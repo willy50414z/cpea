@@ -1,0 +1,4 @@
+profile_id: synthetic-demo
+contract_version: '1'
+source_kind: sql
+catalog: catalog.yaml

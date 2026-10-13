@@ -1,0 +1,48 @@
+view: demo.v_inventory
+summary: 合成示例：目前各倉庫的品號庫存數量。
+grain: 品號、倉庫
+temporal_scope: current_snapshot
+columns:
+  品号:
+    type: 字串
+    description: 合成品號
+    capabilities:
+    - select
+    - filter
+    aliases:
+    - 品號
+  仓库名称:
+    type: 字串
+    description: 合成倉庫
+    capabilities:
+    - select
+    - filter
+    - group_by
+    aliases:
+    - 倉庫
+  库存数量:
+    type: 數值
+    description: 合成數量
+    capabilities:
+    - select
+    aggregations:
+    - sum
+    default_aggregation: sum
+    aliases:
+    - 庫存數量
+filter_operators:
+  default:
+  - '='
+  - IN
+  - LIKE
+  number:
+  - '='
+  - '>'
+scope_rules:
+- name: 各倉庫
+  request_patterns:
+  - 各倉庫
+  required_dimension: 仓库名称
+  required_group_by: true
+  prohibited_filter_columns:
+  - 仓库名称

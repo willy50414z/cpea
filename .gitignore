@@ -1,0 +1,15 @@
+.venv/
+.cache/
+.pytest_cache/
+__pycache__/
+*.py[cod]
+.env
+.env.*
+!.env.example
+dist/
+build/
+*.egg-info/
+artifacts/
+.idea/
+integrations/private/
+evaluations/private/

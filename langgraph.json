@@ -1,0 +1,7 @@
+{
+  "$schema": "https://langchain-ai.github.io/langgraph-cli/schema.json",
+  "dependencies": ["."],
+  "graphs": {
+    "sql_generation": "./src/cpea/workflows/text_to_sql/sql_generation.py:create_graph"
+  }
+}

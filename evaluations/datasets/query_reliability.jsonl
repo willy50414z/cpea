@@ -1,0 +1,2 @@
+{"question":"請查詢 ZX100 目前各倉庫庫存數量","expected_supported":true,"expected_view":"demo.v_inventory","expected_filters":{"品号":"ZX100"},"expected_select_columns":["仓库名称","库存数量"],"expected_group_by":["仓库名称"],"expected_aggregations":{"库存数量":"sum"},"notes":"合成資料；不是客戶業務品質基準"}
+{"question":"請 JOIN 兩個資料表","expected_supported":false,"notes":"保留單一 View 限制"}

@@ -180,6 +180,7 @@ class SQLGenerationWorkflow:
         if _JOIN.search(request):
             return {"rejection_stage": "schema_selection", "response": self._unsupported(
                 "單一查詢任務尚不支援跨 View JOIN。", ["請拆成多個單一 View 查詢任務。"])}
+        # 將request內容分類,拆成select {} from {} where {} order by {} group by {}
         evidence = self._request_evidence(state)
         facts = evidence.facts
         if not evidence.supported or evidence.ambiguity or not facts:

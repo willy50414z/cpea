@@ -68,11 +68,11 @@ def _env_float(*names: str, default: str) -> float:
 
 def _normalize_provider(value: str) -> str:
     normalized = value.strip().lower().replace("-", "").replace("_", "")
-    aliases = {"ollama": "ollama", "llamacpp": "llamacpp"}
+    aliases = {"ollama": "ollama", "llamacpp": "llamacpp", "azure": "azure", "gcp": "gcp", "google": "gcp"}
     try:
         return aliases[normalized]
     except KeyError as exc:
-        raise ValueError("LLM_PROVIDER must be 'ollama' or 'llamacpp'") from exc
+        raise ValueError("LLM_PROVIDER must be 'ollama', 'llamacpp', 'azure', or 'gcp'") from exc
 
 
 def _validate_url(name: str, value: str) -> str:
@@ -114,6 +114,9 @@ class AssistantSettings:
     integration_path: str | None = None
     deployment_file: str | None = None
     datasource_id: str | None = None
+    top_p: float = 1.0
+    gcp_project: str | None = None
+    gcp_location: str = "global"
 
     @classmethod
     def from_env(cls, env_file: str | Path | None = None) -> AssistantSettings:
@@ -142,11 +145,12 @@ class AssistantSettings:
         provider = _normalize_provider(
             _first_env("ASSISTANT_LLM_PROVIDER", "LLM_PROVIDER", default="ollama")
         )
-        default_base_url = (
-            "http://localhost:11434"
-            if provider == "ollama"
-            else "http://localhost:8080/v1"
-        )
+        default_base_url = {
+            "ollama": "http://localhost:11434",
+            "llamacpp": "http://localhost:8080/v1",
+            "azure": "https://example.invalid/openai/v1",
+            "gcp": "https://generativelanguage.googleapis.com",
+        }[provider]
         base_url = _validate_url(
             "LLM_BASE_URL",
             _first_env(
@@ -207,6 +211,9 @@ class AssistantSettings:
             temperature=_env_float(
                     "ASSISTANT_LLM_TEMPERATURE", "LLM_TEMPERATURE", default="0.0"
                 ),
+            top_p=_env_float("ASSISTANT_LLM_TOP_P", "LLM_TOP_P", default="1.0"),
+            gcp_project=_first_env("CPEA_GCP_PROJECT", "GOOGLE_CLOUD_PROJECT", default="") or None,
+            gcp_location=_first_env("CPEA_GCP_LOCATION", "GOOGLE_CLOUD_LOCATION", default="global"),
             seed=_env_int("ASSISTANT_LLM_SEED", "LLM_SEED", default=42),
             context_window=_env_int(
                 "ASSISTANT_LLM_NUM_CTX",
@@ -275,6 +282,8 @@ class AssistantSettings:
 
         if result.request_timeout_seconds <= 0:
             raise ValueError('ASSISTANT_LLM_TIMEOUT_SECONDS must be positive')
+        if not 0 < result.top_p <= 1:
+            raise ValueError('ASSISTANT_LLM_TOP_P must be > 0 and <= 1')
         if result.max_output_tokens + result.context_safety_tokens >= result.context_window:
             raise ValueError('output and safety tokens must be less than context window')
         return result

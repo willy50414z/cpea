@@ -37,7 +37,7 @@ flowchart TD
 | `infrastructure/sql_compiler.py`、`sql_policy.py` | 保留既有 MSSQL renderer／唯讀 SQL 檢查 |
 | `resources/demo/` | 可分發的合成示例；不是客戶資料 |
 | `integrations/private/gms2/` | 原客戶契約／樣本，私有保存，wheel／sdist 排除 |
-| `evaluations/` | 品質工具及合成題庫；private legacy 與 artifacts 分開 |
+| `evaluations/` | 品質工具及合成題庫；原始私有題庫封存於被忽略的 `artifacts/baseline/` |
 
 Domain 不 import API；application 回應模型由 API 引用。API／CLI／Graph 使用 bootstrap 建立依賴。Provider-specific LLM／retrieval 的現有抽象沿用 LangChain，沒有另外引入通用 plugin 平台。
 

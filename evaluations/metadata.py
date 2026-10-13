@@ -9,12 +9,12 @@ import cpea
 
 def run_metadata(runtime, cases, *, kind='real-model'):
     values = asdict(runtime.settings)
-    keys = ['llm_provider', 'llm_model', 'temperature', 'seed', 'context_window',
+    keys = ['llm_provider', 'llm_model', 'temperature', 'top_p', 'seed', 'context_window',
             'max_output_tokens', 'context_safety_tokens', 'request_timeout_seconds',
             'embedding_provider', 'embedding_model', 'retrieval_mode', 'retrieval_k',
             'reranker_enabled', 'reranker_provider', 'reranker_model', 'rerank_top_k',
             'history_token_budget', 'history_recent_turns', 'max_rows', 'sql_generation_mode',
-            'token_count_encoding']
+            'token_count_encoding', 'gcp_project', 'gcp_location']
     settings = {key: values[key] for key in keys}
     canonical = [case.model_dump() if hasattr(case, 'model_dump') else case for case in cases]
     digest = sha256()

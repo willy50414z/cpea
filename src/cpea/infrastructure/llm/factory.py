@@ -11,6 +11,7 @@ def get_llm_config(
     seed: int | None = None,
     num_ctx: int | None = None,
     num_predict: int | None = None,
+    top_p: float | None = None,
     settings: AssistantSettings | None = None,
 ) -> BaseChatModel:
     settings = settings or AssistantSettings.from_env()
@@ -24,6 +25,7 @@ def get_llm_config(
     selected_output = (
         num_predict if num_predict is not None else settings.max_output_tokens
     )
+    selected_top_p = top_p if top_p is not None else settings.top_p
 
     if settings.llm_provider == "ollama":
         return ChatOllama(
@@ -33,6 +35,7 @@ def get_llm_config(
             seed=selected_seed,
             num_ctx=selected_context,
             num_predict=selected_output,
+            top_p=selected_top_p,
             # SQL generation needs a compact JSON artifact. Some local models
             # otherwise spend the output budget on hidden reasoning.
             reasoning=False,
@@ -40,21 +43,43 @@ def get_llm_config(
             client_kwargs={"timeout": settings.request_timeout_seconds},
         )
 
-    # Imported lazily so existing Ollama-only deployments fail with a useful
-    # dependency message only when the llama.cpp provider is selected.
+    if settings.llm_provider == "gcp":
+        try:
+            from langchain_google_genai import ChatGoogleGenerativeAI
+        except ImportError as exc:
+            raise RuntimeError("gcp provider requires 'langchain-google-genai'") from exc
+        if not settings.gcp_project:
+            raise ValueError("gcp provider requires CPEA_GCP_PROJECT")
+        return ChatGoogleGenerativeAI(
+            model=selected_model,
+            api_key=None if settings.llm_api_key == "not-needed" else settings.llm_api_key,
+            project=settings.gcp_project,
+            location=settings.gcp_location,
+            vertexai=True,
+            temperature=selected_temperature,
+            top_p=selected_top_p,
+            max_output_tokens=selected_output,
+            timeout=settings.request_timeout_seconds,
+        )
+    # Imported lazily so local-only deployments need no cloud dependency.
     try:
         from langchain_openai import ChatOpenAI
     except ImportError as exc:  # pragma: no cover - deployment guard
         raise RuntimeError(
-            "llama.cpp provider requires the 'langchain-openai' package"
+            f"{settings.llm_provider} provider requires the 'langchain-openai' package"
         ) from exc
+    if settings.llm_provider == "azure" and settings.llm_api_key == "not-needed":
+        raise ValueError("azure provider requires ASSISTANT_LLM_API_KEY")
+    if settings.llm_provider == "azure" and "example.invalid" in selected_base_url:
+        raise ValueError("azure provider requires ASSISTANT_LLM_BASE_URL")
     return ChatOpenAI(
         base_url=selected_base_url,
         api_key=settings.llm_api_key,
         model=selected_model,
         temperature=selected_temperature,
+        top_p=selected_top_p,
         seed=selected_seed,
         max_tokens=selected_output,
         timeout=settings.request_timeout_seconds,
-        model_kwargs={"response_format": {"type": "json_object"}},
+        model_kwargs={"response_format": {"type": "json_object"}} if settings.llm_provider == "llamacpp" else {},
     )

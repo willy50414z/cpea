@@ -46,7 +46,7 @@
 
 - 使用者安裝必要依賴後，Python 3.12.3 執行原程式 11 個離線案例全部通過，報告位於 `artifacts/baseline/legacy-tests.xml`。原 test harness 另存於 `legacy-test-harness.zip`。
 - 已建立 `pyproject.toml`、`uv.lock`、`src/cpea`、測試與評估工具；向量檢索另確認需要 NumPy，已明列為核心依賴。
-- 原 `ref/db_schema` 已移至 `integrations/private/gms2`，原 `eval` 移至 `evaluations/private/legacy`；原始內容仍有完整備份。新 `manifest.yaml` 只增添 profile identity，不改寫客戶 View 政策。
+- 原 `ref/db_schema` 已移至 `integrations/private/gms2`；原 `eval` 工作副本已移除，其原始內容保存在 `artifacts/baseline/original-poc.zip`，並經 `original-inventory.json` 的 SHA-256 核對。新 `manifest.yaml` 只增添 profile identity，不改寫客戶 View 政策。
 - 已遷移 Windows x64／Python 3.12 的獨立 wheel，其他平台未驗證。Optional providers 不屬核心驗證 lock。
 - 原 source／入口的退休副本位於 `artifacts/baseline/retired`；不會被產品 import 或發行。
 - 詳細驗證及未實作能力見 [refactoring_verification.md](refactoring_verification.md)。

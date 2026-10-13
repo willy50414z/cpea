@@ -17,7 +17,7 @@ dependencies = [
 [project.scripts]
 cpea = "cpea.interfaces.cli.main:main"
 cpea-query-eval = "evaluations.runners.query_reliability:main"
-cpea-model-eval = "evaluations.runners.compare_models:main"
+cpea-governance-eval = "evaluations.governance_runner:main"
 
 [dependency-groups]
 dev = ["pytest>=9,<10", "httpx>=0.28,<1", "hatchling>=1.32,<2"]
@@ -27,7 +27,7 @@ packages = ["src/cpea", "evaluations"]
 exclude = ["**/private/**", "**/__pycache__/**", "**/*.pyc"]
 
 [tool.hatch.build.targets.sdist]
-include = ["src/cpea", "evaluations/runners", "evaluations/datasets", "evaluations/metadata.py", "evaluations/__init__.py", "evaluations/README.md", "requirements", "tests", "docs", "README.md", "pyproject.toml", "uv.lock", "langgraph.json", ".env.example", "config/tenants/example.yaml"]
+include = ["src/cpea", "evaluations/runners", "evaluations/datasets", "evaluations/config", "evaluations/governance_*.py", "evaluations/metadata.py", "evaluations/__init__.py", "evaluations/README.md", "requirements", "tests", "docs", "README.md", "pyproject.toml", "uv.lock", "langgraph.json", ".env.example", "config/tenants/example.yaml"]
 exclude = ["**/private/**", "**/__pycache__/**", "**/*.pyc"]
 
 [tool.pytest.ini_options]

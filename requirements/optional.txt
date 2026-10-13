@@ -1,4 +1,5 @@
 # Optional providers; install explicitly only when enabled in configuration.
 # These are excluded from the validated core lock to avoid pulling large model runtimes.
 langchain-openai>=1,<2
+langchain-google-genai>=4,<5
 sentence-transformers>=5,<6

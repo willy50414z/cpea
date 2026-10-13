@@ -1,0 +1,8 @@
+{
+  "version": 1,
+  "models": [
+
+    {"provider": "azure", "transport": "azure", "model": "DeepSeek-V4.1-Flash", "deployment": "DeepSeek-V4.1-Flash", "endpoint_env": "CPEA_AZURE_LLM_BASE_URL", "api_key_env": "CPEA_AZURE_LLM_API_KEY"}
+
+  ]
+}

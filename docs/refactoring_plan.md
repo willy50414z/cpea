@@ -88,8 +88,8 @@ app = create_app(runtime)
 | `graph/workflow.py` | `cpea.workflows.text_to_sql.sql_generation` |
 | `settings.py`、`llm_config.py`、`context_budget.py` | `config/settings.py`、`infrastructure/llm/` |
 | `ref/db_schema` | `integrations/private/gms2`；profile 可外置 |
-| `eval/` | `evaluations/private/legacy`；新合成題庫在 datasets |
-| `eval_main.py`、`query_reliability_eval.py` | `cpea-model-eval`、`cpea-query-eval` |
+| `eval/` | 原始內容封存於 `artifacts/baseline/original-poc.zip`；新合成題庫在 `evaluations/datasets` |
+| `eval_main.py`、`query_reliability_eval.py` | `cpea-governance-eval`、`cpea-query-eval` |
 
 HTTP 路徑與成功 payload 保留；不提供回頭引用原專案的 import shim。舊 `gen_sql(request)` 的程式呼叫移至 `AssistantRuntime.from_env().generate(request)`。
 

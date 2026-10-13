@@ -49,6 +49,10 @@ retrieve_schema → match_candidates → compile_query → finalize
 
 Graph 只產生 QueryPlan／SQL／QueryTaskTrace；SQLExecutionAgent 顯式取得 executor 與 datasource 後執行一次，保留最大筆數、truncation 和 execution trace；AnswerSynthesisService 根據結果產生附來源的回答。未設定 executor／binding 時，在 generation／LLM 呼叫前回報 unavailable。TOP 和 SQL policy 不取代真實資料庫權限與負載限制。
 
+每個候選 View 直接把完整原始 request 與既有 YAML policy（包含可用 samples、欄位描述與 term mappings）交給 LLM；正常成功路徑只呼叫一次，沒有獨立 FactDraft 抽取。SchemaLinkDraft 同時回傳 facts、links、view_satisfied、ambiguity 與 unresolved_facts。例如「目前」由模型判斷已被 current snapshot View 滿足，保留 fact 與理由，但不增加 SQL filter。仍保留有限次格式／語意修正及候選 fallback。
+
+Python 不再依品號／倉庫字詞、識別碼或季度 regex 補寫或覆蓋 links；仍驗證原文引用、已回傳 facts 的承接、欄位能力、operator／aggregation、catalog scope、filter 值來源，以及 QueryPlan／SQL policy。Samples 提供語意線索，值轉換仍需原文或明確 term mapping；不新增 evidence ID、catalog 格式或 profile 遷移。自然語言漏項與時間理解由模型負責，這些 deterministic checks 不能證明模型已完整理解需求。
+
 Catalog snapshot 保留各 View YAML 的 physical name、欄位能力、聚合、詞彙、範圍與時間語意。Manifest 指定 profile_id、contract_version、source_kind 和 catalog；loader 不限定 `gms2`。所有 resource 必須解析到該 profile 根目錄內；讀取 symlink 也以最終路徑檢查。契約內容 fingerprint 約束 cache，更新契約後需重新建立 runtime 取得新 snapshot。
 
 不支援跨 View JOIN、SQL dialect 切換或新業務 workflow。未來 API operation 是獨立能力介面，設計列於 enterprise_design，不會強迫以 SQL 呼叫 API。

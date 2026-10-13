@@ -56,15 +56,18 @@ class StubLLM:
     def with_structured_output(self, model, **kwargs):
         def invoke(messages):
             self.calls += 1
-            if model.__name__ == 'FactDraft':
-                return model.model_validate({'facts': [
-                    {'kind': 'entity', 'text': 'ZX100'}, {'kind': 'time', 'text': '目前'},
-                    {'kind': 'dimension', 'text': '各倉庫'}, {'kind': 'metric', 'text': '庫存數量'},
-                ]})
-            return model.model_validate({'supported': True, 'links': [
+            assert model.__name__ == 'SchemaLinkDraft'
+            if '請 JOIN 兩個資料表' in messages[-1].content or 'JOIN two views' in messages[-1].content:
+                return model.model_validate({'supported': False, 'requires_join': True})
+            if '請查第一季庫存數量' in messages[-1].content:
+                return model.model_validate({'supported': False, 'ambiguity': ['季度需求缺少年份'], 'unresolved_facts': ['第一季']})
+            return model.model_validate({'supported': True, 'facts': [
+                {'kind': 'entity', 'text': 'ZX100'}, {'kind': 'time', 'text': '目前'},
+                {'kind': 'dimension', 'text': '各倉庫'}, {'kind': 'metric', 'text': '庫存數量'},
+            ], 'view_satisfied': [{'fact_text': '目前', 'reason': 'View temporal_scope 為 current_snapshot，已提供目前資料。'}], 'links': [
                 {'fact_text': 'ZX100', 'view': self.view, 'column': '品号', 'role': 'filter', 'operator': '=', 'value': 'ZX100'},
-                {'fact_text': '各倉庫', 'view': self.view, 'column': '仓库名称', 'role': 'dimension'},
                 {'fact_text': '庫存數量', 'view': self.view, 'column': '库存数量', 'role': 'metric', 'aggregation': 'sum'},
+                {'fact_text': '各倉庫', 'view': self.view, 'column': '仓库名称', 'role': 'dimension'},
             ]})
         return SimpleNamespace(invoke=invoke)
     def invoke(self, messages):

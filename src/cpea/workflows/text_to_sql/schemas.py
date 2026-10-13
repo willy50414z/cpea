@@ -9,15 +9,17 @@ class AnswerDraft(BaseModel):
     answer: str
     citations: list[str] = Field(default_factory=list)
 
-class FactDraft(BaseModel):
-    supported: bool = True
-    facts: list[QueryFact] = Field(default_factory=list)
-    ambiguity: list[str] = Field(default_factory=list)
-    explanation: str = ""
+class ViewSatisfiedFact(BaseModel):
+    fact_text: str
+    reason: str = Field(min_length=1)
 
 class SchemaLinkDraft(BaseModel):
     supported: bool = False
+    facts: list[QueryFact] = Field(default_factory=list)
     links: list[SchemaLink] = Field(default_factory=list)
+    view_satisfied: list[ViewSatisfiedFact] = Field(default_factory=list)
+    ambiguity: list[str] = Field(default_factory=list)
+    requires_join: bool = False
     unresolved_facts: list[str] = Field(default_factory=list)
     explanation: str = ""
     limitations: list[str] = Field(default_factory=list)

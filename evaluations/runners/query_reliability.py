@@ -4,11 +4,13 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
+from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 from importlib.resources import files
 from cpea.bootstrap import AssistantRuntime
-from evaluations.metadata import run_metadata, default_output, write_jsonl
+from evaluations.metadata import run_metadata, default_output
 
 from pydantic import BaseModel, Field
 
@@ -31,10 +33,15 @@ class QueryReliabilityCase(BaseModel):
     notes: str = ""
 
 
-def evaluate_cases(cases: list[QueryReliabilityCase], service: Any, runs: int = 3) -> list[dict[str, Any]]:
+def evaluate_cases(cases: list[QueryReliabilityCase], service: Any, runs: int = 3, *,
+                   max_failures: int | None = None,
+                   on_record: Callable[[dict[str, Any]], None] | None = None) -> list[dict[str, Any]]:
     if runs < 1:
         raise ValueError("runs must be positive")
+    if max_failures is not None and max_failures < 1:
+        raise ValueError("max_failures must be positive")
     records = []
+    failed = 0
     for case in cases:
         for run in range(1, runs + 1):
             try:
@@ -86,6 +93,11 @@ def evaluate_cases(cases: list[QueryReliabilityCase], service: Any, runs: int = 
                 records.append({"question": case.question, "run": run, "passed": False,
                                 "failure_reasons": [f"exception:{type(exc).__name__}:{exc}"],
                                 "rejection_stage": "exception", "result": None})
+            if on_record is not None:
+                on_record(records[-1])
+            failed += not records[-1]['passed']
+            if max_failures is not None and failed >= max_failures:
+                return records
     return records
 
 
@@ -95,15 +107,36 @@ def main(argv=None, *, runtime=None, kind='real-model') -> int:
     parser.add_argument("--output", help="New private output path")
     parser.add_argument("--env-file")
     parser.add_argument("--runs", type=int, default=3)
+    parser.add_argument("--max-failures", type=int, help="Stop after this many failed cases")
+    parser.add_argument("--progress", action="store_true", help="Print per-case progress to stderr")
     args = parser.parse_args(argv)
+    if args.runs < 1 or (args.max_failures is not None and args.max_failures < 1):
+        parser.error("runs and max-failures must be positive")
     runtime = runtime if runtime is not None else AssistantRuntime.from_env(args.env_file)
     cases = [QueryReliabilityCase.model_validate_json(line) for line in Path(args.dataset).read_text(encoding="utf-8").splitlines() if line.strip()]
     metadata = run_metadata(runtime, cases, kind=kind)
-    records = evaluate_cases(cases, runtime.generation_service(), runs=args.runs)
-    for record in records:
-        record["run_metadata"] = metadata
-    write_jsonl(args.output or default_output(metadata, "query-reliability"), records)
+    target = Path(args.output or default_output(metadata, "query-reliability"))
+    target.parent.mkdir(parents=True, exist_ok=True)
+    completed = 0
+    with target.open('x', encoding='utf-8') as output:
+        def emit(record):
+            nonlocal completed
+            record['run_metadata'] = metadata
+            output.write(json.dumps(record, ensure_ascii=False, default=str) + '\n')
+            output.flush()
+            completed += 1
+            if args.progress:
+                print(json.dumps({'event': 'case_complete', 'completed': completed,
+                                  'passed': record['passed'], 'rejection_stage': record['rejection_stage']},
+                                 ensure_ascii=False), file=sys.stderr, flush=True)
+
+        records = evaluate_cases(cases, runtime.generation_service(), runs=args.runs,
+                                 max_failures=args.max_failures, on_record=emit)
     print(json.dumps({"total": len(records), "passed": sum(record["passed"] for record in records),
+                      "failed": sum(not record['passed'] for record in records),
+                      "planned_total": len(cases) * args.runs,
+                      "stopped_early": len(records) < len(cases) * args.runs,
+                      "max_failures": args.max_failures,
                       "by_stage": {stage: sum(record["rejection_stage"] == stage for record in records)
                                    for stage in {record["rejection_stage"] for record in records}}}, ensure_ascii=False))
     return 0

@@ -32,6 +32,10 @@ class ClauseColumn(BaseModel):
     column: str
 
 
+class ClauseField(ClauseColumn):
+    aggregation: Literal['sum', 'count', 'avg', 'min', 'max'] | None = None
+
+
 class ClauseCriterion(ClauseColumn):
     operator: str = "="
     value: str | int | float | list[str | int | float]
@@ -62,9 +66,10 @@ class IgnoredTerm(BaseModel):
 
 
 class SQLClauseMapping(BaseModel):
-    fields: list[ClauseColumn] = Field(default_factory=list)
+    fields: list[ClauseField] = Field(default_factory=list)
     table: ClauseTable | list[ClauseTable] | None = None
     criteria: list[ClauseCriterion] = Field(default_factory=list)
     order: list[ClauseColumn] = Field(default_factory=list)
     group: list[ClauseColumn] = Field(default_factory=list)
     ignored: list[IgnoredTerm] = Field(default_factory=list)
+    unsupported_reason: str | None = None

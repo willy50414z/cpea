@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import re
 from typing import Any, TypedDict
 
 from langchain_core.documents import Document
@@ -10,6 +11,7 @@ from langchain_core.prompts import ChatPromptTemplate
 from langgraph.graph import END, START, StateGraph
 
 from cpea.infrastructure.llm.context_budget import ContextPacker
+from cpea.infrastructure.llm.factory import bind_response_schema, response_schema_for
 from cpea.application.models.query import CandidateAttempt, ConversationTurn, QueryTaskTrace, SourceReference, SQLGenerationResponse
 from cpea.workflows.text_to_sql.schemas import SQLClauseMapping, SchemaLinkDraft
 from cpea.domain.models import QueryFact, QueryFilter, QueryPlan, SchemaLink
@@ -20,8 +22,23 @@ from cpea.infrastructure.retrieval.schema import RetrievalCandidate, SchemaRetri
 from cpea.config.settings import AssistantSettings
 
 
-MATCH_PROMPT = """你是一個資料庫專家，需要根據 user 提出的需求、view 的欄位資訊、以下提供的 SQL template，提供一個 JSON，包含每個變數（fields/table/criteria/order/group）對應到原文的什麼詞，還有對應到 table/view 的哪個欄位。若有部分關鍵字屬於冗詞贅字，不需做為 SQL 的一部分，請說明原因。參考用的 SQL 樣板：'select {{fields}} from {{table}} where {{criteria}} order by {{order}} group by {{group}}'。
-JSON 中 fields、criteria、order、group 是陣列；每項使用 text 表示需求原文中的詞、column 表示 View 欄位，不能把欄位名稱當成原文詞。fields 只放要顯示的欄位；篩選用詞放 criteria，另有 operator 和 value；「各／每個類別的數量」屬於按類別彙總，group 應對應該類別欄位；只有逐筆列出原始紀錄時 group 才留空。table 使用 text 和 view；原文沒有 View 名稱時 text 可為 null。冗詞贅字放在 ignored，使用 text 和 reason。沒有對應項目時使用空陣列；只回傳 JSON。"""
+MATCH_PROMPT = """你是單一 View 的需求對應器。根據需求與提供的 View 契約，回傳純 JSON，不輸出 SQL、Markdown 或額外文字。
+固定 keys：fields、table、criteria、order、group、ignored。fields/criteria/order/group/ignored 都是陣列，沒有項目用 []。
+fields 每項含 text、column、aggregation；criteria 每項含 text、column、operator、value；order/group 每項含 text、column；ignored 每項含 text、reason。table 是含 text、view 的物件；無法完整滿足需求或需要 JOIN 時為 null。table.text 可為 null。
+text 必須逐字擷取需求中的連續片段，不改寫、不做繁簡轉換。column/view 必須使用契約的原始名稱。criteria.value 保留原文值與型別；不可把欄位名稱當值、猜測代碼或新增條件。只有契約明確提供的詞彙對應可轉換值。
+fields 對應要顯示的欄位；criteria 對應限制資料的條件；order 對應明確排序要求；group 僅用於彙總維度或明確去重。列出明細不代表分組。aggregation 只能為契約允許的 sum/count/avg/min/max 或 null；依指標與需求選擇，分組維度不聚合，明細欄位不聚合。
+所有明確的欄位、條件、時間範圍、排序與分組需求都要處理；不可為了適配 View 忽略缺失資訊或改變業務語意。ignored 只收不影響查詢的語助詞，或已由 View 定義滿足的範圍並說明原因；不確定或缺欄位時 table=null。
+未要求明細、逐筆資料或同列呈現識別欄位時，指標遵循契約的 default_aggregation；若需求要列出明細識別欄位，保持原值，除非明確要求彙總。
+業務含義須同時符合需求與欄位描述，不能僅因字面相近就替換指標或資料來源。View 名稱與摘要是概述，須綜合欄位、資料範圍判斷；若需求只是要該來源已有的紀錄，不額外猜測存在性條件。只有明確的條件值才放 criteria，text 必須包含授權該值的原文片段。
+依 capabilities、scope_rules、term_mappings 與 filter_operators 遵守契約。operator 使用契約允許的 SQL 運算子（例如 =、IN），不可回傳 default 等政策鍵。string/date 欄位的條件值保留為字串，number 欄位才可用數值。
+若提供多個 candidates，請比較完整需求與各候選契約，選出業務含義及所有欄位最吻合的一個 View；不可混用不同 View。未指定的時間或資料涵蓋範圍不自行擴大。table=null 時另提供 unsupported_reason，指出契約缺少的資訊。
+若需求未限定來源種類，而所需欄位組合只完整匹配一個候選，可選該候選；不可將未指定來源解讀為必須包含所有來源種類。若明確限定的業務語意不符，仍須拒絕。table.text 只有需求逐字包含契約的完整 View 名稱時才填該名稱，否則一律 null；不要用摘要或推測的來源詞填入。
+fields 只放明確要求顯示的資訊。條件欄位及其值屬於 criteria，不因需求提到條件欄位就自動將它列入 fields 或 group；只有另外要求顯示或分組該欄位時才加入。group 只包含需求指定的分組維度，不為了修補多餘的 fields 擴充分組。"""
+
+_LEGACY_COLUMN_TYPES = {
+    '字串': 'string', '字串（代碼）': 'string', '數值': 'number', '数值': 'number',
+    '日期': 'date', '日期字串（`YYYY-MM-DD`）': 'string',
+}
 
 
 class SQLGenerationState(TypedDict, total=False):
@@ -115,96 +132,104 @@ class SQLGenerationWorkflow:
 
     def _match_candidates(self, state: SQLGenerationState) -> dict[str, Any]:
         request = state["request"]
-        attempts: list[CandidateAttempt] = []
+        definitions = {item.name: item for item in self.catalog.views()}
+        schemas = {str(item.document.metadata["document_id"]):
+                   candidate_schema(definitions[str(item.document.metadata["document_id"])])
+                   for item in state["candidates"]}
+        detailed = [RetrievalCandidate(
+            document=Document(id=item.document.id,
+                              page_content=json.dumps(schemas[str(item.document.metadata["document_id"])], ensure_ascii=False),
+                              metadata=item.document.metadata),
+            retrieval_score=item.retrieval_score, reranker_score=item.reranker_score,
+        ) for item in state["candidates"]]
+        response_schema = response_schema_for(SQLClauseMapping,
+            column_names={column for schema in schemas.values() for column in schema['columns']},
+            view_names=set(schemas))
+        packed = self.context_packer.pack_documents(
+            system_prompt=MATCH_PROMPT, question=request, history_text="", candidates=detailed,
+            additional_prompt_text=json.dumps({'candidates': [], 'response_schema': response_schema}, ensure_ascii=False),
+        )
+        admitted = {source.document_id for source in packed.sources}
+        attempts = [CandidateAttempt(view=view, outcome="context_budget",
+                                     errors=["完整 View contract 超出 context budget"])
+                    for view in schemas if view not in admitted]
+        schemas = {view: schema for view, schema in schemas.items() if view in admitted}
+        response_schema = response_schema_for(SQLClauseMapping,
+            column_names={column for schema in schemas.values() for column in schema['columns']},
+            view_names=set(schemas))
+        prompt = ChatPromptTemplate.from_messages([
+            ("system", MATCH_PROMPT),
+            ("human", "需求: {request} table定義: {schema_context}"),
+        ])
+        variables = {"request": request,
+                     "schema_context": json.dumps({"candidates": list(schemas.values()),
+                                                  "response_schema": response_schema}, ensure_ascii=False)}
         facts: list[QueryFact] = []
-        for candidate in state["candidates"]:
-            view = str(candidate.document.metadata["document_id"])
-            definition = next(item for item in self.catalog.views() if item.name == view)
-            schema = {
-                "view": definition.name,
-                "summary": definition.summary,
-                "columns": {
-                    name: {"data_type": "number" if any(word in spec["type"] for word in ("數值", "数值", "number")) else "string"}
-                    for name, spec in definition.policy["columns"].items()
-                },
-            }
-            detailed = RetrievalCandidate(
-                document=Document(id=candidate.document.id,
-                                  page_content=json.dumps(schema, ensure_ascii=False),
-                                  metadata=candidate.document.metadata),
-                retrieval_score=candidate.retrieval_score, reranker_score=candidate.reranker_score,
-            )
-            packed = self.context_packer.pack_documents(
-                system_prompt=MATCH_PROMPT, question=request, history_text="", candidates=[detailed],
-            )
-            if not packed.sources:
-                attempts.append(CandidateAttempt(view=view, outcome="context_budget",
-                                                 errors=["完整 View contract 超出 context budget"]))
+        for _ in range(2 if schemas else 0):
+            try:
+                mapping = self._invoke_model(prompt, variables, SQLClauseMapping, response_schema=response_schema)
+            except ValueError as exc:
+                attempts.append(CandidateAttempt(view="(unselected)", outcome="schema_mismatch", errors=[str(exc)]))
                 continue
-            prompt = ChatPromptTemplate.from_messages([
-                ("system", MATCH_PROMPT),
-                ("human", "需求: {request} table定義: {schema_context}"),
-            ])
-            variables = {"request": request, "schema_context": json.dumps(schema, ensure_ascii=False)}
-            draft = SchemaLinkDraft()
-            errors: list[str] = []
-            for _ in range(2):
-                try:
-                    mapping = self._invoke_model(prompt, variables, SQLClauseMapping)
-                except ValueError as exc:
-                    errors = [str(exc)]
-                    continue
-                if isinstance(mapping.table, list):
-                    return {"request_facts": facts, "rejection_stage": "schema_selection",
-                            "response": self._unsupported("單一查詢任務只支援一個 View。", [request])}
-                if (mapping.table is None or mapping.table.view != view
-                        or (mapping.table.text and mapping.table.text != view and mapping.table.text not in request)):
-                    errors = ["table mapping does not match the request and selected View"]
-                    continue
-                facts_by_text: dict[str, QueryFact] = {}
-                links: list[SchemaLink] = []
-                grouped = {item.column for item in mapping.group}
-                for item in mapping.criteria:
-                    facts_by_text.setdefault(item.text, QueryFact(kind="entity", text=item.text))
-                    links.append(SchemaLink(fact_text=item.text, view=view, column=item.column,
-                                            role="filter", operator=item.operator, value=item.value))
-                for item in [*mapping.fields, *mapping.group]:
-                    fact_text = item.text
-                    if fact_text not in request and item in mapping.fields:
-                        if item.column in {criterion.column for criterion in mapping.criteria} or item.column in grouped:
-                            continue
-                        if item.column in schema["columns"]:
-                            names = [item.column, *self.catalog.field_contract(view, item.column).get("aliases", [])]
-                            fact_text = next((name for name in names if name in request), fact_text)
-                    role = "dimension" if item.column in grouped else "metric"
-                    facts_by_text.setdefault(fact_text, QueryFact(kind=role, text=fact_text))
-                    link = SchemaLink(fact_text=fact_text, view=view, column=item.column, role=role)
-                    if link not in links:
-                        links.append(link)
-                draft = SchemaLinkDraft(
-                    supported=True, facts=list(facts_by_text.values()), links=links,
-                    explanation="；".join(f"{item.text}：{item.reason}" for item in mapping.ignored),
-                )
-                facts = draft.facts
-                errors = self._link_errors(facts, draft, view, request)
-                if not mapping.fields:
-                    errors.append("fields mapping is empty")
-                for item in [*mapping.order, *mapping.group, *mapping.ignored]:
-                    if not item.text or item.text not in request:
-                        errors.append(f"mapped text absent from request: {item.text}")
-                if any(item.column not in schema["columns"] for item in mapping.order):
-                    errors.append("order column is not in selected View")
-                if not errors:
-                    attempts.append(CandidateAttempt(view=view, outcome="matched", facts=facts, links=draft.links))
-                    return {"request_facts": facts, "candidate_attempts": attempts,
-                            "selected_views": [view], "links": draft, "order_by": [item.column for item in mapping.order], "sources": packed.sources,
-                            "context_tokens": packed.context_tokens, "context_budget": packed.document_budget}
-            covered = {link.fact_text for link in draft.links} | {item.fact_text for item in draft.view_satisfied}
-            unmatched = [fact.text for fact in facts if fact.required and fact.text not in covered]
-            attempts.append(CandidateAttempt(
-                view=view, outcome="context_budget" if any("context budget" in e for e in errors) else "schema_mismatch",
-                facts=draft.facts, links=draft.links,
-                unresolved=list(dict.fromkeys([*draft.unresolved_facts, *unmatched, *([request] if not facts else [])])), errors=errors))
+            if isinstance(mapping.table, list):
+                return {"request_facts": facts, "candidate_attempts": attempts,
+                        "rejection_stage": "schema_selection",
+                        "response": self._unsupported("單一查詢任務只支援一個 View。", [request])}
+            if (mapping.table is None or mapping.table.view not in schemas
+                    or (mapping.table.text and mapping.table.text != mapping.table.view and mapping.table.text not in request)):
+                attempts.append(CandidateAttempt(
+                    view=mapping.table.view if mapping.table else "(unselected)",
+                    outcome="schema_mismatch", unresolved=[request],
+                    errors=[mapping.unsupported_reason or "table mapping does not match the request and selected View"]))
+                continue
+            view = mapping.table.view
+            schema = schemas[view]
+            facts_by_text: dict[str, QueryFact] = {}
+            links: list[SchemaLink] = []
+            grouped = {item.column for item in mapping.group}
+            for item in mapping.criteria:
+                facts_by_text.setdefault(item.text, QueryFact(kind="entity", text=item.text))
+                links.append(SchemaLink(fact_text=item.text, view=view, column=item.column,
+                                        role="filter", operator=item.operator, value=item.value))
+            for item in [*mapping.fields, *mapping.group]:
+                fact_text = item.text
+                if fact_text not in request and item in mapping.fields:
+                    if item.column in {criterion.column for criterion in mapping.criteria} or item.column in grouped:
+                        continue
+                    if item.column in schema["columns"]:
+                        names = [item.column, *self.catalog.field_contract(view, item.column).get("aliases", [])]
+                        fact_text = next((name for name in names if name in request), fact_text)
+                role = "dimension" if item.column in grouped else "metric"
+                facts_by_text.setdefault(fact_text, QueryFact(kind=role, text=fact_text))
+                link = SchemaLink(fact_text=fact_text, view=view, column=item.column, role=role,
+                                  aggregation=getattr(item, "aggregation", None))
+                if link not in links:
+                    links.append(link)
+            draft = SchemaLinkDraft(
+                supported=True, facts=list(facts_by_text.values()), links=links,
+                explanation="；".join(f"{item.text}：{item.reason}" for item in mapping.ignored),
+            )
+            facts = draft.facts
+            errors = self._link_errors(facts, draft, view, request)
+            if not mapping.fields:
+                errors.append("fields mapping is empty")
+            for item in [*mapping.order, *mapping.group, *mapping.ignored]:
+                if not item.text or item.text not in request:
+                    errors.append(f"mapped text absent from request: {item.text}")
+            if any(item.column not in schema["columns"] for item in mapping.order):
+                errors.append("order column is not in selected View")
+            missing_literals = unmapped_request_literals(request, mapping, self.catalog, view)
+            if missing_literals:
+                errors.append("unmapped request literals: " + ", ".join(missing_literals))
+            if not errors:
+                attempts.append(CandidateAttempt(view=view, outcome="matched", facts=facts, links=draft.links))
+                return {"request_facts": facts, "candidate_attempts": attempts,
+                        "selected_views": [view], "links": draft,
+                        "order_by": [item.column for item in mapping.order],
+                        "sources": [source for source in packed.sources if source.document_id == view],
+                        "context_tokens": packed.context_tokens, "context_budget": packed.document_budget}
+            attempts.append(CandidateAttempt(view=view, outcome="schema_mismatch", facts=facts,
+                                             links=draft.links, unresolved=[*draft.unresolved_facts, *missing_literals], errors=errors))
         reasons = [f"{attempt.view}: {', '.join(attempt.errors or attempt.unresolved)}" for attempt in attempts]
         return {"request_facts": facts, "candidate_attempts": attempts, "rejection_stage": "schema_linking",
                 "response": self._unsupported("沒有單一 View 能完整承接需求。", reasons)}
@@ -304,11 +329,6 @@ class SQLGenerationWorkflow:
                     return {"rejection_stage": "query_plan", "response": self._unsupported(
                         "指標聚合定義衝突。", [f"conflicting aggregation: {link.column}"])}
                 aggregations[link.column] = link.aggregation
-        for link in state["links"].links:
-            if link.role == "metric" and link.column not in aggregations:
-                default = self.catalog.field_contract(view, link.column).get("default_aggregation")
-                if default:
-                    aggregations[link.column] = default
         plan = QueryPlan(supported=True, source_views=[view], select_columns=columns,
                          filters=filters, group_by=group_by, aggregations=aggregations,
                          order_by=state.get("order_by", []),
@@ -370,10 +390,11 @@ class SQLGenerationWorkflow:
         )
         return {"response": response.model_copy(update={"query_trace": trace})}
 
-    def _invoke_model(self, prompt: ChatPromptTemplate, variables: dict[str, Any], model: type[Any]):
+    def _invoke_model(self, prompt: ChatPromptTemplate, variables: dict[str, Any], model: type[Any], *, response_schema=None):
         serialized = {key: value.model_dump_json() if hasattr(value, "model_dump_json") else value
                       for key, value in variables.items()}
         messages = prompt.invoke(serialized).to_messages()
+        response_llm = bind_response_schema(self.llm, model, schema=response_schema)
         last_error: ValueError | None = None
         for _ in range(2):
             counter = self.context_packer.token_counter
@@ -381,7 +402,7 @@ class SQLGenerationWorkflow:
             if tokens + self.settings.output_token_reserve + self.settings.context_safety_tokens > self.settings.context_window:
                 raise ValueError("prompt exceeds context budget")
             try:
-                raw = self.llm.invoke(messages)
+                raw = response_llm.invoke(messages)
                 from cpea.infrastructure.llm.parsing import parse_model
                 return parse_model(raw, model)
             except ValueError as exc:
@@ -391,6 +412,57 @@ class SQLGenerationWorkflow:
     @staticmethod
     def _unsupported(explanation: str, limitations: list[str], **metadata: Any) -> SQLGenerationResponse:
         return SQLGenerationResponse(supported=False, explanation=explanation, limitations=limitations, **metadata)
+
+
+def candidate_schema(definition) -> dict[str, Any]:
+    """Expose approved metadata only; samples and evaluation data never enter context."""
+    schema = {
+        "view": definition.name, "summary": definition.summary,
+        "columns": {name: {
+            "data_type": _LEGACY_COLUMN_TYPES.get(spec["type"], spec["type"]),
+            "description": spec["description"], "aliases": spec.get("aliases", []),
+            "capabilities": spec.get("capabilities", []),
+            "aggregations": spec.get("aggregations", []),
+            "default_aggregation": spec.get("default_aggregation"),
+        } for name, spec in definition.policy["columns"].items()},
+    }
+    for key in ("temporal_scope", "data_scope", "grain", "filter_operators", "term_mappings", "scope_rules"):
+        if definition.policy.get(key):
+            schema[key] = definition.policy[key]
+    return schema
+
+
+def unmapped_request_literals(request, mapping, catalog, view) -> list[str]:
+    """Prevent silent loss of explicit codes; this is not a natural-language parser."""
+    token = re.compile(r"[A-Za-z0-9_]+(?:[.-][A-Za-z0-9_]+)*")
+    sql_words = {"SQL", "SELECT", "FROM", "WHERE", "ORDER", "BY", "GROUP", "JOIN",
+                 "ASC", "DESC", "SUM", "COUNT", "AVG", "MIN", "MAX", "AND", "OR",
+                 "IN", "LIKE", "NULL", "TOP", "DISTINCT"}
+    literals = {item for item in token.findall(request)
+                if any(char.isdigit() for char in item)
+                or (len(item) > 1 and item.isupper() and item not in sql_words)}
+    covered = {view}
+    for item in [*mapping.fields, *mapping.criteria, *mapping.group, *mapping.order]:
+        try:
+            contract = catalog.field_contract(view, item.column)
+        except ValueError:
+            continue  # Existing schema validation reports unknown columns.
+        covered.update(token.findall(item.column))
+        for alias in contract.get("aliases", []):
+            covered.update(token.findall(alias))
+    for item in mapping.criteria:
+        values = item.value if isinstance(item.value, list) else [item.value]
+        for value in values:
+            covered.update(token.findall(str(value)))
+    definition = next(item for item in catalog.views() if item.name == view)
+    for rule in definition.policy.get("term_mappings", []):
+        filters = rule.get("filters", [])
+        if filters and all(any(item.column == f["column"] and item.operator == f["operator"]
+                               and item.value == f["value"] for item in mapping.criteria) for f in filters):
+            for term in rule.get("terms", []):
+                if term in request:
+                    covered.update(token.findall(term))
+    return sorted(literals - covered)
 
 
 def _default_catalog():

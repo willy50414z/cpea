@@ -13,6 +13,7 @@ import sys
 from time import perf_counter
 from urllib.parse import urlparse
 from uuid import uuid4
+from types import SimpleNamespace
 from dotenv import dotenv_values
 
 from cpea.bootstrap import AssistantRuntime
@@ -22,6 +23,7 @@ from evaluations.governance_inputs import GovernanceCase, ModelTarget, load_case
 from evaluations.governance_trace import CallRecorder, TracedModel
 from evaluations.governance_reports import regenerate, write_reports
 from evaluations.metadata import run_metadata
+from evaluations.runners.query_reliability import evaluate_cases
 
 
 def _git(root: Path, *args: str) -> str:
@@ -102,6 +104,10 @@ def _identity(target: ModelTarget, settings, *, live: bool) -> tuple[str | None,
 
 def grade(case: GovernanceCase, generation, answer: str | None, citations: list[str],
           *, execution_error: str | None = None) -> tuple[str | None, str | None, list[str]]:
+    if case.reliability_case is not None:
+        record = evaluate_cases([case.reliability_case],
+                                SimpleNamespace(generate=lambda question: generation), runs=1)[0]
+        return ("pass" if record["passed"] else "fail"), None, record["failure_reasons"]
     expected = case.expected_result
     failures: list[str] = []
     if expected.supported is not None and generation.supported != expected.supported:
@@ -214,11 +220,13 @@ def _run_one(case: GovernanceCase, target: ModelTarget, repetition: int, base: A
 def evaluate(cases: list[GovernanceCase], targets: list[ModelTarget], *, runtime: AssistantRuntime,
              output: Path, runs: int = 1, concurrency: int = 1, live: bool = False,
              model_factory=None, repo_root: Path | None = None, env_values=None,
-             warmup: bool = False) -> tuple[list[dict], list[dict]]:
+             warmup: bool = False, max_failures: int | None = None) -> tuple[list[dict], list[dict]]:
     if not live and model_factory is None:
         raise ValueError("select --live or inject an offline model factory")
     if runs < 1 or concurrency < 1:
         raise ValueError("runs and concurrency must be positive")
+    if max_failures is not None and (max_failures < 1 or concurrency != 1):
+        raise ValueError("max_failures must be positive and requires concurrency 1")
     root = repo_root or Path(__file__).resolve().parents[1]
     sha = preflight(root, output, live=live)
     if live:
@@ -228,7 +236,10 @@ def evaluate(cases: list[GovernanceCase], targets: list[ModelTarget], *, runtime
                   _identity(target, _target_settings(runtime.settings, target, env_values), live=live)
                   for target in targets}
     metadata = run_metadata(runtime, cases, kind="real-model" if live else "offline-synthetic")
-    metadata.update({"run_id": output.name, "git_sha": sha, "mode": "live" if live else "offline-synthetic"})
+    metadata.update({"run_id": output.name, "git_sha": sha, "mode": "live" if live else "offline-synthetic",
+                     "runs": runs, "planned_total": len(cases) * len(targets) * runs,
+                     "max_failures": max_failures,
+                     "targets": [target.model_dump(mode="json") for target in targets]})
     output.mkdir(parents=True, exist_ok=False)
     (output / "run.json").write_text(json.dumps(metadata, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     recorder = CallRecorder(run_id=output.name, git_sha=sha, concurrency=concurrency,
@@ -245,9 +256,15 @@ def evaluate(cases: list[GovernanceCase], targets: list[ModelTarget], *, runtime
             stream.write(json.dumps(result, ensure_ascii=False, default=str) + "\n")
             stream.flush()
         if concurrency == 1:
+            failures = {}
             for item in work:
-                persist(_run_one(*item, runtime, recorder, model_factory, env_values, warmup,
-                                 identities[(item[1].provider, item[1].model, item[1].deployment)]))
+                key = (item[1].provider, item[1].model, item[1].deployment)
+                if max_failures is not None and failures.get(key, 0) >= max_failures:
+                    continue
+                result = _run_one(*item, runtime, recorder, model_factory, env_values, warmup,
+                                  identities[key])
+                persist(result)
+                failures[key] = failures.get(key, 0) + (result["status"] in {"fail", "error"})
         else:
             with ThreadPoolExecutor(max_workers=concurrency) as pool:
                 futures = [pool.submit(_run_one, *item, runtime, recorder, model_factory, env_values, warmup,
@@ -273,6 +290,7 @@ def main(argv=None, *, runtime=None, model_factory=None) -> int:
         command.add_argument("--output-dir")
         command.add_argument("--live", action="store_true")
         command.add_argument("--warmup", action="store_true")
+        command.add_argument("--max-failures", type=int, help="Stop each model after this many failures (concurrency 1)")
         if mode == "compare":
             command.add_argument("--models", required=True)
     args = parser.parse_args(arguments)
@@ -293,7 +311,8 @@ def main(argv=None, *, runtime=None, model_factory=None) -> int:
     env_values = dotenv_values(args.env_file, interpolate=False) if args.env_file else {}
     results, _ = evaluate(cases, targets, runtime=base, output=output, runs=args.runs,
                           concurrency=args.concurrency, live=args.live, model_factory=model_factory,
-                          repo_root=root, env_values=env_values, warmup=args.warmup)
+                          repo_root=root, env_values=env_values, warmup=args.warmup,
+                          max_failures=args.max_failures)
     print(json.dumps({"run_id": output.name, "results": len(results), "output": str(output)}, ensure_ascii=False))
     return 0
 

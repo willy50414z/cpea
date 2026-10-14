@@ -33,6 +33,43 @@ def _percentile(values: list[float], fraction: float) -> float | None:
     return round(ordered[low] + (ordered[high] - ordered[low]) * (position - low), 3)
 
 
+def model_metrics(records: list[dict], calls: list[dict], runs: int) -> dict:
+    counts = _totals(records)
+    completed = counts["pass"] + counts["fail"]
+    groups = defaultdict(list)
+    for record in records:
+        groups[record["case_id"]].append(record)
+    repeated = [items for items in groups.values()
+                if runs >= 2 and len(items) == runs
+                and len({item["repetition"] for item in items}) == runs]
+    valid = [items for items in repeated if all(item.get("generation") for item in items)]
+    def signature(item):
+        generation = item["generation"]
+        return json.dumps({key: generation.get(key) for key in
+                           ("supported", "selected_views", "query_plan", "sql")},
+                          ensure_ascii=False, sort_keys=True)
+    def token_total(field):
+        return sum(call[field] for call in calls) if calls and all(call.get(field) is not None for call in calls) else None
+    return {
+        "total": len(records), "pass": counts["pass"], "fail": counts["fail"],
+        "error": counts["error"], "pending": counts["pending"],
+        "pass_rate_total": round(counts["pass"] / len(records), 4),
+        "pass_rate_completed": round(counts["pass"] / completed, 4) if completed else None,
+        "error_rate_total": round(counts["error"] / len(records), 4),
+        "elapsed_p50_ms": _percentile([r["elapsed_ms"] for r in records], .5),
+        "elapsed_p95_ms": _percentile([r["elapsed_ms"] for r in records], .95),
+        "elapsed_total_ms": round(sum(r["elapsed_ms"] for r in records), 3),
+        "llm_calls": len(calls), "llm_total_ms": round(sum(c["elapsed_ms"] for c in calls), 3),
+        "input_tokens": token_total("input_tokens"), "output_tokens": token_total("output_tokens"),
+        "usage_complete_calls": sum(c.get("input_tokens") is not None and c.get("output_tokens") is not None for c in calls),
+        "complete_repeated_cases": len(repeated),
+        "all_pass_cases": sum(all(r["status"] == "pass" for r in items) for items in repeated),
+        "status_consistent_cases": sum(len({r["status"] for r in items}) == 1 for items in repeated),
+        "generation_comparable_cases": len(valid),
+        "generation_consistent_cases": sum(len({signature(r) for r in items}) == 1 for items in valid),
+    }
+
+
 def write_reports(run_dir: Path, results: list[dict], calls: list[dict]) -> None:
     run_dir = Path(run_dir)
     by_key = defaultdict(list)
@@ -41,7 +78,7 @@ def write_reports(run_dir: Path, results: list[dict], calls: list[dict]) -> None
     def usage(record, field):
         matched = by_key[(record["case_id"], record["model"], record["repetition"])]
         return sum(call[field] for call in matched) if matched and all(call[field] is not None for call in matched) else None
-    with (run_dir / "summary.csv").open("w", encoding="utf-8-sig", newline="") as stream:
+    with (run_dir / "summary.csv").open("w", encoding="utf-8", newline="") as stream:
         writer = csv.DictWriter(stream, fieldnames=["run_id", "case_id", "category", "difficulty",
                                                     "provider", "model", "repetition", "status",
                                                     "review_state", "failure_reasons", "llm_calls",
@@ -61,24 +98,21 @@ def write_reports(run_dir: Path, results: list[dict], calls: list[dict]) -> None
     per_model = defaultdict(list)
     for record in results:
         per_model[(record["provider"], record["model"])].append(record)
-    with (run_dir / "model_summary.csv").open("w", encoding="utf-8-sig", newline="") as stream:
-        writer = csv.writer(stream)
-        writer.writerow(["provider", "model", "total", "pass", "fail", "error", "pending",
-                         "pass_rate_completed", "error_rate_total", "elapsed_p50_ms", "elapsed_p95_ms"])
+    metadata_path = run_dir / "run.json"
+    runs = json.loads(metadata_path.read_text(encoding="utf-8")).get("runs", 0) if metadata_path.exists() else 0
+    with (run_dir / "model_summary.csv").open("w", encoding="utf-8", newline="") as stream:
+        fields = ["provider", "model", *model_metrics(results, calls, runs)]
+        writer = csv.DictWriter(stream, fieldnames=fields)
+        writer.writeheader()
         for (provider, model), records in sorted(per_model.items()):
-            counts = _totals(records)
-            completed = counts["pass"] + counts["fail"]
-            durations = [record["elapsed_ms"] for record in records]
-            writer.writerow([provider, model, len(records), counts["pass"], counts["fail"], counts["error"],
-                             counts["pending"], round(counts["pass"] / completed, 4) if completed else "",
-                             round(counts["error"] / len(records), 4), _percentile(durations, .5),
-                             _percentile(durations, .95)])
+            matched = [c for c in calls if (c["provider"], c["model"]) == (provider, model)]
+            writer.writerow({"provider": provider, "model": model, **model_metrics(records, matched, runs)})
     totals = _totals(results)
-    overview = ["# Model governance evaluation", "", f"Run: `{run_dir.name}`", "",
-                f"Total: {len(results)}; pass: {totals['pass']}; fail: {totals['fail']}; error: {totals['error']}; pending review: {totals['pending']}.",
-                "", "Rates use all repetitions as the denominator; errors and pending reviews are separate from completed incorrect responses.",
-                "", "Model-level rates and latency percentiles are in `model_summary.csv`.",
-                "", "| Case | Category | Model | Run | Status | Reason |", "|---|---|---|---:|---|---|"]
+    overview = ["# 模型治理評估", "", f"執行：`{run_dir.name}`", "",
+                f"總數：{len(results)}；通過：{totals['pass']}；失敗：{totals['fail']}；錯誤：{totals['error']}；待審：{totals['pending']}。",
+                "", "pass_rate_total 以所有已執行次數為分母；pass_rate_completed 僅計通過與失敗，錯誤與待審另列。未完成題目不視為通過。",
+                "", "各模型通過率、token、耗時與完整重複題目的穩定性見 `model_summary.csv`。缺少 provider 用量時保留空值。",
+                "", "| 案例 | 分類 | 模型 | 次數 | 狀態 | 原因 |", "|---|---|---|---:|---|---|"]
     for record in results:
         case_id = record["case_id"]
         overview.append(f"| [{case_id}](cases/{case_id}.md) | {_safe(record['category'])} | {_safe(record['model'])} | {record['repetition']} | {_safe(record['status'] or 'pending')} | {_safe(_reason_codes(record))} |")
@@ -92,15 +126,15 @@ def write_reports(run_dir: Path, results: list[dict], calls: list[dict]) -> None
         first = records[0]
         checks = [key for key, value in first["expected_result"].items()
                   if (key == "supported" and value is not None) or (key != "supported" and value)]
-        lines = [f"# {case_id}", "", f"Category: `{first['category']}`; difficulty: `{first['difficulty']}`.", "",
-                 "Expected check types: " + ", ".join(checks), "",
-                 "| Model | Run | Status | Elapsed ms | Input tokens | Output tokens | Reason | LLM call IDs |",
+        lines = [f"# {case_id}", "", f"分類：`{first['category']}`；難度：`{first['difficulty']}`。", "",
+                 "預期檢查種類：" + ", ".join(checks), "",
+                 "| 模型 | 次數 | 狀態 | 耗時 ms | 輸入 token | 輸出 token | 原因 | 呼叫 ID |",
                  "|---|---:|---|---:|---:|---:|---|---|"]
         for record in records:
             input_tokens = usage(record, "input_tokens")
             output_tokens = usage(record, "output_tokens")
             lines.append(f"| {_safe(record['model'])} | {record['repetition']} | {_safe(record['status'] or 'pending')} | {record['elapsed_ms']:.3f} | {input_tokens if input_tokens is not None else '—'} | {output_tokens if output_tokens is not None else '—'} | {_safe(_reason_codes(record))} | {_safe(', '.join(record['call_ids']))} |")
-        lines.extend(["", "Raw requests, responses, SQL, and result rows remain in the private JSONL artifacts."])
+        lines.extend(["", "原始請求、回覆、SQL 與資料列保存在私有 JSONL 產物中。"])
         (case_dir / f"{case_id}.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 

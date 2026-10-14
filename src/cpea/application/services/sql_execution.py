@@ -13,6 +13,8 @@ from cpea.application.models.query import ConversationTurn, SQLGenerationRespons
 from cpea.application.ports.catalog import CatalogProvider
 from cpea.infrastructure.retrieval.schema import SchemaRetriever
 from cpea.config.settings import AssistantSettings
+from cpea.infrastructure.sql_policy import validate_generated_sql
+from cpea.infrastructure.sql_compiler import compile_single_view
 
 
 class SQLExecutionError(RuntimeError):
@@ -64,8 +66,25 @@ class SQLExecutionAgent:
         if self.executor is None or not datasource:
             raise DependencyUnavailable()
         generation = self.generator.generate(request, history=history)
+        return self.execute_generation(generation, datasource, request=request)
+
+    def validate_generation(self, generation: SQLGenerationResponse, request: str) -> None:
         if not generation.supported or not generation.sql:
             raise SQLExecutionError(generation.explanation, generation)
+        validate_generated_sql(generation.sql, {view.name for view in self.catalog.views()})
+        if generation.query_plan is None:
+            raise SQLExecutionError('Missing approved query plan', generation)
+        # Recompile deterministically to confirm the approved plan and exact SQL.
+        approved = compile_single_view(generation.query_plan, self.catalog, request=request,
+                                       max_rows=self.settings.max_rows)
+        if approved != generation.sql:
+            raise SQLExecutionError('SQL does not match approved query plan', generation)
+
+    def execute_generation(self, generation: SQLGenerationResponse,
+                           datasource: str | None = None, *, request: str) -> SQLExecutionResult:
+        if self.executor is None or not datasource:
+            raise DependencyUnavailable()
+        self.validate_generation(generation, request)
         try:
             columns, rows = self.executor(datasource, generation.sql)
             rows, truncated = self._bounded_rows(rows)

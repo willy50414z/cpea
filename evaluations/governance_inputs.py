@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
+from evaluations.runners.query_reliability import QueryReliabilityCase
 
 
 class StrictModel(BaseModel):
@@ -42,6 +43,7 @@ class GovernanceCase(StrictModel):
     difficulty: Literal["easy", "medium", "hard"]
     question: str = Field(min_length=1)
     expected_result: ExpectedResult
+    reliability_case: QueryReliabilityCase | None = None
 
 
 class CaseFile(StrictModel):
@@ -94,6 +96,16 @@ class ModelFile(StrictModel):
 
 
 def load_cases(path: str | Path) -> CaseFile:
+    if Path(path).suffix.lower() == ".jsonl":
+        cases = [QueryReliabilityCase.model_validate_json(line)
+                 for line in Path(path).read_text(encoding="utf-8").splitlines() if line.strip()]
+        return CaseFile(version=1, cases=[GovernanceCase(
+            case_id=f"RELIABILITY-{index:03d}",
+            category="simple" if case.expected_supported else "security",
+            difficulty="medium", question=case.question,
+            expected_result=ExpectedResult(supported=case.expected_supported),
+            reliability_case=case,
+        ) for index, case in enumerate(cases, 1)])
     return CaseFile.model_validate(json.loads(Path(path).read_text(encoding="utf-8")))
 
 

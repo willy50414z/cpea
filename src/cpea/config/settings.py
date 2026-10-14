@@ -4,12 +4,13 @@ from __future__ import annotations
 
 import os
 import math
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from contextvars import ContextVar
 from pathlib import Path
 from urllib.parse import urlparse
 
 from dotenv import dotenv_values
+from cpea.config.database import SQLServerSettings
 
 _ENV_LAYERS = ContextVar('cpea_env_layers', default=None)
 
@@ -117,6 +118,8 @@ class AssistantSettings:
     top_p: float = 1.0
     gcp_project: str | None = None
     gcp_location: str = "global"
+    llm_reasoning: bool = False
+    sqlserver: SQLServerSettings = field(default_factory=SQLServerSettings)
 
     @property
     def output_token_reserve(self) -> int:
@@ -131,7 +134,7 @@ class AssistantSettings:
             path = Path(selected).resolve()
             if not path.is_file():
                 raise ValueError('selected env file does not exist')
-            values = dotenv_values(path, interpolate=False)
+            values = dotenv_values(path, interpolate=False, encoding='utf-8')
             base = path.parent
         token = _ENV_LAYERS.set((os.environ, values))
         try:
@@ -140,6 +143,9 @@ class AssistantSettings:
                 value = getattr(result, name)
                 if value:
                     object.__setattr__(result, name, str((base / value).resolve()))
+            if result.sqlserver.freetds_config_file:
+                object.__setattr__(result, 'sqlserver', replace(result.sqlserver,
+                    freetds_config_file=str((base / result.sqlserver.freetds_config_file).resolve())))
             return result
         finally:
             _ENV_LAYERS.reset(token)
@@ -216,6 +222,7 @@ class AssistantSettings:
                     "ASSISTANT_LLM_TEMPERATURE", "LLM_TEMPERATURE", default="0.0"
                 ),
             top_p=_env_float("ASSISTANT_LLM_TOP_P", "LLM_TOP_P", default="1.0"),
+            llm_reasoning=_env_bool("ASSISTANT_LLM_REASONING", False),
             gcp_project=_first_env("CPEA_GCP_PROJECT", "GOOGLE_CLOUD_PROJECT", default="") or None,
             gcp_location=_first_env("CPEA_GCP_LOCATION", "GOOGLE_CLOUD_LOCATION", default="global"),
             seed=_env_int("ASSISTANT_LLM_SEED", "LLM_SEED", default=42),
@@ -281,7 +288,13 @@ class AssistantSettings:
             ),
             integration_path=_first_env('CPEA_PROFILE_PATH', default='') or None,
             deployment_file=_first_env('CPEA_DEPLOYMENT_FILE', default='') or None,
-            datasource_id=_first_env('CPEA_DATASOURCE_ID', default='') or None,
+            datasource_id=(_get_env('CPEA_DATASOURCE_ID') or '').strip() or None,
+            sqlserver=SQLServerSettings(
+                connection_string=(_get_env('CPEA_SQLSERVER_CONNECTION_STRING') or '').strip(),
+                connect_timeout_seconds=_db_timeout('CPEA_SQLSERVER_CONNECT_TIMEOUT_SECONDS', 5),
+                query_timeout_seconds=_db_timeout('CPEA_SQLSERVER_QUERY_TIMEOUT_SECONDS', 30),
+                freetds_config_file=_first_env('FREETDSCONF', 'FREETDS', default='') or None,
+            ),
         )
 
         if result.request_timeout_seconds <= 0:
@@ -293,3 +306,16 @@ class AssistantSettings:
         if result.output_token_reserve + result.context_safety_tokens >= result.context_window:
             raise ValueError('output and safety tokens must be less than context window')
         return result
+
+
+def _db_timeout(name: str, default: int) -> int:
+    raw = _get_env(name)
+    if raw is None or not raw.strip():
+        return default
+    try:
+        value = int(raw)
+    except ValueError:
+        raise ValueError(f'{name} must be a positive integer') from None
+    if value <= 0:
+        raise ValueError(f'{name} must be a positive integer')
+    return value

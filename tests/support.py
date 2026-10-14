@@ -81,7 +81,8 @@ class StubLLM:
             if '請查第一季庫存數量' in messages[-1].content:
                 return SimpleNamespace(content='{"fields":[],"table":null,"criteria":[],"order":[],"group":[],"ignored":[]}')
             return SimpleNamespace(content=__import__('json').dumps({
-                'fields': [{'text': '庫存數量', 'column': '库存数量'}, {'text': '各倉庫', 'column': '仓库名称'}],
+                'fields': [{'text': '庫存數量', 'column': '库存数量', 'aggregation': 'sum'},
+                           {'text': '各倉庫', 'column': '仓库名称', 'aggregation': None}],
                 'table': {'text': None, 'view': self.view},
                 'criteria': [{'text': 'ZX100', 'column': '品号', 'operator': '=', 'value': 'ZX100'}],
                 'order': [], 'group': [{'text': '各倉庫', 'column': '仓库名称'}],

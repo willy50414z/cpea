@@ -1,7 +1,33 @@
+from typing import Any
+
 from langchain_core.language_models import BaseChatModel
 from langchain_ollama import ChatOllama
+from pydantic import BaseModel
 
 from cpea.config.settings import AssistantSettings
+
+
+def response_schema_for(response_model: type[BaseModel], *,
+                        column_names=None, view_names=None) -> dict[str, Any]:
+    """Derive name constraints from admitted contracts, never from evaluation data."""
+    schema = response_model.model_json_schema()
+    for definition in schema.get('$defs', {}).values():
+        properties = definition.get('properties', {})
+        if column_names is not None and 'column' in properties:
+            properties['column']['enum'] = sorted(column_names)
+        if view_names is not None and 'view' in properties:
+            properties['view']['enum'] = sorted(view_names)
+    return schema
+
+
+def bind_response_schema(llm: Any, response_model: type[BaseModel], *, schema=None) -> Any:
+    """Constrain a response without changing the shared model's format."""
+    schema = schema if schema is not None else response_schema_for(response_model)
+    if hasattr(llm, 'with_response_schema'):
+        return llm.with_response_schema(schema)
+    if isinstance(llm, ChatOllama):
+        return llm.bind(format=schema)
+    return llm
 
 
 def get_llm_config(
@@ -36,9 +62,8 @@ def get_llm_config(
             num_ctx=selected_context,
             num_predict=selected_output,
             top_p=selected_top_p,
-            # SQL generation needs a compact JSON artifact. Some local models
-            # otherwise spend the output budget on hidden reasoning.
-            reasoning=False,
+            # Thinking is explicit and needs enough budget for the final JSON.
+            reasoning=settings.llm_reasoning,
             format="json",
             client_kwargs={"timeout": settings.request_timeout_seconds},
         )
@@ -60,6 +85,7 @@ def get_llm_config(
             top_p=selected_top_p,
             max_output_tokens=selected_output,
             timeout=settings.request_timeout_seconds,
+            max_retries=0,
         )
     # Imported lazily so local-only deployments need no cloud dependency.
     try:
@@ -81,5 +107,6 @@ def get_llm_config(
         seed=selected_seed,
         max_tokens=selected_output,
         timeout=settings.request_timeout_seconds,
+        max_retries=0,
         model_kwargs={"response_format": {"type": "json_object"}} if settings.llm_provider == "llamacpp" else {},
     )

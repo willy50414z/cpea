@@ -4,6 +4,8 @@
 __pycache__/
 *.py[cod]
 .env
+aerial-handbook-256212-32c74f63ed6f.json
+config/freetds.local.conf
 .env.*
 !.env.example
 dist/

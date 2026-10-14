@@ -167,3 +167,69 @@ def test_explicit_env_selects_stability_model_without_live_service(tmp_path):
                 model_factory=lambda target, settings: StubLLM(view="demo.v_inventory")) == 0
     records = [json.loads(line) for line in (output / "results.jsonl").read_text(encoding="utf-8").splitlines()]
     assert len(records) == 1 and {record["model"] for record in records} == {"qwen3:4b"}
+
+
+def test_reliability_jsonl_reuses_all_grading_rules(tmp_path):
+    from evaluations.runners.query_reliability import QueryReliabilityCase, evaluate_cases
+    runtime = runtime_fixture(tmp_path)
+    generation = runtime.generate(QUESTION)
+    base = QueryReliabilityCase(question=QUESTION, expected_supported=True, expected_view=VIEW,
+                                expected_filters={"品号": "ZX100"},
+                                expected_filter_operators={"品号": "="},
+                                expected_select_columns=["仓库名称", "不存在欄位"],
+                                expected_group_by=[], expected_order_by=["不存在欄位"],
+                                expected_aggregations={"库存数量": "sum"})
+    dataset = tmp_path / "shared.jsonl"
+    dataset.write_text(base.model_dump_json() + "\n", encoding="utf-8")
+    case = load_cases(dataset).cases[0]
+    original = evaluate_cases([base], SimpleNamespace(generate=lambda question: generation), runs=1)[0]
+    status, _, failures = grade(case, generation, None, [])
+    assert status == "fail" and failures == original["failure_reasons"]
+    assert "select_mismatch:不存在欄位" in failures
+    assert "group_by_mismatch" in failures and "order_by_mismatch" in failures
+
+
+def test_per_model_failure_limit_stops_without_charging_remaining_cases(tmp_path):
+    runtime = runtime_fixture(tmp_path)
+    case = _case().model_copy(update={"expected_result": _case().expected_result.model_copy(update={"supported": False})})
+    targets = [ModelTarget(provider="local", transport="ollama", model=name) for name in ("first", "second")]
+    records, _ = evaluate([case], targets, runtime=runtime, output=_output(), runs=5,
+                          max_failures=2, model_factory=lambda target, settings: StubLLM(), repo_root=ROOT)
+    assert len(records) == 4
+    assert all(record["status"] == "fail" for record in records)
+    with pytest.raises(ValueError, match="requires concurrency 1"):
+        evaluate([case], targets, runtime=runtime, output=_output(), runs=3, concurrency=2,
+                 max_failures=2, model_factory=lambda target, settings: StubLLM(), repo_root=ROOT)
+
+
+def test_trace_preserves_response_schema_without_mutating_original(tmp_path):
+    schemas = []
+    class SchemaModel:
+        def with_response_schema(self, schema):
+            schemas.append(schema)
+            return SimpleNamespace(invoke=lambda messages: AIMessage(content="{}"))
+    recorder = CallRecorder(run_id="schema", git_sha="a" * 40)
+    original = SchemaModel()
+    traced = TracedModel(original, recorder, case_id="ONE", repetition=1,
+                         target=ModelTarget(provider="local", transport="ollama", model="stub"),
+                         settings=runtime_fixture(tmp_path).settings)
+    bound = traced.with_response_schema({"type": "object"})
+    assert bound.invoke("test").content == "{}"
+    assert traced.model is original and schemas == [{"type": "object"}]
+    assert len(recorder.calls) == 1
+
+
+def test_model_metrics_distinguish_partial_runs_and_missing_usage():
+    from evaluations.governance_reports import model_metrics
+    records = [{"case_id": "A", "repetition": i, "status": "pass", "elapsed_ms": 10 * i,
+                "generation": {"supported": True, "sql": "SELECT 1"}} for i in (1, 2, 3)]
+    records.append({"case_id": "B", "repetition": 1, "status": "error", "elapsed_ms": 40,
+                    "generation": None})
+    calls = [{"input_tokens": 10, "output_tokens": 2, "elapsed_ms": 5},
+             {"input_tokens": None, "output_tokens": None, "elapsed_ms": 8}]
+    metrics = model_metrics(records, calls, 3)
+    assert metrics["pass_rate_total"] == .75 and metrics["pass_rate_completed"] == 1
+    assert metrics["complete_repeated_cases"] == metrics["all_pass_cases"] == 1
+    assert metrics["generation_consistent_cases"] == 1
+    assert metrics["input_tokens"] is None and metrics["output_tokens"] is None
+    assert metrics["usage_complete_calls"] == 1 and metrics["elapsed_total_ms"] == 100

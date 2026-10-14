@@ -94,7 +94,7 @@ class MappingLLM(StubLLM):
         return SimpleNamespace(content=__import__('json').dumps(mapping, ensure_ascii=False))
 
 
-def test_mapping_prompt_contains_only_example_view_fields(tmp_path):
+def test_mapping_prompt_contains_approved_contract_without_samples(tmp_path):
     import json
 
     settings, catalog, packer, _, retriever = dependencies(tmp_path)
@@ -105,10 +105,16 @@ def test_mapping_prompt_contains_only_example_view_fields(tmp_path):
     result = Workflow(llm, catalog, settings=settings, retriever=retriever, context_packer=packer).invoke(QUESTION)
     assert result.supported and llm.calls == 1
     user_message = llm.messages[0][-1].content
-    schema = json.loads(user_message.split('table定義: ', 1)[1])
-    assert set(schema) == {'view', 'summary', 'columns'}
-    assert set(schema['columns']['库存数量']) == {'data_type'}
+    payload = json.loads(user_message.split('table定義: ', 1)[1])
+    schema = payload['candidates'][0]
+    assert set(schema) == {'view', 'summary', 'columns', 'temporal_scope', 'grain', 'filter_operators', 'scope_rules'}
+    assert set(schema['columns']['库存数量']) == {'data_type', 'description', 'aliases', 'capabilities', 'aggregations', 'default_aggregation'}
     assert schema['columns']['库存数量']['data_type'] == 'number'
+    assert schema['columns']['库存数量']['description'] == '合成數量'
+    assert schema['columns']['库存数量']['aliases'] == ['庫存數量']
+    assert schema['columns']['库存数量']['aggregations'] == ['sum']
+    assert schema['columns']['库存数量']['default_aggregation'] == 'sum'
+    assert schema['temporal_scope'] == 'current_snapshot'
     assert 'Synthetic West' not in user_message
     assert 'semantic_metadata' not in user_message
 
@@ -149,7 +155,7 @@ def test_accepts_model_column_names_but_grounds_them_in_request(tmp_path):
     def mutate(mapping):
         mapping['fields'] = [
             {'text': '品号', 'column': '品号'},
-            {'text': '库存数量', 'column': '库存数量'},
+            {'text': '库存数量', 'column': '库存数量', 'aggregation': 'sum'},
             {'text': '各倉庫', 'column': '仓库名称'},
         ]
         mapping['table'] = {'text': None, 'column': VIEW}
@@ -208,3 +214,114 @@ def test_second_mapping_attempt_can_recover(tmp_path):
     llm = MappingLLM(mutate)
     result = Workflow(llm, catalog, settings=settings, retriever=retriever, context_packer=packer).invoke(QUESTION)
     assert result.supported and llm.calls == 2
+
+
+@pytest.mark.parametrize('include_second', [True, False])
+def test_joint_selection_compares_candidates_and_rejects_unpacked_view(tmp_path, include_second):
+    import json
+    import yaml
+    from cpea.infrastructure.retrieval.documents import build_documents
+    from cpea.infrastructure.retrieval.schema import RetrievalCandidate, RetrievalResult
+    from tests.support import Catalog, view_contract
+
+    settings, _, packer, _, _ = dependencies(tmp_path)
+    other = 'gms2.v_alternate'
+    (tmp_path / 'alternate.yaml').write_text(
+        yaml.safe_dump(view_contract(other), allow_unicode=True), encoding='utf-8')
+    (tmp_path / 'catalog.yaml').write_text(yaml.safe_dump({'views': {
+        VIEW: {'path': 'inventory.yaml'}, other: {'path': 'alternate.yaml'},
+    }}, allow_unicode=True, sort_keys=False), encoding='utf-8')
+    catalog = Catalog(tmp_path)
+    documents = build_documents(catalog)
+    candidates = [RetrievalCandidate(doc, 1.0 - index * 0.5)
+                  for index, doc in enumerate(documents)]
+
+    class Candidates:
+        def retrieve(self, question):
+            return RetrievalResult(question, candidates if include_second else candidates[:1], 0.0, 0.0)
+
+    llm = MappingLLM(lambda mapping: mapping['table'].update(view=other))
+    result = Workflow(llm, catalog, settings=settings, retriever=Candidates(),
+                      context_packer=packer).invoke(QUESTION)
+    payload = json.loads(llm.messages[0][-1].content.split('table定義: ', 1)[1])
+    assert [s['view'] for s in payload['candidates']] == ([VIEW, other] if include_second else [VIEW])
+    if include_second:
+        assert result.supported and llm.calls == 1
+        assert result.selected_views == [other]
+        assert {source.document_id for source in result.sources} == {other}
+    else:
+        assert not result.supported and result.sql is None
+        assert 'table mapping does not match' in str(result.limitations)
+
+
+@pytest.mark.parametrize('sample', range(3))
+def test_missing_arbitrary_identifier_filter_cannot_broaden_query(tmp_path, sample):
+    from uuid import uuid4
+    identifier = 'ID' + uuid4().hex[:8].upper()
+    question = f'請查詢 {identifier} 目前各倉庫庫存數量'
+    settings, catalog, packer, _, retriever = dependencies(tmp_path)
+    llm = MappingLLM(lambda mapping: mapping.update(criteria=[]))
+    result = Workflow(llm, catalog, settings=settings, retriever=retriever,
+                      context_packer=packer).invoke(question)
+    assert not result.supported and result.sql is None
+    assert identifier in str(result.limitations)
+
+
+@pytest.mark.parametrize('explicit_null', [False, True])
+def test_null_aggregation_keeps_raw_values_despite_catalog_default(tmp_path, explicit_null):
+    settings, catalog, packer, _, retriever = dependencies(tmp_path)
+
+    def mutate(mapping):
+        field = {'text': '庫存數量', 'column': '库存数量'}
+        if explicit_null:
+            field['aggregation'] = None
+        mapping['fields'] = [field]
+        mapping['group'] = []
+        mapping['ignored'] = []
+
+    result = Workflow(MappingLLM(mutate), catalog, settings=settings, retriever=retriever,
+                      context_packer=packer).invoke('請列出 ZX100 的庫存數量')
+    assert result.supported, result.limitations
+    assert result.query_plan.aggregations == {}
+    assert result.query_trace.links.links[-1].aggregation is None
+    assert 'SUM(' not in result.sql
+    assert '[库存数量]' in result.sql
+
+
+def test_grouped_metric_without_aggregation_is_not_silently_summed(tmp_path):
+    settings, catalog, packer, _, retriever = dependencies(tmp_path)
+
+    def mutate(mapping):
+        mapping['fields'][0]['aggregation'] = None
+
+    result = Workflow(MappingLLM(mutate), catalog, settings=settings, retriever=retriever,
+                      context_packer=packer).invoke(QUESTION)
+    assert not result.supported and result.sql is None
+    assert result.query_trace.rejection_stage == 'sql_compilation'
+    assert 'grouped query has unaggregated columns' in str(result.limitations)
+
+
+def test_explicit_aggregation_must_still_pass_catalog_policy(tmp_path):
+    settings, catalog, packer, _, retriever = dependencies(tmp_path)
+
+    def mutate(mapping):
+        mapping['fields'][0]['aggregation'] = 'avg'
+
+    result = Workflow(MappingLLM(mutate), catalog, settings=settings, retriever=retriever,
+                      context_packer=packer).invoke(QUESTION)
+    assert not result.supported and result.sql is None
+    assert result.query_trace.rejection_stage == 'schema_linking'
+    assert 'metric aggregation not allowed' in str(result.limitations)
+
+
+@pytest.mark.parametrize('aggregation', ['SUM(x)', 'sum); DROP TABLE x; --'])
+def test_mapping_rejects_aggregation_expressions(tmp_path, aggregation):
+    settings, catalog, packer, _, retriever = dependencies(tmp_path)
+
+    def mutate(mapping):
+        mapping['fields'][0]['aggregation'] = aggregation
+
+    result = Workflow(MappingLLM(mutate), catalog, settings=settings, retriever=retriever,
+                      context_packer=packer).invoke(QUESTION)
+    assert not result.supported and result.sql is None
+    assert result.query_trace.rejection_stage == 'schema_linking'

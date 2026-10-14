@@ -145,6 +145,15 @@ class TracedModel:
     def invoke(self, messages):
         return list(self._call(messages, lambda: self.model.invoke(messages)))[0]
 
+    def with_response_schema(self, schema):
+        from cpea.infrastructure.llm.factory import bind_response_schema
+        from cpea.workflows.text_to_sql.schemas import SQLClauseMapping
+        bound = bind_response_schema(self.model, SQLClauseMapping, schema=schema)
+        wrapped = self.at(self.node_name)
+        wrapped.model = bound
+        wrapped._attempts = self._attempts
+        return wrapped
+
     def stream(self, messages):
         yield from self._call(messages, lambda: self.model.stream(messages), stream=True)
 

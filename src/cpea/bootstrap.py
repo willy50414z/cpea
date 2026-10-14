@@ -1,4 +1,4 @@
-"""Compose existing services; deployment supplies execution, core owns no DB adapter."""
+"""Compose services with injected or explicitly configured optional execution."""
 from __future__ import annotations
 from functools import cached_property
 from typing import Any
@@ -21,6 +21,10 @@ class AssistantRuntime:
         self._llm = llm
         self.executor = executor
         self.datasource_id = datasource_id if datasource_id is not None else self.deployment.datasource_id
+        if executor is None and settings.sqlserver.enabled:
+            from cpea.infrastructure.database.sql_server import SQLServerExecutor
+            self.executor = SQLServerExecutor(settings.sqlserver, self.datasource_id,
+                {view.name for view in self.catalog.views()}, settings.max_rows)
         self._retriever = retriever
         self._context_packer = context_packer
 
@@ -80,3 +84,8 @@ class AssistantRuntime:
         self.require_execution()
         execution = self.execute(request, history)
         return self.answer_service().synthesize(request, execution)
+
+    def staged_query_service(self):
+        self.require_execution()
+        from cpea.application.services.staged_query import StagedQueryService
+        return StagedQueryService(self.execution_agent(), self.datasource_id)

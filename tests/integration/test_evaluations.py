@@ -35,3 +35,17 @@ def test_reliability_runner_offline_and_output_not_overwritten(tmp_path):
     assert result['run_metadata']['kind'] == 'offline-synthetic'
     with pytest.raises(FileExistsError):
         write_jsonl(output, records)
+
+
+def test_reliability_runner_checks_empty_group_and_order(tmp_path):
+    runtime = runtime_fixture(tmp_path / 'profile')
+    cases = [
+        QueryReliabilityCase(question=QUESTION, expected_supported=True,
+            expected_filters={'品号': 'ZX100'}, expected_group_by=['仓库名称'], expected_order_by=[]),
+        QueryReliabilityCase(question=QUESTION, expected_supported=True,
+            expected_filters={'品号': 'ZX100'}, expected_group_by=[], expected_order_by=['仓库名称']),
+    ]
+    passed, failed = evaluate_cases(cases, runtime.generation_service(), runs=1)
+    assert passed['passed'], passed['failure_reasons']
+    assert not failed['passed']
+    assert {'group_by_mismatch', 'order_by_mismatch'} <= set(failed['failure_reasons'])

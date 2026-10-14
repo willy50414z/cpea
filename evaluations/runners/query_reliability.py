@@ -25,7 +25,8 @@ class QueryReliabilityCase(BaseModel):
     expected_filter_operators: dict[str, str] = Field(default_factory=dict)
     forbidden_filters: list[str] = Field(default_factory=list)
     expected_select_columns: list[str] = Field(default_factory=list)
-    expected_group_by: list[str] = Field(default_factory=list)
+    expected_group_by: list[str] | None = None
+    expected_order_by: list[str] | None = None
     expected_aggregations: dict[str, str] = Field(default_factory=dict)
     notes: str = ""
 
@@ -62,9 +63,10 @@ def evaluate_cases(cases: list[QueryReliabilityCase], service: Any, runs: int = 
                     for column in case.expected_select_columns:
                         if column not in plan.select_columns:
                             failures.append(f"select_mismatch:{column}")
-                    for column in case.expected_group_by:
-                        if column not in plan.group_by:
-                            failures.append(f"group_by_mismatch:{column}")
+                    if case.expected_group_by is not None and plan.group_by != case.expected_group_by:
+                        failures.append("group_by_mismatch")
+                    if case.expected_order_by is not None and plan.order_by != case.expected_order_by:
+                        failures.append("order_by_mismatch")
                     for column, aggregation in case.expected_aggregations.items():
                         if plan.aggregations.get(column) != aggregation:
                             failures.append(f"aggregation_mismatch:{column}")

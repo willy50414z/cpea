@@ -33,6 +33,3 @@ exclude = ["**/private/**", "**/__pycache__/**", "**/*.pyc"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-ra"
-
-[tool.uv]
-environments = ["sys_platform == 'win32'"]

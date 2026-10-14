@@ -118,6 +118,10 @@ class AssistantSettings:
     gcp_project: str | None = None
     gcp_location: str = "global"
 
+    @property
+    def output_token_reserve(self) -> int:
+        return 512 if self.max_output_tokens == -1 else self.max_output_tokens
+
     @classmethod
     def from_env(cls, env_file: str | Path | None = None) -> AssistantSettings:
         selected = env_file or os.environ.get('CPEA_ENV_FILE')
@@ -225,7 +229,7 @@ class AssistantSettings:
                 "ASSISTANT_LLM_NUM_PREDICT",
                 "LLM_MAX_OUTPUT_TOKENS",
                 default=512,
-                minimum=64,
+                minimum=-1,
             ),
             context_safety_tokens=_env_int(
                 "ASSISTANT_CONTEXT_SAFETY_TOKENS", default=128, minimum=0
@@ -284,6 +288,8 @@ class AssistantSettings:
             raise ValueError('ASSISTANT_LLM_TIMEOUT_SECONDS must be positive')
         if not 0 < result.top_p <= 1:
             raise ValueError('ASSISTANT_LLM_TOP_P must be > 0 and <= 1')
-        if result.max_output_tokens + result.context_safety_tokens >= result.context_window:
+        if result.max_output_tokens != -1 and result.max_output_tokens < 64:
+            raise ValueError('ASSISTANT_LLM_NUM_PREDICT must be -1 or >= 64')
+        if result.output_token_reserve + result.context_safety_tokens >= result.context_window:
             raise ValueError('output and safety tokens must be less than context window')
         return result

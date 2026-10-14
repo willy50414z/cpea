@@ -11,8 +11,7 @@ def test_single_view_generation_and_trace(tmp_path):
     assert result.query_trace.rejection_stage is None
     assert result.query_trace.candidate_attempts[0].outcome == 'matched'
     assert llm.calls == 1
-    assert result.query_trace.links.view_satisfied[0].fact_text == '目前'
-    assert len(result.query_trace.request_facts) == 4
+    assert len(result.query_trace.request_facts) == 3
 
 @pytest.mark.parametrize('question,stage', [('請 JOIN 兩個資料表', 'schema_selection'), ('請查第一季庫存數量', 'schema_linking')])
 def test_unsupported_requests(tmp_path, question, stage):
@@ -78,127 +77,134 @@ def test_literal_escaping_and_row_bound(tmp_path):
 
 
 class MappingLLM(StubLLM):
-    """Script model choices explicitly; these tests do not measure LLM accuracy."""
-    def __init__(self, mutate=lambda draft: draft):
+    """Return editable raw JSON for the clause-mapping workflow."""
+
+    def __init__(self, mutate=lambda mapping: None):
         super().__init__()
         self.mutate = mutate
         self.messages = []
 
-    def with_structured_output(self, model, **kwargs):
-        original = super().with_structured_output(model, **kwargs)
-        def invoke(messages):
-            self.messages.append(messages)
-            return self.mutate(original.invoke(messages))
-        return SimpleNamespace(invoke=invoke)
+    def invoke(self, messages):
+        self.messages.append(messages)
+        raw = super().invoke(messages)
+        if 'table定義:' not in messages[-1].content:
+            return raw
+        mapping = __import__('json').loads(raw.content)
+        self.mutate(mapping)
+        return SimpleNamespace(content=__import__('json').dumps(mapping, ensure_ascii=False))
 
 
-def test_mapping_prompt_contains_full_policy_and_samples(tmp_path):
+def test_mapping_prompt_contains_only_example_view_fields(tmp_path):
+    import json
+
     settings, catalog, packer, _, retriever = dependencies(tmp_path)
     policy = catalog.views()[0].policy
     policy['samples'] = [{'品号': 'ZX100', '仓库名称': 'Synthetic West', '库存数量': 12}]
-    policy['term_mappings'] = []
     policy['semantic_metadata'] = {'note': 'synthetic semantic note'}
     llm = MappingLLM()
     result = Workflow(llm, catalog, settings=settings, retriever=retriever, context_packer=packer).invoke(QUESTION)
     assert result.supported and llm.calls == 1
-    content = llm.messages[0][-1].content
-    assert all(item in content for item in [QUESTION, 'Synthetic West', 'semantic_metadata', 'scope_rules', 'term_mappings', 'capabilities'])
+    user_message = llm.messages[0][-1].content
+    schema = json.loads(user_message.split('table定義: ', 1)[1])
+    assert set(schema) == {'view', 'summary', 'columns'}
+    assert set(schema['columns']['库存数量']) == {'data_type'}
+    assert schema['columns']['库存数量']['data_type'] == 'number'
+    assert 'Synthetic West' not in user_message
+    assert 'semantic_metadata' not in user_message
 
 
 @pytest.mark.parametrize('mutation,expected', [
-    ('invented_value', 'ungrounded filter'), ('missing_fact', 'unlinked items'),
-    ('invented_fact', 'fact absent'), ('unknown_column', 'column is not'),
-    ('operator', 'operator not allowed'), ('extra_filter', 'prohibited scope'),
-    ('view', 'unselected view'), ('view_satisfied_entity', 'invalid View-satisfied'),
+    ('invented_value', 'ungrounded filter'),
+    ('absent_fact', 'fact absent'),
+    ('unknown_column', 'column is not'),
+    ('operator', 'operator not allowed'),
+    ('extra_filter', 'prohibited scope'),
+    ('view', 'table mapping does not match'),
+    ('missing_group', '必須依維度彙總'),
 ])
-def test_single_call_mapping_keeps_guards(tmp_path, mutation, expected):
-    from cpea.workflows.text_to_sql.schemas import ViewSatisfiedFact
+def test_clause_mapping_keeps_guards(tmp_path, mutation, expected):
     settings, catalog, packer, _, retriever = dependencies(tmp_path)
-    def mutate(draft):
-        link = draft.links[0]
-        if mutation == 'invented_value': link.value = 'MADEUP'
-        if mutation == 'missing_fact': draft.links.pop(0)
-        if mutation == 'invented_fact': draft.facts[0].text = 'absent'
-        if mutation == 'unknown_column': link.column = 'absent'
-        if mutation == 'operator': link.operator = 'DROP'
-        if mutation == 'view': link.view = 'other.v_inventory'
+
+    def mutate(mapping):
+        criterion = mapping['criteria'][0]
+        if mutation == 'invented_value': criterion['value'] = 'MADEUP'
+        if mutation == 'absent_fact': criterion['text'] = 'absent'
+        if mutation == 'unknown_column': criterion['column'] = 'absent'
+        if mutation == 'operator': criterion['operator'] = 'DROP'
         if mutation == 'extra_filter':
-            draft.links.append(models.SchemaLink(fact_text='各倉庫', view=VIEW, column='仓库名称', role='filter', operator='=', value='A'))
-        if mutation == 'view_satisfied_entity':
-            draft.links.pop(0)
-            draft.view_satisfied.append(ViewSatisfiedFact(fact_text='ZX100', reason='pretend satisfied'))
-        return draft
+            mapping['criteria'].append({'text': '各倉庫', 'column': '仓库名称', 'operator': '=', 'value': 'A'})
+        if mutation == 'view': mapping['table']['view'] = 'other.v_inventory'
+        if mutation == 'missing_group': mapping['group'] = []
+
     llm = MappingLLM(mutate)
     result = Workflow(llm, catalog, settings=settings, retriever=retriever, context_packer=packer).invoke(QUESTION)
-    assert not result.supported and result.sql is None and llm.calls == 2
+    assert not result.supported and result.sql is None
+    assert llm.calls == (1 if mutation == 'missing_group' else 2)
     assert expected in str(result.limitations)
 
 
-def test_model_can_use_other_current_time_word_without_python_exclusion(tmp_path):
+def test_accepts_model_column_names_but_grounds_them_in_request(tmp_path):
     settings, catalog, packer, _, retriever = dependencies(tmp_path)
-    def mutate(draft):
-        draft.facts[1].text = '此刻'
-        draft.view_satisfied[0].fact_text = '此刻'
-        return draft
+
+    def mutate(mapping):
+        mapping['fields'] = [
+            {'text': '品号', 'column': '品号'},
+            {'text': '库存数量', 'column': '库存数量'},
+            {'text': '各倉庫', 'column': '仓库名称'},
+        ]
+        mapping['table'] = {'text': None, 'column': VIEW}
+        mapping['criteria'][0].pop('value')
+
     llm = MappingLLM(mutate)
-    result = Workflow(llm, catalog, settings=settings, retriever=retriever, context_packer=packer).invoke(QUESTION.replace('目前', '此刻'))
+    result = Workflow(llm, catalog, settings=settings, retriever=retriever, context_packer=packer).invoke(QUESTION)
     assert result.supported and llm.calls == 1
-    assert len(result.query_plan.filters) == 1
-    assert result.query_trace.links.view_satisfied[0].fact_text == '此刻'
+    assert result.query_plan.select_columns == ['库存数量', '仓库名称']
+    assert result.query_plan.filters[0].value == 'ZX100'
+    assert {fact.text for fact in result.query_trace.request_facts} == {'ZX100', '庫存數量', '各倉庫'}
 
 
-def test_model_reports_unsupported_history_without_temporal_regex(tmp_path):
+def test_multiple_view_mapping_is_rejected_without_keyword_check(tmp_path):
     settings, catalog, packer, _, retriever = dependencies(tmp_path)
-    def mutate(draft):
-        draft.supported = False
-        draft.facts[1].text = '去年'
-        draft.view_satisfied = []
-        draft.unresolved_facts = ['去年']
-        draft.explanation = 'current snapshot cannot answer historical stock'
-        return draft
+
+    def mutate(mapping):
+        mapping['table'] = [
+            {'text': None, 'view': VIEW},
+            {'text': None, 'view': 'other.v_inventory'},
+        ]
+
     llm = MappingLLM(mutate)
-    result = Workflow(llm, catalog, settings=settings, retriever=retriever, context_packer=packer).invoke(QUESTION.replace('目前', '去年'))
+    request = QUESTION.replace('請查詢', '請整合')
+    result = Workflow(llm, catalog, settings=settings, retriever=retriever, context_packer=packer).invoke(request)
     assert not result.supported and result.sql is None
-    assert '去年' in result.query_trace.candidate_attempts[0].unresolved
+    assert result.query_trace.rejection_stage == 'schema_selection'
 
 
-def test_renamed_columns_require_no_business_mapping_code(tmp_path):
+def test_renamed_columns_follow_view_document(tmp_path):
     settings, catalog, packer, _, retriever = dependencies(tmp_path)
     policy = catalog.views()[0].policy
     renamed = {'品号': 'item_key', '仓库名称': 'site_label', '库存数量': 'units'}
-    policy['columns'] = {renamed[k]: v for k, v in policy['columns'].items()}
+    policy['columns'] = {renamed[name]: spec for name, spec in policy['columns'].items()}
     for rule in policy['scope_rules']:
         rule['required_dimension'] = 'site_label'
         rule['prohibited_filter_columns'] = ['site_label']
-    policy['samples'] = [{'item_key': 'ZX100', 'site_label': 'A', 'units': 1}]
-    def mutate(draft):
-        for link in draft.links: link.column = renamed[link.column]
-        return draft
+
+    def mutate(mapping):
+        for item in [*mapping['fields'], *mapping['criteria'], *mapping['group']]:
+            item['column'] = renamed[item['column']]
+
     llm = MappingLLM(mutate)
     result = Workflow(llm, catalog, settings=settings, retriever=retriever, context_packer=packer).invoke(QUESTION)
     assert result.supported and llm.calls == 1
     assert '[item_key]' in result.sql and '[site_label]' in result.sql
 
 
-def test_model_ambiguity_is_not_overridden_by_mandatory_links(tmp_path):
+def test_second_mapping_attempt_can_recover(tmp_path):
     settings, catalog, packer, _, retriever = dependencies(tmp_path)
-    def mutate(draft):
-        draft.supported = False
-        draft.links = []
-        draft.unresolved_facts = ['ZX100']
-        draft.ambiguity = ['samples do not establish the requested mapping']
-        return draft
-    llm = MappingLLM(mutate)
-    result = Workflow(llm, catalog, settings=settings, retriever=retriever, context_packer=packer).invoke(QUESTION)
-    assert not result.supported and not result.query_trace.candidate_attempts[0].links
 
+    def mutate(mapping):
+        if llm.calls == 1:
+            mapping['criteria'][0]['value'] = 'MADEUP'
 
-def test_repair_can_succeed_without_fact_extraction_call(tmp_path):
-    settings, catalog, packer, _, retriever = dependencies(tmp_path)
-    def mutate(draft):
-        if llm.calls == 1: draft.links[0].value = 'MADEUP'
-        return draft
     llm = MappingLLM(mutate)
     result = Workflow(llm, catalog, settings=settings, retriever=retriever, context_packer=packer).invoke(QUESTION)
     assert result.supported and llm.calls == 2
-    assert 'ungrounded filter' in llm.messages[1][-1].content

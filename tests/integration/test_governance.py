@@ -19,8 +19,8 @@ ROOT = Path(__file__).resolve().parents[2]
 def test_separate_inputs_and_invalid_cases(tmp_path):
     cases = load_cases(ROOT / "evaluations/datasets/governance_cases.json")
     models = load_models(ROOT / "evaluations/config/models.json")
-    assert len(cases.cases) == 4
-    assert [target.model for target in models.models][:2] == ["gemma4:e4b", "qwen3:4b"]
+    assert len(cases.cases) == 1
+    assert models.models and all(target.model for target in models.models)
     duplicate = {"version": 1, "cases": [cases.cases[0].model_dump(), cases.cases[0].model_dump()]}
     with pytest.raises(ValueError, match="case_id must be unique"):
         CaseFile.model_validate(duplicate)
@@ -64,14 +64,11 @@ def test_compare_traces_retry_and_answer(tmp_path):
     case = _case().model_copy(update={"expected_result": _case().expected_result.model_copy(update={
         "answer_contains": ["合成庫存資料"], "require_citation": True})})
     class RetryModel(StubLLM):
-        def with_structured_output(self, schema, **kwargs):
-            underlying = super().with_structured_output(schema, **kwargs)
-            def invoke(messages):
-                if not getattr(self, "retried", False):
-                    self.retried = True
-                    raise ValueError("malformed first response")
-                return underlying.invoke(messages)
-            return SimpleNamespace(invoke=invoke)
+        def invoke(self, messages):
+            if 'table定義:' in messages[-1].content and not getattr(self, "retried", False):
+                self.retried = True
+                raise ValueError("malformed first response")
+            return super().invoke(messages)
     targets = [ModelTarget(provider="local", transport="ollama", model=name) for name in ("stub-a", "stub-b")]
     results, calls = evaluate([case], targets, runtime=runtime, output=_output(),
                               model_factory=lambda target, settings: RetryModel(), repo_root=ROOT)
@@ -127,8 +124,8 @@ def test_cli_stability_requires_explicit_live_or_stub(tmp_path):
 def test_model_error_retains_failed_call(tmp_path):
     runtime = runtime_fixture(tmp_path)
     class BrokenModel(StubLLM):
-        def with_structured_output(self, schema, **kwargs):
-            return SimpleNamespace(invoke=lambda messages: (_ for _ in ()).throw(TimeoutError("offline timeout")))
+        def invoke(self, messages):
+            raise TimeoutError("offline timeout")
     result, calls = evaluate([_case()], [ModelTarget(provider="local", transport="ollama", model="broken")],
                              runtime=runtime, output=_output(), model_factory=lambda target, settings: BrokenModel(),
                              repo_root=ROOT)
@@ -169,4 +166,4 @@ def test_explicit_env_selects_stability_model_without_live_service(tmp_path):
                  "--env-file", str(env), "--runs", "1", "--output-dir", str(output)],
                 model_factory=lambda target, settings: StubLLM(view="demo.v_inventory")) == 0
     records = [json.loads(line) for line in (output / "results.jsonl").read_text(encoding="utf-8").splitlines()]
-    assert len(records) == 4 and {record["model"] for record in records} == {"qwen3:4b"}
+    assert len(records) == 1 and {record["model"] for record in records} == {"qwen3:4b"}

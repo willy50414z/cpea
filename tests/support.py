@@ -72,6 +72,21 @@ class StubLLM:
         return SimpleNamespace(invoke=invoke)
     def invoke(self, messages):
         self.calls += 1
+        if 'table定義:' in messages[-1].content:
+            if '請 JOIN 兩個資料表' in messages[-1].content:
+                return SimpleNamespace(content=__import__('json').dumps({
+                    'fields': [], 'table': [{'text': None, 'column': self.view}],
+                    'criteria': [], 'order': [], 'group': [], 'ignored': [],
+                }, ensure_ascii=False))
+            if '請查第一季庫存數量' in messages[-1].content:
+                return SimpleNamespace(content='{"fields":[],"table":null,"criteria":[],"order":[],"group":[],"ignored":[]}')
+            return SimpleNamespace(content=__import__('json').dumps({
+                'fields': [{'text': '庫存數量', 'column': '库存数量'}, {'text': '各倉庫', 'column': '仓库名称'}],
+                'table': {'text': None, 'view': self.view},
+                'criteria': [{'text': 'ZX100', 'column': '品号', 'operator': '=', 'value': 'ZX100'}],
+                'order': [], 'group': [{'text': '各倉庫', 'column': '仓库名称'}],
+                'ignored': [{'text': '目前', 'reason': 'View 已表示目前資料'}],
+            }, ensure_ascii=False))
         return SimpleNamespace(content='{"answer":"合成庫存資料 [Source 1]","citations":["Source 1"]}')
     def stream(self, messages):
         yield self.invoke(messages)

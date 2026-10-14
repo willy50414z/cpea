@@ -162,7 +162,7 @@ class ContextPacker:
         document_budget = max(
             0,
             self.settings.context_window
-            - self.settings.max_output_tokens
+            - self.settings.output_token_reserve
             - self.settings.context_safety_tokens
             - base_tokens,
         )

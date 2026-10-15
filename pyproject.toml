@@ -29,6 +29,9 @@ cpea-query-eval = "evaluations.runners.query_reliability:main"
 cpea-governance-eval = "evaluations.governance_runner:main"
 
 [project.optional-dependencies]
+postgres-contracts = [
+    "psycopg[binary]>=3.2,<4",
+]
 sqlserver = [
     "pymssql>=2.3,<3",
     "sqlalchemy>=2.0,<3",

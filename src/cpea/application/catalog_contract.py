@@ -68,20 +68,7 @@ class CatalogContract:
                 continue
             if not any("filter" in self.field_contract(definition.name, item.column).get("capabilities", []) for definition in matching):
                 violations.append(f"filter 不允許欄位：{item.column}")
-            permitted = set()
-            for definition in matching:
-                policy = definition.policy.get("filter_operators", {})
-                configured = policy.get("columns", {}).get(item.column)
-                if configured is not None:
-                    permitted.update(configured)
-                    continue
-                field_type = self.columns(definition.name)[item.column]
-                if "日期" in field_type:
-                    permitted.update(policy.get("date", policy.get("default", [])))
-                elif "數值" in field_type or "数值" in field_type:
-                    permitted.update(policy.get("number", policy.get("default", [])))
-                else:
-                    permitted.update(policy.get("default", []))
+            permitted = set().union(*(self._operators_for(definition.name, item.column) for definition in matching))
             if item.operator not in permitted:
                 violations.append(f"filter operator 不允許：{item.column} {item.operator}")
             if item.operator == "IN" and (
@@ -146,7 +133,14 @@ class CatalogContract:
         contract = definition.policy.get("columns", {}).get(column)
         if not isinstance(contract, dict):
             raise ValueError(f"column is not in view contract: {view_name}.{column}")
-        return contract
+        if definition.policy.get('version') != 3:
+            return contract
+        field_type = contract['type']
+        capabilities = {'select', 'filter', 'group_by', 'order_by'} - set(contract.get('disallowed_capabilities', []))
+        aggregations = ({'sum', 'count', 'avg', 'min', 'max'} if field_type == 'number'
+                        else {'count', 'min', 'max'} if field_type in {'string', 'date'} else {'count'})
+        return {**contract, 'capabilities': sorted(capabilities),
+                'aggregations': sorted(aggregations - set(contract.get('disallowed_aggregations', [])))}
 
     def validate_link(self, link: Any, allowed_views: set[str]) -> str | None:
         if link.view not in allowed_views:
@@ -178,6 +172,14 @@ class CatalogContract:
 
     def _operators_for(self, view_name: str, column: str) -> set[str]:
         definition = next(item for item in self.views() if item.name == view_name)
+        if definition.policy.get('version') == 3:
+            spec = definition.policy['columns'][column]
+            base = {'=', '!=', '<>', 'IN'}
+            if spec['type'] in {'number', 'date'}:
+                base.update({'>', '>=', '<', '<='})
+            if spec['type'] == 'string':
+                base.add('LIKE')
+            return base - set(spec.get('disallowed_operators', []))
         policy = definition.policy.get("filter_operators", {})
         configured = policy.get("columns", {}).get(column)
         if configured is not None:
@@ -197,8 +199,9 @@ class CatalogContract:
             raise ValueError(f"view is not in the verified catalogue: {view_name}")
         policy = definition.policy
         lines = [f"# View: {view_name}", "", "## 用途摘要", "", policy["summary"], "", "## 欄位說明", "", "| 欄位名稱 | 型別（推測） | 說明 | 權限 | 可用聚合 | 別名 |", "|---|---|---|---|---|---|"]
-        for name, spec in policy["columns"].items():
-            lines.append(f"| {name} | {spec['type']} | {spec['description']} | {', '.join(spec.get('capabilities', []))} | {', '.join(spec.get('aggregations', []))} | {', '.join(spec.get('aliases', []))} |")
+        for name, raw in policy["columns"].items():
+            spec = self.field_contract(view_name, name)
+            lines.append(f"| {name} | {spec['type']} | {spec['description']} | {', '.join(spec.get('capabilities', []))} | {', '.join(spec.get('aggregations', []))} | {', '.join(raw.get('aliases', []))} |")
         if policy.get("filter_operators"):
             lines.extend(["", "## 篩選運算子", "", yaml.safe_dump(policy["filter_operators"], allow_unicode=True, sort_keys=False)])
         if policy.get("data_scope"):

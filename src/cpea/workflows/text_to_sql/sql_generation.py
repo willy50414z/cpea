@@ -416,16 +416,36 @@ class SQLGenerationWorkflow:
 
 def candidate_schema(definition) -> dict[str, Any]:
     """Expose approved metadata only; samples and evaluation data never enter context."""
+    from cpea.application.catalog_contract import CatalogContract
+    class _SingleView(CatalogContract):
+        def views(self):
+            return [definition]
+    contract = _SingleView()
     schema = {
         "view": definition.name, "summary": definition.summary,
         "columns": {name: {
             "data_type": _LEGACY_COLUMN_TYPES.get(spec["type"], spec["type"]),
             "description": spec["description"], "aliases": spec.get("aliases", []),
-            "capabilities": spec.get("capabilities", []),
-            "aggregations": spec.get("aggregations", []),
+            "capabilities": contract.field_contract(definition.name, name).get("capabilities", []),
+            "aggregations": contract.field_contract(definition.name, name).get("aggregations", []),
             "default_aggregation": spec.get("default_aggregation"),
+            **({"role": spec["role"]} if "role" in spec else {}),
+            **({"unit": spec["unit"]} if "unit" in spec else {}),
+            **({key: spec[key] for key in ("disallowed_aggregations", "disallowed_operators", "disallowed_capabilities") if key in spec}),
         } for name, spec in definition.policy["columns"].items()},
     }
+    if definition.policy.get('version') == 3:
+        base = ['!=', '<>', '=', 'IN']
+        schema['filter_operators'] = {
+            'default': [*base, 'LIKE'],
+            'number': [*base, '<', '<=', '>', '>='],
+            'date': [*base, '<', '<=', '>', '>='],
+            'columns': {
+                name: sorted(contract._operators_for(definition.name, name))
+                for name, spec in definition.policy['columns'].items()
+                if spec['type'] == 'boolean' or spec.get('disallowed_operators')
+            },
+        }
     for key in ("temporal_scope", "data_scope", "grain", "filter_operators", "term_mappings", "scope_rules"):
         if definition.policy.get(key):
             schema[key] = definition.policy[key]

@@ -13,9 +13,12 @@ from cpea.domain.catalog import ViewDefinition
 _VIEW_NAME = re.compile(r'[A-Za-z_]\w*(?:\.[A-Za-z_]\w*){1,2}\Z')
 _AGGREGATIONS = {'sum', 'count', 'avg', 'min', 'max'}
 _OPERATORS = {'=', '!=', '<>', '>', '>=', '<', '<=', 'IN', 'LIKE'}
+_TYPES = {'string', 'number', 'date', 'boolean'}
+_ROLES = {'identifier', 'dimension', 'measure'}
+_CAPABILITIES = {'select', 'filter', 'group_by', 'order_by'}
 
 class SchemaCatalog(CatalogContract):
-    def __init__(self, profile_root: str | Path | None = None):
+    def __init__(self, profile_root: str | Path | None = None, *, allow_drafts: bool = False):
         self.root = Path(profile_root).resolve() if profile_root is not None else Path(str(files('cpea.resources').joinpath('demo'))).resolve()
         digest = sha256()
         def document(relative: str) -> dict[str, Any]:
@@ -36,6 +39,8 @@ class SchemaCatalog(CatalogContract):
                 raise ValueError('contract resource must contain a mapping')
             return value
         manifest = document('manifest.yaml')
+        if manifest.get('status') == 'draft' and not allow_drafts:
+            raise ValueError('draft contracts require explicit allow_drafts=True')
         self.profile_id = manifest.get('profile_id')
         self.contract_version = manifest.get('contract_version')
         if not isinstance(self.profile_id, str) or not re.fullmatch(r'[A-Za-z0-9_-]+', self.profile_id):
@@ -67,6 +72,29 @@ class SchemaCatalog(CatalogContract):
         columns = policy.get('columns')
         if not isinstance(columns, dict) or not columns:
             raise ValueError('view contract requires columns')
+        if policy.get('version') == 3:
+            if set(policy) - {'version', 'view', 'summary', 'grain', 'columns'}:
+                raise ValueError('v3 contract contains unsupported view settings')
+            grain = policy.get('grain')
+            if not isinstance(grain, dict) or not isinstance(grain.get('description'), str):
+                raise ValueError('v3 contract requires grain description')
+            keys = grain.get('keys')
+            if keys is not None and (not isinstance(keys, list) or not keys or not all(isinstance(k, str) and k in columns for k in keys) or len(keys) != len(set(keys))):
+                raise ValueError('v3 grain keys must reference distinct columns')
+            for name, spec in columns.items():
+                if not isinstance(name, str) or not isinstance(spec, dict) or spec.get('type') not in _TYPES or spec.get('role') not in _ROLES or not isinstance(spec.get('description'), str):
+                    raise ValueError('v3 column requires supported type, role and description')
+                if set(spec) - {'type', 'role', 'description', 'unit', 'disallowed_aggregations', 'disallowed_operators', 'disallowed_capabilities', 'default_aggregation'}:
+                    raise ValueError('v3 contract contains unsupported column settings')
+                if 'unit' in spec and not isinstance(spec['unit'], str):
+                    raise ValueError('v3 unit must be a string')
+                for field, allowed in (('disallowed_aggregations', _AGGREGATIONS), ('disallowed_operators', _OPERATORS), ('disallowed_capabilities', _CAPABILITIES)):
+                    value = spec.get(field, [])
+                    if not isinstance(value, list) or any(not isinstance(item, str) or item not in allowed for item in value):
+                        raise ValueError(f'v3 {field} contains unsupported values')
+                if 'default_aggregation' in spec and spec['default_aggregation'] not in _AGGREGATIONS - set(spec.get('disallowed_aggregations', [])):
+                    raise ValueError('v3 default_aggregation is unsupported or disallowed')
+            return
         for name, spec in columns.items():
             if not isinstance(name, str) or not isinstance(spec, dict) or not isinstance(spec.get('type'), str) or not isinstance(spec.get('description'), str):
                 raise ValueError('column contract requires name, type and description')

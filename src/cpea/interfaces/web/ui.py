@@ -75,7 +75,15 @@ def query_updates(runtime, question: str, gate: SessionGate):
 def create_ui(runtime) -> gr.Blocks:
     with gr.Blocks(title='CPEA', analytics_enabled=False, fill_height=True) as ui:
         gate = gr.State(SessionGate(), time_to_live=3600)
-        gr.Markdown('## CPEA\n每次問題獨立，只顯示最新一題。')
+        gr.Markdown('## CPEA\n\n範例問題：\n\n'
+                    '- 請查詢品號 GN2300 目前各倉庫的庫存數量，依倉庫名稱排序\n'
+                    '- 請列出目前庫存的品號、倉庫名稱與批號，按批號排序\n'
+                    '- 請列出目前庫存的品號、倉庫名稱、批號、最近一個月的銷售量，按品號排序\n'
+                    '- 列出所有銷退貨單號與業務員，依銷退貨日期排序')
+        with gr.Row(elem_id='cpea-composer'):
+            question = gr.Textbox(label='問題', placeholder='輸入問題，Enter 送出，Shift+Enter 換行',
+                                  lines=1, max_lines=5, scale=8, max_length=4000, elem_id='cpea-question')
+            submit = gr.Button('送出', variant='primary', scale=1, elem_id='cpea-submit')
         gr.HTML('<div id="cpea-transport" hidden role="status" aria-live="polite">'
                 '<p class="question"></p><p class="error"></p></div>')
         chat = gr.Chatbot(label='最新問答', render_markdown=False, allow_tags=False,
@@ -85,10 +93,6 @@ def create_ui(runtime) -> gr.Blocks:
                       buttons=['copy'], wrap_lines=True, elem_id='cpea-sql')
         table = gr.Dataframe(label='查詢結果', type='array', datatype='str',
                              interactive=False, visible=False, max_height=350, elem_id='cpea-results')
-        with gr.Row(elem_id='cpea-composer'):
-            question = gr.Textbox(label='問題', placeholder='輸入問題，Enter 送出，Shift+Enter 換行',
-                                  lines=1, max_lines=5, scale=8, max_length=4000, elem_id='cpea-question')
-            submit = gr.Button('送出', variant='primary', scale=1, elem_id='cpea-submit')
 
         def respond(question, gate):
             yield from query_updates(runtime, question, gate)

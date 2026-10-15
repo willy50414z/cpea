@@ -54,6 +54,5 @@ def create_app(runtime: AssistantRuntime | None = None) -> FastAPI:
     return gr.mount_gradio_app(app, create_ui(runtime), path='/',
         show_error=False, footer_links=[], run_history=False, ssr_mode=False,
         enable_monitoring=False, mcp_server=False,
-        css='''#cpea-composer { position: sticky; bottom: 0; background: var(--body-background-fill); z-index: 2; }
-            html[data-cpea-pending] :is(#cpea-chat, #cpea-sql, #cpea-results) { display: none !important; }
+        css='''html[data-cpea-pending] :is(#cpea-chat, #cpea-sql, #cpea-results) { display: none !important; }
             .toast-body.error { display: none !important; }''')

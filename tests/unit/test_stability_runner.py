@@ -46,6 +46,32 @@ def test_provider_error_is_recorded_and_not_retried(tmp_path):
     assert [r['event'] for r in rows] == ['request', 'error']
 
 
+def test_cloud_cap_without_fallback_does_not_reserve_or_call(tmp_path):
+    ledger = tmp_path / 'ledger.jsonl'
+    ledger.write_text((json.dumps({'provider': 'azure'}) + '\n') * 500, encoding='utf-8')
+    cloud = Model()
+    recorded = RecordedModel(cloud, 'azure', 'cloud', tmp_path / 'calls.jsonl', ledger)
+    with pytest.raises(RuntimeError, match='cloud_call_cap_reached'):
+        recorded.invoke([HumanMessage(content='probe')])
+    assert cloud.calls == 0
+    assert len(ledger.read_text(encoding='utf-8').splitlines()) == 500
+
+
+def test_explicit_cloud_cap_uses_existing_ledger_and_stops_at_limit(tmp_path):
+    ledger = tmp_path / 'ledger.jsonl'
+    ledger.write_text((json.dumps({'provider': 'azure'}) + '\n') * 500, encoding='utf-8')
+    cloud = Model()
+    recorded = RecordedModel(cloud, 'azure', 'cloud', tmp_path / 'calls.jsonl', ledger,
+                             cloud_call_limit=501)
+    recorded.invoke([HumanMessage(content='probe')])
+    with pytest.raises(RuntimeError, match='cloud_call_cap_reached'):
+        recorded.invoke([HumanMessage(content='probe')])
+    assert cloud.calls == 1
+    rows = [json.loads(line) for line in ledger.read_text(encoding='utf-8').splitlines()]
+    assert len(rows) == 501
+    assert all(row['provider'] == 'azure' for row in rows)
+
+
 def test_valid_json_with_empty_fields_fails_mvp_semantics(tmp_path):
     _, catalog, *_ = dependencies(tmp_path)
     mapping = SQLClauseMapping.model_validate({'table': {'view': VIEW}, 'fields': []})

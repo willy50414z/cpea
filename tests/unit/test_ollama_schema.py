@@ -3,6 +3,7 @@ from dataclasses import replace
 from types import SimpleNamespace
 
 import httpx
+import pytest
 from langchain_ollama import ChatOllama
 
 from cpea.workflows.text_to_sql.schemas import AnswerDraft, SQLClauseMapping
@@ -53,12 +54,13 @@ def test_response_schema_binding_does_not_change_other_response_formats():
     assert requests[1]['format'] == 'json'
 
 
-def test_configured_thinking_keeps_scratchpad_out_of_json_response(tmp_path, monkeypatch):
+@pytest.mark.parametrize('output_tokens', [8192, -1])
+def test_configured_thinking_keeps_scratchpad_out_of_json_response(tmp_path, monkeypatch, output_tokens):
     from cpea.infrastructure.llm import factory
     from cpea.infrastructure.llm.parsing import parse_model
 
     settings, *_ = dependencies(tmp_path)
-    settings = replace(settings, llm_reasoning=True, max_output_tokens=8192)
+    settings = replace(settings, llm_reasoning=True, max_output_tokens=output_tokens)
     requests = []
 
     def respond(request):
@@ -75,9 +77,38 @@ def test_configured_thinking_keeps_scratchpad_out_of_json_response(tmp_path, mon
     llm = factory.get_llm_config(settings=settings)
     raw = llm.invoke('回傳結構化 JSON')
     assert requests[0]['think'] is True
-    assert requests[0]['options']['num_predict'] == 8192
+    assert requests[0]['options']['num_predict'] == output_tokens
     assert raw.additional_kwargs['reasoning_content'] == 'private synthetic scratchpad'
     assert parse_model(raw, SQLClauseMapping).table is None
+
+
+@pytest.mark.parametrize('output_tokens', [-1, 4096])
+def test_azure_output_budget_uses_provider_request_semantics(tmp_path, monkeypatch, output_tokens):
+    provider = pytest.importorskip('langchain_openai')
+    from cpea.infrastructure.llm import factory
+
+    settings, *_ = dependencies(tmp_path)
+    settings = replace(settings, llm_provider='azure', llm_api_key='synthetic',
+                       llm_base_url='https://azure.example/openai/v1', max_output_tokens=output_tokens)
+    requests = []
+
+    def respond(request):
+        requests.append(json.loads(request.content))
+        return httpx.Response(200, json={
+            'id': 'synthetic', 'object': 'chat.completion', 'created': 0, 'model': 'synthetic',
+            'choices': [{'index': 0, 'finish_reason': 'stop',
+                         'message': {'role': 'assistant', 'content': '{}'}}],
+        })
+
+    original = provider.ChatOpenAI
+    monkeypatch.setattr(provider, 'ChatOpenAI', lambda **kwargs: original(
+        **kwargs, http_client=httpx.Client(transport=httpx.MockTransport(respond), trust_env=False)))
+    factory.get_llm_config(settings=settings).invoke('configuration probe')
+    if output_tokens == -1:
+        assert 'max_tokens' not in requests[0]
+        assert 'max_completion_tokens' not in requests[0]
+    else:
+        assert requests[0].get('max_completion_tokens', requests[0].get('max_tokens')) == output_tokens
 
 
 def test_call_recorder_preserves_per_request_contract_name_constraints(tmp_path):

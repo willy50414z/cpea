@@ -83,7 +83,7 @@ def get_llm_config(
             vertexai=True,
             temperature=selected_temperature,
             top_p=selected_top_p,
-            max_output_tokens=selected_output,
+            max_output_tokens=None if selected_output == -1 else selected_output,
             timeout=settings.request_timeout_seconds,
             max_retries=0,
         )
@@ -105,7 +105,7 @@ def get_llm_config(
         temperature=selected_temperature,
         top_p=selected_top_p,
         seed=selected_seed,
-        max_tokens=selected_output,
+        max_tokens=None if selected_output == -1 else selected_output,
         timeout=settings.request_timeout_seconds,
         max_retries=0,
         model_kwargs={"response_format": {"type": "json_object"}} if settings.llm_provider == "llamacpp" else {},

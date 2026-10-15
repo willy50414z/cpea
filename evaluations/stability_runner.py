@@ -107,9 +107,12 @@ def check_mapping(mapping, question, view, catalog, case=None):
 
 class RecordedModel:
     """Reserve before invoking; SDK retries must be disabled by the caller."""
-    def __init__(self, model, provider, model_name, output, ledger):
+    def __init__(self, model, provider, model_name, output, ledger, *, cloud_call_limit=500):
+        if cloud_call_limit < 1:
+            raise ValueError('cloud_call_limit must be positive')
         self.model, self.provider, self.model_name = model, provider, model_name
         self.output, self.ledger = output, ledger
+        self.cloud_call_limit = cloud_call_limit
         self.context: dict[str, Any] = {}
         self.blocked: Exception | None = None
         self.fallback = None
@@ -134,7 +137,7 @@ class RecordedModel:
             stream.seek(0)
             count = sum(json.loads(line)['provider'] == self.provider
                         for line in stream if line.strip())
-            if self.provider in {'azure', 'gcp'} and count >= 500:
+            if self.provider in {'azure', 'gcp'} and count >= self.cloud_call_limit:
                 if self.fallback is None:
                     raise RuntimeError('cloud_call_cap_reached: switch to ollama')
                 append(self.output, {'event': 'provider_switch', 'from': self.provider,
@@ -176,6 +179,10 @@ def main(argv=None):
     parser.add_argument('--model', required=True)
     parser.add_argument('--output', required=True)
     parser.add_argument('--ledger', default='artifacts/stability/cloud-calls.jsonl')
+    parser.add_argument('--cloud-call-limit', type=int, default=500,
+                        help='Absolute shared-ledger call limit per cloud provider; raising requires explicit authorization')
+    parser.add_argument('--ollama-fallback', action=argparse.BooleanOptionalAction, default=True,
+                        help='Switch to Ollama at the cloud call limit')
     parser.add_argument('--dataset', default='evaluations/datasets/query_reliability.jsonl')
     parser.add_argument('--runs', type=int, default=3)
     parser.add_argument('--prompt-file')
@@ -192,12 +199,14 @@ def main(argv=None):
     parser.add_argument('--feedback-file', help='Probe generic validation feedback without workflow changes')
     parser.add_argument('--reasoning', action=argparse.BooleanOptionalAction, default=None,
                         help='Override explicit Ollama thinking mode')
-    parser.add_argument('--max-output-tokens', type=int, help='Probe a bounded reasoning/output budget')
+    parser.add_argument('--max-output-tokens', type=int, help='Override output budget; -1 removes the explicit limit')
     parser.add_argument('--constrain-names', action='store_true', help='Probe contract-derived name enums')
     parser.add_argument('--execute', action='store_true', help='Also run approved SQL on configured DB')
     args = parser.parse_args(argv)
     if args.runs < 3:
         parser.error('LLM stability evaluation requires at least 3 runs')
+    if args.cloud_call_limit < 1:
+        parser.error('cloud-call-limit must be positive')
     if args.phase == 'mvp' and (not args.view or not args.question):
         parser.error('MVP requires view and question')
     output = Path(args.output)
@@ -211,8 +220,8 @@ def main(argv=None):
     if args.reasoning is not None:
         settings = replace(settings, llm_reasoning=args.reasoning)
     if args.max_output_tokens is not None:
-        if args.max_output_tokens < 1:
-            parser.error('max-output-tokens must be positive')
+        if args.max_output_tokens != -1 and args.max_output_tokens < 1:
+            parser.error('max-output-tokens must be -1 or positive')
         settings = replace(settings, max_output_tokens=args.max_output_tokens)
     if args.provider == 'ollama':
         settings = replace(settings, llm_base_url=args.ollama_base_url or settings.embedding_base_url,
@@ -247,13 +256,14 @@ def main(argv=None):
     if args.native_schema and args.provider == 'gcp':
         llm = llm.bind(response_mime_type='application/json',
                        response_json_schema=SQLClauseMapping.model_json_schema())
-    recorded = RecordedModel(llm, args.provider, args.model, output / 'calls.jsonl', ledger)
+    recorded = RecordedModel(llm, args.provider, args.model, output / 'calls.jsonl', ledger,
+                             cloud_call_limit=args.cloud_call_limit)
     def fallback():
         local = replace(base.settings, llm_provider='ollama', llm_model=args.ollama_model,
                         llm_base_url=args.ollama_base_url or base.settings.embedding_base_url,
                         llm_api_key='not-needed', temperature=0.0)
         return bind_response_schema(get_llm_config(settings=local), SQLClauseMapping), args.ollama_model
-    recorded.fallback = fallback
+    recorded.fallback = fallback if args.ollama_fallback else None
     runtime = AssistantRuntime(settings, catalog=base.catalog, llm=recorded)
     cases = [QueryReliabilityCase.model_validate_json(line) for line in
              Path(args.dataset).read_text(encoding='utf-8').splitlines() if line.strip()]
@@ -268,6 +278,7 @@ def main(argv=None):
                     execute=args.execute, source_module=workflow.__file__,
                     native_schema=args.native_schema, plain_json=args.plain_json,
                     reasoning=settings.llm_reasoning,
+                    cloud_call_limit=args.cloud_call_limit, ollama_fallback=args.ollama_fallback,
                     runner_fingerprint=hashlib.sha256(Path(__file__).read_bytes()).hexdigest())
     (output / 'run.json').write_text(json.dumps(metadata, ensure_ascii=False, indent=2), encoding='utf-8')
     records = []

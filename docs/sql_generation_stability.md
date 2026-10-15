@@ -6,6 +6,8 @@
 
 Ollama 的推理模式由 `ASSISTANT_LLM_REASONING` 明確控制，預設 false。啟用時需要足夠的 `ASSISTANT_LLM_NUM_PREDICT`，因為推理也使用輸出額度。LangChain 將推理內容與最終 JSON 分開；產品 SQL／結果不包含推理內容。
 
+`ASSISTANT_LLM_NUM_PREDICT=-1` 或 runner 的 `--max-output-tokens -1` 可取消明確輸出上限。Ollama 傳送 `num_predict=-1`；Azure／GCP 不指定輸出 token 上限，仍受模型與服務本身限制。正在執行的 Gradio／API 服務需重新啟動才會載入 `.env` 變更。
+
 ## 測試順序
 
 1. 先用 `mvp` 直接測試模型與回覆驗證，不執行完整 workflow 或資料庫。
@@ -41,5 +43,7 @@ uv pip install --python .venv/bin/python --no-deps --editable .
 每次執行使用新的輸出目錄，保留 `run.json`、`calls.jsonl`、`results.jsonl`、`summary.json`；資料庫執行另有 `execution.jsonl`。原始紀錄可能含問題、SQL、推理與企業欄位，保存於 Git 忽略的 `artifacts/`。
 
 共用 `artifacts/stability/cloud-calls.jsonl` 呼叫帳本；同平台不同模型合併計數。每次呼叫前先鎖定帳本並預留，失敗也計入。Azure／GCP 各達 500 次後切換到 Ollama，不能換新帳本規避上限。雲端 SDK 隱藏重試停用，provider 錯誤立即記錄並暫停。遇到 quota、auth 或 network 錯誤先分類檢討，不盲目重跑。
+
+指定 `--no-ollama-fallback` 可在達到雲端呼叫上限時停止，避免切回 Ollama。若使用者明確授權增加雲端呼叫，才可用 `--cloud-call-limit` 設定新的絕對累計上限；原帳本與既有計數必須保留，預設仍為每平台 500 次。測試 metadata 會記錄這兩項設定。
 
 實測結果與每輪錯誤檢討保存在 `artifacts/stability/20261015/`；不同 prompt、模型、推理模式或 source fingerprint 的結果分開解讀。

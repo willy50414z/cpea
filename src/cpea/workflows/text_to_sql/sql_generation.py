@@ -508,9 +508,30 @@ def unmapped_request_literals(request, mapping, catalog, view) -> list[str]:
     sql_words = {"SQL", "SELECT", "FROM", "WHERE", "HAVING", "ORDER", "BY", "GROUP", "JOIN",
                  "ASC", "DESC", "SUM", "COUNT", "AVG", "MIN", "MAX", "AND", "OR",
                  "IN", "LIKE", "NULL", "TOP", "DISTINCT"}
-    literals = {item for item in token.findall(request)
-                if any(char.isdigit() for char in item)
-                or (len(item) > 1 and item.isupper() and item not in sql_words)}
+    # A number inside a mapped field name is part of that field's identity,
+    # provided the contract itself uses the same number. Keep other occurrences
+    # of that number in the request available for filter coverage checks.
+    field_spans: list[tuple[int, int, set[str]]] = []
+    definition = next(item for item in catalog.views() if item.name == view)
+    for field in mapping.fields:
+        spec = definition.policy["columns"].get(field.column)
+        if not spec or not field.text or re.search(
+                r"(?:[<>!=]=?|\b(?:LIKE|IN)\b|大於|小於|超過|低於|至少|以上|以下)",
+                field.text, re.IGNORECASE):
+            continue
+        contract_text = " ".join([field.column, spec["description"], *spec.get("aliases", [])])
+        contract_literals = set(re.findall(r"\d+", contract_text))
+        contract_literals.update(item for item in token.findall(contract_text)
+                                 if any(char.isdigit() for char in item))
+        for occurrence in re.finditer(re.escape(field.text), request):
+            field_spans.append((occurrence.start(), occurrence.end(), contract_literals))
+    literals = {match.group() for match in token.finditer(request)
+                if (any(char.isdigit() for char in match.group())
+                    or (len(match.group()) > 1 and match.group().isupper()
+                        and match.group() not in sql_words))
+                and not any(start <= match.start() and match.end() <= end
+                            and match.group() in numbers
+                            for start, end, numbers in field_spans)}
     covered = {view}
     for item in [*mapping.fields, *mapping.criteria, *getattr(mapping, "having", []), *mapping.group, *mapping.order]:
         try:
@@ -526,7 +547,6 @@ def unmapped_request_literals(request, mapping, catalog, view) -> list[str]:
             covered.update(token.findall(str(value)))
     for item in getattr(mapping, "having", []):
         covered.update(token.findall(str(item.value)))
-    definition = next(item for item in catalog.views() if item.name == view)
     for rule in definition.policy.get("term_mappings", []):
         filters = rule.get("filters", [])
         if filters and all(any(item.column == f["column"] and item.operator == f["operator"]

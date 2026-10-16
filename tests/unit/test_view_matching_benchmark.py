@@ -10,7 +10,7 @@ from cpea.domain.models import QueryPlan
 from cpea.infrastructure.catalog.yaml_catalog import SchemaCatalog
 from cpea.infrastructure.sql_compiler import compile_single_view
 from cpea.workflows.text_to_sql.prompt_resources import load_match_prompt
-from cpea.workflows.text_to_sql.sql_generation import candidate_schema
+from cpea.workflows.text_to_sql.sql_generation import candidate_schema, unmapped_request_literals
 from cpea.bootstrap import AssistantRuntime
 from evaluations.call_budget import CallBudget, ModelStopped, provider_stop_reason
 from evaluations.governance_inputs import load_cases
@@ -178,6 +178,37 @@ def test_v5_contract_omits_unset_default_aggregation():
     policy["columns"][next(iter(policy["columns"]))]["default_aggregation"] = "sum"
     with pytest.raises(ValueError, match="unsupported column settings"):
         SchemaCatalog._validate_policy(policy)
+
+
+def test_literal_check_distinguishes_number_in_field_name_from_filter_value(retail):
+    catalog, path, _, _ = retail
+    case = next(ViewMatchingCase.model_validate_json(line)
+                for line in path.read_text(encoding="utf-8").splitlines()
+                if '"case_id": "RETAIL-CUSTOMER_VALUE-S1-03"' in line)
+    mapping = case.expected_match
+    assert unmapped_request_literals(case.request, mapping, catalog, case.target_view) == []
+    assert unmapped_request_literals(case.request + " 且會員代號 = 90", mapping,
+                                     catalog, case.target_view) == ["90"]
+
+
+def test_literal_check_requires_number_to_be_declared_by_field_contract():
+    view = "demo.v_activity"
+    field = SimpleNamespace(text="近30日活躍狀態", column="active_30d")
+    mapping = SimpleNamespace(fields=[field], criteria=[], having=[], group=[], order=[])
+    definition = SimpleNamespace(name=view, policy={"columns": {
+        "active_30d": {"description": "近 30 日是否活躍"}}})
+    catalog = SimpleNamespace(views=lambda: [definition],
+                              field_contract=lambda *_: {"aliases": []})
+    request = "列出近30日活躍狀態"
+    assert unmapped_request_literals(request, mapping, catalog, view) == []
+    assert unmapped_request_literals(request + "，且分數 >= 30", mapping, catalog, view) == ["30"]
+    field.text = "近30日活躍狀態 >= 30"
+    assert unmapped_request_literals(request + " >= 30", mapping, catalog, view) == ["30"]
+    field.text = "近30日活躍狀態"
+    definition.policy["columns"]["active_30d"]["description"] = "目前是否活躍"
+    field.column = "active_status"
+    definition.policy["columns"]["active_status"] = definition.policy["columns"].pop("active_30d")
+    assert unmapped_request_literals(request, mapping, catalog, view) == ["30"]
 
 
 @pytest.mark.parametrize("version, has_response_schema", [("v4", False), ("v5", True), ("v6", True)])

@@ -60,15 +60,15 @@ class ViewMatchingCase(StrictModel):
     def expected_match_shape(cls, data):
         if isinstance(data, dict) and isinstance(data.get("expected_match"), dict):
             mapping = data["expected_match"]
-            v3 = data.get("prompt_version") == "v3"
-            required = {"fields", "table", "criteria", "order", "group", "ignored"} | ({"having"} if v3 else set())
+            has_having = data.get("prompt_version") in {"v3", "v4"}
+            required = {"fields", "table", "criteria", "order", "group", "ignored"} | ({"having"} if has_having else set())
             if not required <= mapping.keys() or set(mapping) - (required | {"unsupported_reason"}):
                 raise ValueError("expected_match does not match MATCH_PROMPT keys")
             shapes = {"fields": {"text", "column", "aggregation"},
                       "criteria": {"text", "column", "operator", "value"},
                       "group": {"text", "column"},
                       "ignored": {"text", "reason"}}
-            if v3:
+            if has_having:
                 shapes["having"] = {"text", "column", "aggregation", "operator", "value"}
             for key, keys in shapes.items():
                 if not isinstance(mapping[key], list) or any(not isinstance(item, dict) or set(item) != keys
@@ -89,10 +89,10 @@ class ViewMatchingCase(StrictModel):
         if self.target_view not in self.candidate_views or len(self.candidate_views) != len(set(self.candidate_views)):
             raise ValueError("candidate_views must contain the target View exactly once")
         normal = self.category == "normal"
-        if (self.prompt_version == "v3") != isinstance(self.expected_match, SQLClauseMappingV3):
+        if (self.prompt_version in {"v3", "v4"}) != isinstance(self.expected_match, SQLClauseMappingV3):
             raise ValueError("expected_match shape does not match prompt version")
-        if normal and self.prompt_version == "v3" and self.expected_sql.having is None:
-            raise ValueError("v3 normal cases require expected_sql.having")
+        if normal and self.prompt_version in {"v3", "v4"} and self.expected_sql.having is None:
+            raise ValueError("v3/v4 normal cases require expected_sql.having")
         if normal != (self.expected_sql is not None):
             raise ValueError("normal cases require expected_sql; rejection cases must omit it")
         if normal and (self.expected_match.table is None or
@@ -109,7 +109,7 @@ class ViewMatchingCase(StrictModel):
     def content_sha256(self) -> str:
         fields = self.model_dump(mode="json", exclude={"review_status", "reviewer", "reviewed_at",
                                                        "reviewed_case_sha256", "reviewed_contract_fingerprint"})
-        if self.prompt_version != "v3" and fields.get("expected_sql") is not None:
+        if self.prompt_version not in {"v3", "v4"} and fields.get("expected_sql") is not None:
             fields["expected_sql"].pop("having", None)
         return sha256(json.dumps(fields, ensure_ascii=False, sort_keys=True).encode("utf-8")).hexdigest()
 

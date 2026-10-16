@@ -99,7 +99,7 @@ class SchemaCatalog(CatalogContract):
             for name, spec in columns.items():
                 if not isinstance(name, str) or not isinstance(spec, dict) or spec.get('type') not in _TYPES or spec.get('role') not in _ROLES or not isinstance(spec.get('description'), str):
                     raise ValueError('v3 column requires supported type, role and description')
-                if set(spec) - {'type', 'role', 'description', 'unit', 'disallowed_aggregations', 'disallowed_operators', 'disallowed_capabilities', 'default_aggregation'}:
+                if set(spec) - {'type', 'role', 'description', 'unit', 'disallowed_aggregations', 'disallowed_operators', 'disallowed_capabilities'}:
                     raise ValueError('v3 contract contains unsupported column settings')
                 if 'unit' in spec and not isinstance(spec['unit'], str):
                     raise ValueError('v3 unit must be a string')
@@ -107,8 +107,6 @@ class SchemaCatalog(CatalogContract):
                     value = spec.get(field, [])
                     if not isinstance(value, list) or any(not isinstance(item, str) or item not in allowed for item in value):
                         raise ValueError(f'v3 {field} contains unsupported values')
-                if 'default_aggregation' in spec and spec['default_aggregation'] not in _AGGREGATIONS - set(spec.get('disallowed_aggregations', [])):
-                    raise ValueError('v3 default_aggregation is unsupported or disallowed')
             return
         for name, spec in columns.items():
             if not isinstance(name, str) or not isinstance(spec, dict) or not isinstance(spec.get('type'), str) or not isinstance(spec.get('description'), str):

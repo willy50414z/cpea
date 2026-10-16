@@ -55,7 +55,7 @@ Graph 只產生 QueryPlan／SQL／QueryTaskTrace；SQLExecutionAgent 顯式取�
 
 檢索與 context budget 篩選後，模型同時比較候選 View 的核准契約，選出單一來源並回傳 `SQLClauseMapping`。候選資訊包含欄位描述、能力、可用及預設聚合、詞彙對應、範圍與 operator 政策；不把 samples、測試題庫或預期答案放入模型 context。正常成功路徑只需一次模型呼叫，仍保留有上限的格式／語意驗證嘗試。雲端 SDK 的隱藏重試停用，API 錯誤交由呼叫端處理。
 
-Python 將 fields／criteria／group 轉為 QueryFact、SchemaLink 與 QueryPlan，再由既有 compiler 產生 MSSQL。`default_aggregation` 提供模型依據，不由 Python 自動覆蓋模型明確回傳的 null。條件值必須來自需求原文或契約明確的 term mapping，欄位與 View 必須在實際送出的候選契約內。檢查原文引用、欄位能力、operator／aggregation、catalog scope、QueryPlan 與唯讀 SQL policy；明確代碼、數值等 literal 若未承接，則拒絕查詢，避免漏掉篩選後擴大查詢。此檢查不等同完整自然語言解析。
+Python 將 fields／criteria／having／group 轉為 QueryFact、SchemaLink 與 QueryPlan，再由既有 compiler 產生 MSSQL。MATCH v4 的欄位與 View 名稱由實際送出的候選契約限制，輸出格式由 Pydantic JSON Schema 約束；v3 View 契約不使用預設聚合，聚合函數需由需求與契約能力決定。條件值必須來自需求原文或契約明確的 term mapping。檢查原文引用、欄位能力、operator／aggregation、catalog scope、QueryPlan 與唯讀 SQL policy；明確代碼、數值等 literal 若未承接，則拒絕查詢，避免漏掉篩選後擴大查詢。此檢查不等同完整自然語言解析。
 
 Python 不依特定品號、客戶或題目補寫查詢，也不透過案例或答案修正模型。查詢只使用一個核准 View；來源參照保留實際選中的契約，候選與失敗嘗試留在 trace。
 

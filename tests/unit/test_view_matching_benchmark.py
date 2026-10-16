@@ -10,6 +10,7 @@ from cpea.domain.models import QueryPlan
 from cpea.infrastructure.catalog.yaml_catalog import SchemaCatalog
 from cpea.infrastructure.sql_compiler import compile_single_view
 from cpea.workflows.text_to_sql.prompt_resources import load_match_prompt
+from cpea.workflows.text_to_sql.sql_generation import candidate_schema
 from cpea.bootstrap import AssistantRuntime
 from evaluations.call_budget import CallBudget, ModelStopped, provider_stop_reason
 from evaluations.governance_inputs import load_cases
@@ -140,12 +141,13 @@ def test_all_nine_cells_have_compilable_ground_truth(retail, sql_difficulty, sem
 
 def test_prompt_version_and_atomic_persistent_budget(tmp_path):
     prompt = load_match_prompt()
-    assert prompt.version == "v3" and len(prompt.system_sha256) == 64
+    assert prompt.version == "v4" and len(prompt.system_sha256) == 64
     assert len(prompt.response_schema_sha256) == 64
     assert load_match_prompt("v1").version == "v1"
     assert load_match_prompt("v2").version == "v2"
+    assert load_match_prompt("v3").version == "v3"
     with pytest.raises(ValueError, match="unknown"):
-        load_match_prompt("v4")
+        load_match_prompt("v5")
     ledger = tmp_path / "private" / "calls.json"
     budget = CallBudget(3, ledger)
     def reserve(_):
@@ -162,6 +164,63 @@ def test_prompt_version_and_atomic_persistent_budget(tmp_path):
         CallBudget(3, ledger).reserve("model")
     assert provider_stop_reason(RuntimeError("429 Too Many Requests")) == "rate_limit"
     assert provider_stop_reason(RuntimeError("401 unauthorized")) == "authentication"
+
+
+def test_v4_contract_omits_unset_default_aggregation():
+    catalog = SchemaCatalog(ROOT / "projects" / "retail", allow_drafts=True)
+    schema = candidate_schema(catalog.views()[0])
+    assert all("default_aggregation" not in column for column in schema["columns"].values())
+    assert "default_aggregation" not in load_match_prompt().system
+    policy = catalog.views()[0].policy.copy()
+    policy["columns"] = {name: spec.copy() for name, spec in policy["columns"].items()}
+    policy["columns"][next(iter(policy["columns"]))]["default_aggregation"] = "sum"
+    with pytest.raises(ValueError, match="unsupported column settings"):
+        SchemaCatalog._validate_policy(policy)
+
+
+def test_v4_sends_contract_without_duplicate_response_schema(tmp_path):
+    settings, catalog, packer, _, retriever = dependencies(tmp_path / "profile")
+    class CapturingLLM(StubLLM):
+        human = ""
+
+        def invoke(self, messages):
+            if "table定義:" in messages[-1].content:
+                self.human = messages[-1].content
+            return super().invoke(messages)
+
+    llm = CapturingLLM()
+    runtime = AssistantRuntime(settings, catalog=catalog, llm=llm,
+                               retriever=retriever, context_packer=packer)
+    assert runtime.generate(QUESTION).supported
+    assert '"candidates"' in llm.human
+    assert '"response_schema"' not in llm.human
+
+
+def test_equivalent_grounded_spans_and_select_order_pass(retail):
+    catalog, path, _, _ = retail
+    raw = next(json.loads(line) for line in path.read_text(encoding="utf-8").splitlines()
+               if '"case_id": "RETAIL-SALES_DETAIL-M3-01"' in line)
+    case = ViewMatchingCase.model_validate(raw)
+    spec = case.expected_sql
+    assert spec is not None
+    mapping = case.expected_match.model_copy(deep=True)
+    fields = list(mapping.fields)
+    fields[1].text = "扣完折扣的銷售金額合計"
+    fields[2].text = "這行商品賣了幾件的單列最大值"
+    group = mapping.group[0].model_copy(update={"text": "照訂單落在哪個月分組"})
+    mapping = mapping.model_copy(update={"fields": [fields[1], fields[2], fields[0]], "group": [group]})
+    plan = QueryPlan(supported=True, source_views=[case.target_view],
+                     select_columns=[spec.select_columns[1], spec.select_columns[2], spec.select_columns[0]],
+                     filters=spec.filters, having=spec.having or [], aggregations=spec.aggregations,
+                     group_by=spec.group_by, order_by=spec.order_by)
+    sql = compile_single_view(plan, catalog, request=case.request)
+    trace = QueryTaskTrace(request=case.request, selected_mapping_index=1,
+        mapping_attempts=[MappingAttempt(attempt_index=1, mapping=mapping, outcome="selected")])
+    generation = SQLGenerationResponse(supported=True, sql=sql, selected_views=[case.target_view],
+                                       explanation="test", query_plan=plan, query_trace=trace)
+    assert grade_view_matching(case, generation, catalog=catalog) == ("pass", "pass", [])
+    altered = generation.model_copy(update={"sql": sql.replace("SUM([net_sales])", "AVG([net_sales])")})
+    assert "sql_compiled_structure" in grade_view_matching(case, altered, catalog=catalog)[2]
 
 
 def test_workflow_trace_keeps_selected_parsed_mapping(tmp_path):

@@ -80,7 +80,7 @@ role 僅描述業務語意，不代表 SQL 操作權限。
 
 不得僅因欄位是 measure 就禁止 GROUP BY，也不得僅因欄位是 number 就預設 SUM。
 
-未明確指定時，不要產生 `default_aggregation`。
+View Contract v3 不產生 `default_aggregation`；聚合函數由查詢需求與欄位允許的聚合決定。
 
 本次不實作 `scope_rules`、`term_mappings`。
 

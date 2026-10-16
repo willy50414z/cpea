@@ -28,9 +28,12 @@ VIEW = "demo_retail.v_daily_sales"
 
 def test_having_schema_versions_and_hidden_aggregate():
     v2 = load_match_prompt("v2")
-    v3 = load_match_prompt()
+    v3 = load_match_prompt("v3")
+    v4 = load_match_prompt()
     assert v2.response_model is SQLClauseMapping
     assert v3.response_model is SQLClauseMappingV3
+    assert v4.version == "v4" and v4.response_model is SQLClauseMappingV3
+    assert v3.system_sha256 != v4.system_sha256
     assert v2.response_schema_sha256 != v3.response_schema_sha256
     with pytest.raises(ValueError, match="having"):
         SQLClauseMappingV3.model_validate({"fields": [], "table": None})

@@ -144,7 +144,8 @@ class SQLGenerationWorkflow:
             view_names=set(schemas))
         packed = self.context_packer.pack_documents(
             system_prompt=self.match_prompt.system, question=request, history_text="", candidates=detailed,
-            additional_prompt_text=json.dumps({'candidates': [], 'response_schema': response_schema}, ensure_ascii=False),
+            additional_prompt_text=(json.dumps({'candidates': [], 'response_schema': response_schema}, ensure_ascii=False)
+                                    if self.match_prompt.version != "v4" else ""),
         )
         admitted = {source.document_id for source in packed.sources}
         attempts = [CandidateAttempt(view=view, outcome="context_budget",
@@ -158,9 +159,10 @@ class SQLGenerationWorkflow:
             ("system", self.match_prompt.system),
             ("human", self.match_prompt.human),
         ])
-        variables = {"request": request,
-                     "schema_context": json.dumps({"candidates": list(schemas.values()),
-                                                  "response_schema": response_schema}, ensure_ascii=False)}
+        context = {"candidates": list(schemas.values())}
+        if self.match_prompt.version != "v4":
+            context["response_schema"] = response_schema
+        variables = {"request": request, "schema_context": json.dumps(context, ensure_ascii=False)}
         facts: list[QueryFact] = []
         mapping_attempts: list[MappingAttempt] = []
         for _ in range(2 if schemas else 0):
@@ -225,7 +227,7 @@ class SQLGenerationWorkflow:
                 errors.append("fields mapping is empty")
             if getattr(mapping, "having", []) and not mapping.group:
                 errors.append("HAVING requires GROUP BY")
-            if (self.match_prompt.version == "v3" and
+            if (self.match_prompt.version in {"v3", "v4"} and
                     re.search(r"(?:只保留|只顯示).*(?:合計|總和|平均).*(?:大於|小於|超過|低於|至少|以上|以下|[<>]=?)", request)
                     and not mapping.having):
                 errors.append("missing HAVING aggregate threshold")
@@ -476,7 +478,7 @@ def candidate_schema(definition) -> dict[str, Any]:
             "description": spec["description"], "aliases": spec.get("aliases", []),
             "capabilities": contract.field_contract(definition.name, name).get("capabilities", []),
             "aggregations": contract.field_contract(definition.name, name).get("aggregations", []),
-            "default_aggregation": spec.get("default_aggregation"),
+            **({"default_aggregation": spec["default_aggregation"]} if spec.get("default_aggregation") else {}),
             **({"role": spec["role"]} if "role" in spec else {}),
             **({"unit": spec["unit"]} if "unit" in spec else {}),
             **({key: spec[key] for key in ("disallowed_aggregations", "disallowed_operators", "disallowed_capabilities") if key in spec}),

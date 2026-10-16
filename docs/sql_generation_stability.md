@@ -2,7 +2,7 @@
 
 流程先由檢索與 context budget 選出候選契約，再讓模型比較完整需求，回傳單一 View 的欄位、條件、排序與分組對應。欄位與 View 名稱的 JSON Schema enum 由實際送出的契約產生；不傳入 samples、題庫或預期答案。Python 檢查原文引用、literal 承接與契約政策，再由 compiler 產生唯讀 MSSQL。
 
-`MATCH_PROMPT` 上限為 2,000 字。`default_aggregation` 只提供模型依據，模型明確回傳 null 時不自動補聚合。明確代碼或數值未被承接時拒絕查詢，避免漏掉篩選後擴大查詢；這不是完整的自然語言解析器。
+`MATCH_PROMPT` 上限為 2,000 字。MATCH v4 由綁定的 JSON Schema 限制輸出形狀，候選契約只提供已設定的欄位屬性；v3 View 契約不使用 `default_aggregation`。明確代碼或數值未被承接時拒絕查詢，避免漏掉篩選後擴大查詢；這不是完整的自然語言解析器。
 
 Ollama 的推理模式由 `ASSISTANT_LLM_REASONING` 明確控制，預設 false。啟用時需要足夠的 `ASSISTANT_LLM_NUM_PREDICT`，因為推理也使用輸出額度。LangChain 將推理內容與最終 JSON 分開；產品 SQL／結果不包含推理內容。
 

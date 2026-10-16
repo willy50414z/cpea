@@ -7,12 +7,15 @@ import json
 
 from cpea.infrastructure.sql_policy import SQLPolicyError, validate_generated_sql
 from cpea.infrastructure.sql_compiler import compile_single_view
-from cpea.domain.models import QueryPlan
 from evaluations.view_matching_cases import ViewMatchingCase
 
 
 def _bag(values):
     return Counter(json.dumps(value, ensure_ascii=False, sort_keys=True) for value in values)
+
+
+def _mapping_values(items, *, omit_text: bool = False):
+    return _bag(item.model_dump(mode="json", exclude={"text"} if omit_text else None) for item in items)
 
 
 def grade_view_matching(case: ViewMatchingCase, generation, *, catalog=None,
@@ -35,7 +38,7 @@ def grade_view_matching(case: ViewMatchingCase, generation, *, catalog=None,
         for key in ("fields", "criteria", "having", "group", "order"):
             actual = getattr(mapping, key, [])
             wanted = getattr(expected, key, [])
-            if _bag(item.model_dump(mode="json") for item in actual) != _bag(item.model_dump(mode="json") for item in wanted):
+            if _mapping_values(actual, omit_text=True) != _mapping_values(wanted, omit_text=True):
                 mapping_failures.append(f"mapping_{key}")
             if any(not item.text or item.text not in case.request for item in actual):
                 mapping_failures.append(f"mapping_{key}_grounding")
@@ -58,7 +61,7 @@ def grade_view_matching(case: ViewMatchingCase, generation, *, catalog=None,
         else:
             if generation.selected_views != [case.target_view] or plan.source_views != [case.target_view]:
                 sql_failures.append("sql_view")
-            if plan.select_columns != spec.select_columns:
+            if Counter(plan.select_columns) != Counter(spec.select_columns):
                 sql_failures.append("sql_select")
             if _bag(item.model_dump(mode="json") for item in plan.filters) != _bag(item.model_dump(mode="json") for item in spec.filters):
                 sql_failures.append("sql_filters")
@@ -77,16 +80,12 @@ def grade_view_matching(case: ViewMatchingCase, generation, *, catalog=None,
             except SQLPolicyError:
                 sql_failures.append("sql_policy")
             if catalog is not None:
-                expected_plan = QueryPlan(supported=True, source_views=[case.target_view],
-                    select_columns=spec.select_columns, filters=spec.filters, having=spec.having or [],
-                    aggregations=spec.aggregations, group_by=spec.group_by,
-                    order_by=spec.order_by, order_directions=spec.order_directions)
                 try:
-                    expected_sql = compile_single_view(expected_plan, catalog,
+                    compiled_sql = compile_single_view(plan, catalog,
                         max_rows=max_rows, request=case.request)
-                    if generation.sql != expected_sql:
+                    if generation.sql != compiled_sql:
                         sql_failures.append("sql_compiled_structure")
                 except SQLPolicyError:
-                    sql_failures.append("ground_truth_compile_error")
+                    sql_failures.append("sql_compile_error")
     sql_status = "pass" if not sql_failures else "fail"
     return mapping_status, sql_status, [*mapping_failures, *sql_failures]

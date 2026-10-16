@@ -22,7 +22,7 @@ class MatchPrompt:
 
     @property
     def response_model(self):
-        return SQLClauseMappingV3 if self.version in {"v3", "v4"} else SQLClauseMapping
+        return SQLClauseMappingV3 if self.version in {"v3", "v4", "v5"} else SQLClauseMapping
 
     @property
     def system_sha256(self) -> str:
@@ -38,8 +38,8 @@ class MatchPrompt:
         return sha256(payload.encode("utf-8")).hexdigest()
 
 
-def load_match_prompt(version: str = "v4") -> MatchPrompt:
-    if version not in {"v1", "v2", "v3", "v4"}:
+def load_match_prompt(version: str = "v5") -> MatchPrompt:
+    if version not in {"v1", "v2", "v3", "v4", "v5"}:
         raise ValueError(f"unknown MATCH_PROMPT version: {version}")
     system = files("cpea.workflows.text_to_sql").joinpath("prompts", "match", f"{version}.txt").read_text(encoding="utf-8")
     return MatchPrompt(version=version, system=system, human=HUMAN_TEMPLATE,

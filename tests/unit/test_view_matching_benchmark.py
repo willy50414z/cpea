@@ -141,13 +141,14 @@ def test_all_nine_cells_have_compilable_ground_truth(retail, sql_difficulty, sem
 
 def test_prompt_version_and_atomic_persistent_budget(tmp_path):
     prompt = load_match_prompt()
-    assert prompt.version == "v4" and len(prompt.system_sha256) == 64
+    assert prompt.version == "v5" and len(prompt.system_sha256) == 64
     assert len(prompt.response_schema_sha256) == 64
     assert load_match_prompt("v1").version == "v1"
     assert load_match_prompt("v2").version == "v2"
     assert load_match_prompt("v3").version == "v3"
+    assert load_match_prompt("v4").version == "v4"
     with pytest.raises(ValueError, match="unknown"):
-        load_match_prompt("v5")
+        load_match_prompt("v6")
     ledger = tmp_path / "private" / "calls.json"
     budget = CallBudget(3, ledger)
     def reserve(_):
@@ -166,7 +167,7 @@ def test_prompt_version_and_atomic_persistent_budget(tmp_path):
     assert provider_stop_reason(RuntimeError("401 unauthorized")) == "authentication"
 
 
-def test_v4_contract_omits_unset_default_aggregation():
+def test_v5_contract_omits_unset_default_aggregation():
     catalog = SchemaCatalog(ROOT / "projects" / "retail", allow_drafts=True)
     schema = candidate_schema(catalog.views()[0])
     assert all("default_aggregation" not in column for column in schema["columns"].values())
@@ -178,7 +179,8 @@ def test_v4_contract_omits_unset_default_aggregation():
         SchemaCatalog._validate_policy(policy)
 
 
-def test_v4_sends_contract_without_duplicate_response_schema(tmp_path):
+@pytest.mark.parametrize("version, has_response_schema", [("v4", False), ("v5", True)])
+def test_match_prompt_schema_visibility(tmp_path, version, has_response_schema):
     settings, catalog, packer, _, retriever = dependencies(tmp_path / "profile")
     class CapturingLLM(StubLLM):
         human = ""
@@ -190,10 +192,11 @@ def test_v4_sends_contract_without_duplicate_response_schema(tmp_path):
 
     llm = CapturingLLM()
     runtime = AssistantRuntime(settings, catalog=catalog, llm=llm,
-                               retriever=retriever, context_packer=packer)
+                               retriever=retriever, context_packer=packer,
+                               match_prompt=load_match_prompt(version))
     assert runtime.generate(QUESTION).supported
     assert '"candidates"' in llm.human
-    assert '"response_schema"' not in llm.human
+    assert ('"response_schema"' in llm.human) is has_response_schema
 
 
 def test_equivalent_grounded_spans_and_select_order_pass(retail):

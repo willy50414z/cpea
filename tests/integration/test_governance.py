@@ -160,7 +160,8 @@ def test_cloud_preflight_is_configuration_only(tmp_path, monkeypatch):
 
 def test_explicit_env_selects_stability_model_without_live_service(tmp_path):
     env = tmp_path / "selected.env"
-    env.write_text("ASSISTANT_LLM_PROVIDER=ollama\nASSISTANT_LLM_MODEL=qwen3:4b\nASSISTANT_RETRIEVAL_MODE=lexical\nASSISTANT_LLM_NUM_CTX=16000\n", encoding="utf-8")
+    env.write_text("ASSISTANT_LLM_PROVIDER=ollama\nASSISTANT_LLM_MODEL=qwen3:4b\nASSISTANT_RETRIEVAL_MODE=lexical\nASSISTANT_LLM_NUM_CTX=16000\n"
+                   f"CPEA_PROFILE_PATH={ROOT / 'examples/demo-profile'}\n", encoding="utf-8")
     output = _output()
     assert main(["stability", "--cases", str(ROOT / "evaluations/datasets/governance_cases.json"),
                  "--env-file", str(env), "--runs", "1", "--output-dir", str(output)],
@@ -195,11 +196,59 @@ def test_per_model_failure_limit_stops_without_charging_remaining_cases(tmp_path
     targets = [ModelTarget(provider="local", transport="ollama", model=name) for name in ("first", "second")]
     records, _ = evaluate([case], targets, runtime=runtime, output=_output(), runs=5,
                           max_failures=2, model_factory=lambda target, settings: StubLLM(), repo_root=ROOT)
-    assert len(records) == 4
-    assert all(record["status"] == "fail" for record in records)
+    assert len(records) == 10
+    assert sum(record["status"] == "skipped" for record in records) == 6
+    assert sum(record["status"] == "fail" for record in records) == 4
     with pytest.raises(ValueError, match="requires concurrency 1"):
         evaluate([case], targets, runtime=runtime, output=_output(), runs=3, concurrency=2,
                  max_failures=2, model_factory=lambda target, settings: StubLLM(), repo_root=ROOT)
+
+
+def test_model_call_cap_and_provider_rate_limit_skip_remaining(tmp_path):
+    runtime = runtime_fixture(tmp_path)
+    target = ModelTarget(provider="local", transport="ollama", model="limited")
+    records, calls = evaluate([_case()], [target], runtime=runtime, output=_output(), runs=4,
+                              max_model_calls=1, model_factory=lambda target, settings: StubLLM(), repo_root=ROOT)
+    assert len(calls) == 1
+    assert [record["status"] for record in records] == ["pass", "skipped", "skipped", "skipped"]
+
+    class RateLimited(StubLLM):
+        def invoke(self, messages):
+            raise RuntimeError("429 Too Many Requests")
+
+    records, calls = evaluate([_case()], [target], runtime=runtime, output=_output(), runs=4,
+                              model_factory=lambda target, settings: RateLimited(), repo_root=ROOT)
+    assert len(calls) == 1 and calls[0]["error"].startswith("RuntimeError: 429")
+    assert [record["status"] for record in records] == ["error", "skipped", "skipped", "skipped"]
+    assert all(record["failure_reasons"] == ["rate_limit"] for record in records[1:])
+
+
+def test_parallel_inflight_call_survives_rate_limit_and_rest_skip(tmp_path):
+    from threading import Barrier, Lock
+    from time import sleep
+    runtime = runtime_fixture(tmp_path)
+    target = ModelTarget(provider="local", transport="ollama", model="parallel")
+    barrier = Barrier(2)
+    class ParallelRateLimited(StubLLM):
+        def __init__(self):
+            super().__init__()
+            self.started = 0
+            self.lock = Lock()
+        def invoke(self, messages):
+            with self.lock:
+                self.started += 1
+                ordinal = self.started
+            if ordinal <= 2:
+                barrier.wait(timeout=5)
+            if ordinal == 1:
+                raise RuntimeError("429 Too Many Requests")
+            sleep(0.05)
+            return super().invoke(messages)
+    model = ParallelRateLimited()
+    records, calls = evaluate([_case()], [target], runtime=runtime, output=_output(), runs=5,
+                              concurrency=2, model_factory=lambda target, settings: model, repo_root=ROOT)
+    assert model.started == 2 and len(calls) == 2
+    assert sorted(record["status"] for record in records) == ["error", "pass", "skipped", "skipped", "skipped"]
 
 
 def test_trace_preserves_response_schema_without_mutating_original(tmp_path):

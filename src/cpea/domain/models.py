@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from math import isfinite
 from typing import Any, Literal
 from pydantic import BaseModel, Field, field_validator
 
@@ -23,6 +24,19 @@ class QueryFilter(BaseModel):
     operator: str
     value: str | int | float | list[str | int | float]
 
+def validate_numeric_threshold(value: object) -> int | float:
+    if isinstance(value, bool) or not isinstance(value, (int, float)) or not isfinite(value):
+        raise ValueError("HAVING threshold must be a finite numeric literal")
+    return value
+
+class HavingFilter(BaseModel):
+    column: str
+    aggregation: Literal['sum', 'count', 'count_distinct', 'avg', 'min', 'max']
+    operator: Literal['=', '!=', '<>', '>', '>=', '<', '<=']
+    value: int | float
+
+    _validate_value = field_validator("value", mode="before")(validate_numeric_threshold)
+
 class QueryFact(BaseModel):
     kind: Literal["entity", "metric", "dimension", "time", "constraint", "other"]
     text: str
@@ -33,7 +47,7 @@ class SchemaLink(BaseModel):
     fact_text: str
     view: str
     column: str
-    role: Literal["filter", "metric", "dimension"]
+    role: Literal["filter", "metric", "dimension", "having"]
     operator: str | None = None
     value: str | int | float | list[str | int | float] | None = None
     aggregation: str | None = None
@@ -45,8 +59,10 @@ class QueryPlan(BaseModel):
     source_views: list[str] = Field(default_factory=list)
     select_columns: list[str] = Field(default_factory=list)
     filters: list[QueryFilter] = Field(default_factory=list)
+    having: list[HavingFilter] = Field(default_factory=list)
     group_by: list[str] = Field(default_factory=list)
     order_by: list[str] = Field(default_factory=list)
+    order_directions: dict[str, Literal["asc", "desc"]] = Field(default_factory=dict)
     aggregations: dict[str, str] = Field(default_factory=dict)
     limit: int | None = Field(default=None, ge=1, le=10000)
     explanation: str = ""

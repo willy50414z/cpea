@@ -210,7 +210,7 @@ def test_configured_profile_switch_and_no_startup_connection(tmp_path, monkeypat
 def test_private_gms2_catalog_stays_external():
     from pathlib import Path
     from cpea.infrastructure.catalog.yaml_catalog import SchemaCatalog
-    profile = Path(__file__).parents[2] / 'integrations/private/gms2'
+    profile = Path(__file__).parents[2] / 'projects/gms2'
     if not profile.exists():
         pytest.skip('Private deployment profile is not present')
     catalog = SchemaCatalog(profile)

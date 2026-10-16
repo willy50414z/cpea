@@ -27,6 +27,7 @@ dependencies = [
 cpea = "cpea.interfaces.cli.main:main"
 cpea-query-eval = "evaluations.runners.query_reliability:main"
 cpea-governance-eval = "evaluations.governance_runner:main"
+cpea-eval = "evaluations.project_runner:main"
 
 [project.optional-dependencies]
 postgres-contracts = [
@@ -42,11 +43,11 @@ dev = ["pytest>=9,<10", "httpx>=0.28,<1", "hatchling>=1.32,<2"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/cpea", "evaluations"]
-exclude = ["**/private/**", "**/__pycache__/**", "**/*.pyc"]
+exclude = ["projects/**", "**/private/**", "**/__pycache__/**", "**/*.pyc"]
 
 [tool.hatch.build.targets.sdist]
-include = ["src/cpea", "evaluations/runners", "evaluations/datasets", "evaluations/config", "evaluations/governance_*.py", "evaluations/metadata.py", "evaluations/__init__.py", "evaluations/README.md", "requirements", "tests", "docs", "README.md", "pyproject.toml", "uv.lock", "langgraph.json", ".env.example", "config/tenants/example.yaml"]
-exclude = ["**/private/**", "**/__pycache__/**", "**/*.pyc"]
+include = ["src/cpea", "evaluations/runners", "evaluations/datasets", "evaluations/config", "evaluations/governance_*.py", "evaluations/project_runner.py", "evaluations/view_matching_*.py", "evaluations/retail_view_benchmark.py", "evaluations/call_budget.py", "evaluations/metadata.py", "evaluations/__init__.py", "evaluations/README.md", "requirements", "tests", "docs", "examples", "README.md", "pyproject.toml", "uv.lock", "langgraph.json", ".env.example", "config/tenants/example.yaml"]
+exclude = ["projects/**", "**/private/**", "**/__pycache__/**", "**/*.pyc"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

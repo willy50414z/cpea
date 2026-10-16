@@ -40,6 +40,9 @@ class CatalogContract:
             unknown = sorted(set(values) - available)
             if unknown:
                 violations.append(f"{label} 包含 schema 不存在的欄位：{', '.join(unknown)}")
+        unknown_directions = sorted(set(plan.order_directions) - set(plan.order_by))
+        if unknown_directions:
+            violations.append(f"order_directions 包含未排序的欄位：{', '.join(unknown_directions)}")
         if not set(plan.group_by) <= set(plan.select_columns):
             violations.append("GROUP BY 欄位必須包含在 select_columns")
         if not set(plan.aggregations) <= set(plan.select_columns):
@@ -77,6 +80,25 @@ class CatalogContract:
                 violations.append(f"IN filter 必須提供非空值陣列：{item.column}")
             if item.operator != "IN" and isinstance(item.value, list):
                 violations.append(f"非 IN filter 不可使用值陣列：{item.column}")
+        if plan.having and not plan.group_by:
+            violations.append("HAVING 必須有 GROUP BY")
+        for item in plan.having:
+            matching = [definition for definition in selected if item.column in self.columns(definition.name)]
+            if not matching:
+                violations.append(f"HAVING 欄位不存在於 source_views：{item.column}")
+                continue
+            if not any("filter" in self.field_contract(definition.name, item.column).get("capabilities", [])
+                       for definition in matching):
+                violations.append(f"HAVING 不允許篩選欄位：{item.column}")
+            if not any(item.aggregation in self.field_contract(definition.name, item.column).get("aggregations", [])
+                       for definition in matching):
+                violations.append(f"HAVING aggregation 不允許：{item.column} {item.aggregation}")
+            if not any(item.operator in self._operators_for(definition.name, item.column)
+                       for definition in matching):
+                violations.append(f"HAVING operator 不允許：{item.column} {item.operator}")
+            if item.aggregation in {"sum", "avg", "min", "max"} and not any(
+                    self.columns(definition.name)[item.column] in {"number", "數值", "数值"} for definition in matching):
+                violations.append(f"HAVING 聚合結果必須為數值：{item.column}")
         for definition in selected:
             for rule in definition.policy.get("scope_rules", []):
                 if not any(re.search(pattern, request) for pattern in rule.get("request_patterns", [])):
@@ -137,8 +159,9 @@ class CatalogContract:
             return contract
         field_type = contract['type']
         capabilities = {'select', 'filter', 'group_by', 'order_by'} - set(contract.get('disallowed_capabilities', []))
-        aggregations = ({'sum', 'count', 'avg', 'min', 'max'} if field_type == 'number'
-                        else {'count', 'min', 'max'} if field_type in {'string', 'date'} else {'count'})
+        aggregations = ({'sum', 'count', 'count_distinct', 'avg', 'min', 'max'} if field_type == 'number'
+                        else {'count', 'count_distinct', 'min', 'max'} if field_type in {'string', 'date'}
+                        else {'count', 'count_distinct'})
         return {**contract, 'capabilities': sorted(capabilities),
                 'aggregations': sorted(aggregations - set(contract.get('disallowed_aggregations', [])))}
 
@@ -149,14 +172,14 @@ class CatalogContract:
             contract = self.field_contract(link.view, link.column)
         except ValueError as exc:
             return str(exc)
-        needed = "filter" if link.role == "filter" else "select"
+        needed = "filter" if link.role in {"filter", "having"} else "select"
         if needed not in contract.get("capabilities", []):
             return f"schema link cannot {needed} column: {link.column}"
-        if link.role == "metric" and link.aggregation and link.aggregation not in contract.get("aggregations", []):
+        if link.role in {"metric", "having"} and link.aggregation and link.aggregation not in contract.get("aggregations", []):
             return f"metric aggregation not allowed: {link.column} {link.aggregation}"
         if link.role == "dimension" and "group_by" not in contract.get("capabilities", []):
             return f"dimension link requires groupable column: {link.column}"
-        if link.role == "filter":
+        if link.role in {"filter", "having"}:
             if link.operator is None or link.value is None:
                 return f"filter link requires operator and value: {link.column}"
             operators = self._operators_for(link.view, link.column)
@@ -166,6 +189,15 @@ class CatalogContract:
                 return f"IN link requires nonempty values: {link.column}"
             if link.operator != "IN" and isinstance(link.value, list):
                 return f"filter link uses unexpected values list: {link.column}"
+            if link.role == "having":
+                if link.aggregation not in {"sum", "count", "count_distinct", "avg", "min", "max"}:
+                    return f"HAVING link requires aggregation: {link.column}"
+                if link.operator not in {"=", "!=", "<>", ">", ">=", "<", "<="}:
+                    return f"HAVING link uses unsupported operator: {link.column}"
+                if not isinstance(link.value, (int, float)) or isinstance(link.value, bool):
+                    return f"HAVING link requires numeric value: {link.column}"
+                if link.aggregation in {"sum", "avg", "min", "max"} and self.columns(link.view)[link.column] not in {"number", "數值", "数值"}:
+                    return f"HAVING aggregation requires numeric column: {link.column}"
         elif link.operator is not None or link.value is not None:
             return f"non-filter link contains filter condition: {link.column}"
         return None

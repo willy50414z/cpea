@@ -68,7 +68,9 @@ def test_shared_json_parser(raw):
     assert parse_model(raw, AnswerDraft).answer == 'example'
 
 def test_import_and_factory_do_not_connect(tmp_path):
-    code = '''import socket
+    demo = Path(__file__).parents[2] / 'examples/demo-profile'
+    code = f'''import os
+import socket
 def fail(*args, **kwargs):
     raise AssertionError("import/factory attempted a connection")
 socket.socket.connect = fail
@@ -76,9 +78,16 @@ import cpea
 from cpea.interfaces.api.app import create_app
 from cpea.workflows.text_to_sql.sql_generation import create_graph
 from cpea.infrastructure.catalog.yaml_catalog import SchemaCatalog
+try:
+    create_app()
+except ValueError as exc:
+    assert 'integration profile is required' in str(exc)
+else:
+    raise AssertionError('missing profile was accepted')
+os.environ['CPEA_PROFILE_PATH'] = {str(demo)!r}
 app = create_app()
 graph = create_graph()
-assert SchemaCatalog().profile_id == 'synthetic-demo'
+assert SchemaCatalog(os.environ['CPEA_PROFILE_PATH']).profile_id == 'synthetic-demo'
 assert app.title == 'CPEA'
 print(cpea.__version__)
 '''

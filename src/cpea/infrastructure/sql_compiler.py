@@ -44,7 +44,9 @@ def compile_single_view(
     for column in plan.select_columns:
         quoted = _identifier(column)
         if column in aggregate:
-            rendered.append(f"{aggregate[column].upper()}({quoted}) AS {quoted}")
+            expression = (f"COUNT(DISTINCT {quoted})" if aggregate[column] == "count_distinct"
+                          else f"{aggregate[column].upper()}({quoted})")
+            rendered.append(f"{expression} AS {quoted}")
         else:
             rendered.append(quoted)
     sql = f"SELECT TOP ({limit}) {', '.join(rendered)} FROM {view}"
@@ -60,6 +62,16 @@ def compile_single_view(
         sql += " WHERE " + " AND ".join(predicates)
     if plan.group_by:
         sql += " GROUP BY " + ", ".join(_identifier(column) for column in plan.group_by)
+    if plan.having:
+        predicates = []
+        for item in plan.having:
+            quoted = _identifier(item.column)
+            expression = (f"COUNT(DISTINCT {quoted})" if item.aggregation == "count_distinct"
+                          else f"{item.aggregation.upper()}({quoted})")
+            predicates.append(f"{expression} {item.operator} {_literal(item.value)}")
+        sql += " HAVING " + " AND ".join(predicates)
     if plan.order_by:
-        sql += " ORDER BY " + ", ".join(_identifier(column) for column in plan.order_by)
+        sql += " ORDER BY " + ", ".join(
+            _identifier(column) + (" DESC" if plan.order_directions.get(column) == "desc" else "")
+            for column in plan.order_by)
     return sql

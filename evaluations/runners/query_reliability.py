@@ -8,7 +8,6 @@ import sys
 from collections.abc import Callable
 from pathlib import Path
 from typing import Any
-from importlib.resources import files
 from cpea.bootstrap import AssistantRuntime
 from evaluations.metadata import run_metadata, default_output
 
@@ -103,7 +102,7 @@ def evaluate_cases(cases: list[QueryReliabilityCase], service: Any, runs: int = 
 
 def main(argv=None, *, runtime=None, kind='real-model') -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--dataset", default=str(files("evaluations").joinpath("datasets/query_reliability.jsonl")))
+    parser.add_argument("--dataset", required=True)
     parser.add_argument("--output", help="New private output path")
     parser.add_argument("--env-file")
     parser.add_argument("--runs", type=int, default=3)

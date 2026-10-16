@@ -7,6 +7,17 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 from evaluations.runners.query_reliability import QueryReliabilityCase
+from evaluations.view_matching_cases import ViewMatchingCase
+
+
+class ProjectCase(QueryReliabilityCase):
+    """One stable, project-bound reliability case in the unified JSONL file."""
+    model_config = ConfigDict(extra="forbid")
+
+    case_id: str = Field(pattern=r"^[A-Za-z0-9][A-Za-z0-9_-]*$")
+    category: str = Field(pattern=r"^[A-Za-z0-9][A-Za-z0-9_-]*$")
+    difficulty: Literal["easy", "medium", "hard"] = "medium"
+    profile_id: str = Field(min_length=1)
 
 
 class StrictModel(BaseModel):
@@ -39,11 +50,12 @@ class ExpectedResult(StrictModel):
 
 class GovernanceCase(StrictModel):
     case_id: str = Field(pattern=r"^[A-Za-z0-9][A-Za-z0-9_-]*$")
-    category: Literal["simple", "complex", "ambiguous", "security"]
+    category: Literal["simple", "complex", "ambiguous", "security", "core", "colloquial", "normal", "unsupported"]
     difficulty: Literal["easy", "medium", "hard"]
     question: str = Field(min_length=1)
     expected_result: ExpectedResult
     reliability_case: QueryReliabilityCase | None = None
+    view_matching_case: ViewMatchingCase | None = None
 
 
 class CaseFile(StrictModel):
@@ -97,14 +109,22 @@ class ModelFile(StrictModel):
 
 def load_cases(path: str | Path) -> CaseFile:
     if Path(path).suffix.lower() == ".jsonl":
-        cases = [QueryReliabilityCase.model_validate_json(line)
-                 for line in Path(path).read_text(encoding="utf-8").splitlines() if line.strip()]
+        lines = [json.loads(line) for line in Path(path).read_text(encoding="utf-8").splitlines() if line.strip()]
+        project_format = any("case_id" in case for case in lines)
+        if project_format and not all("case_id" in case for case in lines):
+            raise ValueError("project case file mixes stable and legacy case formats")
+        cases = [ViewMatchingCase.model_validate(case) if case.get("case_kind") == "view_matching"
+                 else ProjectCase.model_validate(case) if project_format else QueryReliabilityCase.model_validate(case)
+                 for case in lines]
         return CaseFile(version=1, cases=[GovernanceCase(
-            case_id=f"RELIABILITY-{index:03d}",
-            category="simple" if case.expected_supported else "security",
-            difficulty="medium", question=case.question,
-            expected_result=ExpectedResult(supported=case.expected_supported),
-            reliability_case=case,
+            case_id=case.case_id if isinstance(case, (ProjectCase, ViewMatchingCase)) else f"RELIABILITY-{index:03d}",
+            category=case.category if isinstance(case, (ProjectCase, ViewMatchingCase)) else ("simple" if case.expected_supported else "security"),
+            difficulty=({"S": "easy", "M": "medium", "H": "hard"}.get(case.sql_difficulty, "medium")
+                        if isinstance(case, ViewMatchingCase) else case.difficulty if isinstance(case, ProjectCase) else "medium"),
+            question=case.request if isinstance(case, ViewMatchingCase) else case.question,
+            expected_result=ExpectedResult(supported=case.category == "normal" if isinstance(case, ViewMatchingCase) else case.expected_supported),
+            reliability_case=None if isinstance(case, ViewMatchingCase) else QueryReliabilityCase.model_validate(case.model_dump()),
+            view_matching_case=case if isinstance(case, ViewMatchingCase) else None,
         ) for index, case in enumerate(cases, 1)])
     return CaseFile.model_validate(json.loads(Path(path).read_text(encoding="utf-8")))
 

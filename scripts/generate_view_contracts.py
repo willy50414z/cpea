@@ -79,7 +79,7 @@ def discover(cursor, schema: str):
 def main() -> None:
     project_root = Path(__file__).resolve().parents[1]
     parser = argparse.ArgumentParser()
-    parser.add_argument('--root', type=Path, default=project_root / 'integrations' / 'private' / 'retail',
+    parser.add_argument('--root', type=Path, default=project_root / 'projects' / 'retail',
                         help='integration profile directory for generated contracts')
     args = parser.parse_args()
     root = args.root.resolve()

@@ -41,7 +41,8 @@ def model_metrics(records: list[dict], calls: list[dict], runs: int) -> dict:
         groups[record["case_id"]].append(record)
     repeated = [items for items in groups.values()
                 if runs >= 2 and len(items) == runs
-                and len({item["repetition"] for item in items}) == runs]
+                and len({item["repetition"] for item in items}) == runs
+                and all(item["status"] in {"pass", "fail"} for item in items)]
     valid = [items for items in repeated if all(item.get("generation") for item in items)]
     def signature(item):
         generation = item["generation"]
@@ -51,11 +52,14 @@ def model_metrics(records: list[dict], calls: list[dict], runs: int) -> dict:
     def token_total(field):
         return sum(call[field] for call in calls) if calls and all(call.get(field) is not None for call in calls) else None
     return {
-        "total": len(records), "pass": counts["pass"], "fail": counts["fail"],
-        "error": counts["error"], "pending": counts["pending"],
-        "pass_rate_total": round(counts["pass"] / len(records), 4),
+        "total": len(records), "completed": len(records) - counts["skipped"],
+        "pass": counts["pass"], "fail": counts["fail"],
+        "error": counts["error"], "pending": counts["pending"], "skipped": counts["skipped"],
+        "mapping_pass": sum(r.get("mapping_status") == "pass" for r in records),
+        "sql_pass": sum(r.get("sql_status") == "pass" for r in records),
+        "pass_rate_total": round(counts["pass"] / len(records), 4) if records else None,
         "pass_rate_completed": round(counts["pass"] / completed, 4) if completed else None,
-        "error_rate_total": round(counts["error"] / len(records), 4),
+        "error_rate_total": round(counts["error"] / len(records), 4) if records else None,
         "elapsed_p50_ms": _percentile([r["elapsed_ms"] for r in records], .5),
         "elapsed_p95_ms": _percentile([r["elapsed_ms"] for r in records], .95),
         "elapsed_total_ms": round(sum(r["elapsed_ms"] for r in records), 3),
@@ -64,6 +68,7 @@ def model_metrics(records: list[dict], calls: list[dict], runs: int) -> dict:
         "usage_complete_calls": sum(c.get("input_tokens") is not None and c.get("output_tokens") is not None for c in calls),
         "complete_repeated_cases": len(repeated),
         "all_pass_cases": sum(all(r["status"] == "pass" for r in items) for items in repeated),
+        "all_pass_rate": round(sum(all(r["status"] == "pass" for r in items) for items in repeated) / len(repeated), 4) if repeated else None,
         "status_consistent_cases": sum(len({r["status"] for r in items}) == 1 for items in repeated),
         "generation_comparable_cases": len(valid),
         "generation_consistent_cases": sum(len({signature(r) for r in items}) == 1 for items in valid),
@@ -81,14 +86,16 @@ def write_reports(run_dir: Path, results: list[dict], calls: list[dict]) -> None
     with (run_dir / "summary.csv").open("w", encoding="utf-8", newline="") as stream:
         writer = csv.DictWriter(stream, fieldnames=["run_id", "case_id", "category", "difficulty",
                                                     "provider", "model", "repetition", "status",
-                                                    "review_state", "failure_reasons", "llm_calls",
+                                                    "review_state", "target_view", "sql_difficulty", "semantic_difficulty",
+                                                    "mapping_status", "sql_status", "failure_reasons", "llm_calls",
                                                     "input_tokens", "output_tokens", "llm_ms", "elapsed_ms"])
         writer.writeheader()
         for record in results:
             matched = by_key[(record["case_id"], record["model"], record["repetition"])]
             writer.writerow({
                 **{field: record.get(field) for field in ("run_id", "case_id", "category", "difficulty",
-                     "provider", "model", "repetition", "status", "review_state", "elapsed_ms")},
+                     "provider", "model", "repetition", "status", "review_state", "target_view",
+                     "sql_difficulty", "semantic_difficulty", "mapping_status", "sql_status", "elapsed_ms")},
                 "failure_reasons": _reason_codes(record),
                 "llm_calls": len(matched),
                 "input_tokens": usage(record, "input_tokens") if usage(record, "input_tokens") is not None else "",
@@ -107,12 +114,52 @@ def write_reports(run_dir: Path, results: list[dict], calls: list[dict]) -> None
         for (provider, model), records in sorted(per_model.items()):
             matched = [c for c in calls if (c["provider"], c["model"]) == (provider, model)]
             writer.writerow({"provider": provider, "model": model, **model_metrics(records, matched, runs)})
+    per_category = defaultdict(list)
+    for record in results:
+        per_category[(record["category"], record["provider"], record["model"])].append(record)
+    with (run_dir / "category_summary.csv").open("w", encoding="utf-8", newline="") as stream:
+        fields = ["category", "provider", "model", *model_metrics(results, calls, runs)]
+        writer = csv.DictWriter(stream, fieldnames=fields)
+        writer.writeheader()
+        for (category, provider, model), records in sorted(per_category.items()):
+            case_ids = {record["case_id"] for record in records}
+            matched = [call for call in calls if call["case_id"] in case_ids
+                       and call["provider"] == provider and call["model"] == model]
+            writer.writerow({"category": category, "provider": provider, "model": model,
+                             **model_metrics(records, matched, runs)})
+    per_grid = defaultdict(list)
+    for record in results:
+        if record.get("target_view"):
+            per_grid[(record["target_view"], record.get("sql_difficulty"),
+                      record.get("semantic_difficulty"), record["category"],
+                      record["provider"], record["model"])].append(record)
+    with (run_dir / "view_grid_summary.csv").open("w", encoding="utf-8", newline="") as stream:
+        fields = ["target_view", "sql_difficulty", "semantic_difficulty", "category",
+                  "provider", "model", *model_metrics(results, calls, runs)]
+        writer = csv.DictWriter(stream, fieldnames=fields)
+        writer.writeheader()
+        for key, records in sorted(per_grid.items(), key=lambda item: str(item[0])):
+            ids = {record["case_id"] for record in records}
+            matched = [call for call in calls if call["case_id"] in ids and
+                       (call["provider"], call["model"]) == key[-2:]]
+            writer.writerow({**dict(zip(fields[:6], key)), **model_metrics(records, matched, runs)})
     totals = _totals(results)
+    metadata = json.loads(metadata_path.read_text(encoding="utf-8")) if metadata_path.exists() else {}
+    planned = metadata.get("planned_total", len(results))
     overview = ["# 模型治理評估", "", f"執行：`{run_dir.name}`", "",
-                f"總數：{len(results)}；通過：{totals['pass']}；失敗：{totals['fail']}；錯誤：{totals['error']}；待審：{totals['pending']}。",
+                f"預定：{planned}；已完成：{len(results) - totals['skipped']}；略過：{totals['skipped']}；未記錄：{max(0, planned - len(results))}；通過：{totals['pass']}；失敗：{totals['fail']}；錯誤：{totals['error']}；待審：{totals['pending']}。",
                 "", "pass_rate_total 以所有已執行次數為分母；pass_rate_completed 僅計通過與失敗，錯誤與待審另列。未完成題目不視為通過。",
-                "", "各模型通過率、token、耗時與完整重複題目的穩定性見 `model_summary.csv`。缺少 provider 用量時保留空值。",
-                "", "| 案例 | 分類 | 模型 | 次數 | 狀態 | 原因 |", "|---|---|---|---:|---|---|"]
+                "", "各模型、分類與 View 九宮格的通過率、token、耗時見 `model_summary.csv`、`category_summary.csv`、`view_grid_summary.csv`。缺少 provider 用量時保留空值。"]
+    if runs >= 2:
+        overview.append("完整重複題目的穩定性也見上述 CSV；一致失敗不代表正確。")
+    else:
+        overview.append("本次每題僅執行一次，不提供重複執行穩定性結論。")
+    overview.extend(["", "| 分類 | 模型 | 已執行 | 通過 | 失敗 | 錯誤 |",
+                     "|---|---|---:|---:|---:|---:|"])
+    for (category, _provider, model), records in sorted(per_category.items()):
+        counts = _totals(records)
+        overview.append(f"| {_safe(category)} | {_safe(model)} | {len(records)} | {counts['pass']} | {counts['fail']} | {counts['error']} |")
+    overview.extend(["", "| 案例 | 分類 | 模型 | 次數 | 狀態 | 原因 |", "|---|---|---|---:|---|---|"])
     for record in results:
         case_id = record["case_id"]
         overview.append(f"| [{case_id}](cases/{case_id}.md) | {_safe(record['category'])} | {_safe(record['model'])} | {record['repetition']} | {_safe(record['status'] or 'pending')} | {_safe(_reason_codes(record))} |")

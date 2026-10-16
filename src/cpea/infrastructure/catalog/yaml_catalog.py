@@ -1,7 +1,6 @@
 """Snapshot a bounded, versioned integration profile. No database or LLM calls."""
 from __future__ import annotations
 from hashlib import sha256
-from importlib.resources import files
 from pathlib import Path
 import re
 from typing import Any
@@ -11,7 +10,7 @@ from cpea.application.catalog_contract import CatalogContract
 from cpea.domain.catalog import ViewDefinition
 
 _VIEW_NAME = re.compile(r'[A-Za-z_]\w*(?:\.[A-Za-z_]\w*){1,2}\Z')
-_AGGREGATIONS = {'sum', 'count', 'avg', 'min', 'max'}
+_AGGREGATIONS = {'sum', 'count', 'count_distinct', 'avg', 'min', 'max'}
 _OPERATORS = {'=', '!=', '<>', '>', '>=', '<', '<=', 'IN', 'LIKE'}
 _TYPES = {'string', 'number', 'date', 'boolean'}
 _ROLES = {'identifier', 'dimension', 'measure'}
@@ -19,7 +18,9 @@ _CAPABILITIES = {'select', 'filter', 'group_by', 'order_by'}
 
 class SchemaCatalog(CatalogContract):
     def __init__(self, profile_root: str | Path | None = None, *, allow_drafts: bool = False):
-        self.root = Path(profile_root).resolve() if profile_root is not None else Path(str(files('cpea.resources').joinpath('demo'))).resolve()
+        if profile_root is None:
+            raise ValueError('integration profile is required; set CPEA_PROFILE_PATH or select a project')
+        self.root = Path(profile_root).resolve()
         digest = sha256()
         def document(relative: str) -> dict[str, Any]:
             if not isinstance(relative, str) or not relative:
@@ -39,6 +40,7 @@ class SchemaCatalog(CatalogContract):
                 raise ValueError('contract resource must contain a mapping')
             return value
         manifest = document('manifest.yaml')
+        self.status = manifest.get('status', 'approved')
         if manifest.get('status') == 'draft' and not allow_drafts:
             raise ValueError('draft contracts require explicit allow_drafts=True')
         self.profile_id = manifest.get('profile_id')
@@ -63,7 +65,10 @@ class SchemaCatalog(CatalogContract):
             policy = document(relative)
             if policy.get('view') != name or not isinstance(policy.get('summary'), str):
                 raise ValueError('view contract does not match its catalog entry')
-            self._validate_policy(policy)
+            try:
+                self._validate_policy(policy)
+            except ValueError as exc:
+                raise ValueError(f'{relative} ({name}): {exc}') from None
             self._definitions.append(ViewDefinition(name, policy['summary'], (self.root / relative).as_posix(), policy))
         self.fingerprint = digest.hexdigest()
 
@@ -79,8 +84,18 @@ class SchemaCatalog(CatalogContract):
             if not isinstance(grain, dict) or not isinstance(grain.get('description'), str):
                 raise ValueError('v3 contract requires grain description')
             keys = grain.get('keys')
-            if keys is not None and (not isinstance(keys, list) or not keys or not all(isinstance(k, str) and k in columns for k in keys) or len(keys) != len(set(keys))):
-                raise ValueError('v3 grain keys must reference distinct columns')
+            if keys is not None:
+                if not isinstance(keys, list) or not keys:
+                    raise ValueError('grain.keys must be null or a nonempty list of column names')
+                seen = set()
+                for index, key in enumerate(keys):
+                    if not isinstance(key, str):
+                        raise ValueError(f'grain.keys[{index}] must be a column name, got {key!r}')
+                    if key not in columns:
+                        raise ValueError(f'grain.keys[{index}] {key!r} is not a column; use one column name per list item')
+                    if key in seen:
+                        raise ValueError(f'grain.keys[{index}] {key!r} is duplicated')
+                    seen.add(key)
             for name, spec in columns.items():
                 if not isinstance(name, str) or not isinstance(spec, dict) or spec.get('type') not in _TYPES or spec.get('role') not in _ROLES or not isinstance(spec.get('description'), str):
                     raise ValueError('v3 column requires supported type, role and description')

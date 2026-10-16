@@ -10,33 +10,35 @@ Ollama 的推理模式由 `ASSISTANT_LLM_REASONING` 明確控制，預設 false�
 
 ## 測試順序
 
-1. 先用 `mvp` 直接測試模型與回覆驗證，不執行完整 workflow 或資料庫。
-2. 每項模型修改至少測試 3 次，確認語意、原文引用與契約一致。
-3. 再用 `workflow` 跑原始題庫，每題至少 3 次。
-4. 原始題庫穩定通過後，測試口語化題庫，並選擇是否實際執行 SQL。
-5. 同一批完整 workflow 累計 3 次失敗立即停止，檢討原始 request／response 與 trace 後，回到 MVP。
+1. 用 `cpea-eval --project gms2 --runs 1 --concurrency 1` 執行單次正確率評估。
+2. 用同一份 `projects/gms2/evaluations/cases.jsonl` 執行 `--runs 3`，觀察正確率與重複生成的一致性；報告依 `category` 分別列出基本與口語案例。
+3. 需要分階段排查模型回覆時，才使用下方進階 `mvp`／`workflow` runner；它仍將結果寫入舊版全域 `artifacts/stability/`，不算新的專案 run。
 
-確認目前環境載入工作目錄的 `src/cpea`，避免測到舊 wheel。雲端使用時另安裝對應的選配 provider 套件。
+正式專案評估的入口只需 project、runs、concurrency。執行前確認工作目錄乾淨、安裝了對應 provider 套件，並確認 `projects/gms2/.env` 設定的模型服務可用。
+
+```bash
+uv run --locked cpea-eval --project gms2 --runs 1 --concurrency 1
+uv run --locked cpea-eval --project gms2 --runs 3 --concurrency 1
+```
+
+以下進階診斷仍需要明確指定模型、題庫、env 與輸出路徑：
 
 ```bash
 uv pip install --python .venv/bin/python --no-deps --editable .
-.venv/bin/python -m evaluations.stability_runner mvp \
+CPEA_PROFILE_PATH="$PWD/projects/gms2" .venv/bin/python -m evaluations.stability_runner mvp \
+  --env-file projects/gms2/.env --dataset projects/gms2/evaluations/cases.jsonl \
   --provider ollama --model gemma4:26b --reasoning --max-output-tokens 8192 \
   --all-candidates --constrain-names --question '需求原文' --view '核准的完整View名稱' \
   --output artifacts/stability/mvp-unique-run
 
-.venv/bin/python -m evaluations.stability_runner workflow \
+CPEA_PROFILE_PATH="$PWD/projects/gms2" .venv/bin/python -m evaluations.stability_runner workflow \
+  --env-file projects/gms2/.env \
   --provider ollama --model gemma4:26b --reasoning --max-output-tokens 8192 \
-  --retrieval-mode lexical --dataset evaluations/datasets/query_reliability.jsonl \
+  --retrieval-mode lexical --dataset projects/gms2/evaluations/cases.jsonl \
   --output artifacts/stability/workflow-unique-run
-
-.venv/bin/python -m evaluations.stability_runner workflow \
-  --provider ollama --model gemma4:26b --reasoning --max-output-tokens 8192 \
-  --retrieval-mode lexical --dataset evaluations/datasets/query_reliability_colloquial.jsonl \
-  --execute --output artifacts/stability/colloquial-unique-run
 ```
 
-題庫的預期欄位必須對應 `.env` 選定的 profile。口語化題庫保留原始合成需求的預期語意，不因模型失敗而改答案。`--execute` 使用部署設定的真實唯讀 executor，驗證 SQL 可執行；不提供假結果，也不宣稱已驗證所有業務數值。
+題庫的預期欄位必須對應選定專案的 profile。進階 runner 可加 `--execute` 使用部署設定的真實唯讀 executor，驗證 SQL 可執行；不提供假結果，也不宣稱已驗證所有業務數值。
 
 ## 紀錄與成本
 

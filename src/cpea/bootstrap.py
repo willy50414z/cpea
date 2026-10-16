@@ -12,7 +12,7 @@ class AssistantRuntime:
     def __init__(self, settings: AssistantSettings, *, deployment: DeploymentSettings | None = None,
                  catalog: CatalogProvider | None = None, llm: Any = None,
                  executor: SQLQueryExecutor | None = None, datasource_id: str | None = None,
-                 retriever: Any = None, context_packer: Any = None):
+                 retriever: Any = None, context_packer: Any = None, match_prompt: Any = None):
         from cpea.infrastructure.catalog.yaml_catalog import SchemaCatalog
         self.settings = settings
         self.deployment = deployment or DeploymentSettings.load(settings.deployment_file,
@@ -27,6 +27,7 @@ class AssistantRuntime:
                 {view.name for view in self.catalog.views()}, settings.max_rows)
         self._retriever = retriever
         self._context_packer = context_packer
+        self.match_prompt = match_prompt
 
     @classmethod
     def from_env(cls, env_file=None, **dependencies):
@@ -60,7 +61,8 @@ class AssistantRuntime:
     def generation_service(self):
         from cpea.application.services.sql_generation import SQLGenerationService
         return SQLGenerationService(self.llm, self.catalog, settings=self.settings,
-            retriever=self.retriever, context_packer=self.context_packer)
+            retriever=self.retriever, context_packer=self.context_packer,
+            match_prompt=self.match_prompt)
 
     def execution_agent(self):
         self.require_execution()

@@ -1,6 +1,6 @@
 # Example of one independently deployed enterprise; no runtime authentication.
 deployment_id: example-enterprise
 # Relative paths are resolved against this configuration file.
-# profile_path: ../../integrations/private/gms2
+# profile_path: ../../projects/gms2
 # datasource_id: deployment-supplied-id
 secret_references: {}

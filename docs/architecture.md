@@ -39,9 +39,9 @@ flowchart TD
 | `infrastructure/retrieval/` | LangChain Document 轉換、lexical／vector retrieval、rerank 與 cache |
 | `infrastructure/llm/` | 既有模型 factory、共享 JSON parsing、token/context budget |
 | `infrastructure/sql_compiler.py`、`sql_policy.py` | 保留既有 MSSQL renderer／唯讀 SQL 檢查 |
-| `resources/demo/` | 可分發的合成示例；不是客戶資料 |
-| `integrations/private/gms2/` | 原客戶契約／樣本，私有保存，wheel／sdist 排除 |
-| `evaluations/` | 品質工具及合成題庫；原始私有題庫封存於被忽略的 `artifacts/baseline/` |
+| `examples/demo-profile/` | 明確選用的合成示例；不是客戶資料，也不是 runtime 預設值 |
+| `projects/<project-id>/` | 私有專案 View 契約、`.env`、單一題庫與評估產物；wheel／sdist 排除 |
+| `evaluations/` | 共用品質工具與合成 fixture；原始私有 PoC 題庫封存於被忽略的 `artifacts/baseline/` |
 
 Domain 不 import API；application 回應模型由 API 引用。API／CLI／Graph 使用 bootstrap 建立依賴。Provider-specific LLM／retrieval 的現有抽象沿用 LangChain，沒有另外引入通用 plugin 平台。
 

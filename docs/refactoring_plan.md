@@ -87,8 +87,8 @@ app = create_app(runtime)
 | `assistant.api.router` | `cpea.interfaces.api.app.create_app(runtime)` |
 | `graph/workflow.py` | `cpea.workflows.text_to_sql.sql_generation` |
 | `settings.py`、`llm_config.py`、`context_budget.py` | `config/settings.py`、`infrastructure/llm/` |
-| `ref/db_schema` | `integrations/private/gms2`；profile 可外置 |
-| `eval/` | 原始內容封存於 `artifacts/baseline/original-poc.zip`；新合成題庫在 `evaluations/datasets` |
+| `ref/db_schema` | 現行私有工作目錄為 `projects/gms2`；原遷移位置 `integrations/private/gms2` 已封存於本機 `artifacts/project-migration/legacy-integrations/gms2`，profile 仍可外置 |
+| `eval/` | 原始內容封存於 `artifacts/baseline/original-poc.zip`；現行專案題庫位於 `projects/gms2/evaluations/cases.jsonl`，舊合成題庫保留於 `examples/legacy-evaluation-cases` |
 | `eval_main.py`、`query_reliability_eval.py` | `cpea-governance-eval`、`cpea-query-eval` |
 
 HTTP 路徑與成功 payload 保留；不提供回頭引用原專案的 import shim。舊 `gen_sql(request)` 的程式呼叫移至 `AssistantRuntime.from_env().generate(request)`。

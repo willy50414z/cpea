@@ -109,3 +109,20 @@ def test_compiler_directives_cannot_be_injected_from_profile(tmp_path):
     path.write_text(yaml.safe_dump(policy), encoding='utf-8')
     with pytest.raises(ValueError, match='aggregations'):
         SchemaCatalog(profile)
+
+def test_invalid_v3_grain_key_identifies_contract_and_column(tmp_path):
+    profile = write_profile(tmp_path / 'profile')
+    path = profile / 'inventory.yaml'
+    policy = {
+        'version': 3,
+        'view': 'gms2.v_inventory',
+        'summary': '合成庫存',
+        'grain': {'description': '每個品號一列', 'keys': ['品号, 仓库名称']},
+        'columns': {'品号': {'type': 'string', 'role': 'identifier', 'description': '品號'}},
+    }
+    path.write_text(yaml.safe_dump(policy, allow_unicode=True), encoding='utf-8')
+    with pytest.raises(ValueError) as error:
+        SchemaCatalog(profile)
+    message = str(error.value)
+    assert 'inventory.yaml (gms2.v_inventory)' in message
+    assert "grain.keys[0] '品号, 仓库名称' is not a column" in message

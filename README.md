@@ -11,7 +11,8 @@ Linux／macOS（Bash）：
 ```bash
 uv sync --locked
 cp .env.example .env
-uv run --locked cpea --env-file .env --request "請查詢 ZX100 目前各倉庫庫存數量"
+CPEA_PROFILE_PATH=examples/demo-profile uv run --locked cpea --env-file .env --request "請查詢 ZX100 目前各倉庫庫存數量"
+export CPEA_PROFILE_PATH="$PWD/examples/demo-profile"
 export CPEA_ENV_FILE="$PWD/.env"
 uv run --locked uvicorn cpea.interfaces.api.app:create_app --factory --host 127.0.0.1 --port 8000
 ```
@@ -21,12 +22,13 @@ Windows（PowerShell）：
 ```powershell
 uv sync --locked
 Copy-Item .env.example .env
+$env:CPEA_PROFILE_PATH = (Resolve-Path examples/demo-profile).Path
 uv run --locked cpea --env-file .env --request "請查詢 ZX100 目前各倉庫庫存數量"
 $env:CPEA_ENV_FILE = (Resolve-Path .env).Path
 uv run --locked uvicorn cpea.interfaces.api.app:create_app --factory --host 127.0.0.1 --port 8000
 ```
 
-開啟 `http://127.0.0.1:8000/`。Gradio 與 FastAPI 由同一服務提供，不需前端建置。預設 profile 為合成示例；SQL 生成需要可用的 LLM／embedding 服務。沒有 executor 時仍可用 `/api/assistant/sql` 與 CLI 生成 SQL；首頁與執行 API 則回報執行不可用。
+開啟 `http://127.0.0.1:8000/`。Gradio 與 FastAPI 由同一服務提供，不需前端建置。必須明確選定 profile；`examples/demo-profile` 是合成示例，不包含在 wheel，部署時應提供自己的 profile。SQL 生成需要可用的 LLM／embedding 服務。沒有 executor 時仍可用 `/api/assistant/sql` 與 CLI 生成 SQL；首頁與執行 API 則回報執行不可用。
 
 `--env-file`／`CPEA_ENV_FILE` 應指向目前作業系統上的實際檔案；Linux 不使用 Windows 路徑。程式不自動搜尋 `.env`，設定依 process environment、明確 env file、預設值的順序讀取。Profile／deployment 相對路徑以選定 env file 所在目錄解析。
 
@@ -42,7 +44,7 @@ uv sync --locked --extra sqlserver
 在自己選定的 `.env` 填入以下欄位。範例中的主機、資料庫、帳號與密碼都是佔位文字：
 
 ```dotenv
-CPEA_PROFILE_PATH=integrations/private/gms2
+CPEA_PROFILE_PATH=projects/gms2
 CPEA_DATASOURCE_ID=gms2-readonly
 CPEA_SQLSERVER_CONNECTION_STRING='mssql+pymssql://YOUR_USER:YOUR_PASSWORD@server.example:1433/YOUR_DATABASE'
 CPEA_SQLSERVER_CONNECT_TIMEOUT_SECONDS=5
@@ -103,22 +105,23 @@ location / {
 ```bash
 uv run --locked --extra sqlserver pytest
 uv build
-uv run --locked cpea-query-eval --env-file .env --dataset evaluations/datasets/query_reliability.jsonl --runs 3 --progress
+uv run --locked cpea-eval --project gms2 --runs 3 --concurrency 1
 ```
 
 離線測試使用合成 profile 與 fake driver／executor，不能代表真實 ERP 權限或資料正確性。實際 GMS2 smoke test 需要可用的 pymssql、部署設定與核准 View 的唯讀權限。
 
-上述 reliability test 會呼叫 `.env` 指定的真實模型，使用 GMS2 題庫時須設定對應的私有 GMS2 profile。`--runs 3` 對每題重複三次；它只驗證 SQL 生成，不執行資料庫查詢。
+`cpea-eval` 由 `--project` 選取 `projects/<id>/.env`、View 契約與單一 `evaluations/cases.jsonl`；使用真實模型，不需要另傳題庫、模型或輸出路徑。`--runs 1` 觀察單次正確率，`--runs 3` 對每題重複三次並統計穩定性。此流程只驗證 SQL 生成，不執行資料庫查詢；Retail manifest 目前為 `approved`，但題庫尚待人工審核，沒有正式採計的題目。
 
-多模型治理比較可共用同一份 reliability JSONL 題庫與評分規則。先在獨立、乾淨的 Git worktree 準備模型矩陣與 provider 依賴，再執行：
+多模型治理比較仍可使用共用 runner。先在獨立、乾淨的 Git worktree 準備模型矩陣與 provider 依賴，再執行：
 
 ```bash
-uv run --locked cpea-governance-eval compare \
-  --cases evaluations/datasets/query_reliability.jsonl \
-  --models evaluations/config/models.json --env-file .env \
+CPEA_PROFILE_PATH="$PWD/projects/gms2" uv run --locked cpea-governance-eval compare \
+  --cases projects/gms2/evaluations/cases.jsonl \
+  --models evaluations/config/models.json --env-file projects/gms2/.env \
   --runs 3 --concurrency 1 --max-failures 3 --live
 ```
 
-`compare` 預設只跑一次，因此比較穩定性須明確加上 `--runs 3`；`stability` 則只測 `.env` 的單一模型。每模型達到 `--max-failures` 後停止該模型，未完成題目不計入通過率。結果包含逐次通過狀態、provider 回報的 token 用量與耗時，詳見 [品質評估](evaluations/README.md)。
+舊 `compare` 入口仍需明確傳入與專案對應的 `CPEA_PROFILE_PATH`、`--env-file projects/gms2/.env` 及模型矩陣；`compare` 預設只跑一次，因此比較穩定性須明確加上 `--runs 3`。每模型達到 `--max-failures` 後停止該模型，未完成題目不計入通過率。結果包含逐次通過狀態、provider 回報的 token 用量與耗時，詳見 [品質評估](evaluations/README.md)。
 
 完整架構與延伸設計見 [架構](docs/architecture.md) 與 [企業級設計](docs/enterprise_design.md)。
+目前的目錄與資料搬遷、舊入口及回復步驟見 [專案目錄搬遷](docs/project_migration.md)。

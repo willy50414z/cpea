@@ -12,28 +12,18 @@ from langgraph.graph import END, START, StateGraph
 
 from cpea.infrastructure.llm.context_budget import ContextPacker
 from cpea.infrastructure.llm.factory import bind_response_schema, response_schema_for
-from cpea.application.models.query import CandidateAttempt, ConversationTurn, QueryTaskTrace, SourceReference, SQLGenerationResponse
+from cpea.application.models.query import CandidateAttempt, ConversationTurn, MappingAttempt, QueryTaskTrace, SourceReference, SQLGenerationResponse
 from cpea.workflows.text_to_sql.schemas import SQLClauseMapping, SchemaLinkDraft
-from cpea.domain.models import QueryFact, QueryFilter, QueryPlan, SchemaLink
+from cpea.domain.models import HavingFilter, QueryFact, QueryFilter, QueryPlan, SchemaLink
 from cpea.application.ports.catalog import CatalogProvider
 from cpea.infrastructure.sql_compiler import compile_single_view
 from cpea.infrastructure.sql_policy import SQLPolicyError, validate_generated_sql
 from cpea.infrastructure.retrieval.schema import RetrievalCandidate, SchemaRetriever
 from cpea.config.settings import AssistantSettings
+from cpea.workflows.text_to_sql.prompt_resources import MatchPrompt, load_match_prompt
 
 
-MATCH_PROMPT = """你是單一 View 的需求對應器。根據需求與提供的 View 契約，回傳純 JSON，不輸出 SQL、Markdown 或額外文字。
-固定 keys：fields、table、criteria、order、group、ignored。fields/criteria/order/group/ignored 都是陣列，沒有項目用 []。
-fields 每項含 text、column、aggregation；criteria 每項含 text、column、operator、value；order/group 每項含 text、column；ignored 每項含 text、reason。table 是含 text、view 的物件；無法完整滿足需求或需要 JOIN 時為 null。table.text 可為 null。
-text 必須逐字擷取需求中的連續片段，不改寫、不做繁簡轉換。column/view 必須使用契約的原始名稱。criteria.value 保留原文值與型別；不可把欄位名稱當值、猜測代碼或新增條件。只有契約明確提供的詞彙對應可轉換值。
-fields 對應要顯示的欄位；criteria 對應限制資料的條件；order 對應明確排序要求；group 僅用於彙總維度或明確去重。列出明細不代表分組。aggregation 只能為契約允許的 sum/count/avg/min/max 或 null；依指標與需求選擇，分組維度不聚合，明細欄位不聚合。
-所有明確的欄位、條件、時間範圍、排序與分組需求都要處理；不可為了適配 View 忽略缺失資訊或改變業務語意。ignored 只收不影響查詢的語助詞，或已由 View 定義滿足的範圍並說明原因；不確定或缺欄位時 table=null。
-未要求明細、逐筆資料或同列呈現識別欄位時，指標遵循契約的 default_aggregation；若需求要列出明細識別欄位，保持原值，除非明確要求彙總。
-業務含義須同時符合需求與欄位描述，不能僅因字面相近就替換指標或資料來源。View 名稱與摘要是概述，須綜合欄位、資料範圍判斷；若需求只是要該來源已有的紀錄，不額外猜測存在性條件。只有明確的條件值才放 criteria，text 必須包含授權該值的原文片段。
-依 capabilities、scope_rules、term_mappings 與 filter_operators 遵守契約。operator 使用契約允許的 SQL 運算子（例如 =、IN），不可回傳 default 等政策鍵。string/date 欄位的條件值保留為字串，number 欄位才可用數值。
-若提供多個 candidates，請比較完整需求與各候選契約，選出業務含義及所有欄位最吻合的一個 View；不可混用不同 View。未指定的時間或資料涵蓋範圍不自行擴大。table=null 時另提供 unsupported_reason，指出契約缺少的資訊。
-若需求未限定來源種類，而所需欄位組合只完整匹配一個候選，可選該候選；不可將未指定來源解讀為必須包含所有來源種類。若明確限定的業務語意不符，仍須拒絕。table.text 只有需求逐字包含契約的完整 View 名稱時才填該名稱，否則一律 null；不要用摘要或推測的來源詞填入。
-fields 只放明確要求顯示的資訊。條件欄位及其值屬於 criteria，不因需求提到條件欄位就自動將它列入 fields 或 group；只有另外要求顯示或分組該欄位時才加入。group 只包含需求指定的分組維度，不為了修補多餘的 fields 擴充分組。"""
+MATCH_PROMPT = load_match_prompt().system
 
 _LEGACY_COLUMN_TYPES = {
     '字串': 'string', '字串（代碼）': 'string', '數值': 'number', '数值': 'number',
@@ -54,8 +44,12 @@ class SQLGenerationState(TypedDict, total=False):
     context_budget: int
     request_facts: list[QueryFact]
     candidate_attempts: list[CandidateAttempt]
+    mapping_attempts: list[MappingAttempt]
+    selected_mapping_index: int
     links: SchemaLinkDraft
+    having: list[HavingFilter]
     order_by: list[str]
+    order_directions: dict[str, str]
     selected_views: list[str]
     plan: QueryPlan
     compiled_sql: str
@@ -67,7 +61,8 @@ class SQLGenerationWorkflow:
     def __init__(self, llm: Any, catalog: CatalogProvider | None = None, *,
                  settings: AssistantSettings | None = None,
                  retriever: SchemaRetriever | None = None,
-                 context_packer: ContextPacker | None = None) -> None:
+                 context_packer: ContextPacker | None = None,
+                 match_prompt: MatchPrompt | None = None) -> None:
         self.llm = llm
         self.catalog = catalog or _default_catalog()
         self.settings = settings or AssistantSettings.from_env()
@@ -75,6 +70,7 @@ class SQLGenerationWorkflow:
             raise ValueError("ASSISTANT_SQL_GENERATION_MODE supports only compiler; legacy is unsupported")
         self.retriever = retriever or SchemaRetriever(self.settings, catalog=self.catalog)
         self.context_packer = context_packer or ContextPacker(self.settings)
+        self.match_prompt = match_prompt or load_match_prompt()
         self.graph = self._build_graph()
 
     def invoke(self, request: str, history: list[ConversationTurn] | None = None) -> SQLGenerationResponse:
@@ -107,7 +103,7 @@ class SQLGenerationWorkflow:
         history_context = self.context_packer.pack_history(state["request"], state.get("history", []))
         # 根據context budget設定,篩選並打包成PackedContext dto
         packed = self.context_packer.pack_documents(
-            system_prompt=MATCH_PROMPT, question=state["request"],
+            system_prompt=self.match_prompt.system, question=state["request"],
             history_text=history_context, candidates=result.candidates,
         )
         if not packed.sources:
@@ -142,11 +138,12 @@ class SQLGenerationWorkflow:
                               metadata=item.document.metadata),
             retrieval_score=item.retrieval_score, reranker_score=item.reranker_score,
         ) for item in state["candidates"]]
-        response_schema = response_schema_for(SQLClauseMapping,
+        response_model = self.match_prompt.response_model
+        response_schema = response_schema_for(response_model,
             column_names={column for schema in schemas.values() for column in schema['columns']},
             view_names=set(schemas))
         packed = self.context_packer.pack_documents(
-            system_prompt=MATCH_PROMPT, question=request, history_text="", candidates=detailed,
+            system_prompt=self.match_prompt.system, question=request, history_text="", candidates=detailed,
             additional_prompt_text=json.dumps({'candidates': [], 'response_schema': response_schema}, ensure_ascii=False),
         )
         admitted = {source.document_id for source in packed.sources}
@@ -154,25 +151,32 @@ class SQLGenerationWorkflow:
                                      errors=["完整 View contract 超出 context budget"])
                     for view in schemas if view not in admitted]
         schemas = {view: schema for view, schema in schemas.items() if view in admitted}
-        response_schema = response_schema_for(SQLClauseMapping,
+        response_schema = response_schema_for(response_model,
             column_names={column for schema in schemas.values() for column in schema['columns']},
             view_names=set(schemas))
         prompt = ChatPromptTemplate.from_messages([
-            ("system", MATCH_PROMPT),
-            ("human", "需求: {request} table定義: {schema_context}"),
+            ("system", self.match_prompt.system),
+            ("human", self.match_prompt.human),
         ])
         variables = {"request": request,
                      "schema_context": json.dumps({"candidates": list(schemas.values()),
                                                   "response_schema": response_schema}, ensure_ascii=False)}
         facts: list[QueryFact] = []
+        mapping_attempts: list[MappingAttempt] = []
         for _ in range(2 if schemas else 0):
             try:
-                mapping = self._invoke_model(prompt, variables, SQLClauseMapping, response_schema=response_schema)
+                mapping = self._invoke_model(prompt, variables, response_model, response_schema=response_schema,
+                    on_parse_error=lambda exc: mapping_attempts.append(MappingAttempt(
+                        attempt_index=len(mapping_attempts) + 1, outcome="parse_error", reason=str(exc))))
             except ValueError as exc:
                 attempts.append(CandidateAttempt(view="(unselected)", outcome="schema_mismatch", errors=[str(exc)]))
                 continue
+            mapping_attempts.append(MappingAttempt(attempt_index=len(mapping_attempts) + 1,
+                                                   mapping=mapping, outcome="rejected"))
             if isinstance(mapping.table, list):
+                mapping_attempts[-1].reason = "multiple Views selected"
                 return {"request_facts": facts, "candidate_attempts": attempts,
+                        "mapping_attempts": mapping_attempts,
                         "rejection_stage": "schema_selection",
                         "response": self._unsupported("單一查詢任務只支援一個 View。", [request])}
             if (mapping.table is None or mapping.table.view not in schemas
@@ -181,6 +185,7 @@ class SQLGenerationWorkflow:
                     view=mapping.table.view if mapping.table else "(unselected)",
                     outcome="schema_mismatch", unresolved=[request],
                     errors=[mapping.unsupported_reason or "table mapping does not match the request and selected View"]))
+                mapping_attempts[-1].reason = mapping.unsupported_reason or "table mismatch"
                 continue
             view = mapping.table.view
             schema = schemas[view]
@@ -191,6 +196,11 @@ class SQLGenerationWorkflow:
                 facts_by_text.setdefault(item.text, QueryFact(kind="entity", text=item.text))
                 links.append(SchemaLink(fact_text=item.text, view=view, column=item.column,
                                         role="filter", operator=item.operator, value=item.value))
+            for item in getattr(mapping, "having", []):
+                facts_by_text.setdefault(item.text, QueryFact(kind="constraint", text=item.text))
+                links.append(SchemaLink(fact_text=item.text, view=view, column=item.column,
+                                        role="having", aggregation=item.aggregation,
+                                        operator=item.operator, value=item.value))
             for item in [*mapping.fields, *mapping.group]:
                 fact_text = item.text
                 if fact_text not in request and item in mapping.fields:
@@ -213,6 +223,17 @@ class SQLGenerationWorkflow:
             errors = self._link_errors(facts, draft, view, request)
             if not mapping.fields:
                 errors.append("fields mapping is empty")
+            if getattr(mapping, "having", []) and not mapping.group:
+                errors.append("HAVING requires GROUP BY")
+            if (self.match_prompt.version == "v3" and
+                    re.search(r"(?:只保留|只顯示).*(?:合計|總和|平均).*(?:大於|小於|超過|低於|至少|以上|以下|[<>]=?)", request)
+                    and not mapping.having):
+                errors.append("missing HAVING aggregate threshold")
+            if getattr(mapping, "having", []) and re.search(r"(?:\bOR\b|或者|或是|或\s*者|COUNT\s*\(\s*\*\s*\))", request, re.IGNORECASE):
+                errors.append("unsupported HAVING expression")
+            if any(re.search(r"(?:合計|總和|平均|計數|筆數).*(?:大於|小於|超過|低於|至少|以上|以下|[<>]=?)", item.text)
+                   for item in mapping.criteria):
+                errors.append("aggregate threshold cannot be a WHERE criterion")
             for item in [*mapping.order, *mapping.group, *mapping.ignored]:
                 if not item.text or item.text not in request:
                     errors.append(f"mapped text absent from request: {item.text}")
@@ -222,16 +243,26 @@ class SQLGenerationWorkflow:
             if missing_literals:
                 errors.append("unmapped request literals: " + ", ".join(missing_literals))
             if not errors:
+                mapping_attempts[-1].outcome = "selected"
                 attempts.append(CandidateAttempt(view=view, outcome="matched", facts=facts, links=draft.links))
                 return {"request_facts": facts, "candidate_attempts": attempts,
+                        "mapping_attempts": mapping_attempts,
+                        "selected_mapping_index": len(mapping_attempts),
                         "selected_views": [view], "links": draft,
                         "order_by": [item.column for item in mapping.order],
+                        "order_directions": {item.column: item.direction for item in mapping.order
+                                             if item.direction != "asc"},
+                        "having": [HavingFilter(column=item.column, aggregation=item.aggregation,
+                                                operator=item.operator, value=item.value)
+                                   for item in getattr(mapping, "having", [])],
                         "sources": [source for source in packed.sources if source.document_id == view],
                         "context_tokens": packed.context_tokens, "context_budget": packed.document_budget}
             attempts.append(CandidateAttempt(view=view, outcome="schema_mismatch", facts=facts,
                                              links=draft.links, unresolved=[*draft.unresolved_facts, *missing_literals], errors=errors))
+            mapping_attempts[-1].reason = "; ".join(errors)
         reasons = [f"{attempt.view}: {', '.join(attempt.errors or attempt.unresolved)}" for attempt in attempts]
-        return {"request_facts": facts, "candidate_attempts": attempts, "rejection_stage": "schema_linking",
+        return {"request_facts": facts, "candidate_attempts": attempts,
+                "mapping_attempts": mapping_attempts, "rejection_stage": "schema_linking",
                 "response": self._unsupported("沒有單一 View 能完整承接需求。", reasons)}
 
     def _link_errors(self, facts: list[QueryFact], draft: SchemaLinkDraft, view: str, request: str) -> list[str]:
@@ -292,6 +323,9 @@ class SQLGenerationWorkflow:
                 if link.column in filter_values and filter_values[link.column] != value:
                     errors.append(f"conflicting linked filters: {link.column}")
                 filter_values[link.column] = value
+            if link.role == "having":
+                if not self._filter_is_grounded(link, request, mappings):
+                    errors.append(f"ungrounded HAVING: {link.column} {link.value}")
         return list(dict.fromkeys(errors))
 
     def _filter_is_grounded(self, link: SchemaLink, request: str, mappings: list[dict[str, Any]]) -> bool:
@@ -320,6 +354,8 @@ class SQLGenerationWorkflow:
                 if item not in filters:
                     filters.append(item)
                 continue
+            if link.role == "having":
+                continue
             if link.column not in columns:
                 columns.append(link.column)
             if link.role == "dimension" and link.column not in group_by:
@@ -330,8 +366,9 @@ class SQLGenerationWorkflow:
                         "指標聚合定義衝突。", [f"conflicting aggregation: {link.column}"])}
                 aggregations[link.column] = link.aggregation
         plan = QueryPlan(supported=True, source_views=[view], select_columns=columns,
-                         filters=filters, group_by=group_by, aggregations=aggregations,
+                         filters=filters, having=state.get("having", []), group_by=group_by, aggregations=aggregations,
                          order_by=state.get("order_by", []),
+                         order_directions=state.get("order_directions", {}),
                          explanation="由核准的 Schema Links 與 View 契約組成。")
         errors = self._plan_errors(plan, state)
         if errors:
@@ -371,6 +408,11 @@ class SQLGenerationWorkflow:
         for item in plan.filters:
             if (item.column, item.operator, str(item.value)) not in linked_filters:
                 errors.append(f"unlinked filter: {item.column}")
+        linked_having = {(link.column, link.aggregation, link.operator, str(link.value))
+                         for link in links if link.role == "having"}
+        for item in plan.having:
+            if (item.column, item.aggregation, item.operator, str(item.value)) not in linked_having:
+                errors.append(f"unlinked HAVING: {item.column}")
         errors.extend(self.catalog.validate_plan_contract(plan, state["request"]))
         return errors
 
@@ -382,6 +424,9 @@ class SQLGenerationWorkflow:
         trace = QueryTaskTrace(
             request=state["request"], request_facts=state.get("request_facts", []),
             candidate_attempts=state.get("candidate_attempts", []),
+            mapping_attempts=state.get("mapping_attempts", []),
+            selected_mapping_index=state.get("selected_mapping_index"),
+            mapping_unavailable_reason=("no mapping returned" if not state.get("mapping_attempts") else None),
             selected_view=state.get("selected_views", [None])[0],
             links=state.get("links"), plan=state.get("plan"),
             sql=response.sql or state.get("compiled_sql"),
@@ -390,7 +435,8 @@ class SQLGenerationWorkflow:
         )
         return {"response": response.model_copy(update={"query_trace": trace})}
 
-    def _invoke_model(self, prompt: ChatPromptTemplate, variables: dict[str, Any], model: type[Any], *, response_schema=None):
+    def _invoke_model(self, prompt: ChatPromptTemplate, variables: dict[str, Any], model: type[Any], *,
+                      response_schema=None, on_parse_error=None):
         serialized = {key: value.model_dump_json() if hasattr(value, "model_dump_json") else value
                       for key, value in variables.items()}
         messages = prompt.invoke(serialized).to_messages()
@@ -407,6 +453,8 @@ class SQLGenerationWorkflow:
                 return parse_model(raw, model)
             except ValueError as exc:
                 last_error = exc
+                if on_parse_error is not None:
+                    on_parse_error(exc)
         raise last_error or ValueError("LLM did not return a structured response")
 
     @staticmethod
@@ -455,14 +503,14 @@ def candidate_schema(definition) -> dict[str, Any]:
 def unmapped_request_literals(request, mapping, catalog, view) -> list[str]:
     """Prevent silent loss of explicit codes; this is not a natural-language parser."""
     token = re.compile(r"[A-Za-z0-9_]+(?:[.-][A-Za-z0-9_]+)*")
-    sql_words = {"SQL", "SELECT", "FROM", "WHERE", "ORDER", "BY", "GROUP", "JOIN",
+    sql_words = {"SQL", "SELECT", "FROM", "WHERE", "HAVING", "ORDER", "BY", "GROUP", "JOIN",
                  "ASC", "DESC", "SUM", "COUNT", "AVG", "MIN", "MAX", "AND", "OR",
                  "IN", "LIKE", "NULL", "TOP", "DISTINCT"}
     literals = {item for item in token.findall(request)
                 if any(char.isdigit() for char in item)
                 or (len(item) > 1 and item.isupper() and item not in sql_words)}
     covered = {view}
-    for item in [*mapping.fields, *mapping.criteria, *mapping.group, *mapping.order]:
+    for item in [*mapping.fields, *mapping.criteria, *getattr(mapping, "having", []), *mapping.group, *mapping.order]:
         try:
             contract = catalog.field_contract(view, item.column)
         except ValueError:
@@ -474,6 +522,8 @@ def unmapped_request_literals(request, mapping, catalog, view) -> list[str]:
         values = item.value if isinstance(item.value, list) else [item.value]
         for value in values:
             covered.update(token.findall(str(value)))
+    for item in getattr(mapping, "having", []):
+        covered.update(token.findall(str(item.value)))
     definition = next(item for item in catalog.views() if item.name == view)
     for rule in definition.policy.get("term_mappings", []):
         filters = rule.get("filters", [])

@@ -183,7 +183,7 @@ def main(argv=None):
                         help='Absolute shared-ledger call limit per cloud provider; raising requires explicit authorization')
     parser.add_argument('--ollama-fallback', action=argparse.BooleanOptionalAction, default=True,
                         help='Switch to Ollama at the cloud call limit')
-    parser.add_argument('--dataset', default='evaluations/datasets/query_reliability.jsonl')
+    parser.add_argument('--dataset', required=True)
     parser.add_argument('--runs', type=int, default=3)
     parser.add_argument('--prompt-file')
     parser.add_argument('--view', help='Candidate for an isolated MVP probe')
@@ -250,28 +250,34 @@ def main(argv=None):
     if hasattr(llm, 'max_retries'):
         llm.max_retries = 0
     # Bind before wrapping so isinstance-based provider dispatch still works.
-    llm = bind_response_schema(llm, SQLClauseMapping)
+    from cpea.workflows.text_to_sql.prompt_resources import MatchPrompt, load_match_prompt
+    selected_prompt = (MatchPrompt(version='experimental',
+                                   system=Path(args.prompt_file).read_text(encoding='utf-8'),
+                                   human=load_match_prompt().human)
+                       if args.prompt_file else load_match_prompt())
+    response_model = selected_prompt.response_model
+    llm = bind_response_schema(llm, response_model)
     if args.plain_json and args.provider == 'ollama':
         llm = llm.bind(format='json')
     if args.native_schema and args.provider == 'gcp':
         llm = llm.bind(response_mime_type='application/json',
-                       response_json_schema=SQLClauseMapping.model_json_schema())
+                       response_json_schema=response_model.model_json_schema())
     recorded = RecordedModel(llm, args.provider, args.model, output / 'calls.jsonl', ledger,
                              cloud_call_limit=args.cloud_call_limit)
     def fallback():
         local = replace(base.settings, llm_provider='ollama', llm_model=args.ollama_model,
                         llm_base_url=args.ollama_base_url or base.settings.embedding_base_url,
                         llm_api_key='not-needed', temperature=0.0)
-        return bind_response_schema(get_llm_config(settings=local), SQLClauseMapping), args.ollama_model
+        return bind_response_schema(get_llm_config(settings=local), response_model), args.ollama_model
     recorded.fallback = fallback if args.ollama_fallback else None
-    runtime = AssistantRuntime(settings, catalog=base.catalog, llm=recorded)
-    cases = [QueryReliabilityCase.model_validate_json(line) for line in
-             Path(args.dataset).read_text(encoding='utf-8').splitlines() if line.strip()]
     import cpea.workflows.text_to_sql.sql_generation as workflow
-    prompt = Path(args.prompt_file).read_text(encoding='utf-8') if args.prompt_file else workflow.MATCH_PROMPT
+    prompt = selected_prompt.system
     if len(prompt) > 2000:
         parser.error('MATCH_PROMPT exceeds 2000 characters')
-    workflow.MATCH_PROMPT = prompt
+    runtime = AssistantRuntime(settings, catalog=base.catalog, llm=recorded,
+                               match_prompt=selected_prompt)
+    cases = [QueryReliabilityCase.model_validate_json(line) for line in
+             Path(args.dataset).read_text(encoding='utf-8').splitlines() if line.strip()]
     metadata = run_metadata(runtime, cases)
     metadata.update(phase=args.phase, prompt=prompt, prompt_chars=len(prompt),
                     prompt_sha256=hashlib.sha256(prompt.encode('utf-8')).hexdigest(),
@@ -289,7 +295,7 @@ def main(argv=None):
         schema = {'candidates': contracts}
         if args.constrain_names:
             from cpea.infrastructure.llm.factory import response_schema_for
-            constrained = response_schema_for(SQLClauseMapping,
+            constrained = response_schema_for(response_model,
                 column_names={c for contract in contracts for c in contract['columns']},
                 view_names={contract['view'] for contract in contracts})
             schema['response_schema'] = constrained
@@ -306,7 +312,7 @@ def main(argv=None):
             recorded.context = {'question': args.question, 'repetition': repetition}
             try:
                 raw = recorded.invoke(messages)
-                mapping = parse_model(raw, SQLClauseMapping)
+                mapping = parse_model(raw, response_model)
                 case = next((c for c in cases if c.question == args.question), None)
                 failures = check_mapping(mapping, args.question, args.view, runtime.catalog, case)
                 record = {'run': repetition, 'parsed': True, 'passed': not failures,

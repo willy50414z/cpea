@@ -8,6 +8,7 @@ from cpea.workflows.text_to_sql.sql_generation import SQLGenerationWorkflow
 from cpea.application.ports.catalog import CatalogProvider
 from cpea.infrastructure.retrieval.schema import SchemaRetriever
 from cpea.config.settings import AssistantSettings
+from cpea.workflows.text_to_sql.prompt_resources import MatchPrompt
 
 
 class SQLGenerationService:
@@ -19,6 +20,7 @@ class SQLGenerationService:
         settings: AssistantSettings | None = None,
         retriever: SchemaRetriever | None = None,
         context_packer: ContextPacker | None = None,
+        match_prompt: MatchPrompt | None = None,
     ) -> None:
         self.workflow = SQLGenerationWorkflow(
             llm,
@@ -26,6 +28,7 @@ class SQLGenerationService:
             settings=settings,
             retriever=retriever,
             context_packer=context_packer,
+            match_prompt=match_prompt,
         )
 
     def generate(

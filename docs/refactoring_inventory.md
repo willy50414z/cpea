@@ -34,7 +34,7 @@
 | 資產 | 分類 | 本次保存 | 後續目的地／分發規則 |
 |---|---|---|---|
 | 原始程式與文件 | 遷移來源 | 原位置及私有完整備份 | 經重構後的 package／docs；備份不進 wheel |
-| `ref/db_schema/catalog.yaml`、View YAML | 客戶 integration 契約，分發權限待確認 | 原位置及私有備份 | `integrations/private/<profile>` 或部署外部資源；不內嵌通用 wheel |
+| `ref/db_schema/catalog.yaml`、View YAML | 客戶 integration 契約，分發權限待確認 | 原位置及私有備份 | 現行 `projects/<project-id>` 或部署外部資源；不內嵌通用 wheel |
 | `ref/db_schema/samples/*.jsonl` | 客戶樣本，分發權限待確認 | 原位置及私有備份 | 私有 authoring evidence；不作公開 fixture、不進 wheel |
 | `eval/dataset.jsonl`、`eval/query_reliability.jsonl` | 客戶題庫，分發權限待確認 | 原位置及私有備份 | 私有 datasets；另建立可分發的合成題庫 |
 | 其他 `eval/*.jsonl` | 歷史結果／baseline，可能含 prompt、rows 與 trace | 原位置及私有備份 | `evaluations/private/baselines`；保留來源與設定可比性說明 |
@@ -46,7 +46,7 @@
 
 - 使用者安裝必要依賴後，Python 3.12.3 執行原程式 11 個離線案例全部通過，報告位於 `artifacts/baseline/legacy-tests.xml`。原 test harness 另存於 `legacy-test-harness.zip`。
 - 已建立 `pyproject.toml`、`uv.lock`、`src/cpea`、測試與評估工具；向量檢索另確認需要 NumPy，已明列為核心依賴。
-- 原 `ref/db_schema` 已移至 `integrations/private/gms2`；原 `eval` 工作副本已移除，其原始內容保存在 `artifacts/baseline/original-poc.zip`，並經 `original-inventory.json` 的 SHA-256 核對。新 `manifest.yaml` 只增添 profile identity，不改寫客戶 View 政策。
+- 原 `ref/db_schema` 先移至 `integrations/private/gms2`，後續整併為 `projects/gms2`；前一位置的工作副本保存在本機 `artifacts/project-migration/legacy-integrations/gms2`。原 `eval` 工作副本已移除，其原始內容保存在 `artifacts/baseline/original-poc.zip`，並經 `original-inventory.json` 的 SHA-256 核對。新 `manifest.yaml` 只增添 profile identity，不改寫客戶 View 政策。
 - 已遷移 Windows x64／Python 3.12 的獨立 wheel，其他平台未驗證。Optional providers 不屬核心驗證 lock。
 - 原 source／入口的退休副本位於 `artifacts/baseline/retired`；不會被產品 import 或發行。
 - 詳細驗證及未實作能力見 [refactoring_verification.md](refactoring_verification.md)。

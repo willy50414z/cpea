@@ -75,6 +75,15 @@ def test_literal_escaping_and_row_bound(tmp_path):
     sql = Compiler.compile_single_view(plan, catalog, max_rows=2)
     assert 'TOP (2)' in sql and "N'O''Brien'" in sql
 
+def test_descending_order_is_explicit_and_validated(tmp_path):
+    _, catalog, *_ = dependencies(tmp_path)
+    catalog.views()[0].policy['columns']['仓库名称']['capabilities'].append('order_by')
+    plan = models.QueryPlan(source_views=[VIEW], select_columns=['仓库名称'],
+                            order_by=['仓库名称'], order_directions={'仓库名称': 'desc'})
+    assert Compiler.compile_single_view(plan, catalog).endswith('ORDER BY [仓库名称] DESC')
+    with pytest.raises(Compiler.SQLPolicyError, match='order_directions'):
+        Compiler.compile_single_view(plan.model_copy(update={'order_by': []}), catalog)
+
 
 class MappingLLM(StubLLM):
     """Return editable raw JSON for the clause-mapping workflow."""
@@ -92,6 +101,32 @@ class MappingLLM(StubLLM):
         mapping = __import__('json').loads(raw.content)
         self.mutate(mapping)
         return SimpleNamespace(content=__import__('json').dumps(mapping, ensure_ascii=False))
+
+
+def test_workflow_preserves_descending_order(tmp_path):
+    settings, catalog, packer, _, retriever = dependencies(tmp_path)
+    catalog.views()[0].policy['columns']['仓库名称']['capabilities'].append('order_by')
+    def add_order(mapping):
+        mapping['order'] = [{'text': '各倉庫由高到低排序', 'column': '仓库名称', 'direction': 'desc'}]
+    question = QUESTION + '請依各倉庫由高到低排序。'
+    result = Workflow(MappingLLM(add_order), catalog, settings=settings,
+                      retriever=retriever, context_packer=packer).invoke(question)
+    assert result.supported
+    assert result.query_plan.order_directions == {'仓库名称': 'desc'}
+    assert result.sql.endswith('ORDER BY [仓库名称] DESC')
+
+
+def test_workflow_compiles_distinct_count(tmp_path):
+    settings, catalog, packer, _, retriever = dependencies(tmp_path)
+    catalog.views()[0].policy['columns']['库存数量']['aggregations'].append('count_distinct')
+    def distinct_count(mapping):
+        mapping['fields'][0]['aggregation'] = 'count_distinct'
+    question = QUESTION + '請計算各倉庫去重後的庫存數量。'
+    result = Workflow(MappingLLM(distinct_count), catalog, settings=settings,
+                      retriever=retriever, context_packer=packer).invoke(question)
+    assert result.supported
+    assert result.query_plan.aggregations == {'库存数量': 'count_distinct'}
+    assert 'COUNT(DISTINCT [库存数量])' in result.sql
 
 
 def test_mapping_prompt_contains_approved_contract_without_samples(tmp_path):

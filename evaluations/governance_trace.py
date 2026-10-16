@@ -9,6 +9,7 @@ from threading import Lock
 from time import perf_counter
 from typing import Any
 from uuid import uuid4
+from evaluations.call_budget import CallBudget, ProviderCallError, model_key, provider_stop_reason
 
 
 def _plain(value: Any) -> Any:
@@ -55,7 +56,8 @@ class TracedModel:
 
     def __init__(self, model: Any, recorder: CallRecorder, *, case_id: str,
                  repetition: int, target: Any, settings: Any, node_name: str = "schema_match",
-                 quantization: str | None = None, model_digest: str | None = None):
+                 quantization: str | None = None, model_digest: str | None = None,
+                 budget: CallBudget | None = None):
         self.model = model
         self.recorder = recorder
         self.case_id = case_id
@@ -65,15 +67,19 @@ class TracedModel:
         self.node_name = node_name
         self.quantization = quantization
         self.model_digest = model_digest
+        self.budget = budget
         self._attempts: dict[str, int] = {}
 
     def at(self, node_name: str) -> "TracedModel":
         return TracedModel(self.model, self.recorder, case_id=self.case_id,
                            repetition=self.repetition, target=self.target,
                            settings=self.settings, node_name=node_name,
-                           quantization=self.quantization, model_digest=self.model_digest)
+                           quantization=self.quantization, model_digest=self.model_digest,
+                           budget=self.budget)
 
     def _call(self, request: Any, action, *, stream: bool = False):
+        if self.budget is not None:
+            self.budget.reserve(model_key(self.target))
         node = self.node_name
         self._attempts[node] = self._attempts.get(node, 0) + 1
         attempt = self._attempts[node]
@@ -96,6 +102,10 @@ class TracedModel:
                 yield raw
         except Exception as exc:
             error = f"{type(exc).__name__}: {exc}"
+            reason = provider_stop_reason(exc)
+            if reason and self.budget is not None:
+                self.budget.stop(model_key(self.target), reason)
+                raise ProviderCallError(f"{reason}: {type(exc).__name__}: {exc}") from exc
             raise
         finally:
             ended = perf_counter()
@@ -147,8 +157,9 @@ class TracedModel:
 
     def with_response_schema(self, schema):
         from cpea.infrastructure.llm.factory import bind_response_schema
-        from cpea.workflows.text_to_sql.schemas import SQLClauseMapping
-        bound = bind_response_schema(self.model, SQLClauseMapping, schema=schema)
+        from cpea.workflows.text_to_sql.schemas import SQLClauseMapping, SQLClauseMappingV3
+        response_model = SQLClauseMappingV3 if "having" in schema.get("properties", {}) else SQLClauseMapping
+        bound = bind_response_schema(self.model, response_model, schema=schema)
         wrapped = self.at(self.node_name)
         wrapped.model = bound
         wrapped._attempts = self._attempts

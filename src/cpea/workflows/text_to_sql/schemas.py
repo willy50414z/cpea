@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import Any, Literal
 from pydantic import BaseModel, Field, field_validator, model_validator
 
-from cpea.domain.models import QueryFact, SchemaLink, _normalize_limitations
+from cpea.domain.models import QueryFact, SchemaLink, _normalize_limitations, validate_numeric_threshold
 
 class AnswerDraft(BaseModel):
     answer: str
@@ -33,7 +33,11 @@ class ClauseColumn(BaseModel):
 
 
 class ClauseField(ClauseColumn):
-    aggregation: Literal['sum', 'count', 'avg', 'min', 'max'] | None = None
+    aggregation: Literal['sum', 'count', 'count_distinct', 'avg', 'min', 'max'] | None = None
+
+
+class ClauseOrder(ClauseColumn):
+    direction: Literal['asc', 'desc'] = 'asc'
 
 
 class ClauseCriterion(ClauseColumn):
@@ -46,6 +50,14 @@ class ClauseCriterion(ClauseColumn):
         if isinstance(value, dict) and "value" not in value and isinstance(value.get("text"), str):
             return {**value, "value": value["text"]}
         return value
+
+
+class ClauseHaving(ClauseColumn):
+    aggregation: Literal['sum', 'count', 'count_distinct', 'avg', 'min', 'max']
+    operator: Literal['=', '!=', '<>', '>', '>=', '<', '<=']
+    value: int | float
+
+    _validate_value = field_validator("value", mode="before")(validate_numeric_threshold)
 
 
 class ClauseTable(BaseModel):
@@ -69,7 +81,11 @@ class SQLClauseMapping(BaseModel):
     fields: list[ClauseField] = Field(default_factory=list)
     table: ClauseTable | list[ClauseTable] | None = None
     criteria: list[ClauseCriterion] = Field(default_factory=list)
-    order: list[ClauseColumn] = Field(default_factory=list)
+    order: list[ClauseOrder] = Field(default_factory=list)
     group: list[ClauseColumn] = Field(default_factory=list)
     ignored: list[IgnoredTerm] = Field(default_factory=list)
     unsupported_reason: str | None = None
+
+
+class SQLClauseMappingV3(SQLClauseMapping):
+    having: list[ClauseHaving]

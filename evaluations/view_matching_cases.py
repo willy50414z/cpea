@@ -60,7 +60,7 @@ class ViewMatchingCase(StrictModel):
     def expected_match_shape(cls, data):
         if isinstance(data, dict) and isinstance(data.get("expected_match"), dict):
             mapping = data["expected_match"]
-            has_having = data.get("prompt_version") in {"v3", "v4", "v5"}
+            has_having = data.get("prompt_version") in {"v3", "v4", "v5", "v6"}
             required = {"fields", "table", "criteria", "order", "group", "ignored"} | ({"having"} if has_having else set())
             if not required <= mapping.keys() or set(mapping) - (required | {"unsupported_reason"}):
                 raise ValueError("expected_match does not match MATCH_PROMPT keys")
@@ -89,10 +89,10 @@ class ViewMatchingCase(StrictModel):
         if self.target_view not in self.candidate_views or len(self.candidate_views) != len(set(self.candidate_views)):
             raise ValueError("candidate_views must contain the target View exactly once")
         normal = self.category == "normal"
-        if (self.prompt_version in {"v3", "v4", "v5"}) != isinstance(self.expected_match, SQLClauseMappingV3):
+        if (self.prompt_version in {"v3", "v4", "v5", "v6"}) != isinstance(self.expected_match, SQLClauseMappingV3):
             raise ValueError("expected_match shape does not match prompt version")
-        if normal and self.prompt_version in {"v3", "v4", "v5"} and self.expected_sql.having is None:
-            raise ValueError("v3/v4/v5 normal cases require expected_sql.having")
+        if normal and self.prompt_version in {"v3", "v4", "v5", "v6"} and self.expected_sql.having is None:
+            raise ValueError("v3+ normal cases require expected_sql.having")
         if normal != (self.expected_sql is not None):
             raise ValueError("normal cases require expected_sql; rejection cases must omit it")
         if normal and (self.expected_match.table is None or
@@ -109,7 +109,7 @@ class ViewMatchingCase(StrictModel):
     def content_sha256(self) -> str:
         fields = self.model_dump(mode="json", exclude={"review_status", "reviewer", "reviewed_at",
                                                        "reviewed_case_sha256", "reviewed_contract_fingerprint"})
-        if self.prompt_version not in {"v3", "v4", "v5"} and fields.get("expected_sql") is not None:
+        if self.prompt_version not in {"v3", "v4", "v5", "v6"} and fields.get("expected_sql") is not None:
             fields["expected_sql"].pop("having", None)
         return sha256(json.dumps(fields, ensure_ascii=False, sort_keys=True).encode("utf-8")).hexdigest()
 

@@ -141,14 +141,15 @@ def test_all_nine_cells_have_compilable_ground_truth(retail, sql_difficulty, sem
 
 def test_prompt_version_and_atomic_persistent_budget(tmp_path):
     prompt = load_match_prompt()
-    assert prompt.version == "v5" and len(prompt.system_sha256) == 64
+    assert prompt.version == "v6" and len(prompt.system_sha256) == 64
     assert len(prompt.response_schema_sha256) == 64
     assert load_match_prompt("v1").version == "v1"
     assert load_match_prompt("v2").version == "v2"
     assert load_match_prompt("v3").version == "v3"
     assert load_match_prompt("v4").version == "v4"
+    assert load_match_prompt("v5").version == "v5"
     with pytest.raises(ValueError, match="unknown"):
-        load_match_prompt("v6")
+        load_match_prompt("v7")
     ledger = tmp_path / "private" / "calls.json"
     budget = CallBudget(3, ledger)
     def reserve(_):
@@ -179,7 +180,7 @@ def test_v5_contract_omits_unset_default_aggregation():
         SchemaCatalog._validate_policy(policy)
 
 
-@pytest.mark.parametrize("version, has_response_schema", [("v4", False), ("v5", True)])
+@pytest.mark.parametrize("version, has_response_schema", [("v4", False), ("v5", True), ("v6", True)])
 def test_match_prompt_schema_visibility(tmp_path, version, has_response_schema):
     settings, catalog, packer, _, retriever = dependencies(tmp_path / "profile")
     class CapturingLLM(StubLLM):

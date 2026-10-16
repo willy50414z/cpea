@@ -227,7 +227,7 @@ class SQLGenerationWorkflow:
                 errors.append("fields mapping is empty")
             if getattr(mapping, "having", []) and not mapping.group:
                 errors.append("HAVING requires GROUP BY")
-            if (self.match_prompt.version in {"v3", "v4", "v5"} and
+            if (self.match_prompt.version in {"v3", "v4", "v5", "v6"} and
                     re.search(r"(?:只保留|只顯示).*(?:合計|總和|平均).*(?:大於|小於|超過|低於|至少|以上|以下|[<>]=?)", request)
                     and not mapping.having):
                 errors.append("missing HAVING aggregate threshold")

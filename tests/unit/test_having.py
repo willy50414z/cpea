@@ -30,12 +30,14 @@ def test_having_schema_versions_and_hidden_aggregate():
     v2 = load_match_prompt("v2")
     v3 = load_match_prompt("v3")
     v4 = load_match_prompt("v4")
-    v5 = load_match_prompt()
+    v5 = load_match_prompt("v5")
+    v6 = load_match_prompt()
     assert v2.response_model is SQLClauseMapping
     assert v3.response_model is SQLClauseMappingV3
     assert v4.response_model is SQLClauseMappingV3
     assert v5.version == "v5" and v5.response_model is SQLClauseMappingV3
-    assert len({v3.system_sha256, v4.system_sha256, v5.system_sha256}) == 3
+    assert v6.version == "v6" and v6.response_model is SQLClauseMappingV3
+    assert len({v3.system_sha256, v4.system_sha256, v5.system_sha256, v6.system_sha256}) == 4
     assert v2.response_schema_sha256 != v3.response_schema_sha256
     with pytest.raises(ValueError, match="having"):
         SQLClauseMappingV3.model_validate({"fields": [], "table": None})

@@ -57,7 +57,7 @@ def test_cli_and_graph_use_same_runtime(tmp_path, capsys):
     runtime = runtime_fixture(tmp_path)
     assert main(['--request', QUESTION], runtime=runtime) == 0
     assert json.loads(capsys.readouterr().out)['selected_views'] == [VIEW]
-    assert set(create_graph(runtime).get_graph().nodes) >= {'retrieve_schema', 'match_candidates', 'compile_query', 'finalize'}
+    assert set(create_graph(runtime).get_graph().nodes) >= {'retrieve_schema', 'match_candidates', 'finalize'}
 
 @pytest.mark.parametrize('raw', [
     {'answer': 'example', 'citations': []},

@@ -82,12 +82,10 @@ class SQLGenerationWorkflow:
         # 從doc篩選views並加入tokens budget/latency ms打包成context
         graph.add_node("retrieve_schema", self._retrieve_schema)
         graph.add_node("match_candidates", self._match_candidates)
-        graph.add_node("compile_query", self._compile_query)
         graph.add_node("finalize", self._finalize)
         graph.add_edge(START, "retrieve_schema")
         graph.add_conditional_edges("retrieve_schema", self._continue_or_end, {"continue": "match_candidates", "end": "finalize"})
-        graph.add_conditional_edges("match_candidates", self._continue_or_end, {"continue": "compile_query", "end": "finalize"})
-        graph.add_edge("compile_query", "finalize")
+        graph.add_edge("match_candidates", "finalize")
         graph.add_edge("finalize", END)
         return graph.compile()
 
@@ -139,58 +137,63 @@ class SQLGenerationWorkflow:
             retrieval_score=item.retrieval_score, reranker_score=item.reranker_score,
         ) for item in state["candidates"]]
         response_model = self.match_prompt.response_model
-        response_schema = response_schema_for(response_model,
-            column_names={column for schema in schemas.values() for column in schema['columns']},
-            view_names=set(schemas))
-        packed = self.context_packer.pack_documents(
-            system_prompt=self.match_prompt.system, question=request, history_text="", candidates=detailed,
-            additional_prompt_text=(json.dumps({'candidates': [], 'response_schema': response_schema}, ensure_ascii=False)
-                                    if self.match_prompt.version != "v4" else ""),
-        )
-        admitted = {source.document_id for source in packed.sources}
-        attempts = [CandidateAttempt(view=view, outcome="context_budget",
-                                     errors=["完整 View contract 超出 context budget"])
-                    for view in schemas if view not in admitted]
-        schemas = {view: schema for view, schema in schemas.items() if view in admitted}
-        response_schema = response_schema_for(response_model,
-            column_names={column for schema in schemas.values() for column in schema['columns']},
-            view_names=set(schemas))
+        attempts: list[CandidateAttempt] = []
         prompt = ChatPromptTemplate.from_messages([
             ("system", self.match_prompt.system),
             ("human", self.match_prompt.human),
         ])
-        context = {"candidates": list(schemas.values())}
-        if self.match_prompt.version != "v4":
-            context["response_schema"] = response_schema
-        variables = {"request": request, "schema_context": json.dumps(context, ensure_ascii=False)}
         facts: list[QueryFact] = []
         mapping_attempts: list[MappingAttempt] = []
-        for _ in range(2 if schemas else 0):
+        failure_stage = "schema_linking"
+        pending = [(candidate, None) for candidate in detailed]
+        while pending:
+            candidate, repair = pending.pop(0)
+            failure_stage = "schema_linking"
+            candidate_view = str(candidate.document.metadata["document_id"])
+            candidate_schema_data = schemas[candidate_view]
+            response_schema = response_schema_for(response_model,
+                column_names=set(candidate_schema_data["columns"]), view_names={candidate_view})
+            packed = self.context_packer.pack_documents(
+                system_prompt=self.match_prompt.system, question=request, history_text="",
+                candidates=[candidate],
+                additional_prompt_text=(json.dumps({'candidates': [], 'response_schema': response_schema}, ensure_ascii=False)
+                                        if self.match_prompt.version != "v4" else ""),
+            )
+            if not packed.sources:
+                attempts.append(CandidateAttempt(view=candidate_view, outcome="context_budget",
+                                                 errors=["完整 View contract 超出 context budget"]))
+                continue
+            context = {"candidates": [candidate_schema_data]}
+            if self.match_prompt.version != "v4":
+                context["response_schema"] = response_schema
+            if repair is not None:
+                context["repair"] = repair
+            variables = {"request": request, "schema_context": json.dumps(context, ensure_ascii=False)}
             try:
                 mapping = self._invoke_model(prompt, variables, response_model, response_schema=response_schema,
                     on_parse_error=lambda exc: mapping_attempts.append(MappingAttempt(
                         attempt_index=len(mapping_attempts) + 1, outcome="parse_error", reason=str(exc))))
             except ValueError as exc:
-                attempts.append(CandidateAttempt(view="(unselected)", outcome="schema_mismatch", errors=[str(exc)]))
+                attempts.append(CandidateAttempt(view=candidate_view, outcome="schema_mismatch", errors=[str(exc)]))
                 continue
             mapping_attempts.append(MappingAttempt(attempt_index=len(mapping_attempts) + 1,
                                                    mapping=mapping, outcome="rejected"))
             if isinstance(mapping.table, list):
                 mapping_attempts[-1].reason = "multiple Views selected"
-                return {"request_facts": facts, "candidate_attempts": attempts,
-                        "mapping_attempts": mapping_attempts,
-                        "rejection_stage": "schema_selection",
-                        "response": self._unsupported("單一查詢任務只支援一個 View。", [request])}
-            if (mapping.table is None or mapping.table.view not in schemas
+                attempts.append(CandidateAttempt(view=candidate_view, outcome="schema_mismatch",
+                                                 errors=["multiple Views selected"]))
+                failure_stage = "schema_selection"
+                continue
+            if (mapping.table is None or mapping.table.view != candidate_view
                     or (mapping.table.text and mapping.table.text != mapping.table.view and mapping.table.text not in request)):
                 attempts.append(CandidateAttempt(
-                    view=mapping.table.view if mapping.table else "(unselected)",
+                    view=candidate_view,
                     outcome="schema_mismatch", unresolved=[request],
                     errors=[mapping.unsupported_reason or "table mapping does not match the request and selected View"]))
                 mapping_attempts[-1].reason = mapping.unsupported_reason or "table mismatch"
                 continue
             view = mapping.table.view
-            schema = schemas[view]
+            schema = candidate_schema_data
             facts_by_text: dict[str, QueryFact] = {}
             links: list[SchemaLink] = []
             grouped = {item.column for item in mapping.group}
@@ -227,12 +230,16 @@ class SQLGenerationWorkflow:
                 errors.append("fields mapping is empty")
             if getattr(mapping, "having", []) and not mapping.group:
                 errors.append("HAVING requires GROUP BY")
-            if (self.match_prompt.version in {"v3", "v4", "v5", "v6"} and
+            if (self.match_prompt.version in {"v3", "v4", "v5", "v6", "v7", "v8", "v9"} and
                     re.search(r"(?:只保留|只顯示).*(?:合計|總和|平均).*(?:大於|小於|超過|低於|至少|以上|以下|[<>]=?)", request)
                     and not mapping.having):
                 errors.append("missing HAVING aggregate threshold")
             if getattr(mapping, "having", []) and re.search(r"(?:\bOR\b|或者|或是|或\s*者|COUNT\s*\(\s*\*\s*\))", request, re.IGNORECASE):
                 errors.append("unsupported HAVING expression")
+            for item in getattr(mapping, "having", []):
+                if not re.search(r"(?:合計|總和|加總|累計|平均|最大|最小|聚合後|分組後|\b(?:SUM|COUNT|AVG|MAX|MIN)\b)",
+                                 item.text, re.IGNORECASE):
+                    errors.append(f"HAVING requires an explicit aggregate threshold; use criteria for row filters: {item.text}")
             if any(re.search(r"(?:合計|總和|平均|計數|筆數).*(?:大於|小於|超過|低於|至少|以上|以下|[<>]=?)", item.text)
                    for item in mapping.criteria):
                 errors.append("aggregate threshold cannot be a WHERE criterion")
@@ -244,28 +251,44 @@ class SQLGenerationWorkflow:
             missing_literals = unmapped_request_literals(request, mapping, self.catalog, view)
             if missing_literals:
                 errors.append("unmapped request literals: " + ", ".join(missing_literals))
+            outcome = "schema_mismatch"
             if not errors:
-                mapping_attempts[-1].outcome = "selected"
-                attempts.append(CandidateAttempt(view=view, outcome="matched", facts=facts, links=draft.links))
-                return {"request_facts": facts, "candidate_attempts": attempts,
-                        "mapping_attempts": mapping_attempts,
-                        "selected_mapping_index": len(mapping_attempts),
-                        "selected_views": [view], "links": draft,
-                        "order_by": [item.column for item in mapping.order],
-                        "order_directions": {item.column: item.direction for item in mapping.order
-                                             if item.direction != "asc"},
-                        "having": [HavingFilter(column=item.column, aggregation=item.aggregation,
-                                                operator=item.operator, value=item.value)
-                                   for item in getattr(mapping, "having", [])],
-                        "sources": [source for source in packed.sources if source.document_id == view],
-                        "context_tokens": packed.context_tokens, "context_budget": packed.document_budget}
-            attempts.append(CandidateAttempt(view=view, outcome="schema_mismatch", facts=facts,
+                selected = {"request_facts": facts, "selected_mapping_index": len(mapping_attempts),
+                            "selected_views": [view], "links": draft,
+                            "order_by": [item.column for item in mapping.order],
+                            "order_directions": {item.column: item.direction for item in mapping.order
+                                                 if item.direction != "asc"},
+                            "having": [HavingFilter(column=item.column, aggregation=item.aggregation,
+                                                    operator=item.operator, value=item.value)
+                                       for item in getattr(mapping, "having", [])],
+                            "sources": [source for source in packed.sources if source.document_id == view],
+                            "context_tokens": packed.context_tokens, "context_budget": packed.document_budget}
+                compiled = self._compile_query({**state, **selected})
+                if compiled["response"].supported:
+                    mapping_attempts[-1].outcome = "selected"
+                    attempts.append(CandidateAttempt(view=view, outcome="matched", facts=facts, links=draft.links))
+                    return {**selected, **compiled, "candidate_attempts": attempts,
+                            "mapping_attempts": mapping_attempts}
+                errors = compiled["response"].limitations
+                failure_stage = compiled["rejection_stage"]
+                outcome = "validation_failed"
+            attempts.append(CandidateAttempt(view=view, outcome=outcome, facts=facts,
                                              links=draft.links, unresolved=[*draft.unresolved_facts, *missing_literals], errors=errors))
             mapping_attempts[-1].reason = "; ".join(errors)
+            if repair is None:
+                pending.insert(0, (candidate, {
+                    "previous_mapping": mapping.model_dump(mode="json"),
+                    "validation_errors": errors,
+                    "instruction": "Revise the mapping for this same View using its contract and the original request. "
+                                   "Fix the validation errors without dropping required request items. "
+                                   "If the View cannot satisfy the request, return table=null with a specific reason.",
+                }))
         reasons = [f"{attempt.view}: {', '.join(attempt.errors or attempt.unresolved)}" for attempt in attempts]
         return {"request_facts": facts, "candidate_attempts": attempts,
-                "mapping_attempts": mapping_attempts, "rejection_stage": "schema_linking",
-                "response": self._unsupported("沒有單一 View 能完整承接需求。", reasons)}
+                "mapping_attempts": mapping_attempts, "rejection_stage": failure_stage,
+                "response": self._unsupported(
+                    "單一查詢任務只支援一個 View。" if failure_stage == "schema_selection"
+                    else "沒有單一 View 能完整承接需求。", reasons)}
 
     def _link_errors(self, facts: list[QueryFact], draft: SchemaLinkDraft, view: str, request: str) -> list[str]:
         errors: list[str] = []

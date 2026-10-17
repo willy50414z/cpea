@@ -100,7 +100,7 @@
 
 - 已知缺口除記載於報告，也應有至少一題可追蹤的具體需求與 `unsupported_evidence`；使用穩定 ID，與基本 55 題分開統計。每次重跑須保留人工審核紀錄的指紋規則。
 - 目前 Retail Coverage Gap：跨會員平均每筆訂單消費額與跨門市整體毛利率需要跨欄位算式，目前各保留一題 `unsupported` 案例；JOIN 與跨欄位算式不在本次功能實作範圍。同欄位雙界限日期篩選仍由邊界案例或產題規則追蹤。
-- HAVING 已納入正常案例：每個 View 的 `B-09` 以明確分組維度、聚合函數、比較運算子與門檻值驗證彙總後篩選，並容許該指標不出現在 SELECT。Ground Truth 必須區分 WHERE 與 HAVING；例如「依門市分組，只保留營收合計大於 100 的門市」需要 `HAVING SUM(revenue) > 100`，不能改成 `WHERE revenue > 100`。有 GROUP BY 時，一般欄位門檻仍是 WHERE。MATCH v6 的 `expected_match.having` 與 `expected_sql.having` 必須一致；未使用 HAVING 的 v6 題目使用空陣列。
+- HAVING 已納入正常案例：每個 View 的 `B-09` 以明確分組維度、聚合函數、比較運算子與門檻值驗證彙總後篩選，並容許該指標不出現在 SELECT。Ground Truth 必須區分 WHERE 與 HAVING；例如「依門市分組，只保留營收合計大於 100 的門市」需要 `HAVING SUM(revenue) > 100`，不能改成 `WHERE revenue > 100`。有 GROUP BY 時，一般欄位門檻仍是 WHERE。MATCH v6 及後續版本的 `expected_match.having` 與 `expected_sql.having` 必須一致；未使用 HAVING 的題目使用空陣列。
 - 已處理項目：七個 View 各有降冪排序正常案例；`v_sales_detail` 有 `COUNT(DISTINCT order_id)` 正常案例；固定涵蓋期間、固定庫存快照日期及 `sold_qty_30d` 的固定截止日期已從契約移除，對應舊案例不再產生。`v_sales_detail` 的 `(order_id, product_id)` 已由審核後的 YAML 宣告為複合唯一鍵，`--check` 驗證目前資料沒有重複；不得再以「明細唯一鍵未確認」產生拒絕案例。複合鍵不等於單一欄位識別碼，題目須明確要求兩欄。
 - `COUNT(*)` 或直接 `AVG` 比率欄位不得充當上述跨粒度需求的 Ground Truth；也不得將使用者要求的降冪改成升冪。若新的計算公式或日期保證尚未確立，採 `unsupported` 或 `ambiguous` 並寫明實際證據，不得產生虛構的 `expected_sql`。
 - 草稿契約的未確認敘述只能測試系統是否謹慎處理，不應當作經確認的業務真值。待契約或 Builder 改版後，重新判定拒絕是否仍成立，補上可編譯的正常案例，再更新 Coverage Report；不得讓過期的拒絕案例繼續計入正式成績。

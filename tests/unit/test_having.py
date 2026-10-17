@@ -31,13 +31,19 @@ def test_having_schema_versions_and_hidden_aggregate():
     v3 = load_match_prompt("v3")
     v4 = load_match_prompt("v4")
     v5 = load_match_prompt("v5")
-    v6 = load_match_prompt()
+    v6 = load_match_prompt("v6")
+    v7 = load_match_prompt("v7")
+    v8 = load_match_prompt("v8")
+    v9 = load_match_prompt()
     assert v2.response_model is SQLClauseMapping
     assert v3.response_model is SQLClauseMappingV3
     assert v4.response_model is SQLClauseMappingV3
     assert v5.version == "v5" and v5.response_model is SQLClauseMappingV3
     assert v6.version == "v6" and v6.response_model is SQLClauseMappingV3
-    assert len({v3.system_sha256, v4.system_sha256, v5.system_sha256, v6.system_sha256}) == 4
+    assert v7.version == "v7" and v7.response_model is SQLClauseMappingV3
+    assert v8.version == "v8" and v8.response_model is SQLClauseMappingV3
+    assert v9.version == "v9" and v9.response_model is SQLClauseMappingV3
+    assert len({v3.system_sha256, v4.system_sha256, v5.system_sha256, v6.system_sha256, v7.system_sha256, v8.system_sha256, v9.system_sha256}) == 7
     assert v2.response_schema_sha256 != v3.response_schema_sha256
     with pytest.raises(ValueError, match="having"):
         SQLClauseMappingV3.model_validate({"fields": [], "table": None})
@@ -79,6 +85,38 @@ def test_where_group_having_order_and_multiple_conditions():
     assert sql.index(" WHERE ") < sql.index(" GROUP BY ") < sql.index(" HAVING ") < sql.index(" ORDER BY ")
     assert "HAVING SUM([revenue]) > 100 AND COUNT([order_count]) >= 2" in sql
     validate_generated_sql(sql, {VIEW})
+
+
+def test_unrequested_aggregate_threshold_is_repaired_as_row_filter():
+    raw = next(json.loads(line) for line in (ROOT / "projects/retail/evaluations/cases.jsonl").open(encoding="utf-8")
+               if '"case_id": "RETAIL-STORE_MONTHLY_KPI-M3-03"' in line)
+    expected = raw["expected_match"]
+
+    class RepairLLM:
+        def __init__(self):
+            self.calls = []
+
+        def invoke(self, messages):
+            context = json.loads(messages[-1].content.split("table定義: ", 1)[1])
+            self.calls.append(context)
+            mapping = json.loads(json.dumps(expected, ensure_ascii=False))
+            if len(self.calls) == 1:
+                criterion = next(item for item in mapping["criteria"] if item["column"] == "gross_profit")
+                mapping["criteria"].remove(criterion)
+                mapping["having"] = [{**criterion, "aggregation": "sum"}]
+            return SimpleNamespace(content=json.dumps(mapping, ensure_ascii=False))
+
+    settings = replace(AssistantSettings.from_env(ROOT / "projects/retail/.env"),
+                       retrieval_mode="lexical", context_window=16000, max_output_tokens=8192)
+    catalog = SchemaCatalog(ROOT / "projects/retail", allow_drafts=True)
+    llm = RepairLLM()
+    result = SQLGenerationWorkflow(llm, catalog, settings=settings,
+                                   context_packer=ContextPacker(settings, token_counter=Counter())).invoke(raw["request"])
+    assert result.supported and len(llm.calls) == 2
+    assert "HAVING requires an explicit aggregate threshold" in str(llm.calls[1]["repair"]["validation_errors"])
+    assert "[gross_profit] >= 100" in result.sql
+    assert " HAVING " not in result.sql
+    assert [attempt.outcome for attempt in result.query_trace.mapping_attempts] == ["rejected", "selected"]
 
 
 def test_v2_case_shape_remains_readable_and_v3_having_is_graded():

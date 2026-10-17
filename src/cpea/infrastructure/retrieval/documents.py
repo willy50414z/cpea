@@ -1,32 +1,31 @@
 from pathlib import Path
+import re
 from langchain_core.documents import Document
 from cpea.application.ports.catalog import CatalogProvider
 
-def build_documents(catalog: CatalogProvider) -> list[Document]:
-    """Return one semantic, table-preserving retrieval unit per view.
 
-    The curated files are already organized by business-document
-    sections. Keeping each schema contract intact prevents field tables
-    and their column headings from being separated. Large sample-data
-    tables are deliberately excluded from both retrieval and LLM context.
-    """
+def _without_column_names(text: str, names: list[str]) -> str:
+    for name in sorted(names, key=len, reverse=True):
+        text = re.sub(rf"(?<![A-Za-z0-9_]){re.escape(name)}(?![A-Za-z0-9_])", "欄位", text)
+    return text
+
+
+def build_documents(catalog: CatalogProvider) -> list[Document]:
+    """Index View and field descriptions without column names for retrieval."""
     documents: list[Document] = []
     for definition in catalog.views():
-        # Retrieval needs a compact semantic index. The full field
-        # descriptions are loaded only after the view has been selected.
         columns = catalog.columns(definition.name)
-        contract = "\n".join(
-            [f"# View: {definition.name}", definition.summary, "", "欄位："]
-            + [f"- {name}（{field_type}）" for name, field_type in columns.items()]
-        )
+        names = list(columns)
+        summary = _without_column_names(definition.summary, names)
+        descriptions = [
+            f"- {_without_column_names(catalog.field_contract(definition.name, name)['description'], names)}"
+            for name in names
+        ]
         source = Path(definition.detail_path).as_posix()
         documents.append(
             Document(
                 id=definition.name,
-                page_content=(
-                    f"# {definition.name}\n\n"
-                    f"用途摘要：{definition.summary}\n\n{contract}"
-                ),
+                page_content="\n".join([f"用途摘要：{summary}", "", "欄位說明：", *descriptions]),
                 metadata={
                     "document_id": definition.name,
                     "source": source,
@@ -37,7 +36,7 @@ def build_documents(catalog: CatalogProvider) -> list[Document]:
                     "schema": definition.name.split(".", 1)[0],
                     "document_type": "database_view",
                     "view_name": definition.name,
-                    "summary": definition.summary,
+                    "summary": summary,
                 },
             )
         )

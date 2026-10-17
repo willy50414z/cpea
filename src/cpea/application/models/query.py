@@ -23,7 +23,7 @@ class SourceReference(BaseModel):
 
 class CandidateAttempt(BaseModel):
     view: str
-    outcome: Literal["matched", "schema_mismatch", "context_budget", "ambiguous"]
+    outcome: Literal["matched", "schema_mismatch", "validation_failed", "context_budget", "ambiguous"]
     facts: list[QueryFact] = Field(default_factory=list)
     links: list[SchemaLink] = Field(default_factory=list)
     unresolved: list[str] = Field(default_factory=list)

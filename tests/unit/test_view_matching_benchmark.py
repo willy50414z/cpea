@@ -141,15 +141,18 @@ def test_all_nine_cells_have_compilable_ground_truth(retail, sql_difficulty, sem
 
 def test_prompt_version_and_atomic_persistent_budget(tmp_path):
     prompt = load_match_prompt()
-    assert prompt.version == "v6" and len(prompt.system_sha256) == 64
+    assert prompt.version == "v9" and len(prompt.system_sha256) == 64
     assert len(prompt.response_schema_sha256) == 64
     assert load_match_prompt("v1").version == "v1"
     assert load_match_prompt("v2").version == "v2"
     assert load_match_prompt("v3").version == "v3"
     assert load_match_prompt("v4").version == "v4"
     assert load_match_prompt("v5").version == "v5"
+    assert load_match_prompt("v6").version == "v6"
+    assert load_match_prompt("v7").version == "v7"
+    assert load_match_prompt("v8").version == "v8"
     with pytest.raises(ValueError, match="unknown"):
-        load_match_prompt("v7")
+        load_match_prompt("v10")
     ledger = tmp_path / "private" / "calls.json"
     budget = CallBudget(3, ledger)
     def reserve(_):
@@ -211,7 +214,7 @@ def test_literal_check_requires_number_to_be_declared_by_field_contract():
     assert unmapped_request_literals(request, mapping, catalog, view) == ["30"]
 
 
-@pytest.mark.parametrize("version, has_response_schema", [("v4", False), ("v5", True), ("v6", True)])
+@pytest.mark.parametrize("version, has_response_schema", [("v4", False), ("v5", True), ("v6", True), ("v7", True), ("v8", True), ("v9", True)])
 def test_match_prompt_schema_visibility(tmp_path, version, has_response_schema):
     settings, catalog, packer, _, retriever = dependencies(tmp_path / "profile")
     class CapturingLLM(StubLLM):
@@ -286,9 +289,12 @@ def test_workflow_trace_keeps_retry_sequence(tmp_path, first_response):
     runtime = AssistantRuntime(settings, catalog=catalog, llm=RetryStub(),
                                retriever=retriever, context_packer=packer)
     trace = runtime.generate(QUESTION).query_trace
-    assert [attempt.outcome for attempt in trace.mapping_attempts] == [
-        "parse_error" if first_response == "parse_error" else "rejected", "selected"]
-    assert trace.selected_mapping_index == 2
+    if first_response == "parse_error":
+        assert [attempt.outcome for attempt in trace.mapping_attempts] == ["parse_error", "selected"]
+        assert trace.selected_mapping_index == 2
+    else:
+        assert [attempt.outcome for attempt in trace.mapping_attempts] == ["rejected"]
+        assert trace.selected_mapping_index is None
 
 
 def test_stability_requires_all_repetitions_correct():

@@ -2,6 +2,19 @@ from dataclasses import replace
 import pytest
 from tests.support import *
 
+
+def test_retrieval_document_uses_only_descriptions(tmp_path):
+    from cpea.infrastructure.retrieval.documents import build_documents
+
+    _, catalog, *_ = dependencies(tmp_path)
+    document = build_documents(catalog)[0]
+    assert "合成數量" in document.page_content
+    assert "數值" not in document.page_content
+    assert "库存数量" not in document.page_content
+    assert "仓库名称" not in document.page_content
+    assert document.metadata["document_id"] == VIEW
+
+
 def test_single_view_generation_and_trace(tmp_path):
     settings, catalog, packer, llm, retriever = dependencies(tmp_path)
     result = Workflow(llm, catalog, settings=settings, retriever=retriever, context_packer=packer).invoke(QUESTION)
@@ -180,7 +193,7 @@ def test_clause_mapping_keeps_guards(tmp_path, mutation, expected):
     llm = MappingLLM(mutate)
     result = Workflow(llm, catalog, settings=settings, retriever=retriever, context_packer=packer).invoke(QUESTION)
     assert not result.supported and result.sql is None
-    assert llm.calls == (1 if mutation == 'missing_group' else 2)
+    assert llm.calls == (1 if mutation == 'view' else 2)
     assert expected in str(result.limitations)
 
 
@@ -239,20 +252,27 @@ def test_renamed_columns_follow_view_document(tmp_path):
     assert '[item_key]' in result.sql and '[site_label]' in result.sql
 
 
-def test_second_mapping_attempt_can_recover(tmp_path):
+def test_validation_error_repairs_same_candidate(tmp_path):
+    import json
+
     settings, catalog, packer, _, retriever = dependencies(tmp_path)
 
     def mutate(mapping):
         if llm.calls == 1:
-            mapping['criteria'][0]['value'] = 'MADEUP'
+            mapping['fields'] = []
 
     llm = MappingLLM(mutate)
     result = Workflow(llm, catalog, settings=settings, retriever=retriever, context_packer=packer).invoke(QUESTION)
     assert result.supported and llm.calls == 2
+    repair = json.loads(llm.messages[1][-1].content.split('table定義: ', 1)[1])['repair']
+    assert repair['previous_mapping']['table']['view'] == VIEW
+    assert repair['previous_mapping']['fields'] == []
+    assert 'fields mapping is empty' in repair['validation_errors']
+    assert [attempt.outcome for attempt in result.query_trace.mapping_attempts] == ['rejected', 'selected']
 
 
 @pytest.mark.parametrize('include_second', [True, False])
-def test_joint_selection_compares_candidates_and_rejects_unpacked_view(tmp_path, include_second):
+def test_candidates_are_matched_one_view_at_a_time(tmp_path, include_second):
     import json
     import yaml
     from cpea.infrastructure.retrieval.documents import build_documents
@@ -278,15 +298,64 @@ def test_joint_selection_compares_candidates_and_rejects_unpacked_view(tmp_path,
     llm = MappingLLM(lambda mapping: mapping['table'].update(view=other))
     result = Workflow(llm, catalog, settings=settings, retriever=Candidates(),
                       context_packer=packer).invoke(QUESTION)
-    payload = json.loads(llm.messages[0][-1].content.split('table定義: ', 1)[1])
-    assert [s['view'] for s in payload['candidates']] == ([VIEW, other] if include_second else [VIEW])
+    payloads = [json.loads(messages[-1].content.split('table定義: ', 1)[1]) for messages in llm.messages]
+    assert [[s['view'] for s in payload['candidates']] for payload in payloads] == (
+        [[VIEW], [other]] if include_second else [[VIEW]])
+    for payload in payloads:
+        selected_view = payload['candidates'][0]['view']
+        definitions = payload['response_schema']['$defs'].values()
+        assert [definition['properties']['view']['enum'] for definition in definitions
+                if 'view' in definition.get('properties', {})] == [[selected_view]]
+        assert all(set(definition['properties']['column']['enum']) == set(payload['candidates'][0]['columns'])
+                   for definition in definitions if 'column' in definition.get('properties', {}))
     if include_second:
-        assert result.supported and llm.calls == 1
+        assert result.supported and llm.calls == 2
         assert result.selected_views == [other]
         assert {source.document_id for source in result.sources} == {other}
+        assert [attempt.outcome for attempt in result.query_trace.candidate_attempts] == [
+            'schema_mismatch', 'matched']
     else:
         assert not result.supported and result.sql is None
         assert 'table mapping does not match' in str(result.limitations)
+
+
+@pytest.mark.parametrize('first_fails', [False, True])
+def test_sequential_candidates_stop_on_first_compiled_sql(tmp_path, first_fails):
+    import json
+    import yaml
+    from cpea.infrastructure.retrieval.documents import build_documents
+    from cpea.infrastructure.retrieval.schema import RetrievalCandidate, RetrievalResult
+    from tests.support import Catalog, view_contract
+
+    settings, _, packer, _, _ = dependencies(tmp_path)
+    other = 'gms2.v_alternate'
+    (tmp_path / 'alternate.yaml').write_text(
+        yaml.safe_dump(view_contract(other), allow_unicode=True), encoding='utf-8')
+    (tmp_path / 'catalog.yaml').write_text(yaml.safe_dump({'views': {
+        VIEW: {'path': 'inventory.yaml'}, other: {'path': 'alternate.yaml'},
+    }}, allow_unicode=True, sort_keys=False), encoding='utf-8')
+    catalog = Catalog(tmp_path)
+    candidates = [RetrievalCandidate(doc, 1.0 - index * 0.5)
+                  for index, doc in enumerate(build_documents(catalog))]
+
+    class Candidates:
+        def retrieve(self, question):
+            return RetrievalResult(question, candidates, 0.0, 0.0)
+
+    def map_current_view(mapping):
+        current = json.loads(llm.messages[-1][-1].content.split('table定義: ', 1)[1])['candidates'][0]['view']
+        mapping['table']['view'] = current
+        if first_fails and llm.calls <= 2:
+            mapping['fields'][0]['aggregation'] = None
+
+    llm = MappingLLM(map_current_view)
+    result = Workflow(llm, catalog, settings=settings, retriever=Candidates(),
+                      context_packer=packer).invoke(QUESTION)
+    assert result.supported
+    assert result.selected_views == ([other] if first_fails else [VIEW])
+    assert llm.calls == (3 if first_fails else 1)
+    assert [attempt.outcome for attempt in result.query_trace.candidate_attempts] == (
+        ['validation_failed', 'validation_failed', 'matched'] if first_fails else ['matched'])
 
 
 @pytest.mark.parametrize('sample', range(3))

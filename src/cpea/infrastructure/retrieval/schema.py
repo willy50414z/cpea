@@ -81,6 +81,24 @@ def _lexical_score(query: str, document: Document) -> float:
     )
 
 
+def _view_lexical_score(query: str, document: Document) -> float:
+    """Rank a View by its summary and best matching fields, not its size."""
+    view_name = str(document.metadata.get("view_name", ""))
+    if view_name and view_name.lower() in preprocess_query(query).lower():
+        return 1.0
+    query_terms = _lexical_terms(query)
+    if not query_terms:
+        return 0.0
+    def overlap(text: str) -> float:
+        return len(query_terms & _lexical_terms(text)) / len(query_terms)
+    summary = overlap(str(document.metadata.get("summary", "")))
+    fields = [overlap(line) for line in document.page_content.splitlines() if line.startswith("- ")]
+    if not fields:
+        return summary
+    strongest = sorted(fields, reverse=True)[:3]
+    return (0.3 * summary) + (0.7 * sum(strongest) / len(strongest))
+
+
 def lexical_relevance(query: str, text: str) -> float:
     """Return a lightweight relevance score for non-document context."""
     return _lexical_score(query, Document(page_content=text, metadata={}))
@@ -180,7 +198,7 @@ class SchemaRetriever:
         ranked = sorted(
             (
                 RetrievalCandidate(
-                    document=doc, retrieval_score=_lexical_score(query, doc)
+                    document=doc, retrieval_score=_view_lexical_score(query, doc)
                 )
                 for doc in self.documents
             ),
@@ -213,7 +231,7 @@ class SchemaRetriever:
         else:
             reranked = []
             for item in items:
-                lexical = _lexical_score(query, item.document)
+                lexical = _view_lexical_score(query, item.document)
                 # Preserve dense-retrieval evidence while allowing exact
                 # Chinese business terms and product numbers to dominate.
                 combined = (0.75 * lexical) + (

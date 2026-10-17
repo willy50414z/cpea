@@ -15,6 +15,19 @@ def test_retrieval_document_uses_only_descriptions(tmp_path):
     assert document.metadata["document_id"] == VIEW
 
 
+def test_view_retrieval_is_not_helped_by_unrelated_columns():
+    from langchain_core.documents import Document
+    from cpea.infrastructure.retrieval.schema import _view_lexical_score
+
+    question = "顯示每日營收與訂單筆數"
+    metadata = {"view_name": "demo.v_sales", "summary": "每日銷售"}
+    focused = Document(page_content="- 每日營收\n- 訂單筆數", metadata=metadata)
+    expanded = Document(page_content=focused.page_content + "\n- 客戶地址\n- 商品分類\n- 付款管道",
+                        metadata=metadata)
+    assert _view_lexical_score(question, expanded) <= _view_lexical_score(question, focused)
+    assert _view_lexical_score("請從 demo.v_sales 查詢每日營收", focused) == 1.0
+
+
 def test_single_view_generation_and_trace(tmp_path):
     settings, catalog, packer, llm, retriever = dependencies(tmp_path)
     result = Workflow(llm, catalog, settings=settings, retriever=retriever, context_packer=packer).invoke(QUESTION)
@@ -356,6 +369,20 @@ def test_sequential_candidates_stop_on_first_compiled_sql(tmp_path, first_fails)
     assert llm.calls == (3 if first_fails else 1)
     assert [attempt.outcome for attempt in result.query_trace.candidate_attempts] == (
         ['validation_failed', 'validation_failed', 'matched'] if first_fails else ['matched'])
+
+
+@pytest.mark.parametrize('change, expected', [
+    (lambda mapping: mapping.update(unsupported_reason='必要指標無法對應'), 'unsupported reason'),
+    (lambda mapping: mapping['ignored'].append({'text': '合計', 'reason': '略過'}), 'cannot be ignored'),
+])
+def test_selected_view_cannot_discard_required_semantics(tmp_path, change, expected):
+    settings, catalog, packer, _, retriever = dependencies(tmp_path)
+    llm = MappingLLM(change)
+    result = Workflow(llm, catalog, settings=settings, retriever=retriever,
+                      context_packer=packer).invoke(QUESTION + '合計')
+    assert not result.supported
+    assert llm.calls == 2
+    assert expected in str(result.limitations)
 
 
 @pytest.mark.parametrize('sample', range(3))

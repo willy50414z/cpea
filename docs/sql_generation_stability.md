@@ -2,6 +2,8 @@
 
 流程先由檢索與 context budget 選出候選契約，再依排名逐一將單一 View 契約與完整需求交給模型，回傳欄位、條件、排序與分組對應。當次 JSON Schema enum 只包含該 View 及其欄位；不傳入 samples、題庫或預期答案。Python 檢查原文引用、literal 承接與契約政策，由 compiler 產生唯讀 MSSQL；失敗時試下一個候選，成功就停止。
 
+字面檢索以 View 摘要及最相關的三個欄位描述評分，避免欄位較多的 View 因全文命中較多而佔優勢；需求明示完整 View 名稱時優先保留該 View。模型若選中 View 卻同時宣稱不支援，或將必要的聚合、分組、排序、篩選語意放進 `ignored`，會被退回修正。可用 `uv run --locked python -m evaluations.retail_view_retrieval --report projects/retail/evaluations/view_retrieval_diagnostic.md` 離線比較原本與目前的正確 View 排名；此檢查不呼叫模型，也不代表最終 SQL 正確。
+
 `MATCH_PROMPT` 上限為 2,000 字。MATCH v9 使用 Markdown 標題與條列，先要求模型填寫顯示指標及分組維度，再處理篩選與排序；單一候選的 JSON Schema 限制輸出形狀及名稱。驗證失敗後，修正呼叫會收到同一 View 契約、前次映射與具體錯誤；不會把其他 View 的欄位放進同一呼叫。HAVING 條件須有明確聚合或分組後門檻語意；普通資料列門檻不得自行改為 HAVING，錯誤映射會退回修正。候選契約只提供已設定的欄位屬性；v3 View 契約不使用 `default_aggregation`。明確代碼或數值未被承接時拒絕查詢，避免漏掉篩選後擴大查詢；這不是完整的自然語言解析器。
 
 Ollama 的推理模式由 `ASSISTANT_LLM_REASONING` 明確控制，預設 false。啟用時需要足夠的 `ASSISTANT_LLM_NUM_PREDICT`，因為推理也使用輸出額度。LangChain 將推理內容與最終 JSON 分開；產品 SQL／結果不包含推理內容。

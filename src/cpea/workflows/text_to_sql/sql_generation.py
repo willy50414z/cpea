@@ -226,6 +226,11 @@ class SQLGenerationWorkflow:
             )
             facts = draft.facts
             errors = self._link_errors(facts, draft, view, request)
+            if mapping.unsupported_reason:
+                errors.append("selected View cannot also declare an unsupported reason")
+            for item in mapping.ignored:
+                if re.search(r"(?:合計|總和|加總|平均|最大|最小|單列|分組|排序|篩選|條件|大於|小於|超過|低於|至少|以上|以下|[<>]=?)", item.text):
+                    errors.append(f"required request clause cannot be ignored: {item.text}")
             if not mapping.fields:
                 errors.append("fields mapping is empty")
             if getattr(mapping, "having", []) and not mapping.group:

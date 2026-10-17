@@ -12,7 +12,8 @@ dist/
 build/
 *.egg-info/
 artifacts/
-projects/
+projects/*
+!projects/retail/
 .idea/
 integrations/private/
 evaluations/private/

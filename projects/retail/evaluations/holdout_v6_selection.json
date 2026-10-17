@@ -1,0 +1,12 @@
+{
+  "case_ids": [
+    "RETAIL-CUSTOMER_VALUE-S1-03",
+    "RETAIL-DAILY_SALES-B-09",
+    "RETAIL-INVENTORY_STATUS-M2-04",
+    "RETAIL-ORDER_SUMMARY-B-04",
+    "RETAIL-PRODUCT_MONTHLY-B-06",
+    "RETAIL-SALES_DETAIL-H1-04",
+    "RETAIL-STORE_MONTHLY_KPI-M3-03"
+  ],
+  "selection": "Selected before v6 prompt edits; unseen in prior 7-case run; covers detail, WHERE, HAVING, mixed aggregation, ambiguity, JOIN boundary."
+}

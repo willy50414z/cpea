@@ -157,8 +157,9 @@ class TracedModel:
 
     def with_response_schema(self, schema):
         from cpea.infrastructure.llm.factory import bind_response_schema
-        from cpea.workflows.text_to_sql.schemas import SQLClauseMapping, SQLClauseMappingV3
-        response_model = SQLClauseMappingV3 if "having" in schema.get("properties", {}) else SQLClauseMapping
+        from cpea.workflows.text_to_sql.schemas import SQLClauseMapping, SQLClauseMappingV3, SQLClauseMappingV10
+        response_model = (SQLClauseMappingV10 if "terms" in schema.get("properties", {})
+                          else SQLClauseMappingV3 if "having" in schema.get("properties", {}) else SQLClauseMapping)
         bound = bind_response_schema(self.model, response_model, schema=schema)
         wrapped = self.at(self.node_name)
         wrapped.model = bound

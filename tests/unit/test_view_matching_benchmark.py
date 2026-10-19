@@ -26,6 +26,8 @@ ROOT = Path(__file__).resolve().parents[2]
 
 @pytest.fixture(scope="module")
 def retail():
+    if not (ROOT / 'projects/retail/manifest.yaml').is_file():
+        pytest.skip('private Retail profile and approved cases are not installed')
     catalog = SchemaCatalog(ROOT / "projects" / "retail", allow_drafts=True)
     path = ROOT / "projects" / "retail" / "evaluations" / "cases.jsonl"
     cases = load_cases(path).cases
@@ -141,7 +143,7 @@ def test_all_nine_cells_have_compilable_ground_truth(retail, sql_difficulty, sem
 
 def test_prompt_version_and_atomic_persistent_budget(tmp_path):
     prompt = load_match_prompt()
-    assert prompt.version == "v9" and len(prompt.system_sha256) == 64
+    assert prompt.version == "v10" and len(prompt.system_sha256) == 64
     assert len(prompt.response_schema_sha256) == 64
     assert load_match_prompt("v1").version == "v1"
     assert load_match_prompt("v2").version == "v2"
@@ -151,8 +153,9 @@ def test_prompt_version_and_atomic_persistent_budget(tmp_path):
     assert load_match_prompt("v6").version == "v6"
     assert load_match_prompt("v7").version == "v7"
     assert load_match_prompt("v8").version == "v8"
+    assert load_match_prompt("v9").version == "v9"
     with pytest.raises(ValueError, match="unknown"):
-        load_match_prompt("v10")
+        load_match_prompt("v11")
     ledger = tmp_path / "private" / "calls.json"
     budget = CallBudget(3, ledger)
     def reserve(_):
@@ -171,6 +174,7 @@ def test_prompt_version_and_atomic_persistent_budget(tmp_path):
     assert provider_stop_reason(RuntimeError("401 unauthorized")) == "authentication"
 
 
+@pytest.mark.skipif(not (ROOT / 'projects/retail/manifest.yaml').is_file(), reason='private Retail profile is not installed')
 def test_v5_contract_omits_unset_default_aggregation():
     catalog = SchemaCatalog(ROOT / "projects" / "retail", allow_drafts=True)
     schema = candidate_schema(catalog.views()[0])

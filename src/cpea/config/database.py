@@ -2,6 +2,21 @@
 from dataclasses import dataclass, field
 
 
+class SQLServerConfigurationError(ValueError):
+    """Allowlisted diagnostics that never include a connection URL."""
+    messages = {
+        'invalid_url': 'SQL Server requires a valid mssql+pymssql URL',
+        'driver_unsupported': 'SQL Server requires the mssql+pymssql URL driver',
+        'host_or_database_missing': 'SQL Server URL requires a host and database',
+        'query_options_unsupported': 'SQL Server URL query options are unsupported; use deployment settings',
+    }
+
+    def __init__(self, reason: str):
+        message = self.messages[reason]
+        self.code = 'sqlserver_' + reason
+        super().__init__(message)
+
+
 @dataclass(frozen=True)
 class SQLServerSettings:
     connection_string: str = field(default='', repr=False)

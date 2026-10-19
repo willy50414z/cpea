@@ -17,7 +17,7 @@ def test_latest_question_and_precise_result_without_answering(tmp_path):
     first = list(query_updates(runtime, QUESTION, gate))
     assert len(first) == 3
     assert first[0][1].value == '' and first[0][2].value['data'] == []
-    assert first[1][1].value == calls[0]
+    assert gate.sql == calls[0]
     assert first[-1][1].value == calls[0] and first[-1][1].visible
     assert first[-1][2].value['data'] == [['<script>test</script>']]
     assert first[-1][3].interactive and first[-1][4].interactive
@@ -44,7 +44,7 @@ def test_ui_result_and_fixed_errors(tmp_path, monkeypatch, kind):
     if 'error' in kind or kind == 'preflight':
         assert status == ERROR_MESSAGE
         assert updates[-1][2].visible is False
-        assert updates[-1][1].visible == (kind in ['db_error', 'encoding_error'])
+        assert updates[-1][1].visible is (kind in ('db_error', 'encoding_error'))
     elif kind == 'zero':
         assert status == '查無資料' and updates[-1][2].visible is False
     elif kind == 'limit':

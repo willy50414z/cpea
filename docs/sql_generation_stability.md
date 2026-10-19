@@ -14,7 +14,17 @@
 
 Ollama 的推理模式由 `ASSISTANT_LLM_REASONING` 明確控制，預設 false。啟用時需要足夠的 `ASSISTANT_LLM_NUM_PREDICT`，因為推理也使用輸出額度。LangChain 將推理內容與最終 JSON 分開；產品 SQL／結果不包含推理內容。
 
+目前預設使用 HILP 的獨立 MATCH v10；上游 v1–v9 prompt 與 schema 保留供歷史比較。v10 延用逐一候選與同一 View 修正流程，在 QueryPlan 硬性驗證後檢查完整詞彙證據，需要時先請使用者確認，再產生 SQL；確認後不重跑 MATCH。詳見[欄位確認流程](hilp_confirmation.md)。
+
 `ASSISTANT_LLM_NUM_PREDICT=-1` 或 runner 的 `--max-output-tokens -1` 可取消明確輸出上限。Ollama 傳送 `num_predict=-1`；Azure／GCP 不指定輸出 token 上限，仍受模型與服務本身限制。正在執行的 Gradio／API 服務需重新啟動才會載入 `.env` 變更。
+
+## 網頁與評估結果不一致時
+
+- 核對 project、prompt 版本、檢索方式、context 與輸出額度。舊版 prompt 的通過紀錄不能直接視為 v10 的穩定性成績。
+- `execution_preflight / sql_executor_unavailable` 表示尚未進入 SQL 生成。首頁在 project 缺少 executor／datasource 時改用純生成模式，仍可完成 HILP，結果明確標示未執行查詢。
+- 「整理報表時照城市別分組……」實際是 `RETAIL-STORE_MONTHLY_KPI-M3-03`，目標為 `demo_retail.v_store_monthly_kpi`。完成訂單筆數、毛利及完整月份旗標的門檻都是 WHERE，不能因另外按城市分組就改成 HAVING。
+
+2026-10-17 的本地診斷使用 `qwen3.8:27b`、lexical、context 16000、輸出上限 8192。v10 在同一 View 修正一次後進入 HILP；以隔離暫存詞彙檔和明確測試選項確認後，產出 `SUM(units_sold)`、`MAX(revenue)` 與上述三項 WHERE。診斷僅保留自然排名第一的候選，未呼叫資料庫，未寫入正式詞彙檔；這是單次流程驗證，不是三次重複穩定性成績。另已補上「單列最大值／最小值」語法及詞彙邊界的離線回歸測試，避免正確草稿被未承接的「值」拒絕，或把比較、排序語法存成業務詞。
 
 ## 測試順序
 

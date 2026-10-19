@@ -35,6 +35,7 @@ def test_workflow_sends_pydantic_schema_in_ollama_request(tmp_path):
     assert result.supported, result.limitations
     assert len(requests) == 1
     schema = requests[0]['format']
+    assert set(schema['required']) == set(schema['properties'])
     assert schema['$defs']['ClauseField']['properties']['column']['enum'] == sorted(catalog.columns('gms2.v_inventory'))
     assert schema['$defs']['ClauseTable']['properties']['view']['enum'] == ['gms2.v_inventory']
     assert result.query_plan.aggregations == {'库存数量': 'sum'}

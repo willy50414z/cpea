@@ -30,7 +30,7 @@ cpea --help
 cpea --env-file .env --request "請查詢 ZX100 目前各倉庫庫存數量"
 ```
 
-需先提供可用 LLM；vector mode 還需要 embedding 模型。wheel 預設使用 `synthetic-demo`，其中 ZX100／倉庫皆為合成示例。使用客戶契約時設定 `CPEA_PROFILE_PATH` 或明確的 `CPEA_DEPLOYMENT_FILE`。機密只由部署端提供。
+需先提供可用 LLM；vector mode 還需要 embedding 模型。wheel 不附帶專案契約；首頁由 `CPEA_PROJECTS_ROOT` 載入 `gms2`／`retail`，CLI 可設定 `CPEA_PROFILE_PATH` 或明確的 `CPEA_DEPLOYMENT_FILE`。機密只由部署端提供。
 
 API 與 Graph：
 

@@ -15,6 +15,7 @@ from cpea.interfaces.cli.main import main as cli_main
 from cpea.interfaces.web.ui import SessionGate, query_updates
 from cpea.workflows.text_to_sql.sql_generation import SQLGenerationWorkflow, ViewComparison
 from cpea.workflows.text_to_sql.schemas import SQLClauseMappingV3
+from cpea.workflows.text_to_sql.prompt_resources import load_match_prompt
 from tests.support import Counter
 
 
@@ -60,19 +61,21 @@ class AmbiguousLLM:
         return SimpleNamespace(invoke=invoke)
 
 
-def workflow(comparison=None):
+def workflow(tmp_path, comparison=None):
     settings = replace(AssistantSettings.from_env(PROFILE / ".env"),
-                       retrieval_mode="lexical", context_window=16000)
+                       retrieval_mode="lexical", context_window=16000,
+                       terms_mapping_path=str(tmp_path / "terms_mapping.json"))
     catalog = SchemaCatalog(PROFILE, allow_drafts=True)
     llm = AmbiguousLLM(comparison)
     packer = ContextPacker(settings, token_counter=Counter())
     retriever = SchemaRetriever(settings, catalog=catalog)
     return SQLGenerationWorkflow(llm, catalog, settings=settings,
-                                 retriever=retriever, context_packer=packer), llm, catalog
+                                 retriever=retriever, context_packer=packer,
+                                 match_prompt=load_match_prompt("v9")), llm, catalog
 
 
-def test_ambiguous_views_request_clarification_before_sql():
-    runtime, llm, catalog = workflow()
+def test_ambiguous_views_request_clarification_before_sql(tmp_path):
+    runtime, llm, catalog = workflow(tmp_path)
     response = runtime.invoke(REQUEST)
     assert response.status == "needs_clarification"
     assert not response.supported and response.sql is None and response.query_plan is None
@@ -82,8 +85,8 @@ def test_ambiguous_views_request_clarification_before_sql():
     assert llm.calls >= 3
 
 
-def test_choice_revalidates_and_rejects_stale_or_unoffered_option():
-    runtime, _, catalog = workflow()
+def test_choice_revalidates_and_rejects_stale_or_unoffered_option(tmp_path):
+    runtime, _, catalog = workflow(tmp_path)
     selected = runtime.invoke(REQUEST, clarification_choice=ClarificationChoice(
         option_id=DETAIL, contract_fingerprint=catalog.fingerprint))
     assert selected.status == "ready" and selected.selected_views == [DETAIL]
@@ -96,28 +99,28 @@ def test_choice_revalidates_and_rejects_stale_or_unoffered_option():
     assert forged.status == "unsupported" and forged.sql is None
 
 
-def test_comparison_cannot_select_using_a_shared_ambiguous_term():
-    runtime, _, _ = workflow({"decision": "select", "selected_view": ORDER,
+def test_comparison_cannot_select_using_a_shared_ambiguous_term(tmp_path):
+    runtime, _, _ = workflow(tmp_path, {"decision": "select", "selected_view": ORDER,
         "request_evidence": "逐筆", "contract_evidence": "每筆已完成訂單一列"})
     response = runtime.invoke(REQUEST)
     assert response.status == "needs_clarification" and response.sql is None
 
 
-def test_unique_mapped_contract_phrase_selects_clear_order_view():
-    runtime, _, _ = workflow()
+def test_unique_mapped_contract_phrase_selects_clear_order_view(tmp_path):
+    runtime, _, _ = workflow(tmp_path)
     response = runtime.invoke("列出每筆已完成訂單的訂單編號與訂單金額")
     assert response.status == "ready"
     assert response.selected_views == [ORDER]
     assert "order_amount" in response.sql
 
 
-def test_api_and_ui_do_not_execute_before_clarification():
-    generator, llm, catalog = workflow()
+def test_api_and_ui_do_not_execute_before_clarification(tmp_path):
+    generator, llm, catalog = workflow(tmp_path)
     database_calls = []
     runtime = AssistantRuntime(generator.settings, catalog=catalog, llm=llm,
         retriever=generator.retriever, context_packer=generator.context_packer,
         executor=lambda datasource, sql: (database_calls.append(sql) or (["金額"], [[10]])),
-        datasource_id="retail-test")
+        datasource_id="retail-test", match_prompt=generator.match_prompt)
     client = TestClient(create_app(runtime))
     sql = client.post("/api/assistant/sql", json={"request": REQUEST})
     assert sql.status_code == 200 and sql.json()["status"] == "needs_clarification"

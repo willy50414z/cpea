@@ -39,7 +39,9 @@ def test_project_resolution_and_identity_preflight(tmp_path, monkeypatch):
     projects, root, file = project_fixture(tmp_path)
     workspace = resolve_project("acme", projects_root=projects)
     assert workspace.root == root.resolve()
-    assert _runtime_for_project(workspace).catalog.profile_id == "synthetic"
+    runtime = _runtime_for_project(workspace)
+    assert runtime.catalog.profile_id == "synthetic"
+    assert runtime.datasource_id == runtime.settings.datasource_id == "acme"
     for bad in ("../acme", "other/acme", "/tmp/acme"):
         with pytest.raises(ValueError, match="project ID"):
             resolve_project(bad, projects_root=projects)
@@ -124,6 +126,7 @@ def test_project_run_reports_and_collision(tmp_path):
             repo_root=ROOT, model_factory=lambda target, settings: StubLLM(), timestamp=when)
 
 
+@pytest.mark.skipif(not (ROOT / "projects/retail/manifest.yaml").is_file(), reason="private Retail profile and approved cases are not installed")
 def test_retail_pending_case_is_exploratory_only(tmp_path):
     source = ROOT / "projects" / "retail"
     projects = tmp_path / "projects"
@@ -142,11 +145,11 @@ def test_retail_pending_case_is_exploratory_only(tmp_path):
         return StubLLM()
     with pytest.raises(ValueError, match="no approved cases"):
         evaluate_project("retail", projects_root=projects, repo_root=ROOT,
-                         allow_draft_profile=True, model_factory=factory)
+                         allow_draft_profile=True, model_factory=factory, prompt_version="v9")
     assert not factory_calls
     result = evaluate_project("retail", projects_root=projects, repo_root=ROOT,
                               allow_draft_profile=True, exploratory=True,
-                              runs=1, model_factory=factory)
+                              runs=1, model_factory=factory, prompt_version="v9")
     assert result["planned_total"] == 1 and result["completed_total"] == 1
     record = json.loads((Path(result["output"]) / "results.jsonl").read_text(encoding="utf-8"))
     assert record["review_state"] == "pending" and record["status"] is None

@@ -24,6 +24,8 @@ from tests.support import Counter
 
 ROOT = Path(__file__).resolve().parents[2]
 VIEW = "demo_retail.v_daily_sales"
+pytestmark = pytest.mark.skipif(not (ROOT / "projects/retail/manifest.yaml").is_file(),
+    reason="private Retail profile and approved cases are not installed")
 
 
 def test_having_schema_versions_and_hidden_aggregate():
@@ -34,7 +36,7 @@ def test_having_schema_versions_and_hidden_aggregate():
     v6 = load_match_prompt("v6")
     v7 = load_match_prompt("v7")
     v8 = load_match_prompt("v8")
-    v9 = load_match_prompt()
+    v9 = load_match_prompt('v9')
     assert v2.response_model is SQLClauseMapping
     assert v3.response_model is SQLClauseMappingV3
     assert v4.response_model is SQLClauseMappingV3
@@ -87,7 +89,7 @@ def test_where_group_having_order_and_multiple_conditions():
     validate_generated_sql(sql, {VIEW})
 
 
-def test_unrequested_aggregate_threshold_is_repaired_as_row_filter():
+def test_unrequested_aggregate_threshold_is_repaired_as_row_filter(tmp_path):
     raw = next(json.loads(line) for line in (ROOT / "projects/retail/evaluations/cases.jsonl").open(encoding="utf-8")
                if '"case_id": "RETAIL-STORE_MONTHLY_KPI-M3-03"' in line)
     expected = raw["expected_match"]
@@ -107,10 +109,11 @@ def test_unrequested_aggregate_threshold_is_repaired_as_row_filter():
             return SimpleNamespace(content=json.dumps(mapping, ensure_ascii=False))
 
     settings = replace(AssistantSettings.from_env(ROOT / "projects/retail/.env"),
-                       retrieval_mode="lexical", context_window=16000, max_output_tokens=8192)
+                       retrieval_mode="lexical", context_window=16000, max_output_tokens=8192,
+                       terms_mapping_path=str(tmp_path / "terms_mapping.json"))
     catalog = SchemaCatalog(ROOT / "projects/retail", allow_drafts=True)
     llm = RepairLLM()
-    result = SQLGenerationWorkflow(llm, catalog, settings=settings,
+    result = SQLGenerationWorkflow(llm, catalog, settings=settings, match_prompt=load_match_prompt("v9"),
                                    context_packer=ContextPacker(settings, token_counter=Counter())).invoke(raw["request"])
     assert result.supported and len(llm.calls) >= 2
     assert "HAVING requires an explicit aggregate threshold" in str(llm.calls[1]["repair"]["validation_errors"])
@@ -149,7 +152,7 @@ def test_v2_case_shape_remains_readable_and_v3_having_is_graded():
     validate_view_case(old_case, catalog)
 
 
-def test_workflow_having_keeps_hidden_metric_out_of_select():
+def test_workflow_having_keeps_hidden_metric_out_of_select(tmp_path):
     request = "請從 demo_retail.v_daily_sales 依門市識別碼分組，只顯示門市識別碼，只保留折扣後銷售淨額合計大於 100 的群組。"
     class HavingLLM:
         def invoke(self, messages):
@@ -160,9 +163,11 @@ def test_workflow_having_keeps_hidden_metric_out_of_select():
                             "operator": ">", "value": 100}],
                 "order": [], "group": [{"text": "門市識別碼", "column": "store_id"}], "ignored": [],
             }, ensure_ascii=False))
-    settings = replace(AssistantSettings.from_env(), retrieval_mode="lexical", context_window=16000)
+    settings = replace(AssistantSettings.from_env(), retrieval_mode="lexical", context_window=16000,
+                       terms_mapping_path=str(tmp_path / "terms_mapping.json"))
     catalog = SchemaCatalog(ROOT / "projects/retail", allow_drafts=True)
     workflow = SQLGenerationWorkflow(HavingLLM(), catalog=catalog, settings=settings,
+                                     match_prompt=load_match_prompt("v9"),
                                      retriever=SchemaRetriever(settings, catalog=catalog),
                                      context_packer=ContextPacker(settings, token_counter=Counter()))
     result = workflow.invoke(request)
@@ -177,7 +182,7 @@ def test_workflow_having_keeps_hidden_metric_out_of_select():
     assert agent.execute_generation(result, "test", request=request).rows == [[1]]
 
 
-def test_workflow_rejects_having_threshold_mapped_to_where():
+def test_workflow_rejects_having_threshold_mapped_to_where(tmp_path):
     request = "請從 demo_retail.v_daily_sales 依門市識別碼分組，只顯示門市識別碼，只保留折扣後銷售淨額合計大於 100 的群組。"
     class MisplacedLLM:
         def invoke(self, messages):
@@ -189,9 +194,11 @@ def test_workflow_rejects_having_threshold_mapped_to_where():
                 "having": [], "order": [],
                 "group": [{"text": "門市識別碼", "column": "store_id"}], "ignored": [],
             }, ensure_ascii=False))
-    settings = replace(AssistantSettings.from_env(), retrieval_mode="lexical", context_window=16000)
+    settings = replace(AssistantSettings.from_env(), retrieval_mode="lexical", context_window=16000,
+                       terms_mapping_path=str(tmp_path / "terms_mapping.json"))
     catalog = SchemaCatalog(ROOT / "projects/retail", allow_drafts=True)
     workflow = SQLGenerationWorkflow(MisplacedLLM(), catalog=catalog, settings=settings,
+                                     match_prompt=load_match_prompt("v9"),
                                      retriever=SchemaRetriever(settings, catalog=catalog),
                                      context_packer=ContextPacker(settings, token_counter=Counter()))
     result = workflow.invoke(request)

@@ -112,6 +112,7 @@ class AssistantSettings:
     token_count_endpoint: str | None
     token_count_encoding: str
 
+    terms_mapping_path: str | None = None
     integration_path: str | None = None
     deployment_file: str | None = None
     datasource_id: str | None = None
@@ -139,10 +140,14 @@ class AssistantSettings:
         token = _ENV_LAYERS.set((os.environ, values))
         try:
             result = cls._from_values()
-            for name in ('integration_path', 'deployment_file'):
+            for name in ('integration_path', 'deployment_file', 'terms_mapping_path'):
                 value = getattr(result, name)
                 if value:
                     object.__setattr__(result, name, str((base / value).resolve()))
+            # A project's single datasource shares its directory name. Ignore
+            # stale env bindings, including those inherited from another project.
+            if selected is not None and (base / 'manifest.yaml').is_file() and (base / 'catalog.yaml').is_file():
+                object.__setattr__(result, 'datasource_id', base.name)
             if result.sqlserver.freetds_config_file:
                 object.__setattr__(result, 'sqlserver', replace(result.sqlserver,
                     freetds_config_file=str((base / result.sqlserver.freetds_config_file).resolve())))
@@ -286,6 +291,7 @@ class AssistantSettings:
                 "TOKEN_COUNT_ENCODING",
                 default="cl100k_base",
             ),
+            terms_mapping_path=_first_env('CPEA_TERMS_MAPPING_PATH', default='') or None,
             integration_path=_first_env('CPEA_PROFILE_PATH', default='') or None,
             deployment_file=_first_env('CPEA_DEPLOYMENT_FILE', default='') or None,
             datasource_id=(_get_env('CPEA_DATASOURCE_ID') or '').strip() or None,

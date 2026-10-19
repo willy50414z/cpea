@@ -2,9 +2,10 @@ from __future__ import annotations
 
 from typing import Any, Literal
 from pydantic import BaseModel, Field, field_validator, model_validator
+from cpea.application.models.confirmation import Clarification, TermMappingReasoning
 
 from cpea.domain.models import QueryFact, QueryPlan, SchemaLink
-from cpea.workflows.text_to_sql.schemas import SchemaLinkDraft, SQLClauseMapping, SQLClauseMappingV3
+from cpea.workflows.text_to_sql.schemas import SchemaLinkDraft, SQLClauseMapping, SQLClauseMappingV3, SQLClauseMappingV10
 
 class ConversationTurn(BaseModel):
     role: Literal["user", "assistant"]
@@ -31,7 +32,7 @@ class CandidateAttempt(BaseModel):
 
 class MappingAttempt(BaseModel):
     attempt_index: int
-    mapping: SQLClauseMappingV3 | SQLClauseMapping | None = None
+    mapping: SQLClauseMappingV10 | SQLClauseMappingV3 | SQLClauseMapping | None = None
     outcome: Literal["selected", "candidate", "rejected", "parse_error"]
     reason: str | None = None
 
@@ -79,9 +80,12 @@ class ClarificationChoice(BaseModel):
 
 
 class SQLGenerationResponse(BaseModel):
+    run_id: str | None = Field(default=None, exclude=True)
+    status: Literal['ready', 'needs_confirmation', 'needs_clarification', 'unsupported', 'cancelled', 'error'] = 'unsupported'
+    code: str | None = None
+    clarification: Clarification | ClarificationRequest | None = None
+    term_mapping_reasoning: list[TermMappingReasoning] = Field(default_factory=list)
     supported: bool
-    status: Literal["ready", "needs_clarification", "unsupported"] | None = None
-    clarification: ClarificationRequest | None = None
     sql: str | None = None
     selected_views: list[str] = Field(default_factory=list)
     explanation: str
@@ -95,18 +99,30 @@ class SQLGenerationResponse(BaseModel):
     query_plan: QueryPlan | None = None
     query_trace: QueryTaskTrace | None = None
 
-    @model_validator(mode="after")
-    def coherent_status(self):
-        if self.status is None:
-            self.status = "ready" if self.supported else "unsupported"
-        if self.status == "needs_clarification":
-            if self.supported or self.sql is not None or self.clarification is None:
-                raise ValueError("clarification responses cannot contain SQL")
-        elif self.clarification is not None or self.supported != (self.status == "ready"):
-            raise ValueError("SQL generation status does not match its payload")
+    @model_validator(mode='before')
+    @classmethod
+    def infer_legacy_status(cls, value):
+        if isinstance(value, dict) and 'status' not in value:
+            value = {**value, 'status': 'ready' if value.get('supported') and value.get('sql') else 'unsupported'}
+        return value
+
+    @model_validator(mode='after')
+    def check_status(self):
+        if self.status == 'ready':
+            if not self.supported or not self.sql:
+                raise ValueError('ready requires supported and SQL')
+        elif self.supported or self.sql is not None:
+            raise ValueError('only ready may expose SQL or supported=true')
+        expected = {'needs_confirmation': Clarification, 'needs_clarification': ClarificationRequest}
+        if self.status in expected:
+            if not isinstance(self.clarification, expected[self.status]):
+                raise ValueError('clarification payload does not match its status')
+        elif self.clarification is not None:
+            raise ValueError('clarification requires a pending confirmation status')
         return self
 
 class AssistantQueryResponse(BaseModel):
+    term_mapping_reasoning: list[TermMappingReasoning] = Field(default_factory=list)
     answer: str
     citations: list[str] = Field(default_factory=list)
     sources: list[SourceReference] = Field(default_factory=list)

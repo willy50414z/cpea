@@ -8,6 +8,7 @@ from typing import Literal
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 from evaluations.runners.query_reliability import QueryReliabilityCase
 from evaluations.view_matching_cases import ViewMatchingCase
+from evaluations.hilp_cases import HilpCase
 
 
 class ProjectCase(QueryReliabilityCase):
@@ -56,6 +57,7 @@ class GovernanceCase(StrictModel):
     expected_result: ExpectedResult
     reliability_case: QueryReliabilityCase | None = None
     view_matching_case: ViewMatchingCase | None = None
+    hilp_case: HilpCase | None = None
 
 
 class CaseFile(StrictModel):
@@ -113,18 +115,20 @@ def load_cases(path: str | Path) -> CaseFile:
         project_format = any("case_id" in case for case in lines)
         if project_format and not all("case_id" in case for case in lines):
             raise ValueError("project case file mixes stable and legacy case formats")
-        cases = [ViewMatchingCase.model_validate(case) if case.get("case_kind") == "view_matching"
+        cases = [HilpCase.model_validate(case) if case.get("case_kind") == "hilp"
+                 else ViewMatchingCase.model_validate(case) if case.get("case_kind") == "view_matching"
                  else ProjectCase.model_validate(case) if project_format else QueryReliabilityCase.model_validate(case)
                  for case in lines]
         return CaseFile(version=1, cases=[GovernanceCase(
-            case_id=case.case_id if isinstance(case, (ProjectCase, ViewMatchingCase)) else f"RELIABILITY-{index:03d}",
-            category=case.category if isinstance(case, (ProjectCase, ViewMatchingCase)) else ("simple" if case.expected_supported else "security"),
+            case_id=case.case_id if isinstance(case, (ProjectCase, ViewMatchingCase, HilpCase)) else f"RELIABILITY-{index:03d}",
+            category="ambiguous" if isinstance(case, HilpCase) else case.category if isinstance(case, (ProjectCase, ViewMatchingCase)) else ("simple" if case.expected_supported else "security"),
             difficulty=({"S": "easy", "M": "medium", "H": "hard"}.get(case.sql_difficulty, "medium")
                         if isinstance(case, ViewMatchingCase) else case.difficulty if isinstance(case, ProjectCase) else "medium"),
             question=case.request if isinstance(case, ViewMatchingCase) else case.question,
-            expected_result=ExpectedResult(supported=case.category == "normal" if isinstance(case, ViewMatchingCase) else case.expected_supported),
-            reliability_case=None if isinstance(case, ViewMatchingCase) else QueryReliabilityCase.model_validate(case.model_dump()),
+            expected_result=ExpectedResult(supported=case.category == "normal" if isinstance(case, ViewMatchingCase) else case.expected_initial_status == "ready" if isinstance(case, HilpCase) else case.expected_supported),
+            reliability_case=None if isinstance(case, (ViewMatchingCase, HilpCase)) else QueryReliabilityCase.model_validate(case.model_dump()),
             view_matching_case=case if isinstance(case, ViewMatchingCase) else None,
+            hilp_case=case if isinstance(case, HilpCase) else None,
         ) for index, case in enumerate(cases, 1)])
     return CaseFile.model_validate(json.loads(Path(path).read_text(encoding="utf-8")))
 

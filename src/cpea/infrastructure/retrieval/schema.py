@@ -44,6 +44,20 @@ def preprocess_query(query: str) -> str:
     return " ".join(normalized.strip().split())
 
 
+def explicit_column_references(query: str, catalog: CatalogProvider) -> set[str]:
+    """Find exact catalog identifiers, excluding filter values and quoted data."""
+    known = {column for view in catalog.views() for column in catalog.columns(view.name)
+             if re.fullmatch(r'[A-Za-z_][A-Za-z0-9_]*', column)}
+    literals = [m.span() for m in re.finditer(r"'(?:''|[^'])*'", query)]
+    for match in re.finditer(
+        r"""(?:>=|<=|!=|<>|=|>|<|\bLIKE\b)\s*("[^"]*"|'(?:''|[^'])*'|[^\s，。；、且]+)"""
+        r'|\bIN\s*\(([^)]*)\)', query, re.IGNORECASE,
+    ):
+        literals.append(match.span(1 if match.group(1) is not None else 2))
+    return {m.group() for m in re.finditer(r'[A-Za-z_][A-Za-z0-9_]*', query)
+            if m.group() in known and not any(a <= m.start() and m.end() <= b for a, b in literals)}
+
+
 def _lexical_terms(text: str) -> set[str]:
     normalized = preprocess_query(text).lower()
     terms = {term for term in _ASCII_TERM.findall(normalized) if len(term) > 1}
@@ -224,6 +238,9 @@ class SchemaRetriever:
         )
 
     def _vector_candidates(self, query: str) -> list[RetrievalCandidate]:
+        required = explicit_column_references(query, self.catalog)
+        allowed = {item.name for item in self.catalog.views()
+                   if required <= set(self.catalog.columns(item.name))}
         results = self.vector_store.similarity_search_with_score(
             query,
             # The in-memory store scores the whole catalog anyway. Observe the
@@ -231,7 +248,7 @@ class SchemaRetriever:
             k=len(self.documents),
             filter=lambda doc: (
                 doc.metadata.get("document_type") == "database_view"
-                and doc.metadata.get("document_id") in {item.name for item in self.catalog.views()}
+                and doc.metadata.get("document_id") in allowed
             ),
         )
         candidates: list[RetrievalCandidate] = []
@@ -248,12 +265,15 @@ class SchemaRetriever:
         return select_with_ties(candidates, self.settings.retrieval_k)
 
     def _lexical_candidates(self, query: str) -> list[RetrievalCandidate]:
+        required = explicit_column_references(query, self.catalog)
+        allowed = {item.name for item in self.catalog.views()
+                   if required <= set(self.catalog.columns(item.name))}
         ranked = sorted(
             (
                 RetrievalCandidate(
                     document=doc, retrieval_score=_view_lexical_score(query, doc)
                 )
-                for doc in self.documents
+                for doc in self.documents if doc.metadata.get('document_id') in allowed
             ),
             key=lambda item: item.retrieval_score,
             reverse=True,

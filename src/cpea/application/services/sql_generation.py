@@ -21,6 +21,7 @@ class SQLGenerationService:
         retriever: SchemaRetriever | None = None,
         context_packer: ContextPacker | None = None,
         match_prompt: MatchPrompt | None = None,
+        repository=None,
     ) -> None:
         self.workflow = SQLGenerationWorkflow(
             llm,
@@ -28,11 +29,15 @@ class SQLGenerationService:
             settings=settings,
             retriever=retriever,
             context_packer=context_packer,
-            match_prompt=match_prompt,
+            match_prompt=match_prompt, repository=repository,
         )
 
     def generate(
         self, request: str, history: list[ConversationTurn] | None = None,
-        clarification_choice: ClarificationChoice | None = None,
+        clarification_choice: ClarificationChoice | None = None, *, mode="sql", owner=None
     ) -> SQLGenerationResponse:
-        return self.workflow.invoke(request, history=history, clarification_choice=clarification_choice)
+        return self.workflow.invoke(request, history=history, clarification_choice=clarification_choice, mode=mode, owner=owner)
+
+    def generate_updates(self, request: str, history=None, *, mode='sql', owner=None, clarification_choice=None):
+        yield from self.workflow.generate_updates(request, history=history, mode=mode, owner=owner,
+                                                 clarification_choice=clarification_choice)

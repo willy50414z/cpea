@@ -44,11 +44,12 @@ class SQLExecutionAgent:
         settings: AssistantSettings | None = None,
         retriever: SchemaRetriever | None = None,
         context_packer: ContextPacker | None = None,
+        generator: SQLGenerationService | None = None,
     ) -> None:
         self.llm = llm
         self.catalog = catalog or _default_catalog()
         self.settings = settings or AssistantSettings.from_env()
-        self.generator = SQLGenerationService(
+        self.generator = generator or SQLGenerationService(
             llm,
             self.catalog,
             settings=self.settings,

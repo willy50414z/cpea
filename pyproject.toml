@@ -30,6 +30,9 @@ cpea-governance-eval = "evaluations.governance_runner:main"
 cpea-eval = "evaluations.project_runner:main"
 
 [project.optional-dependencies]
+azure = [
+    "langchain-openai>=1,<2",
+]
 postgres-contracts = [
     "psycopg[binary]>=3.2,<4",
 ]
@@ -43,11 +46,11 @@ dev = ["pytest>=9,<10", "httpx>=0.28,<1", "hatchling>=1.32,<2"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/cpea", "evaluations"]
-exclude = ["projects/**", "**/private/**", "**/__pycache__/**", "**/*.pyc"]
+exclude = ["projects/**", "**/private/**", "**/__pycache__/**", "**/*.pyc", "**/terms_mapping.json", "**/.terms_mapping.json-*"]
 
 [tool.hatch.build.targets.sdist]
-include = ["src/cpea", "evaluations/runners", "evaluations/datasets", "evaluations/config", "evaluations/governance_*.py", "evaluations/project_runner.py", "evaluations/view_matching_*.py", "evaluations/retail_view_benchmark.py", "evaluations/call_budget.py", "evaluations/metadata.py", "evaluations/__init__.py", "evaluations/README.md", "requirements", "tests", "docs", "examples", "README.md", "pyproject.toml", "uv.lock", "langgraph.json", ".env.example", "config/tenants/example.yaml"]
-exclude = ["projects/**", "**/private/**", "**/__pycache__/**", "**/*.pyc"]
+include = ["src/cpea", "evaluations/runners", "evaluations/datasets", "evaluations/config", "evaluations/governance_*.py", "evaluations/project_runner.py", "evaluations/hilp_cases.py", "evaluations/view_matching_*.py", "evaluations/retail_view_benchmark.py", "evaluations/retail_view_retrieval.py", "evaluations/call_budget.py", "evaluations/metadata.py", "evaluations/__init__.py", "evaluations/README.md", "requirements", "tests", "docs", "examples", "README.md", "pyproject.toml", "uv.lock", "langgraph.json", ".env.example", "config/tenants/example.yaml"]
+exclude = ["projects/**", "**/private/**", "**/__pycache__/**", "**/*.pyc", "**/terms_mapping.json", "**/.terms_mapping.json-*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

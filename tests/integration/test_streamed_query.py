@@ -104,7 +104,7 @@ def test_stage_errors_are_fixed_without_secrets(tmp_path, monkeypatch, caplog, p
                     raise RuntimeError('PWD=top-secret')
                 service.agent.generator.generate = fail
             elif phase == 'unsupported':
-                service.agent.generator.generate = lambda *a, **k: SQLGenerationResponse(supported=False, explanation='top-secret')
+                service.agent.generator.generate = lambda *a, **k: SQLGenerationResponse(supported=False, explanation='資料不足')
             else:
                 generation = service.agent.generator.generate(QUESTION)
                 generation = generation.model_copy(update={'sql': 'DELETE FROM gms2.v_inventory'} if phase == 'policy' else {'query_plan': None})
@@ -114,8 +114,9 @@ def test_stage_errors_are_fixed_without_secrets(tmp_path, monkeypatch, caplog, p
     response = TestClient(create_app(runtime)).post(STREAM_PATH, json={'request': QUESTION})
     parsed = events(response)
     before_sql = phase in ['generation', 'unsupported', 'policy', 'plan']
-    assert [e[0] for e in parsed] == (['error'] if before_sql else ['sql', 'error'])
-    assert parsed[-1][1] == {'message': ERROR_MESSAGE}
+    assert [e[0] for e in parsed] == (['unsupported'] if phase == 'unsupported' else ['error'] if before_sql else ['sql', 'error'])
+    if phase != 'unsupported':
+        assert parsed[-1][1] == {'message': ERROR_MESSAGE}
     assert len(calls) == (0 if before_sql else 1)
     assert 'top-secret' not in response.text and 'top-secret' not in caplog.text
 

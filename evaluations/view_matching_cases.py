@@ -12,7 +12,7 @@ from cpea.domain.models import HavingFilter, QueryFilter, QueryPlan
 from cpea.infrastructure.llm.factory import response_schema_for
 from cpea.infrastructure.sql_compiler import compile_single_view
 from cpea.infrastructure.sql_policy import validate_generated_sql
-from cpea.workflows.text_to_sql.schemas import SQLClauseMapping, SQLClauseMappingV3
+from cpea.workflows.text_to_sql.schemas import SQLClauseMapping, SQLClauseMappingV3, SQLClauseMappingV10
 from cpea.workflows.text_to_sql.prompt_resources import load_match_prompt
 
 
@@ -44,7 +44,7 @@ class ViewMatchingCase(StrictModel):
     semantic_difficulty: Literal["L1", "L2", "L3"] | None
     category: Literal["normal", "unsupported", "ambiguous", "security"]
     request: str = Field(min_length=1)
-    expected_match: SQLClauseMappingV3 | SQLClauseMapping
+    expected_match: SQLClauseMappingV10 | SQLClauseMappingV3 | SQLClauseMapping
     expected_sql: ExpectedSQL | None
     rationale: str
     validation_status: Literal["validated", "needs_review"]
@@ -60,8 +60,10 @@ class ViewMatchingCase(StrictModel):
     def expected_match_shape(cls, data):
         if isinstance(data, dict) and isinstance(data.get("expected_match"), dict):
             mapping = data["expected_match"]
-            has_having = data.get("prompt_version") in {"v3", "v4", "v5", "v6", "v7", "v8", "v9"}
+            has_having = data.get("prompt_version") in {"v3", "v4", "v5", "v6", "v7", "v8", "v9", "v10"}
             required = {"fields", "table", "criteria", "order", "group", "ignored"} | ({"having"} if has_having else set())
+            if data.get('prompt_version') == 'v10':
+                required |= {'terms', 'syntax_spans', 'candidate_view'}
             if not required <= mapping.keys() or set(mapping) - (required | {"unsupported_reason"}):
                 raise ValueError("expected_match does not match MATCH_PROMPT keys")
             shapes = {"fields": {"text", "column", "aggregation"},
@@ -82,6 +84,7 @@ class ViewMatchingCase(StrictModel):
             if mapping["table"] is not None and (not isinstance(mapping["table"], dict)
                 or set(mapping["table"]) != {"text", "view"}):
                 raise ValueError("expected_match.table has invalid shape")
+            data = {**data, "expected_match": load_match_prompt(data["prompt_version"]).response_model.model_validate(mapping)}
         return data
 
     @model_validator(mode="after")
@@ -89,9 +92,9 @@ class ViewMatchingCase(StrictModel):
         if self.target_view not in self.candidate_views or len(self.candidate_views) != len(set(self.candidate_views)):
             raise ValueError("candidate_views must contain the target View exactly once")
         normal = self.category == "normal"
-        if (self.prompt_version in {"v3", "v4", "v5", "v6", "v7", "v8", "v9"}) != isinstance(self.expected_match, SQLClauseMappingV3):
+        if (self.prompt_version in {"v3", "v4", "v5", "v6", "v7", "v8", "v9", "v10"}) != isinstance(self.expected_match, SQLClauseMappingV3):
             raise ValueError("expected_match shape does not match prompt version")
-        if normal and self.prompt_version in {"v3", "v4", "v5", "v6", "v7", "v8", "v9"} and self.expected_sql.having is None:
+        if normal and self.prompt_version in {"v3", "v4", "v5", "v6", "v7", "v8", "v9", "v10"} and self.expected_sql.having is None:
             raise ValueError("v3+ normal cases require expected_sql.having")
         if normal != (self.expected_sql is not None):
             raise ValueError("normal cases require expected_sql; rejection cases must omit it")
@@ -109,7 +112,7 @@ class ViewMatchingCase(StrictModel):
     def content_sha256(self) -> str:
         fields = self.model_dump(mode="json", exclude={"review_status", "reviewer", "reviewed_at",
                                                        "reviewed_case_sha256", "reviewed_contract_fingerprint"})
-        if self.prompt_version not in {"v3", "v4", "v5", "v6", "v7", "v8", "v9"} and fields.get("expected_sql") is not None:
+        if self.prompt_version not in {"v3", "v4", "v5", "v6", "v7", "v8", "v9", "v10"} and fields.get("expected_sql") is not None:
             fields["expected_sql"].pop("having", None)
         return sha256(json.dumps(fields, ensure_ascii=False, sort_keys=True).encode("utf-8")).hexdigest()
 

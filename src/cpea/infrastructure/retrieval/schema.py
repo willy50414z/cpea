@@ -111,6 +111,51 @@ class RetrievalCandidate:
     reranker_score: float | None = None
 
 
+def select_with_ties(
+    ranked_views: Iterable[RetrievalCandidate], top_k: int = 5
+) -> list[RetrievalCandidate]:
+    """Keep the ranked prefix plus exact cutoff ties; never use fuzzy equality.
+
+    Scores are deterministic IEEE-754 values from one scoring operation. A score
+    even one representable value below the cutoff is not a tie. The caller owns
+    ranking; keeping its order also preserves every previously admitted View.
+    """
+    if top_k < 1:
+        raise ValueError("retrieval limit must be positive")
+    items = list(ranked_views)
+    scores = [item.retrieval_score if item.reranker_score is None else item.reranker_score
+              for item in items]
+    if any(not math.isfinite(score) for score in scores):
+        raise ValueError("retrieval scores must be finite")
+    if len(items) <= top_k:
+        return items
+    threshold = scores[top_k - 1]
+    return items[:top_k] + [item for item, score in zip(items[top_k:], scores[top_k:], strict=True)
+                            if score >= threshold]
+
+
+# FUTURE_RETRIEVAL: GRAIN_DIVERSITY
+# Status: NOT_ADOPTED. Reason: labeled challenge cases still need human review.
+# Trigger: a reviewed, valid distinct grain is excluded below the cutoff.
+# Evaluation: Gold Selected Recall, Valid View Recall, Ambiguity Coverage, cost.
+# FUTURE_RETRIEVAL: COLUMN_FIRST
+# Status: NOT_ADOPTED. Reason: no reviewed column-index failure is established.
+# Trigger: lexical misses a View with verified required columns and operators.
+# Evaluation: synonym/multi-concept cases, 395 regression cases and LLM cost.
+# FUTURE_RETRIEVAL: HYBRID_RRF
+# Status: NOT_ADOPTED. Reason: MVP0 vector gains only recover cutoff ties.
+# Trigger: complementary recall remains after tie retention on reviewed cases.
+# Evaluation: recall, SQL correctness, candidate count, P95 and LLM cost.
+# FUTURE_RETRIEVAL: DYNAMIC_ROUTER
+# Status: NOT_ADOPTED. Reason: no reviewed failure demonstrates a need.
+# Trigger: query classes consistently benefit from different retrievers.
+# Evaluation: routing accuracy, false routing, recall regression and overhead.
+# FUTURE_RETRIEVAL: LLM_SLOT_EXTRACTION
+# Status: NOT_ADOPTED. Reason: no reviewed complex-slot failure is established.
+# Trigger: implicit concepts survive lexical, column and vector improvements.
+# Evaluation: slot accuracy, hallucinations, recall, 395 regression and tokens.
+
+
 @dataclass(frozen=True)
 class RetrievalResult:
     query: str
@@ -161,12 +206,13 @@ class SchemaRetriever:
         candidate_limit = self.settings.rerank_top_k if limit is None else limit
         if candidate_limit < 1:
             raise ValueError("retrieval limit must be positive")
-        selected = reranked[: min(candidate_limit, len(reranked))]
+        selected = select_with_ties(reranked, candidate_limit)
         logger.info(
-            "assistant retrieval mode=%s candidates=%d selected=%d retrieval_ms=%.1f reranker_ms=%.1f",
+            "assistant retrieval mode=%s candidates=%d selected=%d extra_ties=%d retrieval_ms=%.1f reranker_ms=%.1f",
             self.settings.retrieval_mode,
             len(candidates),
             len(selected),
+            max(0, len(selected) - candidate_limit),
             retrieval_ms,
             rerank_ms,
         )
@@ -180,7 +226,9 @@ class SchemaRetriever:
     def _vector_candidates(self, query: str) -> list[RetrievalCandidate]:
         results = self.vector_store.similarity_search_with_score(
             query,
-            k=min(self.settings.retrieval_k, len(self.documents)),
+            # The in-memory store scores the whole catalog anyway. Observe the
+            # boundary before selecting so this first stage cannot hide ties.
+            k=len(self.documents),
             filter=lambda doc: (
                 doc.metadata.get("document_type") == "database_view"
                 and doc.metadata.get("document_id") in {item.name for item in self.catalog.views()}
@@ -195,7 +243,9 @@ class SchemaRetriever:
             candidates.append(
                 RetrievalCandidate(document=document, retrieval_score=float(score))
             )
-        return candidates
+        order = {doc.metadata["document_id"]: index for index, doc in enumerate(self.documents)}
+        candidates.sort(key=lambda item: (-item.retrieval_score, order[item.document.metadata["document_id"]]))
+        return select_with_ties(candidates, self.settings.retrieval_k)
 
     def _lexical_candidates(self, query: str) -> list[RetrievalCandidate]:
         ranked = sorted(
@@ -208,7 +258,7 @@ class SchemaRetriever:
             key=lambda item: item.retrieval_score,
             reverse=True,
         )
-        return ranked[: min(self.settings.retrieval_k, len(ranked))]
+        return select_with_ties(ranked, self.settings.retrieval_k)
 
     def _rerank(
         self, query: str, candidates: Iterable[RetrievalCandidate]
@@ -218,9 +268,10 @@ class SchemaRetriever:
             not self.settings.reranker_enabled
             or self.settings.reranker_provider == "none"
         ):
-            return [
+            items = [
                 replace(item, reranker_score=item.retrieval_score) for item in items
             ]
+            return self._stable_ranking(items)
         if self.settings.reranker_provider == "cross_encoder":
             encoder = self._cross_encoder or self._build_cross_encoder()
             scores = encoder.predict(
@@ -241,13 +292,17 @@ class SchemaRetriever:
                     0.25 * max(0.0, min(1.0, item.retrieval_score))
                 )
                 reranked.append(replace(item, reranker_score=combined))
-        return sorted(
-            reranked,
-            key=lambda item: (
-                -math.inf if item.reranker_score is None else item.reranker_score
-            ),
-            reverse=True,
-        )
+        return self._stable_ranking(reranked)
+
+    def _stable_ranking(self, candidates: Iterable[RetrievalCandidate]) -> list[RetrievalCandidate]:
+        # Contract catalog order is versioned. It keeps existing tie ordering
+        # while making shuffled backend responses reproducible.
+        order = {doc.metadata["document_id"]: index for index, doc in enumerate(self.documents)}
+        return sorted(candidates, key=lambda item: (
+            -(item.retrieval_score if item.reranker_score is None else item.reranker_score),
+            order.get(item.document.metadata["document_id"], len(order)),
+            item.document.metadata["document_id"],
+        ))
 
     def _build_embeddings(self) -> Embeddings:
         if self.settings.embedding_provider == "ollama":

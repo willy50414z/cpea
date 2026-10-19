@@ -230,6 +230,30 @@ def comparison(rows_by_strategy: dict[str, list[dict]]) -> dict:
     return differences
 
 
+def failure_records(rows: list[dict]) -> list[dict]:
+    failures = []
+    for row in rows:
+        expected = set(row["gold_views"]) | set(row["valid_views"] or [])
+        missing = expected - set(row["selected_views"])
+        if not missing:
+            continue
+        threshold = row["retrieved_views"][min(row["top_k"], len(row["retrieved_views"])) - 1]
+        def score(item):
+            return item["retrieval_score"] if item["reranker_score"] is None else item["reranker_score"]
+        evidence = []
+        for view in sorted(missing):
+            item = next(item for item in row["retrieved_views"] if item["view"] == view)
+            context = view in row["context_dropped_views"]
+            tied = score(item) == score(threshold)
+            evidence.append({"view": view, "stage": "context_budget" if context else "candidate_selection",
+                "root_cause": "context_budget_exclusion" if context else "cutoff_tie" if tied else "score_below_cutoff",
+                "recommendation": "inspect_context_budget" if context else "retain_cutoff_ties" if tied
+                                  else "review_validity_and_column_grain_evidence_before_new_strategy",
+                "future_retrieval": None})
+        failures.append({**row, "missing_views": sorted(missing), "failure_analysis": evidence})
+    return failures
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--profile", type=Path, default=ROOT / "projects/retail")
@@ -297,6 +321,9 @@ def main() -> None:
         metadata["failure_type"] = type(exc).__name__
         raise
     finally:
+        for strategy, rows in rows_by_strategy.items():
+            (output / f"{strategy}-failures.jsonl").write_text("".join(
+                json.dumps(row, ensure_ascii=False) + "\n" for row in failure_records(rows)), encoding="utf-8")
         metadata["summary"] = {strategy: {dataset: summarize([row for row in rows if row["dataset"] == dataset])
                                           for dataset in ("regression", "challenge")}
                                for strategy, rows in rows_by_strategy.items()}

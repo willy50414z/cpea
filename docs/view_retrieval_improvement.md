@@ -30,3 +30,42 @@ Gold Recall@1/3/5 以完整排序計算，Gold Selected Recall 以實際送驗�
 人工審核須核對真實 YAML 的欄位、Operator、Aggregation、結果 Grain、資料範圍及各解釋是否等價。完成後填寫 `reviewer`、`reviewed_at`、`reviewed_contract_fingerprint` 與 `reviewed_case_sha256`，最後設定 `review_status=approved`。新題的內容指紋由 `challenge_content_sha256(case)` 計算；既有題沿用 `ViewMatchingCase.content_sha256()`。修改題目、標註或 Contract 後，舊核准失效。不得為取得較好召回數字修改既有預期答案。
 
 本文件後續記錄各階段的實測值與決策；原始逐題數據保存在各次實驗目錄。
+
+## MVP 0：對照結果
+
+執行版本：`56f2228a27eb31ace44e5614feb255591ea7104a`；完整數據：`projects/retail/artifacts/retrieval/20261019T054801104387Z-56f2228a/`。兩種策略皆在乾淨 worktree 執行相同 445 題，未修改題庫或 Contract。
+
+| 資料集／策略 | Recall@1 | Recall@3 | Recall@5 | Gold Selected | Valid View Recall | 完整歧義覆蓋 | 平均候選 | 檢索 P95 |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| 395／Lexical | 245/395 | 356/395 | 394/395 | 394/395 | 未標註 | 未標註 | 5 | 5.87 ms |
+| 395／Vector | 117/395 | 253/395 | 348/395 | 348/395 | 未標註 | 未標註 | 5 | 16.07 ms |
+| 50／Lexical | 32/44 | 40/44 | 43/44 | 43/44 | 68/72 | 5/6 | 5 | 5.28 ms |
+| 50／Vector | 16/44 | 37/44 | 41/44 | 41/44 | 62/72 | 4/6 | 5 | 13.11 ms |
+
+Challenge 有 6 題不支援需求，沒有 Gold View，因此 Gold 分母為 44；6 題仍保留於候選數與延遲統計。所有數字是待審題的探索結果。SQL 正確率、確認 Precision／Recall、端到端耗時與完整 Pipeline 的 LLM 成本均未測；檢索工具本身為 0 次生成呼叫。
+
+Vector 使用 `nomic-embed-text`，權重 digest 為 `0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f`；索引建立為 5510.65 ms。Vector 只補到原始同分案例及其 Challenge 複本；另有 50 題 Gold 只有 Lexical 選到，兩者共同漏 Gold 為 0。完整差異清單見 `run.json.comparison`。
+
+失敗案例 `RETAIL-ORDER_SUMMARY-S3-03`（Challenge 複本 `RETRIEVAL-AMBIGUOUS-04`）：需求為逐筆成交管道、毛利及會員名稱 LIKE 王%；Gold 為 `v_order_summary`，有效解釋另有 `v_sales_detail`。Lexical 全部排名與分數如下：
+
+| 排名 | View | retrieval／rerank 分數 | 來源 |
+|---|---|---:|---|
+| 1 | v_sales_detail | 0.11199999999999999 | lexical |
+| 2 | v_customer_value | 0.09266666666666666 | lexical |
+| 3 | v_store_monthly_kpi | 0.06933333333333333 | lexical |
+| 4 | v_product_monthly | 0.066 | lexical |
+| 5 | v_daily_sales | 0.06333333333333334 | lexical |
+| 6 | v_order_summary | 0.06333333333333334 | lexical |
+| 7 | v_inventory_status | 0.03266666666666667 | lexical |
+
+根因為最後一道嚴格前五名截斷；Contract 或 Validator 並未參與此失敗。首選解法是同分保留，不需新檢索策略。其餘有效 View 的召回缺口以逐題 `valid_views` 對 `selected_views` 可重建；標註與原因仍須人工審查，不據此立即導入 Column-first。
+
+決策：`ACCEPT_AND_CONTINUE_TESTING`。已重現原始 394/395 及同分第六名；維持 Production Lexical，進入 MVP 1。MVP 0 的人工標註驗收尚未完成。
+
+## MVP 1：實作規則
+
+`select_with_ties()` 保留原本前 K 個候選，再保留與門檻分數完全相同者。比較採同次運算的 IEEE-754 精確值，不使用浮點容許誤差；差一個可表示浮點值也不算同分。非有限分數與非正整數上限不允許進入選擇。
+
+初步 lexical／vector 候選與 rerank 後選擇都套用相同規則，避免更早的截斷隱藏同分候選。Vector 的記憶體索引原本就會掃描 Catalog，現在觀察全部結果後再依門檻選取。相同分數依有版本的 Catalog 順序排序，維持原有第五、六名次序，並避免後端輸入順序改變結果。日誌及逐題紀錄保留超過 K 的數量。
+
+沒有新增依賴、設定或生成模型呼叫；逐 View Mapping、SQL Validator 與確認流程沿用現況。候選增加可能使後續 Mapping 呼叫增加，其實際成本需另行量測。

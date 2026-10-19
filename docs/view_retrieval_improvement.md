@@ -69,3 +69,45 @@ Vector 使用 `nomic-embed-text`，權重 digest 為 `0a109f422b47e3a30ba2b10eca
 初步 lexical／vector 候選與 rerank 後選擇都套用相同規則，避免更早的截斷隱藏同分候選。Vector 的記憶體索引原本就會掃描 Catalog，現在觀察全部結果後再依門檻選取。相同分數依有版本的 Catalog 順序排序，維持原有第五、六名次序，並避免後端輸入順序改變結果。日誌及逐題紀錄保留超過 K 的數量。
 
 沒有新增依賴、設定或生成模型呼叫；逐 View Mapping、SQL Validator 與確認流程沿用現況。候選增加可能使後續 Mapping 呼叫增加，其實際成本需另行量測。
+
+
+## MVP 1：實測結果與決策
+
+執行版本：`eb04d5b7`；完整數據：`projects/retail/artifacts/retrieval/20261019T055113528938Z-eb04d5b7/`。題庫及 Contract 指紋與 MVP 0 相同。全套離線測試為 235 passed。
+
+| 指標 | 修改前 | 修改後 |
+|---|---:|---:|
+| 395 題 Gold Selected Recall | 394/395 | 395/395 |
+| 395 題嚴格 Gold Recall@5 | 394/395 | 394/395 |
+| 395 題 Recall@1／3 | 245／356 | 245／356 |
+| 395 題平均候選 | 5 | 5.05823 |
+| 395 題檢索 P95 | 5.87 ms | 5.85 ms |
+| Challenge Gold Selected Recall | 43/44 | 44/44 |
+| Challenge Valid View Recall | 68/72 | 69/72 |
+| Challenge 完整歧義覆蓋 | 5/6 | 6/6 |
+| Challenge 平均候選 | 5 | 5.08 |
+| SQL Correctness | 未測 | 未測 |
+| 完整 Pipeline 平均 LLM 呼叫／端到端延遲 | 未測 | 未測 |
+
+395 題原有前五名全部保留，總計增加 23 個候選；Challenge 增加 4 個，合計 27／2225，候選送驗量增加 1.21%。這是候選成本，尚不是實際 LLM 呼叫增幅。Vector 結果維持 348/395 與 41/44，沒有新增互補的 Gold 收益。
+
+以下三個 Challenge 的等價替代 View 分數低於門檻；Gold 及其業務解釋的其他代表仍在候選中。不是同分問題，不透過任意改排名掩蓋，完整排名／分數／來源見 `lexical-failures.jsonl`。
+
+| 題目 | 未召回的有效替代 View | 排名／分數 | 根因與處置 |
+|---|---|---|---|
+| EXACT_MATCH-07：交易日門市訂單數 | v_order_summary | 7／0.13333333333333333 | 全文分數低於 0.19242424242424241；daily 與 detail 已覆蓋相同解釋，先人工審核 |
+| AMBIGUOUS-07：已完成訂單毛利總和 | v_product_monthly | 6／0.1987654320987654 | 分數低於 0.2962962962962963；其他四個等價來源已保留，先驗證下游等價判斷 |
+| AMBIGUOUS-09：各門市各月毛利 | v_order_summary | 6／0.11449275362318839 | 分數低於 0.17101449275362315；含零交易／僅有交易兩種解釋皆保留，先人工審核 |
+
+決策：`ACCEPT_AND_CONTINUE_TESTING`。同分根因已修復，原本成功的 394 題無召回退步。停止擴充檢索演算法，進入 MVP 2 下游測試；不能宣稱整體 SQL 回歸或人工驗收已通過。
+
+## MVP 2：測試入口
+
+`evaluations.retrieval_grain_probe` 重用既有 CallRecorder／TracedModel，單執行緒呼叫目前設定的真實模型，保存 Provider、Model、Quantization、模型 digest、Temperature、Top-P、Num-Ctx、Max-Tokens、每次 prompt／response、token 用量、SQL 驗證 trace 與延遲；不執行 SQL 或保存資料列。
+
+```bash
+.venv/bin/python -m evaluations.retrieval_grain_probe \
+  --experiment-id retrieval-mvp2 --exploratory --max-model-calls 100
+```
+
+探測包含使用者指定的 Q1／Q2／Q3、可安全加總的全體毛利、缺少必要欄位、不支援 LIKE、禁止加總毛利率；Q3 出現訂單／明細選項時，分別選取並重新驗證。這是小樣本探索，不能代替 395 題完整 SQL 正確率回歸或人工審核後的確認 Precision／Recall。

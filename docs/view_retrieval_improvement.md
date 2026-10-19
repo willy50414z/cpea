@@ -111,3 +111,18 @@ Vector 使用 `nomic-embed-text`，權重 digest 為 `0a109f422b47e3a30ba2b10eca
 ```
 
 探測包含使用者指定的 Q1／Q2／Q3、可安全加總的全體毛利、缺少必要欄位、不支援 LIKE、禁止加總毛利率；Q3 出現訂單／明細選項時，分別選取並重新驗證。這是小樣本探索，不能代替 395 題完整 SQL 正確率回歸或人工審核後的確認 Precision／Recall。
+
+
+## MVP 2：已重現的比較失敗與最小修正
+
+修改前真實模型探測版本為 `095e075`，產物為 `projects/retail/artifacts/grain-probes/20261019T055323418326Z/`。Q1「查詢每張訂單的毛利」得到 `needs_clarification`，不符合明確需求；Q2「查詢每個商品明細的毛利」得到正確的 `ready`。取得 Q1 根因後結束該輪，剩餘問題不列為完成；Q3 中斷中的呼叫不作為成功或失敗的 SQL 樣本。
+
+Q1 中已通過驗證的兩個方案分別為：明細 View 的 `SUM(gross_profit) GROUP BY order_id`，以及訂單 View 直接取 `gross_profit`。模型比較原本已選訂單 View，回傳原文證據「每張訂單」與契約證據「粒度：每筆已完成訂單一列」。程式要求使用者片段同時逐字出現在契約且只出現在一個契約；這個門檻否決了模型選擇，轉成不必要的確認。比較輸入也缺少已驗證的 QueryPlan，無法清楚區分結果 Grain 與原生 Grain。
+
+修正範圍為既有 Semantic Comparison：加入已驗證 QueryPlan，並新增同一次比較呼叫可回傳的 `equivalent` 結果。模型須涵蓋全部有效候選、說明原因，且每個 View 提供至少兩段可核對的契約原文，其中包含相關指標定義。程式另檢查結果鍵、WHERE 與 HAVING 一致；明細按訂單分組可與訂單原生鍵相容，純 scalar aggregation 可彼此相容。這只是必要條件，指標與母體是否等價仍由既有比較模型核對。沒有已知鍵、缺少證據、原生訂單與原生明細不同鍵、篩選不一致時，不接受等價宣稱。
+
+原本針對共享模糊詞的選擇限制維持；沒有新增檢索策略、Node、依賴或模型呼叫。`select` 仍需原有證據，`equivalent` 是獨立且有條件的比較結果。結果鍵使用 Contract／QueryPlan 的實際欄位，不主動推測跨欄位別名。
+
+新增測試在修改前為 2 failed、3 passed；修正後包含原有澄清與探測測試為 12 passed。隔離 worktree 全套為 241 passed、1 skipped（未複製的私有部署 fixture）；合併回原工作目錄後再驗證該 fixture。原本第六名 regression test 亦已確認在 `56f2228` 舊碼失敗。
+
+目前決策：`REVISE_CURRENT_MVP`，先用真實模型驗證修正，再決定採納；不能以 scripted model 的測試宣稱實際比較模型已通過。

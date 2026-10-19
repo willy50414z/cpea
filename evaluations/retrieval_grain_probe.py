@@ -69,6 +69,7 @@ def main():
     parser.add_argument("--experiment-id", required=True)
     parser.add_argument("--exploratory", action="store_true", required=True)
     parser.add_argument("--max-model-calls", type=int, default=100)
+    parser.add_argument("--case-id", action="append", choices=[case["case_id"] for case in PROBES])
     args = parser.parse_args()
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
     output_root = args.profile / "artifacts/grain-probes"
@@ -84,7 +85,8 @@ def main():
     quantization, digest = _identity(target, settings, live=True)
     model = get_llm_config(settings=settings)
     output.mkdir(parents=True, exist_ok=False)
-    metadata = run_metadata(SimpleNamespace(settings=settings, catalog=catalog), PROBES,
+    probes = [case for case in PROBES if not args.case_id or case["case_id"] in args.case_id]
+    metadata = run_metadata(SimpleNamespace(settings=settings, catalog=catalog), probes,
                             kind="real-model-grain-probe")
     metadata.update(experiment_id=args.experiment_id, git_sha=git_sha, review_status="pending",
                     evaluation_status="exploratory", quantization=quantization, model_digest=digest,
@@ -104,9 +106,14 @@ def main():
         before = len(recorder.calls)
         started = perf_counter()
         response = workflow.invoke(case["request"], clarification_choice=choice)
+        calls = recorder.calls[before:]
+        def tokens(key):
+            values = [call.get(key) for call in calls]
+            return sum(values) if values and all(value is not None for value in values) else None
         row = {**case, "git_sha": git_sha, "response": response.model_dump(mode="json"),
                "latency_ms": (perf_counter() - started) * 1000,
                "llm_calls": len(recorder.calls) - before,
+               "tokens_in": tokens("input_tokens"), "tokens_out": tokens("output_tokens"),
                "pass": grade_probe(case["kind"], response) if choice is None else (
                    response.status == "ready" and response.selected_views == [choice.option_id]
                    and response.query_plan is not None and not response.query_plan.aggregations
@@ -120,7 +127,7 @@ def main():
         return response
     save()
     try:
-        for case in PROBES:
+        for case in probes:
             response = invoke(case)
             if case["kind"] == "ambiguous" and response.clarification:
                 options = {option.id for option in response.clarification.options}
@@ -129,6 +136,9 @@ def main():
                         invoke({**case, "case_id": case["case_id"] + "-" + view.rsplit(".", 1)[-1]},
                                choice=ClarificationChoice(option_id=view, contract_fingerprint=catalog.fingerprint))
         metadata["status"] = "completed"
+    except KeyboardInterrupt:
+        metadata.update(status="interrupted", failure_type="KeyboardInterrupt")
+        raise
     except Exception as exc:
         metadata.update(status="failed", failure_type=type(exc).__name__)
         raise

@@ -248,7 +248,7 @@ def main() -> None:
     catalog = SchemaCatalog(args.profile, allow_drafts=True)
     cases = evaluation_cases(args.cases, args.challenge, catalog, exploratory=args.exploratory)
     settings = AssistantSettings.from_env(args.env_file)
-    if not settings.integration_path or Path(settings.integration_path).resolve() != args.profile.resolve():
+    if settings.integration_path and Path(settings.integration_path).resolve() != args.profile.resolve():
         raise ValueError("environment profile differs from benchmark profile")
     from cpea.infrastructure.retrieval.documents import build_documents
     documents = build_documents(catalog)

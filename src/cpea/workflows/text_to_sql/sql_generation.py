@@ -33,6 +33,11 @@ _LEGACY_COLUMN_TYPES = {
 }
 
 
+class EquivalenceEvidence(BaseModel):
+    grain_or_scope: str = Field(description="逐字引用此 View 的 grain、summary 或 data_scope。")
+    metric_definition: str = Field(description="逐字引用 mapped_fields 中相關指標的 description。")
+
+
 class ViewComparison(BaseModel):
     decision: Literal["select", "clarify", "equivalent"]
     selected_view: str | None = None
@@ -42,12 +47,12 @@ class ViewComparison(BaseModel):
     question: str | None = None
     options: list[ClarificationOption] = Field(default_factory=list)
     equivalent_views: list[str] = Field(default_factory=list)
-    equivalence_evidence: dict[str, list[str]] = Field(default_factory=dict)
+    equivalence_evidence: dict[str, EquivalenceEvidence] = Field(default_factory=dict)
 
 
 COMPARE_SYSTEM = """比較已通過契約與 SQL 驗證的單一 View 方案。只使用問題原文與提供的 YAML 契約證據。
 先比較 query_plan 的結果粒度、業務實體、指標定義、篩選與資料範圍，不以 View 原生 grain 直接代替結果粒度。
-若所有方案業務語意等價，回傳 decision=equivalent、equivalent_views（全部候選）、reason，及 equivalence_evidence（每個 View 至少兩個契約原文片段，含相關指標定義與粒度／資料範圍證據）。
+若所有方案業務語意等價，回傳 decision=equivalent、equivalent_views（全部候選）、reason，及 equivalence_evidence（每個 View 的 grain_or_scope 引用其 grain／summary／data_scope，metric_definition 引用 mapped_fields 的指標 description）。所有證據必須逐字引用，不能引用程式產生的 QueryPlan 說明。
 例如明細按訂單加總後，可與原本一張訂單一列的方案等價；但逐筆訂單與逐筆明細、不同期間或母體的聚合不等價。不能僅因欄位同名就宣稱等價。
 若問題明確指出其中一種業務粒度或指標口徑，可選擇該 View；需提供問題原文中的連續片段 request_evidence，及所選契約中的連續片段 contract_evidence。
 若多種解讀仍合理，回傳 decision=clarify、自然語言問題及每個候選 View 的業務選項。不要用技術欄位名作為選項標籤。
@@ -377,7 +382,7 @@ class SQLGenerationWorkflow:
                              "data_scope": schema.get("data_scope"), "term_mappings": schema.get("term_mappings"),
                              "scope_rules": schema.get("scope_rules"),
                              "query_plan": compiled["response"].query_plan.model_dump(
-                                 mode="json", exclude={"source_views"}),
+                                 mode="json", exclude={"source_views", "supported", "explanation"}),
                              "mapped_fields": [{"request_text": link.fact_text, "role": link.role,
                                                 "aggregation": link.aggregation,
                                                 "description": columns[link.column]["description"]}
@@ -419,8 +424,11 @@ class SQLGenerationWorkflow:
             ("human", "問題：{request}\n候選證據：{candidates}"),
         ])
         try:
+            comparison_schema = response_schema_for(ViewComparison)
+            comparison_schema["required"] = ["decision", "reason", "equivalent_views", "equivalence_evidence"]
             result = self._invoke_model(prompt, {"request": request,
-                "candidates": json.dumps(evidence, ensure_ascii=False)}, ViewComparison)
+                "candidates": json.dumps(evidence, ensure_ascii=False)}, ViewComparison,
+                response_schema=comparison_schema)
         except ValueError:
             result = None
         if (result is not None and result.decision == "equivalent"
@@ -430,12 +438,14 @@ class SQLGenerationWorkflow:
                 and result.reason.strip() and self._same_result_grain(evidence)):
             grounded = True
             for item in evidence:
-                quotes = result.equivalence_evidence[item["view"]]
-                if (len(set(quotes)) < 2
-                        or any(len(quote.strip()) < 4 or quote not in contract_texts[item["view"]]
-                               for quote in quotes)
-                        or not any(quote in field["description"]
-                                   for quote in quotes for field in item["mapped_fields"])):
+                proof = result.equivalence_evidence[item["view"]]
+                grain = item.get("grain")
+                scope_text = json.dumps({"summary": item["summary"], "grain": grain,
+                                         "data_scope": item["data_scope"]}, ensure_ascii=False)
+                fields = [field for field in item["mapped_fields"] if field["role"] == "metric"] or item["mapped_fields"]
+                if (len(proof.grain_or_scope.strip()) < 4 or proof.grain_or_scope not in scope_text
+                        or len(proof.metric_definition.strip()) < 4
+                        or not any(proof.metric_definition in field["description"] for field in fields)):
                     grounded = False
                     break
             if grounded:

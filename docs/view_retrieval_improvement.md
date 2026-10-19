@@ -126,3 +126,8 @@ Q1 中已通過驗證的兩個方案分別為：明細 View 的 `SUM(gross_profi
 新增測試在修改前為 2 failed、3 passed；修正後包含原有澄清與探測測試為 12 passed。隔離 worktree 全套為 241 passed、1 skipped（未複製的私有部署 fixture）；合併回原工作目錄後再驗證該 fixture。原本第六名 regression test 亦已確認在 `56f2228` 舊碼失敗。
 
 目前決策：`REVISE_CURRENT_MVP`，先用真實模型驗證修正，再決定採納；不能以 scripted model 的測試宣稱實際比較模型已通過。
+
+
+第一輪修正 `bcff446` 的真實探測為 `projects/retail/artifacts/grain-probes/20261019T060215419595Z/`。Q1 仍未通過：模型回傳 equivalent，但省略 reason，並引用 QueryPlan 的制式 explanation，未提供指標定義。程式正確拒絕這份不完整證據，因此該輪仍是 `REVISE_CURRENT_MVP`；取得原因後停止其餘探測。
+
+第二輪將 QueryPlan 的 supported／explanation 排除於比較輸入，等價證據改為具名的 `grain_or_scope`、`metric_definition`，分別核對對應契約內容；Structured Output 要求 reason、equivalent_views、equivalence_evidence 完整回傳。新增制式說明不能當作指標證據的 regression test。先以原始真實模型已產生且重新編譯驗證的 Q1 mapping 重測比較模型，另行標記 comparison-only，避免混入完整 Pipeline 成本。

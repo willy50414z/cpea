@@ -26,22 +26,26 @@ class ComparisonLLM:
         self.messages = []
 
     def with_response_schema(self, schema):
+        assert {"reason", "equivalent_views", "equivalence_evidence"} <= set(schema["required"])
         def invoke(messages):
             self.messages = messages
             return SimpleNamespace(content=json.dumps(self.payload, ensure_ascii=False))
         return SimpleNamespace(invoke=invoke)
 
 
-def setup_comparison(*, scalar=False, native_detail=False, missing_evidence=False, filter_difference=False):
+def setup_comparison(*, scalar=False, native_detail=False, missing_evidence=False,
+                     filter_difference=False, boilerplate_evidence=False):
     root = Path(__file__).resolve().parents[2] / "projects/retail"
     catalog = SchemaCatalog(root, allow_drafts=True)
     schemas = {view.name: candidate_schema(view) for view in catalog.views() if view.name in {ORDER, DETAIL}}
     payload = {"decision": "equivalent", "equivalent_views": [ORDER, DETAIL],
         "reason": "兩個已驗證方案的結果粒度、已完成訂單範圍、毛利定義與篩選相同。",
-        "equivalence_evidence": {view: [schema["grain"]["description"],
-            schema["columns"]["gross_profit"]["description"]] for view, schema in schemas.items()}}
+        "equivalence_evidence": {view: {"grain_or_scope": schema["grain"]["description"],
+            "metric_definition": schema["columns"]["gross_profit"]["description"]} for view, schema in schemas.items()}}
     if missing_evidence:
         del payload["equivalence_evidence"][ORDER]
+    if boilerplate_evidence:
+        payload["equivalence_evidence"][DETAIL]["metric_definition"] = "由核准的 Schema Links 與 View 契約組成。"
     llm = ComparisonLLM(payload)
     settings = replace(AssistantSettings.from_env(), retrieval_mode="lexical", context_window=16000)
     workflow = SQLGenerationWorkflow(llm, catalog, settings=settings,
@@ -75,6 +79,7 @@ def test_verified_equivalent_result_grains_do_not_require_confirmation(scalar):
 
 @pytest.mark.parametrize("options", [
     {"native_detail": True}, {"missing_evidence": True}, {"filter_difference": True},
+    {"boilerplate_evidence": True},
 ])
 def test_equivalence_cannot_hide_different_grains_filters_or_missing_proof(options):
     workflow, _, schemas, successful, request = setup_comparison(**options)

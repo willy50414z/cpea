@@ -25,3 +25,7 @@ Retail 題庫可用 `uv run --locked --extra postgres-contracts python -m evalua
 `evaluations/` 保留共用評分、治理 runner、模型矩陣範例與合成 fixture。舊版兩份 reliability JSONL 保存在 `examples/legacy-evaluation-cases/` 作來源對照；既有 `artifacts/evaluations/`、`artifacts/stability/` 和原 PoC 封存保留原位，不改寫為新的專案 run。
 
 `cpea-governance-eval compare` 可用於額外的多模型研究，必須明確指定 `--cases`、`--models` 與 `--env-file`。舊 `cpea-query-eval` 與 `python -m evaluations.stability_runner` 是進階診斷入口，現在也必須明確傳入 `--dataset`；它們不會自動選取專案。.env 中的 API key、DB 密碼與帶認證資訊的 endpoint 不寫入 metadata 或摘要。
+
+## 欄位確認評估
+
+預設 MATCH v10；`cpea-eval --prompt-version v10 --runs 3` 對每個已核准案例重複三次。統一 JSONL 可包含 `case_kind=hilp`，以明確腳本確認、取消或檢查詞彙沿用。每次使用隔離的詞彙 JSON；多階段狀態保存於 `hilp_phases`，另產出 `hilp_summary.json` 統計語意誤放行、過度確認與三次穩定性。pending／過期審核不算正式通過。舊 Retail 題庫產生器固定 v6；不要因預設版本改變就覆寫已核准 ground truth。詳細協定與限制見 [欄位確認文件](../docs/hilp_confirmation.md)。

@@ -4,7 +4,7 @@ from importlib.resources import files
 import os
 from pathlib import Path
 
-from cpea.config.database import SQLServerSettings
+from cpea.config.database import SQLServerSettings, SQLServerConfigurationError
 from cpea.infrastructure.sql_policy import validate_generated_sql
 
 
@@ -23,12 +23,14 @@ class SQLServerExecutor:
         except ImportError:
             raise ValueError('SQL Server requires the sqlserver extra (SQLAlchemy and pymssql)') from None
         except Exception:
-            raise ValueError('SQL Server requires a valid mssql+pymssql URL') from None
-        if url.drivername != 'mssql+pymssql' or not url.host or not url.database:
-            raise ValueError('SQL Server requires a mssql+pymssql URL with host and database')
+            raise SQLServerConfigurationError('invalid_url') from None
+        if url.drivername != 'mssql+pymssql':
+            raise SQLServerConfigurationError('driver_unsupported')
+        if not url.host or not url.database:
+            raise SQLServerConfigurationError('host_or_database_missing')
         if url.query:
             # Driver behavior, credentials and timeouts must remain explicit.
-            raise ValueError('SQL Server URL query options are unsupported; use deployment settings')
+            raise SQLServerConfigurationError('query_options_unsupported')
         if engine_factory is None:
             engine_factory = sqlalchemy.create_engine
         # FreeTDS reads TLS policy from its process-wide configuration. Use a

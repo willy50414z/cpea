@@ -1,4 +1,0 @@
-schema: demo
-views:
-  demo.v_inventory:
-    path: views/inventory.yaml

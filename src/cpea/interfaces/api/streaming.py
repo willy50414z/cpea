@@ -29,18 +29,36 @@ def event_frame(event: str, payload: dict) -> str:
     return f'event: {event}\ndata: {body}\n\n'
 
 
-async def query_events(runtime, request, question: str):
+async def query_events(runtime, request, question: str, *, confirmation=None, claimed=None):
     phase = 'generation'
+    sql_stage = None
+    resumed = False
     try:
         if await request.is_disconnected():
             return
         def generate():
             service = runtime.staged_query_service()
             return service, service.generate(question)
-        service, sql_stage = await run_in_threadpool(generate)
+        if confirmation is not None:
+            from cpea.application.services.staged_query import SQLStage
+            resumed = True
+            question, generation = await run_in_threadpool(runtime.resume_generation,
+                confirmation, mode='stream', claimed=claimed)
+            service, sql_stage = runtime.staged_query_service(), SQLStage(generation)
+        else:
+            service, sql_stage = await run_in_threadpool(generate)
         if await request.is_disconnected():
             return
-        yield event_frame('sql', {'sql': sql_stage.sql})
+        generation = sql_stage.generation
+        if generation.status == 'needs_confirmation':
+            yield event_frame('clarification', generation.model_dump(exclude={'query_trace'}))
+            return
+        if generation.status != 'ready':
+            yield event_frame('cancelled' if generation.status == 'cancelled' else 'unsupported',
+                              generation.model_dump(exclude={'query_trace'}))
+            return
+        yield event_frame('sql', {'sql': sql_stage.sql,
+            'term_mapping_reasoning': [r.model_dump() for r in generation.term_mapping_reasoning]})
         # StreamingResponse awaits ASGI send before resuming this iterator.
         if await request.is_disconnected():
             return
@@ -62,3 +80,10 @@ async def query_events(runtime, request, question: str):
         logger.warning('Independent query failed at stage=%s', phase)
         if not await request.is_disconnected():
             yield event_frame('error', {'message': ERROR_MESSAGE})
+
+    finally:
+        if sql_stage is not None and sql_stage.generation.status != 'needs_confirmation':
+            runtime.finish(sql_stage.generation)
+        if claimed is not None and not resumed:
+            runtime.generation_service().workflow.registry.finish(claimed.id)
+            claimed.lock.release()

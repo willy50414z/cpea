@@ -97,6 +97,7 @@ class AnswerSynthesisService:
                 execution.rows_truncated or rows_in_context < len(execution.rows)
             ),
             generation=execution.generation,
+            term_mapping_reasoning=execution.generation.term_mapping_reasoning,
         )
 
     def build_context(

@@ -17,9 +17,10 @@ def _literal(value: str | int | float) -> str:
     return str(value)
 
 
-def compile_single_view(
+def validate_single_view_plan(
     plan: QueryPlan, catalog: CatalogProvider, *, max_rows: int = 200, request: str = ""
-) -> str:
+) -> None:
+    """Validate a draft without producing SQL before human confirmation."""
     if len(plan.source_views) != 1:
         raise SQLPolicyError("single-view compiler requires exactly one source view")
     if not plan.select_columns:
@@ -29,7 +30,6 @@ def compile_single_view(
     violations = catalog.validate_plan_contract(plan, request)
     if violations:
         raise SQLPolicyError("；".join(violations))
-    view = plan.source_views[0]
     selected = set(plan.select_columns)
     grouped = set(plan.group_by)
     aggregate = plan.aggregations
@@ -39,6 +39,14 @@ def compile_single_view(
             raise SQLPolicyError("grouped query has unaggregated columns: " + ", ".join(sorted(unaggregated)))
     elif aggregate and selected - set(aggregate):
         raise SQLPolicyError("aggregate query cannot mix raw columns without GROUP BY")
+
+
+def compile_single_view(
+    plan: QueryPlan, catalog: CatalogProvider, *, max_rows: int = 200, request: str = ""
+) -> str:
+    validate_single_view_plan(plan, catalog, max_rows=max_rows, request=request)
+    view = plan.source_views[0]
+    aggregate = plan.aggregations
     limit = min(plan.limit or max_rows, max_rows)
     rendered = []
     for column in plan.select_columns:

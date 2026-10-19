@@ -10,6 +10,8 @@ import os
 from pathlib import Path
 import subprocess
 import sys
+from tempfile import TemporaryDirectory
+from evaluations.hilp_cases import run_hilp_case
 from time import perf_counter
 from urllib.parse import urlparse
 from uuid import uuid4
@@ -192,8 +194,13 @@ def _run_one(case: GovernanceCase, target: ModelTarget, repetition: int, base: A
     answer = None
     citations: list[str] = []
     error = None
+    phases, hilp_failures = [], []
+    runtime = None
+    temporary = TemporaryDirectory(prefix="cpea-eval-mappings-")
+    settings = replace(settings, terms_mapping_path=str(Path(temporary.name) / "terms_mapping.json"))
     stopped = budget.reason(model_key(target))
     if stopped:
+        temporary.cleanup()
         return _skipped(case, target, repetition, recorder.run_id, stopped)
     try:
         model = model_factory(target, settings) if model_factory else get_llm_config(settings=settings)
@@ -206,7 +213,10 @@ def _run_one(case: GovernanceCase, target: ModelTarget, repetition: int, base: A
                                    executor=base.executor, datasource_id=base.datasource_id,
                                    retriever=base.retriever, context_packer=base.context_packer,
                                    match_prompt=base.match_prompt)
-        generation = runtime.generate(case.question)
+        if case.hilp_case is not None:
+            generation, phases, hilp_failures = run_hilp_case(runtime, case.hilp_case)
+        else:
+            generation = runtime.generate(case.question)
         needs_answer = bool(case.expected_result.answer_contains or case.expected_result.answer_excludes
                             or case.expected_result.require_citation)
         if generation.supported and needs_answer:
@@ -226,10 +236,19 @@ def _run_one(case: GovernanceCase, target: ModelTarget, repetition: int, base: A
         reason = provider_stop_reason(exc)
         if reason:
             budget.stop(model_key(target), reason)
+    finally:
+        if runtime is not None:
+            runtime.close()
+        temporary.cleanup()
     if generation is None:
         status, review_state, failures = "error", None, [error or "generation_unavailable"]
     elif error:
         status, review_state, failures = "error", None, [error]
+    elif case.hilp_case is not None:
+        status = 'fail' if hilp_failures else 'pass'
+        review_state, failures = 'approved', hilp_failures
+        if not case.hilp_case.approved_for(base.catalog.fingerprint):
+            status, review_state = None, 'pending'
     else:
         status, review_state, failures = grade(case, generation, answer, citations,
                                                catalog=base.catalog, max_rows=settings.max_rows)
@@ -247,6 +266,7 @@ def _run_one(case: GovernanceCase, target: ModelTarget, repetition: int, base: A
         "target_view": case.view_matching_case.target_view if case.view_matching_case else None,
         "sql_difficulty": case.view_matching_case.sql_difficulty if case.view_matching_case else None,
         "semantic_difficulty": case.view_matching_case.semantic_difficulty if case.view_matching_case else None,
+        "hilp_phases": phases,
         "mapping_status": mapping_status, "sql_status": sql_status,
         "generation": generation.model_dump(mode="json") if generation else None,
         "answer": answer, "citations": citations, "call_ids": [],

@@ -24,6 +24,8 @@ from tests.support import Counter
 
 ROOT = Path(__file__).resolve().parents[2]
 VIEW = "demo_retail.v_daily_sales"
+pytestmark = pytest.mark.skipif(not (ROOT / "projects/retail/manifest.yaml").is_file(),
+    reason="private Retail profile and approved cases are not installed")
 
 
 def test_having_schema_versions_and_hidden_aggregate():
@@ -34,7 +36,7 @@ def test_having_schema_versions_and_hidden_aggregate():
     v6 = load_match_prompt("v6")
     v7 = load_match_prompt("v7")
     v8 = load_match_prompt("v8")
-    v9 = load_match_prompt()
+    v9 = load_match_prompt('v9')
     assert v2.response_model is SQLClauseMapping
     assert v3.response_model is SQLClauseMappingV3
     assert v4.response_model is SQLClauseMappingV3

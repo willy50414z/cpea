@@ -77,6 +77,19 @@ def model_metrics(records: list[dict], calls: list[dict], runs: int) -> dict:
 
 def write_reports(run_dir: Path, results: list[dict], calls: list[dict]) -> None:
     run_dir = Path(run_dir)
+    hilp = [r for r in results if r.get('hilp_phases')]
+    if hilp:
+        grouped = defaultdict(list)
+        for row in hilp:
+            grouped[(row['provider'], row['model'], row['case_id'])].append(row)
+        summary = {'completed_repetitions': len(hilp),
+                   'semantic_false_accepts': sum('semantic_false_accept' in r['failure_reasons'] for r in hilp),
+                   'unnecessary_confirmations': sum('unnecessary_confirmation' in r['failure_reasons'] for r in hilp),
+                   'script_or_sql_failures': sum(bool(r['failure_reasons']) for r in hilp),
+                   'cases_with_at_least_three_repetitions': sum(len(rows) >= 3 for rows in grouped.values()),
+                   'cases_stable_and_passing_three_repetitions': sum(len(rows) >= 3 and all(r['status'] == 'pass' for r in rows)
+                                                                      for rows in grouped.values())}
+        (run_dir / 'hilp_summary.json').write_text(json.dumps(summary, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     by_key = defaultdict(list)
     for call in calls:
         by_key[(call["case_id"], call["model"], call["repetition"])].append(call)

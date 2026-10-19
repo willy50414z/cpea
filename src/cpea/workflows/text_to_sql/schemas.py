@@ -89,3 +89,49 @@ class SQLClauseMapping(BaseModel):
 
 class SQLClauseMappingV3(SQLClauseMapping):
     having: list[ClauseHaving]
+
+
+class TermEvidence(BaseModel):
+    clause: Literal['fields', 'criteria', 'group', 'order', 'having']
+    index: int = Field(ge=0)
+    start: int = Field(ge=0)
+    end: int = Field(ge=1)
+    term: str = Field(min_length=1)
+    candidates: list[str] = Field(default_factory=list)
+    evidence_quote: str | None = None
+
+
+class SyntaxSpan(BaseModel):
+    kind: Literal['aggregation', 'operator', 'literal', 'source']
+    clause: Literal['fields', 'criteria', 'group', 'order', 'having', 'table']
+    index: int = Field(ge=0)
+    start: int = Field(ge=0)
+    end: int = Field(ge=1)
+
+
+class SemanticOption(BaseModel):
+    column: str
+    label: str = Field(min_length=1, max_length=60)
+    evidence_quote: str = Field(min_length=1)
+    same_concept: bool
+    grain_compatible: bool
+
+
+class SemanticClarification(BaseModel):
+    term: str = Field(min_length=1)
+    options: list[SemanticOption] = Field(default_factory=list)
+    needs_refinement: bool = False
+
+
+class ClarificationResolution(BaseModel):
+    source_compatible: bool
+    clarifications: list[SemanticClarification]
+
+
+class SQLClauseMappingV10(SQLClauseMappingV3):
+    # Defaults permit conservative migration of drafts; missing evidence never
+    # grants trust. The server independently checks the entire original request.
+    terms: list[TermEvidence] = Field(default_factory=list)
+    syntax_spans: list[SyntaxSpan] = Field(default_factory=list)
+    candidate_view: str | None = None
+    clarifications: list[SemanticClarification] = Field(default_factory=list)

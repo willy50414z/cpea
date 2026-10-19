@@ -39,7 +39,9 @@ def test_project_resolution_and_identity_preflight(tmp_path, monkeypatch):
     projects, root, file = project_fixture(tmp_path)
     workspace = resolve_project("acme", projects_root=projects)
     assert workspace.root == root.resolve()
-    assert _runtime_for_project(workspace).catalog.profile_id == "synthetic"
+    runtime = _runtime_for_project(workspace)
+    assert runtime.catalog.profile_id == "synthetic"
+    assert runtime.datasource_id == runtime.settings.datasource_id == "acme"
     for bad in ("../acme", "other/acme", "/tmp/acme"):
         with pytest.raises(ValueError, match="project ID"):
             resolve_project(bad, projects_root=projects)
@@ -124,6 +126,7 @@ def test_project_run_reports_and_collision(tmp_path):
             repo_root=ROOT, model_factory=lambda target, settings: StubLLM(), timestamp=when)
 
 
+@pytest.mark.skipif(not (ROOT / "projects/retail/manifest.yaml").is_file(), reason="private Retail profile and approved cases are not installed")
 def test_retail_pending_case_is_exploratory_only(tmp_path):
     source = ROOT / "projects" / "retail"
     projects = tmp_path / "projects"

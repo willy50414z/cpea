@@ -5,9 +5,18 @@ from dataclasses import dataclass
 import os
 from pathlib import Path
 import re
+from dotenv import dotenv_values
 
 
 _PROJECT_ID = re.compile(r"[A-Za-z0-9][A-Za-z0-9_-]*\Z")
+
+
+def configured_projects_root(env_file: str | Path | None = None) -> Path:
+    selected = env_file or os.environ.get('CPEA_ENV_FILE')
+    base = Path(selected).resolve().parent if selected else Path.cwd()
+    values = dotenv_values(selected, interpolate=False, encoding='utf-8') if selected else {}
+    value = os.environ.get('CPEA_PROJECTS_ROOT') or values.get('CPEA_PROJECTS_ROOT')
+    return (base / value).resolve() if value else (Path.cwd() / 'projects').resolve()
 
 
 @dataclass(frozen=True)

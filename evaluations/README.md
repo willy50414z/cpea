@@ -4,7 +4,7 @@
 
 使用 `python -m evaluations.retrieval_benchmark --experiment-id <實驗名稱> --exploratory` 比較相同 395 題 Regression 與 50 題待審 Challenge 的 Lexical／純 Vector 排名。工具要求乾淨 worktree，記錄版本、全部分數與實際候選，並分開計算嚴格 Recall@5 與含同分的 Gold Selected Recall。未完成題庫人工審核時，不能省略 `--exploratory`。
 
-`python -m evaluations.retrieval_grain_probe --experiment-id <實驗名稱> --exploratory` 可執行小樣本真實模型的 Grain、確認及不支援需求探測；`--case-id` 可指定題目，`--max-model-calls` 限制呼叫數。這些結果不等同完整 SQL 正確率回歸。版本、命令、成本、失敗案例與階段決策見 [漸進改善紀錄](../docs/view_retrieval_improvement.md)。
+目前採納範圍為 View 篩選的同分保留及檢索評估；Semantic Comparison 維持起始版本。本工具不量測完整 SQL 正確率。版本、命令、成本、失敗案例與階段決策見 [漸進改善紀錄](../docs/view_retrieval_improvement.md)。
 
 ## 專案評估
 

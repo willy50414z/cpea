@@ -1,6 +1,6 @@
 # View Retrieval 漸進式改善紀錄
 
-本次工作遵循 MVP 0 → MVP 1 → MVP 2 的順序。只有人工審核後的失敗證據支持時，才導入 Column-first、Grain-aware、Hybrid 或 Slot Extraction。維持既有 LangGraph 與逐 View 驗證，不新增生成模型呼叫或依賴。
+本次採納範圍為 MVP 0 的檢索對照與 MVP 1 的 Top-K 同分保留。Semantic Comparison 恢復為起始快照 `9ab8778` 的版本；Mapping、SQL Validation 與原有確認流程保留，不包含額外的等價比較改動。只有後續可重現的失敗證據支持時，才考慮下一階段改善。
 
 ## 版本與重現
 
@@ -99,83 +99,32 @@ Vector 使用 `nomic-embed-text`，權重 digest 為 `0a109f422b47e3a30ba2b10eca
 | AMBIGUOUS-07：已完成訂單毛利總和 | v_product_monthly | 6／0.1987654320987654 | 分數低於 0.2962962962962963；其他四個等價來源已保留，先驗證下游等價判斷 |
 | AMBIGUOUS-09：各門市各月毛利 | v_order_summary | 6／0.11449275362318839 | 分數低於 0.17101449275362315；含零交易／僅有交易兩種解釋皆保留，先人工審核 |
 
-決策：`ACCEPT_AND_CONTINUE_TESTING`。同分根因已修復，原本成功的 394 題無召回退步。停止擴充檢索演算法，進入 MVP 2 下游測試；不能宣稱整體 SQL 回歸或人工驗收已通過。
+決策：`ACCEPT_AND_CONTINUE_TESTING`。保留已通過檢索層驗證的同分修正，原本成功的 394 題無召回退步。維持此版本，後續累積測試並完成人工標註；有新失敗案例再分析升級，不包含本次額外的 Semantic Comparison 修改。不能宣稱整體 SQL 回歸或人工驗收已通過。
 
-## MVP 2：測試入口
+## 本次提交範圍
 
-`evaluations.retrieval_grain_probe` 重用既有 CallRecorder／TracedModel，單執行緒呼叫目前設定的真實模型，保存 Provider、Model、Quantization、模型 digest、Temperature、Top-P、Num-Ctx、Max-Tokens、每次 prompt／response、token 用量、SQL 驗證 trace 與延遲；不執行 SQL 或保存資料列。
+- 保留 Lexical／既有 Rerank、兩階段同分保留、穩定排序、候選增加量紀錄與相關 regression tests。
+- 保留版本化檢索評估、50 題待審 Challenge 與既有實驗數據；不修改原本 395 題預期答案或 YAML Contract。
+- 將 `src/cpea/workflows/text_to_sql/sql_generation.py` 恢復為 `9ab8778`，保留起始版本已有的 Mapping、Semantic Comparison、SQL Validation 與確認功能。
+- 移除新增的 Grain／Semantic Comparison 專用探測工具及測試。舊實驗紀錄保存在 `projects/retail/artifacts/grain-probes/semantic-comparison-history.md` 與原始 artifacts；歷史程式可由 Git SHA 追溯，不納入目前採納功能。
 
-```bash
-.venv/bin/python -m evaluations.retrieval_grain_probe \
-  --experiment-id retrieval-mvp2 --exploratory --max-model-calls 100
-```
+## 成本與未完成驗收
 
-探測包含使用者指定的 Q1／Q2／Q3、可安全加總的全體毛利、缺少必要欄位、不支援 LIKE、禁止加總毛利率；Q3 出現訂單／明細選項時，分別選取並重新驗證。這是小樣本探索，不能代替 395 題完整 SQL 正確率回歸或人工審核後的確認 Precision／Recall。
+同分修正本身的檢索 P95 由 5.87 ms 變為 5.85 ms，沒有觀察到明顯增加。395 題候選送驗量由 1975 增為 1998，增加 23 個（約 1.16%）；原有前五名候選及完整排序均保留。完整契約容量已確認 1998/1998 可容納，紀錄為 `projects/retail/artifacts/retrieval/contract-admission-20261019T061810512058Z.json`；該歷史檢查版本尚含額外比較實驗，但執行僅到檢索與契約打包，未呼叫比較模型。
 
+沒有新增 LLM Node，但每個額外候選仍可能沿用既有 Per-View Mapping，因此不能宣稱完整 Pipeline 呼叫數完全不增加。實際平均 LLM 呼叫、完整 SQL Correctness、Clarification Precision／Recall 與端到端 P50／P95 仍為未測。歷史單題比較耗時 6.79 → 32.46 秒屬於已排除的 Semantic Comparison 實驗，不能歸因於同分保留。
 
-## MVP 2：已重現的比較失敗與最小修正
+50 題人工閱讀清單位於 `projects/retail/artifacts/retrieval/challenge-review-v1.md`；新舊題庫目前仍待人工核准。通過目前檢索測試不等於正式 SQL／成本驗收，也不代表正式環境上線。
 
-修改前真實模型探測版本為 `095e075`，產物為 `projects/retail/artifacts/grain-probes/20261019T055323418326Z/`。Q1「查詢每張訂單的毛利」得到 `needs_clarification`，不符合明確需求；Q2「查詢每個商品明細的毛利」得到正確的 `ready`。取得 Q1 根因後結束該輪，剩餘問題不列為完成；Q3 中斷中的呼叫不作為成功或失敗的 SQL 樣本。
+## 交付檔案
 
-Q1 中已通過驗證的兩個方案分別為：明細 View 的 `SUM(gross_profit) GROUP BY order_id`，以及訂單 View 直接取 `gross_profit`。模型比較原本已選訂單 View，回傳原文證據「每張訂單」與契約證據「粒度：每筆已完成訂單一列」。程式要求使用者片段同時逐字出現在契約且只出現在一個契約；這個門檻否決了模型選擇，轉成不必要的確認。比較輸入也缺少已驗證的 QueryPlan，無法清楚區分結果 Grain 與原生 Grain。
+| 範圍 | 主要檔案 |
+|---|---|
+| 同分修正 | src/cpea/infrastructure/retrieval/schema.py、tests/unit/test_retrieval_ties.py |
+| 檢索對照 | evaluations/retrieval_benchmark.py、tests/unit/test_retrieval_benchmark.py |
+| 題庫草稿 | evaluations/data/retail_retrieval_challenge.jsonl |
+| 說明與既有診斷 | 本文件、evaluations/README.md、evaluations/retail_view_retrieval.py |
 
-修正範圍為既有 Semantic Comparison：加入已驗證 QueryPlan，並新增同一次比較呼叫可回傳的 `equivalent` 結果。模型須涵蓋全部有效候選、說明原因，且每個 View 提供至少兩段可核對的契約原文，其中包含相關指標定義。程式另檢查結果鍵、WHERE 與 HAVING 一致；明細按訂單分組可與訂單原生鍵相容，純 scalar aggregation 可彼此相容。這只是必要條件，指標與母體是否等價仍由既有比較模型核對。沒有已知鍵、缺少證據、原生訂單與原生明細不同鍵、篩選不一致時，不接受等價宣稱。
+## 排除 Semantic Comparison 後的驗證
 
-原本針對共享模糊詞的選擇限制維持；沒有新增檢索策略、Node、依賴或模型呼叫。`select` 仍需原有證據，`equivalent` 是獨立且有條件的比較結果。結果鍵使用 Contract／QueryPlan 的實際欄位，不主動推測跨欄位別名。
-
-新增測試在修改前為 2 failed、3 passed；修正後包含原有澄清與探測測試為 12 passed。隔離 worktree 全套為 241 passed、1 skipped（未複製的私有部署 fixture）；合併回原工作目錄後再驗證該 fixture。原本第六名 regression test 亦已確認在 `56f2228` 舊碼失敗。
-
-目前決策：`REVISE_CURRENT_MVP`，先用真實模型驗證修正，再決定採納；不能以 scripted model 的測試宣稱實際比較模型已通過。
-
-
-第一輪修正 `bcff446` 的真實探測為 `projects/retail/artifacts/grain-probes/20261019T060215419595Z/`。Q1 仍未通過：模型回傳 equivalent，但省略 reason，並引用 QueryPlan 的制式 explanation，未提供指標定義。程式正確拒絕這份不完整證據，因此該輪仍是 `REVISE_CURRENT_MVP`；取得原因後停止其餘探測。
-
-第二輪將 QueryPlan 的 supported／explanation 排除於比較輸入，等價證據改為具名的 `grain_or_scope`、`metric_definition`，分別核對對應契約內容；Structured Output 要求 reason、equivalent_views、equivalence_evidence 完整回傳。新增制式說明不能當作指標證據的 regression test。先以原始真實模型已產生且重新編譯驗證的 Q1 mapping 重測比較模型，另行標記 comparison-only，避免混入完整 Pipeline 成本。
-
-
-## MVP 2：最終小樣本結果
-
-執行版本：`29551146370c3be9d19047d69cf864e3fe1d51a3`。全套離線測試為 **243 passed**，包含缺少契約證據、制式說明冒充指標證據、不同結果鍵與不同篩選不得視為等價，以及原有 API／CLI／UI 確認流程。
-
-Q1 的聚焦真實比較產物：`projects/retail/artifacts/grain-probes/20261019T060837998334Z-comparison-only/`。來源為最初真實 Mapping；兩個方案重新經過現有 Compiler 與 SQL Validator，結果保存在 `revalidated-sql.jsonl`。只重跑比較模型一次，得到等價並選擇按訂單彙總的明細方案；這是 comparison-only，不能當作完整 Pipeline 的延遲或呼叫數。
-
-其餘真實流程產物：`projects/retail/artifacts/grain-probes/20261019T061009438521Z/`。重現命令：
-
-```bash
-.venv/bin/python -m evaluations.retrieval_grain_probe \
-  --experiment-id retrieval-mvp2-final --exploratory \
-  --max-model-calls 100 --case-id GRAIN-Q3 --case-id GRAIN-EQUIVALENT
-```
-
-模型為 Ollama `qwen3.8:27b`、Q4_K_M；digest 為 `aaee06c39dcf2437cde036998d960e1fc1494b8191be7cc9657d01e509097813`。Temperature=0、Top-P=1、Num-Ctx=16000、Max-Tokens=8192，完整 request／response 與用量已保存。
-
-| 探測 | 修改前 | 修改後／本次觀察 | 實際生成呼叫 | 耗時 |
-|---|---|---|---:|---:|
-| Q1：每張訂單毛利 | 錯誤要求確認 | 原始 Mapping 重新驗證後，比較模型接受等價 | 1（僅比較） | 32.46 秒（僅比較） |
-| Q2：每個商品明細毛利 | ready，SQL 使用明細 View | 原路徑不需修改；最終版本未重跑此完整題 | 前測 5 | 前測 205.68 秒 |
-| Q3：逐筆管道與毛利 | 未完成前測 | needs_clarification，選項恰為訂單／明細 | 6 | 136.09 秒 |
-| Q3：選擇訂單 | 未完成前測 | 重新驗證後 ready，訂單原生粒度 | 6 | 103.28 秒 |
-| Q3：選擇明細 | 未完成前測 | 重新驗證後 ready，明細原生粒度 | 6 | 146.23 秒 |
-| 全體已完成訂單毛利加總 | 未測 | 多個 scalar SUM 方案等價，ready、不確認 | 6 | 366.53 秒 |
-
-最後一輪共 4 個流程斷言通過、24 次模型呼叫；Q1 聚焦驗證另為 1 次。Q3 三次各消耗 input 19033／output 1038 tokens；全體毛利為 input 19017／output 1180 tokens。這些數字包含逐 View Mapping 與既有語意比較，並非新增 Retrieval 的模型呼叫。
-
-Q1 比較呼叫的 input tokens 由 554 增為 833，output tokens 由 55 增為 342；耗時由 6.79 秒增為 32.46 秒。呼叫數仍為一次，但證據較完整會增加輸出成本。這是單題探索，暖機／執行環境也未控制；尚不能據此宣稱全部題目的平均 LLM 成本、端到端 P95 或成本驗收通過。
-
-另執行完整契約容量檢查：`projects/retail/artifacts/retrieval/contract-admission-20261019T061810512058Z.json`。原 395 題共 **1998/1998** 個候選能容納完整契約，Gold **395/395** 能送驗；嚴格 Recall@5 仍是 **394/395**。新增同分候選沒有在完整契約打包時再次漏掉。
-
-本輪未執行三個 CONTRACT-COLUMN／OPERATOR／AGGREGATION 的真實模型探測；未執行全部 395 題端到端 SQL 評估，也未完成其餘 Challenge 的下游確認評估。相關整體 SQL Correctness、Clarification Precision／Recall 與完整 Pipeline P50／P95 皆為「未測」，不能以檢索結果、單元測試或上述小樣本替代。
-
-決策：`ACCEPT_AND_CONTINUE_TESTING`。保留同分修正及已通過小樣本的 Semantic Comparison 修正，繼續待審題庫的人工標註、完整 SQL 回歸與成本驗收。不新增 Retrieval Node、生成模型或依賴；不啟用 Column-first、Grain Diversity、Hybrid、Dynamic Router 或 Slot Extraction。這不是正式環境上線決定，也不是最終驗收完成。
-
-## 交付檔案與後續驗收
-
-| 階段 | 主要檔案 | 狀態 |
-|---|---|---|
-| 現況保存 | 起始工作目錄的原有修改，提交 9ab8778 | 已保存，未丟棄既有工作 |
-| MVP 0 | evaluations/retrieval_benchmark.py、evaluations/data/retail_retrieval_challenge.jsonl、tests/unit/test_retrieval_benchmark.py | 445 題探索對照完成，人工審核未完成 |
-| MVP 1 | src/cpea/infrastructure/retrieval/schema.py、tests/unit/test_retrieval_ties.py | 395/395 Gold Selected，原本 394 題召回不退步 |
-| MVP 2 | src/cpea/workflows/text_to_sql/sql_generation.py、evaluations/retrieval_grain_probe.py、tests/unit/test_semantic_equivalence.py、tests/unit/test_retrieval_grain_probe.py | 特定真實模型流程通過；完整回歸與成本仍待驗收 |
-| 報告 | 本文件、evaluations/README.md、既有診斷報告文字 | 分開呈現候選基準 K、嚴格排名與實際候選 |
-
-50 題人工閱讀清單位於 `projects/retail/artifacts/retrieval/challenge-review-v1.md`。必須由人工核對並核准標註，再將相同版本題庫用於正式檢索與完整 SQL／確認流程評估；既有 395 題也仍是 pending。原題庫預期答案與 YAML 完全未修改。所有原始數據保持在私有 artifacts，沒有資料庫查詢回傳資料。
+全套測試為 **235 passed**。SQL Workflow 檔案已逐位元組確認與 `9ab8778` 相同，額外的比較回應格式、Prompt 與結果 Grain 判斷已移除；原本比較與確認流程仍保留。檢索同分修正及其測試未修改。

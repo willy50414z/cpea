@@ -33,27 +33,17 @@ _LEGACY_COLUMN_TYPES = {
 }
 
 
-class EquivalenceEvidence(BaseModel):
-    grain_or_scope: str = Field(description="逐字引用此 View 的 grain、summary 或 data_scope。")
-    metric_definition: str = Field(description="逐字引用 mapped_fields 中相關指標的 description。")
-
-
 class ViewComparison(BaseModel):
-    decision: Literal["select", "clarify", "equivalent"]
+    decision: Literal["select", "clarify"]
     selected_view: str | None = None
     request_evidence: str | None = None
     contract_evidence: str | None = None
     reason: str = ""
     question: str | None = None
     options: list[ClarificationOption] = Field(default_factory=list)
-    equivalent_views: list[str] = Field(default_factory=list)
-    equivalence_evidence: dict[str, EquivalenceEvidence] = Field(default_factory=dict)
 
 
 COMPARE_SYSTEM = """比較已通過契約與 SQL 驗證的單一 View 方案。只使用問題原文與提供的 YAML 契約證據。
-先比較 query_plan 的結果粒度、業務實體、指標定義、篩選與資料範圍，不以 View 原生 grain 直接代替結果粒度。
-若所有方案業務語意等價，回傳 decision=equivalent、equivalent_views（全部候選）、reason，及 equivalence_evidence（每個 View 的 grain_or_scope 引用其 grain／summary／data_scope，metric_definition 引用 mapped_fields 的指標 description）。所有證據必須逐字引用，不能引用程式產生的 QueryPlan 說明。
-例如明細按訂單加總後，可與原本一張訂單一列的方案等價；但逐筆訂單與逐筆明細、不同期間或母體的聚合不等價。不能僅因欄位同名就宣稱等價。
 若問題明確指出其中一種業務粒度或指標口徑，可選擇該 View；需提供問題原文中的連續片段 request_evidence，及所選契約中的連續片段 contract_evidence。
 若多種解讀仍合理，回傳 decision=clarify、自然語言問題及每個候選 View 的業務選項。不要用技術欄位名作為選項標籤。
 SQL 能編譯或排序較高，不足以證明業務語意正確。不得假設不同口徑的金額等價。"""
@@ -374,15 +364,13 @@ class SQLGenerationWorkflow:
         if len(explicitly_named) == 1:
             return explicitly_named[0], None
         evidence = []
-        for view, selected, compiled, _ in successful:
+        for view, selected, _, _ in successful:
             schema = schemas[view]
             columns = schema["columns"]
             evidence.append({"view": view, "summary": schema["summary"],
                              "grain": schema.get("grain"), "temporal_scope": schema.get("temporal_scope"),
                              "data_scope": schema.get("data_scope"), "term_mappings": schema.get("term_mappings"),
                              "scope_rules": schema.get("scope_rules"),
-                             "query_plan": compiled["response"].query_plan.model_dump(
-                                 mode="json", exclude={"source_views", "supported", "explanation"}),
                              "mapped_fields": [{"request_text": link.fact_text, "role": link.role,
                                                 "aggregation": link.aggregation,
                                                 "description": columns[link.column]["description"]}
@@ -393,7 +381,6 @@ class SQLGenerationWorkflow:
                 "summary": item["summary"], "grain": item["grain"],
                 "temporal_scope": item["temporal_scope"], "data_scope": item["data_scope"],
                 "term_mappings": item["term_mappings"], "scope_rules": item["scope_rules"],
-                "query_plan": item["query_plan"],
                 "mapped_fields": sorted(item["mapped_fields"], key=lambda field:
                                         (field["request_text"], field["role"], field["description"])),
             }, ensure_ascii=False, sort_keys=True)
@@ -424,32 +411,10 @@ class SQLGenerationWorkflow:
             ("human", "問題：{request}\n候選證據：{candidates}"),
         ])
         try:
-            comparison_schema = response_schema_for(ViewComparison)
-            comparison_schema["required"] = ["decision", "reason", "equivalent_views", "equivalence_evidence"]
             result = self._invoke_model(prompt, {"request": request,
-                "candidates": json.dumps(evidence, ensure_ascii=False)}, ViewComparison,
-                response_schema=comparison_schema)
+                "candidates": json.dumps(evidence, ensure_ascii=False)}, ViewComparison)
         except ValueError:
             result = None
-        if (result is not None and result.decision == "equivalent"
-                and len(result.equivalent_views) == len(names)
-                and set(result.equivalent_views) == names
-                and set(result.equivalence_evidence) == names
-                and result.reason.strip() and self._same_result_grain(evidence)):
-            grounded = True
-            for item in evidence:
-                proof = result.equivalence_evidence[item["view"]]
-                grain = item.get("grain")
-                scope_text = json.dumps({"summary": item["summary"], "grain": grain,
-                                         "data_scope": item["data_scope"]}, ensure_ascii=False)
-                fields = [field for field in item["mapped_fields"] if field["role"] == "metric"] or item["mapped_fields"]
-                if (len(proof.grain_or_scope.strip()) < 4 or proof.grain_or_scope not in scope_text
-                        or len(proof.metric_definition.strip()) < 4
-                        or not any(proof.metric_definition in field["description"] for field in fields)):
-                    grounded = False
-                    break
-            if grounded:
-                return successful[0][0], None
         if (result is not None and result.decision == "select" and result.selected_view in names
                 and result.request_evidence and result.request_evidence in request
                 and result.contract_evidence
@@ -475,31 +440,6 @@ class SQLGenerationWorkflow:
                     and result.question else "你要以哪一種業務粒度與口徑查詢？")
         return None, ClarificationRequest(original_request=request,
             contract_fingerprint=self.catalog.fingerprint, question=question, options=options)
-
-    @staticmethod
-    def _same_result_grain(evidence: list[dict[str, Any]]) -> bool:
-        """Gate an LLM equivalence claim using validated output keys/filters.
-
-        This is a necessary condition, not a semantic proof. The existing
-        comparison model must still verify measure definitions and data scope
-        against each contract. Unknown keys never establish equivalence.
-        """
-        signatures = []
-        for item in evidence:
-            plan = item["query_plan"]
-            if plan["group_by"]:
-                keys = plan["group_by"]
-            elif plan["aggregations"] and set(plan["select_columns"]) <= set(plan["aggregations"]):
-                keys = []  # One scalar aggregate row.
-            else:
-                grain = item.get("grain")
-                keys = grain.get("keys") if isinstance(grain, dict) else None
-                if not keys:
-                    return False
-            signatures.append((tuple(sorted(keys)),
-                tuple(sorted(json.dumps(value, ensure_ascii=False, sort_keys=True) for value in plan["filters"])),
-                tuple(sorted(json.dumps(value, ensure_ascii=False, sort_keys=True) for value in plan["having"]))))
-        return len(set(signatures)) == 1
 
     def _link_errors(self, facts: list[QueryFact], draft: SchemaLinkDraft, view: str, request: str) -> list[str]:
         errors: list[str] = []

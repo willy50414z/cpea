@@ -302,7 +302,7 @@ def markdown_workflow_retrieval(result: dict) -> str:
              "使用正式流程的 `retrieve_schema` 節點與目前專案設定，並模擬後續單一 View 的完整契約打包；不呼叫 SQL 生成模型或資料庫。",
              "`target_view` 對拒絕類題目只代表題目所屬 View，不代表應產生 SQL。", "",
              f"檢索：`{result['mode']}`；reranker：`{result['reranker']}`；"
-             f"候選上限：{result['candidate_limit']}；契約指紋：`{result['contract_fingerprint']}`。", "",
+             f"候選基準 K：{result['candidate_limit']}（保留同分時可增加）；契約指紋：`{result['contract_fingerprint']}`。", "",
              f"完整契約可容納：{result['full_contract_fit']}/{result['full_contract_checks']} 次候選打包。", "",
              "| 題目類別 | 題數 | top 1 | top 4 | top 5 | 檢索摘要可容納 | 完整契約可容納 |",
              "|---|---:|---:|---:|---:|---:|---:|"]
@@ -315,7 +315,7 @@ def markdown_workflow_retrieval(result: dict) -> str:
         lines.extend([f"### {row['case_id']}", "", f"- 類別：`{row['category']}`",
                       f"- 目標 View：`{row['target_view']}`",
                       f"- 問題：{row['request']}",
-                      "- 前五名：" + "、".join(f"`{name}`" for name in row["ranked"]), ""])
+                      "- 本次送驗候選：" + "、".join(f"`{name}`" for name in row["ranked"]), ""])
     if not result["misses"]:
         lines.append("無。")
     lines.extend(["", "此結果只量測候選召回與 context 容量；不表示模型最後會選對 View、拒絕不支援需求或產生正確 SQL。", ""])

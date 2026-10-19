@@ -1,5 +1,11 @@
 # 品質評估
 
+## View Retrieval 漸進評估
+
+使用 `python -m evaluations.retrieval_benchmark --experiment-id <實驗名稱> --exploratory` 比較相同 395 題 Regression 與 50 題待審 Challenge 的 Lexical／純 Vector 排名。工具要求乾淨 worktree，記錄版本、全部分數與實際候選，並分開計算嚴格 Recall@5 與含同分的 Gold Selected Recall。未完成題庫人工審核時，不能省略 `--exploratory`。
+
+`python -m evaluations.retrieval_grain_probe --experiment-id <實驗名稱> --exploratory` 可執行小樣本真實模型的 Grain、確認及不支援需求探測；`--case-id` 可指定題目，`--max-model-calls` 限制呼叫數。這些結果不等同完整 SQL 正確率回歸。版本、命令、成本、失敗案例與階段決策見 [漸進改善紀錄](../docs/view_retrieval_improvement.md)。
+
 ## 專案評估
 
 每個私有專案位於 `projects/<project-id>/`，包含 View profile、專屬 `.env`、單一 `evaluations/cases.jsonl` 與執行產物。題庫與答案只用於評分，不傳入模型 context。GMS2 保留原有 reliability 題型；Retail 使用 View Matching 題型，每題記錄 `expected_match`、`expected_sql`、契約與 prompt 指紋，以及獨立的自動驗證和人工審核狀態。Retail manifest 目前為 `approved`；395 題（原有 385 題、3 題仍適用的既有缺口案例及 7 題降冪案例）已通過自動結構驗證，人工審核皆為 `pending`。

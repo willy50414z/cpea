@@ -1,10 +1,14 @@
 # SQL 生成穩定性驗證
 
-流程先由檢索與 context budget 選出候選契約，再依排名逐一將單一 View 契約與完整需求交給模型，回傳欄位、條件、排序與分組對應。當次 JSON Schema enum 只包含該 View 及其欄位；不傳入 samples、題庫或預期答案。Python 檢查原文引用、literal 承接與契約政策，由 compiler 產生唯讀 MSSQL；失敗時試下一個候選，成功就停止。
+流程先由檢索與 context budget 選出候選契約，再依排名逐一將單一 View 契約與完整需求交給模型，回傳欄位、條件、排序與分組對應。當次 JSON Schema enum 只包含該 View 及其欄位；不傳入 samples、題庫或預期答案。Python 檢查原文引用、literal 承接與契約政策，由 compiler 產生唯讀 MSSQL；失敗時試下一個候選。已成功的方案不會中止後續候選驗證，以免漏掉業務意思不同的可行 View。
 
 字面檢索以 View 摘要及最相關的三個欄位描述評分，避免欄位較多的 View 因全文命中較多而佔優勢；需求明示完整 View 名稱時優先保留該 View。模型若選中 View 卻同時宣稱不支援，或將必要的聚合、分組、排序、篩選語意放進 `ignored`，會被退回修正。可用 `uv run --locked python -m evaluations.retail_view_retrieval --report projects/retail/evaluations/view_retrieval_diagnostic.md` 離線比較原本與目前的正確 View 排名；此檢查不呼叫模型，也不代表最終 SQL 正確。
 
-Retail 實際設定使用 vector 初步檢索及 lexical rerank；可用 `uv run --locked python -m evaluations.retail_view_retrieval --mode vector --report projects/retail/evaluations/view_vector_retrieval_diagnostic.md` 分別量測兩階段的排名。初步檢索上限及 rerank 輸出上限不同，診斷時應分開看正確 View 是否被召回、是否在 rerank 後進入模型候選。
+若專案設定使用 vector 初步檢索及 lexical rerank，可用 `uv run --locked python -m evaluations.retail_view_retrieval --mode vector --report projects/retail/evaluations/view_vector_retrieval_diagnostic.md` 分別量測兩階段的排名。初步檢索上限及 rerank 輸出上限不同，診斷時應分開看正確 View 是否被召回、是否在 rerank 後進入模型候選。此機器上的 `projects/retail/.env` 設為 lexical，執行時以實際環境設定為準。
+
+可用 `uv run --locked python -m evaluations.retail_view_retrieval --mode review --report projects/retail/evaluations/view_retrieval_review_experiment.md` 比較 vector rerank、lexical 與兩路候選合併後的 top 4／5／7 覆蓋率，以及批次與逐 View context 容量。此隔離實驗只使用目前 YAML 核對的少量案例，不呼叫 SQL 生成模型。舊有 330 題目前仍為 pending 且契約指紋過期，只作探索性排名報告。
+
+正式流程至少檢查前 5 個候選，逐 View 驗證並比較可編譯方案。隔離實驗的 10 題在 top 5 均涵蓋預期 View；這只能證明目前樣本的召回率。多個方案的粒度、資料範圍和欄位描述若完全相同，可選排名較前者；其他情況會以契約證據比較。已映射的需求詞若只在單一候選的摘要、粒度或欄位描述中出現，可直接選該 View；比對時不把模型複製的需求詞當成契約證據。若問題原文無法明確決定口徑，回應 `status=needs_clarification`、問題及業務選項，不提供 SQL。使用者選擇後須連同原問題、選項 ID 及契約指紋重送；系統重新匹配候選並驗證選項仍有效，確認前不執行資料庫查詢。API `/sql` 與 `/query` 使用相同回應狀態，串流 API 發出 `clarification` 事件；網頁介面顯示可選答案。CLI 可用 `--clarification-option` 與 `--clarification-fingerprint` 重送選擇。逐 View 映射需要多次模型呼叫，須以正式模型量測整體耗時。
 
 `MATCH_PROMPT` 上限為 2,000 字。MATCH v9 使用 Markdown 標題與條列，先要求模型填寫顯示指標及分組維度，再處理篩選與排序；單一候選的 JSON Schema 限制輸出形狀及名稱。驗證失敗後，修正呼叫會收到同一 View 契約、前次映射與具體錯誤；不會把其他 View 的欄位放進同一呼叫。HAVING 條件須有明確聚合或分組後門檻語意；普通資料列門檻不得自行改為 HAVING，錯誤映射會退回修正。候選契約只提供已設定的欄位屬性；v3 View 契約不使用 `default_aggregation`。明確代碼或數值未被承接時拒絕查詢，避免漏掉篩選後擴大查詢；這不是完整的自然語言解析器。
 

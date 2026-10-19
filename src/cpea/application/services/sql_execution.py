@@ -9,7 +9,7 @@ from cpea.application.errors import DependencyUnavailable
 
 from cpea.application.services.sql_generation import SQLGenerationService
 from cpea.infrastructure.llm.context_budget import ContextPacker
-from cpea.application.models.query import ConversationTurn, SQLGenerationResponse
+from cpea.application.models.query import ClarificationChoice, ConversationTurn, SQLGenerationResponse
 from cpea.application.ports.catalog import CatalogProvider
 from cpea.infrastructure.retrieval.schema import SchemaRetriever
 from cpea.config.settings import AssistantSettings
@@ -62,10 +62,11 @@ class SQLExecutionAgent:
         request: str,
         datasource: str | None = None,
         history: list[ConversationTurn] | None = None,
+        clarification_choice: ClarificationChoice | None = None,
     ) -> SQLExecutionResult:
         if self.executor is None or not datasource:
             raise DependencyUnavailable()
-        generation = self.generator.generate(request, history=history)
+        generation = self.generator.generate(request, history=history, clarification_choice=clarification_choice)
         return self.execute_generation(generation, datasource, request=request)
 
     def validate_generation(self, generation: SQLGenerationResponse, request: str) -> None:

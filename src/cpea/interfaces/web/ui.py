@@ -9,6 +9,7 @@ import gradio as gr
 
 from cpea.interfaces.api.schemas import StreamQueryRequest
 from cpea.interfaces.api.streaming import ERROR_MESSAGE, _encode_value
+from cpea.application.models.query import ClarificationChoice
 
 logger = logging.getLogger(__name__)
 
@@ -22,31 +23,51 @@ class SessionGate:
         return SessionGate()
 
 
-def query_updates(runtime, question: str, gate: SessionGate):
-    if not question.strip():
-        yield (gr.skip(),) * 5
+def query_updates(runtime, question: str, gate: SessionGate, pending=None, choice=None):
+    if pending and not choice:
+        yield (gr.skip(),) * 7
+        return
+    if not pending and not question.strip():
+        yield (gr.skip(),) * 7
         return
     if not gate.lock.acquire(blocking=False):
-        yield (gr.skip(),) * 5
+        yield (gr.skip(),) * 7
         return
     sql = ''
     phase = 'validation'
     try:
+        clarification_choice = None
+        if pending:
+            question = pending['original_request']
+            clarification_choice = ClarificationChoice(
+                option_id=choice, contract_fingerprint=pending['contract_fingerprint'])
         question = StreamQueryRequest(request=question).request
         yield ([{'role': 'user', 'content': escape(question)},
                 {'role': 'assistant', 'content': '產生 SQL 中…'}],
                gr.Code(value='', visible=False), gr.Dataframe(value={'headers': [], 'data': []}, visible=False),
-               gr.Textbox(value='', interactive=False), gr.Button(interactive=False))
+               gr.Textbox(value='', interactive=False), gr.Button(interactive=False),
+               pending, gr.Radio(visible=False))
         phase = 'preflight'
         runtime.require_execution()
         service = runtime.staged_query_service()
         phase = 'generation'
-        stage = service.generate(question)
+        stage = service.generate(question, clarification_choice)
+        if stage.generation.status == 'needs_clarification':
+            clarification = stage.generation.clarification
+            options = [(f'{item.label}：{item.description}', item.id) for item in clarification.options]
+            yield ([{'role': 'user', 'content': escape(question)},
+                    {'role': 'assistant', 'content': escape(clarification.question)}],
+                   gr.Code(value='', visible=False), gr.Dataframe(value={'headers': [], 'data': []}, visible=False),
+                   gr.Textbox(value='', interactive=False), gr.Button(interactive=True),
+                   clarification.model_dump(mode='json'),
+                   gr.Radio(choices=options, value=None, visible=True, interactive=True))
+            return
         sql = stage.sql
         yield ([{'role': 'user', 'content': escape(question)},
                 {'role': 'assistant', 'content': 'SQL 已產生，查詢中…'}],
                gr.Code(value=sql, visible=True), gr.Dataframe(value={'headers': [], 'data': []}, visible=False),
-               gr.Textbox(value='', interactive=False), gr.Button(interactive=False))
+               gr.Textbox(value='', interactive=False), gr.Button(interactive=False),
+               None, gr.Radio(visible=False))
         phase = 'execution'
         result = service.execute(question, stage)
         phase = 'encoding'
@@ -61,13 +82,15 @@ def query_updates(runtime, question: str, gate: SessionGate):
             status += f' 已達查詢上限 {result.row_limit} 列，可能仍有其他資料。'
         yield ([{'role': 'user', 'content': escape(question)}, {'role': 'assistant', 'content': status}],
                gr.Code(value=sql, visible=True), gr.Dataframe(value=encoded, visible=bool(execution.rows)),
-               gr.Textbox(value='', interactive=True), gr.Button(interactive=True))
+               gr.Textbox(value='', interactive=True), gr.Button(interactive=True),
+               None, gr.Radio(visible=False))
     except Exception:
         logger.warning('UI query failed at stage=%s', phase)
         yield ([{'role': 'user', 'content': escape(question)}, {'role': 'assistant', 'content': ERROR_MESSAGE}],
                gr.Code(value=sql, visible=bool(sql)),
                gr.Dataframe(value={'headers': [], 'data': []}, visible=False),
-               gr.Textbox(interactive=True), gr.Button(interactive=True))
+               gr.Textbox(interactive=True), gr.Button(interactive=True),
+               None, gr.Radio(visible=False))
     finally:
         gate.lock.release()
 
@@ -75,6 +98,7 @@ def query_updates(runtime, question: str, gate: SessionGate):
 def create_ui(runtime) -> gr.Blocks:
     with gr.Blocks(title='CPEA', analytics_enabled=False, fill_height=True) as ui:
         gate = gr.State(SessionGate(), time_to_live=3600)
+        pending = gr.State(None, time_to_live=3600)
         gr.Markdown('## CPEA\n\n範例問題：\n\n'
                     '- 請查詢品號 GN2300 目前各倉庫的庫存數量，依倉庫名稱排序\n'
                     '- 請列出目前庫存的品號、倉庫名稱與批號，按批號排序\n'
@@ -93,12 +117,14 @@ def create_ui(runtime) -> gr.Blocks:
                       buttons=['copy'], wrap_lines=True, elem_id='cpea-sql')
         table = gr.Dataframe(label='查詢結果', type='array', datatype='str',
                              interactive=False, visible=False, max_height=350, elem_id='cpea-results')
+        choice = gr.Radio(label='請選擇查詢意思', choices=[], visible=False, elem_id='cpea-clarification')
 
-        def respond(question, gate):
-            yield from query_updates(runtime, question, gate)
+        def respond(question, gate, pending, choice):
+            yield from query_updates(runtime, question, gate, pending, choice)
 
         gr.on(triggers=[question.submit, submit.click], fn=respond,
-              inputs=[question, gate], outputs=[chat, sql, table, question, submit],
+              inputs=[question, gate, pending, choice],
+              outputs=[chat, sql, table, question, submit, pending, choice],
               trigger_mode='once', concurrency_limit=None, api_visibility='private',
               show_progress='hidden', stream_every=0)
         ui.load(fn=None, js=files('cpea.interfaces.web').joinpath('input.js').read_text(encoding='utf-8'))

@@ -1,6 +1,6 @@
 """Typed independent query stages; transport framing belongs to the interface."""
 from dataclasses import dataclass
-from cpea.application.models.query import SQLGenerationResponse
+from cpea.application.models.query import ClarificationChoice, SQLGenerationResponse
 from cpea.application.services.sql_execution import SQLExecutionAgent, SQLExecutionResult
 
 
@@ -24,9 +24,10 @@ class StagedQueryService:
         self.agent = agent
         self.datasource = datasource
 
-    def generate(self, request: str) -> SQLStage:
-        generation = self.agent.generator.generate(request, history=[])
-        self.agent.validate_generation(generation, request)
+    def generate(self, request: str, clarification_choice: ClarificationChoice | None = None) -> SQLStage:
+        generation = self.agent.generator.generate(request, history=[], clarification_choice=clarification_choice)
+        if generation.status != "needs_clarification":
+            self.agent.validate_generation(generation, request)
         return SQLStage(generation)
 
     def execute(self, request: str, stage: SQLStage) -> ResultStage:

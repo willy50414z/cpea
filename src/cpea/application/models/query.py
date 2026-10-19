@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from typing import Any, Literal
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, model_validator
 
 from cpea.domain.models import QueryFact, QueryPlan, SchemaLink
 from cpea.workflows.text_to_sql.schemas import SchemaLinkDraft, SQLClauseMapping, SQLClauseMappingV3
@@ -32,7 +32,7 @@ class CandidateAttempt(BaseModel):
 class MappingAttempt(BaseModel):
     attempt_index: int
     mapping: SQLClauseMappingV3 | SQLClauseMapping | None = None
-    outcome: Literal["selected", "rejected", "parse_error"]
+    outcome: Literal["selected", "candidate", "rejected", "parse_error"]
     reason: str | None = None
 
 class QueryTaskTrace(BaseModel):
@@ -54,8 +54,34 @@ class QueryTaskTrace(BaseModel):
     rows_truncated: bool = False
     execution_error: str | None = None
 
+class ClarificationOption(BaseModel):
+    id: str = Field(min_length=1)
+    label: str = Field(min_length=1)
+    description: str = Field(min_length=1)
+
+
+class ClarificationRequest(BaseModel):
+    original_request: str = Field(min_length=1)
+    contract_fingerprint: str = Field(min_length=1)
+    question: str = Field(min_length=1)
+    options: list[ClarificationOption] = Field(min_length=2)
+
+    @model_validator(mode="after")
+    def distinct_options(self):
+        if len({item.id for item in self.options}) != len(self.options):
+            raise ValueError("clarification option ids must be distinct")
+        return self
+
+
+class ClarificationChoice(BaseModel):
+    option_id: str = Field(min_length=1)
+    contract_fingerprint: str = Field(min_length=1)
+
+
 class SQLGenerationResponse(BaseModel):
     supported: bool
+    status: Literal["ready", "needs_clarification", "unsupported"] | None = None
+    clarification: ClarificationRequest | None = None
     sql: str | None = None
     selected_views: list[str] = Field(default_factory=list)
     explanation: str
@@ -68,6 +94,17 @@ class SQLGenerationResponse(BaseModel):
     reranker_latency_ms: float = 0.0
     query_plan: QueryPlan | None = None
     query_trace: QueryTaskTrace | None = None
+
+    @model_validator(mode="after")
+    def coherent_status(self):
+        if self.status is None:
+            self.status = "ready" if self.supported else "unsupported"
+        if self.status == "needs_clarification":
+            if self.supported or self.sql is not None or self.clarification is None:
+                raise ValueError("clarification responses cannot contain SQL")
+        elif self.clarification is not None or self.supported != (self.status == "ready"):
+            raise ValueError("SQL generation status does not match its payload")
+        return self
 
 class AssistantQueryResponse(BaseModel):
     answer: str

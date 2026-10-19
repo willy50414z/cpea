@@ -27,22 +27,22 @@ def create_app(runtime: AssistantRuntime | None = None) -> FastAPI:
             runtime.require_execution()
         except Exception:
             return JSONResponse({'message': ERROR_MESSAGE}, status_code=503)
-        return StreamingResponse(query_events(runtime, request, payload.request),
+        return StreamingResponse(query_events(runtime, request, payload.request, payload.clarification_choice),
             media_type='text/event-stream',
             headers={'Cache-Control': 'no-cache, no-transform', 'X-Accel-Buffering': 'no'})
 
     @router.post('/sql', response_model=SQLGenerationResponse)
     def generate_sql(payload: SQLGenerationRequest):
         try:
-            return runtime.generate(payload.request, payload.history)
+            return runtime.generate(payload.request, payload.history, payload.clarification_choice)
         except (FileNotFoundError, ValueError) as exc:
             raise HTTPException(status_code=422, detail=str(exc)) from exc
 
-    @router.post('/query', response_model=AssistantQueryResponse)
+    @router.post('/query', response_model=AssistantQueryResponse | SQLGenerationResponse)
     def query_assistant(payload: SQLGenerationRequest):
         try:
             runtime.require_execution()
-            return runtime.query(payload.request, payload.history)
+            return runtime.query(payload.request, payload.history, payload.clarification_choice)
         except DependencyUnavailable as exc:
             raise HTTPException(status_code=503, detail={'code': exc.code, 'message': str(exc)}) from exc
         except (FileNotFoundError, ValueError, SQLExecutionError) as exc:

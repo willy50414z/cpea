@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import Any
 
 from cpea.infrastructure.llm.context_budget import ContextPacker
-from cpea.application.models.query import ConversationTurn, SQLGenerationResponse
+from cpea.application.models.query import ClarificationChoice, ConversationTurn, SQLGenerationResponse
 from cpea.workflows.text_to_sql.sql_generation import SQLGenerationWorkflow
 from cpea.application.ports.catalog import CatalogProvider
 from cpea.infrastructure.retrieval.schema import SchemaRetriever
@@ -32,6 +32,7 @@ class SQLGenerationService:
         )
 
     def generate(
-        self, request: str, history: list[ConversationTurn] | None = None
+        self, request: str, history: list[ConversationTurn] | None = None,
+        clarification_choice: ClarificationChoice | None = None,
     ) -> SQLGenerationResponse:
-        return self.workflow.invoke(request, history=history)
+        return self.workflow.invoke(request, history=history, clarification_choice=clarification_choice)

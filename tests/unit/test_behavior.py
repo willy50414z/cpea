@@ -333,7 +333,7 @@ def test_candidates_are_matched_one_view_at_a_time(tmp_path, include_second):
 
 
 @pytest.mark.parametrize('first_fails', [False, True])
-def test_sequential_candidates_stop_on_first_compiled_sql(tmp_path, first_fails):
+def test_sequential_candidates_check_remaining_views_after_first_compiled_sql(tmp_path, first_fails):
     import json
     import yaml
     from cpea.infrastructure.retrieval.documents import build_documents
@@ -366,9 +366,9 @@ def test_sequential_candidates_stop_on_first_compiled_sql(tmp_path, first_fails)
                       context_packer=packer).invoke(QUESTION)
     assert result.supported
     assert result.selected_views == ([other] if first_fails else [VIEW])
-    assert llm.calls == (3 if first_fails else 1)
+    assert llm.calls == (3 if first_fails else 2)
     assert [attempt.outcome for attempt in result.query_trace.candidate_attempts] == (
-        ['validation_failed', 'validation_failed', 'matched'] if first_fails else ['matched'])
+        ['validation_failed', 'validation_failed', 'matched'] if first_fails else ['matched', 'matched'])
 
 
 @pytest.mark.parametrize('change, expected', [

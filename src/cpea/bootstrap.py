@@ -75,16 +75,21 @@ class AssistantRuntime:
         return AnswerSynthesisService(self.llm if llm is None else llm,
             settings=self.settings, context_packer=self.context_packer)
 
-    def generate(self, request, history=None):
-        return self.generation_service().generate(request, history=history)
+    def generate(self, request, history=None, clarification_choice=None):
+        return self.generation_service().generate(request, history=history, clarification_choice=clarification_choice)
 
-    def execute(self, request, history=None):
+    def execute(self, request, history=None, clarification_choice=None):
         self.require_execution()
-        return self.execution_agent().run(request, datasource=self.datasource_id, history=history)
+        return self.execution_agent().run(request, datasource=self.datasource_id, history=history,
+                                          clarification_choice=clarification_choice)
 
-    def query(self, request, history=None):
+    def query(self, request, history=None, clarification_choice=None):
         self.require_execution()
-        execution = self.execute(request, history)
+        agent = self.execution_agent()
+        generation = agent.generator.generate(request, history=history, clarification_choice=clarification_choice)
+        if generation.status == "needs_clarification":
+            return generation
+        execution = agent.execute_generation(generation, self.datasource_id, request=request)
         return self.answer_service().synthesize(request, execution)
 
     def staged_query_service(self):

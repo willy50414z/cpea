@@ -1,0 +1,10 @@
+{"case_id":"RETRIEVAL-DAILY","request":"列出各門市有銷售日期的每日營收","expected_views":["demo_retail.v_daily_sales"],"kind":"clear"}
+{"case_id":"RETRIEVAL-ORDER","request":"列出每筆已完成訂單的訂單編號與訂單金額","expected_views":["demo_retail.v_order_summary"],"kind":"clear"}
+{"case_id":"RETRIEVAL-DETAIL","request":"列出每筆已完成訂單商品明細的訂單編號與商品 SKU","expected_views":["demo_retail.v_sales_detail"],"kind":"clear"}
+{"case_id":"RETRIEVAL-INVENTORY","request":"列出目前各門市各商品的庫存件數","expected_views":["demo_retail.v_inventory_status"],"kind":"clear"}
+{"case_id":"RETRIEVAL-STORE-MONTH","request":"列出各門市每月毛利與月目標","expected_views":["demo_retail.v_store_monthly_kpi"],"kind":"clear"}
+{"case_id":"RETRIEVAL-PRODUCT-MONTH","request":"列出各門市每月每個商品的銷售件數","expected_views":["demo_retail.v_product_monthly"],"kind":"clear"}
+{"case_id":"RETRIEVAL-CUSTOMER","request":"列出每位會員的累計消費金額","expected_views":["demo_retail.v_customer_value"],"kind":"clear"}
+{"case_id":"RETRIEVAL-GRAIN-AMBIGUOUS","request":"列出逐筆銷售的金額","expected_views":["demo_retail.v_order_summary","demo_retail.v_sales_detail"],"kind":"ambiguous"}
+{"case_id":"RETRIEVAL-DAY-SYNONYM","request":"照有成交的那一天和門市分組，顯示已完成訂單的銷售淨額總和","expected_views":["demo_retail.v_daily_sales"],"kind":"clear"}
+{"case_id":"RETRIEVAL-DAY-COMPLEX","request":"整理報表時照有成交的那一天、南北區域別、哪一家店分組，顯示折扣後進帳合計與完成了幾筆單的單列最大值，限定門市的編號 IN 1、2、3且成交商品有幾件 >= 1且賺到的毛利 >= 100，依有成交的那一天排序。","expected_views":["demo_retail.v_daily_sales"],"kind":"clear"}

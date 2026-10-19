@@ -4,9 +4,13 @@ import json
 import sys
 from cpea.bootstrap import AssistantRuntime
 from cpea.application.errors import DependencyUnavailable
+from cpea.application.models.query import ClarificationChoice
 
 def compact_generation(result):
-    return {key: getattr(result, key) for key in ('supported', 'sql', 'selected_views', 'explanation', 'limitations')}
+    compact = {key: getattr(result, key) for key in
+               ('supported', 'status', 'sql', 'selected_views', 'explanation', 'limitations')}
+    compact['clarification'] = result.clarification.model_dump(mode='json') if result.clarification else None
+    return compact
 
 def main(argv=None, *, runtime: AssistantRuntime | None = None):
     parser = argparse.ArgumentParser(description='CPEA governed single-view SQL assistant')
@@ -15,23 +19,32 @@ def main(argv=None, *, runtime: AssistantRuntime | None = None):
     parser.add_argument('--answer', action='store_true')
     parser.add_argument('--verbose', action='store_true')
     parser.add_argument('--env-file', help='Explicit env file; no ancestor search')
+    parser.add_argument('--clarification-option', help='Option ID returned by the previous clarification')
+    parser.add_argument('--clarification-fingerprint', help='Contract fingerprint returned with that option')
     args = parser.parse_args(argv)
     if args.answer and not args.execute:
         parser.error('--answer requires --execute')
+    if bool(args.clarification_option) != bool(args.clarification_fingerprint):
+        parser.error('--clarification-option and --clarification-fingerprint must be provided together')
     try:
         runtime = runtime if runtime is not None else AssistantRuntime.from_env(args.env_file)
+        choice = (ClarificationChoice(option_id=args.clarification_option,
+                                      contract_fingerprint=args.clarification_fingerprint)
+                  if args.clarification_option else None)
         if args.execute:
             runtime.require_execution()
-            execution = runtime.execute(args.request)
-            result = execution.generation
-            print(json.dumps(result.model_dump() if args.verbose else compact_generation(result), ensure_ascii=False, default=str))
+        result = runtime.generate(args.request, clarification_choice=choice)
+        print(json.dumps(result.model_dump() if args.verbose else compact_generation(result), ensure_ascii=False, default=str))
+        if result.status == 'needs_clarification' or not result.supported:
+            return 2
+        if args.execute:
+            execution = runtime.execution_agent().execute_generation(
+                result, runtime.datasource_id, request=args.request)
             print(json.dumps({'execution_attempts': execution.attempts, 'repaired': execution.repaired,
                 'columns': execution.columns, 'rows': execution.rows, 'rows_truncated': execution.rows_truncated}, ensure_ascii=False, default=str))
             if args.answer:
                 print(runtime.answer_service().synthesize(args.request, execution).model_dump_json())
             return 0
-        result = runtime.generate(args.request)
-        print(json.dumps(result.model_dump() if args.verbose else compact_generation(result), ensure_ascii=False, default=str))
         return 0 if result.supported and result.sql else 2
     except DependencyUnavailable as exc:
         print(f'{exc.code}: {exc}', file=sys.stderr)

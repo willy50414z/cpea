@@ -141,7 +141,7 @@ class SchemaRetriever:
         store.add_documents(self.documents)
         return store
 
-    def retrieve(self, query: str) -> RetrievalResult:
+    def retrieve(self, query: str, *, limit: int | None = None) -> RetrievalResult:
         normalized_query = preprocess_query(query)
         retrieval_started = time.perf_counter()
 
@@ -158,7 +158,10 @@ class SchemaRetriever:
         rerank_started = time.perf_counter()
         reranked = self._rerank(normalized_query, candidates)
         rerank_ms = (time.perf_counter() - rerank_started) * 1000
-        selected = reranked[: min(self.settings.rerank_top_k, len(reranked))]
+        candidate_limit = self.settings.rerank_top_k if limit is None else limit
+        if candidate_limit < 1:
+            raise ValueError("retrieval limit must be positive")
+        selected = reranked[: min(candidate_limit, len(reranked))]
         logger.info(
             "assistant retrieval mode=%s candidates=%d selected=%d retrieval_ms=%.1f reranker_ms=%.1f",
             self.settings.retrieval_mode,

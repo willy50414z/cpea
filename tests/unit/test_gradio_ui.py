@@ -71,7 +71,7 @@ def test_session_gate_rejects_duplicate_and_isolates_sessions(tmp_path):
     try:
         assert started.wait(5)
         duplicate = list(query_updates(runtime, QUESTION, gate))
-        assert duplicate == [tuple({'__type__': 'update'} for i in range(5))]
+        assert duplicate == [tuple({'__type__': 'update'} for i in range(7))]
         assert len(calls) == 1
         import copy
         other = copy.deepcopy(gate)
@@ -86,7 +86,7 @@ def test_session_gate_rejects_duplicate_and_isolates_sessions(tmp_path):
 
 def test_blank_does_not_replace_current_result_or_call_backend(tmp_path):
     runtime = make_runtime(tmp_path)
-    assert list(query_updates(runtime, ' \n ', SessionGate())) == [tuple({'__type__': 'update'} for i in range(5))]
+    assert list(query_updates(runtime, ' \n ', SessionGate())) == [tuple({'__type__': 'update'} for i in range(7))]
     assert runtime.llm.calls == 0
 
 

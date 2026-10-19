@@ -4,15 +4,17 @@ from __future__ import annotations
 
 import json
 import re
-from typing import Any, TypedDict
+from typing import Any, Literal, TypedDict
 
 from langchain_core.documents import Document
 from langchain_core.prompts import ChatPromptTemplate
 from langgraph.graph import END, START, StateGraph
+from pydantic import BaseModel, Field
 
 from cpea.infrastructure.llm.context_budget import ContextPacker
 from cpea.infrastructure.llm.factory import bind_response_schema, response_schema_for
-from cpea.application.models.query import CandidateAttempt, ConversationTurn, MappingAttempt, QueryTaskTrace, SourceReference, SQLGenerationResponse
+from cpea.application.models.query import (CandidateAttempt, ClarificationChoice, ClarificationOption,
+    ClarificationRequest, ConversationTurn, MappingAttempt, QueryTaskTrace, SourceReference, SQLGenerationResponse)
 from cpea.workflows.text_to_sql.schemas import SQLClauseMapping, SchemaLinkDraft
 from cpea.domain.models import HavingFilter, QueryFact, QueryFilter, QueryPlan, SchemaLink
 from cpea.application.ports.catalog import CatalogProvider
@@ -31,8 +33,25 @@ _LEGACY_COLUMN_TYPES = {
 }
 
 
+class ViewComparison(BaseModel):
+    decision: Literal["select", "clarify"]
+    selected_view: str | None = None
+    request_evidence: str | None = None
+    contract_evidence: str | None = None
+    reason: str = ""
+    question: str | None = None
+    options: list[ClarificationOption] = Field(default_factory=list)
+
+
+COMPARE_SYSTEM = """比較已通過契約與 SQL 驗證的單一 View 方案。只使用問題原文與提供的 YAML 契約證據。
+若問題明確指出其中一種業務粒度或指標口徑，可選擇該 View；需提供問題原文中的連續片段 request_evidence，及所選契約中的連續片段 contract_evidence。
+若多種解讀仍合理，回傳 decision=clarify、自然語言問題及每個候選 View 的業務選項。不要用技術欄位名作為選項標籤。
+SQL 能編譯或排序較高，不足以證明業務語意正確。不得假設不同口徑的金額等價。"""
+
+
 class SQLGenerationState(TypedDict, total=False):
     request: str
+    clarification_choice: ClarificationChoice
     history: list[ConversationTurn]
     history_context: str
     candidates: list[RetrievalCandidate]
@@ -73,8 +92,10 @@ class SQLGenerationWorkflow:
         self.match_prompt = match_prompt or load_match_prompt()
         self.graph = self._build_graph()
 
-    def invoke(self, request: str, history: list[ConversationTurn] | None = None) -> SQLGenerationResponse:
-        state = self.graph.invoke({"request": request, "history": history or []})
+    def invoke(self, request: str, history: list[ConversationTurn] | None = None,
+               clarification_choice: ClarificationChoice | None = None) -> SQLGenerationResponse:
+        state = self.graph.invoke({"request": request, "history": history or [],
+                                   **({"clarification_choice": clarification_choice} if clarification_choice else {})})
         return state["response"]
 
     def _build_graph(self):
@@ -96,32 +117,43 @@ class SQLGenerationWorkflow:
     def _retrieve_schema(self, state: SQLGenerationState) -> dict[str, Any]:
         # 標準化與清理request
         # 根據doc撈出可用的views
-        result = self.retriever.retrieve(state["request"])
+        if isinstance(self.retriever, SchemaRetriever):
+            result = self.retriever.retrieve(state["request"], limit=max(5, self.settings.rerank_top_k))
+        else:
+            result = self.retriever.retrieve(state["request"])
         # 根據歷史資訊篩選最近且最重要的加入context
         history_context = self.context_packer.pack_history(state["request"], state.get("history", []))
         # 根據context budget設定,篩選並打包成PackedContext dto
-        packed = self.context_packer.pack_documents(
-            system_prompt=self.match_prompt.system, question=state["request"],
-            history_text=history_context, candidates=result.candidates,
-        )
-        if not packed.sources:
+        admitted: list[RetrievalCandidate] = []
+        sources: list[SourceReference] = []
+        context_tokens = 0
+        document_budget = 0
+        for candidate in result.candidates:
+            packed = self.context_packer.pack_documents(
+                system_prompt=self.match_prompt.system, question=state["request"],
+                history_text=history_context, candidates=[candidate],
+            )
+            document_budget = packed.document_budget
+            if packed.sources:
+                admitted.append(candidate)
+                sources.extend(packed.sources)
+                context_tokens = max(context_tokens, packed.context_tokens)
+        if not admitted:
             return {"rejection_stage": "retrieval", "response": self._unsupported(
                 "Context budget 無法容納任何候選 schema。", ["請提高 context window 或縮短 schema 文件。"],
                 retrieval_latency_ms=result.retrieval_latency_ms,
                 reranker_latency_ms=result.reranker_latency_ms,
-                context_budget=packed.document_budget,
+                context_budget=document_budget,
             )}
-        by_id = {item.document.metadata["document_id"]: item for item in result.candidates}
-        admitted = [by_id[source.document_id] for source in packed.sources]
         return {
             "history_context": history_context,
-            "candidates": admitted[:self.settings.rerank_top_k],
+            "candidates": admitted,
             "retrieved_candidates": [self.context_packer.source_reference(item) for item in result.candidates],
-            "sources": packed.sources,
+            "sources": sources,
             "retrieval_latency_ms": result.retrieval_latency_ms,
             "reranker_latency_ms": result.reranker_latency_ms,
-            "context_tokens": packed.context_tokens,
-            "context_budget": packed.document_budget,
+            "context_tokens": context_tokens,
+            "context_budget": document_budget,
         }
 
     def _match_candidates(self, state: SQLGenerationState) -> dict[str, Any]:
@@ -144,6 +176,7 @@ class SQLGenerationWorkflow:
         ])
         facts: list[QueryFact] = []
         mapping_attempts: list[MappingAttempt] = []
+        successful: list[tuple[str, dict[str, Any], dict[str, Any], int]] = []
         failure_stage = "schema_linking"
         pending = [(candidate, None) for candidate in detailed]
         while pending:
@@ -270,10 +303,10 @@ class SQLGenerationWorkflow:
                             "context_tokens": packed.context_tokens, "context_budget": packed.document_budget}
                 compiled = self._compile_query({**state, **selected})
                 if compiled["response"].supported:
-                    mapping_attempts[-1].outcome = "selected"
+                    mapping_attempts[-1].outcome = "candidate"
                     attempts.append(CandidateAttempt(view=view, outcome="matched", facts=facts, links=draft.links))
-                    return {**selected, **compiled, "candidate_attempts": attempts,
-                            "mapping_attempts": mapping_attempts}
+                    successful.append((view, selected, compiled, len(mapping_attempts) - 1))
+                    continue
                 errors = compiled["response"].limitations
                 failure_stage = compiled["rejection_stage"]
                 outcome = "validation_failed"
@@ -288,12 +321,125 @@ class SQLGenerationWorkflow:
                                    "Fix the validation errors without dropping required request items. "
                                    "If the View cannot satisfy the request, return table=null with a specific reason.",
                 }))
+        if successful:
+            choice = state.get("clarification_choice")
+            if choice and choice.contract_fingerprint != self.catalog.fingerprint:
+                return {"candidate_attempts": attempts, "mapping_attempts": mapping_attempts,
+                        "rejection_stage": "schema_selection", "response": self._unsupported(
+                            "View 契約已更新，請重新提出問題。", ["待確認選項的契約版本已過期。"])}
+            selected_view: str | None = successful[0][0] if len(successful) == 1 else None
+            clarification: ClarificationRequest | None = None
+            if len(successful) > 1:
+                selected_view, clarification = self._compare_valid_candidates(request, schemas, successful)
+            if choice:
+                if clarification is None or choice.option_id not in {item.id for item in clarification.options}:
+                    return {"candidate_attempts": attempts, "mapping_attempts": mapping_attempts,
+                            "rejection_stage": "schema_selection", "response": self._unsupported(
+                                "待確認選項已失效，請重新提出問題。", ["選項不在目前有效的歧義候選中。"])}
+                selected_view = choice.option_id
+                clarification = None
+            if clarification is not None:
+                return {"candidate_attempts": attempts, "mapping_attempts": mapping_attempts,
+                        "rejection_stage": "clarification", "response": SQLGenerationResponse(
+                            supported=False, status="needs_clarification", explanation=clarification.question,
+                            clarification=clarification, retrieved_candidates=state.get("retrieved_candidates", []),
+                            retrieval_latency_ms=state.get("retrieval_latency_ms", 0.0),
+                            reranker_latency_ms=state.get("reranker_latency_ms", 0.0))}
+            winner = next(item for item in successful if item[0] == selected_view)
+            mapping_attempts[winner[3]].outcome = "selected"
+            return {**winner[1], **winner[2], "candidate_attempts": attempts,
+                    "mapping_attempts": mapping_attempts}
         reasons = [f"{attempt.view}: {', '.join(attempt.errors or attempt.unresolved)}" for attempt in attempts]
         return {"request_facts": facts, "candidate_attempts": attempts,
                 "mapping_attempts": mapping_attempts, "rejection_stage": failure_stage,
                 "response": self._unsupported(
                     "單一查詢任務只支援一個 View。" if failure_stage == "schema_selection"
                     else "沒有單一 View 能完整承接需求。", reasons)}
+
+    def _compare_valid_candidates(self, request: str, schemas: dict[str, dict[str, Any]],
+                                  successful: list[tuple[str, dict[str, Any], dict[str, Any], int]]
+                                  ) -> tuple[str | None, ClarificationRequest | None]:
+        names = {item[0] for item in successful}
+        explicitly_named = [name for name in names if name in request]
+        if len(explicitly_named) == 1:
+            return explicitly_named[0], None
+        evidence = []
+        for view, selected, _, _ in successful:
+            schema = schemas[view]
+            columns = schema["columns"]
+            evidence.append({"view": view, "summary": schema["summary"],
+                             "grain": schema.get("grain"), "temporal_scope": schema.get("temporal_scope"),
+                             "data_scope": schema.get("data_scope"), "term_mappings": schema.get("term_mappings"),
+                             "scope_rules": schema.get("scope_rules"),
+                             "mapped_fields": [{"request_text": link.fact_text, "role": link.role,
+                                                "aggregation": link.aggregation,
+                                                "description": columns[link.column]["description"]}
+                                               for link in selected["links"].links
+                                               if link.column in columns]})
+        def signature(item: dict[str, Any]) -> str:
+            return json.dumps({
+                "summary": item["summary"], "grain": item["grain"],
+                "temporal_scope": item["temporal_scope"], "data_scope": item["data_scope"],
+                "term_mappings": item["term_mappings"], "scope_rules": item["scope_rules"],
+                "mapped_fields": sorted(item["mapped_fields"], key=lambda field:
+                                        (field["request_text"], field["role"], field["description"])),
+            }, ensure_ascii=False, sort_keys=True)
+        if len({signature(item) for item in evidence}) == 1:
+            return successful[0][0], None
+        # A mapped request phrase that appears in only one contract is stronger
+        # evidence than the model's general preference between compatible Views.
+        contract_texts = {item["view"]: json.dumps({
+            "summary": item["summary"], "grain": item["grain"],
+            "temporal_scope": item["temporal_scope"], "data_scope": item["data_scope"],
+            "term_mappings": item["term_mappings"], "scope_rules": item["scope_rules"],
+            "mapped_field_descriptions": [field["description"] for field in item["mapped_fields"]],
+        }, ensure_ascii=False) for item in evidence}
+        exact_matches = set()
+        for item in evidence:
+            view = item["view"]
+            if any(len(field["request_text"]) >= 4
+                   and field["request_text"] in request
+                   and field["request_text"] in contract_texts[view]
+                   and all(field["request_text"] not in text for other_view, text in contract_texts.items()
+                           if other_view != view)
+                   for field in item["mapped_fields"]):
+                exact_matches.add(view)
+        if len(exact_matches) == 1:
+            return exact_matches.pop(), None
+        prompt = ChatPromptTemplate.from_messages([
+            ("system", COMPARE_SYSTEM),
+            ("human", "問題：{request}\n候選證據：{candidates}"),
+        ])
+        try:
+            result = self._invoke_model(prompt, {"request": request,
+                "candidates": json.dumps(evidence, ensure_ascii=False)}, ViewComparison)
+        except ValueError:
+            result = None
+        if (result is not None and result.decision == "select" and result.selected_view in names
+                and result.request_evidence and result.request_evidence in request
+                and result.contract_evidence
+                and result.contract_evidence in contract_texts[result.selected_view]
+                and result.request_evidence in contract_texts[result.selected_view]
+                and all(result.request_evidence not in text for view, text in contract_texts.items()
+                        if view != result.selected_view)):
+            return result.selected_view, None
+        labels = {item["view"]: item for item in evidence}
+        def grain_label(item: dict[str, Any]) -> str:
+            grain = item.get("grain")
+            if isinstance(grain, dict):
+                return str(grain.get("description") or item["summary"])
+            return str(grain or item["summary"])
+        default_options = [ClarificationOption(id=view,
+            label=grain_label(labels[view]),
+            description=labels[view]["summary"]) for view, *_ in successful]
+        options = default_options
+        if (result is not None and result.decision == "clarify" and len(result.options) == len(names)
+                and {item.id for item in result.options} == names):
+            options = result.options
+        question = (result.question if result is not None and result.decision == "clarify"
+                    and result.question else "你要以哪一種業務粒度與口徑查詢？")
+        return None, ClarificationRequest(original_request=request,
+            contract_fingerprint=self.catalog.fingerprint, question=question, options=options)
 
     def _link_errors(self, facts: list[QueryFact], draft: SchemaLinkDraft, view: str, request: str) -> list[str]:
         errors: list[str] = []

@@ -29,16 +29,19 @@ def event_frame(event: str, payload: dict) -> str:
     return f'event: {event}\ndata: {body}\n\n'
 
 
-async def query_events(runtime, request, question: str):
+async def query_events(runtime, request, question: str, clarification_choice=None):
     phase = 'generation'
     try:
         if await request.is_disconnected():
             return
         def generate():
             service = runtime.staged_query_service()
-            return service, service.generate(question)
+            return service, service.generate(question, clarification_choice)
         service, sql_stage = await run_in_threadpool(generate)
         if await request.is_disconnected():
+            return
+        if sql_stage.generation.status == 'needs_clarification':
+            yield event_frame('clarification', sql_stage.generation.clarification.model_dump(mode='json'))
             return
         yield event_frame('sql', {'sql': sql_stage.sql})
         # StreamingResponse awaits ASGI send before resuming this iterator.

@@ -44,7 +44,7 @@ def validate_decomposition(draft: DecompositionDraft, catalog: CatalogProvider) 
             errors.append(f'{task.task_id}: request has unresolved inputs')
         if any(view != task.view and view in task.request for view in views):
             errors.append(f'{task.task_id}: request refers to another view')
-        used = set(task.group_by + task.output_grain + task.attributes) | set(task.metrics)
+        used = set(task.group_by + task.output_grain + task.attributes + task.metadata_collections) | set(task.metrics)
         filters = list(task.filters)
         metrics = list(task.metrics.items())
         for metric in task.conditional_metrics:
@@ -55,6 +55,15 @@ def validate_decomposition(draft: DecompositionDraft, catalog: CatalogProvider) 
         if not used <= fields:
             errors.append(f'{task.task_id}: used column absent from required_columns')
             continue
+        for column in task.metadata_collections:
+            contract = catalog.field_contract(task.view, column)
+            if contract['type'] not in ('date', 'string') or contract.get('role') == 'measure':
+                errors.append(f'{task.task_id}: metadata collections require date or string columns')
+            if 'select' not in contract.get('capabilities', []):
+                errors.append(f'{task.task_id}: metadata collection output forbidden')
+        if (len(set(task.metadata_collections)) != len(task.metadata_collections)
+                or set(task.metadata_collections) & (set(task.group_by + task.output_grain + task.attributes) | {c for c, _ in metrics})):
+            errors.append(f'{task.task_id}: metadata collections must be unique and separate from output fields')
         for column, aggregation in metrics:
             if aggregation not in catalog.field_contract(task.view, column).get('aggregations', []):
                 errors.append(f'{task.task_id}: aggregation forbidden for {column}')
@@ -79,7 +88,7 @@ def validate_decomposition(draft: DecompositionDraft, catalog: CatalogProvider) 
                 if not values:errors.append(f'{task.task_id}: empty filter values')
                 for value in values:
                     if not _valid_value(value,field_type):errors.append(f'{task.task_id}: filter value type mismatch')
-        if metrics and set(task.group_by) != set(task.output_grain):
+        if (metrics or task.metadata_collections or task.group_by) and set(task.group_by) != set(task.output_grain):
             errors.append(f'{task.task_id}: aggregate grain differs from group_by')
         if not metrics and not task.group_by:
             grain=views[task.view].policy.get('grain')
@@ -106,6 +115,19 @@ def validate_decomposition(draft: DecompositionDraft, catalog: CatalogProvider) 
     integration = draft.integration
     if integration is None or integration.anchor_task not in tasks:
         return errors + ['integration requires a valid anchor']
+    anchor = tasks[integration.anchor_task]
+    fixed = {f.column for f in anchor.filters if f.operator == '='}
+    if not set(integration.output_grain) <= set(anchor.output_grain) | fixed:
+        errors.append('final output grain must come from the anchor grain')
+    removed = set(anchor.output_grain) - fixed - set(integration.output_grain)
+    definition = views.get(anchor.view)
+    source_grain = definition.policy.get('grain', {}) if definition else {}
+    source_keys = set(source_grain.get('keys') or []) if isinstance(source_grain, dict) else set()
+    unique = bool(source_keys) and source_keys - fixed <= set(integration.output_grain)
+    prepared = any(p.task_id == anchor.task_id and p.kind in ('aggregate', 'nest', 'pivot')
+                   and set(p.keys) == set(integration.output_grain) for p in integration.preparation)
+    if removed and not unique and not prepared:
+        errors.append('reducing the anchor grain requires uniqueness proof or preparation')
     connected = {integration.anchor_task}
     neighbors = {name:set() for name in tasks}
     for prep in integration.preparation:
@@ -177,8 +199,12 @@ def prepare_requests(draft: DecompositionDraft, catalog: CatalogProvider) -> lis
         body = {'view':task.view,'required_columns':task.required_columns,
                 'filters':[f.model_dump() for f in task.filters], 'metrics':task.metrics,
                 'conditional_metrics':[m.model_dump() for m in task.conditional_metrics],
+                'metadata_collections':task.metadata_collections,
                 'attributes':task.attributes,'group_by':task.group_by,'output_grain':task.output_grain}
-        request = '只執行以下單一 View 資料查詢；保留全部條件及指定輸出粒度，不作跨來源整合或業務決策。\n' + json.dumps(body,ensure_ascii=False)
+        instruction = '只執行以下單一 View 資料查詢；保留全部條件及指定輸出粒度，不作跨來源整合或業務決策。'
+        if task.metadata_collections:
+            instruction += ' metadata_collections 為每組完整 DISTINCT 值集合，不增加分組，不任取單值。日期集合僅記錄資料時間，不代表日期一致；混合日期不得宣稱同日總額，仍須遵守契約的跨日禁止加總限制。'
+        request = instruction + '\n' + json.dumps(body,ensure_ascii=False)
         if len(request)>4000:
             raise ValueError('prepared request exceeds SQL API length limit')
         prepared.append(PreparedSQLRequest(task_id=task.task_id,view=task.view,

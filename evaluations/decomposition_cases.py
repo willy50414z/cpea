@@ -30,7 +30,7 @@ def load_decomposition_cases(path: Path,catalog) -> list[dict]:
                 if source['view'] not in views:
                     raise ValueError('expected view is outside catalog')
                 fields=set(source['required_columns'])
-                used=set(source.get('group_by',[])+source['output_grain']+source.get('attributes',[]))
+                used=set(source.get('group_by',[])+source['output_grain']+source.get('attributes',[])+source.get('metadata_collections',[]))
                 used.update(source.get('metrics',{}))
                 used.update(f['column'] for f in source.get('filters',[]))
                 for metric in source.get('conditional_metrics',[]):

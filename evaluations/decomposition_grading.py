@@ -68,6 +68,7 @@ def _task_score(expected,actual,catalog):
             'metrics':all(equivalent_aggregation(c,a,actual_metrics.get(c)) for c,a in expected.get('metrics',{}).items()),
             'conditional_metrics':all(any(e['column']==a['column'] and equivalent_aggregation(e['column'],e['aggregation'],a['aggregation'])
                  and _filters(e['conditions'])==_filters(a['conditions']) for a in conditions) for e in expected_conditions),
+            'metadata':set(expected.get('metadata_collections',[]))<=set(actual.metadata_collections),
             'grain':grain_match}
 
 
@@ -84,7 +85,7 @@ def grade_decomposition(case,response,catalog) -> dict:
     result['canonical_views_match']=sorted(t['view'] for t in expected)==sorted(t.view for t in actual)
     if len(expected)!=len(actual) or len(actual)>8:return result
     best=None
-    checks=('view','columns','filters','metrics','conditional_metrics','grain')
+    checks=('view','columns','filters','metrics','conditional_metrics','metadata','grain')
     for ordering in permutations(actual):
         scores=[]
         for task,match in zip(expected,ordering):
@@ -113,8 +114,22 @@ def grade_decomposition(case,response,catalog) -> dict:
             pair_keys=set(left['output_grain']) & set(right['output_grain']) & keys
             if not pair_keys or set(edge.left_keys)!=pair_keys or set(edge.right_keys)!=pair_keys:
                 keys_ok=False
-        fixed={f['column'] for f in next(e for e in expected if e['task_id']==oracle['anchor_task']).get('filters',[]) if f['operator']=='='}
-        output_ok=set(integration.output_grain)-fixed==set(anchor.output_grain)-fixed
+        expected_anchor=next(e for e in expected if e['task_id']==oracle['anchor_task'])
+        fixed={f.column for f in anchor.filters if f.operator=='='}
+        definition=next((v for v in catalog.views() if v.name==anchor.view),None)
+        source_grain=definition.policy.get('grain',{}) if definition else {}
+        source_keys=set(source_grain.get('keys') or []) if isinstance(source_grain,dict) else set()
+        required_grain=set(expected_anchor['output_grain'])-fixed
+        final_grain=set(integration.output_grain)-fixed
+        anchor_grain=set(anchor.output_grain)-fixed
+        # Apply the task-level uniqueness proof to final output too. Removing a
+        # required dimension is never equivalent; extra dimensions need proof.
+        anchor_ok=(anchor_grain==required_grain or
+                   (required_grain<=anchor_grain and bool(source_keys)
+                    and source_keys-fixed<=required_grain))
+        output_ok=anchor_ok and final_grain<=anchor_grain and (final_grain==required_grain or
+                   (required_grain<=final_grain and bool(source_keys)
+                    and source_keys-fixed<=required_grain))
         result['integration_keys_match']=bool(keys_ok and integration.anchor_task==anchor.task_id
                     and output_ok and all(e.mode==oracle['mode'] for e in edges) and not validate_decomposition(draft,catalog))
     payloads=response.prepared_requests

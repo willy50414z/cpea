@@ -29,6 +29,7 @@ class PlanningTask(PlanningModel):
     metrics: dict[str, Literal['sum', 'count', 'count_distinct', 'avg', 'min', 'max']] = Field(default_factory=dict)
     conditional_metrics: list[ConditionalMetric] = Field(default_factory=list)
     attributes: list[str] = Field(default_factory=list)
+    metadata_collections: list[str] = Field(default_factory=list, description='Date/string provenance collected as DISTINCT values at output_grain; never an extra grouping dimension or a measure.')
     group_by: list[str] = Field(default_factory=list)
     output_grain: list[str] = Field(min_length=1)
     depends_on: list[str] = Field(default_factory=list)

@@ -182,3 +182,65 @@ def test_extra_snapshot_dimension_requires_source_key_proof(tmp_path):
     data.update(output_grain=['store_id','snapshot_date'],group_by=['store_id','snapshot_date'],metrics={'stock_qty':'sum'})
     task=model.model_validate({**draft(),'tasks':[data]}).tasks[0]
     assert not _task_score(expected,task,catalog)['grain']
+
+
+@pytest.mark.parametrize('final_grain,accepted', [
+    (['store_id', 'product_id'], True),
+    (['store_id', 'product_id', 'snapshot_date'], True),
+    (['store_id'], False),
+    (['store_id', 'product_id', 'made_up'], False),
+    (['store_id', 'product_id', 'order_date'], False),
+])
+def test_final_grain_uses_the_same_source_key_proof_as_task_grain(tmp_path, final_grain, accepted):
+    from evaluations.decomposition_grading import grade_decomposition
+    m, r, prepare = response()
+    catalog = catalog_at(tmp_path)
+    case = case_for(catalog)
+    data = draft()
+    # The declared store/product key determines a raw row's snapshot date.
+    data['tasks'][0]['required_columns'].append('snapshot_date')
+    data['tasks'][0]['output_grain'].append('snapshot_date')
+    data['integration']['output_grain'] = final_grain
+    plan = m.model_validate(data)
+    from cpea.workflows.task_decomposition.validation import validate_decomposition
+    valid = not validate_decomposition(plan, catalog)
+    result = r(status='ready' if valid else 'error', contract_fingerprint=catalog.fingerprint,
+               draft=plan, prepared_requests=prepare(plan, catalog) if valid else [])
+    score = grade_decomposition(case, result, catalog)
+    assert score['equivalent_tasks_match']
+    assert score['integration_keys_match'] is accepted
+
+
+def test_final_grain_cannot_drop_a_snapshot_without_uniqueness_proof(tmp_path):
+    from evaluations.decomposition_grading import grade_decomposition
+    m, r, prepare = response()
+    catalog = catalog_at(tmp_path)
+    case = case_for(catalog)
+    case['expected_tasks'][0].update(group_by=['store_id'], output_grain=['store_id'],
+                                     metrics={'stock_qty': 'sum'}, attributes=[])
+    data = draft()
+    data['tasks'][0].update(required_columns=['store_id', 'snapshot_date', 'stock_qty'],
+                           group_by=['store_id', 'snapshot_date'], output_grain=['store_id', 'snapshot_date'],
+                           metrics={'stock_qty': 'sum'}, attributes=[])
+    data['integration']['edges'][0].update(left_keys=['store_id'], right_keys=['store_id'], cardinality='many_to_one')
+    data['integration']['preparation'] = [dict(task_id='sales', kind='nest', keys=['store_id'], description='保留商品資料')]
+    data['integration']['output_grain'] = ['store_id']
+    case['expected_integration']['keys'] = ['store_id']
+    plan = m.model_validate(data)
+    with pytest.raises(ValueError):
+        prepare(plan, catalog)
+    result = r(status='error', contract_fingerprint=catalog.fingerprint, draft=plan)
+    assert not grade_decomposition(case, result, catalog)['integration_keys_match']
+
+
+def test_required_metadata_must_be_preserved_as_a_collection(tmp_path):
+    from evaluations.decomposition_grading import _task_score
+    m, _, _ = response()
+    catalog = catalog_at(tmp_path)
+    data = draft()
+    data['tasks'][0]['required_columns'].append('snapshot_date')
+    expected = {**data['tasks'][0], 'metadata_collections': ['snapshot_date']}
+    actual = m.model_validate(data).tasks[0]
+    assert not _task_score(expected, actual, catalog)['metadata']
+    actual.metadata_collections = ['snapshot_date']
+    assert _task_score(expected, actual, catalog)['metadata']

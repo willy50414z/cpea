@@ -98,3 +98,107 @@ def test_fixed_source_key_proves_redundant_output_dimension_is_single_row(tmp_pa
     data['integration']['edges'][0].update(left_keys=['store_id'],right_keys=['store_id'],cardinality='one_to_many')
     data['integration']['preparation']=[{'task_id':'sales','kind':'nest','keys':['store_id'],'description':'各店商品銷量子集合'}]
     assert validate(model.model_validate(data),catalog_at(tmp_path))==[]
+
+
+def test_time_metadata_collection_survives_prepared_request_without_changing_grain(tmp_path):
+    import json
+    model, validate, prepare = api()
+    data = draft()
+    task = data['tasks'][0]
+    task.update(required_columns=['store_id', 'stock_qty', 'snapshot_date'],
+                attributes=[], metrics={'stock_qty': 'sum'}, group_by=['store_id'],
+                output_grain=['store_id'], metadata_collections=['snapshot_date'])
+    data['tasks'][1].update(group_by=['store_id'], output_grain=['store_id'])
+    data['integration']['output_grain'] = ['store_id']
+    data['integration']['edges'][0].update(left_keys=['store_id'], right_keys=['store_id'])
+    catalog = catalog_at(tmp_path)
+    plan = model.model_validate(data)
+    assert validate(plan, catalog) == []
+    request = prepare(plan, catalog)[0].payload['request']
+    payload = json.loads(request.split('\n')[-1])
+    assert payload['metadata_collections'] == ['snapshot_date']
+    assert payload['output_grain'] == ['store_id']
+    assert 'DISTINCT' in request
+
+
+@pytest.mark.parametrize('column', ['missing', 'stock_qty', 'store_id'])
+def test_metadata_collections_reject_unadmitted_or_numeric_columns(tmp_path, column):
+    model, validate, prepare = api()
+    data = draft()
+    task = data['tasks'][0]
+    task['metadata_collections'] = [column]
+    if column != 'missing' and column not in task['required_columns']:
+        task['required_columns'].append(column)
+    plan = model.model_validate(data)
+    catalog = catalog_at(tmp_path)
+    assert validate(plan, catalog)
+    with pytest.raises(ValueError):
+        prepare(plan, catalog)
+
+
+@pytest.mark.parametrize('overlap', ['output_grain', 'conditional_metric', 'duplicate', 'attribute'])
+def test_metadata_collection_cannot_duplicate_another_output_role(tmp_path, overlap):
+    model, validate, _ = api()
+    data = draft()
+    task = data['tasks'][0]
+    task['required_columns'].append('snapshot_date')
+    task['metadata_collections'] = ['snapshot_date']
+    if overlap == 'conditional_metric':
+        task['conditional_metrics'] = [dict(column='snapshot_date', aggregation='count_distinct',
+                                           conditions=[dict(column='stock_qty', operator='=', value=0)])]
+        task['group_by'] = list(task['output_grain'])
+    elif overlap == 'duplicate':
+        task['metadata_collections'].append('snapshot_date')
+    elif overlap == 'attribute':
+        task['attributes'].append('snapshot_date')
+    else:
+        task['output_grain'].append('snapshot_date')
+    assert validate(model.model_validate(data), catalog_at(tmp_path))
+
+
+@pytest.mark.parametrize('output_grain,accepted', [(['store_id'], True), (['store_id', 'product_id'], False)])
+def test_metadata_only_aggregation_still_has_an_explicit_grouping_grain(tmp_path, output_grain, accepted):
+    model, validate, _ = api()
+    task = dict(task_id='dates', view='demo.stock',
+                required_columns=['store_id', 'product_id', 'snapshot_date'],
+                metadata_collections=['snapshot_date'], group_by=['store_id'],
+                output_grain=output_grain, request='按店收集盤點日期')
+    data = dict(status='ready', strategy='single_view', tasks=[task],
+                integration=dict(anchor_task='dates', output_grain=output_grain))
+    assert (not validate(model.model_validate(data), catalog_at(tmp_path))) is accepted
+
+
+@pytest.mark.parametrize('restriction', ['measure', 'select_forbidden'])
+def test_metadata_respects_field_role_and_selection_capability(tmp_path, monkeypatch, restriction):
+    model, validate, prepare = api()
+    data = draft()
+    task = data['tasks'][0]
+    task.update(required_columns=task['required_columns'] + ['snapshot_date'],
+                metadata_collections=['snapshot_date'], group_by=task['output_grain'])
+    catalog = catalog_at(tmp_path)
+    field_contract = catalog.field_contract
+    def restricted(view, column):
+        contract = dict(field_contract(view, column))
+        if column == 'snapshot_date':
+            if restriction == 'measure':
+                contract['role'] = 'measure'
+            else:
+                contract['capabilities'] = [c for c in contract['capabilities'] if c != 'select']
+        return contract
+    monkeypatch.setattr(catalog, 'field_contract', restricted)
+    plan = model.model_validate(data)
+    assert validate(plan, catalog)
+    with pytest.raises(ValueError):
+        prepare(plan, catalog)
+
+
+@pytest.mark.parametrize('prepared', [False, True])
+def test_reducing_raw_anchor_grain_requires_explicit_collection(tmp_path, prepared):
+    model, validate, _ = api()
+    data = draft()
+    data['tasks'] = data['tasks'][:1]
+    data['strategy'] = 'single_view'
+    data['integration'].update(output_grain=['store_id'], edges=[], preparation=[])
+    if prepared:
+        data['integration']['preparation'] = [dict(task_id='stock', kind='nest', keys=['store_id'], description='保留各商品資料為子集合')]
+    assert (not validate(model.model_validate(data), catalog_at(tmp_path))) is prepared

@@ -86,3 +86,15 @@ def test_invalid_date_filters_cannot_dispatch(tmp_path,operator,value):
     catalog=catalog_at(tmp_path)
     assert validate(model.model_validate(data),catalog)
     with pytest.raises(ValueError):prepare(model.model_validate(data),catalog)
+
+
+def test_fixed_source_key_proves_redundant_output_dimension_is_single_row(tmp_path):
+    model,validate,_=api();data=draft()
+    data['tasks'][0]={'task_id':'stock','view':'demo.kpi',
+        'required_columns':['store_id','sales_month','target_amount'],
+        'filters':[{'column':'sales_month','operator':'=','value':'2026-09-01'}],
+        'attributes':['target_amount'],'output_grain':['store_id','sales_month'],'request':'單月門市目標'}
+    data['integration']['output_grain']=['store_id','sales_month']
+    data['integration']['edges'][0].update(left_keys=['store_id'],right_keys=['store_id'],cardinality='one_to_many')
+    data['integration']['preparation']=[{'task_id':'sales','kind':'nest','keys':['store_id'],'description':'各店商品銷量子集合'}]
+    assert validate(model.model_validate(data),catalog_at(tmp_path))==[]

@@ -13,6 +13,8 @@
 
 30 題三輪合計 90 次規劃呼叫，第一輪同時為基準，不另外 warmup。新題庫初始皆為 pending，需 `--exploratory`；自動通過不能當作人工核准。輸出位於 `projects/retail/artifacts/task_decomposition/<run-id>/`；包含逐題結果、私有原始呼叫、prompt/schema/契約/題庫/Git 指紋與繁體中文摘要。主要 View 命中與等價任務正確率分開統計；整合及 request 語意仍需人工審查。未完成或略過不提高通過率，一致失敗不算穩定正確。
 
+評分會正規化同一時間軸的月份條件與每日日期範圍，以及日期的含尾／不含尾表示；只用於 filter 的等價日期欄位不要求重複回傳，逐日輸出所需的日期欄位仍必須存在。只有來源契約鍵能證明唯一性時，才接受單列取值與 SUM 等價，或同一分組中的 COUNT 與 COUNT DISTINCT 等價。額外分組維度或遺失必要時間 metadata 仍列為差異，不用題目特例放寬。修正評分器時可使用 `evaluations.decomposition_reports.regrade_run` 離線重評；原始 run 不覆寫，新報告記錄原始結果 SHA-256、模型版本與評分版本，額外模型呼叫數為 0。
+
 ## 專案評估
 
 每個私有專案位於 `projects/<project-id>/`，包含 View profile、專屬 `.env`、單一 `evaluations/cases.jsonl` 與執行產物。題庫與答案只用於評分，不傳入模型 context。GMS2 保留原有 reliability 題型；Retail 使用 View Matching 題型，每題記錄 `expected_match`、`expected_sql`、契約與 prompt 指紋，以及獨立的自動驗證和人工審核狀態。Retail manifest 目前為 `approved`；395 題（原有 385 題、3 題仍適用的既有缺口案例及 7 題降冪案例）已通過自動結構驗證，人工審核皆為 `pending`。

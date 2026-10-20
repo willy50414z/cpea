@@ -56,3 +56,18 @@ def test_endpoint_normalization_is_idempotent(tmp_path):
     assert azure_planning_settings(env,'gpt-6-sol').llm_base_url=='https://azure.example/openai/v1'
     with env.open('a',encoding='utf-8') as f:f.write('CPEA_AZURE_LLM_BASE_URL=https://azure.example/openai/v1/\n')
     assert azure_planning_settings(env,'gpt-6-sol').llm_base_url=='https://azure.example/openai/v1'
+
+
+def test_regrade_preserves_original_and_makes_no_model_calls(tmp_path):
+    from evaluations.decomposition_runner import evaluate_decomposition
+    from evaluations.decomposition_reports import regrade_run
+    catalog,env,cases=workspace(tmp_path);llm=FakeLLM()
+    result=evaluate_decomposition(profile=catalog.root,env_file=env,model='gpt-6-sol',cases_path=cases,
+                                  exploratory=True,llm_factory=lambda s:llm)
+    source=Path(result['output']);before=(source/'results.jsonl').read_bytes()
+    target=regrade_run(source,profile=catalog.root,cases_path=cases,revalidate=True)
+    assert source!=target and len(llm.calls)==30
+    assert (source/'results.jsonl').read_bytes()==before
+    meta=json.loads((target/'run.json').read_text(encoding='utf-8'))
+    assert meta['additional_model_calls']==0 and meta['source_results_sha256']
+    assert meta['revalidated'] and meta['changed_status_count']==0

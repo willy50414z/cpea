@@ -137,10 +137,15 @@ def validate_decomposition(draft: DecompositionDraft, catalog: CatalogProvider) 
         if edge.preserve_task is not None and edge.preserve_task not in (edge.left_task,edge.right_task):
             errors.append('invalid preserved task')
         for task,keys in ((left,edge.left_keys),(right,edge.right_keys)):
-            reduced = set(task.output_grain) - set(keys)
+            fixed={f.column for f in task.filters if f.operator=='='}
+            reduced = set(task.output_grain) - set(keys) - fixed
+            definition=views.get(task.view)
+            grain=definition.policy.get('grain',{}) if definition else {}
+            source_keys=set(grain.get('keys') or []) if isinstance(grain,dict) else set()
+            source_is_unique=bool(source_keys) and (source_keys-fixed)<=set(keys)
             prepared = any(p.task_id == task.task_id and p.kind in ('nest','pivot','aggregate')
                            and set(p.keys) == set(keys) for p in integration.preparation)
-            if reduced and not prepared:
+            if reduced and not prepared and not source_is_unique:
                 # A many-to-one edge may legitimately attach store context to product facts.
                 if not (task is left and edge.cardinality == 'many_to_one'):
                     errors.append('finer output grain requires an explicit preparation')

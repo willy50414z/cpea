@@ -107,3 +107,65 @@ def test_three_source_grading_requires_product_fact_keys(tmp_path):
     data['integration']['output_grain']=['store_id']
     d=m.model_validate(data);result=r(status='ready',contract_fingerprint=catalog.fingerprint,draft=d,prepared_requests=prepare(d,catalog))
     assert not grade_decomposition(c,result,catalog)['automated_pass']
+
+
+def test_raw_monthly_value_is_equivalent_to_sum_of_one_row(tmp_path):
+    from evaluations.decomposition_grading import grade_decomposition
+    m,r,prepare=response();catalog=catalog_at(tmp_path);c=case_for(catalog);data=draft()
+    expected=c['expected_tasks'][1]
+    expected.update(view='demo.monthly',required_columns=['store_id','product_id','sales_month','units_sold'],
+                    metrics={'units_sold':'sum'},filters=[{'column':'sales_month','operator':'=','value':'2026-09-01'}])
+    actual=data['tasks'][1];actual.update(view=expected['view'],required_columns=expected['required_columns'],
+         filters=expected['filters'],metrics={},group_by=[],attributes=['units_sold'])
+    d=m.model_validate(data);result=r(status='ready',contract_fingerprint=catalog.fingerprint,draft=d,prepared_requests=prepare(d,catalog))
+    assert grade_decomposition(c,result,catalog)['automated_pass']
+
+
+def test_inclusive_date_end_is_equivalent_to_next_day_exclusive_end():
+    from evaluations.decomposition_grading import _filters
+    a=[{'column':'order_date','operator':'<=','value':'2026-09-14'}]
+    b=[{'column':'order_date','operator':'<','value':'2026-09-15'}]
+    assert _filters(a)==_filters(b)
+
+
+def test_month_filter_and_day_bounds_match_without_losing_daily_output():
+    from evaluations.decomposition_grading import _filters
+    a=[{'column':'order_month','operator':'=','value':'2026-09-01'}]
+    b=[{'column':'order_date','operator':'>=','value':'2026-09-01'},
+       {'column':'order_date','operator':'<','value':'2026-10-01'}]
+    assert _filters(a)==_filters(b)
+
+
+def test_filter_date_alias_does_not_require_unused_date_column(tmp_path):
+    from evaluations.decomposition_grading import _task_score
+    model,_,_=response();catalog=catalog_at(tmp_path);expected=draft()['tasks'][1]
+    data=deepcopy(expected);data['required_columns'].remove('order_date');data['required_columns'].append('order_month')
+    data['filters']=[{'column':'order_month','operator':'=','value':'2026-09-01'}]
+    task=model.model_validate({**draft(),'tasks':[data]}).tasks[0]
+    assert _task_score(expected,task,catalog)['columns']
+    expected['output_grain'].append('order_date')
+    assert not _task_score(expected,task,catalog)['columns']
+
+
+def test_count_equivalence_requires_source_uniqueness_within_group(tmp_path):
+    from evaluations.decomposition_grading import _task_score
+    model,_,_=response();catalog=catalog_at(tmp_path)
+    data={'task_id':'m','view':'demo.monthly','required_columns':['store_id','product_id','sales_month'],
+          'filters':[{'column':'sales_month','operator':'=','value':'2026-09-01'}],
+          'metrics':{'product_id':'count'},'group_by':['store_id'],'output_grain':['store_id'],'request':'商品數'}
+    task=model.model_validate({**draft(),'tasks':[data]}).tasks[0]
+    expected={**data,'metrics':{'product_id':'count_distinct'}}
+    assert _task_score(expected,task,catalog)['metrics']
+    data['filters']=[]
+    task=model.model_validate({**draft(),'tasks':[data]}).tasks[0]
+    expected['filters']=[]
+    assert not _task_score(expected,task,catalog)['metrics']
+
+
+def test_rejected_plan_still_reports_source_choice_but_cannot_pass(tmp_path):
+    from evaluations.decomposition_grading import grade_decomposition
+    m,r,_=response();catalog=catalog_at(tmp_path);c=case_for(catalog)
+    result=r(status='error',code='invalid_plan',contract_fingerprint=catalog.fingerprint,draft=m.model_validate(draft()))
+    s=grade_decomposition(c,result,catalog)
+    assert s['canonical_views_match'] and s['views_and_columns_match']
+    assert not s['automated_pass'] and not s['payload_ready']

@@ -14,7 +14,7 @@ def catalog_at(root):
     root.mkdir(parents=True, exist_ok=True)
     columns = {
         'stock': {'store_id':'number','product_id':'number','stock_qty':'number','snapshot_date':'date'},
-        'sales': {'store_id':'number','product_id':'number','quantity':'number','order_date':'date','sales_channel':'string'},
+        'sales': {'store_id':'number','product_id':'number','quantity':'number','order_date':'date','order_month':'date','sales_channel':'string'},
         'kpi': {'store_id':'number','sales_month':'date','target_amount':'number'},
         'monthly': {'store_id':'number','product_id':'number','units_sold':'number','sales_month':'date'},
     }

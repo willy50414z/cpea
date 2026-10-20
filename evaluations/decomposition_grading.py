@@ -29,7 +29,9 @@ def _task_score(expected,actual):
     conditions=[m.model_dump() for m in actual.conditional_metrics]
     expected_conditions=expected.get('conditional_metrics',[])
     actual_metrics=dict(actual.metrics)
-    for m in conditions:actual_metrics[m['column']]=m['aggregation']
+    def grain(columns,filters):
+        fixed={f['column'] for f in filters if f['operator']=='='}
+        return set(columns)-fixed
     return {'view':expected['view']==actual.view,'columns':required<=fields,
             'column_recall':len(required&fields)/len(required) if required else 1.0,
             'column_precision':len(required&fields)/len(fields) if fields else 0.0,
@@ -37,7 +39,7 @@ def _task_score(expected,actual):
             'metrics':all(actual_metrics.get(c)==a for c,a in expected.get('metrics',{}).items()),
             'conditional_metrics':all(any(e['column']==a['column'] and e['aggregation']==a['aggregation']
                  and _filters(e['conditions'])==_filters(a['conditions']) for a in conditions) for e in expected_conditions),
-            'grain':set(expected['output_grain'])==set(actual.output_grain)}
+            'grain':grain(expected['output_grain'],expected.get('filters',[]))==grain(actual.output_grain,[f.model_dump() for f in actual.filters])}
 
 
 def grade_decomposition(case,response,catalog) -> dict:
@@ -71,13 +73,19 @@ def grade_decomposition(case,response,catalog) -> dict:
     if integration and anchor:
         edges=integration.edges
         # The product-fact keys apply to product facts only; store context has its own edge.
-        keys_ok=all(set(edge.left_keys)==set(edge.right_keys) and
-                    set(edge.left_keys)<=set(next(t for t in actual if t.task_id==edge.left_task).output_grain)
-                    for edge in edges)
-        if len(actual)==2:
-            keys_ok=keys_ok and len(edges)==1 and set(edges[0].left_keys)==keys
+        expected_by_actual={a.task_id:e for e,a in zip(expected,ordering)}
+        keys_ok=len(edges)==len(actual)-1
+        for edge in edges:
+            left=expected_by_actual.get(edge.left_task);right=expected_by_actual.get(edge.right_task)
+            if not left or not right:
+                keys_ok=False;continue
+            pair_keys=set(left['output_grain']) & set(right['output_grain']) & keys
+            if not pair_keys or set(edge.left_keys)!=pair_keys or set(edge.right_keys)!=pair_keys:
+                keys_ok=False
+        fixed={f['column'] for f in next(e for e in expected if e['task_id']==oracle['anchor_task']).get('filters',[]) if f['operator']=='='}
+        output_ok=set(integration.output_grain)-fixed==set(anchor.output_grain)-fixed
         result['integration_keys_match']=bool(keys_ok and integration.anchor_task==anchor.task_id
-                    and all(e.mode==oracle['mode'] for e in edges) and not validate_decomposition(draft,catalog))
+                    and output_ok and all(e.mode==oracle['mode'] for e in edges) and not validate_decomposition(draft,catalog))
     payloads=response.prepared_requests
     result['payload_ready']=(len(payloads)==len(actual) and {p.task_id for p in payloads}=={a.task_id for a in actual}
                               and all(set(p.payload)=={'request','history'} and p.payload['history']==[] and p.payload['request'].strip() for p in payloads))

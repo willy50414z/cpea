@@ -33,11 +33,17 @@ def load_decomposition_cases(path: Path,catalog) -> list[dict]:
                 used=set(source.get('group_by',[])+source['output_grain']+source.get('attributes',[]))
                 used.update(source.get('metrics',{}))
                 used.update(f['column'] for f in source.get('filters',[]))
+                for metric in source.get('conditional_metrics',[]):
+                    used.add(metric['column'])
+                    used.update(f['column'] for f in metric['conditions'])
                 if not used<=fields or not fields<=set(catalog.columns(source['view'])):
                     raise ValueError('expected field is outside source or required columns')
                 for column,agg in source.get('metrics',{}).items():
                     if agg not in catalog.field_contract(source['view'],column).get('aggregations',[]):
                         raise ValueError('expected aggregation forbidden')
+                for metric in source.get('conditional_metrics',[]):
+                    if metric['aggregation'] not in catalog.field_contract(source['view'],metric['column']).get('aggregations',[]):
+                        raise ValueError('expected conditional aggregation forbidden')
     return cases
 
 

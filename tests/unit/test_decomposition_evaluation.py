@@ -69,3 +69,41 @@ def test_partial_run_and_consistent_failure_do_not_count_as_stable_pass(tmp_path
     summary=summarize(results,planned=6,runs=3)
     assert summary['all_runs_pass_cases']==0 and summary['consistent_failure_cases']==1
     assert summary['automated_pass_count']==1 and summary['planned']==6
+
+
+def test_conditional_count_cannot_be_replaced_by_unconditional_count(tmp_path):
+    from evaluations.decomposition_grading import grade_decomposition
+    m,r,prepare=response();catalog=catalog_at(tmp_path);c=case_for(catalog)
+    expected=c['expected_tasks'][0]
+    expected['conditional_metrics']=[{'column':'product_id','aggregation':'count_distinct',
+                                      'conditions':[{'column':'stock_qty','operator':'=','value':0}]}]
+    d=m.model_validate(draft())
+    result=r(status='ready',contract_fingerprint=catalog.fingerprint,draft=d,prepared_requests=prepare(d,catalog))
+    assert not grade_decomposition(c,result,catalog)['automated_pass']
+
+
+def test_conditional_metric_cannot_replace_unconditional_metric(tmp_path):
+    from evaluations.decomposition_grading import grade_decomposition
+    m,r,prepare=response();catalog=catalog_at(tmp_path);c=case_for(catalog);data=draft()
+    task=data['tasks'][1];task['metrics']={};task['required_columns'].append('sales_channel')
+    task['conditional_metrics']=[{'column':'quantity','aggregation':'sum',
+                               'conditions':[{'column':'sales_channel','operator':'=','value':'online'}]}]
+    d=m.model_validate(data);result=r(status='ready',contract_fingerprint=catalog.fingerprint,draft=d,prepared_requests=prepare(d,catalog))
+    assert not grade_decomposition(c,result,catalog)['automated_pass']
+
+
+def test_three_source_grading_requires_product_fact_keys(tmp_path):
+    from evaluations.decomposition_grading import grade_decomposition
+    m,r,prepare=response();catalog=catalog_at(tmp_path);data=draft()
+    data['tasks'].append({'task_id':'kpi','view':'demo.kpi','required_columns':['store_id','sales_month','target_amount'],
+                         'output_grain':['store_id'],'attributes':['target_amount'],
+                         'filters':[{'column':'sales_month','operator':'=','value':'2026-09-01'}],'request':'目標'})
+    data['integration']['edges'].append({'left_task':'stock','right_task':'kpi','left_keys':['store_id'],
+        'right_keys':['store_id'],'mode':'left','cardinality':'many_to_one','preserve_task':'stock'})
+    c=case_for(catalog);c['expected_tasks'].append({**data['tasks'][2],'acceptable_alternatives':[]})
+    # Valid structure for a store-level merge, but it loses the oracle's product comparison.
+    data['integration']['edges'][0].update(left_keys=['store_id'],right_keys=['store_id'])
+    data['integration']['preparation']=[{'task_id':name,'kind':'aggregate','keys':['store_id'],'description':'依店彙總'} for name in ('stock','sales')]
+    data['integration']['output_grain']=['store_id']
+    d=m.model_validate(data);result=r(status='ready',contract_fingerprint=catalog.fingerprint,draft=d,prepared_requests=prepare(d,catalog))
+    assert not grade_decomposition(c,result,catalog)['automated_pass']

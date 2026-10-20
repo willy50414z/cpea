@@ -67,3 +67,22 @@ def test_three_source_edges_use_store_key_for_kpi(tmp_path):
 def test_extra_model_fields_are_rejected():
     model,_,_=api();data=draft();data['sql']='SELECT secret'
     with pytest.raises(ValidationError):model.model_validate(data)
+
+
+@pytest.mark.parametrize('corruption',['swapped_keys','lost_anchor','raw_grain','join_filter_key'])
+def test_review_integration_and_grain_counterexamples(tmp_path,corruption):
+    model,validate,_=api();data=draft()
+    e=data['integration']['edges'][0]
+    if corruption=='swapped_keys':e['right_keys'].reverse()
+    if corruption=='lost_anchor':e.update(left_task='sales',right_task='stock',preserve_task='sales')
+    if corruption=='raw_grain':data['tasks'][1].update(metrics={},group_by=[])
+    if corruption=='join_filter_key':data['tasks'][1]['filters'].append({'column':'product_id','operator':'=','value':'not-a-number'})
+    assert validate(model.model_validate(data),catalog_at(tmp_path)),corruption
+
+
+@pytest.mark.parametrize('operator,value',[('>=',None),('LIKE','2026-09%')])
+def test_invalid_date_filters_cannot_dispatch(tmp_path,operator,value):
+    model,validate,prepare=api();data=draft();data['tasks'][1]['filters'][0].update(operator=operator,value=value)
+    catalog=catalog_at(tmp_path)
+    assert validate(model.model_validate(data),catalog)
+    with pytest.raises(ValueError):prepare(model.model_validate(data),catalog)

@@ -2,8 +2,21 @@
 from __future__ import annotations
 
 import json
+from datetime import date
 from cpea.application.models.decomposition import DecompositionDraft, PreparedSQLRequest
 from cpea.application.ports.catalog import CatalogProvider
+
+
+def _valid_value(value,field_type):
+    if field_type=='number':return type(value) in (int,float)
+    if field_type=='boolean':return type(value) is bool
+    if field_type=='string':return isinstance(value,str)
+    if field_type=='date':
+        if not isinstance(value,str):return False
+        try:date.fromisoformat(value)
+        except ValueError:return False
+        return True
+    return value is not None
 
 
 def validate_decomposition(draft: DecompositionDraft, catalog: CatalogProvider) -> list[str]:
@@ -56,8 +69,24 @@ def validate_decomposition(draft: DecompositionDraft, catalog: CatalogProvider) 
                 errors.append(f'{task.task_id}: operator forbidden')
             if condition.operator in ('IN','NOT IN') and not isinstance(condition.value,list):
                 errors.append(f'{task.task_id}: IN requires a list')
+            field_type=contract['type']
+            if condition.operator=='LIKE' and field_type!='string':
+                errors.append(f'{task.task_id}: LIKE requires a string column')
+            if field_type=='boolean' and condition.operator not in ('=','!=','<>','IN','NOT IN','IS NULL','IS NOT NULL'):
+                errors.append(f'{task.task_id}: boolean operator forbidden')
+            if condition.operator not in ('IS NULL','IS NOT NULL'):
+                values=condition.value if isinstance(condition.value,list) else [condition.value]
+                if not values:errors.append(f'{task.task_id}: empty filter values')
+                for value in values:
+                    if not _valid_value(value,field_type):errors.append(f'{task.task_id}: filter value type mismatch')
         if metrics and set(task.group_by) != set(task.output_grain):
             errors.append(f'{task.task_id}: aggregate grain differs from group_by')
+        if not metrics and not task.group_by:
+            grain=views[task.view].policy.get('grain')
+            source_keys=set(grain.get('keys') or []) if isinstance(grain,dict) else set()
+            fixed={f.column for f in task.filters if f.operator=='='}
+            if not source_keys or not (source_keys-fixed)<=set(task.output_grain):
+                errors.append(f'{task.task_id}: raw output grain is not supported by source keys')
         if any(dep not in tasks or dep == task.task_id for dep in task.depends_on):
             errors.append(f'{task.task_id}: unknown or self dependency')
     visiting, visited = set(), set()
@@ -101,6 +130,8 @@ def validate_decomposition(draft: DecompositionDraft, catalog: CatalogProvider) 
                 if lk in catalog.columns(left.view) and rk in catalog.columns(right.view):
                     if catalog.field_contract(left.view,lk)['type'] != catalog.field_contract(right.view,rk)['type']:
                         errors.append('integration key type mismatch')
+                if lk!=rk:
+                    errors.append('integration keys lack an admitted semantic mapping')
         if edge.mode == 'left' and edge.preserve_task != edge.left_task:
             errors.append('left integration must preserve its left task')
         if edge.preserve_task is not None and edge.preserve_task not in (edge.left_task,edge.right_task):
@@ -120,6 +151,13 @@ def validate_decomposition(draft: DecompositionDraft, catalog: CatalogProvider) 
                 connected.add(name);pending.append(name)
     if connected != set(tasks):
         errors.append('integration graph is disconnected')
+    preserved={integration.anchor_task}
+    for _ in tasks:
+        for edge in integration.edges:
+            if edge.left_task in preserved:preserved.add(edge.right_task)
+            if edge.mode=='full' and edge.right_task in preserved:preserved.add(edge.left_task)
+    if not set(tasks)<=preserved:
+        errors.append('integration direction cannot preserve the anchor population')
     return errors
 
 

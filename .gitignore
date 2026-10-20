@@ -17,3 +17,7 @@ projects/*
 .idea/
 integrations/private/
 evaluations/private/
+
+# Runtime vocabulary; never commit deployment knowledge.
+**/terms_mapping.json
+**/.terms_mapping.json-*

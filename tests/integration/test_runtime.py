@@ -15,7 +15,7 @@ from cpea.application.errors import DependencyUnavailable
 from cpea.infrastructure.llm.parsing import parse_model
 from cpea.workflows.text_to_sql.schemas import AnswerDraft
 from cpea.workflows.text_to_sql.sql_generation import create_graph
-from tests.support import dependencies, QUESTION, VIEW
+from tests.support import dependencies, write_profile, QUESTION, VIEW
 
 def runtime_fixture(tmp_path, **kwargs):
     settings, catalog, packer, llm, retriever = dependencies(tmp_path)
@@ -46,7 +46,7 @@ def test_api_injected_query_and_payload(tmp_path):
     response = client.post('/api/assistant/query', json={'request': QUESTION, 'history': []})
     assert response.status_code == 200
     payload = response.json()
-    assert set(payload) == {'answer', 'citations', 'sources', 'sql', 'columns', 'rows', 'rows_truncated', 'generation'}
+    assert set(payload) == {'answer', 'citations', 'sources', 'sql', 'columns', 'rows', 'rows_truncated', 'generation', 'term_mapping_reasoning'}
     assert payload['citations'] == ['[Source 1]'] and payload['rows'] == [['A', 10]]
     assert calls[0][0] == 'test-datasource' and len(calls) == 1
     rejected = client.post('/api/assistant/sql', json={'request': 'JOIN two views'})
@@ -68,7 +68,8 @@ def test_shared_json_parser(raw):
     assert parse_model(raw, AnswerDraft).answer == 'example'
 
 def test_import_and_factory_do_not_connect(tmp_path):
-    demo = Path(__file__).parents[2] / 'examples/demo-profile'
+    profile = write_profile(tmp_path / 'projects' / 'gms2')
+    (profile / '.env').write_text('ASSISTANT_RETRIEVAL_MODE=lexical\n', encoding='utf-8')
     code = f'''import os
 import socket
 def fail(*args, **kwargs):
@@ -78,16 +79,18 @@ import cpea
 from cpea.interfaces.api.app import create_app
 from cpea.workflows.text_to_sql.sql_generation import create_graph
 from cpea.infrastructure.catalog.yaml_catalog import SchemaCatalog
+os.environ['CPEA_PROJECTS_ROOT'] = {str(tmp_path / 'missing-projects')!r}
 try:
     create_app()
 except ValueError as exc:
-    assert 'integration profile is required' in str(exc)
+    assert 'selected project' in str(exc)
 else:
     raise AssertionError('missing profile was accepted')
-os.environ['CPEA_PROFILE_PATH'] = {str(demo)!r}
+os.environ['CPEA_PROJECTS_ROOT'] = {str(profile.parent)!r}
 app = create_app()
+os.environ['CPEA_PROFILE_PATH'] = {str(profile)!r}
 graph = create_graph()
-assert SchemaCatalog(os.environ['CPEA_PROFILE_PATH']).profile_id == 'synthetic-demo'
+assert SchemaCatalog({str(profile)!r}).profile_id == 'synthetic'
 assert app.title == 'CPEA'
 print(cpea.__version__)
 '''

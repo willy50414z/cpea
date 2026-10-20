@@ -23,7 +23,7 @@ GMS2 的 `.env` 已從本機原有設定複製到 `projects/gms2/.env`，移除�
 |---|---|
 | `integrations/private/gms2/`、`integrations/private/retail/` | `projects/gms2/`、`projects/retail/`；搬遷前副本保存在本機 `artifacts/project-migration/legacy-integrations/` |
 | `evaluations/datasets/query_reliability*.jsonl` | 32 題核對後合併為 `projects/gms2/evaluations/cases.jsonl`；原檔保存在 `examples/legacy-evaluation-cases/` |
-| `src/cpea/resources/demo/` | `examples/demo-profile/`；只在明確指定時載入 |
+| 舊合成 demo profile | 已移除；首頁改由 `gms2`／`retail` 專案選單指定來源 |
 | `artifacts/evaluations/`、`artifacts/stability/` | 原位保留作歷史執行紀錄；新 run 才使用專案內位置 |
 | 原 PoC 封存 | 原位保留，不重新命名或當作新 run |
 

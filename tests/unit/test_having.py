@@ -24,6 +24,22 @@ from tests.support import Counter
 
 ROOT = Path(__file__).resolve().parents[2]
 VIEW = "demo_retail.v_daily_sales"
+pytestmark = pytest.mark.skipif(not (ROOT / "projects/retail/manifest.yaml").is_file(),
+    reason="private Retail profile and approved cases are not installed")
+
+
+def retail_clarification_response(messages):
+    context = json.loads(messages[-1].content.split("語意確認資料: ", 1)[1])
+    proposals = []
+    for item in context["required_terms"]:
+        column = item["uses"][0]["column"]
+        description = context["contract"]["columns"][column]["description"]
+        proposals.append({"term": item["term"], "needs_refinement": False, "options": [{
+            "column": column, "label": description, "evidence_quote": description,
+            "same_concept": True, "grain_compatible": True,
+        }]})
+    return SimpleNamespace(content=json.dumps({"source_compatible": True, "clarifications": proposals},
+                                             ensure_ascii=False))
 
 
 def test_having_schema_versions_and_hidden_aggregate():
@@ -34,7 +50,7 @@ def test_having_schema_versions_and_hidden_aggregate():
     v6 = load_match_prompt("v6")
     v7 = load_match_prompt("v7")
     v8 = load_match_prompt("v8")
-    v9 = load_match_prompt()
+    v9 = load_match_prompt('v9')
     assert v2.response_model is SQLClauseMapping
     assert v3.response_model is SQLClauseMappingV3
     assert v4.response_model is SQLClauseMappingV3
@@ -97,6 +113,8 @@ def test_unrequested_aggregate_threshold_is_repaired_as_row_filter():
             self.calls = []
 
         def invoke(self, messages):
+            if "語意確認資料:" in messages[-1].content:
+                return retail_clarification_response(messages)
             context = json.loads(messages[-1].content.split("table定義: ", 1)[1])
             self.calls.append(context)
             mapping = json.loads(json.dumps(expected, ensure_ascii=False))
@@ -106,7 +124,7 @@ def test_unrequested_aggregate_threshold_is_repaired_as_row_filter():
                 mapping["having"] = [{**criterion, "aggregation": "sum"}]
             return SimpleNamespace(content=json.dumps(mapping, ensure_ascii=False))
 
-    settings = replace(AssistantSettings.from_env(ROOT / "projects/retail/.env"),
+    settings = replace(AssistantSettings.from_env(),
                        retrieval_mode="lexical", context_window=16000, max_output_tokens=8192)
     catalog = SchemaCatalog(ROOT / "projects/retail", allow_drafts=True)
     llm = RepairLLM()
@@ -153,6 +171,8 @@ def test_workflow_having_keeps_hidden_metric_out_of_select():
     request = "請從 demo_retail.v_daily_sales 依門市識別碼分組，只顯示門市識別碼，只保留折扣後銷售淨額合計大於 100 的群組。"
     class HavingLLM:
         def invoke(self, messages):
+            if "語意確認資料:" in messages[-1].content:
+                return retail_clarification_response(messages)
             return SimpleNamespace(content=json.dumps({
                 "fields": [{"text": "門市識別碼", "column": "store_id", "aggregation": None}],
                 "table": {"text": VIEW, "view": VIEW}, "criteria": [],

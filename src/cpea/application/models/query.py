@@ -1,10 +1,11 @@
 from __future__ import annotations
 
 from typing import Any, Literal
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, model_validator
+from cpea.application.models.confirmation import Clarification, TermMappingReasoning
 
 from cpea.domain.models import QueryFact, QueryPlan, SchemaLink
-from cpea.workflows.text_to_sql.schemas import SchemaLinkDraft, SQLClauseMapping, SQLClauseMappingV3
+from cpea.workflows.text_to_sql.schemas import SchemaLinkDraft, SQLClauseMapping, SQLClauseMappingV3, SQLClauseMappingV10
 
 class ConversationTurn(BaseModel):
     role: Literal["user", "assistant"]
@@ -31,7 +32,7 @@ class CandidateAttempt(BaseModel):
 
 class MappingAttempt(BaseModel):
     attempt_index: int
-    mapping: SQLClauseMappingV3 | SQLClauseMapping | None = None
+    mapping: SQLClauseMappingV10 | SQLClauseMappingV3 | SQLClauseMapping | None = None
     outcome: Literal["selected", "rejected", "parse_error"]
     reason: str | None = None
 
@@ -55,6 +56,11 @@ class QueryTaskTrace(BaseModel):
     execution_error: str | None = None
 
 class SQLGenerationResponse(BaseModel):
+    run_id: str | None = Field(default=None, exclude=True)
+    status: Literal['ready', 'needs_confirmation', 'unsupported', 'cancelled', 'error'] = 'unsupported'
+    code: str | None = None
+    clarification: Clarification | None = None
+    term_mapping_reasoning: list[TermMappingReasoning] = Field(default_factory=list)
     supported: bool
     sql: str | None = None
     selected_views: list[str] = Field(default_factory=list)
@@ -69,7 +75,26 @@ class SQLGenerationResponse(BaseModel):
     query_plan: QueryPlan | None = None
     query_trace: QueryTaskTrace | None = None
 
+    @model_validator(mode='before')
+    @classmethod
+    def infer_legacy_status(cls, value):
+        if isinstance(value, dict) and 'status' not in value:
+            value = {**value, 'status': 'ready' if value.get('supported') and value.get('sql') else 'unsupported'}
+        return value
+
+    @model_validator(mode='after')
+    def check_status(self):
+        if self.status == 'ready':
+            if not self.supported or not self.sql:
+                raise ValueError('ready requires supported and SQL')
+        elif self.supported or self.sql is not None:
+            raise ValueError('only ready may expose SQL or supported=true')
+        if (self.status == 'needs_confirmation') != (self.clarification is not None):
+            raise ValueError('clarification requires needs_confirmation')
+        return self
+
 class AssistantQueryResponse(BaseModel):
+    term_mapping_reasoning: list[TermMappingReasoning] = Field(default_factory=list)
     answer: str
     citations: list[str] = Field(default_factory=list)
     sources: list[SourceReference] = Field(default_factory=list)

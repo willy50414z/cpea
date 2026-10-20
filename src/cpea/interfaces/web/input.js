@@ -1,117 +1,177 @@
 () => {
-  const ERROR = "執行錯誤請再試一次";
   let composing = false;
+  let epoch = 0;
   let busy = false;
-  let latestQuestion = "";
-  const question = (target) => target?.closest?.("#cpea-question");
-  const panel = document.querySelector("#cpea-transport");
-
-  function transportError() {
-    busy = false;
+  let outcomeUnknown = false;
+  const versions = new Map();
+  const mainEvents = new Set();
+  let submitIntent = false;
+  const question = target => target?.closest?.('#cpea-question');
+  const panel = document.querySelector('#cpea-transport');
+  function unknown() {
+    outcomeUnknown = true;
+    document.documentElement.dataset.cpeaUnknown = '';
+    panel.dataset.outcome = 'unknown';
+    const abandon = document.querySelector('#cpea-abandon');
+    if (abandon) { abandon.style.setProperty('display', 'block', 'important'); abandon.disabled = false; }
     panel.hidden = false;
-    panel.querySelector(".question").textContent = latestQuestion;
-    panel.querySelector(".question").hidden = !("cpeaPending" in document.documentElement.dataset);
-    panel.querySelector(".error").textContent = ERROR;
-    const input = document.querySelector("#cpea-question textarea");
-    if (input) input.disabled = false;
-    const submit = document.querySelector("#cpea-submit");
-    if (submit) submit.disabled = false;
+    panel.querySelector('.error').textContent = '無法確認處理結果；舊請求可能仍完成。請勿重送確認。';
+    document.querySelectorAll('#cpea-conversation button, #cpea-question textarea, #cpea-project input, #cpea-assistant-confirmation input')
+      .forEach(element => { if (!element.closest('#cpea-abandon')) element.disabled = true; });
   }
-
-  // Observe Gradio's transport without taking over its event protocol.
-  const fetchOriginal = window.fetch.bind(window);
+  const original = window.fetch.bind(window);
   window.fetch = async (...args) => {
-    const url = new URL(args[0]?.url ?? args[0], window.location.href);
-    const queued = url.pathname.includes("/gradio_api/queue/");
+    const url = new URL(args[0]?.url ?? args[0], location.href);
+    const queued = url.pathname.includes('/gradio_api/queue/');
+    const submittedEpoch = epoch;
+    const mainJoin = queued && url.pathname.endsWith("/join") && submitIntent;
+    if (mainJoin) submitIntent = false;
     let response;
-    try {
-      response = await fetchOriginal(...args);
-    } catch (error) {
-      if (queued && busy) transportError();
-      throw error;
+    try { response = await original(...args); }
+    catch (error) { if (queued && busy && submittedEpoch === epoch) unknown(); throw error; }
+    if (queued && !response.ok && busy && submittedEpoch === epoch) unknown();
+    if (queued && url.pathname.endsWith('/join') && response.ok) {
+      const data = await response.clone().json();
+      if (data.event_id) {
+        versions.set(data.event_id, submittedEpoch);
+        if (mainJoin) mainEvents.add(data.event_id);
+      }
     }
-    if (queued && !response.ok && busy) transportError();
-    if (!queued || !url.pathname.endsWith("/data") || !response.body) return response;
-
+    if (!queued || !url.pathname.endsWith('/data') || !response.body) return response;
     const reader = response.body.getReader();
     const decoder = new TextDecoder();
-    let buffer = "";
-    let completed = false;
+    const encoder = new TextEncoder();
+    let buffer = '';
     const body = new ReadableStream({
       async pull(controller) {
         try {
-          const { value, done } = await reader.read();
+          const {value, done} = await reader.read();
           if (done) {
-            if (busy && !completed) transportError();
+            if (busy) unknown();
             controller.close();
             return;
           }
-          buffer += decoder.decode(value, { stream: true });
+          buffer += decoder.decode(value, {stream: true});
           let boundary;
-          while ((boundary = buffer.indexOf("\n\n")) !== -1) {
+          let deliver = '';
+          while ((boundary = buffer.indexOf('\n\n')) !== -1) {
             const frame = buffer.slice(0, boundary);
             buffer = buffer.slice(boundary + 2);
             const data = frame.match(/^data: ?(.+)$/m);
-            if (!data) continue;
+            if (!data) { deliver += frame + '\n\n'; continue; }
             const message = JSON.parse(data[1]);
-            if (message.msg === "process_starts") completed = false;
-            if (message.msg === "process_completed") {
-              completed = true;
-              if (message.success === false && busy) transportError();
-              busy = false;
+            const version = versions.get(message.event_id);
+            if (version !== undefined && version !== epoch) {
+              if (message.msg === 'process_completed') { versions.delete(message.event_id); mainEvents.delete(message.event_id); }
+              continue;
             }
+            if (message.msg === 'process_completed') {
+              if (message.success === false && busy) unknown();
+              if (mainEvents.has(message.event_id)) busy = false;
+              mainEvents.delete(message.event_id);
+              versions.delete(message.event_id);
+            }
+            // Once outcome is unknown, only a new explicitly detached epoch may
+            // update the screen. Never replay a confirmation automatically.
+            if (outcomeUnknown) continue;
+            deliver += frame + '\n\n';
           }
-          controller.enqueue(value);
+          controller.enqueue(encoder.encode(deliver));
         } catch (error) {
-          if (busy) transportError();
+          if (busy) unknown();
           controller.error(error);
         }
       },
       cancel(reason) { return reader.cancel(reason); }
     });
-    return new Response(body, { status: response.status, headers: response.headers });
+    return new Response(body, {status: response.status, headers: response.headers});
   };
-
-  document.addEventListener("compositionstart", (event) => {
-    if (question(event.target)) composing = true;
-  }, true);
-  document.addEventListener("compositionend", (event) => {
-    if (question(event.target)) composing = false;
-  }, true);
-  document.addEventListener("keydown", (event) => {
-    if (!question(event.target) || event.key !== "Enter") return;
+  document.addEventListener('compositionstart', event => { if (question(event.target)) composing = true; }, true);
+  document.addEventListener('compositionend', event => { if (question(event.target)) composing = false; }, true);
+  document.addEventListener('keydown', event => {
+    const radio = event.target.closest?.('#cpea-assistant-confirmation input[type=radio]');
+    if (radio && ['ArrowDown', 'ArrowRight', 'ArrowUp', 'ArrowLeft', 'Home', 'End'].includes(event.key)) {
+      if (outcomeUnknown || radio.disabled) return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      const radios = [...radio.closest('fieldset').querySelectorAll('input[type=radio]')].filter(e => !e.disabled);
+      const index = radios.indexOf(radio);
+      const next = event.key === 'Home' ? 0 : event.key === 'End' ? radios.length - 1 :
+        (index + (['ArrowDown', 'ArrowRight'].includes(event.key) ? 1 : -1) + radios.length) % radios.length;
+      radios[next]?.focus();
+      radios[next]?.click();
+      return;
+    }
+    if (!question(event.target) || event.key !== 'Enter') return;
     event.stopImmediatePropagation();
     if (composing || event.isComposing || event.keyCode === 229 || event.shiftKey) return;
     event.preventDefault();
-    if (!event.target.disabled && event.target.value.trim())
-      document.querySelector("#cpea-submit")?.click();
+    if (!event.target.disabled && event.target.value.trim()) document.querySelector('#cpea-submit')?.click();
   }, true);
-  document.addEventListener("click", (event) => {
-    if (!event.target.closest?.("#cpea-submit")) return;
-    const input = document.querySelector("#cpea-question textarea");
-    if (!input || busy || input.disabled || !input.value.trim()) {
-      event.preventDefault();
-      event.stopImmediatePropagation();
+  document.addEventListener('click', event => {
+    if (event.target.closest?.('#cpea-abandon')) {
+      epoch += 1;
+      busy = true;
+      submitIntent = true;
+      // This button was disabled directly during transport failure; Gradio's
+      // unchanged interactive prop would otherwise leave its DOM disabled.
+      const newQuestion = document.querySelector('#cpea-new');
+      if (newQuestion) newQuestion.disabled = false;
+      outcomeUnknown = false;
+      delete panel.dataset.outcome;
+      document.querySelector('#cpea-abandon').style.removeProperty('display');
+      delete document.documentElement.dataset.cpeaUnknown;
+      panel.hidden = true;
       return;
     }
-    busy = true;
-    latestQuestion = input.value;
-    panel.hidden = false;
-    panel.querySelector(".question").textContent = latestQuestion;
-    panel.querySelector(".question").hidden = false;
-    panel.querySelector(".error").textContent = "產生 SQL 中…";
-    document.documentElement.dataset.cpeaPending = "";
-  }, true);
-
-  const chat = document.querySelector("#cpea-chat");
-  chat?.setAttribute("aria-live", "polite");
-  chat?.setAttribute("aria-relevant", "additions text");
-  // Clear stale content immediately; reveal Gradio's new question when it arrives.
-  new MutationObserver(() => {
-    const current = chat?.querySelector("[data-testid=user] .message-content")?.textContent;
-    if (current?.trim() === latestQuestion.trim()) {
-      delete document.documentElement.dataset.cpeaPending;
-      if (panel.querySelector(".error").textContent !== ERROR) panel.hidden = true;
+    const submit = event.target.closest?.('#cpea-submit');
+    const confirm = event.target.closest?.('.cpea-confirm, .cpea-cancel, #cpea-new');
+    if (!submit && !confirm) return;
+    const input = document.querySelector('#cpea-question textarea');
+    if (busy || outcomeUnknown || (submit && (!input?.value.trim() || input.disabled))) {
+      event.preventDefault(); event.stopImmediatePropagation(); return;
     }
-  }).observe(chat, { childList: true, subtree: true, characterData: true });
+    if (submit) epoch += 1;
+    busy = true;
+    submitIntent = true;
+  }, true);
+  const chat = document.querySelector('#cpea-chat');
+  chat?.setAttribute('aria-live', 'polite');
+  const thread = document.querySelector('#cpea-thread');
+  let followProgress = true;
+  thread?.addEventListener('scroll', () => {
+    followProgress = thread.scrollHeight - thread.clientHeight - thread.scrollTop < 72;
+  }, {passive: true});
+  let previous = 'idle';
+  let pendingFocus = false;
+  new MutationObserver(() => {
+    const state = document.querySelector('[data-cpea-state]')?.dataset.cpeaState;
+    if (state !== previous) {
+      if (state === 'generating' || state === 'resuming') followProgress = true;
+      previous = state;
+      pendingFocus = state === 'waiting_confirmation';
+      if (state === 'editing' && !outcomeUnknown) {
+        document.querySelector('#cpea-question textarea')?.focus();
+      }
+    }
+    document.querySelectorAll('#cpea-assistant-confirmation fieldset').forEach(group => {
+      const radios = [...group.querySelectorAll('input[type=radio]')];
+      if (!radios.length) return;
+      if (group.getAttribute('role') !== 'radiogroup') group.setAttribute('role', 'radiogroup');
+      const label = group.querySelector('[data-testid=block-info]')?.textContent?.trim() || '欄位對應確認';
+      if (group.getAttribute('aria-label') !== label) group.setAttribute('aria-label', label);
+      const current = radios.find(radio => radio.checked) || radios[0];
+      radios.forEach(radio => {
+        const tabIndex = radio === current ? 0 : -1;
+        if (radio.tabIndex !== tabIndex) radio.tabIndex = tabIndex;
+      });
+    });
+    if (pendingFocus && !outcomeUnknown) {
+      const first = document.querySelector('#cpea-assistant-confirmation input[type=radio]');
+      if (first) { pendingFocus = false; first.focus(); }
+    }
+    if (followProgress && !outcomeUnknown && ['generating', 'resuming', 'executing', 'completed'].includes(state)) {
+      thread.scrollTop = thread.scrollHeight;
+    }
+  }).observe(document.querySelector('#cpea-conversation'), {subtree: true, childList: true, attributes: true});
 }

@@ -159,9 +159,11 @@ def test_cloud_preflight_is_configuration_only(tmp_path, monkeypatch):
 
 
 def test_explicit_env_selects_stability_model_without_live_service(tmp_path):
+    from tests.support import write_profile
+    profile = write_profile(tmp_path / 'profile', view='demo.v_inventory')
     env = tmp_path / "selected.env"
     env.write_text("ASSISTANT_LLM_PROVIDER=ollama\nASSISTANT_LLM_MODEL=qwen3:4b\nASSISTANT_RETRIEVAL_MODE=lexical\nASSISTANT_LLM_NUM_CTX=16000\n"
-                   f"CPEA_PROFILE_PATH={ROOT / 'examples/demo-profile'}\n", encoding="utf-8")
+                   f"CPEA_PROFILE_PATH={profile}\n", encoding="utf-8")
     output = _output()
     assert main(["stability", "--cases", str(ROOT / "evaluations/datasets/governance_cases.json"),
                  "--env-file", str(env), "--runs", "1", "--output-dir", str(output)],

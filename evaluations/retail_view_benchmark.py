@@ -416,7 +416,7 @@ def generate(catalog: SchemaCatalog) -> tuple[list[dict], dict[str, list[str]]]:
         if case["expected_sql"] is not None:
             case["expected_sql"].setdefault("having", [])
         case.update(profile_id=catalog.profile_id, contract_fingerprint=catalog.fingerprint,
-                    prompt_version=load_match_prompt().version, prompt_sha256=load_match_prompt().system_sha256)
+                    prompt_version=load_match_prompt("v6").version, prompt_sha256=load_match_prompt("v6").system_sha256)
     ids = [case["case_id"] for case in cases]
     if len(ids) != len(set(ids)):
         raise ValueError("duplicate benchmark case IDs")

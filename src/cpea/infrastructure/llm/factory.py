@@ -11,12 +11,25 @@ def response_schema_for(response_model: type[BaseModel], *,
                         column_names=None, view_names=None) -> dict[str, Any]:
     """Derive name constraints from admitted contracts, never from evaluation data."""
     schema = response_model.model_json_schema()
+    semantic_schema = 'clarifications' in schema.get('properties', {})
+    if semantic_schema and 'fields' in schema['properties']:
+        # Parsing keeps migration defaults, but constrained generators must
+        # explicitly return the query clauses instead of omitting them.
+        schema['required'] = list(schema['properties'])
     for definition in schema.get('$defs', {}).values():
         properties = definition.get('properties', {})
+        if semantic_schema and properties:
+            definition['required'] = list(properties)
         if column_names is not None and 'column' in properties:
             properties['column']['enum'] = sorted(column_names)
         if view_names is not None and 'view' in properties:
             properties['view']['enum'] = sorted(view_names)
+        if column_names is not None and 'candidates' in properties:
+            properties['candidates'].setdefault('items', {})['enum'] = sorted(column_names)
+    if view_names is not None and 'candidate_view' in schema.get('properties', {}):
+        for branch in schema['properties']['candidate_view'].get('anyOf', []):
+            if branch.get('type') == 'string':
+                branch['enum'] = sorted(view_names)
     return schema
 
 

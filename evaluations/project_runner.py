@@ -23,7 +23,7 @@ from evaluations.view_matching_cases import validate_view_case
 from evaluations.governance_runner import evaluate
 
 
-def _runtime_for_project(workspace: ProjectWorkspace, *, allow_draft_profile: bool = False) -> AssistantRuntime:
+def _runtime_for_project(workspace: ProjectWorkspace, *, allow_draft_profile: bool = False, prompt_version: str = "v10") -> AssistantRuntime:
     settings = AssistantSettings.from_env(workspace.env_file)
     if settings.integration_path and Path(settings.integration_path).resolve() != workspace.root:
         raise ValueError("CPEA_PROFILE_PATH conflicts with the selected project")
@@ -36,7 +36,7 @@ def _runtime_for_project(workspace: ProjectWorkspace, *, allow_draft_profile: bo
     settings = replace(settings, sqlserver=SQLServerSettings())
     catalog = SchemaCatalog(workspace.root, allow_drafts=allow_draft_profile)
     return AssistantRuntime(settings, deployment=deployment, catalog=catalog,
-                            match_prompt=load_match_prompt())
+                            match_prompt=load_match_prompt(prompt_version))
 
 
 def _cases_for_project(workspace: ProjectWorkspace, runtime: AssistantRuntime):
@@ -46,6 +46,14 @@ def _cases_for_project(workspace: ProjectWorkspace, runtime: AssistantRuntime):
         raise ValueError("selected project has no evaluation cases")
     allowed = {view.name: set(view.policy["columns"]) for view in runtime.catalog.views()}
     for wrapped, raw in zip(cases, raw_lines):
+        if wrapped.hilp_case is not None:
+            case = wrapped.hilp_case
+            if case.profile_id != runtime.catalog.profile_id or case.contract_fingerprint != runtime.catalog.fingerprint:
+                raise ValueError(f'{case.case_id}: HILP case profile/contract fingerprint mismatch')
+            for record in case.initial_mappings:
+                if record.view not in allowed or record.column not in allowed[record.view]:
+                    raise ValueError('HILP seed mapping outside catalog')
+            continue
         if wrapped.view_matching_case is not None:
             validate_view_case(wrapped.view_matching_case, runtime.catalog)
             prompt = runtime.match_prompt or load_match_prompt()
@@ -84,25 +92,30 @@ def evaluate_project(project_id: str, *, runs: int = 3, concurrency: int = 1,
                      model_factory=None,
                      timestamp: datetime | None = None,
                      allow_draft_profile: bool = False, exploratory: bool = False,
-                     max_model_calls: int | None = None, call_ledger: str | Path | None = None):
+                     max_model_calls: int | None = None, call_ledger: str | Path | None = None,
+                     prompt_version: str = "v10"):
     if runs < 1 or concurrency < 1:
         raise ValueError("runs and concurrency must be positive")
     workspace = resolve_project(project_id, projects_root=projects_root)
-    runtime = runtime or _runtime_for_project(workspace, allow_draft_profile=allow_draft_profile)
+    runtime = runtime or _runtime_for_project(workspace, allow_draft_profile=allow_draft_profile, prompt_version=prompt_version)
     if runtime.catalog.root != workspace.root:
         raise ValueError("runtime profile conflicts with the selected project")
     if runtime.catalog.status == "draft" and not allow_draft_profile:
         raise ValueError("draft profile requires --allow-draft-profile")
     cases = _cases_for_project(workspace, runtime)
-    if exploratory:
-        cases = [case for case in cases if case.view_matching_case is None
-                 or (case.view_matching_case.validation_status == "validated"
-                     and case.view_matching_case.review_status != "rejected")]
-    else:
-        cases = [case for case in cases if case.view_matching_case is None
-                 or case.view_matching_case.approved_for(runtime.catalog.fingerprint)]
-        if not cases:
-            raise ValueError("no approved cases for formal evaluation; use --exploratory for pending cases")
+    def include(case):
+        if case.hilp_case is not None:
+            return (case.hilp_case.review_status != 'rejected' if exploratory
+                    else case.hilp_case.approved_for(runtime.catalog.fingerprint))
+        if case.view_matching_case is None:
+            return True
+        if exploratory:
+            return (case.view_matching_case.validation_status == 'validated'
+                    and case.view_matching_case.review_status != 'rejected')
+        return case.view_matching_case.approved_for(runtime.catalog.fingerprint)
+    cases = [case for case in cases if include(case)]
+    if not cases:
+        raise ValueError('no approved cases for formal evaluation; use --exploratory for pending cases')
     root = Path(repo_root).resolve() if repo_root else Path(__file__).resolve().parents[1]
     sha = subprocess.run(["git", "rev-parse", "HEAD"], cwd=root, text=True,
                          capture_output=True, check=True).stdout.strip()
@@ -133,6 +146,7 @@ def evaluate_project(project_id: str, *, runs: int = 3, concurrency: int = 1,
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--project", required=True)
+    parser.add_argument("--prompt-version", choices=[f"v{i}" for i in range(1, 11)], default="v10")
     parser.add_argument("--runs", type=int, default=3)
     parser.add_argument("--concurrency", type=int, default=1)
     parser.add_argument("--allow-draft-profile", action="store_true")
@@ -144,7 +158,7 @@ def main(argv=None) -> int:
         result = evaluate_project(args.project, runs=args.runs, concurrency=args.concurrency,
                                   allow_draft_profile=args.allow_draft_profile,
                                   exploratory=args.exploratory,
-                                  max_model_calls=args.max_model_calls, call_ledger=args.call_ledger)
+                                  max_model_calls=args.max_model_calls, call_ledger=args.call_ledger, prompt_version=args.prompt_version)
     except (ValueError, FileNotFoundError, FileExistsError) as exc:
         parser.error(str(exc))
     print(json.dumps(result, ensure_ascii=False))

@@ -6,7 +6,7 @@ from types import SimpleNamespace
 import pytest
 
 from cpea.bootstrap import AssistantRuntime
-from cpea.config.database import SQLServerSettings
+from cpea.config.database import SQLServerSettings, SQLServerConfigurationError
 from cpea.config.settings import AssistantSettings
 from cpea.infrastructure.database.sql_server import SQLServerExecutor, SQLServerExecutionError
 from tests.support import dependencies, QUESTION, VIEW
@@ -220,6 +220,23 @@ def test_private_gms2_catalog_stays_external():
     assert driver.calls == []
     executor('binding', 'SELECT * FROM gms2.v_inventory')
     assert driver.calls[0][0] == 'mssql+pymssql://user:secret@server.example/actual-db'
+
+
+@pytest.mark.parametrize('raw,code', [
+    ('PWD=top-secret', 'sqlserver_invalid_url'),
+    ('postgresql://u:top-secret@host/db', 'sqlserver_driver_unsupported'),
+    ('mssql+pyodbc://u:top-secret@host/db', 'sqlserver_driver_unsupported'),
+    ('mssql+pymssql://u:top-secret@host', 'sqlserver_host_or_database_missing'),
+    ('mssql+pymssql://u:top-secret@host/db?conn_properties=DELETE', 'sqlserver_query_options_unsupported'),
+])
+def test_connection_format_errors_have_safe_specific_codes(raw, code):
+    driver = Driver()
+    with pytest.raises(SQLServerConfigurationError) as error:
+        SQLServerExecutor(SQLServerSettings(raw), 'binding', {VIEW}, 2,
+                          engine_factory=driver.create_engine)
+    assert error.value.code == code
+    assert 'top-secret' not in str(error.value)
+    assert not driver.engine_calls and not driver.calls
 
 
 def test_invalid_url_and_configuration_errors_are_sanitized():

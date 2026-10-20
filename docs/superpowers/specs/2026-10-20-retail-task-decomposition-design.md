@@ -4,7 +4,7 @@
 
 在既有單 View text-to-sql 之前新增獨立資料分工決策層，從使用者需求與核准 View 契約決定必要來源、子查詢及整合方式。本次使用 Retail 契約與 Azure GPT，只驗收到可提交的 text-to-sql requests，不生成 SQL、不連線查詢 DB，也不依尚未取得的資料產生採購結論。
 
-使用者已確認採獨立前置 planner 方案、要求先建立 30 個跨表需求，並指定從專案根目錄 `./.env` 取得 Azure 連線資訊。這份文件將已確認方向具體化，尚待書面規格確認；目前沒有實作產品程式。
+使用者已確認採獨立前置 planner 方案、要求先建立 30 個跨表需求，並指定從專案根目錄 `./.env` 取得 Azure 連線資訊。使用者於 2026-10-20 核准這份書面規格，指定 Azure 模型／deployment 為 `gpt-6-sol`，並解除 Azure 模型呼叫次數上限。目前沒有實作產品程式。
 
 ## 現況與邊界
 
@@ -90,7 +90,7 @@ request 本身不包含 SQL。只要仍依賴未取得的上一子任務結果�
 
 ## 評分與產物
 
-先執行一輪 30 題觀察基準，需觀察穩定性時再用相同設定跑三輪。每次 LLM 呼叫都列入預算；不做 warmup、解析重試或隱藏的答案生成。
+第一輪 30 題同時作為基準；三輪模式合計 90 次模型呼叫，記錄各輪結果與穩定性，不額外再跑一輪基準。使用者已解除 Azure 模型呼叫次數上限；仍記錄每次實際呼叫、tokens 與耗時，不設定自製 quota cap。不做 warmup、解析重試或隱藏的答案生成。
 
 逐題評分包含：
 
@@ -110,7 +110,7 @@ request 本身不包含 SQL。只要仍依賴未取得的上一子任務結果�
 
 使用根目錄 `./.env` 的 `CPEA_AZURE_LLM_BASE_URL` 與 `CPEA_AZURE_LLM_API_KEY`，在 runner 中明確選 Azure，不能沿用目前 `ASSISTANT_LLM_PROVIDER=ollama` 或 `ASSISTANT_LLM_MODEL=qwen3.8:27b`。不改寫使用者 `.env`。
 
-Azure GPT deployment 由明確 CLI 參數提供，不從 Ollama 模型名稱推定。已確認 endpoint、key 及 `langchain_openai` 套件存在；本環境 endpoint 未含 deployment 名稱，需使用者提供實際 Azure GPT deployment 才能開始 live benchmark。endpoint URL 依實際 Azure 介面解析，實作前核對 SDK 用法，不臆測服務路由。
+Azure GPT deployment 由明確 CLI 參數提供，這次使用者指定為 `gpt-6-sol`，不從 Ollama 模型名稱推定。已確認 endpoint、key 及 `langchain_openai` 套件存在。endpoint URL 依實際 Azure 介面解析，實作前核對 SDK 用法，不臆測服務路由。
 
 任何 provider SDK retry 設為 0。遇 rate limit 不重跑；保存私有 terminal output，依使用者規則交 `quota.py inspect-terminal` 判讀，不將 Azure 問題誤當作 Codex 帳號額度。若判讀為 quota/auth/network 問題，依結構化狀態停止後續呼叫並記錄未完成題。
 

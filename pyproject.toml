@@ -28,6 +28,7 @@ cpea = "cpea.interfaces.cli.main:main"
 cpea-query-eval = "evaluations.runners.query_reliability:main"
 cpea-governance-eval = "evaluations.governance_runner:main"
 cpea-eval = "evaluations.project_runner:main"
+cpea-plan-eval = "evaluations.decomposition_runner:main"
 
 [project.optional-dependencies]
 azure = [
@@ -49,7 +50,7 @@ packages = ["src/cpea", "evaluations"]
 exclude = ["projects/**", "**/private/**", "**/__pycache__/**", "**/*.pyc", "**/terms_mapping.json", "**/.terms_mapping.json-*"]
 
 [tool.hatch.build.targets.sdist]
-include = ["src/cpea", "evaluations/runners", "evaluations/datasets", "evaluations/config", "evaluations/governance_*.py", "evaluations/project_runner.py", "evaluations/hilp_cases.py", "evaluations/view_matching_*.py", "evaluations/retail_view_benchmark.py", "evaluations/retail_view_retrieval.py", "evaluations/call_budget.py", "evaluations/metadata.py", "evaluations/__init__.py", "evaluations/README.md", "requirements", "tests", "docs", "examples", "README.md", "pyproject.toml", "uv.lock", "langgraph.json", ".env.example", "config/tenants/example.yaml"]
+include = ["src/cpea", "evaluations/runners", "evaluations/datasets", "evaluations/config", "evaluations/governance_*.py", "evaluations/decomposition_*.py", "evaluations/project_runner.py", "evaluations/hilp_cases.py", "evaluations/view_matching_*.py", "evaluations/retail_view_benchmark.py", "evaluations/retail_view_retrieval.py", "evaluations/call_budget.py", "evaluations/metadata.py", "evaluations/__init__.py", "evaluations/README.md", "requirements", "tests", "docs", "examples", "README.md", "pyproject.toml", "uv.lock", "langgraph.json", ".env.example", "config/tenants/example.yaml"]
 exclude = ["projects/**", "**/private/**", "**/__pycache__/**", "**/*.pyc", "**/terms_mapping.json", "**/.terms_mapping.json-*"]
 
 [tool.pytest.ini_options]

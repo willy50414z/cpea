@@ -1,5 +1,18 @@
 # 品質評估
 
+## 前置需求拆分評估
+
+`cpea-plan-eval` 只評估資料分工規劃，輸出各子任務的 View、必要欄位、條件、粒度、整合計畫及 text-to-sql request，不生成或執行 SQL。Retail 專用題庫為 `projects/retail/evaluations/task_decomposition_cases.jsonl`；與既有 SQL 題庫分開。
+
+```bash
+.venv/bin/python -m evaluations.decomposition_runner --project retail --env-file .env --model gpt-6-sol --runs 3 --exploratory
+# 安裝套件後也可使用 cpea-plan-eval 搭配相同參數。
+```
+
+這個入口從根目錄 `.env` 的 `CPEA_AZURE_LLM_BASE_URL`、`CPEA_AZURE_LLM_API_KEY` 取得 Azure 設定，明確使用指定 deployment，不沿用預設 Ollama 模型，也不依賴 `projects/retail/.env`。資源根 URL 會依 [Azure v1 文件](https://learn.microsoft.com/en-us/azure/ai-foundry/openai/api-version-lifecycle) 補上 `/openai/v1`；已含該 suffix 則保留。模型呼叫不設次數上限，SDK 不重試；遇 provider 錯誤停止後續呼叫並記錄 failed／skipped。rate limit 的原始診斷保存於私有 `provider-error.txt`，依本機帳號額度流程判讀，不直接重跑。
+
+30 題三輪合計 90 次規劃呼叫，第一輪同時為基準，不另外 warmup。新題庫初始皆為 pending，需 `--exploratory`；自動通過不能當作人工核准。輸出位於 `projects/retail/artifacts/task_decomposition/<run-id>/`；包含逐題結果、私有原始呼叫、prompt/schema/契約/題庫/Git 指紋與繁體中文摘要。主要 View 命中與等價任務正確率分開統計；整合及 request 語意仍需人工審查。未完成或略過不提高通過率，一致失敗不算穩定正確。
+
 ## 專案評估
 
 每個私有專案位於 `projects/<project-id>/`，包含 View profile、專屬 `.env`、單一 `evaluations/cases.jsonl` 與執行產物。題庫與答案只用於評分，不傳入模型 context。GMS2 保留原有 reliability 題型；Retail 使用 View Matching 題型，每題記錄 `expected_match`、`expected_sql`、契約與 prompt 指紋，以及獨立的自動驗證和人工審核狀態。Retail manifest 目前為 `approved`；395 題（原有 385 題、3 題仍適用的既有缺口案例及 7 題降冪案例）已通過自動結構驗證，人工審核皆為 `pending`。

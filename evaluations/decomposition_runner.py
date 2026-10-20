@@ -24,6 +24,7 @@ from evaluations.call_budget import provider_stop_reason
 from evaluations.decomposition_cases import load_decomposition_cases, approved_for
 from evaluations.decomposition_grading import grade_decomposition
 from evaluations.decomposition_reports import summarize, write_reports
+from evaluations.metadata import git_workspace
 
 
 def azure_planning_settings(env_file: Path,model: str) -> AssistantSettings:
@@ -58,7 +59,7 @@ def evaluate_decomposition(*,profile: Path,env_file: Path,model: str,cases_path:
     cases=[c for c in cases if c.get('review_status')!='rejected' and (exploratory or approved_for(c,catalog))]
     if not cases:raise ValueError('no approved cases; pending cases require --exploratory')
     settings=azure_planning_settings(env_file,model)
-    repo=Path(__file__).resolve().parents[1]
+    repo=git_workspace(profile)
     revision=subprocess.run(['git','rev-parse','HEAD'],cwd=repo,text=True,capture_output=True,check=True).stdout.strip()
     diff=subprocess.run(['git','diff','HEAD','--binary'],cwd=repo,capture_output=True,check=True).stdout
     created=datetime.now(timezone.utc)

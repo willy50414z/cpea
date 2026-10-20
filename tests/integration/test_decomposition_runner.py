@@ -72,3 +72,12 @@ def test_regrade_preserves_original_and_makes_no_model_calls(tmp_path):
     assert meta['additional_model_calls']==0 and meta['source_results_sha256']
     assert meta['revalidated'] and meta['changed_status_count']==0
     assert all(meta[key] for key in ('grading_code_sha256','validation_code_sha256','response_models_sha256','grading_diff_sha256'))
+
+
+def test_installed_runner_finds_workspace_git_not_site_packages(tmp_path,monkeypatch):
+    import evaluations.decomposition_runner as module
+    catalog,env,cases=workspace(tmp_path)
+    monkeypatch.setattr(module,'__file__',str(tmp_path/'site-packages/evaluations/decomposition_runner.py'))
+    result=module.evaluate_decomposition(profile=catalog.root,env_file=env,model='gpt-6-sol',cases_path=cases,
+                                        exploratory=True,llm_factory=lambda s:FakeLLM())
+    assert result['model_calls']==30

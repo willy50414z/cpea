@@ -51,9 +51,10 @@ def regrade_run(run_dir,*,profile,cases_path,revalidate=False):
     from cpea.infrastructure.catalog.yaml_catalog import SchemaCatalog
     from evaluations.decomposition_cases import load_decomposition_cases
     from evaluations.decomposition_grading import grade_decomposition
+    from evaluations.metadata import git_workspace
     from cpea.workflows.task_decomposition.validation import validate_decomposition,prepare_requests
     run_dir=Path(run_dir);cases_path=Path(cases_path)
-    repo=Path(__file__).resolve().parents[1]
+    repo=git_workspace(profile)
     metadata=json.loads((run_dir/'run.json').read_text(encoding='utf-8'))
     if not metadata.get('finished_at'):
         raise ValueError('cannot regrade an unfinished run')

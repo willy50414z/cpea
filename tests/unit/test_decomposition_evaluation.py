@@ -169,3 +169,16 @@ def test_rejected_plan_still_reports_source_choice_but_cannot_pass(tmp_path):
     s=grade_decomposition(c,result,catalog)
     assert s['canonical_views_match'] and s['views_and_columns_match']
     assert not s['automated_pass'] and not s['payload_ready']
+
+
+def test_extra_snapshot_dimension_requires_source_key_proof(tmp_path):
+    from evaluations.decomposition_grading import _task_score
+    model,_,_=response();catalog=catalog_at(tmp_path);expected=draft()['tasks'][0]
+    data=deepcopy(expected);data['required_columns'].append('snapshot_date');data['output_grain'].append('snapshot_date')
+    task=model.model_validate({**draft(),'tasks':[data]}).tasks[0]
+    assert _task_score(expected,task,catalog)['grain']
+    # Across products, a store does not determine all snapshot dates in the contract.
+    expected.update(output_grain=['store_id'],group_by=['store_id'],metrics={'stock_qty':'sum'})
+    data.update(output_grain=['store_id','snapshot_date'],group_by=['store_id','snapshot_date'],metrics={'stock_qty':'sum'})
+    task=model.model_validate({**draft(),'tasks':[data]}).tasks[0]
+    assert not _task_score(expected,task,catalog)['grain']

@@ -1,6 +1,7 @@
 """Separate benchmark counts from unverified integration/request semantics."""
 from collections import defaultdict
 import json
+from pathlib import Path
 
 
 def summarize(results,*,planned,runs):
@@ -44,12 +45,15 @@ def regrade_run(run_dir,*,profile,cases_path,revalidate=False):
     from datetime import datetime,timezone
     from hashlib import sha256
     from uuid import uuid4
+    import inspect
     import subprocess
     from cpea.application.models.decomposition import DecompositionResponse
     from cpea.infrastructure.catalog.yaml_catalog import SchemaCatalog
     from evaluations.decomposition_cases import load_decomposition_cases
     from evaluations.decomposition_grading import grade_decomposition
     from cpea.workflows.task_decomposition.validation import validate_decomposition,prepare_requests
+    run_dir=Path(run_dir);cases_path=Path(cases_path)
+    repo=Path(__file__).resolve().parents[1]
     metadata=json.loads((run_dir/'run.json').read_text(encoding='utf-8'))
     if not metadata.get('finished_at'):
         raise ValueError('cannot regrade an unfinished run')
@@ -79,7 +83,11 @@ def regrade_run(run_dir,*,profile,cases_path,revalidate=False):
             row['score']=grade_decomposition(by_id[row['case_id']],response,catalog)
     destination=run_dir.parent/(run_dir.name+'-regrade-'+uuid4().hex[:6]);destination.mkdir(mode=0o700)
     metadata.update(source_run=str(run_dir.resolve()),source_results_sha256=sha256((run_dir/'results.jsonl').read_bytes()).hexdigest(),
-                    grading_revision=subprocess.run(['git','rev-parse','HEAD'],text=True,capture_output=True,check=True).stdout.strip(),
+                    grading_revision=subprocess.run(['git','rev-parse','HEAD'],cwd=repo,text=True,capture_output=True,check=True).stdout.strip(),
+                    grading_diff_sha256=sha256(subprocess.run(['git','diff','HEAD','--binary'],cwd=repo,capture_output=True,check=True).stdout).hexdigest(),
+                    grading_code_sha256=sha256(Path(inspect.getfile(grade_decomposition)).read_bytes()).hexdigest(),
+                    validation_code_sha256=sha256(Path(inspect.getfile(validate_decomposition)).read_bytes()).hexdigest(),
+                    response_models_sha256=sha256(Path(inspect.getfile(DecompositionResponse)).read_bytes()).hexdigest(),
                     regraded_at=datetime.now(timezone.utc).isoformat(),additional_model_calls=0,
                     revalidated=revalidate,
                     changed_status_count=sum(r.get('source_response_status',r.get('response',{}).get('status'))!=r.get('response',{}).get('status') for r in results))

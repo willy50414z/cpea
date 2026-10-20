@@ -71,3 +71,4 @@ def test_regrade_preserves_original_and_makes_no_model_calls(tmp_path):
     meta=json.loads((target/'run.json').read_text(encoding='utf-8'))
     assert meta['additional_model_calls']==0 and meta['source_results_sha256']
     assert meta['revalidated'] and meta['changed_status_count']==0
+    assert all(meta[key] for key in ('grading_code_sha256','validation_code_sha256','response_models_sha256','grading_diff_sha256'))

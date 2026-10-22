@@ -8,7 +8,7 @@ from langchain_core.messages import SystemMessage, HumanMessage
 from langgraph.graph import START, END, StateGraph
 from cpea.application.models.decomposition import DecompositionDraft, DecompositionResponse
 from cpea.infrastructure.llm.context_budget import build_token_counter
-from cpea.infrastructure.llm.factory import bind_response_schema
+from cpea.infrastructure.llm.factory import bind_response_schema, prepare_structured_messages
 from cpea.infrastructure.llm.parsing import parse_model
 from cpea.workflows.task_decomposition.prompt import DECOMPOSITION_PROMPT
 from cpea.workflows.task_decomposition.validation import validate_decomposition, prepare_requests
@@ -54,6 +54,7 @@ class TaskDecompositionWorkflow:
         context={'request':state['request'],'views':[{'view':v.name,**v.policy} for v in views],
                  'response_schema':DecompositionDraft.model_json_schema()}
         messages=[SystemMessage(content=DECOMPOSITION_PROMPT),HumanMessage(content=json.dumps(context,ensure_ascii=False))]
+        messages=prepare_structured_messages(messages,DecompositionDraft,schema=context['response_schema'])
         tokens=self.token_counter.count_messages([('system',messages[0].content),('user',messages[1].content)])
         budget=self.settings.context_window-self.settings.output_token_reserve-self.settings.context_safety_tokens
         if tokens>budget:
@@ -65,8 +66,6 @@ class TaskDecompositionWorkflow:
         event={'messages':[{'role':m.type,'content':m.content} for m in state['messages']]}
         try:
             llm=bind_response_schema(self.llm,DecompositionDraft)
-            if self.settings.llm_provider=='azure' and hasattr(llm,'bind'):
-                llm=llm.bind(response_format={'type':'json_object'})
             raw=llm.invoke(state['messages'])
         except Exception as exc:
             event.update(error_type=type(exc).__name__,error=str(exc),elapsed_ms=(perf_counter()-started)*1000)

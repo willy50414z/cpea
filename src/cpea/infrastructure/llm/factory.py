@@ -1,6 +1,8 @@
 from typing import Any
+import json
 
 from langchain_core.language_models import BaseChatModel
+from langchain_core.messages import SystemMessage, convert_to_messages
 from langchain_ollama import ChatOllama
 from pydantic import BaseModel
 
@@ -33,6 +35,25 @@ def response_schema_for(response_model: type[BaseModel], *,
     return schema
 
 
+def prepare_structured_messages(messages, response_model: type[BaseModel], *, schema=None):
+    """Expose the same output contract to every provider before token counting."""
+    schema = schema if schema is not None else response_schema_for(response_model)
+    serialized = json.dumps(schema, ensure_ascii=False)
+    prepared = convert_to_messages([messages] if isinstance(messages, str) else messages)
+    if any(isinstance(message.content, str) and serialized in message.content for message in prepared):
+        return prepared
+    instruction = ('只回傳符合以下 JSON Schema 的 JSON 物件，必須包含所有 required 欄位。'
+                   '\n輸出契約：' + serialized)
+    if prepared and isinstance(prepared[0], SystemMessage):
+        content = prepared[0].content
+        content = (content + '\n\n' + instruction if isinstance(content, str)
+                   else [*content, {'type': 'text', 'text': instruction}])
+        prepared[0] = prepared[0].model_copy(update={'content': content})
+    else:
+        prepared.insert(0, SystemMessage(content=instruction))
+    return prepared
+
+
 def bind_response_schema(llm: Any, response_model: type[BaseModel], *, schema=None) -> Any:
     """Constrain a response without changing the shared model's format."""
     schema = schema if schema is not None else response_schema_for(response_model)
@@ -40,6 +61,15 @@ def bind_response_schema(llm: Any, response_model: type[BaseModel], *, schema=No
         return llm.with_response_schema(schema)
     if isinstance(llm, ChatOllama):
         return llm.bind(format=schema)
+    try:
+        from langchain_openai import ChatOpenAI
+    except ImportError:
+        pass
+    else:
+        if isinstance(llm, ChatOpenAI):
+            # The full schema travels in common messages. JSON mode does not
+            # assume that this deployment supports native strict JSON Schema.
+            return llm.bind(response_format={'type': 'json_object'})
     return llm
 
 

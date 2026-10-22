@@ -30,7 +30,7 @@ from langgraph.graph import END, START, StateGraph
 from pydantic import BaseModel, Field
 
 from cpea.infrastructure.llm.context_budget import ContextPacker
-from cpea.infrastructure.llm.factory import bind_response_schema, response_schema_for
+from cpea.infrastructure.llm.factory import bind_response_schema, response_schema_for, prepare_structured_messages
 from cpea.application.models.query import (CandidateAttempt, ClarificationChoice, ClarificationOption,
     ClarificationRequest, ConversationTurn, MappingAttempt, QueryTaskTrace, SourceReference, SQLGenerationResponse)
 from cpea.workflows.text_to_sql.schemas import ClauseField, ClarificationResolution, SQLClauseMapping, SchemaLinkDraft
@@ -1370,7 +1370,8 @@ class SQLGenerationWorkflow:
                       response_schema=None, on_parse_error=None):
         serialized = {key: value.model_dump_json() if hasattr(value, "model_dump_json") else value
                       for key, value in variables.items()}
-        messages = prompt.invoke(serialized).to_messages()
+        messages = prepare_structured_messages(prompt.invoke(serialized).to_messages(), model,
+                                               schema=response_schema)
         response_llm = bind_response_schema(self.llm, model, schema=response_schema)
         last_error: ValueError | None = None
         for attempt in range(2):

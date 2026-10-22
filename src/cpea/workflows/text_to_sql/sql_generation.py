@@ -701,11 +701,15 @@ class SQLGenerationWorkflow:
                              "grain": schema.get("grain"), "temporal_scope": schema.get("temporal_scope"),
                              "data_scope": schema.get("data_scope"), "term_mappings": schema.get("term_mappings"),
                              "scope_rules": schema.get("scope_rules"),
+                             **{key: schema[key] for key in ('source', 'scope', 'time', 'usage', 'metrics')
+                                if key in schema},
                              "mapped_fields": [{"request_text": link.fact_text, "role": link.role,
                                                 "aggregation": link.aggregation,
                                                 **({'operator': link.operator, 'value': link.value}
                                                    if self.match_prompt.version == 'v10' else {}),
-                                                "description": columns[link.column]["description"]}
+                                                "description": columns[link.column]["description"],
+                                                **({'entity': columns[link.column]['entity']}
+                                                   if 'entity' in columns[link.column] else {})}
                                                for link in selected["links"].links
                                                if link.column in columns]})
         def signature(item: dict[str, Any]) -> str:
@@ -713,6 +717,7 @@ class SQLGenerationWorkflow:
                 "summary": item["summary"], "grain": item["grain"],
                 "temporal_scope": item["temporal_scope"], "data_scope": item["data_scope"],
                 "term_mappings": item["term_mappings"], "scope_rules": item["scope_rules"],
+                **{key: item[key] for key in ('source', 'scope', 'time', 'usage', 'metrics') if key in item},
                 "mapped_fields": sorted(item["mapped_fields"], key=lambda field:
                                         (field["request_text"], field["role"], field["description"])),
             }, ensure_ascii=False, sort_keys=True)
@@ -724,7 +729,10 @@ class SQLGenerationWorkflow:
             "summary": item["summary"], "grain": item["grain"],
             "temporal_scope": item["temporal_scope"], "data_scope": item["data_scope"],
             "term_mappings": item["term_mappings"], "scope_rules": item["scope_rules"],
+            **{key: item[key] for key in ('source', 'scope', 'time', 'usage', 'metrics') if key in item},
             "mapped_field_descriptions": [field["description"] for field in item["mapped_fields"]],
+            **({'mapped_field_entities': [field['entity'] for field in item['mapped_fields'] if 'entity' in field]}
+               if any('entity' in field for field in item['mapped_fields']) else {}),
         }, ensure_ascii=False) for item in evidence}
         exact_matches = set()
         for item in evidence:
@@ -1410,11 +1418,12 @@ def candidate_schema(definition) -> dict[str, Any]:
             "aggregations": contract.field_contract(definition.name, name).get("aggregations", []),
             **({"default_aggregation": spec["default_aggregation"]} if spec.get("default_aggregation") else {}),
             **({"role": spec["role"]} if "role" in spec else {}),
+            **({"entity": spec["entity"]} if "entity" in spec else {}),
             **({"unit": spec["unit"]} if "unit" in spec else {}),
             **({key: spec[key] for key in ("disallowed_aggregations", "disallowed_operators", "disallowed_capabilities") if key in spec}),
         } for name, spec in definition.policy["columns"].items()},
     }
-    if definition.policy.get('version') == 3:
+    if definition.policy.get('version') in {3, 4}:
         base = ['!=', '<>', '=', 'IN']
         schema['filter_operators'] = {
             'default': [*base, 'LIKE'],
@@ -1428,6 +1437,9 @@ def candidate_schema(definition) -> dict[str, Any]:
         }
     for key in ("temporal_scope", "data_scope", "grain", "filter_operators", "term_mappings", "scope_rules"):
         if definition.policy.get(key):
+            schema[key] = definition.policy[key]
+    if definition.policy.get('version') == 4:
+        for key in ('source', 'scope', 'time', 'usage', 'metrics'):
             schema[key] = definition.policy[key]
     return schema
 

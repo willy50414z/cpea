@@ -1,11 +1,38 @@
-version: 3
+version: 4
 view: demo_retail.v_daily_sales
-summary: 粒度：門市×有銷售的日期；沒有交易的門市日期不出現。適合每日營收、門市趨勢
+summary: 門市每日銷售彙總資料。
 grain:
-  description: 門市×有銷售的日期
+  description: 每個門市與銷售日期組合一列
   keys:
   - sales_date
   - store_id
+source:
+  verification: metadata_verified
+  relations:
+  - demo_retail.v_order_summary
+  definition_sha256: 2b875c93a84c5b37a71f5d9220f5a611fbfc3d1ccb3b631252369e5576419b71
+scope:
+  population: 依門市與日期彙總的已完成訂單。
+  included:
+  - 繼承訂單彙總的已完成訂單口徑
+  excluded:
+  - 未完成訂單
+  row_coverage: 只出現有交易的門市日期；沒有資料列不等於已補零。
+time:
+  kind: aggregate
+  dimensions:
+    sales_date: 訂單成立日期的曆日。
+  coverage: null
+  rules: []
+usage:
+  supported:
+  - 每日營收與門市銷售趨勢
+  - 依門市區域與城市彙總銷售
+  unsupported:
+  - question: 商品分類銷售排行
+    reason: 未輸出商品維度。
+  - question: 包含零交易日的每日平均
+    reason: 未補齊無交易的門市日期，缺列無法直接當作零。
 columns:
   sales_date:
     type: date
@@ -15,18 +42,22 @@ columns:
     type: number
     role: identifier
     description: 門市id
+    entity: 門市
   store_name:
     type: string
     role: dimension
     description: 門市名稱
+    entity: 門市
   region:
     type: string
     role: dimension
     description: 門市所屬區域；北部、中部、南部
+    entity: 門市
   city:
     type: string
     role: dimension
     description: 門市所在城市
+    entity: 門市
   order_count:
     type: number
     role: measure
@@ -46,3 +77,28 @@ columns:
     role: measure
     description: 門市此日毛利總額（折扣後淨額 − 商品成本），單位 TWD
     unit: TWD
+metrics:
+  orders:
+    description: 每日訂單數
+    columns:
+    - order_count
+    calculation: COUNT 訂單彙總列數。
+    aggregation_notes: 可依所需維度加總；MIN、MAX、AVG 作用於本 view 的單列值，不能還原較細粒度的分布。
+  units:
+    description: 每日銷售件數
+    columns:
+    - units_sold
+    calculation: SUM 訂單商品總件數。
+    aggregation_notes: 可依所需維度加總；MIN、MAX、AVG 作用於本 view 的單列值，不能還原較細粒度的分布。
+  revenue:
+    description: 每日折扣後營收
+    columns:
+    - revenue
+    calculation: SUM 訂單折扣後金額。
+    aggregation_notes: 可依所需維度加總；MIN、MAX、AVG 作用於本 view 的單列值，不能還原較細粒度的分布。
+  gross_profit:
+    description: 每日毛利
+    columns:
+    - gross_profit
+    calculation: SUM 訂單毛利。
+    aggregation_notes: 可依所需維度加總；MIN、MAX、AVG 作用於本 view 的單列值，不能還原較細粒度的分布。

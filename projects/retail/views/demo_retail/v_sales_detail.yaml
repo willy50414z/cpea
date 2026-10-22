@@ -1,20 +1,56 @@
-version: 3
+version: 4
 view: demo_retail.v_sales_detail
-summary: 粒度：每筆已完成訂單的每個商品品項；僅含已完成訂單。銷售額為折扣後淨額，毛利=淨額-成本。請勿以 COUNT(*) 當訂單數。
+summary: 商品交易明細資料。
 grain:
-  description: 每筆已完成訂單的每筆商品明細
-  keys:
-    - order_id
-    - product_id
+  description: 每筆訂單商品明細一列
+  keys: null
+source:
+  verification: metadata_verified
+  relations:
+  - demo_retail.customers
+  - demo_retail.order_items
+  - demo_retail.orders
+  - demo_retail.products
+  - demo_retail.stores
+  definition_sha256: 9c75628ab4e5d15fb4be3873b836433d62d7d84fdb98289ea9f5daa7330e8200
+scope:
+  population: 能連結訂單、門市、會員與商品主檔的訂單明細。
+  included:
+  - 訂單狀態為 completed
+  excluded:
+  - 未完成訂單
+  row_coverage: 同訂單可有多筆同商品明細；未輸出 order_item_id 或 line_no，輸出欄位沒有可證實的唯一鍵。
+time:
+  kind: event
+  dimensions:
+    order_date: 訂單成立時間轉為曆日。
+    order_month: 訂單成立月份首日。
+  coverage: null
+  rules:
+  - columns:
+    - order_date
+    - order_month
+    description: 兩欄都來自訂單成立時間，不代表付款日期。
+usage:
+  supported:
+  - 商品交易明細金額、銷量與毛利分析
+  - 按交易門市、會員、商品與期間彙總
+  unsupported:
+  - question: 直接把資料列數當作訂單數
+    reason: 每筆訂單可能有多列明細；訂單數需 COUNT DISTINCT order_id 或使用訂單彙總。
+  - question: 依會員居住城市分析
+    reason: 未輸出會員城市；store_city 是交易門市城市。
 columns:
   order_id:
     type: number
     role: identifier
     description: 訂單內部識別碼；同一訂單可有多筆商品明細，因此此欄位在本 View 不唯一。
+    entity: 訂單
   order_no:
     type: string
     role: identifier
     description: 提供使用者辨識訂單的訂單編號；同一訂單的多筆明細會重複。
+    entity: 訂單
   order_date:
     type: date
     role: dimension
@@ -27,18 +63,22 @@ columns:
     type: number
     role: identifier
     description: 交易所屬門市的識別碼。
+    entity: 門市
   store_name:
     type: string
     role: dimension
     description: 交易所屬門市名稱。
+    entity: 門市
   region:
     type: string
     role: dimension
     description: 門市所屬區域；測試資料為北部、中部、南部。
+    entity: 門市
   store_city:
     type: string
     role: dimension
     description: 交易門市所在城市；不是會員居住城市。
+    entity: 門市
   sales_channel:
     type: string
     role: dimension
@@ -47,30 +87,37 @@ columns:
     type: number
     role: identifier
     description: 下單會員識別碼；同一會員可能有多筆訂單及明細。
+    entity: 會員
   customer_name:
     type: string
     role: dimension
     description: 下單會員名稱；為虛構測試資料。
+    entity: 會員
   membership_tier:
     type: string
     role: dimension
     description: 下單會員所屬等級；一般、銀卡、金卡、VIP。
+    entity: 會員
   product_id:
     type: number
     role: identifier
     description: 商品識別碼；同商品可能出現在不同訂單明細。
+    entity: 商品
   sku:
     type: string
     role: identifier
     description: 商品庫存單位代碼（SKU），用於辨識商品。
+    entity: 商品
   product_name:
     type: string
     role: dimension
     description: 本筆訂單明細販售的商品名稱。
+    entity: 商品
   category:
     type: string
     role: dimension
     description: 商品所屬分類，例如飲料、零食、日用品。
+    entity: 商品
   quantity:
     type: number
     role: measure
@@ -107,3 +154,47 @@ columns:
     role: measure
     description: 本筆明細毛利，net_sales − cost_amount，單位 TWD；不是毛利率。
     unit: TWD
+metrics:
+  units:
+    description: 明細銷售件數
+    columns:
+    - quantity
+    calculation: 明細 quantity。
+    aggregation_notes: 可依商品、門市與期間加總。
+  gross_sales:
+    description: 明細折扣前銷售額
+    columns:
+    - gross_sales
+    - quantity
+    - unit_price
+    calculation: quantity × unit_price。
+    aggregation_notes: 可加總金額，不可直接加總單價。
+  discount:
+    description: 明細折扣金額
+    columns:
+    - discount_amount
+    calculation: 訂單明細的 discount。
+    aggregation_notes: 可加總。
+  net_sales:
+    description: 明細折扣後銷售額
+    columns:
+    - net_sales
+    - gross_sales
+    - discount_amount
+    calculation: gross_sales − discount_amount。
+    aggregation_notes: 可加總；單列極值代表一筆商品明細，不是整筆訂單。
+  cost:
+    description: 明細成本
+    columns:
+    - cost_amount
+    - quantity
+    calculation: quantity × 下單時 unit_cost。
+    aggregation_notes: 可加總；成本單價未輸出。
+  profit:
+    description: 明細毛利
+    columns:
+    - gross_profit
+    - net_sales
+    - cost_amount
+    calculation: net_sales − cost_amount。
+    aggregation_notes: 可加總，不是毛利率。

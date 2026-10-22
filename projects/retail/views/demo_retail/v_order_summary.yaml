@@ -1,19 +1,57 @@
-version: 3
+version: 4
 view: demo_retail.v_order_summary
-summary: 粒度：每筆已完成訂單一列；適合訂單數、客單價、單筆訂單金額與通路分析；取消訂單已排除。
+summary: 訂單銷售彙總資料。
 grain:
-  description: 每筆已完成訂單一列
+  description: 每筆訂單一列
   keys:
   - order_id
+source:
+  verification: metadata_verified
+  relations:
+  - demo_retail.customers
+  - demo_retail.order_items
+  - demo_retail.orders
+  - demo_retail.stores
+  definition_sha256: 9c611d5e71b6f178e1ef35eadb64f672b33cfbe717f4e5dd5ad7d91bdb4fb859
+scope:
+  population: 有商品明細且能連結門市與會員的已完成訂單。
+  included:
+  - 訂單狀態為 completed
+  excluded:
+  - 未完成訂單
+  - 沒有商品明細的訂單
+  row_coverage: 明細經 INNER JOIN 後彙總成訂單列；不是所有訂單主檔紀錄。
+time:
+  kind: event
+  dimensions:
+    order_date: 訂單成立時間轉為曆日。
+    order_month: 訂單成立月份首日。
+  coverage: null
+  rules:
+  - columns:
+    - order_date
+    - order_month
+    description: 兩欄都來自訂單成立時間，不代表付款日期。
+usage:
+  supported:
+  - 訂單筆數與訂單金額分析
+  - 訂單通路、會員等級與門市分析
+  unsupported:
+  - question: 商品層級銷售分析
+    reason: 商品明細已彙總，未輸出商品維度。
+  - question: 取消或未完成訂單分析
+    reason: 內建已排除未完成訂單。
 columns:
   order_id:
     type: number
     role: identifier
     description: 已完成訂單的唯一識別碼；本 View 每筆訂單只有一列。
+    entity: 訂單
   order_no:
     type: string
     role: identifier
     description: 訂單編號；本 View 每筆已完成訂單只有一列。
+    entity: 訂單
   order_date:
     type: date
     role: dimension
@@ -26,18 +64,22 @@ columns:
     type: number
     role: identifier
     description: 訂單所屬門市識別碼。
+    entity: 門市
   store_name:
     type: string
     role: dimension
     description: 訂單所屬門市名稱。
+    entity: 門市
   region:
     type: string
     role: dimension
     description: 訂單門市所屬區域；北部、中部、南部。
+    entity: 門市
   store_city:
     type: string
     role: dimension
     description: 訂單門市所在城市，不是會員居住城市。
+    entity: 門市
   sales_channel:
     type: string
     role: dimension
@@ -46,14 +88,17 @@ columns:
     type: number
     role: identifier
     description: 下單會員識別碼。
+    entity: 會員
   customer_name:
     type: string
     role: dimension
     description: 下單會員名稱；為虛構測試資料。
+    entity: 會員
   membership_tier:
     type: string
     role: dimension
     description: 下單會員等級；一般、銀卡、金卡、VIP。
+    entity: 會員
   item_lines:
     type: number
     role: measure
@@ -78,3 +123,42 @@ columns:
     role: measure
     description: 此訂單毛利，order_amount − cost_amount，單位 TWD。
     unit: TWD
+metrics:
+  orders:
+    description: 訂單筆數
+    columns:
+    - order_id
+    calculation: 每列代表一筆訂單，可計算列數。
+    aggregation_notes: 不可將 item_lines 或 total_quantity 當作訂單筆數。
+  lines:
+    description: 商品明細列數
+    columns:
+    - item_lines
+    calculation: COUNT order_item_id。
+    aggregation_notes: 跨訂單可加總；與銷售件數不同。
+  units:
+    description: 銷售件數
+    columns:
+    - total_quantity
+    calculation: SUM 明細 quantity。
+    aggregation_notes: 跨訂單可加總。
+  net_sales:
+    description: 訂單折扣後銷售額
+    columns:
+    - order_amount
+    calculation: SUM 明細 quantity × unit_price − discount。
+    aggregation_notes: 跨訂單可加總；單列最大值是訂單金額最大值。
+  cost:
+    description: 訂單成本
+    columns:
+    - cost_amount
+    calculation: SUM 明細 quantity × 下單時 unit_cost。
+    aggregation_notes: 跨訂單可加總。
+  profit:
+    description: 訂單毛利
+    columns:
+    - gross_profit
+    - order_amount
+    - cost_amount
+    calculation: order_amount − cost_amount。
+    aggregation_notes: 跨訂單可加總，不是毛利率。

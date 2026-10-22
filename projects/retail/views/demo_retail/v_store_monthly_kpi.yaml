@@ -1,11 +1,45 @@
-version: 3
+version: 4
 view: demo_retail.v_store_monthly_kpi
-summary: 粒度：每門市每月一列。營收、毛利、訂單數、客單價、月目標與達標率；百分比數值為 0~100。
+summary: 門市每月營運績效與目標資料。
 grain:
-  description: 每門市每月一列
+  description: 每個門市與月份組合一列
   keys:
   - store_id
   - sales_month
+source:
+  verification: metadata_verified
+  relations:
+  - demo_retail.monthly_targets
+  - demo_retail.stores
+  - demo_retail.v_order_summary
+  definition_sha256: 561289b2f5f2f6e01f6c37127d223096008f5fa20fec9beac39e0029c4ebd75b
+scope:
+  population: 月目標表中已設定目標且能連結門市的門市月份。
+  included:
+  - 實績僅統計已完成訂單
+  - 有目標但無成交訂單的組合仍保留
+  excluded:
+  - 未設定目標的門市月份
+  row_coverage: 以目標表為母體 LEFT JOIN 實績；沒有實績時訂單數、件數、營收與毛利補 0。
+time:
+  kind: aggregate
+  dimensions:
+    sales_month: 目標月份首日，連結相同訂單成立月份的實績。
+  coverage: null
+  rules:
+  - columns:
+    - sales_month
+    - is_complete_month
+    description: 完整月旗標固定為 sales_month < 2026-10-01；不是隨執行當下月份變動。
+usage:
+  supported:
+  - 門市月營收、毛利與銷量分析
+  - 月目標及達標率比較
+  unsupported:
+  - question: 涵蓋所有門市月份的完整銷售統計
+    reason: 未設定目標的門市月份不出現，不能推定是零營收。
+  - question: 商品或每日銷售分析
+    reason: 僅保留門市月份彙總。
 columns:
   sales_month:
     type: date
@@ -15,18 +49,22 @@ columns:
     type: number
     role: identifier
     description: 門市識別碼；與 sales_month 組合唯一決定一列。
+    entity: 門市
   store_name:
     type: string
     role: dimension
     description: 門市名稱。
+    entity: 門市
   region:
     type: string
     role: dimension
     description: 門市所屬區域；北部、中部、南部。
+    entity: 門市
   city:
     type: string
     role: dimension
     description: 門市所在城市。
+    entity: 門市
   order_count:
     type: number
     role: measure
@@ -49,7 +87,7 @@ columns:
   gross_margin_pct:
     type: number
     role: measure
-    description: 該門市當月毛利率，gross_profit ÷ revenue × 100，單位 %（0～100 表示百分比）；營收為 0 時回傳 0。跨門市或月份需以總毛利／總營收重算，勿直接加總或平均百分比。
+    description: gross_profit ÷ revenue × 100，四捨五入至二位小數；營收不大於 0 時回傳 0。跨門市或月份應以總毛利／總營收重算，勿直接加總或平均百分比。
     unit: '%'
     disallowed_aggregations:
     - sum
@@ -78,4 +116,53 @@ columns:
   is_complete_month:
     type: boolean
     role: dimension
-    description: 是否為此示範資料中的完整統計月份；2026-10 為 false，其他月份為 true；為固定示範邏輯，非即時判斷。
+    description: 固定判定 sales_month < 2026-10-01；不是依目前月份動態計算。
+metrics:
+  orders:
+    description: 月訂單數
+    columns:
+    - order_count
+    calculation: COUNT 該門市月份已完成訂單；無實績補 0。
+    aggregation_notes: 可依所需維度加總；MIN、MAX、AVG 作用於本 view 的單列值，不能還原較細粒度的分布。
+  units:
+    description: 月銷售件數
+    columns:
+    - units_sold
+    calculation: SUM 訂單商品總件數；無實績補 0。
+    aggregation_notes: 可依所需維度加總；MIN、MAX、AVG 作用於本 view 的單列值，不能還原較細粒度的分布。
+  revenue:
+    description: 月營收
+    columns:
+    - revenue
+    calculation: SUM 訂單折扣後金額；無實績補 0。
+    aggregation_notes: 可依所需維度加總；MIN、MAX、AVG 作用於本 view 的單列值，不能還原較細粒度的分布。
+  profit:
+    description: 月毛利
+    columns:
+    - gross_profit
+    calculation: SUM 訂單毛利；無實績補 0。
+    aggregation_notes: 可依所需維度加總；MIN、MAX、AVG 作用於本 view 的單列值，不能還原較細粒度的分布。
+  margin:
+    description: 毛利率百分比
+    columns:
+    - gross_margin_pct
+    - gross_profit
+    - revenue
+    calculation: 營收 > 0 時 gross_profit ÷ revenue × 100，四捨五入至二位小數；否則為 0。
+    aggregation_notes: 跨門市或月份以總毛利除以總營收重算，不能直接加總或平均百分比；百分比並非保證落在 0 至 100。
+  average_order_value:
+    description: 客單價
+    columns:
+    - avg_order_value
+    - revenue
+    - order_count
+    calculation: 訂單數 > 0 時 revenue ÷ order_count，四捨五入至二位小數；否則為 0。
+    aggregation_notes: 跨門市或月份以總營收除以總訂單數重算。
+  achievement:
+    description: 營收目標達成率
+    columns:
+    - target_achievement_pct
+    - revenue
+    - target_amount
+    calculation: target_amount > 0 時 revenue ÷ target_amount × 100，四捨五入至二位小數；否則為 null。
+    aggregation_notes: 跨門市或月份以總營收除以總目標重算，不能直接加總或平均百分比；可超過 100。

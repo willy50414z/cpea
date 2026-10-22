@@ -1,4 +1,5 @@
 from __future__ import annotations
+import json
 import re
 from typing import Any
 import yaml
@@ -155,7 +156,7 @@ class CatalogContract:
         contract = definition.policy.get("columns", {}).get(column)
         if not isinstance(contract, dict):
             raise ValueError(f"column is not in view contract: {view_name}.{column}")
-        if definition.policy.get('version') != 3:
+        if definition.policy.get('version') not in {3, 4}:
             return contract
         field_type = contract['type']
         capabilities = {'select', 'filter', 'group_by', 'order_by'} - set(contract.get('disallowed_capabilities', []))
@@ -204,7 +205,7 @@ class CatalogContract:
 
     def _operators_for(self, view_name: str, column: str) -> set[str]:
         definition = next(item for item in self.views() if item.name == view_name)
-        if definition.policy.get('version') == 3:
+        if definition.policy.get('version') in {3, 4}:
             spec = definition.policy['columns'][column]
             base = {'=', '!=', '<>', 'IN'}
             if spec['type'] in {'number', 'date'}:
@@ -246,6 +247,14 @@ class CatalogContract:
         if policy.get("limitations"):
             lines.extend(["", "## 已知限制"])
             lines.extend(f"- {item}" for item in policy["limitations"])
+        if policy.get('version') == 4:
+            for key, label in (('grain', '資料粒度'), ('source', '來源證據'),
+                               ('scope', '資料母體與範圍'), ('time', '時間規則'),
+                               ('usage', '適用範圍'), ('metrics', '指標口徑')):
+                lines.extend(['', f'## {label}', '', json.dumps(policy[key], ensure_ascii=False)])
+            entities = {name: spec['entity'] for name, spec in policy['columns'].items() if 'entity' in spec}
+            if entities:
+                lines.extend(['', '## 欄位所屬實體', '', json.dumps(entities, ensure_ascii=False)])
         return "\n".join(lines) + "\n"
 
     def context(self, view_names: list[str]) -> str:

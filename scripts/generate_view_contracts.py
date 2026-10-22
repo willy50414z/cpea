@@ -1,13 +1,18 @@
-"""Generate reviewable v3 contracts from PostgreSQL catalog metadata only."""
+"""Verify explicit v4 semantics against read-only PostgreSQL metadata."""
 from __future__ import annotations
 
 import argparse
+from copy import deepcopy
+from hashlib import sha256
 from pathlib import Path
 import re
 
 from dotenv import dotenv_values
 import psycopg
 import yaml
+
+from cpea.infrastructure.catalog.view_contract_v4 import validate_view_contract_v4
+from cpea.infrastructure.catalog.yaml_catalog import SchemaCatalog
 
 
 GRAINS = {
@@ -76,13 +81,69 @@ def discover(cursor, schema: str):
         yield name, definition, comment, cursor.fetchall(), constraints
 
 
+def discover_relations(cursor, schema: str, name: str) -> list[str]:
+    cursor.execute("""SELECT DISTINCT rn.nspname || '.' || rel.relname
+                      FROM pg_rewrite rw JOIN pg_class v ON v.oid=rw.ev_class
+                      JOIN pg_namespace vn ON vn.oid=v.relnamespace
+                      JOIN pg_depend d ON d.classid='pg_rewrite'::regclass AND d.objid=rw.oid
+                      JOIN pg_class rel ON d.refclassid='pg_class'::regclass AND rel.oid=d.refobjid
+                      JOIN pg_namespace rn ON rn.oid=rel.relnamespace
+                      WHERE vn.nspname=%s AND v.relname=%s AND rel.oid<>v.oid
+                        AND rel.relkind IN ('r','p','v','m','f')
+                      ORDER BY 1""", (schema, name))
+    return [row[0] for row in cursor.fetchall()]
+
+
+def build_view_contract(name, definition, columns, constraints, semantics, relations) -> dict:
+    if not semantics or semantics.get('version') != 4:
+        raise ValueError(f'explicit v4 semantic definition required: {name}')
+    validate_view_contract_v4(semantics)
+    if semantics['view'] != f'demo_retail.{name}' or name not in GRAINS:
+        raise ValueError(f'no reviewed grain rule for {name}')
+    source = semantics['source']
+    if (source['verification'] != 'metadata_verified'
+            or source['definition_sha256'] != sha256(definition.encode('utf-8')).hexdigest()):
+        raise ValueError(f'view definition changed or unverified: {name}')
+    if set(source['relations'] or []) != set(relations):
+        raise ValueError(f'source relations changed: {name}')
+    actual_columns = {col: pg_type(db_type) for col, db_type, _ in columns}
+    if actual_columns != {col: spec['type'] for col, spec in semantics['columns'].items()}:
+        raise ValueError(f'view output columns or types changed: {name}')
+    keys, required, fragments = GRAINS[name]
+    actual_keys = semantics['grain']['keys']
+    if (keys is None) != (actual_keys is None) or set(keys or []) != set(actual_keys or []):
+        raise ValueError(f'grain keys differ from reviewed evidence: {name}')
+    for table, expected in required.items():
+        if not any(kind in ('p', 'u') and tuple(actual) == expected
+                   for kind, actual in constraints.get(table, [])):
+            raise ValueError(f'missing source uniqueness evidence: {name}/{table}')
+    if any(fragment not in definition for fragment in fragments):
+        raise ValueError(f'view grain definition changed: {name}')
+    return deepcopy(semantics)
+
+
+def write_contract_file(path: Path, contract: dict) -> None:
+    if path.exists():
+        if yaml.safe_load(path.read_text(encoding='utf-8')) != contract:
+            raise ValueError(f'existing contract differs; manual merge required: {path}')
+        return
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(yaml.safe_dump(contract, allow_unicode=True, sort_keys=False, width=120),
+                    encoding='utf-8', newline='\n')
+
+
 def main() -> None:
     project_root = Path(__file__).resolve().parents[1]
     parser = argparse.ArgumentParser()
     parser.add_argument('--root', type=Path, default=project_root / 'projects' / 'retail',
                         help='integration profile directory for generated contracts')
+    parser.add_argument('--semantic-profile', type=Path,
+                        default=project_root / 'projects' / 'retail',
+                        help='canonical profile containing explicit v4 semantics')
     args = parser.parse_args()
     root = args.root.resolve()
+    semantics = SchemaCatalog(args.semantic_profile.resolve(), allow_drafts=True)
+    policies = {view.name: view.policy for view in semantics.views()}
     config = dotenv_values(root / '.env', interpolate=False, encoding='utf-8')
     schema = config.get('RETAILER_DB_SCHEMA')
     if not schema or not re.fullmatch(r'[A-Za-z_][A-Za-z_0-9]*', schema):
@@ -95,50 +156,33 @@ def main() -> None:
         with db.cursor() as cursor:
             cursor.execute('BEGIN READ ONLY')
             for name, definition, comment, columns, constraints in discover(cursor, schema):
-                if name not in GRAINS:
-                    raise ValueError(f'no reviewed grain rule for {name}')
-                keys, required, fragments = GRAINS[name]
-                for table, expected in required.items():
-                    if not any(actual == expected for _, actual in constraints.get(table, [])):
-                        raise ValueError(f'missing source uniqueness evidence: {name}/{table}')
-                if any(fragment not in definition for fragment in fragments):
-                    raise ValueError(f'view definition changed: {name}')
-                if not comment:
-                    raise ValueError(f'view comment missing: {name}')
-                specs = {col: column_spec(col, db_type, note) for col, db_type, note in columns}
-                if keys and not set(keys) <= set(specs):
-                    raise ValueError(f'grain keys missing from output: {name}')
-                summary = comment
-                grain_description = re.split('[；。]', comment, maxsplit=1)[0].removeprefix('粒度：')
-                if name == 'v_sales_detail':
-                    grain_description = '每筆已完成訂單的每筆商品明細'
-                generated[name] = {'version': 3, 'view': f'{schema}.{name}', 'summary': summary,
-                                   'grain': {'description': grain_description, 'keys': keys},
-                                   'columns': specs}
+                full_name = f'{schema}.{name}'
+                policy = policies.get(full_name)
+                generated[name] = build_view_contract(name, definition, columns, constraints, policy,
+                                                     discover_relations(cursor, schema, name))
+    if {f'{schema}.{name}' for name in generated} != set(policies):
+        raise ValueError('discovered views differ from canonical semantic profile')
     destination = root / 'views' / schema
     destination.mkdir(parents=True, exist_ok=True)
     for name, contract in generated.items():
         path = destination / f'{name}.yaml'
-        if path.exists():
-            prior = yaml.safe_load(path.read_text(encoding='utf-8'))
-            if prior != contract:
-                raise ValueError(f'existing contract differs; manual merge required: {path}')
-            continue
-        path.write_text(yaml.safe_dump(contract, allow_unicode=True, sort_keys=False, width=120), encoding='utf-8', newline='\n')
+        write_contract_file(path, contract)
     catalog = {'schema': schema, 'views': {f'{schema}.{name}': {'path': f'views/{schema}/{name}.yaml'} for name in generated}}
     catalog_path = root / 'catalog.yaml'
     if catalog_path.exists() and yaml.safe_load(catalog_path.read_text(encoding='utf-8')) != catalog:
         raise ValueError('existing catalog differs; manual merge required')
     if not catalog_path.exists():
         catalog_path.write_text(yaml.safe_dump(catalog, allow_unicode=True, sort_keys=False), encoding='utf-8', newline='\n')
-    manifest = {'profile_id': f'{schema}_draft', 'contract_version': '3-draft', 'source_kind': 'sql',
+    manifest = {'profile_id': f'{schema}_draft', 'contract_version': '4', 'source_kind': 'sql',
                 'catalog': 'catalog.yaml', 'status': 'draft'}
     manifest_path = root / 'manifest.yaml'
-    if manifest_path.exists() and yaml.safe_load(manifest_path.read_text(encoding='utf-8')) != manifest:
-        raise ValueError('existing manifest differs; manual merge required')
+    if manifest_path.exists():
+        prior = yaml.safe_load(manifest_path.read_text(encoding='utf-8'))
+        if (prior.get('source_kind'), prior.get('catalog'), prior.get('contract_version')) != ('sql', 'catalog.yaml', '4'):
+            raise ValueError('existing manifest differs; manual merge required')
     if not manifest_path.exists():
         manifest_path.write_text(yaml.safe_dump(manifest, allow_unicode=True, sort_keys=False), encoding='utf-8', newline='\n')
-    print(f'generated {len(generated)} draft contracts in {destination}')
+    print(f'verified {len(generated)} v4 contracts in {destination}')
 
 
 if __name__ == '__main__':

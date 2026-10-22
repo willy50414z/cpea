@@ -1,0 +1,459 @@
+{
+  "$defs": {
+    "Column": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "enum": [
+            "string",
+            "number",
+            "date",
+            "boolean"
+          ],
+          "title": "Type",
+          "type": "string"
+        },
+        "role": {
+          "enum": [
+            "identifier",
+            "dimension",
+            "measure"
+          ],
+          "title": "Role",
+          "type": "string"
+        },
+        "description": {
+          "minLength": 1,
+          "title": "Description",
+          "type": "string"
+        },
+        "unit": {
+          "default": null,
+          "minLength": 1,
+          "title": "Unit",
+          "type": "string"
+        },
+        "entity": {
+          "default": null,
+          "minLength": 1,
+          "title": "Entity",
+          "type": "string"
+        },
+        "disallowed_aggregations": {
+          "items": {
+            "enum": [
+              "sum",
+              "count",
+              "count_distinct",
+              "avg",
+              "min",
+              "max"
+            ],
+            "type": "string"
+          },
+          "title": "Disallowed Aggregations",
+          "type": "array"
+        },
+        "disallowed_operators": {
+          "items": {
+            "enum": [
+              "=",
+              "!=",
+              "<>",
+              ">",
+              ">=",
+              "<",
+              "<=",
+              "IN",
+              "LIKE"
+            ],
+            "type": "string"
+          },
+          "title": "Disallowed Operators",
+          "type": "array"
+        },
+        "disallowed_capabilities": {
+          "items": {
+            "enum": [
+              "select",
+              "filter",
+              "group_by",
+              "order_by"
+            ],
+            "type": "string"
+          },
+          "title": "Disallowed Capabilities",
+          "type": "array"
+        }
+      },
+      "required": [
+        "type",
+        "role",
+        "description"
+      ],
+      "title": "Column",
+      "type": "object"
+    },
+    "Grain": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "minLength": 1,
+          "title": "Description",
+          "type": "string"
+        },
+        "keys": {
+          "anyOf": [
+            {
+              "items": {
+                "minLength": 1,
+                "pattern": "^\\S(?:[\\s\\S]*\\S)?$",
+                "type": "string"
+              },
+              "minItems": 1,
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Keys"
+        }
+      },
+      "required": [
+        "description",
+        "keys"
+      ],
+      "title": "Grain",
+      "type": "object"
+    },
+    "Metric": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "minLength": 1,
+          "title": "Description",
+          "type": "string"
+        },
+        "columns": {
+          "items": {
+            "minLength": 1,
+            "pattern": "^\\S(?:[\\s\\S]*\\S)?$",
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Columns",
+          "type": "array"
+        },
+        "calculation": {
+          "minLength": 1,
+          "title": "Calculation",
+          "type": "string"
+        },
+        "aggregation_notes": {
+          "minLength": 1,
+          "title": "Aggregation Notes",
+          "type": "string"
+        }
+      },
+      "required": [
+        "description",
+        "columns",
+        "calculation",
+        "aggregation_notes"
+      ],
+      "title": "Metric",
+      "type": "object"
+    },
+    "Scope": {
+      "additionalProperties": false,
+      "properties": {
+        "population": {
+          "minLength": 1,
+          "title": "Population",
+          "type": "string"
+        },
+        "included": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Included",
+          "type": "array"
+        },
+        "excluded": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Excluded",
+          "type": "array"
+        },
+        "row_coverage": {
+          "minLength": 1,
+          "title": "Row Coverage",
+          "type": "string"
+        }
+      },
+      "required": [
+        "population",
+        "included",
+        "excluded",
+        "row_coverage"
+      ],
+      "title": "Scope",
+      "type": "object"
+    },
+    "Source": {
+      "additionalProperties": false,
+      "properties": {
+        "verification": {
+          "enum": [
+            "metadata_verified",
+            "unknown"
+          ],
+          "title": "Verification",
+          "type": "string"
+        },
+        "relations": {
+          "anyOf": [
+            {
+              "items": {
+                "pattern": "^[A-Za-z_]\\w*(?:\\.[A-Za-z_]\\w*){1,2}$",
+                "type": "string"
+              },
+              "minItems": 1,
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Relations"
+        },
+        "definition_sha256": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Definition Sha256"
+        }
+      },
+      "required": [
+        "verification",
+        "relations",
+        "definition_sha256"
+      ],
+      "title": "Source",
+      "type": "object"
+    },
+    "Time": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "event",
+            "aggregate",
+            "snapshot",
+            "cumulative",
+            "mixed",
+            "unknown"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "dimensions": {
+          "patternProperties": {
+            "^\\S(?:[\\s\\S]*\\S)?$": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "propertyNames": {
+            "minLength": 1
+          },
+          "title": "Dimensions",
+          "type": "object"
+        },
+        "coverage": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Coverage"
+        },
+        "rules": {
+          "items": {
+            "$ref": "#/$defs/TimeRule"
+          },
+          "title": "Rules",
+          "type": "array"
+        }
+      },
+      "required": [
+        "kind",
+        "dimensions",
+        "coverage",
+        "rules"
+      ],
+      "title": "Time",
+      "type": "object"
+    },
+    "TimeRule": {
+      "additionalProperties": false,
+      "properties": {
+        "columns": {
+          "items": {
+            "minLength": 1,
+            "pattern": "^\\S(?:[\\s\\S]*\\S)?$",
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Columns",
+          "type": "array"
+        },
+        "description": {
+          "minLength": 1,
+          "title": "Description",
+          "type": "string"
+        }
+      },
+      "required": [
+        "columns",
+        "description"
+      ],
+      "title": "TimeRule",
+      "type": "object"
+    },
+    "UnsupportedUse": {
+      "additionalProperties": false,
+      "properties": {
+        "question": {
+          "minLength": 1,
+          "title": "Question",
+          "type": "string"
+        },
+        "reason": {
+          "minLength": 1,
+          "title": "Reason",
+          "type": "string"
+        }
+      },
+      "required": [
+        "question",
+        "reason"
+      ],
+      "title": "UnsupportedUse",
+      "type": "object"
+    },
+    "Usage": {
+      "additionalProperties": false,
+      "properties": {
+        "supported": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Supported",
+          "type": "array"
+        },
+        "unsupported": {
+          "items": {
+            "$ref": "#/$defs/UnsupportedUse"
+          },
+          "title": "Unsupported",
+          "type": "array"
+        }
+      },
+      "required": [
+        "supported",
+        "unsupported"
+      ],
+      "title": "Usage",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "const": 4,
+      "title": "Version",
+      "type": "integer"
+    },
+    "view": {
+      "pattern": "^[A-Za-z_]\\w*(?:\\.[A-Za-z_]\\w*){1,2}$",
+      "title": "View",
+      "type": "string"
+    },
+    "summary": {
+      "minLength": 1,
+      "pattern": "^[^\\r\\n]+$",
+      "title": "Summary",
+      "type": "string"
+    },
+    "grain": {
+      "$ref": "#/$defs/Grain"
+    },
+    "source": {
+      "$ref": "#/$defs/Source"
+    },
+    "scope": {
+      "$ref": "#/$defs/Scope"
+    },
+    "time": {
+      "$ref": "#/$defs/Time"
+    },
+    "usage": {
+      "$ref": "#/$defs/Usage"
+    },
+    "columns": {
+      "minProperties": 1,
+      "patternProperties": {
+        "^\\S(?:[\\s\\S]*\\S)?$": {
+          "$ref": "#/$defs/Column"
+        }
+      },
+      "propertyNames": {
+        "minLength": 1
+      },
+      "title": "Columns",
+      "type": "object"
+    },
+    "metrics": {
+      "patternProperties": {
+        "^\\S(?:[\\s\\S]*\\S)?$": {
+          "$ref": "#/$defs/Metric"
+        }
+      },
+      "propertyNames": {
+        "minLength": 1
+      },
+      "title": "Metrics",
+      "type": "object"
+    }
+  },
+  "required": [
+    "version",
+    "view",
+    "summary",
+    "grain",
+    "source",
+    "scope",
+    "time",
+    "usage",
+    "columns",
+    "metrics"
+  ],
+  "title": "ViewContractV4",
+  "type": "object"
+}

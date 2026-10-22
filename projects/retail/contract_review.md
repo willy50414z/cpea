@@ -1,52 +1,34 @@
-# demo_retail View Contract v3 人工審核
+# demo_retail View Contract v4 核對紀錄
 
 ## 狀態與範圍
 
-- 透過唯讀 PostgreSQL 連線檢查 `demo_retail` 的 7 個普通 View、102 個輸出欄位，以及來源表主鍵、唯一約束、CHECK 與預設值；沒有讀取業務資料列或修改資料庫。
-- 7 份 YAML 均為**草稿**。本 profile 的 `manifest.yaml` 標記 `status: draft`；正常 `SchemaCatalog` 載入會拒絕，僅明確傳入 `allow_drafts=True` 才可供驗證。不要把此 profile 設為正式查詢來源。
-- View Comment 缺少：無。Column Comment 缺少：無。根據欄位註解及型別仍無法合理判斷 Role：無。
-- 型別轉換：`integer`、`bigint`、`numeric` → `number`；`text` → `string`；`date` → `date`；`boolean` → `boolean`。本批沒有不支援的 PostgreSQL 型別。
+已以唯讀 PostgreSQL metadata 核對 7 個 views、102 個輸出欄位、直接來源、完整 view 定義及來源主鍵／唯一約束；沒有查詢業務資料列或修改資料庫。`source.verification: metadata_verified` 僅表示結構與 DDL 證據已核對。
 
-## Grain 與 Keys
+保留既有 manifest 的 `profile_id: demo_retail_draft` 與 `status: approved`，僅將 contract_version 更新為字串 `4`；此處不宣稱新增業務核准。原始題庫及 v3 快照另存於前後測證據目錄，不因遷移而改寫。
 
-| View | 草稿 Keys | 結構證據與待確認事項 |
+## 粒度與來源
+
+| View | 輸出唯一鍵 | 已核對的來源事實 |
 |---|---|---|
-| `v_customer_value` | `customer_id` | `customers` 主鍵是 `customer_id`；View 以該欄及會員屬性 GROUP BY，訂單統計在 JOIN 後聚合成每會員一列。 |
-| `v_daily_sales` | `store_id, sales_date` | View 依 `order_date, store_id` 及門市屬性 GROUP BY；`stores.store_id` 主鍵決定門市屬性。`v_order_summary` 的 `store_id` 來自該門市表。 |
-| `v_inventory_status` | `store_id, product_id` | `inventory` 的複合主鍵；門市與商品 JOIN 各引用主鍵，`last_30d` 也依這兩欄 GROUP BY。 |
-| `v_order_summary` | `order_id` | `orders.order_id` 主鍵；View 依 `o.order_id` 及訂單、門市、會員屬性 GROUP BY，明細在 JOIN 後匯總。 |
-| `v_product_monthly` | `store_id, sales_month, product_id` | View 依 `order_month, store_id, product_id` 及門市、商品屬性 GROUP BY；`stores.store_id`、`products.product_id` 均有主鍵，屬性由相應 ID 決定。 |
-| `v_sales_detail` | `null` | 來源 `order_items.order_item_id` 是主鍵，但 View 未輸出；`(order_id, product_id)` 沒有唯一約束，同訂單可有多筆同商品明細。**請確認是否可加入 `order_item_id`，或提供其他可證實唯一的輸出欄位。** |
-| `v_store_monthly_kpi` | `store_id, sales_month` | `monthly_targets(store_id, target_month)` 是複合主鍵；銷售 CTE 依相同門市／月份 GROUP BY，再 LEFT JOIN 該唯一組合。 |
+| v_customer_value | customer_id | customers 主鍵；LEFT JOIN 訂單再依會員彙總，包含未下單會員。 |
+| v_daily_sales | sales_date、store_id | 訂單依門市日期 GROUP BY；只包含有交易的日期，不補零。 |
+| v_inventory_status | store_id、product_id | inventory 複合主鍵；門市與商品主檔 JOIN 主鍵；銷量子查詢按相同鍵聚合。 |
+| v_order_summary | order_id | orders 主鍵；只含 completed，INNER JOIN 商品明細後依訂單彙總。 |
+| v_product_monthly | store_id、sales_month、product_id | 交易明細依門市、月份、商品及其屬性 GROUP BY，無訂單數。 |
+| v_sales_detail | null | 未輸出 order_item_id 或 line_no；來源唯一約束是 order_item_id 與 (order_id,line_no)，不能證明 (order_id,product_id) 唯一。 |
+| v_store_monthly_kpi | store_id、sales_month | monthly_targets 複合主鍵；以目標表為母體 LEFT JOIN 月實績，無目標組合不出現。 |
 
-## 數值指標與重複計算風險
+## 時間與指標核對
 
-| View／欄位 | 判斷依據 | 建議修正方向 |
-|---|---|---|
-| `v_sales_detail`／整個 View | View Comment 明示「請勿以 COUNT(*) 當訂單數」；同一 `order_id` 可有多筆明細。 | 計算訂單數時以 `COUNT(DISTINCT order_id)` 或訂單粒度的 `v_order_summary`；請確認目前僅支援 `count` 的全域 SQL 白名單是否需要補充不同粒度的計數能力。此限制無法正確表成單一欄位的無條件黑名單。 |
-| `v_sales_detail.unit_price` | 欄位註解明示「不應直接加總單價」。 | 已設 `disallowed_aggregations: [sum]`；跨品項單價若要彙總，請確認加權平均口徑。 |
-| `v_customer_value.avg_order_value` | 欄位註解要求跨會員以總金額／總訂單數重算。 | 已禁止直接 `sum`、`avg`；請確認零訂單會員是否納入群體平均分母。 |
-| `v_store_monthly_kpi.gross_margin_pct`、`avg_order_value`、`target_achievement_pct` | 欄位註解要求跨門市／月份用各自分子分母重算。 | 已禁止直接 `sum`、`avg`；群體值應由總毛利／總營收、總營收／總訂單數、總營收／總目標計算。 |
-| `v_inventory_status.stock_qty` | 欄位註解明示可跨門市加總，但不可跨不同快照日期直接加總。 | 目前來源表主鍵只含 `store_id, product_id`，View 不限制 `snapshot_date`；請確認歷史快照的儲存模式。若未來有多日期快照，需用時間條件／粒度規則表達限制，不能用無條件 `disallowed_aggregations: [sum]`。 |
-| `v_inventory_status.estimated_days_of_supply` | View SQL 為 `stock_qty × 30 ÷ sold_qty_30d`，欄位註解稱簡化估計。 | 跨商品或門市的天數應先確認加權／重算方式；現有註解沒有明確禁止特定操作，因此未產生黑名單。 |
-| `v_store_monthly_kpi`／月度指標 | View Comment 明示 2026-10 是未完整月份。 | 跨月比較、達標率解讀前，請確認是否必須篩 `is_complete_month=true`；本次未實作 `scope_rules`。 |
+- 會員消費值是可用已完成訂單的累計，SQL 未限制統計日期；registered_on 是註冊時間，不能用來取得指定交易期間消費。活躍旗標只判斷最後訂單日期 >= 2026-07-17，沒有上界，不是動態或完整有上下界的 90 日窗口。
+- 庫存 snapshot_date 來自每筆 inventory 紀錄，未限定最新日期或保證全體同日。sold_qty_30d 固定在 2026-09-15～2026-10-14（含首尾），不隨快照或執行日期移動；無銷量時為 0，estimated_days_of_supply 為 null。
+- 庫存成本估值使用商品主檔成本；交易成本使用下單明細成本，不能互換。不同快照日期的庫存不可直接相加。
+- 月 KPI 的完整月條件固定為 sales_month < 2026-10-01；無實績補零，目標不大於零時達標率為 null。毛利率在營收不大於零時為 0，百分比不是範圍約束。
+- 客單價、毛利率與達標率跨群體需用分子分母重算。既有 disallowed_aggregations 保留；本次未擴大 compiler 公式或聚合能力。
+- 月彙總的 MIN／MAX／AVG 作用於月彙總列，不能還原明細分布。明細列數不是訂單數。
 
-## 註解與 SQL 定義的待核對之處
+## 重跑與限制
 
-原先 `v_customer_value` 的固定涵蓋期間，以及 `v_inventory_status` 的固定快照日期敘述，已從目前 View YAML 移除；不再把它們當成契約保證或評估題目的前提。以下保留仍需核對的項目。資料庫 Comment 是否同步修改，尚未重新查詢確認。
+執行 `uv run --extra postgres-contracts python scripts/generate_view_contracts.py`；明列語意由 canonical YAML 載入，DB 僅核對 metadata，不從混合註解生成摘要。定義、來源、型別或唯一性漂移時拒絕；差異檔案需人工合併，相同內容不改寫。
 
-| View | 證據 | 需要確認的業務問題與方向 |
-|---|---|---|
-| `v_inventory_status.sold_qty_30d` | 目前欄位 description 仍寫「截至 2026-10-14（含）過去 30 個曆日」；View SQL 的時間窗口需重新核對。 | 確認這是固定業務定義或舊樣本日期；若只是樣本日期，請移除固定日期，改寫為相對時間窗口。 |
-| `v_sales_detail` | View Comment 說「每個商品品項」，來源表的唯一鍵是 `order_item_id` 或 `(order_id, line_no)`，不是 `(order_id, product_id)`；View 未輸出明細鍵。 | 請確認同訂單是否允許重複商品行；若允許，建議把粒度措辭改為「每筆訂單明細一列」，並輸出 `order_item_id`。 |
-
-## 啟用前條件
-
-1. 確認 `v_sales_detail` 的唯一鍵或接受其 Keys 為未知，並確認是否要讓沒有可證實 Keys 的 View 進入查詢 Catalog。
-2. 核對 `sold_qty_30d` 尚存的固定日期描述與 View SQL，避免將樣本日期當成長期契約。
-3. 決定跨粒度比率、單價與訂單數的查詢規則；本批只對註解明示的欄位操作設定黑名單，沒有推定 `default_aggregation`。
-4. 完成業務審核後，才移除 `manifest.yaml` 的草稿狀態並作為正式部署 profile；確認 PostgreSQL 資料來源與目前 SQL compiler 的方言配置可實際執行。
-
-## 重跑方式
-
-在專案根目錄執行 `uv run --extra postgres-contracts python scripts/generate_view_contracts.py`。生成器讀取專案 `.env` 指定的 PostgreSQL schema metadata，預設寫入 `projects/retail`；已存在且內容不同的 YAML 或索引會停止並要求人工合併，不會覆寫。相同 metadata 重跑時檔案內容維持不變。
+完整欄位規則見 [v4 契約文件](../../docs/view-schema-v4.md)。本輪模型評估只核對原 mapping／SQL Oracle，不執行 SQL，因此正確率不能當作資料庫結果正確率。

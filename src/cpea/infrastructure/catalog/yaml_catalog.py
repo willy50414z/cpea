@@ -74,6 +74,13 @@ class SchemaCatalog(CatalogContract):
 
     @staticmethod
     def _validate_policy(policy: dict[str, Any]) -> None:
+        version = policy.get('version')
+        if version is not None and (type(version) is not int or version not in {1, 2, 3, 4}):
+            raise ValueError('unsupported view contract version')
+        if version == 4:
+            from cpea.infrastructure.catalog.view_contract_v4 import validate_view_contract_v4
+            validate_view_contract_v4(policy)
+            return
         columns = policy.get('columns')
         if not isinstance(columns, dict) or not columns:
             raise ValueError('view contract requires columns')

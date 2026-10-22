@@ -1,0 +1,37 @@
+from copy import deepcopy
+import json,sys
+from pathlib import Path
+from langchain_core.messages import AIMessage
+from evaluations.diagnostics import managed_text_leaf_evidence as m
+out=m.ROOT/'evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract'
+sys.path.insert(0,str(m.ROOT/'tests/unit'))
+from test_kind_mapping_managed_contract import inputs
+p=m.load_package();m.version_guard(p)
+results=[]
+for failure in [None,'scope','typed']:
+ folder=out/'controls'/('full-'+str(failure));catalog=m.base.SchemaCatalog(m.ROOT/'projects/retail')
+ request,rec,maps,sel=inputs(catalog)
+ if failure=='scope':
+  metric=next(r for r in rec['requirements'] if r['kind']=='metric' and r['scope_ids'])
+  complete=next(v for v in maps if v['entries'][metric['requirement_id']]['status']=='supported')
+  complete['entries'][metric['scope_ids'][0]].update(status='unsupported',own_gap=True,mappings=[],contract_path=None)
+ if failure=='typed':sel['draft']['tasks'][0].pop('filters')
+ values=iter([rec,*maps,sel]);names=[]
+ def invoke(name,*args):names.append(name);return AIMessage(content=json.dumps(next(values),ensure_ascii=False))
+ bound=m.bind_catalog(catalog);case=m.runner.diagnostic_case(catalog,request)
+ meta=m.runner.record_run(folder,catalog,case,invoke,contract=bound)
+ replay=m.runner.replay(folder,catalog,case,contract=bound)
+ assert bool(meta['stopped'])==bool(failure) and replay['raw_replays']==len(names)
+ if failure is None:assert len(names)==9 and len(m.base.read_json(folder/'response.json')['prepared_requests'])==2
+ results.append(dict(kind='natural-fake',failure=failure,folder=str(folder.relative_to(m.ROOT)),replay=replay))
+for failure in [None,'object']:
+ c=m.prepare(p,'COV-ISO-v1-01',43);value=deepcopy(p['oracle']['positive_outputs'][c['sample']['id']])
+ if failure:value['entries']['MET-003']['contract_path']='/columns/revenue'
+ folder=out/'controls'/('isolation-'+str(failure))
+ receipt=m.record_sample(folder,c,lambda *args:AIMessage(content=json.dumps(value,ensure_ascii=False)))
+ assert receipt['status']==('FAIL' if failure else 'PASS')
+ results.append(dict(kind='isolation-fake',failure=failure,folder=str(folder.relative_to(m.ROOT)),replay=m.replay(folder,p)))
+frozen=m.freeze_sources(out/'frozen')
+m.base.write_json(out/'controls-and-freeze.json',dict(result='PASS',POST=0,SQL_DB=0,controls=results,
+ freeze=str(frozen.relative_to(m.ROOT)),manifest_sha256=m.base.digest(m.DEFAULT_MANIFEST)))
+print(json.dumps(dict(result='PASS',controls=len(results),frozen=str(frozen)),ensure_ascii=False))

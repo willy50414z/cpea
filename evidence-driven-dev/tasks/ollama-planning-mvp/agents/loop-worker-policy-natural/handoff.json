@@ -1,0 +1,30 @@
+{
+  "ticket": "3989747b0a0f45ffa8b33ca5027469c7",
+  "result": "PASS",
+  "evidence": [
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-natural/preflight.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-natural/post-start.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-natural/execute.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-natural/raw-presence-check.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-natural/semantic-review.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-natural/live-replay.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-natural/frozen-replay.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-natural/controller-check-evidence.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-natural/preservation-initial.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-natural/final-verification.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-natural/evidence-index.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-policy-shape-1-20261021T231146Z-570327/SEL-ISO-v1-01.outer.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-policy-shape-1-20261021T231146Z-570327/SEL-ISO-v1-01.outer.sha256.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-policy-shape-1-20261021T231146Z-570327/SEL-ISO-v1-01/node-call.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-policy-shape-1-20261021T231146Z-570327/SEL-ISO-v1-01/node-provider-response.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-policy-shape-1-20261021T231146Z-570327/SEL-ISO-v1-01/node-managed.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-policy-shape-1-20261021T231146Z-570327/SEL-ISO-v1-01/node-body.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-policy-shape-1-20261021T231146Z-570327/SEL-ISO-v1-01/semantic-review.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-policy-shape-1-20261021T231146Z-570327/SEL-ISO-v1-01/response.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-policy-shape-1-20261021T231146Z-570327/frozen/freeze.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-policy-shape-1-20261021T231146Z-570327/frozen/policy-freeze.json",
+    "evaluations/fixtures/kind_diagnostics_policy_shape/manifest.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-semantics/review.json"
+  ],
+  "summary": "第18輪唯一預固定kind-policy-shape-1:ISOLATION:SEL-ISO-v1-01:node首次managed local POST HTTP200完成，0retry/0cloud；累計23local。真三方fixture及新作者/審者closed PASS/fullbindings/endpoint/model/runtime先核。原raw30objects全部required、8assignment、5exclusion及全部自由文字獨立ACCEPT：inventory店商品anchor/stock sum/盤點日期metadata；sales同task九月整月online兩sum、先店商品彙總後LEFT一對一/正確雙鍵/保庫存/不補零，第一flat政策與無nest真shape一致；2prepared逐欄一致，無defaults/repair/canonicalize。legacy及新predicate/outer均PASS；新module同版及完整frozen各1raw重播PASS且結果逐值相等，5203舊檔/668作者證據/167source不變，完整bindings及freeze保持。原第15FAIL不翻案。upstream_injected=true，僅selection child可行，非自然recall/coverage/父或root通過。全部程序結束且proof最後封存，未SQL/DB/source/tests/fixture/Task/control/commit/push。Main等真FINAL核hash/check-evidence後finish；必fresh16–18audit及原parent自身0POST整合，再原coverage3/全新自然9POST/全部祖先/final驗收。"
+}

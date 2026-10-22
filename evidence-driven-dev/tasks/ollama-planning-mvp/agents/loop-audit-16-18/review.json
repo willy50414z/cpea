@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "ticket": "6e0689f64d854bbe879f5179eb32d7d6",
+  "verdict": "CONTINUE",
+  "reviewed_rounds": [
+    16,
+    17,
+    18
+  ],
+  "evidence": [
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-16-18/independent-checks.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-16-18/verification.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-16-18/policy-controls.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-16-18/policy-controls.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-16-18/policy-controls-corrected.log"
+  ],
+  "summary": "完整16–18輪及祖先進度獨立審核：CONTINUE。第16輪確實分開修正第一literal誤拒合法NULL與EMPTY缺真nest兩個問題；新predicate只替換精確舊literal finding，其餘typed/來源/scope/grain/母體/首錯守門完整保留。唯一輸入變更為通用政策形狀system suffix，無來源或typed答案洩漏。第17輪真fresh distinct作者/審者及原fixture三方均closed PASS、完整bindings符合；已PASS的第14輪8需求56列與三coverage內容逐bytes保留，未重開。第18輪唯一首次受控selection原raw、30物件required、8assignment/5exclusion、全部raw及normalized理由文字與兩prepared已獨立核對，符合inventory店商品anchor/stock sum/盤點日期metadata、sales同task整月online雙sum、先店商品aggregate後LEFT一對一雙鍵、保全部庫存且缺值不補零。新raw為flat第一政策且無nest，無修答或defaults補typed。獨立同版重播18 PASS、15仍FAIL，13記憶體正反控制通過；5203舊保護檔/668作者證據/284自然證據/47本段輪次證據hash保持，舊rebound bindings相等。允許依原樹先selection parent自身0POST整合，再原coverage3首次POST與新自然9POST、全部祖先各自整合及fresh final。只selection上游注入診斷成功，原FAIL與歷史38×2 Gate未過不變，root尚未通過。本audit 0POST/SQL/DB。",
+  "round_assessment": [
+    {
+      "round": 16,
+      "assessment": "契約修正合理且可否證",
+      "findings": [
+        "default與NULL字義皆保缺值、不補零，不能以第一literal專屬比較當語意Oracle。",
+        "EMPTY要求每條保左child edge有真typed nest且child task/right keys吻合；aggregate與metadata皆不構成nest。改名、錯child/keys、第二child等控制有辨識力。",
+        "nested記憶體正例只證政策predicate，不證本題需要集合；仍須獨立業務語意審核。",
+        "薄adapter重用原prepare/parse/materialize/finish/record/replay，明留legacy findings及新decision，非廣泛移除FAIL；raw前後完整版本/context/provenance檢查有據。"
+      ]
+    },
+    {
+      "round": 17,
+      "assessment": "新政策獨立核准與原fixture核准範圍清楚",
+      "findings": [
+        "真Task核對作者第16輪與審者第17輪distinct platform、closed PASS及immutable completion evidence；原fixture content/binding/reviewer三方亦真closed PASS。",
+        "review對完整sources/imports/schema/model/runtime/inputs與引用舊fixture/review/lineage綁定；原open reviewer的network前拒絕log保留。",
+        "舊fixture、schema與三literal未變，沒有把上輪原FAIL改判成功。"
+      ]
+    },
+    {
+      "round": 18,
+      "assessment": "單一首次自然selection通過；不推廣為自然全管線",
+      "findings": [
+        "controller記錄唯一request 52128e22c3864f24a84bef58cb85c369、round18、預固定physical case、HTTP200/0retry；全局23local/0cloud/0retry。",
+        "actual raw指派8責任至inventory/sales，5未選view的gap理由保留合法partial能力：customer會員累計淨額self/scope/grain缺口、daily部分店鍵、order淨額grain缺口、product_monthly只缺online scope、store_monthly部分鍵，未虛稱來源母體。",
+        "五個自由文字欄位逐項與typed一致；inventory無sales scope或status限制，snapshot_date是metadata集合；sales完整九月online雙sum於同一task；兩prepared JSON逐值等於raw typed，無從request取答案。",
+        "原15raw仍無nest且只有sales aggregate；原同版重播FAIL，新shape亦FAIL。新18raw第一flat政策與真shape一致，legacy/new/outer均PASS。"
+      ]
+    }
+  ],
+  "independent_verification": {
+    "protected_files": 5203,
+    "author_evidence_files": 668,
+    "natural_evidence_files": 284,
+    "round16to18_unique_evidence_files": 47,
+    "live_replays": {
+      "round18": "PASS",
+      "round15": "FAIL保持，replay_verification PASS"
+    },
+    "memory_controls": 13,
+    "raw_required_objects": 30,
+    "duplicate_keys": 0,
+    "prepared_typed_payloads": 2,
+    "complete_bindings": "exact",
+    "body_delta": "僅通用selection system suffix，schema/options/upstream/其他messages相等",
+    "new_model_POST": 0,
+    "SQL_DB": 0,
+    "tests": "未重跑作者171或既有數百測試；讀已綁定測試log，另做上述必要獨立控制/重播。"
+  },
+  "ancestor_status": {
+    "natural_kind_selection_isolation": "verify_parent，必自身0POST整合新raw、舊FAIL及契約差異",
+    "natural_kind_coverage_isolation": "pending，沿用第14輪已ACCEPT及原rebound固定3樣本首次POST；不改fixture或Oracle",
+    "natural_kind_mapping_three_stage": "pending，固定新candidate且原題全新自然recall+7coverage+selection；不得注入fixture、重用舊答案或抽分",
+    "remaining_ancestors": [
+      "natural_own_responsibility_three_stage",
+      "natural_evidence_bound_three_stage",
+      "natural_slots_three_stage",
+      "natural_qwen_three_stage",
+      "three_stage_integration",
+      "root"
+    ],
+    "root": "pending",
+    "historical_38x2_gate": "未通過，保持"
+  },
+  "continuation_contract": [
+    "按controller逐輪返回原selection parent自身驗收，不能孩子綠即PASS。",
+    "原rebound coverage COV-ISO-v1-01/02/03按預固定順序及首次單樣本規則；使用原已核准上游/原kind candidate，不能因本selection成功略過。",
+    "其後原natural_kind_mapping_three_stage以managed-policy-shape-1及全新自然recall/7coverage/selection共9POST驗證，不注入fixture；必要scope/grain/部分能力/缺口與所有prose仍逐項審核。",
+    "任何錯答保存FAIL回fresh研究，不原樣重送挑分；每3輪fresh audit保持。",
+    "所有失敗祖先各自整合及root fresh final ACCEPT完成前不得宣稱任務或歷史Gate通過。"
+  ],
+  "limitations": [
+    "單一上游注入selection樣本只證本節點可行，不估可靠率。",
+    "本audit只獨立重播必要raw及有限控制；完整frozen重播證據以已核對hash的作者/審者/自然worker工件確認，未無故重跑。",
+    "本audit第一次required walker未處理JSON Schema oneOf而僅走19個物件；失敗log保留，補正審核腳本後完整30個物件通過，實作/測試/raw/schema均未修改。"
+  ],
+  "unresolved": [],
+  "proof_sha256": {
+    "independent-checks.json": "81361a9b2ec7b606e869a16ec164bc0bb68be0ee1cc005c6bc9259b257f404a5",
+    "verification.log": "095fe718c5b980edee2e16ce71e91240c314ab4f2a021b54d5295fe15c08d3ba",
+    "policy-controls.json": "c9a2d9561cec053e99ddbe493e52e5784e437a69ff2e7788692419a7b38bb4ab",
+    "policy-controls.log": "8d29a575e57883f10cc39d957fe932f1135192d13fa8f74bfa72633f33fe33d4",
+    "policy-controls-corrected.log": "ec32b67e3168fd9515c250867ee2e3fad70a7eda4636b2c7235df5e4484aaa13"
+  },
+  "all_audit_processes_ended": true,
+  "source_tests_fixture_Task_control_edits": 0,
+  "commit_push": 0
+}

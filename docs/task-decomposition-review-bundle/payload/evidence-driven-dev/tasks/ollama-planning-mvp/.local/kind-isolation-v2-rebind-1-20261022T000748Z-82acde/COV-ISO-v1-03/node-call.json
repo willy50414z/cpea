@@ -1,0 +1,22 @@
+{
+  "response": "{\"entries\":{\"amount/net\":{\"contract_path\":\"/columns/amount_value/description\",\"mappings\":[{\"aggregation\":\"sum\",\"column\":\"amount_value\",\"conditions\":[{\"column\":\"day_key\",\"operator\":\">=\",\"value\":\"2032-02-01\"},{\"column\":\"day_key\",\"operator\":\"<\",\"value\":\"2032-03-01\"}]}],\"own_gap\":false,\"status\":\"partial\"},\"m_discount\":{\"contract_path\":null,\"mappings\":[],\"own_gap\":true,\"status\":\"unsupported\"},\"model_dump\":{\"contract_path\":null,\"mappings\":[],\"own_gap\":true,\"status\":\"unsupported\"},\"scope-channel\":{\"contract_path\":null,\"mappings\":[],\"own_gap\":true,\"status\":\"unsupported\"},\"slot_0/🧾\":{\"mappings\":[],\"own_gap\":true,\"status\":\"unsupported\"},\"保留/全部\":{\"contract_path\":null,\"mappings\":[],\"own_gap\":true,\"status\":\"unsupported\"},\"元資料\":{\"contract_path\":null,\"mappings\":[],\"own_gap\":true,\"status\":\"unsupported\"},\"月~邊界\":{\"contract_path\":\"/columns/day_key/description\",\"mappings\":[{\"column\":\"day_key\",\"operator\":\">=\",\"value\":\"2032-02-01\"},{\"column\":\"day_key\",\"operator\":\"<\",\"value\":\"2032-03-01\"}],\"own_gap\":false,\"status\":\"supported\"}}}",
+  "usage": {
+    "input_tokens": 3799,
+    "output_tokens": 3163,
+    "total_tokens": 6962
+  },
+  "response_metadata": {
+    "model": "qwen3.8:27b",
+    "created_at": "2026-10-22T00:44:34.237177302Z",
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 1280044047544,
+    "load_duration": 2495361,
+    "prompt_eval_count": 3799,
+    "prompt_eval_cached_count": 0,
+    "prompt_eval_duration": 49229567000,
+    "eval_count": 3163,
+    "eval_duration": 1230135306000
+  },
+  "elapsed_seconds": 1281.1161152010027
+}

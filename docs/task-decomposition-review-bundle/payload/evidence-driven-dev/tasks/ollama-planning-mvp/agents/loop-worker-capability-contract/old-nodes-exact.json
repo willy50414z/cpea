@@ -1,0 +1,7 @@
+{
+  "result": "PASS",
+  "count": 21,
+  "root_goal_acceptance_exact": true,
+  "node_definitions": "全部舊id/parent/goal/acceptance逐值完全相同",
+  "POST": 0
+}

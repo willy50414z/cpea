@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "ticket": "52e22eb4e62b4142995079d89efb29c2",
+  "direction": "REPLAN",
+  "rulings": [
+    {
+      "round": 22,
+      "result": "保留PASS；未證自然效果",
+      "basis": "真21/22作者與獨立審者均closed PASS且實際_roles接受。無損cards及有限AND原碼符合限定delta；原獨立17真context/16多群/7kind/15授權控制log在綁定證據中。"
+    },
+    {
+      "round": 23,
+      "result": "保留FAIL；不得歸因僅格式",
+      "basis": "獨立核五原始最終content全部33列與原逐列裁決相符。01/03共有四個object證據path；04漏會員累計淨額sum有用partial；05母體責任少store_id且product描述不足證完整母體。結果FAIL/PASS/FAIL/FAIL/FAIL；只上游注入coverage，非自然全pipeline。"
+    },
+    {
+      "round": 24,
+      "result": "保留FAIL與FAIL_NOT_AUTHORIZED；不可直接當post版本",
+      "basis": "focused 65PASS/1FAIL的reviewer-same_platform實際仍與作者不同；133PASS/16FAIL是既有測試deepcopy真Task後append同21/22輪，初始assert被duplicate completion擋。獨立純函式控制重現真capability接受、重複21拒絕及真24FAIL拒絕，不需削弱守門。新candidate frozen replay及fresh語意review未完成。"
+    },
+    {
+      "scope": "最新使用者範圍",
+      "result": "轉為有限同題前後比較，不恢復無限改善",
+      "basis": "Task明載修正前、後各同30題一次，Qwen本機、錯答不重抽。舊9案×3seed/block-gate與先全9過才續等開發計畫不適合作本次題庫批次規則，也不是此次必做前置。"
+    },
+    {
+      "scope": "新候選provenance",
+      "result": "直接套原入口不可行，必須fresh研究",
+      "basis": "roles()硬綁原24作者/ticket/platform並要求round24 closed PASS，真歷史已FAIL。audit_guard()又要求22–24 CONTINUE；本次REPLAN不是CONTINUE。不能偽造review或改24歷史。若用此delta，研究者須提出能在新工作與真新provenance下受控評測的版本／入口，不可僅改測試後繞過守門。"
+    }
+  ],
+  "next_fresh_research_questions": [
+    {
+      "id": "B1",
+      "question": "真正loop開始前baseline完整bytes在哪裡，能否凍結且離線重播？",
+      "required_answer": "比對round1 before-hashes、原runner/source/schema/prompt/raw messages與依賴。before-hashes的recall_indexed SHA為471a41d1e105f3e3af9857d5ff3a306b6e85eef44dff682fc652635b8e68fccd，當時來源雜湊不是完整可執行snapshot；原agent目錄沒有frozen子目錄，不能推定其他地方無原版。釐清.git版本與既存未提交src變更及歷史.local快照年代。不得拿round20或DeepSeek18/30冒充Qwen修前；不能把採用round1後prompt標成preloop。確有無法還原的必要bytes，列缺口與可證替代範圍後才提實質版本選擇問題。"
+    },
+    {
+      "id": "C1",
+      "question": "目前修後arm具體是哪一版，最低必要離線前置為何？",
+      "required_answer": "列已核准capability版與24未核准text-leaf候選的取捨／可否測量限制，交fresh研究自行決策。若採24delta，確認新author/provenance/manifest與本次REPLAN相容、測試生命週期與錯誤same_platform反例、實際自然run_pipeline接線、完整freeze/replay與必要負控制，取得相應獨立delta核對。不能回寫原FAIL、任意排除測試或放寬closed守門。這些是執行與證據可信度前置；不要求先把自然答案修到PASS、不先重跑9×3面板、不先完成舊全部祖先才准量30題。若保留已知失敗，明記測量的候選狀態與風險，不能稱正式核准。"
+    },
+    {
+      "id": "O1",
+      "question": "如何在看新模型答案之前，固定同一份完整30題獨立semantic Oracle？",
+      "required_answer": "追溯原Oracle作者/獨立review manifest與current catalog fingerprint；cases檔review_status=pending不等於可自行改expected。逐題涵蓋原需求所有條件、來源、粒度、母體、角色/指標、NULL/0、join/巢狀/去重、prepared payload與決策範圍。凍結合法替代來源、日期區間／AND、唯一性可證聚合等equivalence規則，容許ID/排序差異但不能放掉缺責任；exact canonical view或格式檢查不得替代語意。不同arm若內部wire不同，公同比較依最終可執行計畫之同一功能契約；各arm原生provider/parse/contract錯另記且本題端到端0分。全30題與所有有效／失敗raw都由獨立者完整評分，非只自動grader旗標、非只第一finding、非用模型當Oracle。原Oracle/fixture與歷史分數不改。"
+    },
+    {
+      "id": "F1",
+      "question": "兩arm的模型、輸入、處理與執行順序如何公平且固定？",
+      "required_answer": "先固定兩arm source/import/prompt/schema/catalog/cases/runtime完整hash、真本機qwen3.8:27b digest與options(含seed/temperature/top_p/num_ctx/num_predict/think)、同日期環境與無timeout/不限輸出設定。兩arm的不可避免pipeline/schema及calls差異明列為受測差異，其餘相同；全部requests走loopctl，不用舊DeepSeek輸出、不注入gold recall/coverage/expected到自然pipeline。不以降低一arm context或限時製造差異；批次順序預固定並記cache/warmup差異，不額外取自然暖身答案。"
+    },
+    {
+      "id": "E1",
+      "question": "如何確保固定60個案例結果不被首題失敗短路？",
+      "required_answer": "預列兩arm×30case的單一首次attempt ID，60指案例結果而非HTTP數；依各arm自然stage可能每題多個POST。每題首provider/parse/contract錯保存request、receipt、原始response/thinking及stop-stage後停止該題、記0、接下一獨立case；語意錯也不重抽或修答。單題失敗不啟原block-gate阻止後續case，不把未跑29題填已跑FAIL。批次僅遇controller/授權/基礎設施不可繼續等真正全局停止條件才暫停並標未執行，恢復不重送既發request。規劃冪等resume、inflight檢查及raw未完證據保留，0隱藏retry。"
+    },
+    {
+      "id": "R1",
+      "question": "比較怎麼收斂並保留既有歷史與控制計數？",
+      "required_answer": "完成前後各30首次及同Oracle獨立逐題review後輸出各自正確數/30、paired改善/退步/同對/同錯、失敗類別及HTTP/token/耗時；單次樣本僅描述本次結果，不宣稱穩定性。原24輪/31local/43dispatch與0retry從本審核繼續記帳，原root/祖先/38×2Gate不翻PASS。必要準備與評測以合法新增／既有未過節點承載，不刪改原node驗收洗計數。完成本次有限比較即停止，不因出現錯答自動開改善循環。"
+    }
+  ],
+  "execution_permission": "本review不授權自然POST，不決定兩arm技術方案；REPLAN後由新研究者提出具體有限計畫與最小前置。既有本機資源授權與controller計數保持，無需因例行FAIL再請使用者確認。",
+  "historical_limits": [
+    "原38×2 Gate未過；root與自然全pipeline仍PENDING。",
+    "business draft／technical approved及sales_detail唯一鍵矛盾不得升格為正式業務認證。",
+    "docs/task-decomposition-evidence-review.md是21輪快照，不能取代23/24原證據。"
+  ],
+  "source_refs": {
+    "evaluations/diagnostics/managed_capability_projection.py": "44fc1a6ec68f2b3c7562e27dcc0cc59e8145692aee8ea8f86e551c033087dd3d",
+    "evaluations/diagnostics/managed_text_leaf_evidence.py": "d745f4ad23cc7e7708c662de829c85da3b9d0d5dc251b4e7d6285e921f7373cf",
+    "tests/diagnostics/test_managed_capability_projection.py": "ddf30e05642a4cc36540cbae20c3a4561a36594fa125871762df16a333dc0bf1",
+    "tests/diagnostics/test_managed_text_leaf_evidence.py": "3383078de87df60ba0a1fa93511f7e2801daa308cb5e1f04bc81bc7037d953d2",
+    "evaluations/decomposition_grading.py": "1c70bd7ee47dc76f39bd7ee21205be434c0307d3817e092cd68d1fc1702b1cbd",
+    "projects/retail/views/demo_retail/v_customer_value.yaml": "d3ef37ced4521ef46a65980f418088683c4aefa9f138802a6829f87fb531f2cc",
+    "projects/retail/views/demo_retail/v_inventory_status.yaml": "ed7c44ef1fca1b55f92454fbbcc2b3145acd6dea0a4ca17f46c2a08d90cb58b3"
+  },
+  "actions": {
+    "POST": 0,
+    "SQL_DB": 0,
+    "source_tests_fixture_oracle_manifest_Task_control_edits": 0,
+    "commit_push": 0
+  }
+}

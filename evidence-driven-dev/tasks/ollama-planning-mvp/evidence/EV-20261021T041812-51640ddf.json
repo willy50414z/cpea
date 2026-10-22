@@ -1,0 +1,21 @@
+{
+  "id": "EV-20261021T041812-51640ddf",
+  "kind": "review",
+  "command": [
+    ".venv/bin/python",
+    "-m",
+    "evidence-driven-dev.tasks.ollama-planning-mvp.reports.verify_qwen_indexed_repeat"
+  ],
+  "cwd": "/home/willy/code/cpea_terms",
+  "started_at": "2026-10-21T04:18:12+00:00",
+  "finished_at": "2026-10-21T04:18:13+00:00",
+  "exit_code": 0,
+  "revision": "bc09c67fc4078501599c37e4cdfecdee40af2ef8",
+  "diff_fingerprint": "7055794fccfac615aaa94cdd99d6e17a66113c46da353a4d231b958a8476f3a5",
+  "post_fingerprint": "7055794fccfac615aaa94cdd99d6e17a66113c46da353a4d231b958a8476f3a5",
+  "source_unchanged": true,
+  "output_sha256": "83427a987360c38cca2783ec386972b9100e0a137440c0f683a75b56e85d5a8e",
+  "raw_output": ".local/EV-20261021T041812-51640ddf.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "c51f03e88b51aa8c1771eef07650abf9cc36845fb2f21b634f413208ba0c929d"
+}

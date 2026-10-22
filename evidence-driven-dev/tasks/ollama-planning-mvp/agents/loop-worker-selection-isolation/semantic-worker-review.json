@@ -1,0 +1,1637 @@
+{
+  "ticket": "1333a1a753e349c399099b022d3ff0ca",
+  "sample": "SEL-ISO-v1-01",
+  "upstream_injected": true,
+  "original_node_result": "FAIL",
+  "machine_findings": [
+    {
+      "aspect": "no unproven zero fill",
+      "actual": "保留未匹配母體；未匹配子集合為空集合，不製造零值元素或將數值缺值補零。"
+    }
+  ],
+  "review_scope": "本輪worker逐項核對原raw/typed/8assignment/5exclusion/全部自由文字；非新fresh研究，不替代父層或自然全管線。",
+  "required_presence_checks": [
+    {
+      "path": "",
+      "required": [
+        "selected_views",
+        "assignments",
+        "exclusions",
+        "draft"
+      ],
+      "present": [
+        "assignments",
+        "draft",
+        "exclusions",
+        "selected_views"
+      ],
+      "missing": []
+    },
+    {
+      "path": "/assignments/0",
+      "required": [
+        "requirement_id",
+        "view",
+        "task_id"
+      ],
+      "present": [
+        "requirement_id",
+        "task_id",
+        "view"
+      ],
+      "missing": []
+    },
+    {
+      "path": "/assignments/1",
+      "required": [
+        "requirement_id",
+        "view",
+        "task_id"
+      ],
+      "present": [
+        "requirement_id",
+        "task_id",
+        "view"
+      ],
+      "missing": []
+    },
+    {
+      "path": "/assignments/2",
+      "required": [
+        "requirement_id",
+        "view",
+        "task_id"
+      ],
+      "present": [
+        "requirement_id",
+        "task_id",
+        "view"
+      ],
+      "missing": []
+    },
+    {
+      "path": "/assignments/3",
+      "required": [
+        "requirement_id",
+        "view",
+        "task_id"
+      ],
+      "present": [
+        "requirement_id",
+        "task_id",
+        "view"
+      ],
+      "missing": []
+    },
+    {
+      "path": "/assignments/4",
+      "required": [
+        "requirement_id",
+        "view",
+        "task_id"
+      ],
+      "present": [
+        "requirement_id",
+        "task_id",
+        "view"
+      ],
+      "missing": []
+    },
+    {
+      "path": "/assignments/5",
+      "required": [
+        "requirement_id",
+        "view",
+        "task_id"
+      ],
+      "present": [
+        "requirement_id",
+        "task_id",
+        "view"
+      ],
+      "missing": []
+    },
+    {
+      "path": "/assignments/6",
+      "required": [
+        "requirement_id",
+        "view",
+        "task_id"
+      ],
+      "present": [
+        "requirement_id",
+        "task_id",
+        "view"
+      ],
+      "missing": []
+    },
+    {
+      "path": "/assignments/7",
+      "required": [
+        "requirement_id",
+        "view",
+        "task_id"
+      ],
+      "present": [
+        "requirement_id",
+        "task_id",
+        "view"
+      ],
+      "missing": []
+    },
+    {
+      "path": "/draft",
+      "required": [
+        "status",
+        "strategy",
+        "tasks",
+        "integration",
+        "clarifications",
+        "unsupported_reasons"
+      ],
+      "present": [
+        "clarifications",
+        "integration",
+        "status",
+        "strategy",
+        "tasks",
+        "unsupported_reasons"
+      ],
+      "missing": []
+    },
+    {
+      "path": "/draft/integration",
+      "required": [
+        "anchor_task",
+        "output_grain",
+        "edges",
+        "preparation",
+        "missing_data_policy",
+        "notes"
+      ],
+      "present": [
+        "anchor_task",
+        "edges",
+        "missing_data_policy",
+        "notes",
+        "output_grain",
+        "preparation"
+      ],
+      "missing": []
+    },
+    {
+      "path": "/draft/integration/edges/0",
+      "required": [
+        "left_task",
+        "right_task",
+        "left_keys",
+        "right_keys",
+        "mode",
+        "cardinality",
+        "preserve_task"
+      ],
+      "present": [
+        "cardinality",
+        "left_keys",
+        "left_task",
+        "mode",
+        "preserve_task",
+        "right_keys",
+        "right_task"
+      ],
+      "missing": []
+    },
+    {
+      "path": "/draft/integration/preparation/0",
+      "required": [
+        "task_id",
+        "kind",
+        "keys",
+        "description"
+      ],
+      "present": [
+        "description",
+        "keys",
+        "kind",
+        "task_id"
+      ],
+      "missing": []
+    },
+    {
+      "path": "/draft/tasks/0",
+      "required": [
+        "task_id",
+        "view",
+        "required_columns",
+        "filters",
+        "metrics",
+        "conditional_metrics",
+        "attributes",
+        "metadata_collections",
+        "group_by",
+        "output_grain",
+        "depends_on",
+        "unbound_inputs",
+        "request"
+      ],
+      "present": [
+        "attributes",
+        "conditional_metrics",
+        "depends_on",
+        "filters",
+        "group_by",
+        "metadata_collections",
+        "metrics",
+        "output_grain",
+        "request",
+        "required_columns",
+        "task_id",
+        "unbound_inputs",
+        "view"
+      ],
+      "missing": []
+    },
+    {
+      "path": "/draft/tasks/0/metrics",
+      "required": [],
+      "present": [
+        "stock_qty"
+      ],
+      "missing": []
+    },
+    {
+      "path": "/draft/tasks/1",
+      "required": [
+        "task_id",
+        "view",
+        "required_columns",
+        "filters",
+        "metrics",
+        "conditional_metrics",
+        "attributes",
+        "metadata_collections",
+        "group_by",
+        "output_grain",
+        "depends_on",
+        "unbound_inputs",
+        "request"
+      ],
+      "present": [
+        "attributes",
+        "conditional_metrics",
+        "depends_on",
+        "filters",
+        "group_by",
+        "metadata_collections",
+        "metrics",
+        "output_grain",
+        "request",
+        "required_columns",
+        "task_id",
+        "unbound_inputs",
+        "view"
+      ],
+      "missing": []
+    },
+    {
+      "path": "/draft/tasks/1/filters/0",
+      "required": [
+        "column",
+        "operator",
+        "value"
+      ],
+      "present": [
+        "column",
+        "operator",
+        "value"
+      ],
+      "missing": []
+    },
+    {
+      "path": "/draft/tasks/1/filters/1",
+      "required": [
+        "column",
+        "operator",
+        "value"
+      ],
+      "present": [
+        "column",
+        "operator",
+        "value"
+      ],
+      "missing": []
+    },
+    {
+      "path": "/draft/tasks/1/filters/2",
+      "required": [
+        "column",
+        "operator",
+        "value"
+      ],
+      "present": [
+        "column",
+        "operator",
+        "value"
+      ],
+      "missing": []
+    },
+    {
+      "path": "/draft/tasks/1/metrics",
+      "required": [],
+      "present": [
+        "discount_amount",
+        "net_sales"
+      ],
+      "missing": []
+    },
+    {
+      "path": "/exclusions/0",
+      "required": [
+        "view",
+        "refs"
+      ],
+      "present": [
+        "refs",
+        "view"
+      ],
+      "missing": []
+    },
+    {
+      "path": "/exclusions/0/refs/0",
+      "required": [
+        "kind",
+        "requirement_ids",
+        "selected_view"
+      ],
+      "present": [
+        "kind",
+        "requirement_ids",
+        "selected_view"
+      ],
+      "missing": []
+    },
+    {
+      "path": "/exclusions/1",
+      "required": [
+        "view",
+        "refs"
+      ],
+      "present": [
+        "refs",
+        "view"
+      ],
+      "missing": []
+    },
+    {
+      "path": "/exclusions/1/refs/0",
+      "required": [
+        "kind",
+        "requirement_ids",
+        "selected_view"
+      ],
+      "present": [
+        "kind",
+        "requirement_ids",
+        "selected_view"
+      ],
+      "missing": []
+    },
+    {
+      "path": "/exclusions/2",
+      "required": [
+        "view",
+        "refs"
+      ],
+      "present": [
+        "refs",
+        "view"
+      ],
+      "missing": []
+    },
+    {
+      "path": "/exclusions/2/refs/0",
+      "required": [
+        "kind",
+        "requirement_ids",
+        "selected_view"
+      ],
+      "present": [
+        "kind",
+        "requirement_ids",
+        "selected_view"
+      ],
+      "missing": []
+    },
+    {
+      "path": "/exclusions/3",
+      "required": [
+        "view",
+        "refs"
+      ],
+      "present": [
+        "refs",
+        "view"
+      ],
+      "missing": []
+    },
+    {
+      "path": "/exclusions/3/refs/0",
+      "required": [
+        "kind",
+        "requirement_ids",
+        "selected_view"
+      ],
+      "present": [
+        "kind",
+        "requirement_ids",
+        "selected_view"
+      ],
+      "missing": []
+    },
+    {
+      "path": "/exclusions/4",
+      "required": [
+        "view",
+        "refs"
+      ],
+      "present": [
+        "refs",
+        "view"
+      ],
+      "missing": []
+    },
+    {
+      "path": "/exclusions/4/refs/0",
+      "required": [
+        "kind",
+        "requirement_ids",
+        "selected_view"
+      ],
+      "present": [
+        "kind",
+        "requirement_ids",
+        "selected_view"
+      ],
+      "missing": []
+    }
+  ],
+  "raw_equals_parsed": true,
+  "duplicate_keys": false,
+  "typed_other_than_policy": "ACCEPT",
+  "assignments": [
+    {
+      "requirement_id": "GRN-001",
+      "task_id": "task_inv",
+      "view": "demo_retail.v_inventory_status",
+      "verdict": "ACCEPT",
+      "reason": "inventory store_id/product_id 成對唯一鍵承擔根粒度，與left anchor一致。"
+    },
+    {
+      "requirement_id": "MET-001",
+      "task_id": "task_inv",
+      "view": "demo_retail.v_inventory_status",
+      "verdict": "ACCEPT",
+      "reason": "inventory stock_qty sum；無sales日期、通路或stock_status條件；未用units_sold當庫存。"
+    },
+    {
+      "requirement_id": "FILT-001",
+      "task_id": "task_sales",
+      "view": "demo_retail.v_sales_detail",
+      "verdict": "ACCEPT",
+      "reason": "sales同task order_date >=2026-09-01且<2026-10-01，完整九月；未篩inventory snapshot。"
+    },
+    {
+      "requirement_id": "FILT-002",
+      "task_id": "task_sales",
+      "view": "demo_retail.v_sales_detail",
+      "verdict": "ACCEPT",
+      "reason": "sales同task sales_channel=online，契約online=線上。"
+    },
+    {
+      "requirement_id": "MET-002",
+      "task_id": "task_sales",
+      "view": "demo_retail.v_sales_detail",
+      "verdict": "ACCEPT",
+      "reason": "sales discount_amount sum，依賴同task月份、online與完整店商品粒度。"
+    },
+    {
+      "requirement_id": "MET-003",
+      "task_id": "task_sales",
+      "view": "demo_retail.v_sales_detail",
+      "verdict": "ACCEPT",
+      "reason": "sales net_sales sum折扣後淨額，未用gross_sales或單價，依賴同task scope/grain。"
+    },
+    {
+      "requirement_id": "META-001",
+      "task_id": "task_inv",
+      "view": "demo_retail.v_inventory_status",
+      "verdict": "ACCEPT",
+      "reason": "inventory snapshot_date為metadata，不增加group_by；prepared為完整DISTINCT集合，明示禁止混日總額。"
+    },
+    {
+      "requirement_id": "POP-001",
+      "task_id": "task_inv",
+      "view": "demo_retail.v_inventory_status",
+      "verdict": "ACCEPT",
+      "reason": "inventory全部庫存商品無filter，left preserve_task=task_inv，未借交易母體證保庫存。"
+    }
+  ],
+  "exclusions": [
+    {
+      "refs": [
+        {
+          "kind": "gap",
+          "requirement_ids": [
+            "GRN-001",
+            "MET-001",
+            "FILT-001",
+            "FILT-002",
+            "MET-002",
+            "MET-003",
+            "META-001",
+            "POP-001"
+          ],
+          "selected_view": null
+        }
+      ],
+      "view": "demo_retail.v_customer_value",
+      "verdict": "ACCEPT",
+      "reason": "8refs：會員鍵非店商品；lifetime_spend sum保留partial，self為會員母體未證本題不限會員淨額，另缺月份/online/grain；不假設實際有非會員交易。缺庫存/折扣/盤點/庫存母體。",
+      "normalized_refs_reviewed": [
+        {
+          "requirement_id": "GRN-001",
+          "status": "unsupported",
+          "mappings": [],
+          "gaps": [
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "self",
+              "requirements": [
+                {
+                  "requirement_id": "GRN-001",
+                  "quote": "各店各商品",
+                  "status": "unsupported"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "requirement_id": "MET-001",
+          "status": "unsupported",
+          "mappings": [],
+          "gaps": [
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "self",
+              "requirements": [
+                {
+                  "requirement_id": "MET-001",
+                  "quote": "盤點庫存件數",
+                  "status": "unsupported"
+                }
+              ]
+            },
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "grain",
+              "requirements": [
+                {
+                  "requirement_id": "GRN-001",
+                  "quote": "各店各商品",
+                  "status": "unsupported"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "requirement_id": "FILT-001",
+          "status": "unsupported",
+          "mappings": [],
+          "gaps": [
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "self",
+              "requirements": [
+                {
+                  "requirement_id": "FILT-001",
+                  "quote": "2026 年 9 月",
+                  "status": "unsupported"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "requirement_id": "FILT-002",
+          "status": "unsupported",
+          "mappings": [],
+          "gaps": [
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "self",
+              "requirements": [
+                {
+                  "requirement_id": "FILT-002",
+                  "quote": "線上通路",
+                  "status": "unsupported"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "requirement_id": "MET-002",
+          "status": "unsupported",
+          "mappings": [],
+          "gaps": [
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "self",
+              "requirements": [
+                {
+                  "requirement_id": "MET-002",
+                  "quote": "折扣金額",
+                  "status": "unsupported"
+                }
+              ]
+            },
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "scope",
+              "requirements": [
+                {
+                  "requirement_id": "FILT-001",
+                  "quote": "2026 年 9 月",
+                  "status": "unsupported"
+                },
+                {
+                  "requirement_id": "FILT-002",
+                  "quote": "線上通路",
+                  "status": "unsupported"
+                }
+              ]
+            },
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "grain",
+              "requirements": [
+                {
+                  "requirement_id": "GRN-001",
+                  "quote": "各店各商品",
+                  "status": "unsupported"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "requirement_id": "MET-003",
+          "status": "partial",
+          "mappings": [
+            {
+              "column": "lifetime_spend",
+              "role": "metric",
+              "aggregation": "sum"
+            }
+          ],
+          "gaps": [
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "self",
+              "requirements": [
+                {
+                  "requirement_id": "MET-003",
+                  "quote": "淨銷售額",
+                  "status": "partial"
+                }
+              ]
+            },
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "scope",
+              "requirements": [
+                {
+                  "requirement_id": "FILT-001",
+                  "quote": "2026 年 9 月",
+                  "status": "unsupported"
+                },
+                {
+                  "requirement_id": "FILT-002",
+                  "quote": "線上通路",
+                  "status": "unsupported"
+                }
+              ]
+            },
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "grain",
+              "requirements": [
+                {
+                  "requirement_id": "GRN-001",
+                  "quote": "各店各商品",
+                  "status": "unsupported"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "requirement_id": "META-001",
+          "status": "unsupported",
+          "mappings": [],
+          "gaps": [
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "self",
+              "requirements": [
+                {
+                  "requirement_id": "META-001",
+                  "quote": "庫存盤點日期",
+                  "status": "unsupported"
+                }
+              ]
+            },
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "grain",
+              "requirements": [
+                {
+                  "requirement_id": "GRN-001",
+                  "quote": "各店各商品",
+                  "status": "unsupported"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "requirement_id": "POP-001",
+          "status": "unsupported",
+          "mappings": [],
+          "gaps": [
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "self",
+              "requirements": [
+                {
+                  "requirement_id": "POP-001",
+                  "quote": "保留所有庫存商品",
+                  "status": "unsupported"
+                }
+              ]
+            },
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "grain",
+              "requirements": [
+                {
+                  "requirement_id": "GRN-001",
+                  "quote": "各店各商品",
+                  "status": "unsupported"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "refs": [
+        {
+          "kind": "gap",
+          "requirement_ids": [
+            "GRN-001",
+            "MET-001",
+            "FILT-002",
+            "MET-002",
+            "MET-003",
+            "META-001",
+            "POP-001"
+          ],
+          "selected_view": null
+        }
+      ],
+      "view": "demo_retail.v_daily_sales",
+      "verdict": "ACCEPT",
+      "reason": "7refs：store_id合法部分鍵缺product，revenue sum有用partial僅缺online及grain，非自身淨額缺失；整月sales_date雙predicate受支持且未列月份gap；units_sold非庫存，交易日期母體不證庫存。",
+      "normalized_refs_reviewed": [
+        {
+          "requirement_id": "GRN-001",
+          "status": "partial",
+          "mappings": [
+            {
+              "column": "store_id",
+              "role": "key",
+              "aggregation": null
+            }
+          ],
+          "gaps": [
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "self",
+              "requirements": [
+                {
+                  "requirement_id": "GRN-001",
+                  "quote": "各店各商品",
+                  "status": "partial"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "requirement_id": "MET-001",
+          "status": "unsupported",
+          "mappings": [],
+          "gaps": [
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "self",
+              "requirements": [
+                {
+                  "requirement_id": "MET-001",
+                  "quote": "盤點庫存件數",
+                  "status": "unsupported"
+                }
+              ]
+            },
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "grain",
+              "requirements": [
+                {
+                  "requirement_id": "GRN-001",
+                  "quote": "各店各商品",
+                  "status": "partial"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "requirement_id": "FILT-002",
+          "status": "unsupported",
+          "mappings": [],
+          "gaps": [
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "self",
+              "requirements": [
+                {
+                  "requirement_id": "FILT-002",
+                  "quote": "線上通路",
+                  "status": "unsupported"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "requirement_id": "MET-002",
+          "status": "unsupported",
+          "mappings": [],
+          "gaps": [
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "self",
+              "requirements": [
+                {
+                  "requirement_id": "MET-002",
+                  "quote": "折扣金額",
+                  "status": "unsupported"
+                }
+              ]
+            },
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "scope",
+              "requirements": [
+                {
+                  "requirement_id": "FILT-002",
+                  "quote": "線上通路",
+                  "status": "unsupported"
+                }
+              ]
+            },
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "grain",
+              "requirements": [
+                {
+                  "requirement_id": "GRN-001",
+                  "quote": "各店各商品",
+                  "status": "partial"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "requirement_id": "MET-003",
+          "status": "partial",
+          "mappings": [
+            {
+              "column": "revenue",
+              "role": "metric",
+              "aggregation": "sum"
+            }
+          ],
+          "gaps": [
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "scope",
+              "requirements": [
+                {
+                  "requirement_id": "FILT-002",
+                  "quote": "線上通路",
+                  "status": "unsupported"
+                }
+              ]
+            },
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "grain",
+              "requirements": [
+                {
+                  "requirement_id": "GRN-001",
+                  "quote": "各店各商品",
+                  "status": "partial"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "requirement_id": "META-001",
+          "status": "unsupported",
+          "mappings": [],
+          "gaps": [
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "self",
+              "requirements": [
+                {
+                  "requirement_id": "META-001",
+                  "quote": "庫存盤點日期",
+                  "status": "unsupported"
+                }
+              ]
+            },
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "grain",
+              "requirements": [
+                {
+                  "requirement_id": "GRN-001",
+                  "quote": "各店各商品",
+                  "status": "partial"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "requirement_id": "POP-001",
+          "status": "unsupported",
+          "mappings": [],
+          "gaps": [
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "self",
+              "requirements": [
+                {
+                  "requirement_id": "POP-001",
+                  "quote": "保留所有庫存商品",
+                  "status": "unsupported"
+                }
+              ]
+            },
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "grain",
+              "requirements": [
+                {
+                  "requirement_id": "GRN-001",
+                  "quote": "各店各商品",
+                  "status": "partial"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "refs": [
+        {
+          "kind": "gap",
+          "requirement_ids": [
+            "GRN-001",
+            "MET-001",
+            "MET-002",
+            "MET-003",
+            "META-001",
+            "POP-001"
+          ],
+          "selected_view": null
+        }
+      ],
+      "view": "demo_retail.v_order_summary",
+      "verdict": "ACCEPT",
+      "reason": "6refs：每訂單一列，store_id部分鍵，order_amount折扣後sum可用但缺product；日期及online受支持未列gap，缺折扣/庫存/盤點/庫存母體。",
+      "normalized_refs_reviewed": [
+        {
+          "requirement_id": "GRN-001",
+          "status": "partial",
+          "mappings": [
+            {
+              "column": "store_id",
+              "role": "key",
+              "aggregation": null
+            }
+          ],
+          "gaps": [
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "self",
+              "requirements": [
+                {
+                  "requirement_id": "GRN-001",
+                  "quote": "各店各商品",
+                  "status": "partial"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "requirement_id": "MET-001",
+          "status": "unsupported",
+          "mappings": [],
+          "gaps": [
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "self",
+              "requirements": [
+                {
+                  "requirement_id": "MET-001",
+                  "quote": "盤點庫存件數",
+                  "status": "unsupported"
+                }
+              ]
+            },
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "grain",
+              "requirements": [
+                {
+                  "requirement_id": "GRN-001",
+                  "quote": "各店各商品",
+                  "status": "partial"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "requirement_id": "MET-002",
+          "status": "unsupported",
+          "mappings": [],
+          "gaps": [
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "self",
+              "requirements": [
+                {
+                  "requirement_id": "MET-002",
+                  "quote": "折扣金額",
+                  "status": "unsupported"
+                }
+              ]
+            },
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "grain",
+              "requirements": [
+                {
+                  "requirement_id": "GRN-001",
+                  "quote": "各店各商品",
+                  "status": "partial"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "requirement_id": "MET-003",
+          "status": "partial",
+          "mappings": [
+            {
+              "column": "order_amount",
+              "role": "metric",
+              "aggregation": "sum"
+            }
+          ],
+          "gaps": [
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "grain",
+              "requirements": [
+                {
+                  "requirement_id": "GRN-001",
+                  "quote": "各店各商品",
+                  "status": "partial"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "requirement_id": "META-001",
+          "status": "unsupported",
+          "mappings": [],
+          "gaps": [
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "self",
+              "requirements": [
+                {
+                  "requirement_id": "META-001",
+                  "quote": "庫存盤點日期",
+                  "status": "unsupported"
+                }
+              ]
+            },
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "grain",
+              "requirements": [
+                {
+                  "requirement_id": "GRN-001",
+                  "quote": "各店各商品",
+                  "status": "partial"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "requirement_id": "POP-001",
+          "status": "unsupported",
+          "mappings": [],
+          "gaps": [
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "self",
+              "requirements": [
+                {
+                  "requirement_id": "POP-001",
+                  "quote": "保留所有庫存商品",
+                  "status": "unsupported"
+                }
+              ]
+            },
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "grain",
+              "requirements": [
+                {
+                  "requirement_id": "GRN-001",
+                  "quote": "各店各商品",
+                  "status": "partial"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "refs": [
+        {
+          "kind": "gap",
+          "requirement_ids": [
+            "MET-001",
+            "FILT-002",
+            "MET-002",
+            "MET-003",
+            "META-001",
+            "POP-001"
+          ],
+          "selected_view": null
+        }
+      ],
+      "view": "demo_retail.v_product_monthly",
+      "verdict": "ACCEPT",
+      "reason": "6refs：store/product與固定九月能力保留，discount_amount/net_sales sum為partial僅缺online，未否認金額/鍵；缺庫存/盤點/庫存母體。",
+      "normalized_refs_reviewed": [
+        {
+          "requirement_id": "MET-001",
+          "status": "unsupported",
+          "mappings": [],
+          "gaps": [
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "self",
+              "requirements": [
+                {
+                  "requirement_id": "MET-001",
+                  "quote": "盤點庫存件數",
+                  "status": "unsupported"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "requirement_id": "FILT-002",
+          "status": "unsupported",
+          "mappings": [],
+          "gaps": [
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "self",
+              "requirements": [
+                {
+                  "requirement_id": "FILT-002",
+                  "quote": "線上通路",
+                  "status": "unsupported"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "requirement_id": "MET-002",
+          "status": "partial",
+          "mappings": [
+            {
+              "column": "discount_amount",
+              "role": "metric",
+              "aggregation": "sum"
+            }
+          ],
+          "gaps": [
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "scope",
+              "requirements": [
+                {
+                  "requirement_id": "FILT-002",
+                  "quote": "線上通路",
+                  "status": "unsupported"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "requirement_id": "MET-003",
+          "status": "partial",
+          "mappings": [
+            {
+              "column": "net_sales",
+              "role": "metric",
+              "aggregation": "sum"
+            }
+          ],
+          "gaps": [
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "scope",
+              "requirements": [
+                {
+                  "requirement_id": "FILT-002",
+                  "quote": "線上通路",
+                  "status": "unsupported"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "requirement_id": "META-001",
+          "status": "unsupported",
+          "mappings": [],
+          "gaps": [
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "self",
+              "requirements": [
+                {
+                  "requirement_id": "META-001",
+                  "quote": "庫存盤點日期",
+                  "status": "unsupported"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "requirement_id": "POP-001",
+          "status": "unsupported",
+          "mappings": [],
+          "gaps": [
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "self",
+              "requirements": [
+                {
+                  "requirement_id": "POP-001",
+                  "quote": "保留所有庫存商品",
+                  "status": "unsupported"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "refs": [
+        {
+          "kind": "gap",
+          "requirement_ids": [
+            "GRN-001",
+            "MET-001",
+            "FILT-002",
+            "MET-002",
+            "MET-003",
+            "META-001",
+            "POP-001"
+          ],
+          "selected_view": null
+        }
+      ],
+      "view": "demo_retail.v_store_monthly_kpi",
+      "verdict": "ACCEPT",
+      "reason": "7refs：store部分鍵及sales_month月份能力保留，revenue sum為partial缺online及product；缺折扣/庫存/盤點/庫存母體。來源無交易為0未被套到未匹配sales_detail。",
+      "normalized_refs_reviewed": [
+        {
+          "requirement_id": "GRN-001",
+          "status": "partial",
+          "mappings": [
+            {
+              "column": "store_id",
+              "role": "key",
+              "aggregation": null
+            }
+          ],
+          "gaps": [
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "self",
+              "requirements": [
+                {
+                  "requirement_id": "GRN-001",
+                  "quote": "各店各商品",
+                  "status": "partial"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "requirement_id": "MET-001",
+          "status": "unsupported",
+          "mappings": [],
+          "gaps": [
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "self",
+              "requirements": [
+                {
+                  "requirement_id": "MET-001",
+                  "quote": "盤點庫存件數",
+                  "status": "unsupported"
+                }
+              ]
+            },
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "grain",
+              "requirements": [
+                {
+                  "requirement_id": "GRN-001",
+                  "quote": "各店各商品",
+                  "status": "partial"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "requirement_id": "FILT-002",
+          "status": "unsupported",
+          "mappings": [],
+          "gaps": [
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "self",
+              "requirements": [
+                {
+                  "requirement_id": "FILT-002",
+                  "quote": "線上通路",
+                  "status": "unsupported"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "requirement_id": "MET-002",
+          "status": "unsupported",
+          "mappings": [],
+          "gaps": [
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "self",
+              "requirements": [
+                {
+                  "requirement_id": "MET-002",
+                  "quote": "折扣金額",
+                  "status": "unsupported"
+                }
+              ]
+            },
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "scope",
+              "requirements": [
+                {
+                  "requirement_id": "FILT-002",
+                  "quote": "線上通路",
+                  "status": "unsupported"
+                }
+              ]
+            },
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "grain",
+              "requirements": [
+                {
+                  "requirement_id": "GRN-001",
+                  "quote": "各店各商品",
+                  "status": "partial"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "requirement_id": "MET-003",
+          "status": "partial",
+          "mappings": [
+            {
+              "column": "revenue",
+              "role": "metric",
+              "aggregation": "sum"
+            }
+          ],
+          "gaps": [
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "scope",
+              "requirements": [
+                {
+                  "requirement_id": "FILT-002",
+                  "quote": "線上通路",
+                  "status": "unsupported"
+                }
+              ]
+            },
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "grain",
+              "requirements": [
+                {
+                  "requirement_id": "GRN-001",
+                  "quote": "各店各商品",
+                  "status": "partial"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "requirement_id": "META-001",
+          "status": "unsupported",
+          "mappings": [],
+          "gaps": [
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "self",
+              "requirements": [
+                {
+                  "requirement_id": "META-001",
+                  "quote": "庫存盤點日期",
+                  "status": "unsupported"
+                }
+              ]
+            },
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "grain",
+              "requirements": [
+                {
+                  "requirement_id": "GRN-001",
+                  "quote": "各店各商品",
+                  "status": "partial"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "requirement_id": "POP-001",
+          "status": "unsupported",
+          "mappings": [],
+          "gaps": [
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "self",
+              "requirements": [
+                {
+                  "requirement_id": "POP-001",
+                  "quote": "保留所有庫存商品",
+                  "status": "unsupported"
+                }
+              ]
+            },
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "grain",
+              "requirements": [
+                {
+                  "requirement_id": "GRN-001",
+                  "quote": "各店各商品",
+                  "status": "partial"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "raw_prose": [
+    {
+      "path": "/draft/tasks/0/request",
+      "text": "從 v_inventory_status 取得所有門市×商品的盤點庫存件數(stock_qty, sum)與盤點日期(snapshot_date)，保留所有庫存商品，不施加任何篩選條件。",
+      "verdict": "ACCEPT",
+      "reason": "與typed一致：inventory全庫存無filter；sales九月30日含尾等價typed <10月1日，online/兩sum/店商品一致。"
+    },
+    {
+      "path": "/draft/tasks/1/request",
+      "text": "從 v_sales_detail 取 2026 年 9 月（order_date 介於 2026-09-01 至 2026-09-30）且線上通路（sales_channel='online'）的銷售明細，以門市×商品為粒度彙總折扣金額(discount_amount, sum)與淨銷售額(net_sales, sum)。",
+      "verdict": "ACCEPT",
+      "reason": "與typed一致：inventory全庫存無filter；sales九月30日含尾等價typed <10月1日，online/兩sum/店商品一致。"
+    },
+    {
+      "path": "/draft/integration/preparation/0/description",
+      "text": "彙總 2026 年 9 月線上通路各門市各商品的折扣金額與淨銷售額至門市×商品粒度",
+      "verdict": "ACCEPT",
+      "reason": "sales先aggregate至store/product再left；inventory本身唯一此粒度且typed group_by/sum明示，不需額外preparation。"
+    },
+    {
+      "path": "/draft/integration/missing_data_policy",
+      "text": "保留未匹配母體；未匹配子集合為空集合，不製造零值元素或將數值缺值補零。",
+      "verdict": "NEEDS_FRESH_RESEARCH",
+      "reason": "逐字為輸入允許EMPTY_POLICY，明確保母體且禁止數值補零；現有finish接受並產兩prepared。唯一machine finding只是!=MISSING_POLICIES[0]，不能據此指稱實際補零。平面一對一aggregate的空子集合與數值缺值輸出形狀需fresh研究；本輪不改Oracle或原FAIL。"
+    }
+  ],
+  "empty_text_fields": {
+    "notes": [],
+    "clarifications": [],
+    "unsupported_reasons": []
+  },
+  "normalized_generated_text_review": {
+    "verdict": "ACCEPT",
+    "all_assignment_exclusion_reasons_reviewed": true,
+    "contract_citations_exactly_rechecked": 63,
+    "reason": "逐8責任與5來源全部refs比真契約，有用partial與self/derived缺口保留；生成理由沿既有固定上游，不歸功自然coverage。"
+  },
+  "prepared_requests": {
+    "verdict": "ACCEPT",
+    "count": 2,
+    "payloads_equal_raw_typed_fields": true,
+    "inventory": "store/product,stock_qty=sum,snapshot_date DISTINCT metadata,no filters",
+    "sales": "store/product,September2026 half-open month+online,discount_amount/net_sales=sum",
+    "integration": "inventory anchor；兩task typed aggregate至store/product後one_to_one left paired keys，保留inventory。",
+    "metadata_caveat": "未宣稱同日庫存總額；prepared明示混日禁止跨日加總。"
+  },
+  "business_semantics": {
+    "no_zero_fill_observed": true,
+    "inventory_retention_supported": true,
+    "policy_representation": "NEEDS_FRESH_RESEARCH",
+    "conclusion": "唯一machine FAIL為policy literal；其餘完整業務責任核對ACCEPT。EMPTY_POLICY明示不補零且為prompt允許值，不能將字串差異直接等同業務補零錯，也不當場改判本輪FAIL。"
+  },
+  "replays": {
+    "current": "PASS_REPRODUCES_ORIGINAL_FAIL",
+    "frozen": "PASS_REPRODUCES_ORIGINAL_FAIL",
+    "provider_calls": 0
+  },
+  "next_action": "FAIL交fresh研究判policy合理性及平面缺值責任；不重送成功HTTP答案。"
+}

@@ -1,0 +1,45 @@
+{
+  "entries": {
+    "stock": {
+      "status": "unsupported",
+      "own_gap": false,
+      "mappings": [],
+      "contract_path": "/grain/description"
+    },
+    "sales": {
+      "status": "unsupported",
+      "own_gap": true,
+      "mappings": [],
+      "contract_path": "/grain/description"
+    },
+    "channel": {
+      "status": "unsupported",
+      "own_gap": true,
+      "mappings": [],
+      "contract_path": "/grain/description"
+    },
+    "period": {
+      "status": "unsupported",
+      "own_gap": true,
+      "mappings": [],
+      "contract_path": "/grain/description"
+    },
+    "population": {
+      "status": "unsupported",
+      "own_gap": true,
+      "mappings": [],
+      "contract_path": "/grain/description"
+    },
+    "grain": {
+      "status": "unsupported",
+      "own_gap": true,
+      "mappings": []
+    },
+    "R_PURPOSE": {
+      "status": "unsupported",
+      "own_gap": true,
+      "mappings": [],
+      "contract_path": null
+    }
+  }
+}

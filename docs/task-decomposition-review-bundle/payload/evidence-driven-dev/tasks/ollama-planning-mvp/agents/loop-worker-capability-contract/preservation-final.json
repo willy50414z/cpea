@@ -1,0 +1,36 @@
+{
+  "result": "PASS",
+  "protected_old_files": 6390,
+  "unchanged_old_files": 6389,
+  "known_authorized_main_change": [
+    "evidence-driven-dev/tasks/ollama-planning-mvp/task.md"
+  ],
+  "worker_Task_control_drift": false,
+  "Task_sha256": "45760d1f793b8a6e44f9b6594d5a0b311d04fbc69dcf0597690e44d688df06cb",
+  "old_nodes": 21,
+  "completed_rounds": 20,
+  "active": {
+    "round": 21,
+    "node": "capability_projection_contract",
+    "started_at": "2026-10-22T00:59:36.404890+00:00"
+  },
+  "used_before": {
+    "agent_dispatches": 37,
+    "cloud_calls": 0,
+    "local_calls": 26,
+    "model_retries": 0
+  },
+  "used_after": {
+    "agent_dispatches": 37,
+    "cloud_calls": 0,
+    "local_calls": 26,
+    "model_retries": 0
+  },
+  "final_frozen_bound_files": 282,
+  "final_frozen_files": 287,
+  "old_rebound_bindings_equal": true,
+  "source_sha256": "44fc1a6ec68f2b3c7562e27dcc0cc59e8145692aee8ea8f86e551c033087dd3d",
+  "test_sha256": "ddf30e05642a4cc36540cbae20c3a4561a36594fa125871762df16a333dc0bf1",
+  "manifest_sha256": "a2eb2f76c0479b49294245987346e4676db78c86fbefac02dd4e153d8c590f2d",
+  "UTF8_without_BOM": true
+}

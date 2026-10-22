@@ -1,0 +1,13 @@
+{
+  "command": ".venv/bin/python -m evaluations.managed_three_stage_runner --replay evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T161155Z-cb9cb4",
+  "exit_code": 0,
+  "stdout": {
+    "result": "PASS",
+    "raw_replays": 6,
+    "stopped": {
+      "error_type": "ValueError",
+      "error": "duplicate coverage requirement IDs"
+    }
+  },
+  "meaning": "離線重播精確重現失敗前綴；此PASS僅代表重播一致，非自然流程或節點驗收成功。"
+}

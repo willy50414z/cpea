@@ -1,0 +1,19 @@
+{
+  "probe_only": true,
+  "provider_calls": 0,
+  "execution_authorized": false,
+  "explicit_package_skips_fixed_loader": true,
+  "engine_version": "managed-node-diagnostics-1",
+  "sample_request_case": "kind-isolation-v2:ISOLATION:SEL-ISO-v1-01:node",
+  "stopped": null,
+  "replay": {
+    "result": "PASS",
+    "raw_replays": 1,
+    "stopped": null,
+    "upstream_injected": true,
+    "provider_calls": 0
+  },
+  "runtime_source_files": 163,
+  "runtime_lineage_present": false,
+  "outer_adapter_full_binding_and_provenance_still_required": true
+}

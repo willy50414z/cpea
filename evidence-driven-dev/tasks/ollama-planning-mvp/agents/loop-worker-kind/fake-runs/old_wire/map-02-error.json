@@ -1,0 +1,5 @@
+{
+  "error_type": "ValidationError",
+  "error": "4 validation errors for KindCoverage_917e5de3fe5e386d\nentries.period.mappings.0.operator\n  Field required [type=missing, input_value={'column': 'sales_date', ...'value': '2031-02-01'}]}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\nentries.period.mappings.0.value\n  Field required [type=missing, input_value={'column': 'sales_date', ...'value': '2031-02-01'}]}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\nentries.period.mappings.0.role\n  Extra inputs are not permitted [type=extra_forbidden, input_value='filter', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\nentries.period.mappings.0.conditions\n  Extra inputs are not permitted [type=extra_forbidden, input_value=[{'column': 'sales_date',... 'value': '2031-02-01'}], input_type=list]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden",
+  "raw_saved": true
+}

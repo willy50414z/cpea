@@ -1,0 +1,20 @@
+{
+  "ticket": "7e041375a95a4a819d060b84b3779905",
+  "verdict": "REPLAN",
+  "reviewed_rounds": [
+    4,
+    5,
+    6
+  ],
+  "evidence": [
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-4-6/independent-probes.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-4-6/independent-probes-v2.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-4-6/focused-contract.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-4-6/focused-runner.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-4-6/round4-raw-review.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-4-6/replay-round4.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-4-6/replay-round6.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-4-6/hash-check.json"
+  ],
+  "summary": "已獨立覆蓋第4、5、6輪及 natural_evidence_bound_three_stage → natural_slots_three_stage → natural_qwen_three_stage → three_stage_integration → root 全部祖先目標，判定 REPLAN；不需變更使用者需求或增加授權，也不應以同版重送挑成功樣本。\n第4輪完整FAIL維持：自行比對raw與來源契約確認recall把無channel的product_monthly宣稱可按通路篩選、order_summary在商品grain unsupported時把order_amount sum宣supported、monthly缺口/排除理由宣稱契約未保證的only-sales母體，以及原selection response省略typed欄位與integration。須讀call.response原JSON；selection-parsed.json已有Pydantic defaults，不能據其keys否認原始省略。9raw凍結舊版重播精確重現final grain differs from verified requirement keys；不得溯及翻案。\n第5輪方向大致合理：單一managed模組與共用runner保留原guard/舊wire；全部admitted候選與逐字policy理由屬可確定資訊，不代模型選來源；status/mappings/scope/grain適用性、typed draft與整合仍由模型決策，未見依Test ID硬編碼答案。required型別實際清掉parser defaults，ready integration確為非null；獨立32項focused及9項完整typed/fake/replay測試通過，完整fake得到2 prepared且7種失敗prefix停止。307既有證據只證離線，本audit未重跑整307、未把fake當自然成功。\n第6輪直接觸發與設計缺口須分開。原R1=status unsupported/mappings=[]/path=/grain/description/gap grain refs=[R1]；R1自己的grain_requirement_ids=[]且recall禁止self grain refs，所以原輸出確實違反當版明示規則。獨立離線控制僅把R1 gap改為合法mapping/self後，其餘原raw可通過adapter，證明不能聲稱這個unsupported狀態完全無法表示；該控制不是修復自然答案，原FAIL不變。\n但確證另有泛化的表示能力缺口：各店各商品需求在daily_sales能保留store_id而缺product_id，合法partial grain及/grain/description證據在舊adapter可表達，新wire卻對grain/mapping/scope/population/evidence五種自身gap全部拒絕。grain只能指依賴且recall禁止自指；mapping要求空mappings；population限定population需求；evidence要求null而舊guard強制grain path；自身沒有scope。因此有可用部分key映射的自身grain缺口無法誠實表示，不能靠刪掉mapping改unsupported或添假依賴解決。改為會員×商品需求、另一Unicode ID及customer_value會員key後同樣重現，排除本題ID或單一來源特例。第5輪測試只覆蓋metric對grain的依賴缺口，漏了grain責任自己的部分支持。\n下一位fresh研究者應先回答：如何在不增加自由來源事實、不弱化必要guards的前提下，明確區分自身責任未完成與被引用依賴未完成，完整保留partial可用映射？必要正反例包含：上述兩種跨契約自身partial grain、原R1 unsupported的合法表達、合法完整grain、未知/非grain/self依賴及指向supported依賴的拒絕、linked metric在同來源grain未支持時不得supported；並保留真order粒度、不同metric各連不同grain、真正independent scalar及固定月份可縮約的正例。研究後才制定最小候選變更，不由本auditor實作或代選方案。\n同時須釐清gaps完整性與非metric grain refs的契約：獨立控制確認R4 partial只列scope缺口、漏掉未支持R1 grain仍結構接受；F1顯式refs=[R1]但R1 unsupported時，F1 supported且同步移除其他項已完成scope refs仍可結構接受。這只證當前validator檢查所列refs一致性而未證所有依賴缺口完整，也未對非metric refs套用相同support限制。研究必須先定義filter本身的月份能力是否應獨立於輸出商品grain，再設正反例，不能直接把所有filter全域綁grain造成過度拒絕。誤宣independent、漏需求、錯月份/角色、R1較寬population文字與剩餘自由文仍需自然語意審核，refs合法不能免除此責任。R1 all store-product combinations較R6完整庫存母體寬，但尚無selection證明其意指笛卡兒膨脹；不以此單獨判FAIL或要求使用者改題。\n保存性獨立核對：4–6輪42項證據hash、138項現版source freeze、892項歷史工件與兩src既存hash均一致；第6輪3raw凍結新版重播同首錯，未改原raw/分數/38題Gate。audit總0模型POST/SQL/DB、無實作/Task/controller修改、無commit/push；probe v1曾錯估切換F1後的下游scope refs，原失敗log保留，v2同步修正控制條件後驗證，不隱藏中間結果。\n目前recall 8責任及三metric linked R1、customer_value全unsupported可接受，後5View、自然selection/prepared仍NOT_VERIFIED；累計18本機/0retry/0cloud未重置。後續仍需固定新候選全新自然recall+全部7View+selection完整語意及prepared，依序返回各既有祖先獨立整合驗收，再由fresh最終verifier ACCEPT。不得因本audit focused通過、子節點PASS或資源無上限就宣告自然/根驗收完成。"
+}

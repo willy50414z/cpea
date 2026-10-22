@@ -1,0 +1,1311 @@
+[
+  {
+    "case_id": "cross-view-02",
+    "plan": {
+      "status": "ready",
+      "tasks": [
+        {
+          "task_id": "inventory",
+          "view": "demo_retail.v_inventory_status",
+          "query_grain": [
+            "store_id",
+            "product_id"
+          ],
+          "filters": [],
+          "metrics": {},
+          "conditional_metrics": [],
+          "attributes": [
+            "snapshot_date",
+            "stock_qty"
+          ],
+          "metadata_collections": []
+        },
+        {
+          "task_id": "product_sales",
+          "view": "demo_retail.v_product_monthly",
+          "query_grain": [
+            "store_id",
+            "product_id"
+          ],
+          "filters": [
+            {
+              "column": "sales_month",
+              "operator": "=",
+              "value": "2026-09-01"
+            }
+          ],
+          "metrics": {
+            "net_sales": "sum"
+          },
+          "conditional_metrics": [],
+          "attributes": [],
+          "metadata_collections": []
+        }
+      ],
+      "anchor_task": "inventory",
+      "root_grain": [
+        "store_id",
+        "product_id"
+      ],
+      "links": [
+        {
+          "parent": "inventory",
+          "child": "product_sales",
+          "parent_keys": [
+            "store_id",
+            "product_id"
+          ],
+          "child_keys": [
+            "store_id",
+            "product_id"
+          ],
+          "mode": "left",
+          "shape": "merge",
+          "cardinality": "one_to_one"
+        }
+      ],
+      "missing_values": "preserve_null",
+      "clarifications": [],
+      "unsupported_reasons": []
+    },
+    "response": {
+      "status": "ready",
+      "code": null,
+      "draft": {
+        "status": "ready",
+        "strategy": "multi_view",
+        "tasks": [
+          {
+            "task_id": "inventory",
+            "view": "demo_retail.v_inventory_status",
+            "required_columns": [
+              "store_id",
+              "product_id",
+              "snapshot_date",
+              "stock_qty"
+            ],
+            "filters": [],
+            "metrics": {},
+            "conditional_metrics": [],
+            "attributes": [
+              "snapshot_date",
+              "stock_qty"
+            ],
+            "metadata_collections": [],
+            "group_by": [],
+            "output_grain": [
+              "store_id",
+              "product_id"
+            ],
+            "depends_on": [],
+            "unbound_inputs": [],
+            "request": "依型別條件、欄位角色與查詢粒度準備單一來源資料。"
+          },
+          {
+            "task_id": "product_sales",
+            "view": "demo_retail.v_product_monthly",
+            "required_columns": [
+              "store_id",
+              "product_id",
+              "net_sales",
+              "sales_month"
+            ],
+            "filters": [
+              {
+                "column": "sales_month",
+                "operator": "=",
+                "value": "2026-09-01"
+              }
+            ],
+            "metrics": {
+              "net_sales": "sum"
+            },
+            "conditional_metrics": [],
+            "attributes": [],
+            "metadata_collections": [],
+            "group_by": [
+              "store_id",
+              "product_id"
+            ],
+            "output_grain": [
+              "store_id",
+              "product_id"
+            ],
+            "depends_on": [],
+            "unbound_inputs": [],
+            "request": "依型別條件、欄位角色與查詢粒度準備單一來源資料。"
+          }
+        ],
+        "integration": {
+          "anchor_task": "inventory",
+          "output_grain": [
+            "store_id",
+            "product_id"
+          ],
+          "edges": [
+            {
+              "left_task": "inventory",
+              "right_task": "product_sales",
+              "left_keys": [
+                "store_id",
+                "product_id"
+              ],
+              "right_keys": [
+                "store_id",
+                "product_id"
+              ],
+              "mode": "left",
+              "cardinality": "one_to_one",
+              "preserve_task": "inventory"
+            }
+          ],
+          "preparation": [],
+          "missing_data_policy": "保留未匹配母體並標記缺值；無契約保證不得補零。",
+          "notes": []
+        },
+        "clarifications": [],
+        "unsupported_reasons": []
+      },
+      "prepared_requests": [
+        {
+          "task_id": "inventory",
+          "view": "demo_retail.v_inventory_status",
+          "payload": {
+            "request": "只執行以下單一 View 資料查詢；保留全部條件及指定輸出粒度，不作跨來源整合或業務決策。\n{\"view\": \"demo_retail.v_inventory_status\", \"required_columns\": [\"store_id\", \"product_id\", \"snapshot_date\", \"stock_qty\"], \"filters\": [], \"metrics\": {}, \"conditional_metrics\": [], \"metadata_collections\": [], \"attributes\": [\"snapshot_date\", \"stock_qty\"], \"group_by\": [], \"output_grain\": [\"store_id\", \"product_id\"]}",
+            "history": []
+          }
+        },
+        {
+          "task_id": "product_sales",
+          "view": "demo_retail.v_product_monthly",
+          "payload": {
+            "request": "只執行以下單一 View 資料查詢；保留全部條件及指定輸出粒度，不作跨來源整合或業務決策。\n{\"view\": \"demo_retail.v_product_monthly\", \"required_columns\": [\"store_id\", \"product_id\", \"net_sales\", \"sales_month\"], \"filters\": [{\"column\": \"sales_month\", \"operator\": \"=\", \"value\": \"2026-09-01\"}], \"metrics\": {\"net_sales\": \"sum\"}, \"conditional_metrics\": [], \"metadata_collections\": [], \"attributes\": [], \"group_by\": [\"store_id\", \"product_id\"], \"output_grain\": [\"store_id\", \"product_id\"]}",
+            "history": []
+          }
+        }
+      ],
+      "validation_errors": [],
+      "contract_fingerprint": "e5e5a5a2cc29a1be93dc4d6875aba8c47a35ed48c019c7d6838a45831d0441dc",
+      "context_tokens": 0,
+      "token_counter": ""
+    }
+  },
+  {
+    "case_id": "cross-view-07",
+    "plan": {
+      "status": "ready",
+      "tasks": [
+        {
+          "task_id": "inventory",
+          "view": "demo_retail.v_inventory_status",
+          "query_grain": [
+            "store_id",
+            "product_id"
+          ],
+          "filters": [],
+          "metrics": {},
+          "conditional_metrics": [],
+          "attributes": [
+            "snapshot_date",
+            "stock_qty"
+          ],
+          "metadata_collections": []
+        },
+        {
+          "task_id": "sales",
+          "view": "demo_retail.v_sales_detail",
+          "query_grain": [
+            "store_id",
+            "product_id"
+          ],
+          "filters": [
+            {
+              "column": "order_date",
+              "operator": ">=",
+              "value": "2026-09-01"
+            },
+            {
+              "column": "order_date",
+              "operator": "<",
+              "value": "2026-10-01"
+            },
+            {
+              "column": "sales_channel",
+              "operator": "=",
+              "value": "online"
+            }
+          ],
+          "metrics": {
+            "quantity": "sum"
+          },
+          "conditional_metrics": [],
+          "attributes": [],
+          "metadata_collections": []
+        }
+      ],
+      "anchor_task": "inventory",
+      "root_grain": [
+        "store_id",
+        "product_id"
+      ],
+      "links": [
+        {
+          "parent": "inventory",
+          "child": "sales",
+          "parent_keys": [
+            "store_id",
+            "product_id"
+          ],
+          "child_keys": [
+            "store_id",
+            "product_id"
+          ],
+          "mode": "left",
+          "shape": "merge",
+          "cardinality": "one_to_one"
+        }
+      ],
+      "missing_values": "preserve_null",
+      "clarifications": [],
+      "unsupported_reasons": []
+    },
+    "response": {
+      "status": "ready",
+      "code": null,
+      "draft": {
+        "status": "ready",
+        "strategy": "multi_view",
+        "tasks": [
+          {
+            "task_id": "inventory",
+            "view": "demo_retail.v_inventory_status",
+            "required_columns": [
+              "store_id",
+              "product_id",
+              "snapshot_date",
+              "stock_qty"
+            ],
+            "filters": [],
+            "metrics": {},
+            "conditional_metrics": [],
+            "attributes": [
+              "snapshot_date",
+              "stock_qty"
+            ],
+            "metadata_collections": [],
+            "group_by": [],
+            "output_grain": [
+              "store_id",
+              "product_id"
+            ],
+            "depends_on": [],
+            "unbound_inputs": [],
+            "request": "依型別條件、欄位角色與查詢粒度準備單一來源資料。"
+          },
+          {
+            "task_id": "sales",
+            "view": "demo_retail.v_sales_detail",
+            "required_columns": [
+              "store_id",
+              "product_id",
+              "order_date",
+              "quantity",
+              "sales_channel"
+            ],
+            "filters": [
+              {
+                "column": "order_date",
+                "operator": ">=",
+                "value": "2026-09-01"
+              },
+              {
+                "column": "order_date",
+                "operator": "<",
+                "value": "2026-10-01"
+              },
+              {
+                "column": "sales_channel",
+                "operator": "=",
+                "value": "online"
+              }
+            ],
+            "metrics": {
+              "quantity": "sum"
+            },
+            "conditional_metrics": [],
+            "attributes": [],
+            "metadata_collections": [],
+            "group_by": [
+              "store_id",
+              "product_id"
+            ],
+            "output_grain": [
+              "store_id",
+              "product_id"
+            ],
+            "depends_on": [],
+            "unbound_inputs": [],
+            "request": "依型別條件、欄位角色與查詢粒度準備單一來源資料。"
+          }
+        ],
+        "integration": {
+          "anchor_task": "inventory",
+          "output_grain": [
+            "store_id",
+            "product_id"
+          ],
+          "edges": [
+            {
+              "left_task": "inventory",
+              "right_task": "sales",
+              "left_keys": [
+                "store_id",
+                "product_id"
+              ],
+              "right_keys": [
+                "store_id",
+                "product_id"
+              ],
+              "mode": "left",
+              "cardinality": "one_to_one",
+              "preserve_task": "inventory"
+            }
+          ],
+          "preparation": [],
+          "missing_data_policy": "保留未匹配母體並標記缺值；無契約保證不得補零。",
+          "notes": []
+        },
+        "clarifications": [],
+        "unsupported_reasons": []
+      },
+      "prepared_requests": [
+        {
+          "task_id": "inventory",
+          "view": "demo_retail.v_inventory_status",
+          "payload": {
+            "request": "只執行以下單一 View 資料查詢；保留全部條件及指定輸出粒度，不作跨來源整合或業務決策。\n{\"view\": \"demo_retail.v_inventory_status\", \"required_columns\": [\"store_id\", \"product_id\", \"snapshot_date\", \"stock_qty\"], \"filters\": [], \"metrics\": {}, \"conditional_metrics\": [], \"metadata_collections\": [], \"attributes\": [\"snapshot_date\", \"stock_qty\"], \"group_by\": [], \"output_grain\": [\"store_id\", \"product_id\"]}",
+            "history": []
+          }
+        },
+        {
+          "task_id": "sales",
+          "view": "demo_retail.v_sales_detail",
+          "payload": {
+            "request": "只執行以下單一 View 資料查詢；保留全部條件及指定輸出粒度，不作跨來源整合或業務決策。\n{\"view\": \"demo_retail.v_sales_detail\", \"required_columns\": [\"store_id\", \"product_id\", \"order_date\", \"quantity\", \"sales_channel\"], \"filters\": [{\"column\": \"order_date\", \"operator\": \">=\", \"value\": \"2026-09-01\"}, {\"column\": \"order_date\", \"operator\": \"<\", \"value\": \"2026-10-01\"}, {\"column\": \"sales_channel\", \"operator\": \"=\", \"value\": \"online\"}], \"metrics\": {\"quantity\": \"sum\"}, \"conditional_metrics\": [], \"metadata_collections\": [], \"attributes\": [], \"group_by\": [\"store_id\", \"product_id\"], \"output_grain\": [\"store_id\", \"product_id\"]}",
+            "history": []
+          }
+        }
+      ],
+      "validation_errors": [],
+      "contract_fingerprint": "e5e5a5a2cc29a1be93dc4d6875aba8c47a35ed48c019c7d6838a45831d0441dc",
+      "context_tokens": 0,
+      "token_counter": ""
+    }
+  },
+  {
+    "case_id": "cross-view-09",
+    "plan": {
+      "status": "ready",
+      "tasks": [
+        {
+          "task_id": "inventory",
+          "view": "demo_retail.v_inventory_status",
+          "query_grain": [
+            "store_id",
+            "product_id"
+          ],
+          "filters": [],
+          "metrics": {},
+          "conditional_metrics": [],
+          "attributes": [
+            "snapshot_date",
+            "stock_qty"
+          ],
+          "metadata_collections": []
+        },
+        {
+          "task_id": "sales",
+          "view": "demo_retail.v_sales_detail",
+          "query_grain": [
+            "store_id",
+            "product_id",
+            "order_date"
+          ],
+          "filters": [
+            {
+              "column": "order_date",
+              "operator": ">=",
+              "value": "2026-09-01"
+            },
+            {
+              "column": "order_date",
+              "operator": "<",
+              "value": "2026-09-15"
+            }
+          ],
+          "metrics": {
+            "quantity": "sum"
+          },
+          "conditional_metrics": [],
+          "attributes": [],
+          "metadata_collections": []
+        }
+      ],
+      "anchor_task": "inventory",
+      "root_grain": [
+        "store_id",
+        "product_id"
+      ],
+      "links": [
+        {
+          "parent": "inventory",
+          "child": "sales",
+          "parent_keys": [
+            "store_id",
+            "product_id"
+          ],
+          "child_keys": [
+            "store_id",
+            "product_id"
+          ],
+          "mode": "left",
+          "shape": "collection",
+          "cardinality": "one_to_many"
+        }
+      ],
+      "missing_values": "preserve_null",
+      "clarifications": [],
+      "unsupported_reasons": []
+    },
+    "response": {
+      "status": "ready",
+      "code": null,
+      "draft": {
+        "status": "ready",
+        "strategy": "multi_view",
+        "tasks": [
+          {
+            "task_id": "inventory",
+            "view": "demo_retail.v_inventory_status",
+            "required_columns": [
+              "store_id",
+              "product_id",
+              "snapshot_date",
+              "stock_qty"
+            ],
+            "filters": [],
+            "metrics": {},
+            "conditional_metrics": [],
+            "attributes": [
+              "snapshot_date",
+              "stock_qty"
+            ],
+            "metadata_collections": [],
+            "group_by": [],
+            "output_grain": [
+              "store_id",
+              "product_id"
+            ],
+            "depends_on": [],
+            "unbound_inputs": [],
+            "request": "依型別條件、欄位角色與查詢粒度準備單一來源資料。"
+          },
+          {
+            "task_id": "sales",
+            "view": "demo_retail.v_sales_detail",
+            "required_columns": [
+              "store_id",
+              "product_id",
+              "order_date",
+              "quantity"
+            ],
+            "filters": [
+              {
+                "column": "order_date",
+                "operator": ">=",
+                "value": "2026-09-01"
+              },
+              {
+                "column": "order_date",
+                "operator": "<",
+                "value": "2026-09-15"
+              }
+            ],
+            "metrics": {
+              "quantity": "sum"
+            },
+            "conditional_metrics": [],
+            "attributes": [],
+            "metadata_collections": [],
+            "group_by": [
+              "store_id",
+              "product_id",
+              "order_date"
+            ],
+            "output_grain": [
+              "store_id",
+              "product_id",
+              "order_date"
+            ],
+            "depends_on": [],
+            "unbound_inputs": [],
+            "request": "依型別條件、欄位角色與查詢粒度準備單一來源資料。"
+          }
+        ],
+        "integration": {
+          "anchor_task": "inventory",
+          "output_grain": [
+            "store_id",
+            "product_id"
+          ],
+          "edges": [
+            {
+              "left_task": "inventory",
+              "right_task": "sales",
+              "left_keys": [
+                "store_id",
+                "product_id"
+              ],
+              "right_keys": [
+                "store_id",
+                "product_id"
+              ],
+              "mode": "left",
+              "cardinality": "one_to_many",
+              "preserve_task": "inventory"
+            }
+          ],
+          "preparation": [
+            {
+              "task_id": "sales",
+              "kind": "nest",
+              "keys": [
+                "store_id",
+                "product_id"
+              ],
+              "description": "依模型明示的形狀與對齊鍵準備；保留原查詢粒度及背景值語意。"
+            }
+          ],
+          "missing_data_policy": "保留未匹配母體並標記缺值；無契約保證不得補零。",
+          "notes": []
+        },
+        "clarifications": [],
+        "unsupported_reasons": []
+      },
+      "prepared_requests": [
+        {
+          "task_id": "inventory",
+          "view": "demo_retail.v_inventory_status",
+          "payload": {
+            "request": "只執行以下單一 View 資料查詢；保留全部條件及指定輸出粒度，不作跨來源整合或業務決策。\n{\"view\": \"demo_retail.v_inventory_status\", \"required_columns\": [\"store_id\", \"product_id\", \"snapshot_date\", \"stock_qty\"], \"filters\": [], \"metrics\": {}, \"conditional_metrics\": [], \"metadata_collections\": [], \"attributes\": [\"snapshot_date\", \"stock_qty\"], \"group_by\": [], \"output_grain\": [\"store_id\", \"product_id\"]}",
+            "history": []
+          }
+        },
+        {
+          "task_id": "sales",
+          "view": "demo_retail.v_sales_detail",
+          "payload": {
+            "request": "只執行以下單一 View 資料查詢；保留全部條件及指定輸出粒度，不作跨來源整合或業務決策。\n{\"view\": \"demo_retail.v_sales_detail\", \"required_columns\": [\"store_id\", \"product_id\", \"order_date\", \"quantity\"], \"filters\": [{\"column\": \"order_date\", \"operator\": \">=\", \"value\": \"2026-09-01\"}, {\"column\": \"order_date\", \"operator\": \"<\", \"value\": \"2026-09-15\"}], \"metrics\": {\"quantity\": \"sum\"}, \"conditional_metrics\": [], \"metadata_collections\": [], \"attributes\": [], \"group_by\": [\"store_id\", \"product_id\", \"order_date\"], \"output_grain\": [\"store_id\", \"product_id\", \"order_date\"]}",
+            "history": []
+          }
+        }
+      ],
+      "validation_errors": [],
+      "contract_fingerprint": "e5e5a5a2cc29a1be93dc4d6875aba8c47a35ed48c019c7d6838a45831d0441dc",
+      "context_tokens": 0,
+      "token_counter": ""
+    }
+  },
+  {
+    "case_id": "cross-view-14",
+    "plan": {
+      "status": "ready",
+      "tasks": [
+        {
+          "task_id": "inventory",
+          "view": "demo_retail.v_inventory_status",
+          "query_grain": [
+            "store_id"
+          ],
+          "filters": [],
+          "metrics": {},
+          "conditional_metrics": [
+            {
+              "column": "product_id",
+              "aggregation": "count_distinct",
+              "conditions": [
+                {
+                  "column": "stock_qty",
+                  "operator": "=",
+                  "value": 0
+                }
+              ]
+            }
+          ],
+          "attributes": [],
+          "metadata_collections": [
+            "snapshot_date"
+          ]
+        },
+        {
+          "task_id": "store_kpi",
+          "view": "demo_retail.v_store_monthly_kpi",
+          "query_grain": [
+            "store_id",
+            "sales_month"
+          ],
+          "filters": [
+            {
+              "column": "sales_month",
+              "operator": "=",
+              "value": "2026-09-01"
+            }
+          ],
+          "metrics": {},
+          "conditional_metrics": [],
+          "attributes": [
+            "target_amount"
+          ],
+          "metadata_collections": []
+        }
+      ],
+      "anchor_task": "inventory",
+      "root_grain": [
+        "store_id"
+      ],
+      "links": [
+        {
+          "parent": "inventory",
+          "child": "store_kpi",
+          "parent_keys": [
+            "store_id"
+          ],
+          "child_keys": [
+            "store_id"
+          ],
+          "mode": "left",
+          "shape": "merge",
+          "cardinality": "one_to_one"
+        }
+      ],
+      "missing_values": "preserve_null",
+      "clarifications": [],
+      "unsupported_reasons": []
+    },
+    "response": {
+      "status": "ready",
+      "code": null,
+      "draft": {
+        "status": "ready",
+        "strategy": "multi_view",
+        "tasks": [
+          {
+            "task_id": "inventory",
+            "view": "demo_retail.v_inventory_status",
+            "required_columns": [
+              "store_id",
+              "product_id",
+              "snapshot_date",
+              "stock_qty"
+            ],
+            "filters": [],
+            "metrics": {},
+            "conditional_metrics": [
+              {
+                "column": "product_id",
+                "aggregation": "count_distinct",
+                "conditions": [
+                  {
+                    "column": "stock_qty",
+                    "operator": "=",
+                    "value": 0
+                  }
+                ]
+              }
+            ],
+            "attributes": [],
+            "metadata_collections": [
+              "snapshot_date"
+            ],
+            "group_by": [
+              "store_id"
+            ],
+            "output_grain": [
+              "store_id"
+            ],
+            "depends_on": [],
+            "unbound_inputs": [],
+            "request": "依型別條件、欄位角色與查詢粒度準備單一來源資料。"
+          },
+          {
+            "task_id": "store_kpi",
+            "view": "demo_retail.v_store_monthly_kpi",
+            "required_columns": [
+              "store_id",
+              "sales_month",
+              "target_amount"
+            ],
+            "filters": [
+              {
+                "column": "sales_month",
+                "operator": "=",
+                "value": "2026-09-01"
+              }
+            ],
+            "metrics": {},
+            "conditional_metrics": [],
+            "attributes": [
+              "target_amount"
+            ],
+            "metadata_collections": [],
+            "group_by": [],
+            "output_grain": [
+              "store_id",
+              "sales_month"
+            ],
+            "depends_on": [],
+            "unbound_inputs": [],
+            "request": "依型別條件、欄位角色與查詢粒度準備單一來源資料。"
+          }
+        ],
+        "integration": {
+          "anchor_task": "inventory",
+          "output_grain": [
+            "store_id"
+          ],
+          "edges": [
+            {
+              "left_task": "inventory",
+              "right_task": "store_kpi",
+              "left_keys": [
+                "store_id"
+              ],
+              "right_keys": [
+                "store_id"
+              ],
+              "mode": "left",
+              "cardinality": "one_to_one",
+              "preserve_task": "inventory"
+            }
+          ],
+          "preparation": [],
+          "missing_data_policy": "保留未匹配母體並標記缺值；無契約保證不得補零。",
+          "notes": []
+        },
+        "clarifications": [],
+        "unsupported_reasons": []
+      },
+      "prepared_requests": [
+        {
+          "task_id": "inventory",
+          "view": "demo_retail.v_inventory_status",
+          "payload": {
+            "request": "只執行以下單一 View 資料查詢；保留全部條件及指定輸出粒度，不作跨來源整合或業務決策。 metadata_collections 為每組完整 DISTINCT 值集合，不增加分組，不任取單值。日期集合僅記錄資料時間，不代表日期一致；混合日期不得宣稱同日總額，仍須遵守契約的跨日禁止加總限制。\n{\"view\": \"demo_retail.v_inventory_status\", \"required_columns\": [\"store_id\", \"product_id\", \"snapshot_date\", \"stock_qty\"], \"filters\": [], \"metrics\": {}, \"conditional_metrics\": [{\"column\": \"product_id\", \"aggregation\": \"count_distinct\", \"conditions\": [{\"column\": \"stock_qty\", \"operator\": \"=\", \"value\": 0}]}], \"metadata_collections\": [\"snapshot_date\"], \"attributes\": [], \"group_by\": [\"store_id\"], \"output_grain\": [\"store_id\"]}",
+            "history": []
+          }
+        },
+        {
+          "task_id": "store_kpi",
+          "view": "demo_retail.v_store_monthly_kpi",
+          "payload": {
+            "request": "只執行以下單一 View 資料查詢；保留全部條件及指定輸出粒度，不作跨來源整合或業務決策。\n{\"view\": \"demo_retail.v_store_monthly_kpi\", \"required_columns\": [\"store_id\", \"sales_month\", \"target_amount\"], \"filters\": [{\"column\": \"sales_month\", \"operator\": \"=\", \"value\": \"2026-09-01\"}], \"metrics\": {}, \"conditional_metrics\": [], \"metadata_collections\": [], \"attributes\": [\"target_amount\"], \"group_by\": [], \"output_grain\": [\"store_id\", \"sales_month\"]}",
+            "history": []
+          }
+        }
+      ],
+      "validation_errors": [],
+      "contract_fingerprint": "e5e5a5a2cc29a1be93dc4d6875aba8c47a35ed48c019c7d6838a45831d0441dc",
+      "context_tokens": 0,
+      "token_counter": ""
+    }
+  },
+  {
+    "case_id": "cross-view-16",
+    "plan": {
+      "status": "ready",
+      "tasks": [
+        {
+          "task_id": "customers",
+          "view": "demo_retail.v_customer_value",
+          "query_grain": [
+            "customer_id"
+          ],
+          "filters": [],
+          "metrics": {},
+          "conditional_metrics": [],
+          "attributes": [
+            "city",
+            "lifetime_spend"
+          ],
+          "metadata_collections": []
+        },
+        {
+          "task_id": "orders",
+          "view": "demo_retail.v_order_summary",
+          "query_grain": [
+            "customer_id",
+            "sales_channel"
+          ],
+          "filters": [
+            {
+              "column": "order_date",
+              "operator": ">=",
+              "value": "2026-09-01"
+            },
+            {
+              "column": "order_date",
+              "operator": "<",
+              "value": "2026-10-01"
+            }
+          ],
+          "metrics": {
+            "order_id": "count_distinct",
+            "order_amount": "sum"
+          },
+          "conditional_metrics": [],
+          "attributes": [],
+          "metadata_collections": []
+        }
+      ],
+      "anchor_task": "customers",
+      "root_grain": [
+        "customer_id"
+      ],
+      "links": [
+        {
+          "parent": "customers",
+          "child": "orders",
+          "parent_keys": [
+            "customer_id"
+          ],
+          "child_keys": [
+            "customer_id"
+          ],
+          "mode": "left",
+          "shape": "collection",
+          "cardinality": "one_to_many"
+        }
+      ],
+      "missing_values": "preserve_null",
+      "clarifications": [],
+      "unsupported_reasons": []
+    },
+    "response": {
+      "status": "ready",
+      "code": null,
+      "draft": {
+        "status": "ready",
+        "strategy": "multi_view",
+        "tasks": [
+          {
+            "task_id": "customers",
+            "view": "demo_retail.v_customer_value",
+            "required_columns": [
+              "customer_id",
+              "city",
+              "lifetime_spend"
+            ],
+            "filters": [],
+            "metrics": {},
+            "conditional_metrics": [],
+            "attributes": [
+              "city",
+              "lifetime_spend"
+            ],
+            "metadata_collections": [],
+            "group_by": [],
+            "output_grain": [
+              "customer_id"
+            ],
+            "depends_on": [],
+            "unbound_inputs": [],
+            "request": "依型別條件、欄位角色與查詢粒度準備單一來源資料。"
+          },
+          {
+            "task_id": "orders",
+            "view": "demo_retail.v_order_summary",
+            "required_columns": [
+              "customer_id",
+              "sales_channel",
+              "order_amount",
+              "order_date",
+              "order_id"
+            ],
+            "filters": [
+              {
+                "column": "order_date",
+                "operator": ">=",
+                "value": "2026-09-01"
+              },
+              {
+                "column": "order_date",
+                "operator": "<",
+                "value": "2026-10-01"
+              }
+            ],
+            "metrics": {
+              "order_id": "count_distinct",
+              "order_amount": "sum"
+            },
+            "conditional_metrics": [],
+            "attributes": [],
+            "metadata_collections": [],
+            "group_by": [
+              "customer_id",
+              "sales_channel"
+            ],
+            "output_grain": [
+              "customer_id",
+              "sales_channel"
+            ],
+            "depends_on": [],
+            "unbound_inputs": [],
+            "request": "依型別條件、欄位角色與查詢粒度準備單一來源資料。"
+          }
+        ],
+        "integration": {
+          "anchor_task": "customers",
+          "output_grain": [
+            "customer_id"
+          ],
+          "edges": [
+            {
+              "left_task": "customers",
+              "right_task": "orders",
+              "left_keys": [
+                "customer_id"
+              ],
+              "right_keys": [
+                "customer_id"
+              ],
+              "mode": "left",
+              "cardinality": "one_to_many",
+              "preserve_task": "customers"
+            }
+          ],
+          "preparation": [
+            {
+              "task_id": "orders",
+              "kind": "nest",
+              "keys": [
+                "customer_id"
+              ],
+              "description": "依模型明示的形狀與對齊鍵準備；保留原查詢粒度及背景值語意。"
+            }
+          ],
+          "missing_data_policy": "保留未匹配母體並標記缺值；無契約保證不得補零。",
+          "notes": []
+        },
+        "clarifications": [],
+        "unsupported_reasons": []
+      },
+      "prepared_requests": [
+        {
+          "task_id": "customers",
+          "view": "demo_retail.v_customer_value",
+          "payload": {
+            "request": "只執行以下單一 View 資料查詢；保留全部條件及指定輸出粒度，不作跨來源整合或業務決策。\n{\"view\": \"demo_retail.v_customer_value\", \"required_columns\": [\"customer_id\", \"city\", \"lifetime_spend\"], \"filters\": [], \"metrics\": {}, \"conditional_metrics\": [], \"metadata_collections\": [], \"attributes\": [\"city\", \"lifetime_spend\"], \"group_by\": [], \"output_grain\": [\"customer_id\"]}",
+            "history": []
+          }
+        },
+        {
+          "task_id": "orders",
+          "view": "demo_retail.v_order_summary",
+          "payload": {
+            "request": "只執行以下單一 View 資料查詢；保留全部條件及指定輸出粒度，不作跨來源整合或業務決策。\n{\"view\": \"demo_retail.v_order_summary\", \"required_columns\": [\"customer_id\", \"sales_channel\", \"order_amount\", \"order_date\", \"order_id\"], \"filters\": [{\"column\": \"order_date\", \"operator\": \">=\", \"value\": \"2026-09-01\"}, {\"column\": \"order_date\", \"operator\": \"<\", \"value\": \"2026-10-01\"}], \"metrics\": {\"order_id\": \"count_distinct\", \"order_amount\": \"sum\"}, \"conditional_metrics\": [], \"metadata_collections\": [], \"attributes\": [], \"group_by\": [\"customer_id\", \"sales_channel\"], \"output_grain\": [\"customer_id\", \"sales_channel\"]}",
+            "history": []
+          }
+        }
+      ],
+      "validation_errors": [],
+      "contract_fingerprint": "e5e5a5a2cc29a1be93dc4d6875aba8c47a35ed48c019c7d6838a45831d0441dc",
+      "context_tokens": 0,
+      "token_counter": ""
+    }
+  },
+  {
+    "case_id": "cross-view-28",
+    "plan": {
+      "status": "ready",
+      "tasks": [
+        {
+          "task_id": "inventory",
+          "view": "demo_retail.v_inventory_status",
+          "query_grain": [
+            "store_id",
+            "product_id"
+          ],
+          "filters": [],
+          "metrics": {},
+          "conditional_metrics": [],
+          "attributes": [
+            "snapshot_date",
+            "inventory_cost_value"
+          ],
+          "metadata_collections": []
+        },
+        {
+          "task_id": "product_sales",
+          "view": "demo_retail.v_product_monthly",
+          "query_grain": [
+            "store_id",
+            "product_id"
+          ],
+          "filters": [
+            {
+              "column": "sales_month",
+              "operator": "=",
+              "value": "2026-09-01"
+            }
+          ],
+          "metrics": {
+            "gross_profit": "sum"
+          },
+          "conditional_metrics": [],
+          "attributes": [],
+          "metadata_collections": []
+        },
+        {
+          "task_id": "store_kpi",
+          "view": "demo_retail.v_store_monthly_kpi",
+          "query_grain": [
+            "store_id",
+            "sales_month"
+          ],
+          "filters": [
+            {
+              "column": "sales_month",
+              "operator": "=",
+              "value": "2026-09-01"
+            }
+          ],
+          "metrics": {},
+          "conditional_metrics": [],
+          "attributes": [
+            "target_amount"
+          ],
+          "metadata_collections": []
+        }
+      ],
+      "anchor_task": "inventory",
+      "root_grain": [
+        "store_id",
+        "product_id"
+      ],
+      "links": [
+        {
+          "parent": "inventory",
+          "child": "product_sales",
+          "parent_keys": [
+            "store_id",
+            "product_id"
+          ],
+          "child_keys": [
+            "store_id",
+            "product_id"
+          ],
+          "mode": "left",
+          "shape": "merge",
+          "cardinality": "one_to_one"
+        },
+        {
+          "parent": "inventory",
+          "child": "store_kpi",
+          "parent_keys": [
+            "store_id"
+          ],
+          "child_keys": [
+            "store_id"
+          ],
+          "mode": "left",
+          "shape": "context",
+          "cardinality": "many_to_one"
+        }
+      ],
+      "missing_values": "preserve_null",
+      "clarifications": [],
+      "unsupported_reasons": []
+    },
+    "response": {
+      "status": "ready",
+      "code": null,
+      "draft": {
+        "status": "ready",
+        "strategy": "multi_view",
+        "tasks": [
+          {
+            "task_id": "inventory",
+            "view": "demo_retail.v_inventory_status",
+            "required_columns": [
+              "store_id",
+              "product_id",
+              "inventory_cost_value",
+              "snapshot_date"
+            ],
+            "filters": [],
+            "metrics": {},
+            "conditional_metrics": [],
+            "attributes": [
+              "snapshot_date",
+              "inventory_cost_value"
+            ],
+            "metadata_collections": [],
+            "group_by": [],
+            "output_grain": [
+              "store_id",
+              "product_id"
+            ],
+            "depends_on": [],
+            "unbound_inputs": [],
+            "request": "依型別條件、欄位角色與查詢粒度準備單一來源資料。"
+          },
+          {
+            "task_id": "product_sales",
+            "view": "demo_retail.v_product_monthly",
+            "required_columns": [
+              "store_id",
+              "product_id",
+              "gross_profit",
+              "sales_month"
+            ],
+            "filters": [
+              {
+                "column": "sales_month",
+                "operator": "=",
+                "value": "2026-09-01"
+              }
+            ],
+            "metrics": {
+              "gross_profit": "sum"
+            },
+            "conditional_metrics": [],
+            "attributes": [],
+            "metadata_collections": [],
+            "group_by": [
+              "store_id",
+              "product_id"
+            ],
+            "output_grain": [
+              "store_id",
+              "product_id"
+            ],
+            "depends_on": [],
+            "unbound_inputs": [],
+            "request": "依型別條件、欄位角色與查詢粒度準備單一來源資料。"
+          },
+          {
+            "task_id": "store_kpi",
+            "view": "demo_retail.v_store_monthly_kpi",
+            "required_columns": [
+              "store_id",
+              "sales_month",
+              "target_amount"
+            ],
+            "filters": [
+              {
+                "column": "sales_month",
+                "operator": "=",
+                "value": "2026-09-01"
+              }
+            ],
+            "metrics": {},
+            "conditional_metrics": [],
+            "attributes": [
+              "target_amount"
+            ],
+            "metadata_collections": [],
+            "group_by": [],
+            "output_grain": [
+              "store_id",
+              "sales_month"
+            ],
+            "depends_on": [],
+            "unbound_inputs": [],
+            "request": "依型別條件、欄位角色與查詢粒度準備單一來源資料。"
+          }
+        ],
+        "integration": {
+          "anchor_task": "inventory",
+          "output_grain": [
+            "store_id",
+            "product_id"
+          ],
+          "edges": [
+            {
+              "left_task": "inventory",
+              "right_task": "product_sales",
+              "left_keys": [
+                "store_id",
+                "product_id"
+              ],
+              "right_keys": [
+                "store_id",
+                "product_id"
+              ],
+              "mode": "left",
+              "cardinality": "one_to_one",
+              "preserve_task": "inventory"
+            },
+            {
+              "left_task": "inventory",
+              "right_task": "store_kpi",
+              "left_keys": [
+                "store_id"
+              ],
+              "right_keys": [
+                "store_id"
+              ],
+              "mode": "left",
+              "cardinality": "many_to_one",
+              "preserve_task": "inventory"
+            }
+          ],
+          "preparation": [
+            {
+              "task_id": "store_kpi",
+              "kind": "attach_context",
+              "keys": [
+                "store_id"
+              ],
+              "description": "依模型明示的形狀與對齊鍵準備；保留原查詢粒度及背景值語意。"
+            }
+          ],
+          "missing_data_policy": "保留未匹配母體並標記缺值；無契約保證不得補零。",
+          "notes": []
+        },
+        "clarifications": [],
+        "unsupported_reasons": []
+      },
+      "prepared_requests": [
+        {
+          "task_id": "inventory",
+          "view": "demo_retail.v_inventory_status",
+          "payload": {
+            "request": "只執行以下單一 View 資料查詢；保留全部條件及指定輸出粒度，不作跨來源整合或業務決策。\n{\"view\": \"demo_retail.v_inventory_status\", \"required_columns\": [\"store_id\", \"product_id\", \"inventory_cost_value\", \"snapshot_date\"], \"filters\": [], \"metrics\": {}, \"conditional_metrics\": [], \"metadata_collections\": [], \"attributes\": [\"snapshot_date\", \"inventory_cost_value\"], \"group_by\": [], \"output_grain\": [\"store_id\", \"product_id\"]}",
+            "history": []
+          }
+        },
+        {
+          "task_id": "product_sales",
+          "view": "demo_retail.v_product_monthly",
+          "payload": {
+            "request": "只執行以下單一 View 資料查詢；保留全部條件及指定輸出粒度，不作跨來源整合或業務決策。\n{\"view\": \"demo_retail.v_product_monthly\", \"required_columns\": [\"store_id\", \"product_id\", \"gross_profit\", \"sales_month\"], \"filters\": [{\"column\": \"sales_month\", \"operator\": \"=\", \"value\": \"2026-09-01\"}], \"metrics\": {\"gross_profit\": \"sum\"}, \"conditional_metrics\": [], \"metadata_collections\": [], \"attributes\": [], \"group_by\": [\"store_id\", \"product_id\"], \"output_grain\": [\"store_id\", \"product_id\"]}",
+            "history": []
+          }
+        },
+        {
+          "task_id": "store_kpi",
+          "view": "demo_retail.v_store_monthly_kpi",
+          "payload": {
+            "request": "只執行以下單一 View 資料查詢；保留全部條件及指定輸出粒度，不作跨來源整合或業務決策。\n{\"view\": \"demo_retail.v_store_monthly_kpi\", \"required_columns\": [\"store_id\", \"sales_month\", \"target_amount\"], \"filters\": [{\"column\": \"sales_month\", \"operator\": \"=\", \"value\": \"2026-09-01\"}], \"metrics\": {}, \"conditional_metrics\": [], \"metadata_collections\": [], \"attributes\": [\"target_amount\"], \"group_by\": [], \"output_grain\": [\"store_id\", \"sales_month\"]}",
+            "history": []
+          }
+        }
+      ],
+      "validation_errors": [],
+      "contract_fingerprint": "e5e5a5a2cc29a1be93dc4d6875aba8c47a35ed48c019c7d6838a45831d0441dc",
+      "context_tokens": 0,
+      "token_counter": ""
+    }
+  }
+]

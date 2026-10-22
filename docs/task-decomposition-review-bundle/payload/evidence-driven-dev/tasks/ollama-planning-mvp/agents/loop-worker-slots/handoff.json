@@ -1,0 +1,131 @@
+{
+  "ticket": "1f43bbed2d1b4ddb9cf3bd06ef69811a",
+  "result": "PASS",
+  "evidence": [
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-slots/historical-replay.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-slots/before-hashes.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-slots/red.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-slots/red-runner.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-slots/green-first.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-slots/test-correction.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-slots/focused.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-slots/regression.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-slots/offline-final.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-slots/dry-run.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-slots/hash-verification.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-slots/source-freeze.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-slots/encoding.log"
+  ],
+  "summary": "coverage_slots_contract 純離線完成：原6 raw精確重播重複ID失敗；固定required具名槽位、alias安全、全層duplicate JSON key先拒絕；來源facts依唯讀policy取文並重用原嚴格守門。148 focused及238必要相關回歸通過；12個完整/失敗fake、27 raw replay通過。823基線檔僅runner/test兩項授權變更，兩src/舊wire/歷史raw/Gate未改。0模型/雲端/SQL/DB；需第3輪fresh audit後才可新自然測試。",
+  "changes": [
+    {
+      "path": "evaluations/slotted_view_coverage.py",
+      "sha256": "b580113834567e4a41900c2c91840f66186fa6c15ab124b3009bc48cca2be6d2"
+    },
+    {
+      "path": "evaluations/prompts/coverage_slots.md",
+      "sha256": "a5a00595621b5506149ad5fcd5f6f04b122c922322964b0f09f9fe56517f302b"
+    },
+    {
+      "path": "evaluations/managed_three_stage_runner.py",
+      "sha256": "8f63e19dabb20968b57585900c307005a6ea4a4195a5f1e391f48f425611b998"
+    },
+    {
+      "path": "tests/unit/test_slotted_view_coverage.py",
+      "sha256": "22c45d4863a671d67a8c96ee74041abdc4ec7b86604d5325c3977e0159cfe4c3"
+    },
+    {
+      "path": "tests/unit/test_managed_three_stage_runner.py",
+      "sha256": "022434ce8cddffaf7781f99a249ac6d7bb9ef4750a0ae017690f253a876a4ed2"
+    }
+  ],
+  "verification": {
+    "command": ".venv/bin/python -m pytest tests/unit/test_managed_three_stage_runner.py tests/unit/test_indexed_requirement_recall.py tests/unit/test_referenced_view_coverage.py tests/unit/test_slotted_view_coverage.py tests/unit/test_three_stage_view_selection.py tests/unit/test_planning_mvp.py tests/unit/test_task_decomposition_contract.py tests/unit/test_task_decomposition_workflow.py tests/unit/test_decomposition_evaluation.py tests/unit/test_decomposition_decision_chain.py tests/unit/test_decomposition_decision_summary.py tests/unit/test_planning_reasoning_probe.py -q",
+    "result": "238 passed in 19.35s",
+    "focused": "148 passed in 16.86s",
+    "historical_replay": {
+      "raw_replays": 6,
+      "stopped": {
+        "error_type": "ValueError",
+        "error": "duplicate coverage requirement IDs"
+      }
+    },
+    "tdd": {
+      "adapter_red": "37 failed，尚無固定槽位實作；red.log",
+      "runner_red": "1 failed，仍使用ReferencedViewCoverage list schema；red-runner.log",
+      "first_green": "65 passed, 2 failed；未丟棄，保留green-first.log與test-correction.log；修正反例責任層及fake注入位置，沒有改舊guard或raw"
+    },
+    "fake": {
+      "runs": 12,
+      "raw_replays": 27,
+      "complete_calls": 9,
+      "prepared_requests": 2,
+      "complete": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/slots-fake-complete-20261021T171039629709Z",
+      "failure_prefixes": [
+        "duplicate_slot",
+        "conflicting_slot",
+        "nested_duplicate",
+        "missing",
+        "extra",
+        "old_list",
+        "source_override",
+        "contract",
+        "provider",
+        "parse",
+        "input"
+      ],
+      "source_facts": "全部7View normalized view/grain/keys/population與當次policy一致，population原文/summary；partial與缺口保留。",
+      "prepared": "inventory店商品anchor、stock_qty sum及snapshot_date metadata；sales_detail兩sum與月份/online filter同task、店商品先彙總、left保庫存母體、不補零。"
+    },
+    "baseline_files": 823,
+    "preserved_src": {
+      "decomposition": "1fe4eb06da88fc67c3e65250a93393ac944dbbba9f2c4ac3349134e044b10558",
+      "prompt": "4655d352feaaab93bdef78a2ced51da9ae93adf1f907aa99eb8c1a237876349b"
+    }
+  },
+  "semantic_boundary": {
+    "finding": "既有validate_coverage只查合法欄位/role/filter能力，不理解銷售日期語意；inventory.snapshot_date作period filter可結構通過。沒有宣稱mapping guard會拒絕所有業務語意錯誤。",
+    "actual_negative": "test_same_source_scope_rejects_inventory_date_substitution_at_selection：將period移至inventory snapshot_date並刪sales order_date，finish_selection以task omitted verified requirement/scope mapping拒絕。",
+    "unchanged_responsibility": "模型仍負各槽位status/mapping/scope/缺口；自然語意審查需比對日期、母體與所有理由。只有keys不自動把population設supported。",
+    "audit_required": "研究的inventory套sales日期拒絕已在同源selection層測得；這與逐mapping語意界線由fresh auditor判定，沒有偷偷降低驗收。"
+  },
+  "preservation": {
+    "old_wire": "ReferencedViewCoverage/materialize_coverage、原coverage_references.md與coverage_reference_runner均未修改；新wire在獨立slotted_view_coverage。",
+    "history": "原六raw在改動前用原runner replay並保留hash/source快照；新版fingerprint拒絕把舊raw重新解釋為新wire。",
+    "snapshots": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-slots/sources-before / evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-slots/sources-after",
+    "task_controller_changed": false,
+    "commits": 0,
+    "pushes": 0
+  },
+  "natural_next": {
+    "status": "NOT_RUN；先由Main finish，再派fresh auditor完整覆蓋第1至3輪。",
+    "command": ".venv/bin/python -m evaluations.managed_three_stage_runner --execute --ticket \"$EDD_WORKER_TICKET\"",
+    "version": "managed-indexed-slots-three-stage-2",
+    "wire_version": "coverage-slots-1",
+    "actual_candidate_delta": "相對managed-indexed-path-three-stage-1：mapping清單改為依當次recall動態產生的required具名物件；嚴格原JSON duplicate拒絕；view/grain/keys/summary由policy填；mapping新prompt。recall與selection候選/題目/既有guards不改。不是只換case名稱重送錯答。",
+    "sample": "研究預定的全新完整pipeline單樣本，從新的indexed recall開始，七候選各一次mapping，最後selection/prepared；最多9正常節點。",
+    "model": "qwen3.8:27b",
+    "digest": "aaee06c39dcf2437cde036998d960e1fc1494b8191be7cc9657d01e509097813",
+    "configuration": {
+      "think": true,
+      "temperature": 1,
+      "top_p": 1,
+      "seed": 42,
+      "num_ctx": 32768,
+      "num_predict": -1,
+      "HTTP_timeout_seconds": null,
+      "outer_timeout_seconds": null
+    },
+    "constraints": [
+      "所有POST只走loopctl request；本輪0POST。",
+      "首provider/parse/contract錯誤保存raw/log並停止FAIL，成功HTTP錯答不得原樣retry挑分。",
+      "不得補項、去重、改raw、SQL/DB或雲端；第3輪fresh audit未准不得執行自然。",
+      "下一輪仍需完整語意檢核所有recall理由、missing_requirements、selection理由及來源母體；ready不等於語意PASS。"
+    ]
+  },
+  "limitations": [
+    "未測Ollama是否自然遵從動態schema，未達root端到端驗收。",
+    "必要回歸為原193相關集加45新測試；未執行無關完整repository suite（維持本輪純離線/no SQL/DB範圍）。",
+    "一次來源freeze helper誤用系統python而缺langchain_core，改既有.venv後成功；沒有推論或來源變更。"
+  ]
+}

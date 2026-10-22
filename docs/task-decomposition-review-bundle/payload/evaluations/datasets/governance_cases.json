@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "cases": [
+    {
+      "case_id": "SIMPLE-001",
+      "category": "simple",
+      "difficulty": "easy",
+      "question": "請查詢 ZX100 目前各倉庫庫存數量",
+      "expected_result": {"supported": true, "view": "demo.v_inventory", "filters": {"品号": "ZX100"}, "group_by": ["仓库名称"], "aggregations": {"库存数量": "sum"}}
+    }
+  ]
+}

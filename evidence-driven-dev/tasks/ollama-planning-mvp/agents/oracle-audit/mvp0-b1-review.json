@@ -1,0 +1,493 @@
+{
+  "witnesses": [
+    {
+      "label": "missing-output-role",
+      "case_id": "cross-view-07",
+      "runtime_status": "ready",
+      "runtime_errors": [],
+      "sidecar": {
+        "safe": false,
+        "errors": [
+          "inventory: output attribute:snapshot_date",
+          "inventory: output attribute:stock_qty"
+        ],
+        "review_required": true
+      }
+    },
+    {
+      "label": "extra-metric",
+      "case_id": "cross-view-07",
+      "runtime_status": "ready",
+      "runtime_errors": [],
+      "sidecar": {
+        "safe": false,
+        "errors": [
+          "sales: extra metric roles"
+        ],
+        "review_required": true
+      }
+    },
+    {
+      "label": "fill-zero",
+      "case_id": "cross-view-07",
+      "runtime_status": "ready",
+      "runtime_errors": [],
+      "sidecar": {
+        "safe": false,
+        "errors": [
+          "missing policy requires independent review"
+        ],
+        "review_required": true
+      }
+    },
+    {
+      "label": "wrong-payload",
+      "case_id": "cross-view-07",
+      "runtime_status": "ready_before_payload_corruption",
+      "sidecar": {
+        "safe": false,
+        "errors": [
+          "payload integrity"
+        ],
+        "review_required": true
+      }
+    },
+    {
+      "label": "wrong-child-preparation",
+      "case_id": "cross-view-09",
+      "runtime_status": "ready",
+      "runtime_errors": [],
+      "sidecar": {
+        "safe": false,
+        "errors": [
+          "child collection shape"
+        ],
+        "review_required": true
+      }
+    },
+    {
+      "label": "unproved-count-equivalence",
+      "task_errors": [
+        "metric:order_id"
+      ]
+    },
+    {
+      "label": "attribute-count-is-not-value",
+      "case_id": "cross-view-07",
+      "runtime_status": "ready",
+      "runtime_errors": [],
+      "sidecar": {
+        "safe": true,
+        "errors": [],
+        "review_required": true
+      }
+    },
+    {
+      "label": "product-comparison-on-store-only",
+      "case_id": "cross-view-07",
+      "runtime_status": "ready",
+      "runtime_errors": [],
+      "sidecar": {
+        "safe": true,
+        "errors": [],
+        "review_required": true
+      }
+    },
+    {
+      "label": "pivot-unbounded-dates",
+      "case_id": "cross-view-09",
+      "runtime_status": "ready",
+      "runtime_errors": [],
+      "sidecar": {
+        "safe": true,
+        "errors": [],
+        "review_required": true
+      }
+    }
+  ],
+  "injected_controls": [
+    {
+      "case_id": "cross-view-02",
+      "sidecar": {
+        "safe": true,
+        "errors": [],
+        "review_required": true
+      },
+      "response_exactly_reproduced": true,
+      "independent_reference_assessment": "PASS: filters/roles/query/root/anchor/child及背景保留；此項僅注入編譯，非模型抽取"
+    },
+    {
+      "case_id": "cross-view-07",
+      "sidecar": {
+        "safe": true,
+        "errors": [],
+        "review_required": true
+      },
+      "response_exactly_reproduced": true,
+      "independent_reference_assessment": "PASS: filters/roles/query/root/anchor/child及背景保留；此項僅注入編譯，非模型抽取"
+    },
+    {
+      "case_id": "cross-view-09",
+      "sidecar": {
+        "safe": true,
+        "errors": [],
+        "review_required": true
+      },
+      "response_exactly_reproduced": true,
+      "independent_reference_assessment": "PASS: filters/roles/query/root/anchor/child及背景保留；此項僅注入編譯，非模型抽取"
+    },
+    {
+      "case_id": "cross-view-14",
+      "sidecar": {
+        "safe": true,
+        "errors": [],
+        "review_required": true
+      },
+      "response_exactly_reproduced": true,
+      "independent_reference_assessment": "PASS: filters/roles/query/root/anchor/child及背景保留；此項僅注入編譯，非模型抽取"
+    },
+    {
+      "case_id": "cross-view-16",
+      "sidecar": {
+        "safe": true,
+        "errors": [],
+        "review_required": true
+      },
+      "response_exactly_reproduced": true,
+      "independent_reference_assessment": "PASS: filters/roles/query/root/anchor/child及背景保留；此項僅注入編譯，非模型抽取"
+    },
+    {
+      "case_id": "cross-view-28",
+      "sidecar": {
+        "safe": true,
+        "errors": [],
+        "review_required": true
+      },
+      "response_exactly_reproduced": true,
+      "independent_reference_assessment": "PASS: filters/roles/query/root/anchor/child及背景保留；此項僅注入編譯，非模型抽取"
+    }
+  ],
+  "model_calls": 0,
+  "sql_db_calls": 0,
+  "independent_replay": {
+    "all30_replayed_exactly": true,
+    "runtime_rejected_unsafe": 7,
+    "oracle_rejected_unsafe": 12,
+    "new_ready": 0,
+    "all30_sidecar_recomputed_exactly": true,
+    "raw_sources_hash_exact": true,
+    "all30_checks": [
+      {
+        "case_id": "cross-view-01",
+        "response_exact": true,
+        "score_exact": true,
+        "prompt_exact": true,
+        "context_exact": true
+      },
+      {
+        "case_id": "cross-view-02",
+        "response_exact": true,
+        "score_exact": true,
+        "prompt_exact": true,
+        "context_exact": true
+      },
+      {
+        "case_id": "cross-view-03",
+        "response_exact": true,
+        "score_exact": true,
+        "prompt_exact": true,
+        "context_exact": true
+      },
+      {
+        "case_id": "cross-view-04",
+        "response_exact": true,
+        "score_exact": true,
+        "prompt_exact": true,
+        "context_exact": true
+      },
+      {
+        "case_id": "cross-view-05",
+        "response_exact": true,
+        "score_exact": true,
+        "prompt_exact": true,
+        "context_exact": true
+      },
+      {
+        "case_id": "cross-view-06",
+        "response_exact": true,
+        "score_exact": true,
+        "prompt_exact": true,
+        "context_exact": true
+      },
+      {
+        "case_id": "cross-view-07",
+        "response_exact": true,
+        "score_exact": true,
+        "prompt_exact": true,
+        "context_exact": true
+      },
+      {
+        "case_id": "cross-view-08",
+        "response_exact": true,
+        "score_exact": true,
+        "prompt_exact": true,
+        "context_exact": true
+      },
+      {
+        "case_id": "cross-view-09",
+        "response_exact": true,
+        "score_exact": true,
+        "prompt_exact": true,
+        "context_exact": true
+      },
+      {
+        "case_id": "cross-view-10",
+        "response_exact": true,
+        "score_exact": true,
+        "prompt_exact": true,
+        "context_exact": true
+      },
+      {
+        "case_id": "cross-view-11",
+        "response_exact": true,
+        "score_exact": true,
+        "prompt_exact": true,
+        "context_exact": true
+      },
+      {
+        "case_id": "cross-view-12",
+        "response_exact": true,
+        "score_exact": true,
+        "prompt_exact": true,
+        "context_exact": true
+      },
+      {
+        "case_id": "cross-view-13",
+        "response_exact": true,
+        "score_exact": true,
+        "prompt_exact": true,
+        "context_exact": true
+      },
+      {
+        "case_id": "cross-view-14",
+        "response_exact": true,
+        "score_exact": true,
+        "prompt_exact": true,
+        "context_exact": true
+      },
+      {
+        "case_id": "cross-view-15",
+        "response_exact": true,
+        "score_exact": true,
+        "prompt_exact": true,
+        "context_exact": true
+      },
+      {
+        "case_id": "cross-view-16",
+        "response_exact": true,
+        "score_exact": true,
+        "prompt_exact": true,
+        "context_exact": true
+      },
+      {
+        "case_id": "cross-view-17",
+        "response_exact": true,
+        "score_exact": true,
+        "prompt_exact": true,
+        "context_exact": true
+      },
+      {
+        "case_id": "cross-view-18",
+        "response_exact": true,
+        "score_exact": true,
+        "prompt_exact": true,
+        "context_exact": true
+      },
+      {
+        "case_id": "cross-view-19",
+        "response_exact": true,
+        "score_exact": true,
+        "prompt_exact": true,
+        "context_exact": true
+      },
+      {
+        "case_id": "cross-view-20",
+        "response_exact": true,
+        "score_exact": true,
+        "prompt_exact": true,
+        "context_exact": true
+      },
+      {
+        "case_id": "cross-view-21",
+        "response_exact": true,
+        "score_exact": true,
+        "prompt_exact": true,
+        "context_exact": true
+      },
+      {
+        "case_id": "cross-view-22",
+        "response_exact": true,
+        "score_exact": true,
+        "prompt_exact": true,
+        "context_exact": true
+      },
+      {
+        "case_id": "cross-view-23",
+        "response_exact": true,
+        "score_exact": true,
+        "prompt_exact": true,
+        "context_exact": true
+      },
+      {
+        "case_id": "cross-view-24",
+        "response_exact": true,
+        "score_exact": true,
+        "prompt_exact": true,
+        "context_exact": true
+      },
+      {
+        "case_id": "cross-view-25",
+        "response_exact": true,
+        "score_exact": true,
+        "prompt_exact": true,
+        "context_exact": true
+      },
+      {
+        "case_id": "cross-view-26",
+        "response_exact": true,
+        "score_exact": true,
+        "prompt_exact": true,
+        "context_exact": true
+      },
+      {
+        "case_id": "cross-view-27",
+        "response_exact": true,
+        "score_exact": true,
+        "prompt_exact": true,
+        "context_exact": true
+      },
+      {
+        "case_id": "cross-view-28",
+        "response_exact": true,
+        "score_exact": true,
+        "prompt_exact": true,
+        "context_exact": true
+      },
+      {
+        "case_id": "cross-view-29",
+        "response_exact": true,
+        "score_exact": true,
+        "prompt_exact": true,
+        "context_exact": true
+      },
+      {
+        "case_id": "cross-view-30",
+        "response_exact": true,
+        "score_exact": true,
+        "prompt_exact": true,
+        "context_exact": true
+      }
+    ]
+  },
+  "source_hashes": {
+    "evaluations/planning_mvp.py": "42b6f77bcc4853d8426bc23b23d966f8ff12959472b1f15d4ddc163b8201da4d",
+    "tests/unit/test_planning_mvp.py": "7f235a1740dc048e59d8b27d01252dc0f99cddfa2a8ece9acb7c784568a44774",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/reports/replay_mvp0.py": "dd68fb7442524e4c063492166211449ce3682bf509431c3a15e789f351e4019f",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/reports/mvp0-summary.json": "4d76a997b84cbaedd3ed472db3a1420590cc4c44fc9241fce623c3280da36f1b",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/reports/mvp0-sidecar.json": "f853b40a1c0247b10f63d4dea3425d7c002ad9da5f1d93ec06a48aee2b422a7f",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/reports/b1-injected-controls.json": "444712f5f88fdf99f6a076ee48a111c307e21d56c27b402fc1aec6f1f6aef942"
+  },
+  "post_fix_recheck": {
+    "two_confirmed_false_passes_resolved": true,
+    "witnesses": [
+      {
+        "id": "attribute-count-is-not-value",
+        "sidecar": {
+          "safe": false,
+          "errors": [
+            "inventory: output attribute:stock_qty"
+          ],
+          "review_required": true
+        }
+      },
+      {
+        "id": "product-comparison-on-store-only",
+        "sidecar": {
+          "safe": false,
+          "errors": [
+            "semantic integration keys"
+          ],
+          "review_required": true
+        }
+      }
+    ],
+    "tests": "12 passed in 1.01s",
+    "six_injected_controls_still_safe": true,
+    "selected_case_approval_hashes_exact": true,
+    "preflight_tokens": {
+      "cross-view-02": 8096,
+      "cross-view-07": 8089,
+      "cross-view-09": 8092,
+      "cross-view-14": 8114,
+      "cross-view-16": 8096,
+      "cross-view-28": 8118
+    },
+    "max_total_context": 16310,
+    "fingerprints": {
+      "version": "semantic-mvp-b1",
+      "catalog": "e5e5a5a2cc29a1be93dc4d6875aba8c47a35ed48c019c7d6838a45831d0441dc",
+      "source_hashes": {
+        "evaluations/planning_mvp.py": "972d16210114153db1aee4a05db8354312d34591c90dfa58ea2012582290f711",
+        "evaluations/planning_mvp_runner.py": "33f76a27a31bf87ce2e52bbbb5dbacf789c70e7a4e56fdbd94625e9f01dc47d1",
+        "src/cpea/workflows/task_decomposition/validation.py": "ea214f4ee199f391546b0b8cc07b848e49905a0ed3bbb4adebe33f348e9fa2e8",
+        "src/cpea/workflows/task_decomposition/prompt.py": "83f7869377eeb641d7bb51c21551d8db047762272635198a189cba5212c7f440",
+        "evaluations/decomposition_grading.py": "1c70bd7ee47dc76f39bd7ee21205be434c0307d3817e092cd68d1fc1702b1cbd"
+      },
+      "schema_sha256": "e5d06d0dea7f140c1df001532ae55e8e2ffd2ca2a73b2c374264583f2c64bcde",
+      "prompt_sha256": "464028de9aab54865bd4dbe9a0136bde87190ed6b65748e609bd04b4285fc934",
+      "baseline_prompt_sha256": "16b81a357dbc049ed57c27a54f8b5be16ac3eed0d87810edfdea7e885badfe53",
+      "cases_sha256": "5670d9bf39d1e48f638c98537ac45ee67e3a1165412030787eb4ed36fe33c63a"
+    }
+  },
+  "initial_witness_limitations": {
+    "pivot-unbounded-dates": "此非已確認錯誤：第09題有明示有限日期區間，可合法以完整標籤pivot，仍需獨立核對保留所有日期與缺值；不列blocking。"
+  },
+  "reviewed_at": "2026-10-20T12:57:05.457701+00:00",
+  "verdict": "PASS_WITH_WARNINGS",
+  "six_question_research_eligible": true,
+  "full_gate_approved": false,
+  "blocking_issues": [],
+  "resolved_blocking_issues": [
+    {
+      "id": "B1-R1",
+      "issue": "singleton attribute錯允COUNT替代原值",
+      "resolution": "只允許能還原單列原值的sum/min/max/avg；反例現safe=false"
+    },
+    {
+      "id": "B1-R2",
+      "issue": "商品對照錯用store-only鍵仍過sidecar",
+      "resolution": "逐edge核對oracle完整語意鍵；反例現safe=false"
+    }
+  ],
+  "compiler_assessment": "未發現依oracle補來源、日期、通路、度量或母體；compiler只搬移模型明示欄位及shape，再作已表達欄位閉包。缺期間不補，未知欄位不改名。",
+  "runner_assessment": {
+    "provider": "明確Azure DeepSeek；無Ollama或SQL/DB路徑",
+    "calls": "最多12主呼叫；無自動重試或修正",
+    "timeout": "已強制300秒；剩餘wall不足300秒不啟動新呼叫；900秒階段窗口",
+    "source_freeze": "每呼叫前比對source/prompt/schema/cases snapshot",
+    "context": "fresh preflight最高8118+7168+1024=16310<=16384；完整七View保留；候選輸入略長，非縮context證據",
+    "approval": "當前6題實際內容hash經審核者重算均匹配manifest；runner自行比對存放的case_sha256尚不是重算內容校驗，正式Gate前宜hardening",
+    "token_budget": "累計generated門檻在呼叫前檢查，baseline未必有相同單次上限，因此不等於嚴格總生成token硬上限，應逐次另報實際usage"
+  },
+  "limitations": [
+    "A僅新增型別護欄，runtime7/12與oracle12/12必須分列，不聲稱runtime全擋。",
+    "人工注入6/6只證明編譯節點，未證明自然抽取；已啟動6題模型研究需另作12筆逐筆獨立審核。",
+    "sidecar仍review_required，未列等價、任意pivot、額外欄位用途、negative理由及背景重加總須獨立審核；不得作完整Gate自動核准。",
+    "保留初始兩個false-pass證據與修正後拒絕結果；初始pivot日期見證不是確定錯誤，不列blocking。"
+  ],
+  "final_reviewed_source_hashes": {
+    "evaluations/planning_mvp.py": "972d16210114153db1aee4a05db8354312d34591c90dfa58ea2012582290f711",
+    "evaluations/planning_mvp_runner.py": "33f76a27a31bf87ce2e52bbbb5dbacf789c70e7a4e56fdbd94625e9f01dc47d1",
+    "tests/unit/test_planning_mvp.py": "7f235a1740dc048e59d8b27d01252dc0f99cddfa2a8ece9acb7c784568a44774"
+  }
+}

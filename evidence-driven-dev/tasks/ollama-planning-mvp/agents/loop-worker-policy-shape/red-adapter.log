@@ -1,0 +1,552 @@
+..................FFFFFFFFFFFFFF                                         [100%]
+=================================== FAILURES ===================================
+___ test_original_guards_and_other_semantic_failures_remain_fatal[semantic] ____
+
+failure = 'semantic'
+
+    @pytest.mark.parametrize('failure',['typed','inner','zero','business','semantic'])
+    def test_original_guards_and_other_semantic_failures_remain_fatal(failure):
+        mod=api(); context=mod.prepare(mod.load_package()); value=original()
+        value['draft']['integration']['missing_data_policy']=MISSING_POLICIES[1]
+        if failure=='typed': value['draft']['tasks'][0].pop('filters')
+        if failure=='inner': value['draft']['integration']['edges'][0].update(mode='inner',preserve_task=None)
+        if failure=='zero': value['draft']['integration']['missing_data_policy']='補零'
+        if failure=='business': value['draft']['tasks'][1]['metrics']['discount_amount']='max'
+        if failure=='semantic': value['draft']['integration']['edges'][0]['right_keys'].reverse()
+>       if failure=='semantic': assert mod.evaluate(context,json.dumps(value,ensure_ascii=False))['status']=='FAIL'
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/diagnostics/test_managed_policy_shape.py:69: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluations/diagnostics/managed_policy_shape.py:153: in evaluate
+    result = base.evaluate(context,raw)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluations/managed_node_diagnostics.py:300: in evaluate
+    normalized = contract.materialize_selection(parsed_model, context['recall'], context['coverages'], context['request'], context['catalog'])
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluations/evidence_bound_managed_contract.py:262: in materialize_selection
+    finish_selection(result, recall, coverages, request, catalog)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+selection = SelectionResult(selected_views=['demo_retail.v_inventory_status', 'demo_retail.v_sales_detail'], assignments=[Assignme...與淨銷售額至門市×商品粒度')], missing_data_policy='保留未匹配母體並標記缺值；無契約保證不得補零。', notes=[]), clarifications=[], unsupported_reasons=[]))
+recall = BoundRecall(requirements=[BoundRequirement(requirement_id='GRN-001', quote='各店各商品', business_object='各店各商品', kind='gra...", "quote": "粒度：每門市每月一列。營收、毛利、訂單數、客單價、月目標與達標率；百分比數值為 0~100。"}, {"path": "/grain/description", "quote": "每門市每月一列"}]}')])
+coverages = [ViewCoverage(view='demo_retail.v_customer_value', entries=[RequirementCoverage(requirement_id='GRN-001', status='unsu...nce=[ContractEvidence(path='/summary', quote='粒度：每筆已完成訂單的每個商品品項；僅含已完成訂單。銷售額為折扣後淨額，毛利=淨額-成本。請勿以 COUNT(*) 當訂單數。')]), ...]
+request = '對照各店各商品的盤點庫存件數與 2026 年 9 月線上通路的折扣金額及淨銷售額，並顯示庫存盤點日期，準備促銷後補貨評估；保留所有庫存商品。'
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7aa00380fc80>
+
+    def finish_selection(selection, recall, coverages, request, catalog):
+        validate_recall(recall, request, catalog)
+        _unique([v.view for v in coverages], 'coverage views')
+        if {v.view for v in coverages} != {v.view for v in recall.candidate_views}:
+            raise ValueError('missing candidate coverage')
+        for coverage in coverages:
+            validate_coverage(coverage, recall, request, catalog)
+        if selection.draft.status != 'ready':
+            if selection.draft.tasks or selection.assignments or selection.selected_views:
+                raise ValueError('non-ready selection cannot contain executable assignments')
+            return finish(selection.draft, catalog, guard=True)
+        _unique(selection.selected_views, 'selected views')
+        _unique([a.requirement_id for a in selection.assignments], 'assignments')
+        requirements = {r.requirement_id: r for r in recall.requirements}
+        if {a.requirement_id for a in selection.assignments} != set(requirements):
+            raise ValueError('selection omitted requirements')
+        tasks = {t.task_id: t for t in selection.draft.tasks}
+        if len(tasks) != len(selection.draft.tasks):
+            raise ValueError('duplicate task IDs')
+        selected = set(selection.selected_views)
+        if selected != {t.view for t in tasks.values()} or selected != {a.view for a in selection.assignments}:
+            raise ValueError('selected views/tasks/assignments differ')
+        excluded = [v.view for v in selection.exclusions]
+        _unique(excluded, 'exclusions')
+        if selected & set(excluded) or selected | set(excluded) != {v.view for v in recall.candidate_views}:
+            raise ValueError('every candidate must be selected or excluded')
+        entries = {(v.view, e.requirement_id): e for v in coverages for e in v.entries}
+        for a in selection.assignments:
+            entry = entries.get((a.view, a.requirement_id))
+            task = tasks.get(a.task_id)
+            if not entry or entry.status != 'supported' or not task or task.view != a.view:
+                raise ValueError('assignment lacks supported same-source mapping')
+            required = [entry, *(entries[(a.view, s)] for s in requirements[a.requirement_id].scope_ids)]
+            if any(e.status != 'supported' or any(not _mapping_in_task(m, task) for m in e.mappings) for e in required):
+                raise ValueError('task omitted verified requirement/scope mapping')
+            if requirements[a.requirement_id].kind == 'population':
+                integration = selection.draft.integration
+                if not integration or integration.anchor_task != a.task_id:
+                    raise ValueError('preserved population must be the anchor')
+                if any(e.mode != 'left' or e.preserve_task != a.task_id or e.left_task != a.task_id for e in integration.edges):
+                    raise ValueError('integration cannot preserve required anchor population')
+            if requirements[a.requirement_id].kind == 'grain':
+                integration = selection.draft.integration
+                keys = {m.column for m in entry.mappings if m.role == 'key'}
+                if not integration or a.task_id != integration.anchor_task or set(integration.output_grain) != keys:
+                    raise ValueError('final grain differs from verified requirement keys')
+        integration = selection.draft.integration
+        if not integration or integration.missing_data_policy not in MISSING_POLICIES:
+            raise ValueError('missing-data policy must use an admitted no-zero policy')
+        for preparation in integration.preparation:
+            allowed_keys = [integration.output_grain] if preparation.task_id == integration.anchor_task else []
+            allowed_keys += [keys for e in integration.edges for task_id, keys in
+                             [(e.left_task, e.left_keys), (e.right_task, e.right_keys)] if task_id == preparation.task_id]
+            if not allowed_keys or any(set(preparation.keys) != set(keys) for keys in allowed_keys):
+                raise ValueError('preparation cannot erase verified alignment/final grain keys')
+        for task in tasks.values():
+            assigned = [entries[(a.view, a.requirement_id)] for a in selection.assignments if a.task_id == task.task_id]
+            scopes = [entries[(a.view, s)] for a in selection.assignments if a.task_id == task.task_id
+                      for s in requirements[a.requirement_id].scope_ids]
+            mappings = [m for e in assigned + scopes for m in e.mappings]
+            # Child alignment keys may reuse validated grain mappings even when
+            # the final grain requirement is owned by the anchor task.
+            mappings += [m for (view, _), e in entries.items() if view == task.view and e.status == 'supported'
+                         for m in e.mappings if m.role == 'key']
+            if not set(task.required_columns) <= {m.column for m in mappings}:
+                raise ValueError('stage three introduced unverified task columns')
+            if any(not any(m.role == 'filter' and _filter_tuple(m) == _filter_tuple(f) for m in mappings) for f in task.filters):
+                raise ValueError('stage three introduced unverified filters')
+            if any(not any(m.role == 'metric' and not m.conditions and m.column == c and m.aggregation == agg for m in mappings)
+                   for c, agg in task.metrics.items()):
+                raise ValueError('stage three introduced unverified metrics')
+            for field, role in [('attributes', 'attribute'), ('metadata_collections', 'metadata'), ('output_grain', 'key'), ('group_by', 'key')]:
+                if not set(getattr(task, field)) <= {m.column for m in mappings if m.role == role}:
+                    raise ValueError('stage three introduced unverified output roles')
+            for metric in task.conditional_metrics:
+                if not any(m.role == 'metric' and m.column == metric.column and m.aggregation == metric.aggregation
+                           and {_filter_tuple(f) for f in m.conditions} == {_filter_tuple(f) for f in metric.conditions} for m in mappings):
+                    raise ValueError('stage three introduced unverified conditional metric')
+        response = finish(selection.draft, catalog, guard=True)
+        if response.status != 'ready':
+>           raise ValueError('draft validation: ' + '; '.join(response.validation_errors))
+E           ValueError: draft validation: integration keys lack an admitted semantic mapping; integration keys lack an admitted semantic mapping
+
+evaluations/three_stage_view_selection.py:314: ValueError
+_____________ test_new_input_changes_only_selection_system_suffix ______________
+
+    def test_new_input_changes_only_selection_system_suffix():
+        mod=api(); package=mod.load_package(); context=mod.prepare(package)
+        old=rebound.prepare(rebound.load_package(),'SEL-ISO-v1-01')
+        assert context['body']['messages'][1:]==old['body']['messages'][1:]
+        assert context['body']['messages'][0]['content']==old['body']['messages'][0]['content']+mod.SELECTION_SUFFIX
+        assert {k:v for k,v in context['body'].items() if k!='messages'}=={k:v for k,v in old['body'].items() if k!='messages'}
+        assert context['upstream']==old['upstream']
+        assert rebound.bindings(rebound.load_package())==rebound.load_package()['manifest']['bindings']
+>       assert mod.bindings(package)==package['manifest']['bindings']
+E       AssertionError: assert {'legacy': {'...shape-1', ...} == {'legacy': {'...shape-1', ...}
+E         
+E         Omitting 5 identical items, use -vv to show
+E         Differing items:
+E         {'sources': {'evaluations/diagnostics/managed_policy_shape.py': 'dfc741afc10c4a329cb1ec218a14b0e931a2e89f34aeb2185240b... 'tests/diagnostics/test_managed_policy_shape.py': '05693de4b776b1caa1ad914923626555481df388293dde9b0e34ae53f4b1dfd5'}} != {'sources': {'evaluations/diagnostics/managed_policy_shape.py': 'dfc741afc10c4a329cb1ec218a14b0e931a2e89f34aeb2185240b... 'tests/diagnostics/test_managed_policy_shape.py': '60d5dc50ff018d93602e6cf2db6fbaa4c9b210c65735867b561f9f4123ab3f82'}}
+E         Use -v to get more diff
+
+tests/diagnostics/test_managed_policy_shape.py:82: AssertionError
+_____ test_thin_record_keeps_legacy_and_new_first_errors_and_replays[None] _____
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-62/test_thin_record_keeps_legacy_0')
+failure = None
+
+    @pytest.mark.parametrize('failure',[None,'null','shape','typed','semantic','parse','provider','context'])
+    def test_thin_record_keeps_legacy_and_new_first_errors_and_replays(tmp_path,failure):
+        mod=api(); package=mod.load_package(); context=mod.prepare(package); value=original()
+        value['draft']['integration']['missing_data_policy']=MISSING_POLICIES[1 if failure=='null' else 0]
+        if failure=='shape': value['draft']['integration']['missing_data_policy']=MISSING_POLICIES[2]
+        if failure=='typed': value['draft']['tasks'][0].pop('filters')
+        if failure=='semantic': value['draft']['integration']['edges'][0]['right_keys'].reverse()
+        raw='not json' if failure=='parse' else json.dumps(value,ensure_ascii=False)
+        calls=[]
+        def invoke(*args):
+            calls.append(args)
+            if failure=='provider': raise OSError('offline transport lost')
+            return AIMessage(content=raw)
+        folder=tmp_path/'sample'
+>       receipt=mod.record_sample(folder,context,invoke,context_window=1 if failure=='context' else 32768)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/diagnostics/test_managed_policy_shape.py:99: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluations/diagnostics/managed_policy_shape.py:240: in record_sample
+    _version_guard(package,frozen,manifest_hash); _context_guard(package,context)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+package = {'manifest': {'schema_version': 1, 'version': 'kind-policy-shape-1', 'runner_version': 'managed-policy-shape-1', 'cand... 'scope-channel': {'status': 'unsupported', 'own_gap': True, 'mappings': [], 'contract_path': None}, ...}}}, ...}, ...}
+frozen = {'legacy': {'sources': {'src/cpea/__init__.py': 'e6e004e5daa1273b1f894d5f42fe2fe964642b55b7e8cb6486e5369cef68e7df', 's...json': 'f986fd1f361948c4ea4ecc24d4c7e779956210488467533411908f440f07c135'}, 'candidate': 'managed-policy-shape-1', ...}
+manifest_hash = 'e1c5d1f253a66e1b48270215d676056f6a4555f5c07844174928a7e99700faae'
+
+    def _version_guard(package, frozen, manifest_hash):
+        fresh = load_package(package['manifest_path'])
+        if (fresh != package or base.digest(package['manifest_path']) != manifest_hash
+                or bindings(package) != frozen or frozen != package['manifest']['bindings']):
+>           raise ValueError('complete policy source/version/input drift')
+E           ValueError: complete policy source/version/input drift
+
+evaluations/diagnostics/managed_policy_shape.py:121: ValueError
+_____ test_thin_record_keeps_legacy_and_new_first_errors_and_replays[null] _____
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-62/test_thin_record_keeps_legacy_1')
+failure = 'null'
+
+    @pytest.mark.parametrize('failure',[None,'null','shape','typed','semantic','parse','provider','context'])
+    def test_thin_record_keeps_legacy_and_new_first_errors_and_replays(tmp_path,failure):
+        mod=api(); package=mod.load_package(); context=mod.prepare(package); value=original()
+        value['draft']['integration']['missing_data_policy']=MISSING_POLICIES[1 if failure=='null' else 0]
+        if failure=='shape': value['draft']['integration']['missing_data_policy']=MISSING_POLICIES[2]
+        if failure=='typed': value['draft']['tasks'][0].pop('filters')
+        if failure=='semantic': value['draft']['integration']['edges'][0]['right_keys'].reverse()
+        raw='not json' if failure=='parse' else json.dumps(value,ensure_ascii=False)
+        calls=[]
+        def invoke(*args):
+            calls.append(args)
+            if failure=='provider': raise OSError('offline transport lost')
+            return AIMessage(content=raw)
+        folder=tmp_path/'sample'
+>       receipt=mod.record_sample(folder,context,invoke,context_window=1 if failure=='context' else 32768)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/diagnostics/test_managed_policy_shape.py:99: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluations/diagnostics/managed_policy_shape.py:240: in record_sample
+    _version_guard(package,frozen,manifest_hash); _context_guard(package,context)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+package = {'manifest': {'schema_version': 1, 'version': 'kind-policy-shape-1', 'runner_version': 'managed-policy-shape-1', 'cand... 'scope-channel': {'status': 'unsupported', 'own_gap': True, 'mappings': [], 'contract_path': None}, ...}}}, ...}, ...}
+frozen = {'legacy': {'sources': {'src/cpea/__init__.py': 'e6e004e5daa1273b1f894d5f42fe2fe964642b55b7e8cb6486e5369cef68e7df', 's...json': 'f986fd1f361948c4ea4ecc24d4c7e779956210488467533411908f440f07c135'}, 'candidate': 'managed-policy-shape-1', ...}
+manifest_hash = 'e1c5d1f253a66e1b48270215d676056f6a4555f5c07844174928a7e99700faae'
+
+    def _version_guard(package, frozen, manifest_hash):
+        fresh = load_package(package['manifest_path'])
+        if (fresh != package or base.digest(package['manifest_path']) != manifest_hash
+                or bindings(package) != frozen or frozen != package['manifest']['bindings']):
+>           raise ValueError('complete policy source/version/input drift')
+E           ValueError: complete policy source/version/input drift
+
+evaluations/diagnostics/managed_policy_shape.py:121: ValueError
+____ test_thin_record_keeps_legacy_and_new_first_errors_and_replays[shape] _____
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-62/test_thin_record_keeps_legacy_2')
+failure = 'shape'
+
+    @pytest.mark.parametrize('failure',[None,'null','shape','typed','semantic','parse','provider','context'])
+    def test_thin_record_keeps_legacy_and_new_first_errors_and_replays(tmp_path,failure):
+        mod=api(); package=mod.load_package(); context=mod.prepare(package); value=original()
+        value['draft']['integration']['missing_data_policy']=MISSING_POLICIES[1 if failure=='null' else 0]
+        if failure=='shape': value['draft']['integration']['missing_data_policy']=MISSING_POLICIES[2]
+        if failure=='typed': value['draft']['tasks'][0].pop('filters')
+        if failure=='semantic': value['draft']['integration']['edges'][0]['right_keys'].reverse()
+        raw='not json' if failure=='parse' else json.dumps(value,ensure_ascii=False)
+        calls=[]
+        def invoke(*args):
+            calls.append(args)
+            if failure=='provider': raise OSError('offline transport lost')
+            return AIMessage(content=raw)
+        folder=tmp_path/'sample'
+>       receipt=mod.record_sample(folder,context,invoke,context_window=1 if failure=='context' else 32768)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/diagnostics/test_managed_policy_shape.py:99: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluations/diagnostics/managed_policy_shape.py:240: in record_sample
+    _version_guard(package,frozen,manifest_hash); _context_guard(package,context)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+package = {'manifest': {'schema_version': 1, 'version': 'kind-policy-shape-1', 'runner_version': 'managed-policy-shape-1', 'cand... 'scope-channel': {'status': 'unsupported', 'own_gap': True, 'mappings': [], 'contract_path': None}, ...}}}, ...}, ...}
+frozen = {'legacy': {'sources': {'src/cpea/__init__.py': 'e6e004e5daa1273b1f894d5f42fe2fe964642b55b7e8cb6486e5369cef68e7df', 's...json': 'f986fd1f361948c4ea4ecc24d4c7e779956210488467533411908f440f07c135'}, 'candidate': 'managed-policy-shape-1', ...}
+manifest_hash = 'e1c5d1f253a66e1b48270215d676056f6a4555f5c07844174928a7e99700faae'
+
+    def _version_guard(package, frozen, manifest_hash):
+        fresh = load_package(package['manifest_path'])
+        if (fresh != package or base.digest(package['manifest_path']) != manifest_hash
+                or bindings(package) != frozen or frozen != package['manifest']['bindings']):
+>           raise ValueError('complete policy source/version/input drift')
+E           ValueError: complete policy source/version/input drift
+
+evaluations/diagnostics/managed_policy_shape.py:121: ValueError
+____ test_thin_record_keeps_legacy_and_new_first_errors_and_replays[typed] _____
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-62/test_thin_record_keeps_legacy_3')
+failure = 'typed'
+
+    @pytest.mark.parametrize('failure',[None,'null','shape','typed','semantic','parse','provider','context'])
+    def test_thin_record_keeps_legacy_and_new_first_errors_and_replays(tmp_path,failure):
+        mod=api(); package=mod.load_package(); context=mod.prepare(package); value=original()
+        value['draft']['integration']['missing_data_policy']=MISSING_POLICIES[1 if failure=='null' else 0]
+        if failure=='shape': value['draft']['integration']['missing_data_policy']=MISSING_POLICIES[2]
+        if failure=='typed': value['draft']['tasks'][0].pop('filters')
+        if failure=='semantic': value['draft']['integration']['edges'][0]['right_keys'].reverse()
+        raw='not json' if failure=='parse' else json.dumps(value,ensure_ascii=False)
+        calls=[]
+        def invoke(*args):
+            calls.append(args)
+            if failure=='provider': raise OSError('offline transport lost')
+            return AIMessage(content=raw)
+        folder=tmp_path/'sample'
+>       receipt=mod.record_sample(folder,context,invoke,context_window=1 if failure=='context' else 32768)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/diagnostics/test_managed_policy_shape.py:99: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluations/diagnostics/managed_policy_shape.py:240: in record_sample
+    _version_guard(package,frozen,manifest_hash); _context_guard(package,context)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+package = {'manifest': {'schema_version': 1, 'version': 'kind-policy-shape-1', 'runner_version': 'managed-policy-shape-1', 'cand... 'scope-channel': {'status': 'unsupported', 'own_gap': True, 'mappings': [], 'contract_path': None}, ...}}}, ...}, ...}
+frozen = {'legacy': {'sources': {'src/cpea/__init__.py': 'e6e004e5daa1273b1f894d5f42fe2fe964642b55b7e8cb6486e5369cef68e7df', 's...json': 'f986fd1f361948c4ea4ecc24d4c7e779956210488467533411908f440f07c135'}, 'candidate': 'managed-policy-shape-1', ...}
+manifest_hash = 'e1c5d1f253a66e1b48270215d676056f6a4555f5c07844174928a7e99700faae'
+
+    def _version_guard(package, frozen, manifest_hash):
+        fresh = load_package(package['manifest_path'])
+        if (fresh != package or base.digest(package['manifest_path']) != manifest_hash
+                or bindings(package) != frozen or frozen != package['manifest']['bindings']):
+>           raise ValueError('complete policy source/version/input drift')
+E           ValueError: complete policy source/version/input drift
+
+evaluations/diagnostics/managed_policy_shape.py:121: ValueError
+___ test_thin_record_keeps_legacy_and_new_first_errors_and_replays[semantic] ___
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-62/test_thin_record_keeps_legacy_4')
+failure = 'semantic'
+
+    @pytest.mark.parametrize('failure',[None,'null','shape','typed','semantic','parse','provider','context'])
+    def test_thin_record_keeps_legacy_and_new_first_errors_and_replays(tmp_path,failure):
+        mod=api(); package=mod.load_package(); context=mod.prepare(package); value=original()
+        value['draft']['integration']['missing_data_policy']=MISSING_POLICIES[1 if failure=='null' else 0]
+        if failure=='shape': value['draft']['integration']['missing_data_policy']=MISSING_POLICIES[2]
+        if failure=='typed': value['draft']['tasks'][0].pop('filters')
+        if failure=='semantic': value['draft']['integration']['edges'][0]['right_keys'].reverse()
+        raw='not json' if failure=='parse' else json.dumps(value,ensure_ascii=False)
+        calls=[]
+        def invoke(*args):
+            calls.append(args)
+            if failure=='provider': raise OSError('offline transport lost')
+            return AIMessage(content=raw)
+        folder=tmp_path/'sample'
+>       receipt=mod.record_sample(folder,context,invoke,context_window=1 if failure=='context' else 32768)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/diagnostics/test_managed_policy_shape.py:99: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluations/diagnostics/managed_policy_shape.py:240: in record_sample
+    _version_guard(package,frozen,manifest_hash); _context_guard(package,context)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+package = {'manifest': {'schema_version': 1, 'version': 'kind-policy-shape-1', 'runner_version': 'managed-policy-shape-1', 'cand... 'scope-channel': {'status': 'unsupported', 'own_gap': True, 'mappings': [], 'contract_path': None}, ...}}}, ...}, ...}
+frozen = {'legacy': {'sources': {'src/cpea/__init__.py': 'e6e004e5daa1273b1f894d5f42fe2fe964642b55b7e8cb6486e5369cef68e7df', 's...json': 'f986fd1f361948c4ea4ecc24d4c7e779956210488467533411908f440f07c135'}, 'candidate': 'managed-policy-shape-1', ...}
+manifest_hash = 'e1c5d1f253a66e1b48270215d676056f6a4555f5c07844174928a7e99700faae'
+
+    def _version_guard(package, frozen, manifest_hash):
+        fresh = load_package(package['manifest_path'])
+        if (fresh != package or base.digest(package['manifest_path']) != manifest_hash
+                or bindings(package) != frozen or frozen != package['manifest']['bindings']):
+>           raise ValueError('complete policy source/version/input drift')
+E           ValueError: complete policy source/version/input drift
+
+evaluations/diagnostics/managed_policy_shape.py:121: ValueError
+____ test_thin_record_keeps_legacy_and_new_first_errors_and_replays[parse] _____
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-62/test_thin_record_keeps_legacy_5')
+failure = 'parse'
+
+    @pytest.mark.parametrize('failure',[None,'null','shape','typed','semantic','parse','provider','context'])
+    def test_thin_record_keeps_legacy_and_new_first_errors_and_replays(tmp_path,failure):
+        mod=api(); package=mod.load_package(); context=mod.prepare(package); value=original()
+        value['draft']['integration']['missing_data_policy']=MISSING_POLICIES[1 if failure=='null' else 0]
+        if failure=='shape': value['draft']['integration']['missing_data_policy']=MISSING_POLICIES[2]
+        if failure=='typed': value['draft']['tasks'][0].pop('filters')
+        if failure=='semantic': value['draft']['integration']['edges'][0]['right_keys'].reverse()
+        raw='not json' if failure=='parse' else json.dumps(value,ensure_ascii=False)
+        calls=[]
+        def invoke(*args):
+            calls.append(args)
+            if failure=='provider': raise OSError('offline transport lost')
+            return AIMessage(content=raw)
+        folder=tmp_path/'sample'
+>       receipt=mod.record_sample(folder,context,invoke,context_window=1 if failure=='context' else 32768)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/diagnostics/test_managed_policy_shape.py:99: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluations/diagnostics/managed_policy_shape.py:240: in record_sample
+    _version_guard(package,frozen,manifest_hash); _context_guard(package,context)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+package = {'manifest': {'schema_version': 1, 'version': 'kind-policy-shape-1', 'runner_version': 'managed-policy-shape-1', 'cand... 'scope-channel': {'status': 'unsupported', 'own_gap': True, 'mappings': [], 'contract_path': None}, ...}}}, ...}, ...}
+frozen = {'legacy': {'sources': {'src/cpea/__init__.py': 'e6e004e5daa1273b1f894d5f42fe2fe964642b55b7e8cb6486e5369cef68e7df', 's...json': 'f986fd1f361948c4ea4ecc24d4c7e779956210488467533411908f440f07c135'}, 'candidate': 'managed-policy-shape-1', ...}
+manifest_hash = 'e1c5d1f253a66e1b48270215d676056f6a4555f5c07844174928a7e99700faae'
+
+    def _version_guard(package, frozen, manifest_hash):
+        fresh = load_package(package['manifest_path'])
+        if (fresh != package or base.digest(package['manifest_path']) != manifest_hash
+                or bindings(package) != frozen or frozen != package['manifest']['bindings']):
+>           raise ValueError('complete policy source/version/input drift')
+E           ValueError: complete policy source/version/input drift
+
+evaluations/diagnostics/managed_policy_shape.py:121: ValueError
+___ test_thin_record_keeps_legacy_and_new_first_errors_and_replays[provider] ___
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-62/test_thin_record_keeps_legacy_6')
+failure = 'provider'
+
+    @pytest.mark.parametrize('failure',[None,'null','shape','typed','semantic','parse','provider','context'])
+    def test_thin_record_keeps_legacy_and_new_first_errors_and_replays(tmp_path,failure):
+        mod=api(); package=mod.load_package(); context=mod.prepare(package); value=original()
+        value['draft']['integration']['missing_data_policy']=MISSING_POLICIES[1 if failure=='null' else 0]
+        if failure=='shape': value['draft']['integration']['missing_data_policy']=MISSING_POLICIES[2]
+        if failure=='typed': value['draft']['tasks'][0].pop('filters')
+        if failure=='semantic': value['draft']['integration']['edges'][0]['right_keys'].reverse()
+        raw='not json' if failure=='parse' else json.dumps(value,ensure_ascii=False)
+        calls=[]
+        def invoke(*args):
+            calls.append(args)
+            if failure=='provider': raise OSError('offline transport lost')
+            return AIMessage(content=raw)
+        folder=tmp_path/'sample'
+>       receipt=mod.record_sample(folder,context,invoke,context_window=1 if failure=='context' else 32768)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/diagnostics/test_managed_policy_shape.py:99: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluations/diagnostics/managed_policy_shape.py:240: in record_sample
+    _version_guard(package,frozen,manifest_hash); _context_guard(package,context)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+package = {'manifest': {'schema_version': 1, 'version': 'kind-policy-shape-1', 'runner_version': 'managed-policy-shape-1', 'cand... 'scope-channel': {'status': 'unsupported', 'own_gap': True, 'mappings': [], 'contract_path': None}, ...}}}, ...}, ...}
+frozen = {'legacy': {'sources': {'src/cpea/__init__.py': 'e6e004e5daa1273b1f894d5f42fe2fe964642b55b7e8cb6486e5369cef68e7df', 's...json': 'f986fd1f361948c4ea4ecc24d4c7e779956210488467533411908f440f07c135'}, 'candidate': 'managed-policy-shape-1', ...}
+manifest_hash = 'e1c5d1f253a66e1b48270215d676056f6a4555f5c07844174928a7e99700faae'
+
+    def _version_guard(package, frozen, manifest_hash):
+        fresh = load_package(package['manifest_path'])
+        if (fresh != package or base.digest(package['manifest_path']) != manifest_hash
+                or bindings(package) != frozen or frozen != package['manifest']['bindings']):
+>           raise ValueError('complete policy source/version/input drift')
+E           ValueError: complete policy source/version/input drift
+
+evaluations/diagnostics/managed_policy_shape.py:121: ValueError
+___ test_thin_record_keeps_legacy_and_new_first_errors_and_replays[context] ____
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-62/test_thin_record_keeps_legacy_7')
+failure = 'context'
+
+    @pytest.mark.parametrize('failure',[None,'null','shape','typed','semantic','parse','provider','context'])
+    def test_thin_record_keeps_legacy_and_new_first_errors_and_replays(tmp_path,failure):
+        mod=api(); package=mod.load_package(); context=mod.prepare(package); value=original()
+        value['draft']['integration']['missing_data_policy']=MISSING_POLICIES[1 if failure=='null' else 0]
+        if failure=='shape': value['draft']['integration']['missing_data_policy']=MISSING_POLICIES[2]
+        if failure=='typed': value['draft']['tasks'][0].pop('filters')
+        if failure=='semantic': value['draft']['integration']['edges'][0]['right_keys'].reverse()
+        raw='not json' if failure=='parse' else json.dumps(value,ensure_ascii=False)
+        calls=[]
+        def invoke(*args):
+            calls.append(args)
+            if failure=='provider': raise OSError('offline transport lost')
+            return AIMessage(content=raw)
+        folder=tmp_path/'sample'
+>       receipt=mod.record_sample(folder,context,invoke,context_window=1 if failure=='context' else 32768)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/diagnostics/test_managed_policy_shape.py:99: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluations/diagnostics/managed_policy_shape.py:240: in record_sample
+    _version_guard(package,frozen,manifest_hash); _context_guard(package,context)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+package = {'manifest': {'schema_version': 1, 'version': 'kind-policy-shape-1', 'runner_version': 'managed-policy-shape-1', 'cand... 'scope-channel': {'status': 'unsupported', 'own_gap': True, 'mappings': [], 'contract_path': None}, ...}}}, ...}, ...}
+frozen = {'legacy': {'sources': {'src/cpea/__init__.py': 'e6e004e5daa1273b1f894d5f42fe2fe964642b55b7e8cb6486e5369cef68e7df', 's...json': 'f986fd1f361948c4ea4ecc24d4c7e779956210488467533411908f440f07c135'}, 'candidate': 'managed-policy-shape-1', ...}
+manifest_hash = 'e1c5d1f253a66e1b48270215d676056f6a4555f5c07844174928a7e99700faae'
+
+    def _version_guard(package, frozen, manifest_hash):
+        fresh = load_package(package['manifest_path'])
+        if (fresh != package or base.digest(package['manifest_path']) != manifest_hash
+                or bindings(package) != frozen or frozen != package['manifest']['bindings']):
+>           raise ValueError('complete policy source/version/input drift')
+E           ValueError: complete policy source/version/input drift
+
+evaluations/diagnostics/managed_policy_shape.py:121: ValueError
+__________ test_interruption_and_outer_drift_never_promote_inner_pass __________
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-62/test_interruption_and_outer_dr0')
+
+    def test_interruption_and_outer_drift_never_promote_inner_pass(tmp_path):
+        mod=api();package=mod.load_package();context=mod.prepare(package)
+        def interrupt(*args): raise KeyboardInterrupt('offline interruption')
+        folder=tmp_path/'interrupted'
+>       with pytest.raises(KeyboardInterrupt): mod.record_sample(folder,context,interrupt)
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/diagnostics/test_managed_policy_shape.py:115: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluations/diagnostics/managed_policy_shape.py:240: in record_sample
+    _version_guard(package,frozen,manifest_hash); _context_guard(package,context)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+package = {'manifest': {'schema_version': 1, 'version': 'kind-policy-shape-1', 'runner_version': 'managed-policy-shape-1', 'cand... 'scope-channel': {'status': 'unsupported', 'own_gap': True, 'mappings': [], 'contract_path': None}, ...}}}, ...}, ...}
+frozen = {'legacy': {'sources': {'src/cpea/__init__.py': 'e6e004e5daa1273b1f894d5f42fe2fe964642b55b7e8cb6486e5369cef68e7df', 's...json': 'f986fd1f361948c4ea4ecc24d4c7e779956210488467533411908f440f07c135'}, 'candidate': 'managed-policy-shape-1', ...}
+manifest_hash = 'e1c5d1f253a66e1b48270215d676056f6a4555f5c07844174928a7e99700faae'
+
+    def _version_guard(package, frozen, manifest_hash):
+        fresh = load_package(package['manifest_path'])
+        if (fresh != package or base.digest(package['manifest_path']) != manifest_hash
+                or bindings(package) != frozen or frozen != package['manifest']['bindings']):
+>           raise ValueError('complete policy source/version/input drift')
+E           ValueError: complete policy source/version/input drift
+
+evaluations/diagnostics/managed_policy_shape.py:121: ValueError
+___ test_full_natural_runner_contract_reuses_nine_stages_and_prepared[None] ____
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-62/test_full_natural_runner_contr0')
+failure = None
+
+    @pytest.mark.parametrize('failure',[None,'shape','typed'])
+    def test_full_natural_runner_contract_reuses_nine_stages_and_prepared(tmp_path,failure):
+        from evaluations import managed_three_stage_runner as runner
+        from cpea.infrastructure.catalog.yaml_catalog import SchemaCatalog
+>       from test_kind_mapping_managed_contract import inputs
+E       ModuleNotFoundError: No module named 'test_kind_mapping_managed_contract'
+
+tests/diagnostics/test_managed_policy_shape.py:132: ModuleNotFoundError
+___ test_full_natural_runner_contract_reuses_nine_stages_and_prepared[shape] ___
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-62/test_full_natural_runner_contr1')
+failure = 'shape'
+
+    @pytest.mark.parametrize('failure',[None,'shape','typed'])
+    def test_full_natural_runner_contract_reuses_nine_stages_and_prepared(tmp_path,failure):
+        from evaluations import managed_three_stage_runner as runner
+        from cpea.infrastructure.catalog.yaml_catalog import SchemaCatalog
+>       from test_kind_mapping_managed_contract import inputs
+E       ModuleNotFoundError: No module named 'test_kind_mapping_managed_contract'
+
+tests/diagnostics/test_managed_policy_shape.py:132: ModuleNotFoundError
+___ test_full_natural_runner_contract_reuses_nine_stages_and_prepared[typed] ___
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-62/test_full_natural_runner_contr2')
+failure = 'typed'
+
+    @pytest.mark.parametrize('failure',[None,'shape','typed'])
+    def test_full_natural_runner_contract_reuses_nine_stages_and_prepared(tmp_path,failure):
+        from evaluations import managed_three_stage_runner as runner
+        from cpea.infrastructure.catalog.yaml_catalog import SchemaCatalog
+>       from test_kind_mapping_managed_contract import inputs
+E       ModuleNotFoundError: No module named 'test_kind_mapping_managed_contract'
+
+tests/diagnostics/test_managed_policy_shape.py:132: ModuleNotFoundError
+=========================== short test summary info ============================
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_original_guards_and_other_semantic_failures_remain_fatal[semantic]
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_new_input_changes_only_selection_system_suffix
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_thin_record_keeps_legacy_and_new_first_errors_and_replays[None]
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_thin_record_keeps_legacy_and_new_first_errors_and_replays[null]
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_thin_record_keeps_legacy_and_new_first_errors_and_replays[shape]
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_thin_record_keeps_legacy_and_new_first_errors_and_replays[typed]
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_thin_record_keeps_legacy_and_new_first_errors_and_replays[semantic]
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_thin_record_keeps_legacy_and_new_first_errors_and_replays[parse]
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_thin_record_keeps_legacy_and_new_first_errors_and_replays[provider]
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_thin_record_keeps_legacy_and_new_first_errors_and_replays[context]
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_interruption_and_outer_drift_never_promote_inner_pass
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_full_natural_runner_contract_reuses_nine_stages_and_prepared[None]
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_full_natural_runner_contract_reuses_nine_stages_and_prepared[shape]
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_full_natural_runner_contract_reuses_nine_stages_and_prepared[typed]
+14 failed, 18 passed in 16.42s

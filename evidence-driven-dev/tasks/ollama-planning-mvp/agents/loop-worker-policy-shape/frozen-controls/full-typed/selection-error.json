@@ -1,0 +1,5 @@
+{
+  "error_type": "ValidationError",
+  "error": "1 validation error for SelectionWire\ndraft.ready.tasks.0.filters\n  Field required [type=missing, input_value={'task_id': 'stock', 'vie...店商品庫存件數'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing",
+  "raw_saved": true
+}

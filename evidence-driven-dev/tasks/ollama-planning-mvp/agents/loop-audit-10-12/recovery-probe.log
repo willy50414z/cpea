@@ -1,0 +1,7 @@
+{"existing_candidate_files": 12, "original_hash_matches": []}
+{"memory_candidate": "review remove appended summary clarification", "trailing_newline": true, "sha256": "aaa8b740cc30fbd1b8670fa45ce5b68280dc073b9ee5e662dc43eeb68b903dfa", "matches_original": true}
+{"memory_candidate": "review remove appended summary clarification", "trailing_newline": false, "sha256": "5e4351eb27e1c9d9b875f0a360d53f919210f4ef5efb1ea82bdfc4513fbc7df6", "matches_original": false}
+{"memory_candidate": "log remove appended blocking_finding own_gap_ruling field", "sha256": "fa3e4654447f56bef7cffe64220195c4e2817ba20838d2c3b27eaf893a28eaaa", "matches_original": true}
+{"current_file": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-semantics/review.json", "size": 26997, "mtime_ns": 1792616499235728727, "ctime_ns": 1792616499235728727}
+{"current_file": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-semantics/semantic-review.log", "size": 129858, "mtime_ns": 1792616499233728715, "ctime_ns": 1792616499233728715}
+{"current_file": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-semantics/handoff.json", "size": 1366, "mtime_ns": 1792616499235728727, "ctime_ns": 1792616499235728727}

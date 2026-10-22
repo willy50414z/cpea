@@ -1,0 +1,33 @@
+{
+  "result": "PASS_RESEARCH_ARTIFACT_CONSISTENCY_ONLY",
+  "exact_old_nodes": 24,
+  "new_children": 3,
+  "root_exact": true,
+  "acyclic_parent_path": true,
+  "passed_nodes_reopened": 0,
+  "bound_source_files_rehashed": 54,
+  "source_changes": [],
+  "document_sha256": "91e8dcee858369d84838ec249cc0785515a59c346aa8e0778f804c15fd8f09de",
+  "text_files": "全部JSON UTF-8無BOM",
+  "format_probe": "0POST，真View text-leaf membership確有4個object path拒絕",
+  "tests_and_replays": "本研究未執行測試套件或重播；23輪已封存5live+5frozen原結果只引用，不冒稱本研究重跑。",
+  "limitations": [
+    "新A1、B、C均無本研究自然效果；原題E2E/root PENDING",
+    "完整8047舊檔保護驗證引用23輪封存證據；本研究獨立重hash的是上述針對性來源集合",
+    "08/09等新控制的詳細row期望尚須fresh reviewer核准，研究者不自認Oracle",
+    "三seed transport為新版本必要delta，現舊invoke無法直接改seed；下一author與audit可否證其必要性/正確性。"
+  ],
+  "research_calls": {
+    "POST": 0,
+    "cloud": 0,
+    "SQL_DB": 0
+  },
+  "plan_sha256": "effdbeee6d6f0572c83d587950f0b64cc52fa46d108091c02a101a48d909372e",
+  "proof_hashes": {
+    "source-index.json": "56acaf620e84a6b7c812f092c28dc58427f56ed15294642373e679ae10142a4a",
+    "old-nodes-snapshot.json": "22de3d0781a6438ce912597538b3f7b392045cf53e4d5df6af6a60442f2d5a9e",
+    "raw-and-leaf-probe.json": "a8e22b730407a1f27b8100652768fec442be9f1aab9dd1f4aae66b536836567e",
+    "advice-evaluation.json": "2cd5293fdf3ca90eda44e609b7b73af4e07d69d5955b4428fe8432a194061d26",
+    "research.json": "5e9587e2a21b075060065ac544af95d26d9c11f2ac1846c4cbaac8c2328b0126"
+  }
+}

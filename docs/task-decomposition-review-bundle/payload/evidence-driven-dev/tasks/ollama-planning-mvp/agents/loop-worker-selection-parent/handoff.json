@@ -1,0 +1,18 @@
+{
+  "ticket": "315d9203195d4080b655f6d8afe659dd",
+  "result": "PASS",
+  "evidence": [
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-selection-parent/acceptance-mapping.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-selection-parent/independent-checks.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-selection-parent/raw-presence.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-selection-parent/typed-prepared-checks.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-selection-parent/reason-text-checks.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-selection-parent/historical15-check.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-selection-parent/live-replay.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-selection-parent/controller-check-evidence.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-selection-parent/final-verification.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-selection-parent/evidence-index.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-selection-parent/independent-verification.log"
+  ],
+  "summary": "第19輪原natural_kind_selection_isolation父層自身0POST整合PASS。獨立核原3項acceptance、原raw30objects全部required且raw=parsed=wire、8assignment/5排除/49理由refs/56列引文/5自由文字與2prepared；inventory店商品anchor/stock sum/盤點日metadata，sales同task九月整月online雙sum，先店商品聚合後LEFT一對一雙鍵保全庫存、flat缺值不補零。新舊body僅通用policy suffix有實質差異、無Oracle/typed答案；五方distinct closedPASS及fullbindings精確。新18同版PASS、原15同版及frozen仍FAIL，原flat EMPTY未修答翻案；完整frozen證據hash獨立吻合，5203保護檔/668作者/284自然/29原15證據無漂移，check-evidence PASS。明確只upstream_injected selection可行性，不代表自然recall/coverage/9POST/祖先/root/歷史Gate或可靠率；原coverage3及自然父9POST/祖先/final仍待驗。0SQL/DB/cloud/retry，累計23local不變；不改source/tests/fixture/Task/control、不commit/push。驗證腳本介面誤用已保留失敗log並按原API重核，無未決問題。proof已完成封存，Main待真FINAL核SHA後finish。"
+}

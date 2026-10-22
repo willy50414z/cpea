@@ -1,0 +1,158 @@
+{
+  "schema_version": 1,
+  "ticket": "caed3d1a0db849f1aea96f5efaaafc3d",
+  "role": "research",
+  "task_id": "ollama-planning-mvp",
+  "result": "REPLAN",
+  "summary": "第4輪是完整FAIL：recall重複捏造能力、未選View過度支持商品級metric、缺口/排除理由捏造母體，以及selection省略完整typed責任。採managed專用新wire收斂冗餘事實重述，保留模型語意決策；新增metric→grain顯式依賴與完整必填typed selection。先第5輪離線實作驗證，再第6輪固定新候選自然單樣本；fresh audit4–6及所有父層驗收不可省略。所有新方案效果PENDING。",
+  "evidence": [
+    "evidence-driven-dev/tasks/ollama-planning-mvp/task.md",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-2/handoff.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-2/semantic-review.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T171721Z-fa4587/recall-result.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T171721Z-fa4587/map-02-result.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T171721Z-fa4587/map-04-result.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T171721Z-fa4587/map-07-result.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T171721Z-fa4587/selection-request.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T171721Z-fa4587/selection-parsed.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-2/handoff.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-slots/handoff.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-1-3/review.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-4/diagnosis.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-4/plan.json"
+  ],
+  "hypothesis": {
+    "id": "LR4-H1",
+    "claim": "把固定候選與可導出來源事實交給程式，用明示grain依賴與可驗證缺口/選擇refs保留模型判定，再將selection typed欄位在managed schema設為真正必填，可封閉已定位的冗餘重述與漏填邊界，同時讓Qwen仍自然產生全部業務決策。",
+    "falsifier": "新wire若允許錯grain依賴仍supported、未知/相矛盾refs或未保證能力/母體進入normalized、typed省略/空內容繞過守門，離線節點FAIL；自然任何requirement/候選/選擇/prepared或剩餘文字語意錯誤亦FAIL，不修答案或挑樣本。",
+    "status": "PENDING"
+  },
+  "alternatives": [
+    {
+      "option": "維持原wire只加不得捏造/填完整欄位提醒",
+      "decision": "不選",
+      "reason": "monthly能力理由已跨兩自然輪重現；原selection prompt已有typed要求。提醒可伴隨新責任邊界，但不能作唯一修法或原樣整輪抽樣。"
+    },
+    {
+      "option": "僅使integration必填或只補最後grain報錯",
+      "decision": "拒絕",
+      "reason": "同時還缺filters/metrics/metadata/group_by/preparation等，且上游三類語意錯未解。"
+    },
+    {
+      "option": "程式由coverage/assignment自動編譯全部draft並選anchor/left",
+      "decision": "本輪不選",
+      "reason": "typed資訊可重用，但選來源、grain與合併仍有真正語意決策；本輪先測保留模型完整typed輸出的最小新契約，避免擴張成新planner/compiler。"
+    },
+    {
+      "option": "獨立LLM審查/repair每一步或每需求一call",
+      "decision": "本輪不選",
+      "reason": "增加模型與整合邊界，review不是oracle，repair會使首次自然答案的錯誤不再清楚；現證據先支持責任及schema缺口。"
+    },
+    {
+      "option": "刪理由/缺口全部驗收或忽略未選來源",
+      "decision": "拒絕",
+      "reason": "必要可追溯語意仍需保留；改結構化refs是保留資訊與可驗證責任，不能只用通用unsupported空理由換PASS。"
+    }
+  ],
+  "worker_scope": {
+    "allowed": [
+      "evaluations新增managed專用recall/gap/selection schema與adapter；可合成一個小module避免過多抽象",
+      "evaluations/managed_three_stage_runner.py最小接線/版本及fingerprint更新",
+      "managed專用新版prompts；既有prompt/wire保留供舊replay",
+      "tests/unit最小有辨識力測試與fake接線",
+      "Task內raw/log、worker必要handoff/hash/source快照"
+    ],
+    "preserve": [
+      "不得原地改IndexedRecallResult/Requirement/ViewCoverage/SelectionResult及原validate_coverage/finish_selection的舊wire語意；新adapter前置檢查後重用它們",
+      "既有passed節點與第1–4輪證據、原raw/分數/完整38題Gate",
+      "src/cpea/application/models/decomposition.py與src/cpea/workflows/task_decomposition/prompt.py兩項既存變更",
+      "qwen digest、既有模型配置/完整原request、admitted contracts及原oracle"
+    ],
+    "forbidden": [
+      "SQL/DB、任何模型POST於第5輪、雲端",
+      "Task/controller直接修改；交Main採plan/finish",
+      "補filter/metric/integration答案、去重、丟錯欄位、first/last、repair",
+      "commit/push、新報告或experiments Markdown"
+    ]
+  },
+  "implementation_order": [
+    "先以source-freeze快照執行第4輪9raw原版replay，精確得到final grain differs from verified requirement keys，並保存F1–F4與map07完整首失敗；保留source/hash基線。若worker更新現runner，保留可執行舊版快照及全部依賴，不讓舊run.json fingerprint被重解釋成新wire。",
+    "新增managed-only requirements-only indexed recall：保留現有索引/角色/scope/grain/population及背景規則，但wire不讓模型輸出candidate_views/reason。Python按當次catalog穩定順序建立全部admitted候選；reason只render「本MVP保留全部admitted候選」及精確summary/grain原文與paths，不從欄名或摘要推導通路/母體。來源能力仍由接下來七個自然mapping判定，不能替模型做top-k或選來源。舊recall欄位注入應extra=forbid拒絕。",
+    "同一新recall模型對各requirement明確輸出grain_requirement_ids（必填list），另對metric明確grain_binding=linked/independent/unspecified。linked必須非空且僅精確引用本次kind=grain的IDs；independent/unspecified為[]，不得用相近grain自由文字作等價判斷。驗證唯一/存在/kind/非自我，模型仍負哪些grain適用的語意。不同metric可連不同明示grain，也可在同題有明示row grain時真正獨立（例如全域scalar上下文），不一律綁root；unspecified不能冒稱已證明適用grain。sidecar保留binding與refs，正規化舊RecallResult時不得無聲丟失。本診斷題三個metric應linked店商品責任，但此為自然語意門檻，不硬編碼ID或靠字串分類；若模型誤填independent，必判自然FAIL，不能宣稱結構validator已證語意。",
+    "新增managed coverage wire版本，保留動態具名必填槽位與全層duplicate JSON key拒絕。status/mappings/contract_path仍由模型決定；用結構化gaps取代自由missing_requirements文句：每gap有aspect（mapping/grain/scope/population/evidence）及本次requirement refs，不可有自由來源事實。scope gap只能指自己的scope_ids且該View非supported；grain gap只指明示grain依賴且非supported；population gap只指population責任；mapping/evidence gap須指當前責任且與可用映射一致。partial必須保留合法部分並給出未完成責任，supported必須gaps=[]。不要提供任意字串reason作逃生門。程式依ref/requirement quote/grain/population及已驗證status渲染具體「契約未證明……」缺口，不可改寫為「來源僅含……」，不得把沒有支持證據偷換成已證明不存在。",
+    "在新adapter重用舊materialize/validate之前加入grain依賴一致性：metric若binding=linked且supported，該同View所有明示grain_requirement_ids也必須supported；不滿足拒絕，不自動降partial或補key。模型須自己選partial並保留金額部分映射及grain gap。binding=independent不被另一無關grain限制，unspecified不可冒稱已證明粒度。固定月份的可縮約維度由模型在grain映射與filter契約證明；不可僅因來源多月份便一律拒，也不以NL grain字串相似當合法證據。檢查只證明明示關聯一致性；錯宣independent/漏語意依賴仍由自然gate判FAIL。",
+    "新增managed selection schema，保持模型自行產生完整typed draft，不使用task.request抽取答案。PlanningTask的filters/metrics/conditional_metrics/attributes/metadata_collections/group_by/output_grain/depends_on/unbound_inputs/request及required_columns等全部required；IntegrationPlan的anchor_task/output_grain/edges/preparation/missing_data_policy/notes與edge mode/preserve_task等也全部required。ready分支integration必須非null；nonready允許顯式null但必須空可執行選擇/assignments/tasks並列原因。可用嚴格local模型/union，不能只改送出的JSON Schema但parser仍接受省略。空[]/{}是明確選擇、仍須由原guard驗足責任；不得自動填已遺漏的值。所有新原生JSON解析共用全層duplicate/NaN拒絕。",
+    "把assignment/exclusion自由reason替換為可核對refs。assignment仍由模型指定requirement/view/task，理由由這些選擇與supported mapping/role/scope/grain證據render。exclusion由模型選未supported requirement refs或明確redundant selected-view refs；驗證前者確為該候選非supported，後者是selected且有對應已支持責任，不能只給空通用理由。render完整相關狀態/缺口/契約原文，不能新增only-sales/退貨排除或額外status欄位必要性。轉回原SelectionResult後跑原finish_selection。保留模型對來源、任務、全部typed欄位、anchor/preparation/edge/grain/no-zero的決策責任。",
+    "更新managed版本/fingerprint，凍結新modules/prompts/schema/tests及當次grain/gap/ref結構。逐request保存原始/parsed/normalized/refs/error。source-freeze含所有新依賴；dry-run不得建provider。完整fake至prepared與各類首錯/replay通過，再執行238既有必要回歸加新增有辨識力測試。第5輪0POST。",
+    "第6輪固定新版本單一預定自然樣本，自新requirements-only recall開始、七候選各一次mapping、一次selection（最多9正常POST），配置不變且全部走loopctl request。首provider/parse/contract錯即停；即使結構全過，也逐項審查全部原文責任、grain links、gaps、理由及draft剩餘自然文字，任一語意錯都FAIL交fresh研究。不能把strict-schema成功當語意成功。"
+  ],
+  "focused_gates": {
+    "replay": [
+      "原9raw在原snapshot精確重現完整FAIL；新wire不得接受舊raw當新版本自然結果；hash與分數不變。"
+    ],
+    "recall": [
+      "任意ID/Unicode、1與多需求、不同catalog順序/改名契約仍列全部候選且理由原文精確；summary含不支持事實也只能逐字引用，不加推論。",
+      "真metadata與背景、日期filter、sales同scope與inventory不繼承scope；兩metric分別連不同明示grain且合法來源可支持。另有同題row-grain存在、scalar metric明示independent的控制，不能被全域grain拒絕。精確ID參照；linked空refs、未知/錯kind/重複refs、independent卻有refs拒絕。",
+      "測試沒有要求stock_status輸出/篩選的完整庫存來源：缺status欄位仍能通過本題；明確要求顯示status的另一需求則需真attribute mapping，不可刪。"
+    ],
+    "coverage": [
+      "從map04失敗建最小新wire反例：order_amount sum合法、兩filter supported但商品grain unsupported；metric supported必拒，模型提供partial+grain gap則合法且不能被selection assignment選用。不是修改原raw或算自然PASS。",
+      "改名欄位/不同grain linked反例仍拒，order級要求+order_amount sum可supported；同題另一無關root grain不影響真正independent scalar或連自己grain的metric。補測固定月份可縮約合法grain，不能只依grain自由文字判同異。誤將本題商品metric宣independent須在自然語意審查FAIL；不偽稱通用validator可自動識別此NL錯誤。",
+      "monthly channel unsupported不能被metric borrowed支持；monthly population未證明缺口只能說未證明完整庫存，不能輸出only-sales、退貨等自由斷言；明示排除的synthetic summary原文可被精確保存。",
+      "gaps錯ref/錯aspect/指向supported scope或非依賴grain/空partial/有mapping卻聲稱無可用mapping皆拒；來源facts不可覆寫。",
+      "全層duplicate keys/NaN/缺額外槽位/假column或path/錯role/錯aggregation/日期與通路值/空supported原負例保留。"
+    ],
+    "selection": [
+      "第4輪typed省略反例在schema邊界拒；各欄位逐一省略、ready integration null、nested edge/preparation缺值均拒並保存raw停止，不執行後續。",
+      "完整typed但filters=[]/metrics={}/metadata=[]，若有該責任仍由原finish_selection拒；只在task.request提條件/sum/日期不得PASS。",
+      "完整typed真值與fake prepared正例；inner丟母體、錯鍵/grain、未先彙總、錯anchor/補零/借sales日期到inventory/metadata當group_by之原反例保留。",
+      "exclusion缺口ref必對應該View；redundant ref必是已選且可核對能力，不能憑另一View支持借能力；錯ref/extra自由reason拒。"
+    ],
+    "runner": [
+      "原始/parsed/normalized/ref/error完整保存；首錯無後續calls、無repair/隱藏retry、replay所有工件/來源fingerprint一致。",
+      "完整fake9節點/2prepared及失敗prefix replay、dry-run0網路；managed invoke仍僅loopctl、stream=false、num_predict=-1、timeout=None。"
+    ],
+    "regression": [
+      "沿用loop-worker-slots/handoff.json verification.command之238既有相關集，加入新managed wire與runner測試；不可刪/弱化既有tests或只跑新增自證測試。"
+    ]
+  },
+  "natural_gate": [
+    "原題8種語意責任允許合理拆合，不硬編碼ID/項數；純促銷補貨用途背景不變；snapshot_date是metadata，非任意日期filter或額外根grain。",
+    "所有新grain refs語意正確，全部7View完整逐項審查，特別order_summary金額不得因可sum而完整支持商品粒度；monthly不得捏造channel或only-sales，customer不得多要求status欄位。",
+    "來源population原文逐字一致；gaps/refs/selection理由及所有剩餘task.request、description、notes等完整核對，程式render或未選來源不豁免語意驗收。",
+    "新自然ready及prepared實際包含inventory store/product anchor、stock_qty sum與snapshot_date metadata；sales_detail同task月份/online/discount_amount與net_sales sum、先以store/product彙總再left、不補零。若不同方案需真實等價契約證據，不能換問題答案。",
+    "成功或失敗同版raw replay精確一致，freeze不變；首語意錯精確記pointer/契約，整份FAIL，不以最末guard或selected結果掩蓋。"
+  ],
+  "parent_return": [
+    "第5輪evidence_bound_managed_contract PASS只解離線子節點；第6輪自然結果不論PASS/FAIL後，依controller先fresh audit覆蓋完整第4–6輪與本方案效果（若提早三連敗亦須提前審核）。",
+    "新自然子項PASS後返回既有natural_slots_three_stage做自身同版全語意及完整raw至prepared replay；明示舊第4輪仍FAIL，不能改舊raw或溯及翻案。",
+    "再返回natural_qwen_three_stage自身驗收，之後three_stage_integration跑必要回歸與歷史hash/Gate核對，最後root逐條核對LOOP1–4。每父節點各自保存證據，不由children自動PASS，父層工作亦計輪並依每3輪fresh audit。",
+    "根節點通過後必派新的fresh-context最終verifier，核對原失敗、修正正反例、自然全部語意、祖先整合、回歸/歷史保留；ACCEPT前不可宣告完成。"
+  ],
+  "resources": {
+    "research_model_POSTs": 0,
+    "offline_round5_model_POSTs": 0,
+    "natural_round6_planned_samples": 1,
+    "natural_round6_normal_POSTs_max": 9,
+    "cloud": 0,
+    "used_at_research": {
+      "rounds": 4,
+      "local_POSTs": 15,
+      "retries": 0
+    },
+    "authorization": "使用者已授權本機模型、輪次、tokens、timeout不限；10**30僅controller容量，不重置使用量；每3輪fresh audit。",
+    "configuration": "qwen3.8:27b digest aaee06c39dcf2437cde036998d960e1fc1494b8191be7cc9657d01e509097813；think=true temperature=1 top_p=1 seed=42 num_ctx=32768 num_predict=-1；HTTP及外層timeout=None；僅loopctl request。"
+  },
+  "stop_rejudge": "任何新實作/自然門檻FAIL保存首次與完整前綴，依controller回新研究；成功HTTP錯答不是傳輸retry。若新grain依賴過度拒絕合法不同粒度/固定維度，先保留反例重研究，不能硬套本題規則或放寬root。若Qwen不遵從新wire，也保存真失敗重判，不偷切回原wire。",
+  "pending": [
+    "上述方案所有實作/正反例/回歸/自然效果均PENDING；本研究只讀證據與寫三份必要JSON，未實跑pytest/replay，不冒稱獨立實驗PASS。",
+    "strict schema不保證語意，新增refs可能帶來模型負擔；若自然失敗需以新證據判斷是否改策略，不能無限加欄位掩蓋架構問題。",
+    "grain_binding/refs方案的最大風險是模型誤判適用性或粒度entry本身錯誤；worker必給不同grain、真正獨立scalar及固定維度正例，auditor需檢查沒有由NL相似度偷代等價證明，最終自然審查不得只看linked refs合法。"
+  ],
+  "blocking_ambiguities": [],
+  "task_or_controller_changed": false,
+  "implementation_changed": false,
+  "SQL_DB": 0,
+  "commits": 0,
+  "pushes": 0
+}

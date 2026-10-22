@@ -1,0 +1,24 @@
+[".venv/bin/python", "/home/willy/code/cpea_terms/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-own/replay_frozen.py", "--snapshot", "before", "--contract", "v1", "--run", "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T185423Z-5d276f"]
+{"result": "PASS", "raw_replays": 3, "stopped": {"error_type": "ValueError", "error": "gap aspect contradicts evidence or dependencies: grain"}}
+[".venv/bin/python", "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-bound/replay_frozen.py", "--snapshot", "before"]
+{"result": "PASS", "raw_replays": 9, "stopped": {"error_type": "ValueError", "error": "final grain differs from verified requirement keys"}}
+[".venv/bin/python", "/home/willy/code/cpea_terms/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-own/replay_frozen.py", "--run", "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-own/fake-runs/complete"]
+{"result": "PASS", "raw_replays": 9, "stopped": null}
+[".venv/bin/python", "/home/willy/code/cpea_terms/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-own/replay_frozen.py", "--run", "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-own/fake-runs/provider"]
+{"result": "PASS", "raw_replays": 2, "stopped": {"error_type": "OSError", "error": "offline provider lost"}}
+[".venv/bin/python", "/home/willy/code/cpea_terms/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-own/replay_frozen.py", "--run", "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-own/fake-runs/parse"]
+{"result": "PASS", "raw_replays": 3, "stopped": {"error_type": "JSONDecodeError", "error": "Expecting value: line 1 column 1 (char 0)"}}
+[".venv/bin/python", "/home/willy/code/cpea_terms/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-own/replay_frozen.py", "--run", "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-own/fake-runs/own_gap"]
+{"result": "PASS", "raw_replays": 3, "stopped": {"error_type": "ValueError", "error": "absent mappings/evidence requires own_gap"}}
+[".venv/bin/python", "/home/willy/code/cpea_terms/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-own/replay_frozen.py", "--run", "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-own/fake-runs/dependency"]
+{"result": "PASS", "raw_replays": 4, "stopped": {"error_type": "ValueError", "error": "supported requires same-source grain support"}}
+[".venv/bin/python", "/home/willy/code/cpea_terms/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-own/replay_frozen.py", "--run", "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-own/fake-runs/mapping"]
+{"result": "PASS", "raw_replays": 3, "stopped": {"error_type": "ValueError", "error": "unadmitted mapping column"}}
+[".venv/bin/python", "/home/willy/code/cpea_terms/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-own/replay_frozen.py", "--run", "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-own/fake-runs/typed"]
+{"result": "PASS", "raw_replays": 9, "stopped": {"error_type": "ValidationError", "error": "1 validation error for SelectionWire\ndraft.ready.tasks.0.filters\n  Field required [type=missing, input_value={'task_id': 'stock', 'vie...店商品庫存件數'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing"}}
+[".venv/bin/python", "/home/willy/code/cpea_terms/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-own/replay_frozen.py", "--run", "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-own/fake-runs/null"]
+{"result": "PASS", "raw_replays": 9, "stopped": {"error_type": "ValidationError", "error": "1 validation error for SelectionWire\ndraft.ready.integration\n  Input should be a valid dictionary or instance of RequiredIntegration [type=model_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.14/v/model_type"}}
+[".venv/bin/python", "/home/willy/code/cpea_terms/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-own/replay_frozen.py", "--run", "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-own/fake-runs/duplicate"]
+{"result": "PASS", "raw_replays": 3, "stopped": {"error_type": "ValueError", "error": "duplicate JSON key: own_gap"}}
+[".venv/bin/python", "/home/willy/code/cpea_terms/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-own/replay_frozen.py", "--run", "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-own/fake-runs/old_wire"]
+{"result": "PASS", "raw_replays": 1, "stopped": {"error_type": "ValidationError", "error": "1 validation error for RecallWire\ncandidate_views\n  Extra inputs are not permitted [type=extra_forbidden, input_value=[], input_type=list]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden"}}

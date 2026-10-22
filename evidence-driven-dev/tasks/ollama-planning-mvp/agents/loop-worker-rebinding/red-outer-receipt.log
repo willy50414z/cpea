@@ -1,0 +1,28 @@
+F
+=================================== FAILURES ===================================
+_______ test_outer_receipt_drift_after_raw_cannot_be_overwritten_as_pass _______
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-59/test_outer_receipt_drift_after0')
+
+    def test_outer_receipt_drift_after_raw_cannot_be_overwritten_as_pass(tmp_path):
+        mod = api(); package = mod.load_package(); context = mod.prepare(package, 'COV-ISO-v1-02')
+        folder = tmp_path / 'run'
+        raw = json.dumps(package['oracle']['positive_outputs']['COV-ISO-v1-02'], ensure_ascii=False)
+        def drift(*args):
+            path = mod.receipt_path(folder); receipt = base.read_json(path)
+            receipt['version'] = 'forged'
+            base.write_json(path, receipt)
+            return AIMessage(content=raw)
+        outer = mod.record_sample(folder, context, drift)
+>       assert outer['status'] == 'FAIL', 'outer receipt drift was silently overwritten'
+E       AssertionError: outer receipt drift was silently overwritten
+E       assert 'PASS' == 'FAIL'
+E         
+E         - FAIL
+E         + PASS
+
+tests/diagnostics/test_managed_node_diagnostics_rebound.py:183: AssertionError
+=========================== short test summary info ============================
+FAILED tests/diagnostics/test_managed_node_diagnostics_rebound.py::test_outer_receipt_drift_after_raw_cannot_be_overwritten_as_pass
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 67 deselected in 5.80s

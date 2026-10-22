@@ -1,0 +1,25 @@
+{
+  "objects": [
+    {
+      "path": "",
+      "keys": [
+        "entries"
+      ]
+    },
+    {
+      "path": "/entries",
+      "keys": [
+        "x"
+      ]
+    }
+  ],
+  "object_key_sequences_in_parse_order": [
+    [
+      "x"
+    ],
+    [
+      "entries"
+    ]
+  ],
+  "note": "raw JSON key sequences include duplicates; strict parser verdict recorded separately"
+}

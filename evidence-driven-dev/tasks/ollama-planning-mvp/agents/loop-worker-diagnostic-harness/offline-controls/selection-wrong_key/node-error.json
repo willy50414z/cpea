@@ -1,0 +1,5 @@
+{
+  "error_type": "ValueError",
+  "error": "preparation cannot erase verified alignment/final grain keys",
+  "raw_saved": true
+}

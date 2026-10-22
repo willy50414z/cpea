@@ -1,0 +1,51 @@
+{
+  "result": "PASS",
+  "ticket": "315d9203195d4080b655f6d8afe659dd",
+  "parent_acceptance_items": 3,
+  "raw_objects": 30,
+  "assignments": 8,
+  "exclusions": 5,
+  "free_text": 5,
+  "prepared": 2,
+  "normalized_evidence_refs": 49,
+  "upstream_rows": 56,
+  "independent_required_and_semantics": true,
+  "full_bindings": "exact",
+  "five_roles": "distinct closed PASS",
+  "body_delta": "僅通用policy suffix",
+  "same_version_replays": {
+    "round18": "PASS",
+    "round15": "FAIL保持"
+  },
+  "full_frozen_evidence": "hash核對並與既有完整結果一致",
+  "controller_check_evidence": "PASS（僅file provenance）",
+  "usage": {
+    "agent_dispatches": 34,
+    "cloud_calls": 0,
+    "local_calls": 23,
+    "model_retries": 0
+  },
+  "POST": 0,
+  "SQL_DB": 0,
+  "task_sha256_unchanged": "b71a4df71376144306e7f57f058395344e5ab011164ff840abd287fc0dddd91a",
+  "source_tests_fixture_Task_control_edits": 0,
+  "commit_push": 0,
+  "scope": {
+    "upstream_injected": true,
+    "selection_node_feasibility": true,
+    "natural_recall": false,
+    "natural_coverage": false,
+    "natural_end_to_end": false,
+    "parent_natural9": false,
+    "root": false,
+    "reliability_estimate": false
+  },
+  "unresolved": [],
+  "all_worker_processes_ended": true,
+  "incidental_verifier_failures": [
+    "verification.log及independent-checks-failure.json：controller review無ticket欄，改依真reviewer/rounds/evidence核對後PASS",
+    "raw-validation-api-failure.log：parse_wire錯傳參數，依原AIMessage/schema介面修正驗證呼叫後PASS",
+    "replay-result-api-failure.log：舊rebound的raw_replays位於inner，依原結果結構核對後PASS；所有歷史FAIL/raw/規則不改"
+  ],
+  "testing_limitations": "本父只做必要raw同版重播與獨立欄位/語意/bindings驗收；採已獨立hash核對的完整frozen證據，未重跑171/大量歷史回歸。新18/舊15同版重播因驗證腳本API欄位錯用各多跑一次，兩次皆0POST且原判定一致。"
+}

@@ -1,0 +1,10 @@
+{
+  "base_git_sha": "bc09c67fc4078501599c37e4cdfecdee40af2ef8",
+  "files": {
+    "evaluations/planning_mvp.py": "972d16210114153db1aee4a05db8354312d34591c90dfa58ea2012582290f711",
+    "evaluations/planning_mvp_runner.py": "33f76a27a31bf87ce2e52bbbb5dbacf789c70e7a4e56fdbd94625e9f01dc47d1",
+    "tests/unit/test_planning_mvp.py": "f51273882b8378009b9e6b0d273d0068d637d2f087514f7f293d97d22c0dc1ac"
+  },
+  "patch_sha256": "85245d35f39c44feec4e53bc49e5deae4b0cf23560e100d3a78fa0edca24c683",
+  "meaning": "保存未採用B1候選與反例測試，保留歷史版本；不是通過Gate的產品變更。"
+}

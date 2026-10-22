@@ -1,0 +1,10 @@
+第23輪固定五首次上游注入coverage：FAIL/PASS/FAIL/FAIL/FAIL。
+33 rows逐項raw presence/status/own_gap/mappings/conditions/paths與完整依賴圖及provider文字已審；可用normalized17rows逐字核對。
+01/03合法有用部分及自身/依賴已有改善，但共四個object證據path失敗；不修path/重送/補normalized。
+04漏會員lifetime_spend sum部分能力，依賴不可完成仍被當整體unsupported；05漏店商品母體store_id且引文不足，status值域列舉非完整母體保證。
+有限AND實際接受0，原legacy findings保留，未放寬任何其他守門。
+五HTTP200、0retry/0cloud/0SQL/DB；累計31local/40dispatch；inflight0。
+5live+5完整frozen replay全部忠實重現；288 frozen files及完整bindings保持。
+8048舊保護檔中8047不變，僅Task由controller記帳更新；check-evidence PASS。
+下一fresh研究需納入使用者docs/next_enhance_advice.md，不改本輪既定試驗。
+未修改source/tests/fixture/Oracle/prompt/manifest/Task/control或舊證據，未commit/push。

@@ -1,0 +1,13 @@
+{
+  "response": "{\"entries\": {\"slot_0/🧾\": {\"status\": \"partial\", \"own_gap\": true, \"mappings\": [{\"column\": \"loc_key\"}]}, \"model_dump\": {\"status\": \"unsupported\", \"own_gap\": true, \"mappings\": [], \"contract_path\": null}, \"月~邊界\": {\"status\": \"supported\", \"own_gap\": false, \"mappings\": [{\"column\": \"day_key\", \"operator\": \">=\", \"value\": \"2032-02-01\"}, {\"column\": \"day_key\", \"operator\": \"<\", \"value\": \"2032-03-01\"}], \"contract_path\": \"/columns/day_key/description\"}, \"scope-channel\": {\"status\": \"unsupported\", \"own_gap\": true, \"mappings\": [], \"contract_path\": null}, \"m_discount\": {\"status\": \"unsupported\", \"own_gap\": true, \"mappings\": [], \"contract_path\": null}, \"amount/net\": {\"status\": \"partial\", \"own_gap\": false, \"mappings\": [{\"column\": \"amount_value\", \"aggregation\": \"sum\", \"conditions\": []}], \"contract_path\": \"/columns/amount_value/description\"}, \"元資料\": {\"status\": \"unsupported\", \"own_gap\": true, \"mappings\": [], \"contract_path\": null}, \"保留/全部\": {\"status\": \"unsupported\", \"own_gap\": true, \"mappings\": [], \"contract_path\": null}}}",
+  "usage": {
+    "input_tokens": 10,
+    "output_tokens": 20,
+    "total_tokens": 30
+  },
+  "response_metadata": {
+    "origin": "OFFLINE_SYNTHETIC_CONTROL",
+    "model_POSTs": 0
+  },
+  "elapsed_seconds": 4.037001053802669e-05
+}

@@ -1,0 +1,13 @@
+round8_raw_presence={"column": true, "role": true, "aggregation": false, "operator": false, "value": false, "conditions": true}
+round8_raw_filter={"column": "sales_date", "role": "filter", "conditions": [{"column": "sales_date", "operator": ">=", "value": "2026-09-01"}, {"column": "sales_date", "operator": "<=", "value": "2026-09-30"}]}
+round8_grain={"contract_path": "/grain/description", "mappings": [], "own_gap": true, "status": "unsupported"}
+source_store_key={"type": "number", "role": "identifier", "description": "門市id"}
+source_grain={"description": "門市×有銷售的日期", "keys": ["sales_date", "store_id"]}
+duplicate_root=REJECT duplicate JSON key: entries
+duplicate_slot=REJECT duplicate JSON key: sales
+duplicate_mapping=REJECT duplicate JSON key: column
+nested_invalid=REJECT invalid JSON constant: NaN
+nested_invalid=REJECT duplicate JSON key: column
+typed_selection_presence={"stock": ["task_id", "view", "required_columns", "filters", "metrics", "conditional_metrics", "attributes", "metadata_collections", "group_by", "output_grain", "depends_on", "unbound_inputs", "request"], "sales": ["task_id", "view", "required_columns", "filters", "metrics", "conditional_metrics", "attributes", "metadata_collections", "group_by", "output_grain", "depends_on", "unbound_inputs", "request"]}
+typed_integration={"anchor_task": "stock", "output_grain": ["store_id", "product_id"], "edges": [{"left_task": "stock", "right_task": "sales", "left_keys": ["store_id", "product_id"], "right_keys": ["store_id", "product_id"], "mode": "left", "cardinality": "one_to_one", "preserve_task": "stock"}], "preparation": [], "missing_data_policy": "保留未匹配資料並標記缺值；契約沒有保證時不可把缺值當成零。", "notes": []}
+all_probes=PASS; diagnostic raw unchanged; zero model POST/SQL/DB

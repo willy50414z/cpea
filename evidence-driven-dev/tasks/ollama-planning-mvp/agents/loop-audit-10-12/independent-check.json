@@ -1,0 +1,163 @@
+{
+  "protected_files": {
+    "count": 3754,
+    "drift": []
+  },
+  "controller_evidence": {
+    "count": 165,
+    "drift": [
+      {
+        "kind": "round11",
+        "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-semantics/review.json",
+        "expected": "aaa8b740cc30fbd1b8670fa45ce5b68280dc073b9ee5e662dc43eeb68b903dfa",
+        "actual": "0200cc20e8aa288580c0a5036d4056a144555a272b6b4afe64da357734118d6b"
+      },
+      {
+        "kind": "round11",
+        "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-semantics/semantic-review.log",
+        "expected": "fa3e4654447f56bef7cffe64220195c4e2817ba20838d2c3b27eaf893a28eaaa",
+        "actual": "3b7c9f3b51626a0634405b8e2c14efbcf730b600138aa60b067e74aceffca4f0"
+      }
+    ]
+  },
+  "bindings": {
+    "v1_live": true,
+    "v2_live": true,
+    "v2_manifest_sha256": "33cf44c84c10842adb60bfb7cbfbb269bac6dfa136c124a43159efabd27d543f",
+    "source_count": 165
+  },
+  "frozen_source_fixtures_lineage": "all exact to present v2 binding, not proof of round11 original; same installed environment; not vendored",
+  "coverage_delta": {
+    "all_rows": 56,
+    "unchanged": 55,
+    "changed": [
+      [
+        "demo_retail.v_customer_value",
+        "MET-003"
+      ]
+    ],
+    "new_row": {
+      "status": "partial",
+      "own_gap": true,
+      "mappings": [
+        {
+          "column": "lifetime_spend",
+          "aggregation": "sum",
+          "conditions": []
+        }
+      ],
+      "contract_path": "/columns/lifetime_spend/description"
+    }
+  },
+  "fixed_inputs": {
+    "selection_precommitted_hashes_tokens_match": true,
+    "selection_tokens": 22011,
+    "coverage_12_files_bytes_unchanged": true,
+    "fixed_samples": [
+      {
+        "id": "SEL-ISO-v1-01",
+        "stage": "selection",
+        "count": 1,
+        "request_case": "kind-isolation-v2:ISOLATION:SEL-ISO-v1-01:node"
+      },
+      {
+        "id": "COV-ISO-v1-01",
+        "stage": "coverage",
+        "count": 1,
+        "request_case": "kind-isolation-v2:ISOLATION:COV-ISO-v1-01:node"
+      },
+      {
+        "id": "COV-ISO-v1-02",
+        "stage": "coverage",
+        "count": 1,
+        "request_case": "kind-isolation-v2:ISOLATION:COV-ISO-v1-02:node"
+      },
+      {
+        "id": "COV-ISO-v1-03",
+        "stage": "coverage",
+        "count": 1,
+        "request_case": "kind-isolation-v2:ISOLATION:COV-ISO-v1-03:node"
+      }
+    ]
+  },
+  "customer_derived_gaps": [
+    {
+      "statement": "契約未證明以下責任完整可用",
+      "aspect": "self",
+      "requirements": [
+        {
+          "requirement_id": "MET-003",
+          "quote": "淨銷售額",
+          "status": "partial"
+        }
+      ]
+    },
+    {
+      "statement": "契約未證明以下責任完整可用",
+      "aspect": "scope",
+      "requirements": [
+        {
+          "requirement_id": "FILT-001",
+          "quote": "2026 年 9 月",
+          "status": "unsupported"
+        },
+        {
+          "requirement_id": "FILT-002",
+          "quote": "線上通路",
+          "status": "unsupported"
+        }
+      ]
+    },
+    {
+      "statement": "契約未證明以下責任完整可用",
+      "aspect": "grain",
+      "requirements": [
+        {
+          "requirement_id": "GRN-001",
+          "quote": "各店各商品",
+          "status": "unsupported"
+        }
+      ]
+    }
+  ],
+  "real_failed_parent_gate": {
+    "refused": true,
+    "error": "review lacks fresh completed author/semantic-parent provenance"
+  },
+  "no_accept_gate": {
+    "refused": true,
+    "error": "execute requires fresh ACCEPT fixture review"
+  },
+  "controller": {
+    "rounds": [
+      {
+        "round": 10,
+        "node": "kind_diagnostic_fixture_harness",
+        "result": "PASS",
+        "producer": "/root/loop_worker_diagnostic_harness"
+      },
+      {
+        "round": 11,
+        "node": "kind_diagnostic_fixture_semantics",
+        "result": "FAIL",
+        "producer": "/root/loop_worker_diagnostic_semantics"
+      },
+      {
+        "round": 12,
+        "node": "kind_diagnostic_fixture_v2_correction",
+        "result": "PASS",
+        "producer": "/root/loop_worker_fixture_v2"
+      }
+    ],
+    "used": {
+      "agent_dispatches": 23,
+      "cloud_calls": 0,
+      "local_calls": 21,
+      "model_retries": 0
+    },
+    "Task_unchanged_by_probe": true,
+    "audit_POSTs": 0,
+    "SQL_DB": 0
+  },
+  "result": "BLOCKED_EVIDENCE_DRIFT"
+}

@@ -1,0 +1,11 @@
+{
+  "ticket": "795af67f6fef4bc198642838b818d584",
+  "result": "FAIL",
+  "evidence": [
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-semantics/review.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-semantics/semantic-review.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-semantics/offline-checks.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-semantics/synthetic-prepared.json"
+  ],
+  "summary": "REJECT：全部8需求與56列真契約逐項核對，customer MET-003漏保留lifetime_spend累計折扣後金額的有用部分能力；以欠交易月份/店商品歸屬作全unsupported理由，違反現prompt先排除scope/grain並保留合法金額分量規則，至少存在未決語意。last_order_date仍無完整月份能力，會員key仍無店商品能力。其餘55列及三樣本等變/輸入邊界/typed synthetic與2prepared已核對；hash精確相符只證版本。整套不得POST，交fresh研究重判固定新版本；不修改Oracle、不代表自然/父層/root通過。0POST/SQL/DB/commit/push，未重跑544。 新Oracle的own_gap仍須fresh研究按來源母體/淨額定義裁定；本review只拒絕完全刪除有用金額mapping，不以離線alternative裁定自身已完整。"
+}

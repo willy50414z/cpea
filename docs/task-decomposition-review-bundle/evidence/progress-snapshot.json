@@ -1,0 +1,255 @@
+{
+  "snapshot_utc": "2026-10-22T02:00:16.292101+00:00",
+  "status": "PLANNING",
+  "checkpoint": {
+    "last_completed": "EDD loop 第22輪 capability_projection_semantics：PASS",
+    "current_action": "EDD loop 22/1000000000000000000000000000000：等待當前節點完成；root → three_stage_integration → natural_qwen_three_stage → natural_slots_three_stage → natural_evidence_bound_three_stage → natural_own_responsibility_three_stage → natural_kind_mapping_three_stage → natural_kind_coverage_isolation → natural_capability_projection_coverage",
+    "next_action": "等待當前節點完成",
+    "required_inputs": [],
+    "unresolved_questions": []
+  },
+  "used": {
+    "agent_dispatches": 40,
+    "cloud_calls": 0,
+    "local_calls": 29,
+    "model_retries": 0
+  },
+  "active": {
+    "round": 23,
+    "node": "natural_capability_projection_coverage",
+    "started_at": "2026-10-22T01:38:51.759123+00:00"
+  },
+  "completed_rounds": [
+    {
+      "round": 1,
+      "node": "contract_and_managed_runner",
+      "result": "PASS",
+      "producer": "/root/loop_worker_contract",
+      "summary": "contract_and_managed_runner完成：舊raw精確重現原ValueError；只強化通用indexed recall背景/metadata邊界；新增controller-only三階段runner及22項離線測試。必要相關回歸193 passed；完整9節點與失敗3節點fake raw離線replay PASS。485項基線hash僅授權prompt變更，兩產品既存變更與所有歷史raw/報告/Gate未變。本輪模型/SQL/DB呼叫皆0，尚未驗證自然Qwen效果。",
+      "finished_at": "2026-10-21T16:10:56.648542+00:00"
+    },
+    {
+      "round": 2,
+      "node": "natural_qwen_three_stage",
+      "result": "FAIL",
+      "producer": "/root/loop_worker_natural_1",
+      "summary": "固定自然單樣本在第5個View daily_sales首錯停止：HTTP 200正常stop，8項requirements卻輸出9項coverage entries，filter_channel_online在entries[1]與[4]重複。共6次本機受控POST、0重試/雲端/SQL/DB。需求拆分與前4View本題責任已核對；sales_detail population額外「不含退貨」缺契約保證，完整差異見semantic-review.log。map-06/07、selection及prepared_requests未執行，不能宣稱端到端通過。失敗前綴6個raw離線replay一致，來源凍結仍匹配；不改來源或答案。交fresh研究，不重送成功HTTP挑分。",
+      "finished_at": "2026-10-21T16:59:15.923598+00:00"
+    },
+    {
+      "round": 3,
+      "node": "coverage_slots_contract",
+      "result": "PASS",
+      "producer": "/root/loop_worker_slots",
+      "summary": "coverage_slots_contract 純離線完成：原6 raw精確重播重複ID失敗；固定required具名槽位、alias安全、全層duplicate JSON key先拒絕；來源facts依唯讀policy取文並重用原嚴格守門。148 focused及238必要相關回歸通過；12個完整/失敗fake、27 raw replay通過。823基線檔僅runner/test兩項授權變更，兩src/舊wire/歷史raw/Gate未改。0模型/雲端/SQL/DB；需第3輪fresh audit後才可新自然測試。",
+      "finished_at": "2026-10-21T17:12:52.243129+00:00"
+    },
+    {
+      "round": 4,
+      "node": "natural_slots_three_stage",
+      "result": "FAIL",
+      "producer": "/root/loop_worker_natural_2",
+      "summary": "新slots候選完整自然9節點（recall+7View+selection）已收集，9本地POST/累計15，0retry/雲端/SQL/DB。前輪duplicate-ID消除，但recall仍捏造monthly通路能力；未選order_summary過度支持商品級net_sales，monthly缺口/selection理由加未保證母體斷言。selection原JSON未填typed filters/metrics/metadata/group_by與integration，僅task.request文字提條件，既有guard於final grain differs from verified requirement keys停止，未產生prepared。顧客View額外缺口措辭保留歧義交fresh研究。9 raw同版離線replay一致，source-freeze及7View來源facts精確相符；未改sources/tests、未自行修改Task/control（僅loopctl正常請求記帳），未修答案或重送。",
+      "finished_at": "2026-10-21T18:31:51.447819+00:00"
+    },
+    {
+      "round": 5,
+      "node": "evidence_bound_managed_contract",
+      "result": "PASS",
+      "producer": "/root/loop_worker_bound",
+      "summary": "第5輪純離線 evidence_bound_managed_contract PASS：requirements-only indexed recall及逐字契約候選理由、精確metric grain依賴、結構化gap/selection refs、真正必填完整typed selection已接共用managed runner；原238相關加69新測試共307通過。原第4輪仍完整FAIL，9raw原版與凍結版精確重現原首錯；新版fake9節點/2prepared與7類首錯同版及凍結版replay一致。0模型POST/SQL/DB。只完成本離線子節點，未宣稱自然或父/root通過。",
+      "finished_at": "2026-10-21T18:53:10.220376+00:00"
+    },
+    {
+      "round": 6,
+      "node": "natural_evidence_bound_three_stage",
+      "result": "FAIL",
+      "producer": "/root/loop_worker_natural_3",
+      "summary": "第6輪固定新candidate自然首次3正常POST後於daily_sales R1 grain gap adapter契約拒絕停止；recall8責任/metric grain links完整、customer_value完成，剩餘5View與selection/prepared未執行。原R1全決策/需求/slot schema/prompt已保存供fresh audit判斷表示能力，不預先歸因模型或設計。同版3raw replay PASS、138檔freeze與兩src不變；0retry/cloud/SQL/DB，不擴測或修法。Main須fresh audit4–6，父/root未驗收。",
+      "finished_at": "2026-10-21T19:19:23.531413+00:00"
+    },
+    {
+      "round": 7,
+      "node": "own_responsibility_managed_contract",
+      "result": "PASS",
+      "producer": "/root/loop_worker_own",
+      "summary": "第7輪純離線 managed-own-responsibility-1 PASS：必填strict own_gap保留自身partial可用key；程式僅依recall與同View statuses完整生成scope/grain缺口，所有kind明示grain refs統一硬依賴，普通月份條件不自動繼承輸出grain。原307相關加新77共384通過；完整fake9節點/2prepared、九種首錯及46raw同版/凍結版重播一致。原第4輪9raw及第6輪3raw保持原FAIL；1164歷史hash與兩src不變。本輪0模型POST/SQL/DB，僅完成離線子節點，未完成自然/父/root驗收。",
+      "finished_at": "2026-10-21T19:44:14.445340+00:00"
+    },
+    {
+      "round": 8,
+      "node": "natural_own_responsibility_three_stage",
+      "result": "FAIL",
+      "producer": "/root/loop_worker_natural_4",
+      "summary": "固定managed-own-responsibility-1單一新自然樣本FAIL：3次本機首次POST/0retry/0cloud。recall與customer通結構；daily_sales首契約錯only metric mapping may aggregate，原filter mapping用conditions而aggregation/operator/value省略（parse後null）。另GRN-001 unsupported空mapping未保留來源store_id合法部分key，依既定partial自然gate記語意缺失，不推測模型動機；交fresh研究。首錯停止，後5View/selection/prepared未驗。live及155-source frozen各3raw replay均精確重現首錯；155 live/frozen、1164歷史工件、candidate fingerprint與兩src hash未變。累計21 local POST/0retry/0cloud；未SQL/DB、改source/tests/Task/control或commit/push。worker未finish，不宣告父層/根驗收。",
+      "finished_at": "2026-10-21T20:09:26.270900+00:00"
+    },
+    {
+      "round": 9,
+      "node": "kind_mapping_managed_contract",
+      "result": "PASS",
+      "producer": "/root/loop_worker_kind",
+      "summary": "第9輪離線managed-kind-mapping-1完成。新kind專用必填/extra-forbid mapping schema及新prompt；僅編譯已驗role、不適用null/[]、grain唯一path，保留所有status/strict own_gap/column/aggregation/predicate/其他path/完整typed決策，原own/evidence/referenced/finish guards原樣重用。共用runner僅新增3行互斥--kind-mapping接線，無舊module/prompts/tests/guards修改。第8輪3raw在未改前live及155-source frozen精確重現原filter.conditions首錯，原遺漏店key語意FAIL維持；不修raw、不展平。RED104預期失敗後首次GREEN104；補schema及guard控制後112新測試，原384原樣加兩檔總496 passed in 55.54s。11份fake（完整9節點2prepared及10類首錯）同版/162-source frozen各51raw一致；原typed庫存anchor、店商品、stock sum/date metadata、sales同task整月online兩sum/先彙總再left/nozero核對。8種預先SEMANTIC_REJECT與2合法無關key/母體unsupported對照明確分開結構接受；parser不冒稱業務完整性oracle。完整source/import/prompts/schema/tests、編譯逐欄比較、fake與snapshots已封存本目錄；1164歷史hash、原第8輪27工件hash、兩src與所有受保護source維持。純離線0POST/SQL/DB，未改Task/controller、未commit/push；同.venv frozen未vendor外部套件。Main下一步finish本handoff後必fresh audit完整7–9，未獲CONTINUE/新研究裁決不可自然POST。自然入口為--kind-mapping --execute --ticket \"$EDD_WORKER_TICKET\"，仍須全新單樣本recall/全7View/完整typed/語意與各父層驗收；本輪不證自然可行、root仍全PENDING。",
+      "finished_at": "2026-10-21T20:26:29.359764+00:00"
+    },
+    {
+      "round": 10,
+      "node": "kind_diagnostic_fixture_harness",
+      "result": "PASS",
+      "producer": "/root/loop_worker_diagnostic_harness",
+      "summary": "第10輪離線kind-isolation-v1 harness完成：新單節點runner重用managed-kind-mapping-1與原ManagedInvoke/finish guards，固定8需求、7View/56-row真契約證據、改名真SchemaCatalog與4個預定樣本；候選及全部舊source不變。focused48通過，原496原樣加新檔共544 passed in 91.02s；31組record/同版與163-source frozen replay一致（29synthetic raw，provider/context首錯無raw）。7種coverage反例原guard ACCEPT但固定machine Oracle拒絕，selection typed/scope/anchor/鍵/補零等負例保留原首錯；自由文字反例如實保留machine接受、獨立語意PENDING邊界。1198保護檔與1164歷史工件無變，兩src/舊raw分數/38Gate保持；本輪0POST/SQL/DB/commit/push，未動Task/control。fixtures及Oracle尚未fresh獨立核准；Main finish後必先下一fresh fixture review，不得直接POST。544後live code/tests/fixtures/manifest無變，只新增本worker必要raw/log/handoff。",
+      "finished_at": "2026-10-21T20:56:21.962270+00:00"
+    },
+    {
+      "round": 11,
+      "node": "kind_diagnostic_fixture_semantics",
+      "result": "FAIL",
+      "producer": "/root/loop_worker_diagnostic_semantics",
+      "summary": "REJECT：全部8需求與56列真契約逐項核對，customer MET-003漏保留lifetime_spend累計折扣後金額的有用部分能力；以欠交易月份/店商品歸屬作全unsupported理由，違反現prompt先排除scope/grain並保留合法金額分量規則，至少存在未決語意。last_order_date仍無完整月份能力，會員key仍無店商品能力。其餘55列及三樣本等變/輸入邊界/typed synthetic與2prepared已核對；hash精確相符只證版本。整套不得POST，交fresh研究重判固定新版本；不修改Oracle、不代表自然/父層/root通過。0POST/SQL/DB/commit/push，未重跑544。",
+      "finished_at": "2026-10-21T21:01:32.642132+00:00"
+    },
+    {
+      "round": 12,
+      "node": "kind_diagnostic_fixture_v2_correction",
+      "result": "PASS",
+      "producer": "/root/loop_worker_fixture_v2",
+      "summary": "第12輪純離線v2修正完成：customer MET-003唯一能力變更partial/lifetime_spend sum/own_gap=true，會員母體未證完整為self，scope/grain另列，不推論非會員交易存在。其餘55列、3coverage及typed selection不變；selection四hash與22011tokens精確符合研究預固定。薄nested runner直接重用v1 prepare/_body/evaluate/_run、原kind/finish/ManagedInvoke，完整綁新source/test，嚴核真作者child與原semantic parent之不同platform完成PASS provenance。62focused+160指定回歸通過；4正例+11首錯prefix同版/完整165-source frozen replay共15組一致。3754既有保護檔、v1 live bindings/REJECT/兩src無變；本輪0POST/DB/SQL/commit/push且Task/control未改。最後tests後live source/fixtures/manifest未變。fixture語意仍PENDING，Main finish本child後須先fresh audit10–12，再由另一fresh原semantic parent全8需求/56row/typed/free-text重審；本worker不續跑。",
+      "finished_at": "2026-10-21T21:19:20.461451+00:00"
+    },
+    {
+      "round": 13,
+      "node": "kind_diagnostic_evidence_rebinding",
+      "result": "PASS",
+      "producer": "/root/loop_worker_rebinding",
+      "summary": "第13輪僅離線證據rebind完成：唯一新manifest引用原v2 33cf44…root；167-source/full-model/runtime/13份immutable lineage完整綁定，直接重用base prepare/evaluate/record/replay與原kind/finish。inner163-source誠實保留v1 engine；獨立outer receipt在HTTP前、raw保存後重核完整版本/authorization/review/receipt，source或receipt漂移即FAIL，真SIGINT於inner PASS後仍INTERRUPTED且raw保留，不以inner PASS冒充完整PASS。75新focused、原3檔160回歸、歷史第12輪frozen v2 62測試/15replay通過；新四正例＋11首錯同版及完整frozen各15組一致。4237既有保護檔、17舊nodes/Task/control、v1 live bindings、原v2 manifest/fixtures/source/test/frozen/全部舊raw/兩src/38Gate保持，check-evidence真PASS；0POST/SQL/DB/commit/push。真preflight仍因本作者未finish及缺fresh原semantic parent closed PASS而拒絕，屬預期；所有自然效果PENDING。所有程序已結束，FINAL後不再補寫proof。",
+      "finished_at": "2026-10-21T21:48:21.073587+00:00"
+    },
+    {
+      "round": 14,
+      "node": "kind_diagnostic_fixture_semantics",
+      "result": "PASS",
+      "producer": "/root/loop_worker_semantics_rebound",
+      "summary": "ACCEPT：本fresh原semantic parent直接重讀全部真契約，獨立核對8需求索引/role/scope/grain/背景、7View×8共56列status/mapping/own_gap及完整self/scope/grain缺口，非沿用舊55列。customer lifetime_spend sum保留有用累計會員折扣後金額；扣除明示scope/grain後仍未證未限定會員的全銷售完整性，own_gap=true有據，未推論非會員實際交易；最後訂單日期非完整交易月。部分店鍵及月縮約不證庫存母體。三coverage樣本、2032閏年/改名/UnicodeIDs、四body無Oracle/預填來源答案、synthetic全8assignment/5排除/全部typed與2prepared及所有自由文字均核對。新manifest/full167source/13immutablelineage精確一致僅證來源；機器接受的無據全庫存補零文字反例由人工明確REJECT。真兩作者closed PASS且三平台不同，本人open使preflight預期拒絕，待Main真FINAL後finish。只核准固定fixture語意，不代表自然selection/coverage/父9POST或祖先/root通過。0POST/SQL/DB/commit/push，未重跑544，既有fixture/Oracle/code/manifest/Task/control未改。",
+      "finished_at": "2026-10-21T21:56:35.497896+00:00"
+    },
+    {
+      "round": 15,
+      "node": "natural_kind_selection_isolation",
+      "result": "FAIL",
+      "producer": "/root/loop_worker_selection_isolation",
+      "summary": "SEL-ISO-v1-01唯一首次managed local POST已完成HTTP200；原節點FAIL保留，唯一machine finding是missing_data_policy非固定literal。模型選的EMPTY_POLICY為prompt允許且明禁補零；其餘全部typed/30物件required presence/8assignment/5exclusion/free text及兩prepared核對ACCEPT，平面一對一未匹配形狀需fresh研究，不能由literal直接斷言補零錯。同版及完整frozen replay均驗證通過並重現原FAIL。upstream_injected=true，不替代自然recall/coverage/父層或完整端到端。22localPOST/0retry/0cloud，無SQL/DB。所有程序已退出，證據已凍結。",
+      "finished_at": "2026-10-21T22:34:45.354003+00:00"
+    },
+    {
+      "round": 16,
+      "node": "kind_policy_shape_contract",
+      "result": "PASS",
+      "producer": "/root/loop_worker_policy_shape",
+      "summary": "第16輪0POST離線contract完成：單一nested薄candidate/test及selection-only manifest，重用全部原kind/typed/finish與managed engines。default/NULL flat均可過；EMPTY必須逐child同task/keys的typed nest，aggregate不代nest，zero/inner及其他首錯仍拒。唯一prompt差異為通用policy適用條件suffix；schema/三literal/上游8需求56列不變。原第15輪同版及原frozen仍精確FAIL，新predicate以同原raw另判shape FAIL，不翻案。68新focused+103指定原回歸通過；4selection控制同版及live原raw frozen重播，完整fake9正例和shape/typed首錯live/frozen共27raw與162輸出artifact一致；正例2prepared。5203既有檔與舊167source逐bytes不變，rebound bindings保持、v2 live仍歷史拒絕。真作者open/未fresh reviewer時HTTP拒絕，來源/授權漂移及中斷不PASS；完整proof均最後封存、全部程序結束。0SQL/DB/commit/push，未改Task/control或舊expectedhash。僅本node PASS；待Main核FINAL/hash及finish後由真fresh不同worker核新語意，後續自然selection/coverage3/自然9POST/各父層與final仍PENDING。",
+      "finished_at": "2026-10-21T23:03:58.349046+00:00"
+    },
+    {
+      "round": 17,
+      "node": "kind_policy_shape_semantics",
+      "result": "PASS",
+      "producer": "/root/loop_worker_policy_semantics",
+      "summary": "第17輪fresh policy/shape semantics ACCEPT。獨立讀真需求、原15raw、三literal、typed shape／新suffix／原guards與checker，裁定default/NULL flat保缺值等價、EMPTY必每child真nest且task/keys吻合，aggregate或metadata不代表nested；未決語意為空，nested memory正例非原題自然成功。新review精確綁新manifest／完整sources/import/schema/model/runtime/suffix/messages/body/upstream及原fixture/review/lineage。原8需求56列與三coverage bytes及第14輪完整review bindings相同，原fixture真三方closed PASS保持；新author第16輪真closed PASS與本17輪reviewer distinct。本review仍open，實查preflight及真execute在network前拒絕，Main必須等本真FINAL核hash/check-evidence與finish PASS才容後續一次selection。31 focused passed、15獨立memory控制、5 live與3 frozen replay符合預期；5203保護檔、668作者索引及167舊sources保持，舊rebound bindings相等、v2 live仍預期拒絕。原15輪同版/frozen精確FAIL與新shape負例不翻案。一次驗證腳本wrong_keys預期分類過窄已保留失敗log並依原guard先REJECT校正，未改實作。0POST/SQL/DB/retry/cloud，local累計22；未改source/test/fixture/舊證據/Task/control、無commit/push。僅本離線child PASS，父/root及自然效果保持PENDING。",
+      "finished_at": "2026-10-21T23:10:33.993529+00:00"
+    },
+    {
+      "round": 18,
+      "node": "natural_kind_policy_shape_selection",
+      "result": "PASS",
+      "producer": "/root/loop_worker_policy_natural",
+      "summary": "第18輪唯一預固定kind-policy-shape-1:ISOLATION:SEL-ISO-v1-01:node首次managed local POST HTTP200完成，0retry/0cloud；累計23local。真三方fixture及新作者/審者closed PASS/fullbindings/endpoint/model/runtime先核。原raw30objects全部required、8assignment、5exclusion及全部自由文字獨立ACCEPT：inventory店商品anchor/stock sum/盤點日期metadata；sales同task九月整月online兩sum、先店商品彙總後LEFT一對一/正確雙鍵/保庫存/不補零，第一flat政策與無nest真shape一致；2prepared逐欄一致，無defaults/repair/canonicalize。legacy及新predicate/outer均PASS；新module同版及完整frozen各1raw重播PASS且結果逐值相等，5203舊檔/668作者證據/167source不變，完整bindings及freeze保持。原第15FAIL不翻案。upstream_injected=true，僅selection child可行，非自然recall/coverage/父或root通過。全部程序結束且proof最後封存，未SQL/DB/source/tests/fixture/Task/control/commit/push。Main等真FINAL核hash/check-evidence後finish；必fresh16–18audit及原parent自身0POST整合，再原coverage3/全新自然9POST/全部祖先/final驗收。",
+      "finished_at": "2026-10-21T23:51:44.930788+00:00"
+    },
+    {
+      "round": 19,
+      "node": "natural_kind_selection_isolation",
+      "result": "PASS",
+      "producer": "/root/loop_worker_selection_parent",
+      "summary": "第19輪原natural_kind_selection_isolation父層自身0POST整合PASS。獨立核原3項acceptance、原raw30objects全部required且raw=parsed=wire、8assignment/5排除/49理由refs/56列引文/5自由文字與2prepared；inventory店商品anchor/stock sum/盤點日metadata，sales同task九月整月online雙sum，先店商品聚合後LEFT一對一雙鍵保全庫存、flat缺值不補零。新舊body僅通用policy suffix有實質差異、無Oracle/typed答案；五方distinct closedPASS及fullbindings精確。新18同版PASS、原15同版及frozen仍FAIL，原flat EMPTY未修答翻案；完整frozen證據hash獨立吻合，5203保護檔/668作者/284自然/29原15證據無漂移，check-evidence PASS。明確只upstream_injected selection可行性，不代表自然recall/coverage/9POST/祖先/root/歷史Gate或可靠率；原coverage3及自然父9POST/祖先/final仍待驗。0SQL/DB/cloud/retry，累計23local不變；不改source/tests/fixture/Task/control、不commit/push。驗證腳本介面誤用已保留失敗log並按原API重核，無未決問題。proof已完成封存，Main待真FINAL核SHA後finish。",
+      "finished_at": "2026-10-22T00:06:22.645888+00:00"
+    },
+    {
+      "round": 20,
+      "node": "natural_kind_coverage_isolation",
+      "result": "FAIL",
+      "producer": "/root/loop_worker_coverage_isolation",
+      "summary": "固定COV-ISO-v1-01/02/03依原rebound manifest與第14輪fresh ACCEPT依序各一次首次local POST，均HTTP200且正常stop；結果FAIL/PASS/FAIL，任一錯即整節點FAIL。01與03均將有用店鍵store_id/loc_key清空並標unsupported，應partial/own=true；01 revenue/sum雖保留，卻將依賴缺online及完整grain誤列own_gap=true，應false。17列raw required presence/status/own_gap/mappings/path、完整derived gaps與所有raw/normalized字串及完整provider thinking均獨立核對；derived依模型原決策機械正確，但錯誤grain status傳入下游、01多self缺口，並未repair。02會員無關identifier對照正確；兩個獨立月份雙AND均正確，03完整2032閏年二月29日、任意Unicode ID與改名欄來源均保留，未以sales件數代庫存或店鍵證庫存母體。\n03金額partial/own=false正確；其conditions重列與獨立月份filter完全相同的整月雙predicate，原checker因expected []另記machine FAIL。獨立語意裁定為prompt明允且idempotent的冗餘AND，不新增能力或改scope，保留此literal分歧交fresh研究，不改Oracle/checker/raw/舊分數；不影響漏loc_key的實質FAIL。\n三raw同版及完整239檔frozen replay各自忠實重現原FAIL/PASS/FAIL，replay_verification全PASS；5919舊保護檔、完整live rebound bindings/manifest/review與external runtime hashes均保持，loopctl check-evidence實跑exit0。另保留一次/tmp cwd導致凍結相對prompt缺檔的離線啟動錯誤及再次診斷stderr，改frozen cwd後成功；最終檢查誤比格式化body file SHA與controller canonical SHA的assert已釐清，三canonical均吻合，未改任何body/expected hash，皆0POST。\n本輪3 local POST/0retry/0cloud，actual token input9712/output8571；全局26 local/0retry/0cloud，19 closed rounds保持待Main finish第20輪。upstream_injected=true，僅recall/單View隔離；0SQL/DB，未直接改source/tests/fixtures/Oracle/Task/control或commit/push，不新增Markdown。完整自然父9POST、所有祖先整合及fresh final verifier仍PENDING，交fresh研究重判部分能力與自身責任可行性。",
+      "finished_at": "2026-10-22T00:50:27.976096+00:00"
+    },
+    {
+      "round": 21,
+      "node": "capability_projection_contract",
+      "result": "PASS",
+      "producer": "/root/loop_worker_capability_contract",
+      "summary": "第21輪純離線能力投影契約完成：無損cards、有限同View scope AND及五固定lineage樣本；原kind全部守門與policy委派保留。81新focused＋228直接回歸實跑PASS，287檔完整finalfreeze及190工件live/frozen一致，fake9兩prepared及scope/typed首錯保持；source/receipt/interrupt/provenance/HTTP身分拒絕通過。6389舊檔不變、Task/control本worker不變，原20 FAIL/PASS/FAIL與15FAIL/18PASS保留。0POST/SQL/DB/commit/push。自然效果PENDING；Main核真FINAL/hash後finish，先fresh audit19–21再fresh delta核准，未准不得POST。",
+      "finished_at": "2026-10-22T01:20:27.783958+00:00"
+    },
+    {
+      "round": 22,
+      "node": "capability_projection_semantics",
+      "result": "PASS",
+      "producer": "/root/loop_worker_capability_semantics",
+      "summary": "fresh capability_projection_semantics離線delta ACCEPT。原需求/20原raw/真View與原56rows逐項核對，無損cards不洩漏答案或刪會員自身限制；daily有用店鍵與依賴-only own=false、customer無關鍵與會員自身own=true、inventory完整責任均保持。有限AND只允同View明示已完整驗證supported filter完整群聯集；17真context、16多群子集合、7動態kind、15授權控制與1focused實跑通過。五輸入與16新增引用rows、全部新舊bindings及作者28閉合證據吻合；精確review在真open審者下於settings/model/network前拒絕，未造Task。原20仍FAIL/PASS/FAIL，原15FAIL/18PASS、38×2 Gate未過及root PENDING不變。0POST/SQL/DB，僅新本審核JSON/log；未重跑作者81/228或全frozen，核其正式log及audit。全部程序/proof已結束；Main核真FINAL及hash/check-evidence、finish本輪closed PASS後才准固定五自然coverage。",
+      "finished_at": "2026-10-22T01:38:51.582441+00:00"
+    }
+  ],
+  "requests_after_round21": [
+    {
+      "id": "b2bca399f95d43b5a93e901ba5e237ce",
+      "round": 23,
+      "case_key": "kind-capability-projection-1:ISOLATION:COV-ISO-v1-01:node",
+      "status": "ok",
+      "retry_number": 0,
+      "reserved_at": "2026-10-22T01:42:00.363250+00:00"
+    },
+    {
+      "id": "b5a046baca9c498fbd4502d607f9a98c",
+      "round": 23,
+      "case_key": "kind-capability-projection-1:ISOLATION:COV-ISO-v1-02:node",
+      "status": "ok",
+      "retry_number": 0,
+      "reserved_at": "2026-10-22T01:48:17.040901+00:00"
+    },
+    {
+      "id": "92d30768809a449ca1e21a0638e7827e",
+      "round": 23,
+      "case_key": "kind-capability-projection-1:ISOLATION:COV-ISO-v1-03:node",
+      "status": "inflight",
+      "retry_number": 0,
+      "reserved_at": "2026-10-22T01:52:58.638271+00:00"
+    }
+  ],
+  "completed_natural_samples_after_round21": [
+    {
+      "round": 23,
+      "id": "COV-ISO-v1-01",
+      "folder": "payload/evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-01",
+      "outer": "payload/evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-01.outer.json",
+      "request_id": "b2bca399f95d43b5a93e901ba5e237ce",
+      "http_status": 200,
+      "status": "FAIL",
+      "stopped": {
+        "error_type": "ValueError",
+        "error": "contract reference must point to nonempty text: /columns/sales_date"
+      },
+      "finished_at": "2026-10-22T01:47:41.746244+00:00",
+      "round_closed": false
+    },
+    {
+      "round": 23,
+      "id": "COV-ISO-v1-02",
+      "folder": "payload/evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-02",
+      "outer": "payload/evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-02.outer.json",
+      "request_id": "b5a046baca9c498fbd4502d607f9a98c",
+      "http_status": 200,
+      "status": "PASS",
+      "stopped": null,
+      "finished_at": "2026-10-22T01:52:23.550682+00:00",
+      "round_closed": false
+    }
+  ]
+}

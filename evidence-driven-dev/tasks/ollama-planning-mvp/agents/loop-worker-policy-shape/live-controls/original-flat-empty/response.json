@@ -1,0 +1,157 @@
+{
+  "status": "ready",
+  "code": null,
+  "draft": {
+    "status": "ready",
+    "strategy": "multi_view",
+    "tasks": [
+      {
+        "task_id": "inventory-observation",
+        "view": "demo_retail.v_inventory_status",
+        "required_columns": [
+          "store_id",
+          "product_id",
+          "stock_qty",
+          "snapshot_date"
+        ],
+        "filters": [],
+        "metrics": {
+          "stock_qty": "sum"
+        },
+        "conditional_metrics": [],
+        "attributes": [],
+        "metadata_collections": [
+          "snapshot_date"
+        ],
+        "group_by": [
+          "store_id",
+          "product_id"
+        ],
+        "output_grain": [
+          "store_id",
+          "product_id"
+        ],
+        "depends_on": [],
+        "unbound_inputs": [],
+        "request": "取得各店各商品盤點庫存件數並收集盤點日期，保留全部庫存商品"
+      },
+      {
+        "task_id": "period-sales",
+        "view": "demo_retail.v_sales_detail",
+        "required_columns": [
+          "store_id",
+          "product_id",
+          "discount_amount",
+          "net_sales",
+          "order_date",
+          "sales_channel"
+        ],
+        "filters": [
+          {
+            "column": "order_date",
+            "operator": ">=",
+            "value": "2026-09-01"
+          },
+          {
+            "column": "order_date",
+            "operator": "<",
+            "value": "2026-10-01"
+          },
+          {
+            "column": "sales_channel",
+            "operator": "=",
+            "value": "online"
+          }
+        ],
+        "metrics": {
+          "discount_amount": "sum",
+          "net_sales": "sum"
+        },
+        "conditional_metrics": [],
+        "attributes": [],
+        "metadata_collections": [],
+        "group_by": [
+          "store_id",
+          "product_id"
+        ],
+        "output_grain": [
+          "store_id",
+          "product_id"
+        ],
+        "depends_on": [],
+        "unbound_inputs": [],
+        "request": "彙總2026年9月線上通路各店商品折扣及淨銷售額"
+      }
+    ],
+    "integration": {
+      "anchor_task": "inventory-observation",
+      "output_grain": [
+        "store_id",
+        "product_id"
+      ],
+      "edges": [
+        {
+          "left_task": "inventory-observation",
+          "right_task": "period-sales",
+          "left_keys": [
+            "store_id",
+            "product_id"
+          ],
+          "right_keys": [
+            "store_id",
+            "product_id"
+          ],
+          "mode": "left",
+          "cardinality": "one_to_one",
+          "preserve_task": "inventory-observation"
+        }
+      ],
+      "preparation": [
+        {
+          "task_id": "inventory-observation",
+          "kind": "aggregate",
+          "keys": [
+            "store_id",
+            "product_id"
+          ],
+          "description": "依店商品彙總庫存件數並收集不同盤點日期"
+        },
+        {
+          "task_id": "period-sales",
+          "kind": "aggregate",
+          "keys": [
+            "store_id",
+            "product_id"
+          ],
+          "description": "先篩選月份與通路，再依店商品彙總折扣及淨額"
+        }
+      ],
+      "missing_data_policy": "保留未匹配母體；未匹配子集合為空集合，不製造零值元素或將數值缺值補零。",
+      "notes": []
+    },
+    "clarifications": [],
+    "unsupported_reasons": []
+  },
+  "prepared_requests": [
+    {
+      "task_id": "inventory-observation",
+      "view": "demo_retail.v_inventory_status",
+      "payload": {
+        "request": "只執行以下單一 View 資料查詢；保留全部條件及指定輸出粒度，不作跨來源整合或業務決策。 metadata_collections 為每組完整 DISTINCT 值集合，不增加分組，不任取單值。日期集合僅記錄資料時間，不代表日期一致；混合日期不得宣稱同日總額，仍須遵守契約的跨日禁止加總限制。\n{\"view\": \"demo_retail.v_inventory_status\", \"required_columns\": [\"store_id\", \"product_id\", \"stock_qty\", \"snapshot_date\"], \"filters\": [], \"metrics\": {\"stock_qty\": \"sum\"}, \"conditional_metrics\": [], \"metadata_collections\": [\"snapshot_date\"], \"attributes\": [], \"group_by\": [\"store_id\", \"product_id\"], \"output_grain\": [\"store_id\", \"product_id\"]}",
+        "history": []
+      }
+    },
+    {
+      "task_id": "period-sales",
+      "view": "demo_retail.v_sales_detail",
+      "payload": {
+        "request": "只執行以下單一 View 資料查詢；保留全部條件及指定輸出粒度，不作跨來源整合或業務決策。\n{\"view\": \"demo_retail.v_sales_detail\", \"required_columns\": [\"store_id\", \"product_id\", \"discount_amount\", \"net_sales\", \"order_date\", \"sales_channel\"], \"filters\": [{\"column\": \"order_date\", \"operator\": \">=\", \"value\": \"2026-09-01\"}, {\"column\": \"order_date\", \"operator\": \"<\", \"value\": \"2026-10-01\"}, {\"column\": \"sales_channel\", \"operator\": \"=\", \"value\": \"online\"}], \"metrics\": {\"discount_amount\": \"sum\", \"net_sales\": \"sum\"}, \"conditional_metrics\": [], \"metadata_collections\": [], \"attributes\": [], \"group_by\": [\"store_id\", \"product_id\"], \"output_grain\": [\"store_id\", \"product_id\"]}",
+        "history": []
+      }
+    }
+  ],
+  "validation_errors": [],
+  "contract_fingerprint": "e5e5a5a2cc29a1be93dc4d6875aba8c47a35ed48c019c7d6838a45831d0441dc",
+  "context_tokens": 0,
+  "token_counter": ""
+}

@@ -1,0 +1,1088 @@
+{
+  "revision": "bc09c67fc4078501599c37e4cdfecdee40af2ef8",
+  "local_run": "projects/retail/artifacts/task_decomposition/20261020T061325410052Z-bc09c67f-ollama-0e14eb",
+  "local_summary": {
+    "planned": 30,
+    "completed": 30,
+    "failed": 0,
+    "ready_responses": 11,
+    "skipped": 0,
+    "automated_pass_count": 7,
+    "canonical_views_match_count": 29,
+    "views_and_columns_match_count": 21,
+    "equivalent_tasks_match_count": 19,
+    "all_runs_pass_cases": 7,
+    "consistent_failure_cases": 23,
+    "semantic_review_required": true
+  },
+  "cloud_summaries": {
+    "gpt-6-sol": {
+      "planned": 30,
+      "completed": 30,
+      "failed": 0,
+      "ready_responses": 30,
+      "skipped": 0,
+      "automated_pass_count": 30,
+      "canonical_views_match_count": 30,
+      "views_and_columns_match_count": 30,
+      "equivalent_tasks_match_count": 30,
+      "all_runs_pass_cases": 30,
+      "consistent_failure_cases": 0,
+      "semantic_review_required": true
+    },
+    "DeepSeek-V4.1-Flash": {
+      "planned": 30,
+      "completed": 30,
+      "failed": 0,
+      "ready_responses": 22,
+      "skipped": 0,
+      "automated_pass_count": 18,
+      "canonical_views_match_count": 27,
+      "views_and_columns_match_count": 26,
+      "equivalent_tasks_match_count": 23,
+      "all_runs_pass_cases": 18,
+      "consistent_failure_cases": 12,
+      "semantic_review_required": true
+    }
+  },
+  "usage": {
+    "input_tokens": 212729,
+    "output_tokens": 96001
+  },
+  "failures": [
+    {
+      "case_id": "cross-view-01",
+      "status": "completed",
+      "response_code": "invalid_plan",
+      "score": {
+        "status_match": false,
+        "canonical_views_match": true,
+        "views_and_columns_match": true,
+        "equivalent_tasks_match": true,
+        "payload_ready": false,
+        "integration_keys_match": false,
+        "automated_pass": false,
+        "semantic_review_required": true,
+        "task_scores": [
+          {
+            "view": true,
+            "columns": true,
+            "column_recall": 1.0,
+            "column_precision": 0.5,
+            "filters": true,
+            "metrics": true,
+            "conditional_metrics": true,
+            "metadata": true,
+            "grain": true
+          },
+          {
+            "view": true,
+            "columns": true,
+            "column_recall": 1.0,
+            "column_precision": 1.0,
+            "filters": true,
+            "metrics": true,
+            "conditional_metrics": true,
+            "metadata": true,
+            "grain": true
+          }
+        ],
+        "strategy_match": true
+      },
+      "validation_errors": [
+        "task_sales_sep2026: used column absent from required_columns"
+      ]
+    },
+    {
+      "case_id": "cross-view-03",
+      "status": "completed",
+      "response_code": "invalid_plan",
+      "score": {
+        "status_match": false,
+        "canonical_views_match": true,
+        "views_and_columns_match": true,
+        "equivalent_tasks_match": true,
+        "payload_ready": false,
+        "integration_keys_match": false,
+        "automated_pass": false,
+        "semantic_review_required": true,
+        "task_scores": [
+          {
+            "view": true,
+            "columns": true,
+            "column_recall": 1.0,
+            "column_precision": 0.36363636363636365,
+            "filters": true,
+            "metrics": true,
+            "conditional_metrics": true,
+            "metadata": true,
+            "grain": true
+          },
+          {
+            "view": true,
+            "columns": true,
+            "column_recall": 1.0,
+            "column_precision": 0.6,
+            "filters": true,
+            "metrics": true,
+            "conditional_metrics": true,
+            "metadata": true,
+            "grain": true
+          }
+        ],
+        "strategy_match": true
+      },
+      "validation_errors": [
+        "inv_current: aggregate grain differs from group_by",
+        "sales_sep_2026: used column absent from required_columns"
+      ]
+    },
+    {
+      "case_id": "cross-view-04",
+      "status": "completed",
+      "response_code": null,
+      "score": {
+        "status_match": true,
+        "canonical_views_match": true,
+        "views_and_columns_match": true,
+        "equivalent_tasks_match": false,
+        "payload_ready": true,
+        "integration_keys_match": true,
+        "automated_pass": false,
+        "semantic_review_required": true,
+        "task_scores": [
+          {
+            "view": true,
+            "columns": true,
+            "column_recall": 1.0,
+            "column_precision": 0.3076923076923077,
+            "filters": true,
+            "metrics": true,
+            "conditional_metrics": true,
+            "metadata": true,
+            "grain": true
+          },
+          {
+            "view": true,
+            "columns": true,
+            "column_recall": 1.0,
+            "column_precision": 1.0,
+            "filters": true,
+            "metrics": false,
+            "conditional_metrics": true,
+            "metadata": true,
+            "grain": false
+          }
+        ],
+        "strategy_match": true
+      },
+      "validation_errors": []
+    },
+    {
+      "case_id": "cross-view-05",
+      "status": "completed",
+      "response_code": "invalid_plan",
+      "score": {
+        "status_match": false,
+        "canonical_views_match": true,
+        "views_and_columns_match": true,
+        "equivalent_tasks_match": true,
+        "payload_ready": false,
+        "integration_keys_match": false,
+        "automated_pass": false,
+        "semantic_review_required": true,
+        "task_scores": [
+          {
+            "view": true,
+            "columns": true,
+            "column_recall": 1.0,
+            "column_precision": 1.0,
+            "filters": true,
+            "metrics": true,
+            "conditional_metrics": true,
+            "metadata": true,
+            "grain": true
+          },
+          {
+            "view": true,
+            "columns": true,
+            "column_recall": 1.0,
+            "column_precision": 1.0,
+            "filters": true,
+            "metrics": true,
+            "conditional_metrics": true,
+            "metadata": true,
+            "grain": true
+          }
+        ],
+        "strategy_match": true
+      },
+      "validation_errors": [
+        "sales_category: used column absent from required_columns"
+      ]
+    },
+    {
+      "case_id": "cross-view-06",
+      "status": "completed",
+      "response_code": null,
+      "score": {
+        "status_match": true,
+        "canonical_views_match": false,
+        "views_and_columns_match": false,
+        "equivalent_tasks_match": false,
+        "payload_ready": true,
+        "integration_keys_match": false,
+        "automated_pass": false,
+        "semantic_review_required": true,
+        "task_scores": [
+          {
+            "view": true,
+            "columns": true,
+            "column_recall": 1.0,
+            "column_precision": 1.0,
+            "filters": true,
+            "metrics": true,
+            "conditional_metrics": true,
+            "metadata": true,
+            "grain": true
+          },
+          {
+            "view": false,
+            "columns": true,
+            "column_recall": 1.0,
+            "column_precision": 1.0,
+            "filters": true,
+            "metrics": true,
+            "conditional_metrics": true,
+            "metadata": true,
+            "grain": true
+          }
+        ],
+        "strategy_match": true
+      },
+      "validation_errors": []
+    },
+    {
+      "case_id": "cross-view-09",
+      "status": "completed",
+      "response_code": "invalid_plan",
+      "score": {
+        "status_match": false,
+        "canonical_views_match": true,
+        "views_and_columns_match": true,
+        "equivalent_tasks_match": true,
+        "payload_ready": false,
+        "integration_keys_match": false,
+        "automated_pass": false,
+        "semantic_review_required": true,
+        "task_scores": [
+          {
+            "view": true,
+            "columns": true,
+            "column_recall": 1.0,
+            "column_precision": 0.4444444444444444,
+            "filters": true,
+            "metrics": true,
+            "conditional_metrics": true,
+            "metadata": true,
+            "grain": true
+          },
+          {
+            "view": true,
+            "columns": true,
+            "column_recall": 1.0,
+            "column_precision": 1.0,
+            "filters": true,
+            "metrics": true,
+            "conditional_metrics": true,
+            "metadata": true,
+            "grain": true
+          }
+        ],
+        "strategy_match": true
+      },
+      "validation_errors": [
+        "final output grain must come from the anchor grain",
+        "finer output grain requires an explicit preparation"
+      ]
+    },
+    {
+      "case_id": "cross-view-11",
+      "status": "completed",
+      "response_code": "invalid_plan",
+      "score": {
+        "status_match": false,
+        "canonical_views_match": true,
+        "views_and_columns_match": true,
+        "equivalent_tasks_match": true,
+        "payload_ready": false,
+        "integration_keys_match": false,
+        "automated_pass": false,
+        "semantic_review_required": true,
+        "task_scores": [
+          {
+            "view": true,
+            "columns": true,
+            "column_recall": 1.0,
+            "column_precision": 0.3333333333333333,
+            "filters": true,
+            "metrics": true,
+            "conditional_metrics": true,
+            "metadata": true,
+            "grain": true
+          },
+          {
+            "view": true,
+            "columns": true,
+            "column_recall": 1.0,
+            "column_precision": 0.8333333333333334,
+            "filters": true,
+            "metrics": true,
+            "conditional_metrics": true,
+            "metadata": true,
+            "grain": true
+          }
+        ],
+        "strategy_match": true
+      },
+      "validation_errors": [
+        "inv_stock: aggregate grain differs from group_by"
+      ]
+    },
+    {
+      "case_id": "cross-view-13",
+      "status": "completed",
+      "response_code": "invalid_plan",
+      "score": {
+        "status_match": false,
+        "canonical_views_match": true,
+        "views_and_columns_match": false,
+        "equivalent_tasks_match": false,
+        "payload_ready": false,
+        "integration_keys_match": false,
+        "automated_pass": false,
+        "semantic_review_required": true,
+        "task_scores": [
+          {
+            "view": true,
+            "columns": true,
+            "column_recall": 1.0,
+            "column_precision": 0.75,
+            "filters": true,
+            "metrics": true,
+            "conditional_metrics": true,
+            "metadata": true,
+            "grain": true
+          },
+          {
+            "view": true,
+            "columns": false,
+            "column_recall": 0.6666666666666666,
+            "column_precision": 0.4,
+            "filters": true,
+            "metrics": true,
+            "conditional_metrics": true,
+            "metadata": true,
+            "grain": true
+          }
+        ],
+        "strategy_match": true
+      },
+      "validation_errors": [
+        "kpi_sep: used column absent from required_columns"
+      ]
+    },
+    {
+      "case_id": "cross-view-14",
+      "status": "completed",
+      "response_code": "invalid_plan",
+      "score": {
+        "status_match": false,
+        "canonical_views_match": true,
+        "views_and_columns_match": false,
+        "equivalent_tasks_match": false,
+        "payload_ready": false,
+        "integration_keys_match": false,
+        "automated_pass": false,
+        "semantic_review_required": true,
+        "task_scores": [
+          {
+            "view": true,
+            "columns": true,
+            "column_recall": 1.0,
+            "column_precision": 0.8,
+            "filters": true,
+            "metrics": true,
+            "conditional_metrics": true,
+            "metadata": true,
+            "grain": true
+          },
+          {
+            "view": true,
+            "columns": false,
+            "column_recall": 0.6666666666666666,
+            "column_precision": 0.6666666666666666,
+            "filters": true,
+            "metrics": true,
+            "conditional_metrics": true,
+            "metadata": true,
+            "grain": true
+          }
+        ],
+        "strategy_match": true
+      },
+      "validation_errors": [
+        "task_kpi: used column absent from required_columns"
+      ]
+    },
+    {
+      "case_id": "cross-view-15",
+      "status": "completed",
+      "response_code": null,
+      "score": {
+        "status_match": true,
+        "canonical_views_match": true,
+        "views_and_columns_match": true,
+        "equivalent_tasks_match": true,
+        "payload_ready": true,
+        "integration_keys_match": false,
+        "automated_pass": false,
+        "semantic_review_required": true,
+        "task_scores": [
+          {
+            "view": true,
+            "columns": true,
+            "column_recall": 1.0,
+            "column_precision": 0.75,
+            "filters": true,
+            "metrics": true,
+            "conditional_metrics": true,
+            "metadata": true,
+            "grain": true
+          },
+          {
+            "view": true,
+            "columns": true,
+            "column_recall": 1.0,
+            "column_precision": 0.8,
+            "filters": true,
+            "metrics": true,
+            "conditional_metrics": true,
+            "metadata": true,
+            "grain": true
+          }
+        ],
+        "strategy_match": true
+      },
+      "validation_errors": []
+    },
+    {
+      "case_id": "cross-view-16",
+      "status": "completed",
+      "response_code": "invalid_plan",
+      "score": {
+        "status_match": false,
+        "canonical_views_match": true,
+        "views_and_columns_match": true,
+        "equivalent_tasks_match": true,
+        "payload_ready": false,
+        "integration_keys_match": false,
+        "automated_pass": false,
+        "semantic_review_required": true,
+        "task_scores": [
+          {
+            "view": true,
+            "columns": true,
+            "column_recall": 1.0,
+            "column_precision": 1.0,
+            "filters": true,
+            "metrics": true,
+            "conditional_metrics": true,
+            "metadata": true,
+            "grain": true
+          },
+          {
+            "view": true,
+            "columns": true,
+            "column_recall": 1.0,
+            "column_precision": 0.8,
+            "filters": true,
+            "metrics": true,
+            "conditional_metrics": true,
+            "metadata": true,
+            "grain": true
+          }
+        ],
+        "strategy_match": true
+      },
+      "validation_errors": [
+        "final output grain must come from the anchor grain",
+        "finer output grain requires an explicit preparation"
+      ]
+    },
+    {
+      "case_id": "cross-view-18",
+      "status": "completed",
+      "response_code": "invalid_plan",
+      "score": {
+        "status_match": false,
+        "canonical_views_match": true,
+        "views_and_columns_match": false,
+        "equivalent_tasks_match": false,
+        "payload_ready": false,
+        "integration_keys_match": false,
+        "automated_pass": false,
+        "semantic_review_required": true,
+        "task_scores": [
+          {
+            "view": true,
+            "columns": true,
+            "column_recall": 1.0,
+            "column_precision": 1.0,
+            "filters": true,
+            "metrics": true,
+            "conditional_metrics": true,
+            "metadata": true,
+            "grain": true
+          },
+          {
+            "view": true,
+            "columns": false,
+            "column_recall": 0.6666666666666666,
+            "column_precision": 1.0,
+            "filters": true,
+            "metrics": true,
+            "conditional_metrics": true,
+            "metadata": true,
+            "grain": true
+          }
+        ],
+        "strategy_match": true
+      },
+      "validation_errors": [
+        "task_orders: used column absent from required_columns"
+      ]
+    },
+    {
+      "case_id": "cross-view-19",
+      "status": "completed",
+      "response_code": "invalid_plan",
+      "score": {
+        "status_match": false,
+        "canonical_views_match": true,
+        "views_and_columns_match": true,
+        "equivalent_tasks_match": true,
+        "payload_ready": false,
+        "integration_keys_match": false,
+        "automated_pass": false,
+        "semantic_review_required": true,
+        "task_scores": [
+          {
+            "view": true,
+            "columns": true,
+            "column_recall": 1.0,
+            "column_precision": 1.0,
+            "filters": true,
+            "metrics": true,
+            "conditional_metrics": true,
+            "metadata": true,
+            "grain": true
+          },
+          {
+            "view": true,
+            "columns": true,
+            "column_recall": 1.0,
+            "column_precision": 1.0,
+            "filters": true,
+            "metrics": true,
+            "conditional_metrics": true,
+            "metadata": true,
+            "grain": true
+          }
+        ],
+        "strategy_match": true
+      },
+      "validation_errors": [
+        "sep2026_store_orders: used column absent from required_columns",
+        "final output grain must come from the anchor grain",
+        "finer output grain requires an explicit preparation"
+      ]
+    },
+    {
+      "case_id": "cross-view-20",
+      "status": "completed",
+      "response_code": "invalid_plan",
+      "score": {
+        "status_match": false,
+        "canonical_views_match": true,
+        "views_and_columns_match": true,
+        "equivalent_tasks_match": true,
+        "payload_ready": false,
+        "integration_keys_match": false,
+        "automated_pass": false,
+        "semantic_review_required": true,
+        "task_scores": [
+          {
+            "view": true,
+            "columns": true,
+            "column_recall": 1.0,
+            "column_precision": 1.0,
+            "filters": true,
+            "metrics": true,
+            "conditional_metrics": true,
+            "metadata": true,
+            "grain": true
+          },
+          {
+            "view": true,
+            "columns": true,
+            "column_recall": 1.0,
+            "column_precision": 0.6,
+            "filters": true,
+            "metrics": true,
+            "conditional_metrics": true,
+            "metadata": true,
+            "grain": true
+          }
+        ],
+        "strategy_match": true
+      },
+      "validation_errors": [
+        "final output grain must come from the anchor grain",
+        "finer output grain requires an explicit preparation"
+      ]
+    },
+    {
+      "case_id": "cross-view-21",
+      "status": "completed",
+      "response_code": "invalid_plan",
+      "score": {
+        "status_match": false,
+        "canonical_views_match": true,
+        "views_and_columns_match": true,
+        "equivalent_tasks_match": true,
+        "payload_ready": false,
+        "integration_keys_match": false,
+        "automated_pass": false,
+        "semantic_review_required": true,
+        "task_scores": [
+          {
+            "view": true,
+            "columns": true,
+            "column_recall": 1.0,
+            "column_precision": 1.0,
+            "filters": true,
+            "metrics": true,
+            "conditional_metrics": true,
+            "metadata": true,
+            "grain": true
+          },
+          {
+            "view": true,
+            "columns": true,
+            "column_recall": 1.0,
+            "column_precision": 0.75,
+            "filters": true,
+            "metrics": true,
+            "conditional_metrics": true,
+            "metadata": true,
+            "grain": true
+          }
+        ],
+        "strategy_match": true
+      },
+      "validation_errors": [
+        "final output grain must come from the anchor grain",
+        "finer output grain requires an explicit preparation"
+      ]
+    },
+    {
+      "case_id": "cross-view-22",
+      "status": "completed",
+      "response_code": "invalid_plan",
+      "score": {
+        "status_match": false,
+        "canonical_views_match": true,
+        "views_and_columns_match": false,
+        "equivalent_tasks_match": false,
+        "payload_ready": false,
+        "integration_keys_match": false,
+        "automated_pass": false,
+        "semantic_review_required": true,
+        "task_scores": [
+          {
+            "view": true,
+            "columns": false,
+            "column_recall": 0.6666666666666666,
+            "column_precision": 0.6666666666666666,
+            "filters": true,
+            "metrics": true,
+            "conditional_metrics": true,
+            "metadata": true,
+            "grain": true
+          },
+          {
+            "view": true,
+            "columns": false,
+            "column_recall": 0.75,
+            "column_precision": 0.75,
+            "filters": true,
+            "metrics": true,
+            "conditional_metrics": true,
+            "metadata": true,
+            "grain": true
+          }
+        ],
+        "strategy_match": true
+      },
+      "validation_errors": [
+        "customer_base: used column absent from required_columns",
+        "product_purchases: used column absent from required_columns",
+        "final output grain must come from the anchor grain",
+        "finer output grain requires an explicit preparation"
+      ]
+    },
+    {
+      "case_id": "cross-view-23",
+      "status": "completed",
+      "response_code": "invalid_plan",
+      "score": {
+        "status_match": false,
+        "canonical_views_match": true,
+        "views_and_columns_match": false,
+        "equivalent_tasks_match": false,
+        "payload_ready": false,
+        "integration_keys_match": false,
+        "automated_pass": false,
+        "semantic_review_required": true,
+        "task_scores": [
+          {
+            "view": true,
+            "columns": false,
+            "column_recall": 0.6666666666666666,
+            "column_precision": 0.6666666666666666,
+            "filters": true,
+            "metrics": true,
+            "conditional_metrics": true,
+            "metadata": true,
+            "grain": true
+          },
+          {
+            "view": true,
+            "columns": true,
+            "column_recall": 1.0,
+            "column_precision": 0.8,
+            "filters": true,
+            "metrics": false,
+            "conditional_metrics": true,
+            "metadata": true,
+            "grain": true
+          }
+        ],
+        "strategy_match": true
+      },
+      "validation_errors": [
+        "task_kpi: used column absent from required_columns",
+        "task_product: used column absent from required_columns",
+        "final output grain must come from the anchor grain",
+        "finer output grain requires an explicit preparation"
+      ]
+    },
+    {
+      "case_id": "cross-view-24",
+      "status": "completed",
+      "response_code": "invalid_plan",
+      "score": {
+        "status_match": false,
+        "canonical_views_match": true,
+        "views_and_columns_match": true,
+        "equivalent_tasks_match": true,
+        "payload_ready": false,
+        "integration_keys_match": false,
+        "automated_pass": false,
+        "semantic_review_required": true,
+        "task_scores": [
+          {
+            "view": true,
+            "columns": true,
+            "column_recall": 1.0,
+            "column_precision": 0.8,
+            "filters": true,
+            "metrics": true,
+            "conditional_metrics": true,
+            "metadata": true,
+            "grain": true
+          },
+          {
+            "view": true,
+            "columns": true,
+            "column_recall": 1.0,
+            "column_precision": 1.0,
+            "filters": true,
+            "metrics": true,
+            "conditional_metrics": true,
+            "metadata": true,
+            "grain": true
+          }
+        ],
+        "strategy_match": true
+      },
+      "validation_errors": [
+        "final output grain must come from the anchor grain",
+        "finer output grain requires an explicit preparation"
+      ]
+    },
+    {
+      "case_id": "cross-view-25",
+      "status": "completed",
+      "response_code": "invalid_plan",
+      "score": {
+        "status_match": false,
+        "canonical_views_match": true,
+        "views_and_columns_match": true,
+        "equivalent_tasks_match": true,
+        "payload_ready": false,
+        "integration_keys_match": false,
+        "automated_pass": false,
+        "semantic_review_required": true,
+        "task_scores": [
+          {
+            "view": true,
+            "columns": true,
+            "column_recall": 1.0,
+            "column_precision": 0.75,
+            "filters": true,
+            "metrics": true,
+            "conditional_metrics": true,
+            "metadata": true,
+            "grain": true
+          },
+          {
+            "view": true,
+            "columns": true,
+            "column_recall": 1.0,
+            "column_precision": 1.0,
+            "filters": true,
+            "metrics": true,
+            "conditional_metrics": true,
+            "metadata": true,
+            "grain": true
+          }
+        ],
+        "strategy_match": true
+      },
+      "validation_errors": [
+        "final output grain must come from the anchor grain",
+        "finer output grain requires an explicit preparation"
+      ]
+    },
+    {
+      "case_id": "cross-view-26",
+      "status": "completed",
+      "response_code": "invalid_plan",
+      "score": {
+        "status_match": false,
+        "canonical_views_match": true,
+        "views_and_columns_match": false,
+        "equivalent_tasks_match": false,
+        "payload_ready": false,
+        "integration_keys_match": false,
+        "automated_pass": false,
+        "semantic_review_required": true,
+        "task_scores": [
+          {
+            "view": true,
+            "columns": true,
+            "column_recall": 1.0,
+            "column_precision": 0.75,
+            "filters": true,
+            "metrics": true,
+            "conditional_metrics": true,
+            "metadata": true,
+            "grain": true
+          },
+          {
+            "view": true,
+            "columns": false,
+            "column_recall": 0.8,
+            "column_precision": 1.0,
+            "filters": false,
+            "metrics": true,
+            "conditional_metrics": true,
+            "metadata": true,
+            "grain": true
+          }
+        ],
+        "strategy_match": true
+      },
+      "validation_errors": [
+        "orders_by_channel_2026_09: used column absent from required_columns"
+      ]
+    },
+    {
+      "case_id": "cross-view-27",
+      "status": "completed",
+      "response_code": "invalid_plan",
+      "score": {
+        "status_match": false,
+        "canonical_views_match": true,
+        "views_and_columns_match": false,
+        "equivalent_tasks_match": false,
+        "payload_ready": false,
+        "integration_keys_match": false,
+        "automated_pass": false,
+        "semantic_review_required": true,
+        "task_scores": [
+          {
+            "view": true,
+            "columns": false,
+            "column_recall": 0.6666666666666666,
+            "column_precision": 0.6666666666666666,
+            "filters": true,
+            "metrics": true,
+            "conditional_metrics": true,
+            "metadata": true,
+            "grain": true
+          },
+          {
+            "view": true,
+            "columns": false,
+            "column_recall": 0.5,
+            "column_precision": 1.0,
+            "filters": true,
+            "metrics": true,
+            "conditional_metrics": true,
+            "metadata": true,
+            "grain": true
+          }
+        ],
+        "strategy_match": true
+      },
+      "validation_errors": [
+        "task_kpi: used column absent from required_columns",
+        "task_vip_online: used column absent from required_columns"
+      ]
+    },
+    {
+      "case_id": "cross-view-28",
+      "status": "completed",
+      "response_code": "invalid_plan",
+      "score": {
+        "status_match": false,
+        "canonical_views_match": true,
+        "views_and_columns_match": false,
+        "equivalent_tasks_match": false,
+        "payload_ready": false,
+        "integration_keys_match": false,
+        "automated_pass": false,
+        "semantic_review_required": true,
+        "task_scores": [
+          {
+            "view": true,
+            "columns": true,
+            "column_recall": 1.0,
+            "column_precision": 1.0,
+            "filters": true,
+            "metrics": true,
+            "conditional_metrics": true,
+            "metadata": true,
+            "grain": true
+          },
+          {
+            "view": true,
+            "columns": true,
+            "column_recall": 1.0,
+            "column_precision": 1.0,
+            "filters": true,
+            "metrics": false,
+            "conditional_metrics": true,
+            "metadata": true,
+            "grain": true
+          },
+          {
+            "view": true,
+            "columns": false,
+            "column_recall": 0.6666666666666666,
+            "column_precision": 1.0,
+            "filters": true,
+            "metrics": true,
+            "conditional_metrics": true,
+            "metadata": true,
+            "grain": true
+          }
+        ],
+        "strategy_match": true
+      },
+      "validation_errors": [
+        "task_product_profit: used column absent from required_columns",
+        "task_store_target: used column absent from required_columns"
+      ]
+    },
+    {
+      "case_id": "cross-view-30",
+      "status": "completed",
+      "response_code": null,
+      "score": {
+        "status_match": true,
+        "canonical_views_match": true,
+        "views_and_columns_match": true,
+        "equivalent_tasks_match": false,
+        "payload_ready": true,
+        "integration_keys_match": true,
+        "automated_pass": false,
+        "semantic_review_required": true,
+        "task_scores": [
+          {
+            "view": true,
+            "columns": true,
+            "column_recall": 1.0,
+            "column_precision": 0.75,
+            "filters": true,
+            "metrics": true,
+            "conditional_metrics": true,
+            "metadata": true,
+            "grain": true
+          },
+          {
+            "view": true,
+            "columns": true,
+            "column_recall": 1.0,
+            "column_precision": 0.75,
+            "filters": true,
+            "metrics": false,
+            "conditional_metrics": true,
+            "metadata": true,
+            "grain": true
+          }
+        ],
+        "strategy_match": true
+      },
+      "validation_errors": []
+    }
+  ],
+  "local_settings": {
+    "model": "qwen3.8:27b",
+    "model_digest": "aaee06c39dcf2437cde036998d960e1fc1494b8191be7cc9657d01e509097813",
+    "reasoning": true,
+    "temperature": 0.0,
+    "top_p": 1.0,
+    "seed": 42,
+    "context_window": 16384,
+    "timeout_seconds": 900.0,
+    "response_format": "native Ollama JSON schema"
+  },
+  "calls_sha256": "600151b7d69d5941714604020441392e8b880e659091bb9b545fd0e14efee582",
+  "results_sha256": "d0eff2e60e5fa977ebaf52630f973c32c803966a4001eac55c4d51944bf4db0c",
+  "field_score_with_missing_used_columns": [
+    "cross-view-01",
+    "cross-view-03",
+    "cross-view-05",
+    "cross-view-19"
+  ],
+  "caveats": [
+    "本地temperature0/reasoningTrue/native schema；Azure temperature1/JSON object，不能視為所有生成設定相同。",
+    "本地共用服務排程、timeout900秒；不是隔離延遲實驗。",
+    "自動分數既有等價表示漏判與額外聚合等語意盲點；日期alias寬鬆規則也可能放過真正漏列的filter欄位，相關案例另列，不回寫原分。request就緒不是全面語意安全。",
+    "只驗規劃與request準備，未生成或執行SQL；本輪同agent用獨立既有oracle及fresh subprocess重播驗收。"
+  ]
+}

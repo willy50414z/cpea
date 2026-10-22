@@ -1,0 +1,6 @@
+{"case": "complete", "result": {"result": "PASS", "raw_replays": 9, "stopped": null}}
+{"case": "duplicate_slot", "result": {"result": "PASS", "raw_replays": 2, "stopped": {"error_type": "ValueError", "error": "duplicate JSON key: stock"}}}
+{"case": "nested_duplicate", "result": {"result": "PASS", "raw_replays": 2, "stopped": {"error_type": "ValueError", "error": "duplicate JSON key: column"}}}
+{"case": "source_override", "result": {"result": "PASS", "raw_replays": 2, "stopped": {"error_type": "ValidationError", "error": "1 validation error for SlottedViewCoverage_2a54ca7c75f4b773\npopulation\n  Extra inputs are not permitted [type=extra_forbidden, input_value='不含退貨', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden"}}}
+{"case": "contract", "result": {"result": "PASS", "raw_replays": 3, "stopped": {"error_type": "ValueError", "error": "invalid contract reference path /not-real"}}}
+{"current_freeze_matches": true}

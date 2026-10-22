@@ -1,0 +1,20 @@
+[
+  {
+    "sample": "COV-CAP-v1-04",
+    "mode": "live",
+    "exit_code": 1,
+    "verification": "PASS",
+    "result": "FAIL",
+    "raw_replays": 1,
+    "provider_calls": 0
+  },
+  {
+    "sample": "COV-CAP-v1-04",
+    "mode": "frozen",
+    "exit_code": 1,
+    "verification": "PASS",
+    "result": "FAIL",
+    "raw_replays": 1,
+    "provider_calls": 0
+  }
+]

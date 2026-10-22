@@ -1,0 +1,22 @@
+{
+  "response": "{\"entries\":{\"FILT-001\":{\"contract_path\":\"/columns/sales_date/description\",\"mappings\":[{\"column\":\"sales_date\",\"operator\":\">=\",\"value\":\"2026-09-01\"},{\"column\":\"sales_date\",\"operator\":\"<\",\"value\":\"2026-10-01\"}],\"own_gap\":false,\"status\":\"supported\"},\"FILT-002\":{\"contract_path\":null,\"mappings\":[],\"own_gap\":true,\"status\":\"unsupported\"},\"GRN-001\":{\"mappings\":[],\"own_gap\":true,\"status\":\"unsupported\"},\"MET-001\":{\"contract_path\":null,\"mappings\":[],\"own_gap\":true,\"status\":\"unsupported\"},\"MET-002\":{\"contract_path\":null,\"mappings\":[],\"own_gap\":true,\"status\":\"unsupported\"},\"MET-003\":{\"contract_path\":\"/columns/revenue/description\",\"mappings\":[{\"aggregation\":\"sum\",\"column\":\"revenue\",\"conditions\":[]}],\"own_gap\":true,\"status\":\"partial\"},\"META-001\":{\"contract_path\":null,\"mappings\":[],\"own_gap\":true,\"status\":\"unsupported\"},\"POP-001\":{\"contract_path\":null,\"mappings\":[],\"own_gap\":true,\"status\":\"unsupported\"}}}",
+  "usage": {
+    "input_tokens": 3886,
+    "output_tokens": 4998,
+    "total_tokens": 8884
+  },
+  "response_metadata": {
+    "model": "qwen3.8:27b",
+    "created_at": "2026-10-22T00:19:43.454557068Z",
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 710471784867,
+    "load_duration": 55651723001,
+    "prompt_eval_count": 3886,
+    "prompt_eval_cached_count": 0,
+    "prompt_eval_duration": 18536113000,
+    "eval_count": 4998,
+    "eval_duration": 636258337000
+  },
+  "elapsed_seconds": 711.6379422309983
+}

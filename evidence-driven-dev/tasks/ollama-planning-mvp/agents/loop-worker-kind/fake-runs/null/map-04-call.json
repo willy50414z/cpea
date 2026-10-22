@@ -1,0 +1,10 @@
+{
+  "response": "{\"entries\": {\"stock\": {\"status\": \"unsupported\", \"mappings\": [], \"contract_path\": \"/grain/description\", \"own_gap\": true}, \"sales\": {\"status\": \"unsupported\", \"mappings\": [], \"contract_path\": \"/grain/description\", \"own_gap\": true}, \"channel\": {\"status\": \"unsupported\", \"mappings\": [], \"contract_path\": \"/grain/description\", \"own_gap\": true}, \"period\": {\"status\": \"unsupported\", \"mappings\": [], \"contract_path\": \"/grain/description\", \"own_gap\": true}, \"population\": {\"status\": \"unsupported\", \"mappings\": [], \"contract_path\": \"/grain/description\", \"own_gap\": true}, \"grain\": {\"status\": \"unsupported\", \"mappings\": [], \"own_gap\": true}, \"R_PURPOSE\": {\"status\": \"unsupported\", \"mappings\": [], \"contract_path\": null, \"own_gap\": true}}}",
+  "usage": {
+    "input_tokens": 10,
+    "output_tokens": 20,
+    "total_tokens": 30
+  },
+  "response_metadata": {},
+  "elapsed_seconds": 0.005318205003277399
+}

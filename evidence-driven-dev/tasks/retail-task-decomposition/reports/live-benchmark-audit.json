@@ -1,0 +1,58 @@
+{
+  "source_run": "/home/willy/code/cpea_terms/projects/retail/artifacts/task_decomposition/20261020T050127310992Z-bf626def-7b4f2d",
+  "regraded_run": "/home/willy/code/cpea_terms/projects/retail/artifacts/task_decomposition/20261020T050127310992Z-bf626def-7b4f2d-regrade-018243",
+  "source_revision": "bf626def01a2bb9bf5e623b28075222688a9bcfe",
+  "grading_revision": "b16d117a2a3168a61c3cdbd889fc0e54ab079625",
+  "model": "gpt-6-sol",
+  "real_model_calls": 90,
+  "additional_model_calls": 0,
+  "parsable_responses": 90,
+  "usage": {
+    "reported_calls": 90,
+    "input_tokens": 657600,
+    "output_tokens": 112053,
+    "total_tokens": 769653
+  },
+  "summary": {
+    "planned": 90,
+    "completed": 90,
+    "failed": 0,
+    "ready_responses": 88,
+    "skipped": 0,
+    "automated_pass_count": 60,
+    "canonical_views_match_count": 90,
+    "views_and_columns_match_count": 79,
+    "equivalent_tasks_match_count": 61,
+    "all_runs_pass_cases": 18,
+    "consistent_failure_cases": 7,
+    "semantic_review_required": true
+  },
+  "stable_cases": {
+    "views": 30,
+    "views_and_columns": 24,
+    "payload_ready": 28
+  },
+  "missing_required_columns": {
+    "cross-view-12": [
+      "snapshot_date"
+    ],
+    "cross-view-14": [
+      "snapshot_date"
+    ],
+    "cross-view-26": [
+      "order_date"
+    ],
+    "cross-view-30": [
+      "snapshot_date"
+    ],
+    "cross-view-05": [
+      "snapshot_date"
+    ],
+    "cross-view-06": [
+      "snapshot_date"
+    ]
+  },
+  "changed_status_count": 6,
+  "original_run_unchanged": true,
+  "prompt_schema_contract_oracle_isolation": "PASS"
+}

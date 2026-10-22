@@ -1,0 +1,89 @@
+{
+  "result": "PASS",
+  "controls": [
+    {
+      "case": "true_execute_exact_review_open_reviewer",
+      "rejected": true,
+      "error": "capability review lacks closed provenance"
+    },
+    {
+      "case": "true_execute_without_review",
+      "rejected": true,
+      "error": "execute requires complete fresh capability ACCEPT review"
+    },
+    {
+      "case": "true_execution_guard_current_semantics_worker",
+      "rejected": true,
+      "error": "execute requires active capability worker and approved 19–21 audit"
+    },
+    {
+      "case": "true_preflight_exact_review_open",
+      "rejected": true,
+      "error": "capability review lacks closed provenance"
+    },
+    {
+      "case": "forged_review_manifest_sha256",
+      "rejected": true,
+      "error": "execute requires complete fresh capability ACCEPT review"
+    },
+    {
+      "case": "forged_review_author_ticket",
+      "rejected": true,
+      "error": "execute requires complete fresh capability ACCEPT review"
+    },
+    {
+      "case": "forged_review_ticket",
+      "rejected": true,
+      "error": "execute requires complete fresh capability ACCEPT review"
+    },
+    {
+      "case": "forged_review_reviewer_role",
+      "rejected": true,
+      "error": "execute requires complete fresh capability ACCEPT review"
+    },
+    {
+      "case": "forged_review_bindings",
+      "rejected": true,
+      "error": "execute requires complete fresh capability ACCEPT review"
+    },
+    {
+      "case": "pure_memory_missing_author",
+      "rejected": true,
+      "error": "capability review lacks closed provenance"
+    },
+    {
+      "case": "pure_memory_author_open",
+      "rejected": true,
+      "error": "capability review lacks closed provenance"
+    },
+    {
+      "case": "pure_memory_author_wrong_node",
+      "rejected": true,
+      "error": "capability review lacks closed provenance"
+    },
+    {
+      "case": "pure_memory_author_wrong_round",
+      "rejected": true,
+      "error": "capability review lacks closed provenance"
+    },
+    {
+      "case": "pure_memory_author_wrong_producer",
+      "rejected": true,
+      "error": "capability review lacks closed provenance"
+    },
+    {
+      "case": "pure_memory_author_no_manifest_evidence",
+      "rejected": true,
+      "error": "capability author completion differs"
+    }
+  ],
+  "settings_calls": 0,
+  "model_identity_network_calls": 0,
+  "socket_connect_calls": 0,
+  "distinct_new_author_reviewer_and_all_legacy_platforms": true,
+  "no_synthetic_Task_created": true,
+  "true_controller_unchanged": true,
+  "review_sha256": "c509270ef90e86b4f6c0ee064ae19b218bb2426f6dc8f88a4171496b819d00d7",
+  "POST": 0,
+  "SQL_DB": 0
+}

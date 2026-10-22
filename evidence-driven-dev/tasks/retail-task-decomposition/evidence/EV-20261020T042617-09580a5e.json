@@ -1,0 +1,20 @@
+{
+  "id": "EV-20261020T042617-09580a5e",
+  "kind": "focused",
+  "command": [
+    ".venv/bin/python",
+    "evidence-driven-dev/tasks/retail-task-decomposition/reports/validate_matrix.py"
+  ],
+  "cwd": "/home/willy/code/cpea_terms",
+  "started_at": "2026-10-20T04:26:17+00:00",
+  "finished_at": "2026-10-20T04:26:17+00:00",
+  "exit_code": 0,
+  "revision": "e05db002bbbb9b3bdbc5842d452fdb7d81da19fd",
+  "diff_fingerprint": "762544c9fd0c1ebecd2dd4ddf6c68eac4015b73f3b63e4507de2f33f38ee841b",
+  "post_fingerprint": "762544c9fd0c1ebecd2dd4ddf6c68eac4015b73f3b63e4507de2f33f38ee841b",
+  "source_unchanged": true,
+  "output_sha256": "d8848e29eb3a098573e4285ca1a4fb133a2ddfb7efc18b8e5e9d1f9cf5d93625",
+  "raw_output": ".local/EV-20261020T042617-09580a5e.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "93ed5162ca1362c2f093ea968cfd1edb23c28a0cd6614df33816c314a48fe59e"
+}

@@ -1,0 +1,139 @@
+{
+  "experiment": "EXP-019",
+  "provider": "ollama",
+  "model": "qwen3.8:27b",
+  "model_digest": "aaee06c39dcf2437cde036998d960e1fc1494b8191be7cc9657d01e509097813",
+  "request": "對照各店各商品的盤點庫存件數與 2026 年 9 月線上通路的折扣金額及淨銷售額，並顯示庫存盤點日期，準備促銷後補貨評估；保留所有庫存商品。",
+  "calls": 1,
+  "retries": 0,
+  "num_predict": -1,
+  "input_token_quota": null,
+  "output_token_quota": null,
+  "network_timeout_seconds": null,
+  "outer_timeout_seconds": null,
+  "thinking": true,
+  "context_window": 32768,
+  "temperature": 1,
+  "top_p": 1,
+  "seed": 42,
+  "same_core_source_schema_catalog_case_messages": true,
+  "elapsed_seconds": 620.0630313259971,
+  "done": true,
+  "done_reason": "stop",
+  "usage": {
+    "input_tokens": 6444,
+    "output_tokens": 4618,
+    "total_tokens": 11062
+  },
+  "load_seconds": 13.130494327,
+  "prompt_eval_seconds": 30.290361,
+  "generation_seconds": 576.289206,
+  "generation_tokens_per_second": 8.0133376643532,
+  "response_characters": 3096,
+  "structural_result": "PASS",
+  "Python_slicing": "PASS",
+  "requirements": 9,
+  "candidate_views": 7,
+  "complete_target_terms": 7,
+  "exact_minimal_target_spans": 7,
+  "target_roles_correct": true,
+  "rows": [
+    {
+      "requirement_id": "R_STOCK_QTY",
+      "start": 8,
+      "end": 14,
+      "derived_quote": "盤點庫存件數",
+      "kind": "metric",
+      "expected_kind": "metric",
+      "scope_ids": [],
+      "exact_minimal_span": true
+    },
+    {
+      "requirement_id": "F_TIME",
+      "start": 16,
+      "end": 26,
+      "derived_quote": "2026 年 9 月",
+      "kind": "filter",
+      "expected_kind": "filter",
+      "scope_ids": [],
+      "exact_minimal_span": true
+    },
+    {
+      "requirement_id": "F_CHANNEL",
+      "start": 26,
+      "end": 30,
+      "derived_quote": "線上通路",
+      "kind": "filter",
+      "expected_kind": "filter",
+      "scope_ids": [],
+      "exact_minimal_span": true
+    },
+    {
+      "requirement_id": "R_DISCOUNT",
+      "start": 31,
+      "end": 35,
+      "derived_quote": "折扣金額",
+      "kind": "metric",
+      "expected_kind": "metric",
+      "scope_ids": [
+        "F_TIME",
+        "F_CHANNEL"
+      ],
+      "exact_minimal_span": true
+    },
+    {
+      "requirement_id": "R_NET_SALES",
+      "start": 36,
+      "end": 40,
+      "derived_quote": "淨銷售額",
+      "kind": "metric",
+      "expected_kind": "metric",
+      "scope_ids": [
+        "F_TIME",
+        "F_CHANNEL"
+      ],
+      "exact_minimal_span": true
+    },
+    {
+      "requirement_id": "R_SNAPSHOT_DATE",
+      "start": 44,
+      "end": 50,
+      "derived_quote": "庫存盤點日期",
+      "kind": "attribute",
+      "expected_kind": "attribute",
+      "scope_ids": [],
+      "exact_minimal_span": true
+    },
+    {
+      "requirement_id": "R_POPULATION",
+      "start": 61,
+      "end": 69,
+      "derived_quote": "保留所有庫存商品",
+      "kind": "population",
+      "expected_kind": "population",
+      "scope_ids": [],
+      "exact_minimal_span": true
+    }
+  ],
+  "sales_scope_result": "PASS: both sales metrics reference time/channel filters",
+  "inventory_scope_result": "PASS: stock/date unaffected by sales time/channel",
+  "population_result": "PASS: explicit population, no status exclusion",
+  "grain_result": "門市×商品已列grain；沒有獨立key項目，不據類別是否出現自行判失敗",
+  "completed_order_semantics": "v_sales_detail summary及grain明定僅已完成訂單，可作契約相容性說明，非另外新增使用者篩選",
+  "source_recall": "7/7 admitted views retained; no final source selection",
+  "diagnostic_semantic_review": "本題主要需求索引/角色/scope/母體/粒度符合；主Agent按固定目標與契約核對",
+  "formal_independent_oracle": "NOT_VERIFIED: new diagnostic question, no new cross-agent oracle approval",
+  "source_mapping": "NOT_EXECUTED",
+  "end_to_end": "NOT_VERIFIED",
+  "raw_replay": "PASS: same parsed offsets and Python-derived quotations, no errors",
+  "raw_run_sha256": "039832c8497af176cc18228b0ce421333a22a8713796f2e61ec5c7da8ecb4cb1",
+  "harness_sha256": "6ad976fbda2da25e32ca93e1e5c34dfe72596a3cd0e14d7198e88b3bd57eb2fc",
+  "artifact_folder": ".local/qwen-indexed-20261021T075802Z-66d3ec",
+  "cost_usd": null,
+  "evidence": [
+    "evidence/EV-20261021T075735-f75bf9ac.json",
+    "evidence/EV-20261021T075801-cb351f74.json",
+    "evidence/EV-20261021T080912-146f3d0c.json",
+    "evidence/EV-20261021T081050-aa48bdf2.json"
+  ]
+}

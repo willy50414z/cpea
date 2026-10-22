@@ -1,0 +1,142 @@
+.....F...................F...FF..                                        [100%]
+=================================== FAILURES ===================================
+______ test_first_failure_is_saved_and_replayed_without_repair[provider] _______
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-42/test_first_failure_is_saved_an0')
+failure = 'provider'
+
+    @pytest.mark.parametrize('failure', ['provider', 'parse', 'predicate', 'own', 'typed', 'null', 'duplicate', 'nan'])
+    def test_first_failure_is_saved_and_replayed_without_repair(tmp_path, failure):
+        mod = api(); package = mod.load_package()
+        sample = 'SEL-ISO-v1-01' if failure in ('typed', 'null') else 'COV-ISO-v1-01'
+        context = mod.prepare(package, sample)
+        value = deepcopy(package['oracle']['positive_outputs'][sample])
+        if failure == 'predicate': value['entries']['FILT-001']['mappings'][0].pop('value')
+        if failure == 'own': value['entries']['MET-001']['own_gap'] = False
+        if failure == 'typed': value['draft']['tasks'][0].pop('filters')
+        if failure == 'null': value['draft']['integration'] = None
+        raw = 'no JSON' if failure == 'parse' else '{"entries":{},"entries":{}}' if failure == 'duplicate' else '{"entries":{"x":NaN}}' if failure == 'nan' else json.dumps(value, ensure_ascii=False)
+        def invoke(*args):
+            if failure == 'provider': raise OSError('offline transport failed')
+            return AIMessage(content=raw)
+        meta = mod.record_sample(tmp_path, context, invoke)
+        assert meta['stopped'] and (tmp_path / 'node-error.json').exists()
+        assert not (tmp_path / 'node-normalized.json').exists()
+        if failure != 'provider':
+            assert json.loads((tmp_path / 'node-call.json').read_text(encoding='utf-8'))['response'] == raw
+>       assert mod.replay(tmp_path, package)['stopped'] == meta['stopped']
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_managed_node_diagnostics.py:80: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+folder = PosixPath('/tmp/pytest-of-willy/pytest-42/test_first_failure_is_saved_an0')
+package = {'manifest': {'schema_version': 1, 'version': 'kind-isolation-v1', 'runner_version': 'managed-node-diagnostics-1', 'ca...on'}, 'scope-channel': {'status': 'unsupported', 'own_gap': True, 'mappings': [], 'contract_path': None}, ...}}}, ...}}
+
+    def replay(folder, package=None):
+        folder = Path(folder); package = package or load_package(); meta = read_json(folder / 'run.json')
+        _verify_artifacts(folder, meta)
+        if meta['version'] != VERSION or digest(package['manifest_path']) != meta['manifest_sha256'] or bindings(package) != meta['frozen']:
+            raise ValueError('replay version/input mismatch')
+        context = prepare(package, meta['sample']['id'])
+        if context['sample'] != meta['sample']:
+            raise ValueError('replay sample mismatch')
+        saved = {}
+        def invoke(name, messages, schema):
+            if read_json(folder / 'node-body.json') != _body(messages, schema):
+                raise ValueError('replay request/body mismatch')
+            if (folder / 'node-provider-error.json').exists():
+                raise RecordedProviderError(read_json(folder / 'node-provider-error.json'))
+            call = read_json(folder / 'node-call.json')
+            return AIMessage(content=call['response'], usage_metadata=call['usage'], response_metadata=call['response_metadata'] or {})
+        stopped = None
+        try: _run(context, invoke, saved.__setitem__, lambda: None, meta['context_window'])
+        except Exception as exc: stopped = error_record(exc)
+        if stopped != meta['stopped']: raise ValueError('replay first error differs')
+        for name, value in saved.items():
+            original = read_json(folder / name)
+            if name.endswith(('-call.json', '-provider-error.json')):
+                original.pop('elapsed_seconds', None); value.pop('elapsed_seconds', None)
+>           if original != value: raise ValueError('replay artifact differs: ' + name)
+                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           ValueError: replay artifact differs: usage.json
+
+evaluations/managed_node_diagnostics.py:384: ValueError
+___ test_execute_preflight_refuses_any_unreviewed_or_drifted_input[binding] ____
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-42/test_execute_preflight_refuses4')
+mutation = 'binding'
+
+    @pytest.mark.parametrize('mutation', ['missing', 'reject', 'self_review', 'manifest', 'binding', 'context', 'body', 'schema', 'source', 'fixture', 'omitted_view'])
+    def test_execute_preflight_refuses_any_unreviewed_or_drifted_input(tmp_path, mutation):
+        mod = api(); package = mod.load_package()
+        review = dict(schema_version=1, verdict='ACCEPT', reviewer_role='fresh_fixture_semantics',
+            ticket='fresh-reviewer-ticket', author_ticket=package['manifest']['author_ticket'],
+            manifest_sha256=mod.digest(package['manifest_path']), bindings=deepcopy(package['manifest']['bindings']))
+        context = mod.prepare(package, 'SEL-ISO-v1-01')
+        if mutation == 'missing': review = None
+        elif mutation == 'reject': review['verdict'] = 'REJECT'
+        elif mutation == 'self_review': review['ticket'] = package['manifest']['author_ticket']
+        elif mutation == 'manifest': review['manifest_sha256'] = '0' * 64
+>       elif mutation == 'binding': review['bindings'].pop(next(iter(review['bindings'])))
+                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       StopIteration
+
+tests/unit/test_managed_node_diagnostics.py:128: StopIteration
+____ test_execute_preflight_refuses_any_unreviewed_or_drifted_input[source] ____
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-42/test_execute_preflight_refuses8')
+mutation = 'source'
+
+    @pytest.mark.parametrize('mutation', ['missing', 'reject', 'self_review', 'manifest', 'binding', 'context', 'body', 'schema', 'source', 'fixture', 'omitted_view'])
+    def test_execute_preflight_refuses_any_unreviewed_or_drifted_input(tmp_path, mutation):
+        mod = api(); package = mod.load_package()
+        review = dict(schema_version=1, verdict='ACCEPT', reviewer_role='fresh_fixture_semantics',
+            ticket='fresh-reviewer-ticket', author_ticket=package['manifest']['author_ticket'],
+            manifest_sha256=mod.digest(package['manifest_path']), bindings=deepcopy(package['manifest']['bindings']))
+        context = mod.prepare(package, 'SEL-ISO-v1-01')
+        if mutation == 'missing': review = None
+        elif mutation == 'reject': review['verdict'] = 'REJECT'
+        elif mutation == 'self_review': review['ticket'] = package['manifest']['author_ticket']
+        elif mutation == 'manifest': review['manifest_sha256'] = '0' * 64
+        elif mutation == 'binding': review['bindings'].pop(next(iter(review['bindings'])))
+        elif mutation == 'context': context['input_tokens'] = 32768
+        elif mutation == 'body': context['body']['think'] = False
+        elif mutation == 'schema': context['schema_json']['additionalProperties'] = True
+>       elif mutation == 'source': package['manifest']['bindings']['sources']['evaluations/managed_node_diagnostics.py'] = '0' * 64
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'sources'
+
+tests/unit/test_managed_node_diagnostics.py:132: KeyError
+___ test_execute_preflight_refuses_any_unreviewed_or_drifted_input[fixture] ____
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-42/test_execute_preflight_refuses9')
+mutation = 'fixture'
+
+    @pytest.mark.parametrize('mutation', ['missing', 'reject', 'self_review', 'manifest', 'binding', 'context', 'body', 'schema', 'source', 'fixture', 'omitted_view'])
+    def test_execute_preflight_refuses_any_unreviewed_or_drifted_input(tmp_path, mutation):
+        mod = api(); package = mod.load_package()
+        review = dict(schema_version=1, verdict='ACCEPT', reviewer_role='fresh_fixture_semantics',
+            ticket='fresh-reviewer-ticket', author_ticket=package['manifest']['author_ticket'],
+            manifest_sha256=mod.digest(package['manifest_path']), bindings=deepcopy(package['manifest']['bindings']))
+        context = mod.prepare(package, 'SEL-ISO-v1-01')
+        if mutation == 'missing': review = None
+        elif mutation == 'reject': review['verdict'] = 'REJECT'
+        elif mutation == 'self_review': review['ticket'] = package['manifest']['author_ticket']
+        elif mutation == 'manifest': review['manifest_sha256'] = '0' * 64
+        elif mutation == 'binding': review['bindings'].pop(next(iter(review['bindings'])))
+        elif mutation == 'context': context['input_tokens'] = 32768
+        elif mutation == 'body': context['body']['think'] = False
+        elif mutation == 'schema': context['schema_json']['additionalProperties'] = True
+        elif mutation == 'source': package['manifest']['bindings']['sources']['evaluations/managed_node_diagnostics.py'] = '0' * 64
+>       elif mutation == 'fixture': package['manifest']['bindings']['fixtures']['request-original.txt'] = '0' * 64
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'fixtures'
+
+tests/unit/test_managed_node_diagnostics.py:133: KeyError
+=========================== short test summary info ============================
+FAILED tests/unit/test_managed_node_diagnostics.py::test_first_failure_is_saved_and_replayed_without_repair[provider]
+FAILED tests/unit/test_managed_node_diagnostics.py::test_execute_preflight_refuses_any_unreviewed_or_drifted_input[binding]
+FAILED tests/unit/test_managed_node_diagnostics.py::test_execute_preflight_refuses_any_unreviewed_or_drifted_input[source]
+FAILED tests/unit/test_managed_node_diagnostics.py::test_execute_preflight_refuses_any_unreviewed_or_drifted_input[fixture]
+4 failed, 29 passed in 29.68s

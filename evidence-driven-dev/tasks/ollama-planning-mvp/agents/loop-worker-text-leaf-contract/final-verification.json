@@ -1,0 +1,231 @@
+{
+  "schema_version": 1,
+  "ticket": "8ef15624ec38441da20ff256197a6af6",
+  "node": "text_leaf_evidence_contract",
+  "round": 24,
+  "result": "FAIL",
+  "manifest_sha256": "624cefc9f2835171ae2debe9bd7a9f3c47c67198099dba832419d456e25160ad",
+  "candidate_bindings_equal": true,
+  "old_nodes_preserved": {
+    "count": 24,
+    "identity_goal_acceptance_differences": {}
+  },
+  "source_files": {
+    "evaluations/diagnostics/managed_text_leaf_evidence.py": "d745f4ad23cc7e7708c662de829c85da3b9d0d5dc251b4e7d6285e921f7373cf",
+    "tests/diagnostics/test_managed_text_leaf_evidence.py": "3383078de87df60ba0a1fa93511f7e2801daa308cb5e1f04bc81bc7037d953d2"
+  },
+  "new_fixture_files": 155,
+  "frozen_files": 452,
+  "focused": {
+    "passed": 65,
+    "failed": 1,
+    "log": "focused.log",
+    "failed_cases": [
+      "tests/diagnostics/test_managed_text_leaf_evidence.py::test_new_provenance_cannot_be_forged[reviewer-same_platform]"
+    ],
+    "reason": "本worker新測試 reviewer-same_platform 將reviewer改為仍與author不同的same平台，卻要求拒絕；測試預期有誤。依使用者本輪後暫停與Main封存指示，不再修正或重新綁版。"
+  },
+  "regression": {
+    "passed": 133,
+    "failed": 16,
+    "log": "regression.log",
+    "failed_cases": [
+      "tests/diagnostics/test_managed_capability_projection.py::test_new_roles_reject_incomplete_or_forged_closed_provenance[open-author]",
+      "tests/diagnostics/test_managed_capability_projection.py::test_new_roles_reject_incomplete_or_forged_closed_provenance[open-reviewer]",
+      "tests/diagnostics/test_managed_capability_projection.py::test_new_roles_reject_incomplete_or_forged_closed_provenance[missing-author]",
+      "tests/diagnostics/test_managed_capability_projection.py::test_new_roles_reject_incomplete_or_forged_closed_provenance[missing-reviewer]",
+      "tests/diagnostics/test_managed_capability_projection.py::test_new_roles_reject_incomplete_or_forged_closed_provenance[node-author]",
+      "tests/diagnostics/test_managed_capability_projection.py::test_new_roles_reject_incomplete_or_forged_closed_provenance[node-reviewer]",
+      "tests/diagnostics/test_managed_capability_projection.py::test_new_roles_reject_incomplete_or_forged_closed_provenance[round-author]",
+      "tests/diagnostics/test_managed_capability_projection.py::test_new_roles_reject_incomplete_or_forged_closed_provenance[round-reviewer]",
+      "tests/diagnostics/test_managed_capability_projection.py::test_new_roles_reject_incomplete_or_forged_closed_provenance[producer-author]",
+      "tests/diagnostics/test_managed_capability_projection.py::test_new_roles_reject_incomplete_or_forged_closed_provenance[producer-reviewer]",
+      "tests/diagnostics/test_managed_capability_projection.py::test_new_roles_reject_incomplete_or_forged_closed_provenance[fail-author]",
+      "tests/diagnostics/test_managed_capability_projection.py::test_new_roles_reject_incomplete_or_forged_closed_provenance[fail-reviewer]",
+      "tests/diagnostics/test_managed_capability_projection.py::test_new_roles_reject_incomplete_or_forged_closed_provenance[same_platform-author]",
+      "tests/diagnostics/test_managed_capability_projection.py::test_new_roles_reject_incomplete_or_forged_closed_provenance[same_platform-reviewer]",
+      "tests/diagnostics/test_managed_capability_projection.py::test_new_roles_reject_incomplete_or_forged_closed_provenance[evidence-author]",
+      "tests/diagnostics/test_managed_capability_projection.py::test_new_roles_reject_incomplete_or_forged_closed_provenance[evidence-reviewer]"
+    ],
+    "reason": "原capability測試由真Task deepcopy後再append synthetic第21/22輪。當前真作者/審者已closed PASS，第21作者產生兩筆符合completed；_roles正確拒絕。16案在初始assert即失敗，未到mutation。舊碼/測試不可改，未排除測試重跑求PASS。"
+  },
+  "controls": {
+    "result": "PASS",
+    "POST": 0,
+    "SQL_DB": 0,
+    "controls": [
+      {
+        "kind": "natural-fake",
+        "failure": null,
+        "folder": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-None",
+        "replay": {
+          "result": "PASS",
+          "raw_replays": 9,
+          "stopped": null
+        }
+      },
+      {
+        "kind": "natural-fake",
+        "failure": "scope",
+        "folder": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-scope",
+        "replay": {
+          "result": "PASS",
+          "raw_replays": 7,
+          "stopped": {
+            "error_type": "ValueError",
+            "error": "supported requires same-source scope support"
+          }
+        }
+      },
+      {
+        "kind": "natural-fake",
+        "failure": "typed",
+        "folder": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-typed",
+        "replay": {
+          "result": "PASS",
+          "raw_replays": 9,
+          "stopped": {
+            "error_type": "ValidationError",
+            "error": "1 validation error for SelectionWire\ndraft.ready.tasks.0.filters\n  Field required [type=missing, input_value={'task_id': 'stock', 'vie...店商品庫存件數'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing"
+          }
+        }
+      },
+      {
+        "kind": "isolation-fake",
+        "failure": null,
+        "folder": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/isolation-None",
+        "replay": {
+          "result": "PASS",
+          "replay_verification": "PASS",
+          "raw_replays": 1,
+          "provider_calls": 0
+        }
+      },
+      {
+        "kind": "isolation-fake",
+        "failure": "object",
+        "folder": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/isolation-object",
+        "replay": {
+          "result": "FAIL",
+          "replay_verification": "PASS",
+          "raw_replays": 1,
+          "provider_calls": 0
+        }
+      }
+    ],
+    "freeze": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen",
+    "manifest_sha256": "624cefc9f2835171ae2debe9bd7a9f3c47c67198099dba832419d456e25160ad"
+  },
+  "historical_replay": {
+    "cases": 10,
+    "live": 10,
+    "frozen": 10,
+    "result": "PASS",
+    "proof": "history-replays.json",
+    "old_results": {
+      "round15": "FAIL",
+      "round18": "PASS",
+      "round20": [
+        "FAIL",
+        "PASS",
+        "FAIL"
+      ],
+      "round23": [
+        "FAIL",
+        "PASS",
+        "FAIL",
+        "FAIL",
+        "FAIL"
+      ]
+    }
+  },
+  "protection": {
+    "result": "PASS",
+    "old_non_task_files": 8047,
+    "differences": {},
+    "old_rebound_bindings_equal": true,
+    "capability_bindings_equal": true,
+    "candidate_bindings_equal": true,
+    "author_ticket": {
+      "id": "8ef15624ec38441da20ff256197a6af6",
+      "role": "worker",
+      "node": "text_leaf_evidence_contract",
+      "round": 24,
+      "platform_id": "/root/loop_worker_text_leaf_contract",
+      "closed": false,
+      "reserved_at": "2026-10-22T03:13:31.197642+00:00"
+    },
+    "active": {
+      "round": 24,
+      "node": "text_leaf_evidence_contract",
+      "started_at": "2026-10-22T03:13:31.029660+00:00"
+    },
+    "closed_rounds": 23,
+    "usage": {
+      "agent_dispatches": 42,
+      "cloud_calls": 0,
+      "local_calls": 31,
+      "model_retries": 0
+    },
+    "source_changes": "Only new nested module/test/new fixture and this worker evidence; no old file altered",
+    "excluded_mutable_task": "evidence-driven-dev/tasks/ollama-planning-mvp/task.md",
+    "used": {
+      "agent_dispatches": 42,
+      "cloud_calls": 0,
+      "local_calls": 31,
+      "model_retries": 0
+    }
+  },
+  "input_tokens": {
+    "min": 3239,
+    "max": 11060,
+    "all_27_under_32768": true
+  },
+  "panel": {
+    "cases": 9,
+    "rows": 65,
+    "seeds": [
+      42,
+      43,
+      44
+    ],
+    "cells": 27,
+    "original_expected": "原五案引用舊核准lineage；四新案及每row/gaps僅author候選，PENDING_FRESH_REVIEW"
+  },
+  "known_limitations": [
+    "新candidate完整frozen replay未執行，不能把freeze產物當重播成功",
+    "43/44的真managed seed/body僅0POST捕獲通過，沒有自然樣本",
+    "前block完整語意ACCEPT的正向gate流程尚未自然執行",
+    "作者未closed，audit22–24/不同fresh reviewer/27自然面板/父層整合/根驗收仍PENDING"
+  ],
+  "actions": {
+    "local_POST": 0,
+    "cloud": 0,
+    "SQL": 0,
+    "DB": 0,
+    "commit": 0,
+    "push": 0,
+    "old_file_edits": 0
+  },
+  "controller_before_finish": {
+    "status": "RUNNING",
+    "closed_rounds": 23,
+    "used": {
+      "agent_dispatches": 42,
+      "cloud_calls": 0,
+      "local_calls": 31,
+      "model_retries": 0
+    },
+    "author": {
+      "id": "8ef15624ec38441da20ff256197a6af6",
+      "role": "worker",
+      "node": "text_leaf_evidence_contract",
+      "round": 24,
+      "platform_id": "/root/loop_worker_text_leaf_contract",
+      "closed": false,
+      "reserved_at": "2026-10-22T03:13:31.197642+00:00"
+    },
+    "root_status": "pending"
+  },
+  "stop": "本輪完成交接後由Main finish FAIL並依使用者明確要求暫停；不開新研究/audit/review/POST。"
+}

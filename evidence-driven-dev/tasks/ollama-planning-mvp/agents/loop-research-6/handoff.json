@@ -1,0 +1,213 @@
+{
+  "schema_version": 1,
+  "ticket": "d30ef2b8093f4facb86da5acd9e98059",
+  "role": "research",
+  "task_id": "ollama-planning-mvp",
+  "result": "PLAN_READY",
+  "summary": "第6輪原R1違反v1規則仍FAIL，且獨立audit已確證自身partial grain無法表達、依賴缺口不完整與非metric顯式grain依賴不一致。採新managed wire只新增必填own_gap布林作真正語意決定；把可由recall與本View狀態精確決定的依賴缺口交程式完整導出，避免讓模型重述已知圖。所有kind的顯式grain refs統一定義為硬依賴；普通月份filter本身能力獨立於商品輸出grain。第7輪先離線封閉正反例，第8輪固定全新單樣本自然驗證，後依controller返回所有既有父節點及fresh audit/final verifier。所有新效果PENDING。",
+  "evidence": [
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-4-6/review.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-4-6/independent-probes-v2.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-3/handoff.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-3/failure-context.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-3/semantic-review.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-4/handoff.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-bound/handoff.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-6/research-probe.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-6/plan.json"
+  ],
+  "diagnosis": [
+    {
+      "classification": "直接規則違反",
+      "confirmed": "原daily_sales R1 unsupported/mappings=[]卻給grain gap refs=[R1]；R1自己的grain_requirement_ids=[]，故v1拒絕正確。原unsupported狀態可以合法mapping/self gap表示；不能宣稱它本身無法表示，也不將offline控制當原自然答案修復。"
+    },
+    {
+      "classification": "表示能力缺口",
+      "confirmed": "自身grain partial保留store_id且缺product時，grain/mapping/scope/population/evidence五種舊aspect都拒絕；會員×商品/customer_value的customer_id及任意Unicode ID同樣。舊referenced guard接受該合法partial，不應丟映射降unsupported或新增假依賴。"
+    },
+    {
+      "classification": "可導出資訊被重複交模型",
+      "confirmed": "v1只驗證列出的gaps是否合理，未證明完整性；linked metric漏掉未supported grain仍可接受。依賴集合與同來源支持狀態已存在，可由程式確定，沒有必要讓模型再枚舉一次。"
+    },
+    {
+      "classification": "非metric依賴語義不一致",
+      "confirmed": "v1允許非metric填grain_requirement_ids，但只有metric受supported依賴守門。自己的read-only probe以同一daily_sales/date filter驗證：refs=[]及refs=[unsupported R1]皆接受。第二種若聲稱硬依賴便矛盾。"
+    },
+    {
+      "classification": "需求層界定",
+      "conclusion": "對原句2026年9月的sales_date月份條件，能力判定只問本View能否正確篩選該月份，無需先能輸出商品grain；故普通月份/通路filter不繼承最終grain。它可supported而同View商品metric因缺product/通路仍partial。若某非metric本身需要指定grain才能完成，例如逐會員商品的attribute/metadata對齊，其顯式grain refs仍是硬依賴，必須遵守。這不刪除輸出grain責任、不把filter支持當metric支持。"
+    }
+  ],
+  "field_necessity": {
+    "preserve": [
+      "requirements及索引引文/背景邊界",
+      "status、部分mappings與來源證據路徑",
+      "scope_ids與精確grain refs、metric binding",
+      "逐字source facts/population與所有既有角色/operator/value/aggregation守門",
+      "完整required typed draft/integration與prepared/left/母體/nozero責任"
+    ],
+    "true_model_decisions": [
+      "各需求的真正scope及grain適用性",
+      "每View的status、所有可用部分映射、證據path",
+      "自身責任是否仍不完整own_gap",
+      "來源選擇與全部typed欄位及integration"
+    ],
+    "deterministic": [
+      "本需求ID/quote",
+      "給定recall與同View全statuses後未supported scope/grain dependency集合",
+      "逐字契約facts與missing_requirements中這些依賴的引用"
+    ],
+    "remove_only_redundant_output": "新wire不要求模型再列gaps/ref清單；不是刪除缺口驗收，而是完整生成其確定部分，自身不完整仍須模型明示，normalized及自然審查保留兩類缺口。舊wire/原raw不遷移、不改判。"
+  },
+  "hypothesis": {
+    "id": "LR6-H1",
+    "claim": "用own_gap表達自身未完成，並從既有依賴圖/同View statuses確定生成全部依賴缺口，可同時封閉自身partial無法表達與漏列依賴，不增加自由來源事實或弱化supported及typed guards；澄清硬依賴可保留合法獨立filter且阻止真正相依非metric過度支持。",
+    "falsifier": "若新wire不能保留合法partial映射，允許own_gap/狀態矛盾、supported但任一真依賴不supported、normalized缺口遺漏或新增不存在依賴、普通獨立月份被全域誤拒、原guards失效，離線FAIL；自然全部7View或完整typed/prepared任一語意錯亦FAIL。",
+    "status": "PENDING"
+  },
+  "chosen_design": {
+    "candidate_version": "managed-own-responsibility-1",
+    "wire": "CoverageDecision四欄皆必填：status（沿用四種）、mappings（沿用ReferencedMapping）、contract_path（沿用str|null）、own_gap（strict bool）。額外gaps或自由reason等欄位一律拒絕。own_gap表示：先不計本項明示scope/grain依賴，當前合法映射與證據是否仍未完整履行本項自身責任。Python不能補/改此布林、status、mappings或path。",
+    "dependency_semantics": "沿用recall原schema與精確ID檢查；grain_requirement_ids對所有kind一律表示履行本項的必要前置grain，而非同題共同背景。普通日期/月份/通路predicate不因最終輸出grain自動填refs；若本身確有grain需求才填。metric linked/independent/unspecified原限制完整保留；不以自由grain文字相似判等價，不將本題商品metric改independent逃避商品鍵。",
+    "derivation": "對每View每項r，D_scope=[s in r.scope_ids where decisions[s].status != supported]，D_grain=[g in r.grain_requirement_ids where decisions[g].status != supported]。只用精確ID與原順序；不可從request猜依賴、借其他View或擴張全域grain。派生缺口必恰好覆蓋這兩集合，沒有省略、重複或額外成員。",
+    "contextual_guards": [
+      "supported僅在own_gap=false、D_scope=[]、D_grain=[]時可進原supported守門；metric unspecified仍不可supported。任何kind若明示硬依賴未supported均拒絕supported，不自動降partial。",
+      "partial必須保留非空合法mappings，且own_gap=true或至少一個派生依賴缺口；own_gap=false且所有依賴supported但仍partial是無缺口矛盾，拒絕。",
+      "unsupported/uncertain依原guard必須mappings=[]；因自身沒有可用映射，own_gap必須true。不能以依賴缺口替代本地映射不存在的事實，也不能明知有合法部分映射只為繞格式而丟棄，後者仍須自然語意審查。",
+      "無mappings或contract_path=null時own_gap必須true；grain所有status仍必須/grain/description。partial的所有已列column/path/role/operator/value/conditions仍跑原嚴格驗證；不把own_gap當非法映射的豁免。",
+      "own_gap=true只產生自身責任尚未完整證明的中性聲明，不證明來源欄位不存在、only-sales或排除退貨；即使為population需求也保留原source summary原文，不能新造母體事實。"
+    ],
+    "normalized_output": "own_gap=true生成一個含自身精確ID/quote/status的self責任缺口；D_scope/D_grain分別生成含全部精確依賴ID/quote/status的中性缺口。Python僅把原始模型決定與已知圖轉為原ReferencedViewCoverage.missing_requirements，來源grain/keys/summary逐字取admitted policy。再調用原referenced materialize_coverage/validate_coverage。這是新wire預先明定的編譯，不是接受舊wire後補漏或repair。",
+    "selection": "直接重用v1 SelectionWire的完整required typed與materialize_selection/finish_selection，不從task.request補typed欄位。assignment只能supported；理由與exclusion會看見完整生成的缺口。舊v1不能因新設計而重新接受原自然錯答。"
+  },
+  "alternatives": [
+    {
+      "option": "只讓grain gap可指self或新增self aspect，但仍由模型列全部依賴refs",
+      "decision": "本輪不選",
+      "reason": "可修自身partial，卻仍讓模型重複枚舉已能從recall/status確定的圖；新增完整性規則會增加不必要輸出負擔。own_gap加確定派生同時解兩個缺陷，且仍保留真正語意決定。"
+    },
+    {
+      "option": "將所有filter全域綁最終grain",
+      "decision": "拒絕",
+      "reason": "能篩月份與能輸出商品是兩個能力；會拒絕daily_sales的合法月份predicate，還混淆下游metric完整支持。"
+    },
+    {
+      "option": "所有非metric refs都忽略或禁止",
+      "decision": "拒絕",
+      "reason": "真正需要grain對齊的attribute/metadata等仍有必要依賴；應統一硬依賴語義並要求普通獨立filter不亂填，不是把合法refs當裝飾。"
+    },
+    {
+      "option": "只要求有任一gap、不檢驗完整依賴，或靠unsupported抹去部分映射",
+      "decision": "拒絕",
+      "reason": "前者掩蓋已知未完成grain/scope，後者遺失誠實能力並違反partial目標。"
+    },
+    {
+      "option": "更換模型、反覆同版重送、LLM repair或程式自選來源/編譯typed答案",
+      "decision": "本輪不選",
+      "reason": "沒有證據需要改模型或外加planner；本缺陷在契約責任邊界，且成功HTTP錯答不能retry挑分。"
+    }
+  ],
+  "worker_scope": {
+    "new": [
+      "evaluations/own_responsibility_managed_contract.py",
+      "evaluations/prompts/own_responsibility/recall.md",
+      "evaluations/prompts/own_responsibility/coverage.md",
+      "tests/unit/test_own_responsibility_managed_contract.py",
+      "tests/unit/test_own_responsibility_managed_runner.py"
+    ],
+    "small_existing_change": [
+      "evaluations/managed_three_stage_runner.py：只接一個與--evidence-bound互斥的--own-responsibility contract選項；共用既有run_pipeline/record/replay/transport，不複製runner。"
+    ],
+    "reuse": "新module重用v1 RecallWire、SelectionWire、parse_wire、materialize_recall與materialize_selection等行為；覆寫新版coverage schema/materializer及必要prompt讀取。selection prompt可直接沿用v1並納入完整source fingerprint。新wire正規化後直接重用原ReferencedViewCoverage及materialize_references，不改舊guard。",
+    "protected": [
+      "v1 evidence_bound_managed_contract.py及prompts/tests",
+      "所有舊wire/原coverage/selection/finish guards",
+      "所有原自然raw、分數、38Gate",
+      "兩src既存修改",
+      "Task/control由Main管理，不由worker或研究者修改"
+    ],
+    "artifacts": "只raw/log及必要handoff/freeze JSON；不新增reports/experiments Markdown、不SQL/DB、commit或push。"
+  },
+  "implementation_order": [
+    "先保存before hash與凍結可執行v1依賴，確認原第6輪3raw原首錯及第4輪9raw原首錯可用既有frozen replay重現；不改任何原工件。",
+    "新增版本專用RED正反例，測原自身partial與兩種dependency缺陷，然後只實作新own_gap wire與deterministic derivation；保持舊v1模組/測試不動。",
+    "新recall/coverage prompt說清自身與前置責任，以及普通月份predicate不自動依賴輸出grain；只提供通用正反例，不寫本題ID或特定來源答案。selection沿用完整typed要求。",
+    "全部新focused正反例、完整fake/失敗prefix/replay/dry-run通過後，跑既有307集加新兩檔；確認舊v1未變與source/歷史hash。第7輪0POST。",
+    "凍結candidate/module及所有import/實際使用prompt/tests/schema/fingerprint；第8輪才以--own-responsibility新版本自recall開始一個預定自然樣本。"
+  ],
+  "focused_gates": {
+    "own_responsibility": [
+      "daily_sales需求店×商品：grain partial保留store_id key、/grain/description、own_gap=true，合法通過且normalized self只指自己；customer_value需求會員×商品保留customer_id同樣通過；任意Unicode/保留字/斜線ID及改名契約仍成立。",
+      "同樣兩種partial若own_gap=false且無依賴缺口必拒；partial空mapping拒；unsupported帶mapping拒；own_gap或path矛盾拒。禁止以丟store/member key或假self依賴作正例。",
+      "完整store/product grain supported+own_gap=false正例；supported+own_gap=true拒。unsupported grain mappings=[]/own_gap=true/path=/grain/description合法；舊R1原raw仍v1 FAIL，不移植raw翻案。",
+      "額外gaps/free reason、缺own_gap、非嚴格bool、未知/缺槽位、重複JSON key/NaN仍拒；原非法column/path/role/aggregation/date/channel/空supported等負例保持。"
+    ],
+    "dependencies": [
+      "linked metric+未supported grain：status supported必拒；模型自行partial保留合法amount sum且own_gap=false時通過，normalized必完整列grain缺口；缺scope與grain同時發生時兩類完整，不能只留其一。",
+      "D_scope/D_grain逐集合斷言：partial/unsupported/uncertain的依賴都完整導出；supported依賴不產gap、無依賴不憑空產gap；多個依賴順序/ID/Unicode/改名仍精確。",
+      "同來源grain若partial也屬未supported；不能跨View借supported。unknown/非grain/self/重複recall refs與linked空refs或independent有refs沿原guard拒。",
+      "非metric真正硬依賴：例如按會員×商品顯示attribute/metadata，該grain未supported時其supported必拒；partial合法映射+own_gap=false會生成依賴缺口。另以硬依賴已supported作正例。",
+      "普通月份predicate refs=[]，daily_sales商品grain未supported也可支持有效sales_date整月range；若明示refs=[G]則在G未supported時supported必拒。這對照只證語義一致，不能拿普通predicate假依賴當自然正確。",
+      "真order grain+order_amount sum、兩metric分別連不同grain、真正independent scalar與固定月份縮約來源維度仍各有正例；不以來源keys和輸出keys字面不相等一律拒。誤宣本題商品metric independent或漏真正依賴仍自然FAIL。"
+    ],
+    "selection_runner": [
+      "完整fake自recall至7View及selection產2 prepared，確認inventory anchor/stock sum/date metadata、sales同task月份/online/兩sum、先彙總left/nozero。fake只證程式，不算自然PASS。",
+      "provider/JSON/own_gap/unsupported-dependency/非法mapping/typed省略/ready integration null/duplicate keys等首錯保存、停止、無後續request，完整及失敗prefix replay精確一致。",
+      "v2 full required typed仍逐欄省略拒絕，空typed責任不可只靠request文字通過；partial不可assignment，exclusion理由只引用真實完整normalized缺口。",
+      "dry-run 0provider；只用loopctl ManagedInvoke、stream=false、num_predict=-1、HTTP/外層timeout=None；來源/模型fingerprint全覆蓋v2與imported v1且frozen replay可執行。"
+    ],
+    "regression": "執行loop-worker-bound/handoff.json verification.command既有14檔307測試原樣，再加入新2檔；不能修改舊tests預期使新版通過，也不跑可能包含provider/DB的無關全repository suite。"
+  },
+  "natural_gate": [
+    "固定candidate單一新樣本，不重用舊recall；8類語意責任可合理拆合但不硬編碼ID/項數，背景留原文；snapshot_date metadata不變任意filter/grain，sales scope不套inventory。",
+    "逐項核對recall硬依賴有實質理由：普通月份/通路filter可獨立，行層attribute/metadata/母體若需根grain不得假稱獨立；本題三metric保持正確grain適用，未依賴輸出grain不代表metric可純量代答。",
+    "七View包含未選來源的所有status/mappings/own_gap與派生缺口都語意正確；有合法部分key必誠實保留，不能丟映射只為unsupported；日期整月、role、scope、母體與合法縮約逐項查契約。",
+    "order_summary不能商品級過度支持，monthly不得憑空channel或only-sales母體，customer無額外status義務；refs/布林/程式render合法均不能免除自然語意驗收。",
+    "自然ready且全部typed與prepared符合原父目標；所有request/notes/description等剩餘自由文也無不支持能力/母體或額外資料責任。原R1較寬population用實際selection判是否笛卡兒膨脹，不單憑字句無證判錯。",
+    "首結構錯停；若結構全跑完仍有任一上述語意錯，整份FAIL且保存完整證據，不以ready/最末guard掩蓋。成功或失敗同版raw replay一致。"
+  ],
+  "parent_return": [
+    "採plan.json時完整保留既有8個node及各自goal/acceptance/root逐字不動；僅為failed natural_evidence_bound_three_stage新增離線與自然兩子項。",
+    "第7輪own_responsibility_managed_contract先離線；第8輪natural_own_responsibility_three_stage固定一個新自然樣本。任一FAIL交fresh研究，不能Main補方案或worker自動改版重送。",
+    "若自然子項PASS，controller返回natural_evidence_bound_three_stage自身同版完整語意/raw→prepared驗收，再依序natural_slots_three_stage、natural_qwen_three_stage、three_stage_integration、root各自驗收；原第4/6輪FAIL不溯及翻案。",
+    "父層工作也計輪；正常情形第7–9輪會含父層整合，依controller fresh audit整段，之後每3輪或提早失敗條件同樣；不能為趕根節點跳過審核。",
+    "root須逐條LOOP1–4核對所有子與父層、回歸/歷史freeze；根PASS後仍需新的fresh final verifier ACCEPT，才可宣告完成。所有尚未跑的父層與自然效果仍PENDING。"
+  ],
+  "resources": {
+    "research_model_POSTs": 0,
+    "research_read_only_probes": 2,
+    "offline_round7_model_POSTs": 0,
+    "natural_round8_planned_samples": 1,
+    "natural_normal_POSTs_max": 9,
+    "cloud": 0,
+    "used_at_research": {
+      "rounds": 6,
+      "local_POSTs": 18,
+      "retry": 0
+    },
+    "configuration": "qwen3.8:27b digest aaee06c39dcf2437cde036998d960e1fc1494b8191be7cc9657d01e509097813；think=true temperature=1 top_p=1 seed=42 num_ctx=32768 num_predict=-1；HTTP/外層timeout=None；僅loopctl request。",
+    "authorization": "使用者已授權本機模型/輪次/token/timeout/agent不限，雲端0，每3輪fresh audit；不重置既有用量，成功HTTP錯答不當retry。"
+  },
+  "stop_rejudge": "任何新wire測試或自然語意FAIL保存首次/失敗前綴回fresh研究；若明示依賴造成合法普通filter被誤拒，先查recall是否把背景grain當硬依賴，不可放寬所有kind支持限制。own_gap含混、漏真正依賴或假獨立仍是語意風險，不能靠不限資源原樣抽樣。若新版需要改root語意或既有需求才過，停止向Main回具體歧義，不自行改驗收。",
+  "pending": [
+    "候選wire、prompt、測試、fake、回歸與自然效果全部PENDING，本研究未實作。",
+    "本研究只對現版v1做兩個讀取控制，沒有pytest/新模型呼叫或candidate成功證據。",
+    "own_gap不能自動證明語意完整；誤false/誤independent/錯硬依賴與自由文字仍須完整自然審查及fresh verifier。"
+  ],
+  "blocking_ambiguities": [],
+  "task_or_controller_changed": false,
+  "implementation_changed": false,
+  "SQL_DB": 0,
+  "commits": 0,
+  "pushes": 0,
+  "next": {
+    "offline_node": "own_responsibility_managed_contract",
+    "offline_round": 7,
+    "offline_entry": "實作新module/兩focused測試檔後，依loop-worker-bound/handoff.json verification.command之既有307集原樣加tests/unit/test_own_responsibility_managed_contract.py及tests/unit/test_own_responsibility_managed_runner.py；全程0POST。",
+    "natural_node": "natural_own_responsibility_three_stage",
+    "natural_round": 8,
+    "natural_command": ".venv/bin/python -m evaluations.managed_three_stage_runner --own-responsibility --execute --ticket \"$EDD_WORKER_TICKET\"",
+    "new_candidate_version": "managed-own-responsibility-1",
+    "precondition": "先完成離線node PASS與凍結；入口目前尚未實作，不可在其存在前宣稱可執行或自然成功。"
+  }
+}

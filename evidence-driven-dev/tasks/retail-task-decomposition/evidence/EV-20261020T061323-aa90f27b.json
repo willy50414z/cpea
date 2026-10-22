@@ -1,0 +1,20 @@
+{
+  "id": "EV-20261020T061323-aa90f27b",
+  "kind": "holdout",
+  "command": [
+    ".venv/bin/python",
+    "evidence-driven-dev/tasks/retail-task-decomposition/.local/run_ollama_decomposition.py"
+  ],
+  "cwd": "/home/willy/code/cpea_terms",
+  "started_at": "2026-10-20T06:13:23+00:00",
+  "finished_at": "2026-10-20T09:22:16+00:00",
+  "exit_code": 0,
+  "revision": "bc09c67fc4078501599c37e4cdfecdee40af2ef8",
+  "diff_fingerprint": "aa41d10592dbead4910485bf28a61ea48d945514929dbccc513e0b4e93b18997",
+  "post_fingerprint": "aa41d10592dbead4910485bf28a61ea48d945514929dbccc513e0b4e93b18997",
+  "source_unchanged": true,
+  "output_sha256": "da7056626c0c669301249f226362710b15c0acac4232ad013a20d1b3760dc5a0",
+  "raw_output": ".local/EV-20261020T061323-aa90f27b.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "c30688dc82f4f46a72e93489e7739516a9bc9406bd4155e24983ae42583fd6a9"
+}

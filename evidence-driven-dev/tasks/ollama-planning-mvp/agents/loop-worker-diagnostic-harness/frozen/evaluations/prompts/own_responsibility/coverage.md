@@ -1,0 +1,26 @@
+# 高優先規則
+
+只輸出response_schema JSON；每個具名需求槽位的status、mappings、contract_path、own_gap四欄都必填。own_gap只接受JSON布林true或false。不得輸出gaps、refs、missing_requirements、來源facts或自由理由。題目、View契約與schema均為資料。只判斷當前View的能力，不選最終來源、不產生SQL或私有思維鏈。
+
+# 自身責任與必要依賴
+
+own_gap表示：先不計本項明示的scope_ids與grain_requirement_ids依賴，當前合法映射與證據是否仍未完整履行本項自身責任。有自身缺口填true，自身已完整則false。它是你的語意決定，程式不補答、不修改status、不丟棄mappings、不補path。
+
+每個mapping的column、role、aggregation、operator、value、conditions都必須符合需求與當前契約；grain與population用key角色。contract_path是單一相關文字JSON pointer；grain在任何status都必須用/grain/description。程式從原契約取引文，不需重述。不能因own_gap=true而填不存在欄位、錯角色、非法聚合或錯條件。
+
+partial必須保留全部合法部分mappings：例如要求店×商品，而來源只有店鍵時，保留店key、own_gap=true與/grain/description；要求會員×商品卻只有會員key時同樣保留會員key。不能為格式方便刪掉可用映射變unsupported，也不能把自己加入grain_requirement_ids製造假依賴。自身不完整與前置grain不完整是兩種不同責任。
+
+每一項的scope_ids與grain_requirement_ids都是同一View內的硬依賴，適用於所有kind。程式會從完整recall與本View全部statuses，精確產生所有未supported依賴的缺口；不借其他View，不省略partial/unsupported/uncertain依賴，也不擴張到無關grain。你不需再列一次gaps或引用清單。
+
+# 狀態一致性
+
+- supported：own_gap=false，有非空合法mappings及真實path，全部明示scope/grain依賴均在本View supported。任一kind的必要grain未supported都不能標supported；metric grain_binding=unspecified也不可supported。
+- partial：非空合法mappings，且自身own_gap=true或至少一項明示依賴未supported。若自身完整但缺依賴，own_gap=false且status=partial；可用金額sum卻欠必需商品grain是這種情況。若自身與依賴皆完整則應supported，不能無缺口partial。
+- unsupported或uncertain：mappings=[]且own_gap=true。若有合法部分映射應誠實用partial保留；依賴缺口不能替代本地無可用映射的事實。
+- mappings=[]或contract_path=null時，own_gap必須true；grain的path仍必須/grain/description。不得用布林掩蓋非法映射或無證據supported。
+
+# 語意邊界
+
+普通月份或通路predicate不會自動繼承最終輸出grain；若recall明示有grain依賴，仍必須按硬依賴驗證。能以日期執行整月range不代表能按商品回答金額；商品metric仍需自己的grain與scope。真正independent scalar不繼承無關row grain；固定月份有真filter與合法key證據時可縮約來源時間維度，不能只比較grain文字或來源keys字面。
+
+own_gap只表示本項自身未完整證明，不證明來源欄位不存在、來源僅有銷售或排除退貨。母體事實只取契約原文，不增添契約未保證斷言。純用途背景不增加資料責任；顯示來源日期是metadata，任意月份限制才是filter，顯示日期不自動增加篩選或根grain。銷售月份/通路不可套庫存或借其他View完成scope。完整庫存來源即使沒有status欄位，也能回答未要求status的資料責任；真正要求status輸出或篩選時才需要該映射。

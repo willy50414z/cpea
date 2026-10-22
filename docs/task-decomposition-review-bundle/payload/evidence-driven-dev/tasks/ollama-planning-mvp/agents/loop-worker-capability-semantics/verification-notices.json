@@ -1,0 +1,32 @@
+{
+  "result": "驗證工具問題已更正，非候選語意錯誤",
+  "events": [
+    {
+      "event": "第一個綜合probe未保留exec session輸出",
+      "effect": "未取得完成證據；不計成功。後以logged probe重新執行，沒有POST或資料改寫。"
+    },
+    {
+      "event": "logged probe誤取controller reviews.ticket，KeyError",
+      "effect": "依真controller schema改核reviewer platform/完整19–21/evidence hash；原失敗保留input-verification.log，後續全通過。"
+    },
+    {
+      "event": "初版review使用未安裝jsonschema，ModuleNotFoundError",
+      "effect": "未安裝依賴；改用內建逐項驗 supplied required/const/string/minLength 及module._review_guard，精確fullbindings相等後才寫review。"
+    },
+    {
+      "event": "前置review尚未寫成導致首次authorization probe FileNotFoundError",
+      "effect": "未到設定或網路，失敗保留authorization-verification.log；review寫成後用同一真Task/同一精確review全部15控制通過。"
+    }
+  ],
+  "unchanged": [
+    "source",
+    "tests",
+    "fixture",
+    "manifest",
+    "舊證據",
+    "Task",
+    "controller"
+  ],
+  "POST": 0,
+  "SQL_DB": 0
+}

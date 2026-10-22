@@ -1,0 +1,20 @@
+{
+  "id": "EV-20261020T054309-4cf2bd0b",
+  "kind": "experiment",
+  "command": [
+    ".venv/bin/python",
+    "/tmp/cpea-decomposition-v3-probe.py"
+  ],
+  "cwd": "/home/willy/code/cpea_terms",
+  "started_at": "2026-10-20T05:43:09+00:00",
+  "finished_at": "2026-10-20T05:44:05+00:00",
+  "exit_code": 0,
+  "revision": "74ef295223b22c1d4eed3c73a5bbc98ca5e52e64",
+  "diff_fingerprint": "6e92851f84a1ea92fca928ea3ab9d0ed52ff1bc0b21667f3c940d7225ea56529",
+  "post_fingerprint": "6e92851f84a1ea92fca928ea3ab9d0ed52ff1bc0b21667f3c940d7225ea56529",
+  "source_unchanged": true,
+  "output_sha256": "879f04d5c426308c15115517c6d6f2291d3d753dd4a5498416d5545d264a0f9c",
+  "raw_output": ".local/EV-20261020T054309-4cf2bd0b.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "b3fa670b4b9a3e8acf947fe3c77160b597970170b7ac78824703f754dab7e4a4"
+}

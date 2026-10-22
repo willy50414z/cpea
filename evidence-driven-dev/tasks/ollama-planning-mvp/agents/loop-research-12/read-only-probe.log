@@ -1,0 +1,307 @@
+{
+  "scope": "READ_ONLY_OFFLINE_RESEARCH_NO_LOAD_AUTHORIZATION_NO_POST",
+  "provider_calls": 0,
+  "v2_live_load_expected_rejection": {
+    "type": "ValueError",
+    "message": "fixed v2 diagnostic design/lineage differs"
+  },
+  "v1_live_bindings_match": true,
+  "v2_binding_top_differences": [
+    "lineage"
+  ],
+  "v2_sources_match": true,
+  "v2_sources_count": 165,
+  "v2_fixture_files_match": true,
+  "v2_content_bindings_match": {
+    "samples": true,
+    "model": true,
+    "runtime": true,
+    "external_sources": true
+  },
+  "samples": {
+    "SEL-ISO-v1-01": {
+      "body": "eb6a1dd98d63365b76b4f513cbf4794b293d9706489c00344f435b13fe133957",
+      "schema": "0e911df0c74d2f30238d24c9b6c483d47a9778e0d23ab18af34fd99aaf5e8bbe",
+      "upstream": "70460cc22c0deccd75d96896c4bd914efc0038a5a3bb300dc8e20be8ad4e43ff",
+      "messages": "c6116af069cb945c678d5aea9e64b1c8eae6371e0a9decd7b809325847877ec5",
+      "profile_id": "demo_retail_draft",
+      "catalog": "e5e5a5a2cc29a1be93dc4d6875aba8c47a35ed48c019c7d6838a45831d0441dc",
+      "input_tokens": 22011
+    },
+    "COV-ISO-v1-01": {
+      "body": "30be965cceda1b54a473d77b3f03f8f1d668040b784c615adfdc6e9bb6f1eb35",
+      "schema": "c2616383e4953dff2e0895490ba820987c5c2e857be380abe48d3ed9ce18dd21",
+      "upstream": "09db09059fbae474f5dd2f37ebfe78cddb5723100461e046ad1c43090e9af488",
+      "messages": "07231241ecedfd19f2710bc63a6c53455ee531b4af37f1138946cf96d8e16fa5",
+      "profile_id": "demo_retail_draft",
+      "catalog": "e5e5a5a2cc29a1be93dc4d6875aba8c47a35ed48c019c7d6838a45831d0441dc",
+      "input_tokens": 4619
+    },
+    "COV-ISO-v1-02": {
+      "body": "a54fe8c06fd3410b3c579ab9000ccf13352a548f3b6496052e3e71721ed1914e",
+      "schema": "a2150f2537a278a6e05ddcd5f64f7bba7ffaf5c4e48a486463ce47c997e59a16",
+      "upstream": "9679ca838cb95b94f4424c06cb88fd3933110ec98c2f7ccd589910d8f043427e",
+      "messages": "fdd9330a767a3e50c0ab18962712874d0db9fafb75687372b8b0cdc7a743b2d3",
+      "profile_id": "demo_retail_draft",
+      "catalog": "e5e5a5a2cc29a1be93dc4d6875aba8c47a35ed48c019c7d6838a45831d0441dc",
+      "input_tokens": 2788
+    },
+    "COV-ISO-v1-03": {
+      "body": "40eaa96a187ace445ce041c42e4036ef70551d3cb9d30e034f96752d28ad7f2f",
+      "schema": "0e8dc947d00e70def0522fa9ffae3583afcfd0b62b0bd223e140b687b5cece60",
+      "upstream": "b09decd488fa06aede796c8b3fca151ff59177a0062027171681da6b62ff7628",
+      "messages": "fe777a6b8073f2a283740f1c68ccf481d682359201e1a53c584703a756c65335",
+      "profile_id": "kind_diag_renamed_v1",
+      "catalog": "0e0fc952adf4a875415d1ff054b37b98535ea6eceabdf5c863adad22cc86d21a",
+      "input_tokens": 4549
+    }
+  },
+  "v1_v2_fixture_differences": [
+    "coverage-selection-normalized.json",
+    "coverage-selection.json",
+    "inputs/SEL-ISO-v1-01-body.json",
+    "inputs/SEL-ISO-v1-01-messages.json",
+    "inputs/SEL-ISO-v1-01-upstream.json",
+    "oracle.json"
+  ],
+  "coverage_row_differences": [
+    {
+      "view": "demo_retail.v_customer_value",
+      "requirement_id": "MET-003",
+      "before": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      },
+      "after": {
+        "status": "partial",
+        "own_gap": true,
+        "mappings": [
+          {
+            "column": "lifetime_spend",
+            "aggregation": "sum",
+            "conditions": []
+          }
+        ],
+        "contract_path": "/columns/lifetime_spend/description"
+      }
+    }
+  ],
+  "all_selection_rows": 56,
+  "oracle_top_differences": [
+    "version",
+    "coverage_evidence"
+  ],
+  "oracle_evidence_differences": [
+    {
+      "before": {
+        "view": "demo_retail.v_customer_value",
+        "requirement_id": "MET-003",
+        "kind": "metric",
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "derived_gaps": [
+          {
+            "statement": "契約未證明以下責任完整可用",
+            "aspect": "self",
+            "requirements": [
+              {
+                "requirement_id": "MET-003",
+                "quote": "淨銷售額",
+                "status": "unsupported"
+              }
+            ]
+          },
+          {
+            "statement": "契約未證明以下責任完整可用",
+            "aspect": "scope",
+            "requirements": [
+              {
+                "requirement_id": "FILT-001",
+                "quote": "2026 年 9 月",
+                "status": "unsupported"
+              },
+              {
+                "requirement_id": "FILT-002",
+                "quote": "線上通路",
+                "status": "unsupported"
+              }
+            ]
+          },
+          {
+            "statement": "契約未證明以下責任完整可用",
+            "aspect": "grain",
+            "requirements": [
+              {
+                "requirement_id": "GRN-001",
+                "quote": "各店各商品",
+                "status": "unsupported"
+              }
+            ]
+          }
+        ],
+        "contract_evidence": [
+          {
+            "path": "/summary",
+            "quote": "粒度：每會員一列，包含未下單會員；"
+          },
+          {
+            "path": "/grain/description",
+            "quote": "每會員一列，包含未下單會員"
+          },
+          {
+            "path": "/columns/customer_id/description",
+            "quote": "會員id"
+          },
+          {
+            "path": "/columns/customer_name/description",
+            "quote": "會員名稱"
+          },
+          {
+            "path": "/columns/membership_tier/description",
+            "quote": "會員等級；一般、銀卡、金卡、VIP"
+          },
+          {
+            "path": "/columns/city/description",
+            "quote": "會員登記城市，不是交易門市所在地"
+          },
+          {
+            "path": "/columns/registered_on/description",
+            "quote": "會員註冊日期。"
+          },
+          {
+            "path": "/columns/completed_order_count/description",
+            "quote": "會員已完成訂單筆數；未下單為 0"
+          },
+          {
+            "path": "/columns/lifetime_spend/description",
+            "quote": "會員在累計折扣後消費金額，單位 TWD"
+          },
+          {
+            "path": "/columns/avg_order_value/description",
+            "quote": "會員平均已完成訂單消費額，單位 TWD/筆"
+          },
+          {
+            "path": "/columns/last_order_date/description",
+            "quote": "會員最後一筆已完成訂單的日期；沒有已完成訂單時為 NULL"
+          },
+          {
+            "path": "/columns/active_in_last_90d/description",
+            "quote": "最近 90 日內有已完成訂單；沒有則為 false。"
+          }
+        ],
+        "reasoning": "會員累計折扣後消費僅保證累計會員值，未證等同本題店商品交易淨額；沒有必要店商品歸屬或可指定交易時間窗口。此保守邊界仍待fresh reviewer獨立審核。",
+        "independent_review": "PENDING",
+        "requirement_quote": "淨銷售額",
+        "scope_ids": [
+          "FILT-001",
+          "FILT-002"
+        ],
+        "grain_requirement_ids": [
+          "GRN-001"
+        ],
+        "grain_binding": "linked",
+        "contract_path": null
+      },
+      "after": {
+        "view": "demo_retail.v_customer_value",
+        "requirement_id": "MET-003",
+        "kind": "metric",
+        "status": "partial",
+        "own_gap": true,
+        "mappings": [
+          {
+            "column": "lifetime_spend",
+            "role": "metric",
+            "source_quote": "淨銷售額",
+            "aggregation": "sum",
+            "operator": null,
+            "value": null,
+            "conditions": [],
+            "contract_evidence": [
+              {
+                "path": "/columns/lifetime_spend/description",
+                "quote": "會員在累計折扣後消費金額，單位 TWD"
+              }
+            ]
+          }
+        ],
+        "derived_gaps": [
+          {
+            "statement": "契約未證明以下責任完整可用",
+            "aspect": "self",
+            "requirements": [
+              {
+                "requirement_id": "MET-003",
+                "quote": "淨銷售額",
+                "status": "partial"
+              }
+            ]
+          },
+          {
+            "statement": "契約未證明以下責任完整可用",
+            "aspect": "scope",
+            "requirements": [
+              {
+                "requirement_id": "FILT-001",
+                "quote": "2026 年 9 月",
+                "status": "unsupported"
+              },
+              {
+                "requirement_id": "FILT-002",
+                "quote": "線上通路",
+                "status": "unsupported"
+              }
+            ]
+          },
+          {
+            "statement": "契約未證明以下責任完整可用",
+            "aspect": "grain",
+            "requirements": [
+              {
+                "requirement_id": "GRN-001",
+                "quote": "各店各商品",
+                "status": "unsupported"
+              }
+            ]
+          }
+        ],
+        "contract_evidence": [
+          {
+            "path": "/columns/lifetime_spend/description",
+            "quote": "會員在累計折扣後消費金額，單位 TWD"
+          }
+        ],
+        "reasoning": "會員累計折扣後消費提供可加總的金額部分。原題未限定會員，契約未證會員金額完整涵蓋銷售母體，因此自身仍有缺口；不推論非會員交易實際存在。指定月份、線上通路與店商品粒度另列scope及grain缺口。",
+        "independent_review": "PENDING",
+        "requirement_quote": "淨銷售額",
+        "scope_ids": [
+          "FILT-001",
+          "FILT-002"
+        ],
+        "grain_requirement_ids": [
+          "GRN-001"
+        ],
+        "grain_binding": "linked",
+        "contract_path": "/columns/lifetime_spend/description"
+      }
+    }
+  ],
+  "synthetic_selection": {
+    "machine_verdict": "PASS",
+    "semantic_approval": "PENDING",
+    "prepared_count": 2
+  },
+  "immutable_recovery_bindings": {
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-evidence-recovery-11/controller-check-evidence.log": "6a7dee2df6decc78d70dd3a9fcef13555f24ec05ef34f4d611783f4084b4e866",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-evidence-recovery-11/receipt.json": "205a6e2f4706d373f98dddaf32db0f0ea942ea89ebb6acf99074c25fa8297a3b",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-evidence-recovery-11/recovery-plan.json": "3b895e7a9592786d6621df03e6dc1110ae0a507242b9b8410a1b647f224c6e4d",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-evidence-recovery-11/review.json.late.raw.log": "0200cc20e8aa288580c0a5036d4056a144555a272b6b4afe64da357734118d6b",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-evidence-recovery-11/review.json.original.raw.log": "aaa8b740cc30fbd1b8670fa45ce5b68280dc073b9ee5e662dc43eeb68b903dfa",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-evidence-recovery-11/semantic-review.log.late.raw.log": "3b7c9f3b51626a0634405b8e2c14efbcf730b600138aa60b067e74aceffca4f0",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-evidence-recovery-11/semantic-review.log.original.raw.log": "fa3e4654447f56bef7cffe64220195c4e2817ba20838d2c3b27eaf893a28eaaa",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-evidence-recovery-11/v2-expected-lineage-rejection.log": "6fc6fad47c0566b8004271cfe185c75d9a051175875b0c305c6e65442e0d4642"
+  }
+}

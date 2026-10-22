@@ -1,0 +1,5 @@
+profile_id: kind_diag_renamed_v1
+contract_version: 3-diagnostic-v1
+source_kind: sql
+catalog: catalog.yaml
+status: approved

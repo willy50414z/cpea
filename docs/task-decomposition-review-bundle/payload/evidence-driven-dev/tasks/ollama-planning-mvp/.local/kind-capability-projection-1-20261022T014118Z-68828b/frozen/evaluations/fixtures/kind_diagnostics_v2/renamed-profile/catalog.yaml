@@ -1,0 +1,4 @@
+schema: diagnostic9
+views:
+  diagnostic9.observation:
+    path: views/observation.yaml

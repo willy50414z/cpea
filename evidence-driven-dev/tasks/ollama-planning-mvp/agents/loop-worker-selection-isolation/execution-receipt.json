@@ -1,0 +1,94 @@
+{
+  "ticket": "1333a1a753e349c399099b022d3ff0ca",
+  "session": 34581,
+  "runner_exit_code": 1,
+  "runner_pid": 2076237,
+  "controller_pid": 2076445,
+  "all_processes_exited": true,
+  "request": {
+    "id": "028e83ec169e4780ae1bb11f226185cd",
+    "ticket_id": "1333a1a753e349c399099b022d3ff0ca",
+    "provider": "local",
+    "case_key": "kind-isolation-v2-rebind-1:ISOLATION:SEL-ISO-v1-01:node",
+    "request_sha": "88375722f50907d5d7747abd145da654fb083dfdfe2d8225ad8132b6e40a67fb",
+    "retry_number": 0,
+    "retry_of": null,
+    "status": "ok",
+    "round": 15,
+    "reserved_at": "2026-10-21T21:58:03.573874+00:00",
+    "finished_at": "2026-10-21T22:30:45.466162+00:00",
+    "details": {
+      "http_status": 200,
+      "response_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/028e83ec169e4780ae1bb11f226185cd.response.txt",
+      "response_sha256": "451ae7485fe593ef358b12db9ebc324dd8ac2204378da8cf40e8e49573aed393"
+    }
+  },
+  "controller_used": {
+    "agent_dispatches": 27,
+    "cloud_calls": 0,
+    "local_calls": 22,
+    "model_retries": 0
+  },
+  "request_timeout_seconds": null,
+  "outer_timeout_seconds": null,
+  "model_identity": {
+    "name": "qwen3.8:27b",
+    "digest": "aaee06c39dcf2437cde036998d960e1fc1494b8191be7cc9657d01e509097813",
+    "checked_at": "2026-10-21T21:57:58.696854+00:00"
+  },
+  "model": "qwen3.8:27b",
+  "done": true,
+  "done_reason": "stop",
+  "duration_seconds": 1963.1855984410067,
+  "usage": {
+    "input_tokens": 18127,
+    "output_tokens": 8394,
+    "total_tokens": 26521
+  },
+  "body_file_sha256": "0cc0b7385bcad400127757f00a0b7fce71082f1de3e47fd61261c4fed1f4f546",
+  "body_canonical_sha256": "eb6a1dd98d63365b76b4f513cbf4794b293d9706489c00344f435b13fe133957",
+  "outer_receipt_sha256": "d614136521733536adc94c82d997575492c74417a87d98398ced63ca1f451278",
+  "freeze_manifest_sha256": "7d52d3c7639e8caf00e2d55cdd2dd4a3aca1b394c3ef90fec0c7e8e3079eeea9",
+  "replay_current": {
+    "result": "FAIL",
+    "replay_verification": "PASS",
+    "stopped": {
+      "error_type": "ValueError",
+      "error": "fixed diagnostic semantic checks failed"
+    },
+    "inner": {
+      "result": "PASS",
+      "raw_replays": 1,
+      "stopped": {
+        "error_type": "ValueError",
+        "error": "fixed diagnostic semantic checks failed"
+      },
+      "upstream_injected": true,
+      "provider_calls": 0
+    },
+    "outer_receipt_sha256": "d614136521733536adc94c82d997575492c74417a87d98398ced63ca1f451278",
+    "provider_calls": 0,
+    "independent_semantic_approval": "PENDING"
+  },
+  "replay_frozen": {
+    "result": "FAIL",
+    "replay_verification": "PASS",
+    "stopped": {
+      "error_type": "ValueError",
+      "error": "fixed diagnostic semantic checks failed"
+    },
+    "inner": {
+      "result": "PASS",
+      "raw_replays": 1,
+      "stopped": {
+        "error_type": "ValueError",
+        "error": "fixed diagnostic semantic checks failed"
+      },
+      "upstream_injected": true,
+      "provider_calls": 0
+    },
+    "outer_receipt_sha256": "d614136521733536adc94c82d997575492c74417a87d98398ced63ca1f451278",
+    "provider_calls": 0,
+    "independent_semantic_approval": "PENDING"
+  }
+}

@@ -1,0 +1,117 @@
+{
+  "artifact_result": "PASS",
+  "model": "gpt-6-sol",
+  "cases": [
+    "cross-view-07",
+    "cross-view-09",
+    "cross-view-14",
+    "cross-view-28"
+  ],
+  "calls": 4,
+  "elapsed_seconds": 33.45672761800233,
+  "runtime_ready": 3,
+  "original_automated_pass": 3,
+  "reasoning_readable_summaries": 0,
+  "cases_with_encrypted_reasoning": 4,
+  "usage": {
+    "input_tokens": 26846,
+    "output_tokens": 2840,
+    "total_tokens": 29686,
+    "reasoning_tokens": 1319
+  },
+  "results": [
+    {
+      "case_id": "cross-view-07",
+      "runtime_status": "ready",
+      "automated_pass": true,
+      "diagnostic_safe": true,
+      "validation_errors": [],
+      "reasoning_summary_status": "not_returned",
+      "reasoning_tokens": 322
+    },
+    {
+      "case_id": "cross-view-09",
+      "runtime_status": "ready",
+      "automated_pass": true,
+      "diagnostic_safe": true,
+      "validation_errors": [],
+      "reasoning_summary_status": "not_returned",
+      "reasoning_tokens": 213
+    },
+    {
+      "case_id": "cross-view-14",
+      "runtime_status": "error",
+      "automated_pass": false,
+      "diagnostic_safe": false,
+      "validation_errors": [
+        "inventory_by_store: attributes lack uniqueness proof"
+      ],
+      "reasoning_summary_status": "not_returned",
+      "reasoning_tokens": 386
+    },
+    {
+      "case_id": "cross-view-28",
+      "runtime_status": "ready",
+      "automated_pass": true,
+      "diagnostic_safe": true,
+      "validation_errors": [],
+      "reasoning_summary_status": "not_returned",
+      "reasoning_tokens": 398
+    }
+  ],
+  "reasoning_archive": [
+    {
+      "case_id": "cross-view-07",
+      "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/gpt-sol-b1-failures-20261020T131351Z-7d555a/cross-view-07-reasoning-items.json",
+      "sha256": "d38d5cb8d8f48cee19a29c62209695ae3508d2db3794563bc1e103f61925e34d",
+      "items": 1,
+      "encrypted_items": 1,
+      "readable_summary_count": 0,
+      "reasoning_tokens": 322,
+      "decryption_attempted": false
+    },
+    {
+      "case_id": "cross-view-09",
+      "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/gpt-sol-b1-failures-20261020T131351Z-7d555a/cross-view-09-reasoning-items.json",
+      "sha256": "0bb4ce63d86ac26219c39848c53212ded5500c5f2520998acb0bbf02e3850d09",
+      "items": 1,
+      "encrypted_items": 1,
+      "readable_summary_count": 0,
+      "reasoning_tokens": 213,
+      "decryption_attempted": false
+    },
+    {
+      "case_id": "cross-view-14",
+      "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/gpt-sol-b1-failures-20261020T131351Z-7d555a/cross-view-14-reasoning-items.json",
+      "sha256": "99caf7a69791aed95ef0ba7dbca43535805f61056d052f23ad99d5791ed77778",
+      "items": 1,
+      "encrypted_items": 1,
+      "readable_summary_count": 0,
+      "reasoning_tokens": 386,
+      "decryption_attempted": false
+    },
+    {
+      "case_id": "cross-view-28",
+      "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/gpt-sol-b1-failures-20261020T131351Z-7d555a/cross-view-28-reasoning-items.json",
+      "sha256": "61bc6300a36d8491c5565ff0d098222bfc5952f724ec253615e5df8efc756837",
+      "items": 1,
+      "encrypted_items": 1,
+      "readable_summary_count": 0,
+      "reasoning_tokens": 398,
+      "decryption_attempted": false
+    }
+  ],
+  "manual_semantic_review": {
+    "reviewer": "main-agent",
+    "independence": "既有獨立oracle與FD審核依據；本輪逐題審查由主agent執行，未另派reviewer",
+    "semantic_plan_correct": 4,
+    "end_to_end_safe_ready": 3,
+    "case14": "骨架語意正確；凍結typed guard未編碼已核准store_id→store_name FD而拒絕。COUNT product_id與COUNT DISTINCT在真store/product唯一列等價。原error不改、仍不算端到端通過。",
+    "case14_offline_existing_validator": "PASS，只有既有validator的離線診斷可生成2個payload；不計入原結果。",
+    "fd_evidence": "projects/retail/contract_review.md:15-16；agents/oracle-audit/baseline-semantic-review.md 第15題"
+  },
+  "new_model_calls_during_verification": 0,
+  "sql_db_calls": 0,
+  "ollama_calls": 0,
+  "limitation": "四題已見失敗集，Responses／reasoning設定與先前DeepSeek Chat不同；不是DeepSeek Gate，不解密或偽造推理摘要。"
+}

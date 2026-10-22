@@ -1,0 +1,32 @@
+{
+  "evaluations/slotted_view_coverage.py": {
+    "sha256": "b580113834567e4a41900c2c91840f66186fa6c15ab124b3009bc48cca2be6d2",
+    "utf8_no_bom": true,
+    "crlf": 0,
+    "lf": 74
+  },
+  "evaluations/prompts/coverage_slots.md": {
+    "sha256": "a5a00595621b5506149ad5fcd5f6f04b122c922322964b0f09f9fe56517f302b",
+    "utf8_no_bom": true,
+    "crlf": 0,
+    "lf": 13
+  },
+  "evaluations/managed_three_stage_runner.py": {
+    "sha256": "8f63e19dabb20968b57585900c307005a6ea4a4195a5f1e391f48f425611b998",
+    "utf8_no_bom": true,
+    "crlf": 0,
+    "lf": 294
+  },
+  "tests/unit/test_slotted_view_coverage.py": {
+    "sha256": "22c45d4863a671d67a8c96ee74041abdc4ec7b86604d5325c3977e0159cfe4c3",
+    "utf8_no_bom": true,
+    "crlf": 0,
+    "lf": 181
+  },
+  "tests/unit/test_managed_three_stage_runner.py": {
+    "sha256": "022434ce8cddffaf7781f99a249ac6d7bb9ef4750a0ae017690f253a876a4ed2",
+    "utf8_no_bom": true,
+    "crlf": 0,
+    "lf": 308
+  }
+}

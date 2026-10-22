@@ -1,0 +1,37 @@
+{
+  "machine_verdict": "FAIL",
+  "classification": "SEMANTIC_REJECT",
+  "findings": [
+    {
+      "requirement_id": "月~邊界",
+      "aspect": "necessary mappings/predicates",
+      "expected": [
+        {
+          "column": "day_key",
+          "operator": ">=",
+          "value": "2032-02-01"
+        },
+        {
+          "column": "day_key",
+          "operator": "<",
+          "value": "2032-03-01"
+        }
+      ],
+      "actual": [
+        {
+          "column": "day_key",
+          "operator": ">=",
+          "value": "2032-02-01"
+        },
+        {
+          "column": "day_key",
+          "operator": "<=",
+          "value": "2032-02-28"
+        }
+      ]
+    }
+  ],
+  "independent_semantic_approval": "PENDING",
+  "free_text_review": "PENDING: all raw/normalized text, tasks.request, preparation, notes, policies, assignment/exclusion refs and remaining claims require independent semantic review",
+  "fixture_approval": "PENDING_FRESH_INDEPENDENT_REVIEW"
+}

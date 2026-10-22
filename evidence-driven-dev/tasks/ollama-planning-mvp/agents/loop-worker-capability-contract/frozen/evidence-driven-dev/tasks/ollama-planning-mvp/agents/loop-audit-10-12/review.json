@@ -1,0 +1,25 @@
+{
+  "ticket": "5dba3c040bf549e9b60ac427131e01e6",
+  "verdict": "REPLAN",
+  "reviewed_rounds": [
+    10,
+    11,
+    12
+  ],
+  "evidence": [
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-10-12/focused.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-10-12/independent-check.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-10-12/independent-complete.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-10-12/independent-check.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-10-12/controller-check-evidence.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-10-12/recovery-probe.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-10-12/recovery-analysis.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-10-12/round11-original-review.json.raw.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-10-12/round11-late-review.json.raw.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-10-12/round11-original-semantic-review.log.raw.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-10-12/round11-late-semantic-review.log.raw.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-10-12/selected-frozen-replays.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-10-12/recovery-plan.json"
+  ],
+  "summary": "完整覆蓋第10、11、12輪及 natural_kind_mapping_three_stage → natural_own_responsibility_three_stage → natural_evidence_bound_three_stage → natural_slots_three_stage → natural_qwen_three_stage → three_stage_integration → root，裁決 REPLAN。阻塞是已封存證據在finish後漂移，非把v2離線成果或原第11輪REJECT推翻。當前不得自然POST，亦不得假稱本audit可繞控制器完整性門檻。\n第10輪將現candidate拆成注入上游的1 selection及3 coverage診斷，是對7–9輪REPLAN之辨識力問題的合理回應。固定8需求、7View/56列及未選來源有用能力仍須全驗；harness的544測試/31離線replay只證接線。第11輪REJECT有據：customer lifetime_spend明示累計折扣後TWD金額，是有用分量，缺月份/online/店商品不能成為清空mapping的理由。last_order_date僅最後訂單日、會員鍵不等於店商品、會員母體不等於庫存母體。原REJECT不升級為PASS，也不把structural alternative own=false當業務定案。\n第12輪v2 partial/lifetime_spend sum/own=true方向合理：扣除明示scope/grain後，僅會員累計金額仍未證完整涵蓋未限定會員的淨銷售額；這是未證完整性，不是推論實際存在非會員銷售或退貨稅額。其餘55列不變，固定logical IDs/ISOLATION/count=1及1+3設計未改，v2實體case預先固定非重抽。selection四hash與22011 tokens吻合研究預固定，三coverage的12個inputs檔bytes及bindings精確不變。薄nested wrapper直接重用prepare/evaluate與base._run/原schema/finish，未複製整framework、改globals或偽造manifest；新增source/test明綁165-source/freeze，v1 live bindings保持。真Task作者為closed PASS child；嘗試以原failed語意parent ticket包裝ACCEPT被真preflight拒絕，缺review亦拒絕；fixture/Oracle仍PENDING，作者不能兼任fresh parent。\n獨立實跑47 focused passed、15 deselected；完整v2 frozen抽3組（selection完整、閏年語意首錯、typed缺欄首錯）各與原artifact/停止狀態一致，0POST。獨立3754保護檔及165-source/兩版fixture/lineage核對與第12輪當時基線一致；本audit未重跑544或全15組。機器PASS仍明留自由文字PENDING，不能代替下一位fresh reviewer的全8需求/56列/typed與所有文字核對。\n阻塞證據：全165份控制器round/plan證據中僅第11輪兩檔漂移。review.json封存aaa8b740…，現為0200cc20…；semantic-review.log封存fa3e4654…，現為3b7c9f3b…。真loopctl check-evidence exit2，review()也會先拒絕。兩檔mtime分別晚於round11 finish約6.594/6.592秒，與記帳後追加吻合；單憑檔案證據不認定寫入者或平台事件根因。現版只移除summary末尾173 UTF-8 bytes、log blocking_finding追加own_gap_ruling欄434 bytes，就逐bytes精確命中原封存SHA256；原REJECT與能力遺漏結論不變，新增內容僅澄清own_gap未定案。audit已保存可恢復原版及後補版四份raw log與差異JSON，沒有修改兩原檔/Task/controller。\n恢復條件：本auditor已獨立裁定recovery-plan.json的精確行政恢復，Main可依其順序機械備份及恢復兩原路徑，不需額外使用者授權；先保留兩版/mtime/hash與差異，僅複製精確命中既有hash的原bytes，絕不能改controller expected hash、重置輪數/用量或刪FAIL。恢復後check-evidence須實跑PASS且v2預期lineage拒絕須留證；從今等待worker真FINAL、再核hash才finish。由於第12輪v2 lineage已綁後補版原路徑，恢復會使v2 live load/preflight拒絕；不能靜默改已完成v2/frozen/manifest/Oracle或把本REPLAN當自動放行。fresh研究須決定版本化後補證據與下游新版本的完整綁定/回歸，使原第11輪、後補澄清、第12輪歷史各自可追蹤；必要新增child須合法保留既有nodes/acceptance。若無此合法恢復能力，保持完整性阻塞並明確要求相應授權，不能跳過check-evidence。\n證據鏈修復且下一個fresh方向裁決允許後，仍只先返回原kind_diagnostic_fixture_semantics由不同fresh worker完整重審，不能只審customer一列；獨立ACCEPT且Main finish PASS形成真parent provenance後才可selection一次，之後coverage三次。局部全PASS及應有audit後才回原父完整自然9POST，recall/全部7View/typed selection與prepared全語意驗收、同版及凍結replay；所有祖先各自整合及fresh final verifier ACCEPT不可省。全局仍21 local/0retry/0cloud，第10–12輪及本audit全0POST/SQL/DB，候選schema/prompt/guards與兩既存src變更不動，歷史38Gate及所有未驗父/root保持PENDING。"
+}

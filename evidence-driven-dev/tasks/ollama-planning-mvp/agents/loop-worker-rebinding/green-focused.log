@@ -1,0 +1,30 @@
+..................................................................F
+=================================== FAILURES ===================================
+_______ test_full_frozen_replay_and_outer_only_drift_preserve_inner_raw ________
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-56/test_full_frozen_replay_and_ou0')
+
+    def test_full_frozen_replay_and_outer_only_drift_preserve_inner_raw(tmp_path):
+        mod = api(); package = mod.load_package(); bound = mod.bindings(package)
+>       frozen = mod.freeze_sources(tmp_path / 'frozen', package)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/diagnostics/test_managed_node_diagnostics_rebound.py:175: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+destination = PosixPath('/tmp/pytest-of-willy/pytest-56/test_full_frozen_replay_and_ou0/frozen')
+package = {'manifest': {'schema_version': 1, 'version': 'kind-isolation-v2-rebind-1', 'runner_version': 'managed-node-diagnostic...on'}, 'scope-channel': {'status': 'unsupported', 'own_gap': True, 'mappings': [], 'contract_path': None}, ...}}}, ...}}
+
+    def freeze_sources(destination, package=None):
+        package = package or load_package(); destination = Path(destination); bound = bindings(package)
+        _version_guard(package, bound, digest(package['manifest_path']))
+        destination.mkdir(parents=True, exist_ok=False)
+>       names = dict(bound['sources'], **bound['lineage'], **bound['historical_fixtures'])
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: dict() got multiple values for keyword argument 'evaluations/fixtures/kind_diagnostics_v1/manifest.json'
+
+evaluations/diagnostics/managed_node_diagnostics_rebound.py:261: TypeError
+=========================== short test summary info ============================
+FAILED tests/diagnostics/test_managed_node_diagnostics_rebound.py::test_full_frozen_replay_and_outer_only_drift_preserve_inner_raw
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 66 passed in 144.86s (0:02:24)

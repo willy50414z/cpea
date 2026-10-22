@@ -1,0 +1,21 @@
+{
+  "id": "EV-20261021T042842-e7ac3938",
+  "kind": "review",
+  "command": [
+    ".venv/bin/python",
+    "-c",
+    "import json\nfrom pathlib import Path\nfrom hashlib import sha256\nfrom evaluations.three_stage_view_selection_runner import SchemaCatalog,fingerprint\nT=Path('evidence-driven-dev/tasks/ollama-planning-mvp')\nr=json.loads((T/'reports/qwen-indexed-recall-third-results.json').read_text(encoding='utf-8'))\nF=T/r['artifact_folder'];P=T/'.local/qwen-indexed-20261021T035651Z-ab0b06'\nassert {p.name for p in F.iterdir()}==set(r['artifact_hashes'])\nfor n,h in r['artifact_hashes'].items():assert sha256((F/n).read_bytes()).hexdigest()==h\nm=json.loads((F/'run.json').read_text(encoding='utf-8'));old=json.loads((P/'run.json').read_text(encoding='utf-8'))\nfor k in ('version','provider','model','frozen','request','reasoning','temperature','top_p','seed','context_window','output_limit','schema_enforcement','harness_sha256','budget'):assert m[k]==old[k],k\nassert (F/'recall-request.json').read_bytes()==(P/'recall-request.json').read_bytes()\nassert m['harness_sha256']==sha256((T/'reports/run_qwen_indexed_probe.py').read_bytes()).hexdigest()\nraw=(T/'.local/index-recall-request.txt').read_bytes();c=SchemaCatalog('projects/retail')\ncase=dict(case_id='diagnostic-request-'+sha256(raw).hexdigest()[:12],request=raw.decode('utf-8'),source_case_id='cross-view-11',profile_id=c.profile_id,contract_fingerprint=c.fingerprint)\nassert m['frozen']==fingerprint(c,case)\ne=json.loads((T/r['evidence'][0]).read_text(encoding='utf-8'))\nassert e['exit_code']==124 and e['source_unchanged']\nassert sha256((T/e['raw_output']).read_bytes()).hexdigest()==e['output_sha256']\nassert json.loads((F/'budget.json').read_text(encoding='utf-8'))['calls']==1\nassert not (F/'recall-call.json').exists() and not (F/'recall-provider-error.json').exists()\nassert 'artifact_hashes' not in m and m['calls']==0\nassert sha256((T/r['runtime_observation_path']).read_bytes()).hexdigest()==r['runtime_observation_sha256']\nprint(json.dumps(dict(result='PASS',scope='request/settings/source/artifacts/outer timeout/runtime observation',provider_attempts=1,raw_replays=0,semantic_result='NOT_VERIFIED'),ensure_ascii=False))\n"
+  ],
+  "cwd": "/home/willy/code/cpea_terms",
+  "started_at": "2026-10-21T04:28:42+00:00",
+  "finished_at": "2026-10-21T04:28:43+00:00",
+  "exit_code": 0,
+  "revision": "bc09c67fc4078501599c37e4cdfecdee40af2ef8",
+  "diff_fingerprint": "7055794fccfac615aaa94cdd99d6e17a66113c46da353a4d231b958a8476f3a5",
+  "post_fingerprint": "7055794fccfac615aaa94cdd99d6e17a66113c46da353a4d231b958a8476f3a5",
+  "source_unchanged": true,
+  "output_sha256": "93a1c9d2e46c3e6cc89b45cad0a603e5c083b2800e2ee308b896aecb8e228680",
+  "raw_output": ".local/EV-20261021T042842-e7ac3938.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "81d2d02b99289e09296bda20c1aebe28d7d24046611bd882d758cf43978c00ae"
+}

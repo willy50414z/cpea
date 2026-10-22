@@ -1,0 +1,48 @@
+version: 3
+view: demo_retail.v_daily_sales
+summary: 粒度：門市×有銷售的日期；沒有交易的門市日期不出現。適合每日營收、門市趨勢
+grain:
+  description: 門市×有銷售的日期
+  keys:
+  - sales_date
+  - store_id
+columns:
+  sales_date:
+    type: date
+    role: dimension
+    description: 已完成訂單的銷售日期；無交易的門市日期不會有資料列。
+  store_id:
+    type: number
+    role: identifier
+    description: 門市id
+  store_name:
+    type: string
+    role: dimension
+    description: 門市名稱
+  region:
+    type: string
+    role: dimension
+    description: 門市所屬區域；北部、中部、南部
+  city:
+    type: string
+    role: dimension
+    description: 門市所在城市
+  order_count:
+    type: number
+    role: measure
+    description: 門市已完成訂單筆數
+  units_sold:
+    type: number
+    role: measure
+    description: 門市已完成訂單銷售的商品總件數；單位件
+    unit: 件
+  revenue:
+    type: number
+    role: measure
+    description: 門市折扣後的銷售淨額總和，單位 TWD
+    unit: TWD
+  gross_profit:
+    type: number
+    role: measure
+    description: 門市此日毛利總額（折扣後淨額 − 商品成本），單位 TWD
+    unit: TWD

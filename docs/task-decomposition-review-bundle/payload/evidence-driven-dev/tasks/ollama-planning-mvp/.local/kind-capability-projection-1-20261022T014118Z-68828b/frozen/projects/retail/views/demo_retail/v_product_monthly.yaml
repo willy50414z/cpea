@@ -1,0 +1,71 @@
+version: 3
+view: demo_retail.v_product_monthly
+summary: 粒度：門市×月份×商品；適合商品/分類排行、商品銷量及毛利，不含訂單筆數；商品跨店排行需加總 net_sales/units_sold。
+grain:
+  description: 門市×月份×商品
+  keys:
+  - store_id
+  - sales_month
+  - product_id
+columns:
+  sales_month:
+    type: date
+    role: dimension
+    description: 商品銷售統計月份的第一天；月度粒度。
+  store_id:
+    type: number
+    role: identifier
+    description: 交易門市識別碼；與 sales_month、product_id 組合唯一決定一列。
+  store_name:
+    type: string
+    role: dimension
+    description: 交易門市名稱。
+  region:
+    type: string
+    role: dimension
+    description: 交易門市所屬區域；北部、中部、南部。
+  city:
+    type: string
+    role: dimension
+    description: 交易門市所在城市。
+  product_id:
+    type: number
+    role: identifier
+    description: 商品識別碼；與 store_id、sales_month 組合唯一決定一列。
+  sku:
+    type: string
+    role: identifier
+    description: 商品庫存單位代碼（SKU）。
+  product_name:
+    type: string
+    role: dimension
+    description: 商品名稱。
+  category:
+    type: string
+    role: dimension
+    description: 商品分類，例如飲料、零食、日用品。
+  units_sold:
+    type: number
+    role: measure
+    description: 此門市此月份此商品的銷售件數合計；單位件。
+    unit: 件
+  gross_sales:
+    type: number
+    role: measure
+    description: 此門市此月份此商品的折扣前銷售額，單位 TWD。
+    unit: TWD
+  discount_amount:
+    type: number
+    role: measure
+    description: 此門市此月份此商品的折扣金額合計，單位 TWD。
+    unit: TWD
+  net_sales:
+    type: number
+    role: measure
+    description: 此門市此月份此商品的折扣後銷售額，單位 TWD；適合跨門市彙總商品營收。
+    unit: TWD
+  gross_profit:
+    type: number
+    role: measure
+    description: 此門市此月份此商品的毛利總額，單位 TWD；不是毛利率。
+    unit: TWD

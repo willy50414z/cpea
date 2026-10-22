@@ -1,0 +1,565 @@
+{
+  "$defs": {
+    "ColumnMapping": {
+      "additionalProperties": false,
+      "properties": {
+        "column": {
+          "minLength": 1,
+          "title": "Column",
+          "type": "string"
+        }
+      },
+      "required": [
+        "column"
+      ],
+      "title": "ColumnMapping",
+      "type": "object"
+    },
+    "KindDecision_filter_439a1ecb8a267cd1": {
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "enum": [
+            "supported",
+            "partial",
+            "unsupported",
+            "uncertain"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "own_gap": {
+          "title": "Own Gap",
+          "type": "boolean"
+        },
+        "mappings": {
+          "items": {
+            "$ref": "#/$defs/RequiredFilter"
+          },
+          "title": "Mappings",
+          "type": "array"
+        },
+        "contract_path": {
+          "anyOf": [
+            {
+              "enum": [
+                "/columns/category/description",
+                "/columns/category/role",
+                "/columns/category/type",
+                "/columns/city/description",
+                "/columns/city/role",
+                "/columns/city/type",
+                "/columns/counted_day/description",
+                "/columns/counted_day/role",
+                "/columns/counted_day/type",
+                "/columns/estimated_days_of_supply/description",
+                "/columns/estimated_days_of_supply/role",
+                "/columns/estimated_days_of_supply/type",
+                "/columns/estimated_days_of_supply/unit",
+                "/columns/inventory_cost_value/description",
+                "/columns/inventory_cost_value/role",
+                "/columns/inventory_cost_value/type",
+                "/columns/inventory_cost_value/unit",
+                "/columns/item_key/description",
+                "/columns/item_key/role",
+                "/columns/item_key/type",
+                "/columns/onhand_value/description",
+                "/columns/onhand_value/role",
+                "/columns/onhand_value/type",
+                "/columns/onhand_value/unit",
+                "/columns/product_name/description",
+                "/columns/product_name/role",
+                "/columns/product_name/type",
+                "/columns/region/description",
+                "/columns/region/role",
+                "/columns/region/type",
+                "/columns/reorder_point/description",
+                "/columns/reorder_point/role",
+                "/columns/reorder_point/type",
+                "/columns/site_key/description",
+                "/columns/site_key/role",
+                "/columns/site_key/type",
+                "/columns/sku/description",
+                "/columns/sku/role",
+                "/columns/sku/type",
+                "/columns/sold_qty_30d/description",
+                "/columns/sold_qty_30d/role",
+                "/columns/sold_qty_30d/type",
+                "/columns/store_name/description",
+                "/columns/store_name/role",
+                "/columns/store_name/type",
+                "/grain/description",
+                "/grain/keys/0",
+                "/grain/keys/1",
+                "/summary",
+                "/view"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Contract Path"
+        }
+      },
+      "required": [
+        "status",
+        "own_gap",
+        "mappings",
+        "contract_path"
+      ],
+      "title": "KindDecision_filter_439a1ecb8a267cd1",
+      "type": "object"
+    },
+    "KindDecision_grain_439a1ecb8a267cd1": {
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "enum": [
+            "supported",
+            "partial",
+            "unsupported",
+            "uncertain"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "own_gap": {
+          "title": "Own Gap",
+          "type": "boolean"
+        },
+        "mappings": {
+          "items": {
+            "$ref": "#/$defs/ColumnMapping"
+          },
+          "title": "Mappings",
+          "type": "array"
+        }
+      },
+      "required": [
+        "status",
+        "own_gap",
+        "mappings"
+      ],
+      "title": "KindDecision_grain_439a1ecb8a267cd1",
+      "type": "object"
+    },
+    "KindDecision_metadata_439a1ecb8a267cd1": {
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "enum": [
+            "supported",
+            "partial",
+            "unsupported",
+            "uncertain"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "own_gap": {
+          "title": "Own Gap",
+          "type": "boolean"
+        },
+        "mappings": {
+          "items": {
+            "$ref": "#/$defs/ColumnMapping"
+          },
+          "title": "Mappings",
+          "type": "array"
+        },
+        "contract_path": {
+          "anyOf": [
+            {
+              "enum": [
+                "/columns/category/description",
+                "/columns/category/role",
+                "/columns/category/type",
+                "/columns/city/description",
+                "/columns/city/role",
+                "/columns/city/type",
+                "/columns/counted_day/description",
+                "/columns/counted_day/role",
+                "/columns/counted_day/type",
+                "/columns/estimated_days_of_supply/description",
+                "/columns/estimated_days_of_supply/role",
+                "/columns/estimated_days_of_supply/type",
+                "/columns/estimated_days_of_supply/unit",
+                "/columns/inventory_cost_value/description",
+                "/columns/inventory_cost_value/role",
+                "/columns/inventory_cost_value/type",
+                "/columns/inventory_cost_value/unit",
+                "/columns/item_key/description",
+                "/columns/item_key/role",
+                "/columns/item_key/type",
+                "/columns/onhand_value/description",
+                "/columns/onhand_value/role",
+                "/columns/onhand_value/type",
+                "/columns/onhand_value/unit",
+                "/columns/product_name/description",
+                "/columns/product_name/role",
+                "/columns/product_name/type",
+                "/columns/region/description",
+                "/columns/region/role",
+                "/columns/region/type",
+                "/columns/reorder_point/description",
+                "/columns/reorder_point/role",
+                "/columns/reorder_point/type",
+                "/columns/site_key/description",
+                "/columns/site_key/role",
+                "/columns/site_key/type",
+                "/columns/sku/description",
+                "/columns/sku/role",
+                "/columns/sku/type",
+                "/columns/sold_qty_30d/description",
+                "/columns/sold_qty_30d/role",
+                "/columns/sold_qty_30d/type",
+                "/columns/store_name/description",
+                "/columns/store_name/role",
+                "/columns/store_name/type",
+                "/grain/description",
+                "/grain/keys/0",
+                "/grain/keys/1",
+                "/summary",
+                "/view"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Contract Path"
+        }
+      },
+      "required": [
+        "status",
+        "own_gap",
+        "mappings",
+        "contract_path"
+      ],
+      "title": "KindDecision_metadata_439a1ecb8a267cd1",
+      "type": "object"
+    },
+    "KindDecision_metric_439a1ecb8a267cd1": {
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "enum": [
+            "supported",
+            "partial",
+            "unsupported",
+            "uncertain"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "own_gap": {
+          "title": "Own Gap",
+          "type": "boolean"
+        },
+        "mappings": {
+          "items": {
+            "$ref": "#/$defs/MetricMapping"
+          },
+          "title": "Mappings",
+          "type": "array"
+        },
+        "contract_path": {
+          "anyOf": [
+            {
+              "enum": [
+                "/columns/category/description",
+                "/columns/category/role",
+                "/columns/category/type",
+                "/columns/city/description",
+                "/columns/city/role",
+                "/columns/city/type",
+                "/columns/counted_day/description",
+                "/columns/counted_day/role",
+                "/columns/counted_day/type",
+                "/columns/estimated_days_of_supply/description",
+                "/columns/estimated_days_of_supply/role",
+                "/columns/estimated_days_of_supply/type",
+                "/columns/estimated_days_of_supply/unit",
+                "/columns/inventory_cost_value/description",
+                "/columns/inventory_cost_value/role",
+                "/columns/inventory_cost_value/type",
+                "/columns/inventory_cost_value/unit",
+                "/columns/item_key/description",
+                "/columns/item_key/role",
+                "/columns/item_key/type",
+                "/columns/onhand_value/description",
+                "/columns/onhand_value/role",
+                "/columns/onhand_value/type",
+                "/columns/onhand_value/unit",
+                "/columns/product_name/description",
+                "/columns/product_name/role",
+                "/columns/product_name/type",
+                "/columns/region/description",
+                "/columns/region/role",
+                "/columns/region/type",
+                "/columns/reorder_point/description",
+                "/columns/reorder_point/role",
+                "/columns/reorder_point/type",
+                "/columns/site_key/description",
+                "/columns/site_key/role",
+                "/columns/site_key/type",
+                "/columns/sku/description",
+                "/columns/sku/role",
+                "/columns/sku/type",
+                "/columns/sold_qty_30d/description",
+                "/columns/sold_qty_30d/role",
+                "/columns/sold_qty_30d/type",
+                "/columns/store_name/description",
+                "/columns/store_name/role",
+                "/columns/store_name/type",
+                "/grain/description",
+                "/grain/keys/0",
+                "/grain/keys/1",
+                "/summary",
+                "/view"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Contract Path"
+        }
+      },
+      "required": [
+        "status",
+        "own_gap",
+        "mappings",
+        "contract_path"
+      ],
+      "title": "KindDecision_metric_439a1ecb8a267cd1",
+      "type": "object"
+    },
+    "KindDecision_population_439a1ecb8a267cd1": {
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "enum": [
+            "supported",
+            "partial",
+            "unsupported",
+            "uncertain"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "own_gap": {
+          "title": "Own Gap",
+          "type": "boolean"
+        },
+        "mappings": {
+          "items": {
+            "$ref": "#/$defs/ColumnMapping"
+          },
+          "title": "Mappings",
+          "type": "array"
+        },
+        "contract_path": {
+          "anyOf": [
+            {
+              "enum": [
+                "/columns/category/description",
+                "/columns/category/role",
+                "/columns/category/type",
+                "/columns/city/description",
+                "/columns/city/role",
+                "/columns/city/type",
+                "/columns/counted_day/description",
+                "/columns/counted_day/role",
+                "/columns/counted_day/type",
+                "/columns/estimated_days_of_supply/description",
+                "/columns/estimated_days_of_supply/role",
+                "/columns/estimated_days_of_supply/type",
+                "/columns/estimated_days_of_supply/unit",
+                "/columns/inventory_cost_value/description",
+                "/columns/inventory_cost_value/role",
+                "/columns/inventory_cost_value/type",
+                "/columns/inventory_cost_value/unit",
+                "/columns/item_key/description",
+                "/columns/item_key/role",
+                "/columns/item_key/type",
+                "/columns/onhand_value/description",
+                "/columns/onhand_value/role",
+                "/columns/onhand_value/type",
+                "/columns/onhand_value/unit",
+                "/columns/product_name/description",
+                "/columns/product_name/role",
+                "/columns/product_name/type",
+                "/columns/region/description",
+                "/columns/region/role",
+                "/columns/region/type",
+                "/columns/reorder_point/description",
+                "/columns/reorder_point/role",
+                "/columns/reorder_point/type",
+                "/columns/site_key/description",
+                "/columns/site_key/role",
+                "/columns/site_key/type",
+                "/columns/sku/description",
+                "/columns/sku/role",
+                "/columns/sku/type",
+                "/columns/sold_qty_30d/description",
+                "/columns/sold_qty_30d/role",
+                "/columns/sold_qty_30d/type",
+                "/columns/store_name/description",
+                "/columns/store_name/role",
+                "/columns/store_name/type",
+                "/grain/description",
+                "/grain/keys/0",
+                "/grain/keys/1",
+                "/summary",
+                "/view"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Contract Path"
+        }
+      },
+      "required": [
+        "status",
+        "own_gap",
+        "mappings",
+        "contract_path"
+      ],
+      "title": "KindDecision_population_439a1ecb8a267cd1",
+      "type": "object"
+    },
+    "KindSlots_439a1ecb8a267cd1": {
+      "additionalProperties": false,
+      "properties": {
+        "GRN-001": {
+          "$ref": "#/$defs/KindDecision_grain_439a1ecb8a267cd1"
+        },
+        "MET-001": {
+          "$ref": "#/$defs/KindDecision_metric_439a1ecb8a267cd1"
+        },
+        "FILT-001": {
+          "$ref": "#/$defs/KindDecision_filter_439a1ecb8a267cd1"
+        },
+        "FILT-002": {
+          "$ref": "#/$defs/KindDecision_filter_439a1ecb8a267cd1"
+        },
+        "MET-002": {
+          "$ref": "#/$defs/KindDecision_metric_439a1ecb8a267cd1"
+        },
+        "MET-003": {
+          "$ref": "#/$defs/KindDecision_metric_439a1ecb8a267cd1"
+        },
+        "META-001": {
+          "$ref": "#/$defs/KindDecision_metadata_439a1ecb8a267cd1"
+        },
+        "POP-001": {
+          "$ref": "#/$defs/KindDecision_population_439a1ecb8a267cd1"
+        }
+      },
+      "required": [
+        "GRN-001",
+        "MET-001",
+        "FILT-001",
+        "FILT-002",
+        "MET-002",
+        "MET-003",
+        "META-001",
+        "POP-001"
+      ],
+      "title": "KindSlots_439a1ecb8a267cd1",
+      "type": "object"
+    },
+    "MetricMapping": {
+      "additionalProperties": false,
+      "properties": {
+        "column": {
+          "minLength": 1,
+          "title": "Column",
+          "type": "string"
+        },
+        "aggregation": {
+          "enum": [
+            "sum",
+            "count",
+            "count_distinct",
+            "avg",
+            "min",
+            "max"
+          ],
+          "title": "Aggregation",
+          "type": "string"
+        },
+        "conditions": {
+          "items": {
+            "$ref": "#/$defs/RequiredFilter"
+          },
+          "title": "Conditions",
+          "type": "array"
+        }
+      },
+      "required": [
+        "column",
+        "aggregation",
+        "conditions"
+      ],
+      "title": "MetricMapping",
+      "type": "object"
+    },
+    "RequiredFilter": {
+      "additionalProperties": false,
+      "properties": {
+        "column": {
+          "title": "Column",
+          "type": "string"
+        },
+        "operator": {
+          "enum": [
+            "=",
+            "!=",
+            "<>",
+            ">",
+            ">=",
+            "<",
+            "<=",
+            "IN",
+            "NOT IN",
+            "LIKE",
+            "IS NULL",
+            "IS NOT NULL"
+          ],
+          "title": "Operator",
+          "type": "string"
+        },
+        "value": {
+          "title": "Value"
+        }
+      },
+      "required": [
+        "column",
+        "operator",
+        "value"
+      ],
+      "title": "RequiredFilter",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "entries": {
+      "$ref": "#/$defs/KindSlots_439a1ecb8a267cd1"
+    }
+  },
+  "required": [
+    "entries"
+  ],
+  "title": "KindCoverage_439a1ecb8a267cd1",
+  "type": "object"
+}

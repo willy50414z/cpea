@@ -1,0 +1,520 @@
+{
+  "artifact_result": "PASS",
+  "prompt_version": "v3-md-priority-review-1",
+  "request": "對照各店各商品目前庫存件數與 2026 年 9 月線上通路的折扣金額及淨銷售額，準備促銷後補貨評估；保留所有庫存商品。",
+  "calls": 2,
+  "model": "DeepSeek-V4.1-Flash",
+  "elapsed_seconds": 32.963228360997164,
+  "input_tokens_estimated": {
+    "planner": 11150,
+    "reviewer": 10505
+  },
+  "planner_semantic_result": "FAIL",
+  "planner_runtime_status": "error",
+  "reviewer_verdict": "reject",
+  "reviewer_assessment": "PASS_WITH_WARNINGS",
+  "confirmed_finding": "決策1/3引用月表不存在的sales_channel；typed欄位與filter同樣使用該欄位，違反來源契約。第二模型已指出並reject。",
+  "reviewer_limitations": [
+    "第二項blocking對門市識別碼語意的額外懷疑未有獨立證據，不採為新增阻擋理由；核心通路缺口已由第一項涵蓋。",
+    "盤點日期不保證全球最新是資料時間限制，但不能推成同店商品有多列，亦不能自動新增日期filter刪除庫存母體；來源鍵仍為店×商品。",
+    "部分plan_references是task_id索引簡寫；planner_output.notes路徑不存在，decision_chain索引亦有步號與陣列位置混用。程式只驗證task/step引用存在，不宣稱所有文字路徑精確。",
+    "同模型的新對話審查不等於獨立oracle；單題一次且沒有自動repair，未驗證對正確計畫的誤拒率。"
+  ],
+  "raw_replays": 2,
+  "v3_default_unchanged": true,
+  "old_four_schemas_unchanged": true,
+  "reviewer_has_no_oracle_or_grade_feedback": true,
+  "planner_result": {
+    "phase": "planner",
+    "parse_error": null,
+    "response": {
+      "status": "error",
+      "code": "invalid_plan",
+      "draft": {
+        "status": "ready",
+        "strategy": "multi_view",
+        "tasks": [
+          {
+            "task_id": "inventory_current",
+            "view": "demo_retail.v_inventory_status",
+            "required_columns": [
+              "snapshot_date",
+              "store_id",
+              "product_id",
+              "stock_qty",
+              "stock_status"
+            ],
+            "filters": [],
+            "metrics": {},
+            "conditional_metrics": [],
+            "attributes": [
+              "stock_qty",
+              "stock_status"
+            ],
+            "metadata_collections": [
+              "snapshot_date"
+            ],
+            "group_by": [
+              "store_id",
+              "product_id"
+            ],
+            "output_grain": [
+              "store_id",
+              "product_id"
+            ],
+            "depends_on": [],
+            "unbound_inputs": [],
+            "request": "查詢各店各商品目前庫存，保留所有庫存商品；輸出 store_id、product_id、stock_qty、stock_status，並收集 snapshot_date 作為來源盤點日期。"
+          },
+          {
+            "task_id": "online_sales_202609",
+            "view": "demo_retail.v_product_monthly",
+            "required_columns": [
+              "sales_month",
+              "store_id",
+              "product_id",
+              "sales_channel",
+              "discount_amount",
+              "net_sales"
+            ],
+            "filters": [
+              {
+                "column": "sales_month",
+                "operator": "=",
+                "value": "2026-09-01"
+              },
+              {
+                "column": "sales_channel",
+                "operator": "=",
+                "value": "online"
+              }
+            ],
+            "metrics": {
+              "discount_amount": "sum",
+              "net_sales": "sum"
+            },
+            "conditional_metrics": [],
+            "attributes": [],
+            "metadata_collections": [],
+            "group_by": [
+              "sales_month",
+              "store_id",
+              "product_id",
+              "sales_channel"
+            ],
+            "output_grain": [
+              "sales_month",
+              "store_id",
+              "product_id",
+              "sales_channel"
+            ],
+            "depends_on": [],
+            "unbound_inputs": [],
+            "request": "查詢 2026 年 9 月線上通路的各店各商品折扣金額與淨銷售額；以 store_id、product_id 彙總 discount_amount、net_sales，並保留 sales_month、sales_channel 作為條件與來源標記。"
+          }
+        ],
+        "integration": {
+          "anchor_task": "inventory_current",
+          "output_grain": [
+            "store_id",
+            "product_id"
+          ],
+          "edges": [
+            {
+              "left_task": "inventory_current",
+              "right_task": "online_sales_202609",
+              "left_keys": [
+                "store_id",
+                "product_id"
+              ],
+              "right_keys": [
+                "store_id",
+                "product_id"
+              ],
+              "mode": "left",
+              "cardinality": "many_to_one",
+              "preserve_task": "inventory_current"
+            }
+          ],
+          "preparation": [
+            {
+              "task_id": "inventory_current",
+              "kind": "aggregate",
+              "keys": [
+                "store_id",
+                "product_id"
+              ],
+              "description": "庫存來源已是門市×商品粒度，僅依 store_id、product_id 彙總並收集 snapshot_date 集合，保留所有庫存商品。"
+            },
+            {
+              "task_id": "online_sales_202609",
+              "kind": "aggregate",
+              "keys": [
+                "store_id",
+                "product_id"
+              ],
+              "description": "銷售來源為門市×月份×商品粒度，依 store_id、product_id 將 2026 年 9 月線上通路列加總 discount_amount 與 net_sales，以對齊最終商品列。"
+            }
+          ],
+          "missing_data_policy": "保留未匹配的庫存商品列並將折扣金額、淨銷售額標記為缺值；契約未保證時不填零。",
+          "notes": [
+            "目前庫存為 snapshot_date 快照，2026 年 9 月線上銷售為歷史月度彙總，兩者資料時間不同，不可解釋為同一時點庫存。",
+            "所有庫存商品均保留，即使 2026 年 9 月線上通路無銷售亦不刪除。",
+            "sales_month 與 sales_channel 僅作銷售任務條件與來源標記，最終輸出粒度不包含 sales_month 或 sales_channel。"
+          ]
+        },
+        "clarifications": [],
+        "unsupported_reasons": []
+      },
+      "prepared_requests": [],
+      "validation_errors": [
+        "online_sales_202609: invalid required columns"
+      ],
+      "contract_fingerprint": "e5e5a5a2cc29a1be93dc4d6875aba8c47a35ed48c019c7d6838a45831d0441dc",
+      "context_tokens": 0,
+      "token_counter": "",
+      "decision_summary": {
+        "source_selection": "選用 v_inventory_status 取得各店各商品目前庫存件數與盤點日期，並以 v_product_monthly 取得 2026 年 9 月線上通路折扣金額與淨銷售額；兩者共同具備 store_id、product_id 可整合，其他 View 缺乏同時含商品粒度與所需折扣／淨銷售指標。",
+        "field_roles": "庫存任務保留 snapshot_date、store_id、product_id、stock_qty、stock_status；銷售任務保留 sales_month、store_id、product_id、sales_channel、discount_amount、net_sales。折扣金額與淨銷售額為可加總度量，盤點日期以 metadata_collections 收集，不當分組。",
+        "conditions": "銷售任務套用 sales_month = 2026-09-01 與 sales_channel = online；庫存任務不另設快照日期篩選，因需求為目前庫存，但保留 snapshot_date 作為來源時間揭露。",
+        "grain": "庫存來源粒度為門市×商品，銷售來源粒度為門市×月份×商品；最終對齊至各店各商品一列，因需求逐一對照每店每商品庫存與該月線上銷售。",
+        "population": "以 v_inventory_status 的門市×商品為保留母體，保留所有庫存商品；2026 年 9 月線上通路無銷售的庫存商品仍保留，銷售指標標記缺值，不填零。",
+        "integration": "以 store_id、product_id 為整合鍵，庫存任務為 anchor，左接銷售任務 many_to_one；最終 output_grain 為 store_id、product_id。"
+      },
+      "decision_chain": [
+        {
+          "step_id": 1,
+          "stage": "source_selection",
+          "decision": "以 v_inventory_status 與 v_product_monthly 兩來源分工：前者供目前庫存，後者供 2026 年 9 月線上折扣與淨銷售。",
+          "evidence": [
+            "目前庫存件數",
+            "2026 年 9 月線上通路的折扣金額及淨銷售額",
+            "v_inventory_status grain: store_id, product_id",
+            "v_product_monthly columns: discount_amount, net_sales, sales_channel"
+          ],
+          "task_ids": [
+            "inventory_current",
+            "online_sales_202609"
+          ],
+          "depends_on": []
+        },
+        {
+          "step_id": 2,
+          "stage": "field_roles",
+          "decision": "庫存任務輸出 snapshot_date、store_id、product_id、stock_qty、stock_status；銷售任務輸出 sales_month、store_id、product_id、sales_channel、discount_amount、net_sales，日期集合作 provenance。",
+          "evidence": [
+            "v_inventory_status columns: snapshot_date, stock_qty, stock_status",
+            "v_product_monthly columns: sales_month, discount_amount, net_sales",
+            "保留所有庫存商品"
+          ],
+          "task_ids": [
+            "inventory_current",
+            "online_sales_202609"
+          ],
+          "depends_on": []
+        },
+        {
+          "step_id": 3,
+          "stage": "conditions",
+          "decision": "銷售來源限 2026 年 9 月且 sales_channel=online；庫存來源不加日期等號條件，但要求 snapshot_date 以揭露來源時間。",
+          "evidence": [
+            "2026 年 9 月線上通路",
+            "v_product_monthly.sales_month",
+            "v_product_monthly.sales_channel",
+            "v_inventory_status.snapshot_date"
+          ],
+          "task_ids": [
+            "inventory_current",
+            "online_sales_202609"
+          ],
+          "depends_on": []
+        },
+        {
+          "step_id": 4,
+          "stage": "grain",
+          "decision": "庫存查詢粒度為 store_id、product_id；銷售查詢粒度為 sales_month、store_id、product_id；最終整合粒度為 store_id、product_id。",
+          "evidence": [
+            "對照各店各商品",
+            "v_inventory_status keys: store_id, product_id",
+            "v_product_monthly keys: store_id, sales_month, product_id"
+          ],
+          "task_ids": [
+            "inventory_current",
+            "online_sales_202609"
+          ],
+          "depends_on": []
+        },
+        {
+          "step_id": 5,
+          "stage": "population",
+          "decision": "以所有庫存門市×商品為母體；2026 年 9 月線上無銷售者仍保留，不將未匹配銷售補零。",
+          "evidence": [
+            "保留所有庫存商品",
+            "準備促銷後補貨評估",
+            "v_inventory_status grain: store_id, product_id"
+          ],
+          "task_ids": [
+            "inventory_current",
+            "online_sales_202609"
+          ],
+          "depends_on": []
+        },
+        {
+          "step_id": 6,
+          "stage": "integration",
+          "decision": "庫存任務作 anchor，以 store_id、product_id left join 銷售任務，many_to_one，保留全部庫存列。",
+          "evidence": [
+            "對照各店各商品目前庫存件數與 ... 折扣金額及淨銷售額",
+            "v_inventory_status keys: store_id, product_id",
+            "v_product_monthly keys: store_id, sales_month, product_id"
+          ],
+          "task_ids": [
+            "inventory_current",
+            "online_sales_202609"
+          ],
+          "depends_on": []
+        }
+      ]
+    },
+    "score": {
+      "status_match": false,
+      "canonical_views_match": false,
+      "views_and_columns_match": false,
+      "equivalent_tasks_match": false,
+      "payload_ready": false,
+      "integration_keys_match": false,
+      "automated_pass": false,
+      "semantic_review_required": true,
+      "task_scores": [
+        {
+          "view": true,
+          "columns": true,
+          "column_recall": 1.0,
+          "column_precision": 0.8,
+          "filters": true,
+          "metrics": true,
+          "conditional_metrics": true,
+          "metadata": true,
+          "grain": true
+        },
+        {
+          "view": false,
+          "columns": false,
+          "column_recall": 0.8333333333333334,
+          "column_precision": 0.8333333333333334,
+          "filters": false,
+          "metrics": true,
+          "conditional_metrics": true,
+          "metadata": true,
+          "grain": true
+        }
+      ],
+      "strategy_match": true
+    },
+    "diagnostic": {
+      "safe": false,
+      "errors": [
+        "status",
+        "online_sales_202609: source",
+        "online_sales_202609: invalid required columns",
+        "missing policy requires independent review",
+        "payload unavailable"
+      ],
+      "review_required": true
+    }
+  },
+  "reviewer_result": {
+    "phase": "reviewer",
+    "parse_error": null,
+    "review": {
+      "verdict": "reject",
+      "checks": [
+        {
+          "requirement": "各店各商品目前庫存件數",
+          "decision_step_ids": [
+            1
+          ],
+          "task_ids": [
+            "inventory_current"
+          ],
+          "contract_references": [
+            "demo_retail.v_inventory_status.grain=store_id,product_id",
+            "demo_retail.v_inventory_status.stock_qty"
+          ],
+          "plan_references": [
+            "planner_output.tasks[\"inventory_current\"].required_columns",
+            "planner_output.decision_chain[1].decision"
+          ],
+          "status": "supported",
+          "missing_evidence": ""
+        },
+        {
+          "requirement": "2026 年 9 月線上通路的折扣金額",
+          "decision_step_ids": [
+            1,
+            3
+          ],
+          "task_ids": [
+            "online_sales_202609"
+          ],
+          "contract_references": [
+            "demo_retail.v_product_monthly.discount_amount",
+            "demo_retail.v_product_monthly.sales_month",
+            "demo_retail.v_product_monthly.sales_channel"
+          ],
+          "plan_references": [
+            "planner_output.tasks[\"online_sales_202609\"].filters",
+            "planner_output.tasks[\"online_sales_202609\"].metrics"
+          ],
+          "status": "contradicted",
+          "missing_evidence": "v_product_monthly 契約欄位未包含 sales_channel；該 View 的維度為門市×月份×商品，無通路維度，因此 plan 以 sales_channel=online 過濾並不可由契約支持。"
+        },
+        {
+          "requirement": "2026 年 9 月線上通路的淨銷售額",
+          "decision_step_ids": [
+            1,
+            3
+          ],
+          "task_ids": [
+            "online_sales_202609"
+          ],
+          "contract_references": [
+            "demo_retail.v_product_monthly.net_sales",
+            "demo_retail.v_product_monthly.sales_month"
+          ],
+          "plan_references": [
+            "planner_output.tasks[\"online_sales_202609\"].filters",
+            "planner_output.tasks[\"online_sales_202609\"].metrics"
+          ],
+          "status": "contradicted",
+          "missing_evidence": "v_product_monthly 無 sales_channel 欄位，無法僅由該 View 取得「線上通路」的 net_sales；plan 仍以 sales_channel=online 過濾，與來源契約矛盾。"
+        },
+        {
+          "requirement": "保留所有庫存商品",
+          "decision_step_ids": [
+            5,
+            6
+          ],
+          "task_ids": [
+            "inventory_current",
+            "online_sales_202609"
+          ],
+          "contract_references": [
+            "demo_retail.v_inventory_status.grain=store_id,product_id"
+          ],
+          "plan_references": [
+            "planner_output.integration.anchor_task",
+            "planner_output.integration.missing_data_policy"
+          ],
+          "status": "supported",
+          "missing_evidence": ""
+        },
+        {
+          "requirement": "以各店各商品對照庫存與線上銷售",
+          "decision_step_ids": [
+            4,
+            6
+          ],
+          "task_ids": [
+            "inventory_current",
+            "online_sales_202609"
+          ],
+          "contract_references": [
+            "demo_retail.v_inventory_status.grain=store_id,product_id",
+            "demo_retail.v_product_monthly.grain=store_id,sales_month,product_id"
+          ],
+          "plan_references": [
+            "planner_output.integration.edges",
+            "planner_output.integration.output_grain"
+          ],
+          "status": "uncertain",
+          "missing_evidence": "門市×商品對照的整合鍵在兩 View 名義上存在，但銷售端的 store_id 是交易門市，是否代表與庫存店同一語意需契約說明；目前缺少通路欄位也阻礙線上對照。"
+        },
+        {
+          "requirement": "線上通路條件需有來源欄位",
+          "decision_step_ids": [
+            1,
+            3
+          ],
+          "task_ids": [
+            "online_sales_202609"
+          ],
+          "contract_references": [
+            "demo_retail.v_product_monthly.columns"
+          ],
+          "plan_references": [
+            "planner_output.tasks[\"online_sales_202609\"].filters"
+          ],
+          "status": "contradicted",
+          "missing_evidence": "v_product_monthly 契約無 sales_channel；若需線上通路，應改用具 sales_channel 之銷售明細來源並以商品×月份彙總，或確認其他契約支援。"
+        },
+        {
+          "requirement": "庫存「目前」的時點定義",
+          "decision_step_ids": [
+            3
+          ],
+          "task_ids": [
+            "inventory_current"
+          ],
+          "contract_references": [
+            "demo_retail.v_inventory_status.snapshot_date"
+          ],
+          "plan_references": [
+            "planner_output.tasks[\"inventory_current\"].filters",
+            "planner_output.notes[0]"
+          ],
+          "status": "uncertain",
+          "missing_evidence": "plan 不篩 snapshot_date，直接視為目前庫存；契約僅說 snapshot_date 為庫存盤點日期，未保證無日期篩選會得到唯一且最新快照。"
+        }
+      ],
+      "findings": [
+        {
+          "severity": "blocking",
+          "requirement": "2026 年 9 月線上通路折扣金額與淨銷售額",
+          "decision_step_ids": [
+            1,
+            3
+          ],
+          "task_ids": [
+            "online_sales_202609"
+          ],
+          "plan_path": "planner_output.tasks[\"online_sales_202609\"]",
+          "observation": "任務在 v_product_monthly 過濾 sales_channel=online，但該契約 View 沒有任何 sales_channel 欄位，且其 grain 為 store_id×sales_month×product_id，不含通路維度；因此線上通路條件無法由所選來源實現。",
+          "required_evidence": "必須使用具 sales_channel 欄位且能彙總至 store_id×product_id×月份 的來源，例如 v_sales_detail，或提供其他明確支援線上通路且含 discount_amount／net_sales 的契約。"
+        },
+        {
+          "severity": "blocking",
+          "requirement": "各店各商品對照與保留所有庫存商品",
+          "decision_step_ids": [
+            6
+          ],
+          "task_ids": [
+            "online_sales_202609"
+          ],
+          "plan_path": "planner_output.integration.edges[0]",
+          "observation": "右側銷售任務的 store_id 來自 v_product_monthly 的交易門市；在來源缺少通路確認下，無法判斷其是否等同線上訂單門市，也無法保證 store_id×product_id 對照能代表「線上通路」銷售。",
+          "required_evidence": "修正銷售任務來源與欄位後，提供線上通路之 store_id／product_id 彙總，或確認通路維度與門市語意。"
+        },
+        {
+          "severity": "advisory",
+          "requirement": "目前庫存的時點",
+          "decision_step_ids": [
+            3
+          ],
+          "task_ids": [
+            "inventory_current"
+          ],
+          "plan_path": "planner_output.decision_chain[3]",
+          "observation": "plan 以不篩 snapshot_date 表示目前庫存，但未證明來源僅含單一最新盤點日期；同時又保留 snapshot_date metadata，可能造成同日／多日快照混用。",
+          "required_evidence": "需要確認 v_inventory_status 是否僅提供最新快照，或在任務中加最新 snapshot_date 篩選條件。"
+        }
+      ],
+      "summary": "庫存完成度尚可，但線上銷售任務所選 v_product_monthly 契約無 sales_channel，無法支援 sales_channel=online 過濾，2026 年 9 月線上折扣與淨銷售額的核心證據不足且與計畫矛盾，因此不應 approve。"
+    }
+  },
+  "raw_folder": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/markdown-review-20261020T161155Z-4d197a",
+  "reviewer": "主agent依既有獨立oracle及完整契約核對，未新增跨agent驗收",
+  "verification_model_calls": 0,
+  "sql_db_calls": 0,
+  "ollama_calls": 0
+}

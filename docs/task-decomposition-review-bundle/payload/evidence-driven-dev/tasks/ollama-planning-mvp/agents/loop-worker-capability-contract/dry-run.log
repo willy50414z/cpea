@@ -1,0 +1,1 @@
+{"version": "managed-capability-projection-1", "execute": false, "provider_calls": 0, "samples": [{"id": "COV-ISO-v1-01", "input_tokens": 5147}, {"id": "COV-ISO-v1-02", "input_tokens": 3239}, {"id": "COV-ISO-v1-03", "input_tokens": 5077}, {"id": "COV-CAP-v1-04", "input_tokens": 5194}, {"id": "COV-CAP-v1-05", "input_tokens": 5568}], "bindings_match": true}

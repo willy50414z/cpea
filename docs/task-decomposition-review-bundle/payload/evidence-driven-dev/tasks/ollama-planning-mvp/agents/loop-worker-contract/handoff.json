@@ -1,0 +1,58 @@
+{
+  "ticket": "cc0b275166ab43abbc9bc96c9eb303e4",
+  "result": "PASS",
+  "evidence": [
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-contract/before-hashes.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-contract/historical-replay.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-contract/red.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-contract/red-interrupt-input.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-contract/regression-final.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-contract/offline-final.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-contract/dry-run.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-contract/hash-verification.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-contract/source-freeze.json"
+  ],
+  "summary": "contract_and_managed_runner完成：舊raw精確重現原ValueError；只強化通用indexed recall背景/metadata邊界；新增controller-only三階段runner及22項離線測試。必要相關回歸193 passed；完整9節點與失敗3節點fake raw離線replay PASS。485項基線hash僅授權prompt變更，兩產品既存變更與所有歷史raw/報告/Gate未變。本輪模型/SQL/DB呼叫皆0，尚未驗證自然Qwen效果。",
+  "changes": [
+    {
+      "path": "evaluations/prompts/three_stage/recall_indexed.md",
+      "summary": "requirements只列資料來源應履行的責任；通用目的/來源日期/期間反例，不刪改原request或模型答案。"
+    },
+    {
+      "path": "evaluations/managed_three_stage_runner.py",
+      "summary": "Indexed recall→全部候選path-only mapping→selection/prepared，重用既有嚴格materialize與finish；唯一推論POST為loopctl request。保存完整body、controller receipt/request id、provider response（含thinking）、raw/parsed/normalized/error、usage及來源/工件hash；支援成功、失敗前綴離線重播。"
+    },
+    {
+      "path": "tests/unit/test_managed_three_stage_runner.py",
+      "summary": "22項：真metadata（R_PURPOSE ID仍保留）/無mapping/錯role、完整原request、9節點prepared、首錯停止、provider/parse/input失敗前綴replay、竄改拒絕、managed參數/無retry、dry-run無網路、中斷非成功與Unicode/CRLF原樣。"
+    }
+  ],
+  "verification": {
+    "command": ".venv/bin/python -m pytest tests/unit/test_managed_three_stage_runner.py tests/unit/test_indexed_requirement_recall.py tests/unit/test_referenced_view_coverage.py tests/unit/test_three_stage_view_selection.py tests/unit/test_planning_mvp.py tests/unit/test_task_decomposition_contract.py tests/unit/test_task_decomposition_workflow.py tests/unit/test_decomposition_evaluation.py tests/unit/test_decomposition_decision_chain.py tests/unit/test_decomposition_decision_summary.py tests/unit/test_planning_reasoning_probe.py -q",
+    "result": "193 passed in 14.52s",
+    "historical_error": "supported requires mappings/evidence and no missing requirements",
+    "fake_complete": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/contract-fake-complete-20261021T160939391126Z",
+    "fake_failure": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/contract-fake-failure-20261021T160940455584Z",
+    "source_hashes": {
+      "evaluations/prompts/three_stage/recall_indexed.md": "a11ee2f89ad1c68263e0ea758994b5fb6b39c060596a9142ca87e1ab7f3e7382",
+      "evaluations/managed_three_stage_runner.py": "cdb1cdeca61c3987e0c5423c37fa53e0171ab9ab3940634363950182c94a7de8",
+      "tests/unit/test_managed_three_stage_runner.py": "d296d5194460a238817dd728cab96dfa33d66c1c829b3951f8c83771f1e1a4f6"
+    }
+  },
+  "next_node": {
+    "id": "natural_qwen_three_stage",
+    "precondition": "Main finish本節點後，begin下一節點、dispatch新worker並bind；新worker先確認source-freeze相符，不改測試或來源再跑自然單樣本。",
+    "execute_command": ".venv/bin/python -m evaluations.managed_three_stage_runner --execute --ticket \"$EDD_WORKER_TICKET\"",
+    "endpoint_initialization": "runner自行以 AssistantSettings.from_env(Path(\".env\")).llm_base_url.rstrip(\"/\") + \"/api/chat\" 設定 EDD_LOCAL_ENDPOINT，子程序繼承；不印出URL或secret，loopctl核對初始化hash。",
+    "model_identity": "execute才只讀GET /api/tags並核對固定digest aaee06c39dcf2437cde036998d960e1fc1494b8191be7cc9657d01e509097813，保存name/digest/checked_at；本輪未呼叫GET。",
+    "configuration": "qwen3.8:27b；think=true；temperature=1；top_p=1；seed=42；num_ctx=32768；num_predict=-1；subprocess無timeout；推論HTTP timeout沿用controller既有null設定；只守物理input context、不預留輸出quota。",
+    "replay_command": ".venv/bin/python -m evaluations.managed_three_stage_runner --replay \"$NEW_NATURAL_RUN_FOLDER\"",
+    "fake_replay": "fake使用不同測試原句；以run.json.case傳入managed_three_stage_runner.replay(folder, SchemaCatalog(\"projects/retail\"), case)，不能用固定診斷原句CLI冒充自然結果。",
+    "failure_policy": "首個provider/parse/contract失敗保存並停止；無自動retry/續接/答案修正。自然錯答FAIL交新研究，不重跑相同成功HTTP答案挑分；若程序中斷先由Main確認controller inflight，不直接重送。"
+  },
+  "limitations": [
+    "通用prompt是否能令自然Qwen正確分類仍待下一節點；fake不算自然PASS。",
+    "舊歷史replay在修改前已實跑並保存；新prompt指紋不同時舊runner本來會拒絕當作同版replay，不更新任何歷史工件。",
+    "沒有修改Task/control state，沒有commit/push，沒有新增reports或experiments Markdown。"
+  ]
+}

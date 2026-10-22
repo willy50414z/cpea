@@ -1,0 +1,26 @@
+{
+  "ticket": "378cab1f79c6485ab7c4df5b18a7e598",
+  "session_id": 89761,
+  "run": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T185423Z-5d276f",
+  "execute_log": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-3/execute.log",
+  "status": "STOPPED_FAIL",
+  "planned_max_POSTs": 9,
+  "model": "qwen3.8:27b",
+  "configuration": {
+    "think": true,
+    "seed": 42,
+    "temperature": 1,
+    "top_p": 1,
+    "num_ctx": 32768,
+    "num_predict": -1,
+    "HTTP_timeout_seconds": null,
+    "outer_timeout_seconds": null
+  },
+  "resume": "先檢查 session 89761／runner 與控制器 request 狀態，不重送執行命令。",
+  "exit_code": 1,
+  "inflight": false,
+  "stopped": {
+    "error_type": "ValueError",
+    "error": "gap aspect contradicts evidence or dependencies: grain"
+  }
+}

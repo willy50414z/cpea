@@ -1,0 +1,1399 @@
+FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF                                 [100%]
+=================================== FAILURES ===================================
+________ test_recall_keeps_exact_policy_facts_and_explicit_dependencies ________
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7e7ff67a2600>
+
+    def test_recall_keeps_exact_policy_facts_and_explicit_dependencies(catalog):
+>       rec = recalled(catalog)
+              ^^^^^^^^^^^^^^^^^
+
+tests/unit/test_evidence_bound_managed_contract.py:73: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_evidence_bound_managed_contract.py:53: in recalled
+    return api().materialize_recall(api().RecallWire.model_validate(data or rec), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.evidence_bound_managed_contract'), 'managed evidence-bound wire missing'
+E       AssertionError: managed evidence-bound wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x7e7ff9bae0c0>('evaluations.evidence_bound_managed_contract')
+E        +    where <function find_spec at 0x7e7ff9bae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_evidence_bound_managed_contract.py:18: AssertionError
+___________ test_recall_rejects_wrong_exact_grain_references[empty] ____________
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7e7ff65e4bc0>
+mutation = 'empty'
+
+    @pytest.mark.parametrize('mutation', ['empty','unknown','wrong_kind','duplicate','self','independent_refs','no_binding','injected_candidates'])
+    def test_recall_rejects_wrong_exact_grain_references(catalog, mutation):
+        _, rec, _, _ = inputs(catalog)
+        r = rec['requirements'][0]
+        if mutation == 'empty': r['grain_requirement_ids'] = []
+        if mutation == 'unknown': r['grain_requirement_ids'] = ['unknown']
+        if mutation == 'wrong_kind': r['grain_requirement_ids'] = ['channel']
+        if mutation == 'duplicate': r['grain_requirement_ids'] = ['grain','grain']
+        if mutation == 'self': r['grain_requirement_ids'] = ['stock']
+        if mutation == 'independent_refs': r['grain_binding'] = 'independent'
+        if mutation == 'no_binding': r.pop('grain_binding')
+        if mutation == 'injected_candidates': rec['candidate_views'] = []
+>       with pytest.raises(ValueError): recalled(catalog, rec)
+                                        ^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_evidence_bound_managed_contract.py:96: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_evidence_bound_managed_contract.py:53: in recalled
+    return api().materialize_recall(api().RecallWire.model_validate(data or rec), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.evidence_bound_managed_contract'), 'managed evidence-bound wire missing'
+E       AssertionError: managed evidence-bound wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x7e7ff9bae0c0>('evaluations.evidence_bound_managed_contract')
+E        +    where <function find_spec at 0x7e7ff9bae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_evidence_bound_managed_contract.py:18: AssertionError
+__________ test_recall_rejects_wrong_exact_grain_references[unknown] ___________
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7e7ff65e7620>
+mutation = 'unknown'
+
+    @pytest.mark.parametrize('mutation', ['empty','unknown','wrong_kind','duplicate','self','independent_refs','no_binding','injected_candidates'])
+    def test_recall_rejects_wrong_exact_grain_references(catalog, mutation):
+        _, rec, _, _ = inputs(catalog)
+        r = rec['requirements'][0]
+        if mutation == 'empty': r['grain_requirement_ids'] = []
+        if mutation == 'unknown': r['grain_requirement_ids'] = ['unknown']
+        if mutation == 'wrong_kind': r['grain_requirement_ids'] = ['channel']
+        if mutation == 'duplicate': r['grain_requirement_ids'] = ['grain','grain']
+        if mutation == 'self': r['grain_requirement_ids'] = ['stock']
+        if mutation == 'independent_refs': r['grain_binding'] = 'independent'
+        if mutation == 'no_binding': r.pop('grain_binding')
+        if mutation == 'injected_candidates': rec['candidate_views'] = []
+>       with pytest.raises(ValueError): recalled(catalog, rec)
+                                        ^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_evidence_bound_managed_contract.py:96: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_evidence_bound_managed_contract.py:53: in recalled
+    return api().materialize_recall(api().RecallWire.model_validate(data or rec), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.evidence_bound_managed_contract'), 'managed evidence-bound wire missing'
+E       AssertionError: managed evidence-bound wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x7e7ff9bae0c0>('evaluations.evidence_bound_managed_contract')
+E        +    where <function find_spec at 0x7e7ff9bae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_evidence_bound_managed_contract.py:18: AssertionError
+_________ test_recall_rejects_wrong_exact_grain_references[wrong_kind] _________
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7e7ff65da7e0>
+mutation = 'wrong_kind'
+
+    @pytest.mark.parametrize('mutation', ['empty','unknown','wrong_kind','duplicate','self','independent_refs','no_binding','injected_candidates'])
+    def test_recall_rejects_wrong_exact_grain_references(catalog, mutation):
+        _, rec, _, _ = inputs(catalog)
+        r = rec['requirements'][0]
+        if mutation == 'empty': r['grain_requirement_ids'] = []
+        if mutation == 'unknown': r['grain_requirement_ids'] = ['unknown']
+        if mutation == 'wrong_kind': r['grain_requirement_ids'] = ['channel']
+        if mutation == 'duplicate': r['grain_requirement_ids'] = ['grain','grain']
+        if mutation == 'self': r['grain_requirement_ids'] = ['stock']
+        if mutation == 'independent_refs': r['grain_binding'] = 'independent'
+        if mutation == 'no_binding': r.pop('grain_binding')
+        if mutation == 'injected_candidates': rec['candidate_views'] = []
+>       with pytest.raises(ValueError): recalled(catalog, rec)
+                                        ^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_evidence_bound_managed_contract.py:96: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_evidence_bound_managed_contract.py:53: in recalled
+    return api().materialize_recall(api().RecallWire.model_validate(data or rec), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.evidence_bound_managed_contract'), 'managed evidence-bound wire missing'
+E       AssertionError: managed evidence-bound wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x7e7ff9bae0c0>('evaluations.evidence_bound_managed_contract')
+E        +    where <function find_spec at 0x7e7ff9bae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_evidence_bound_managed_contract.py:18: AssertionError
+_________ test_recall_rejects_wrong_exact_grain_references[duplicate] __________
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7e7ff6655460>
+mutation = 'duplicate'
+
+    @pytest.mark.parametrize('mutation', ['empty','unknown','wrong_kind','duplicate','self','independent_refs','no_binding','injected_candidates'])
+    def test_recall_rejects_wrong_exact_grain_references(catalog, mutation):
+        _, rec, _, _ = inputs(catalog)
+        r = rec['requirements'][0]
+        if mutation == 'empty': r['grain_requirement_ids'] = []
+        if mutation == 'unknown': r['grain_requirement_ids'] = ['unknown']
+        if mutation == 'wrong_kind': r['grain_requirement_ids'] = ['channel']
+        if mutation == 'duplicate': r['grain_requirement_ids'] = ['grain','grain']
+        if mutation == 'self': r['grain_requirement_ids'] = ['stock']
+        if mutation == 'independent_refs': r['grain_binding'] = 'independent'
+        if mutation == 'no_binding': r.pop('grain_binding')
+        if mutation == 'injected_candidates': rec['candidate_views'] = []
+>       with pytest.raises(ValueError): recalled(catalog, rec)
+                                        ^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_evidence_bound_managed_contract.py:96: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_evidence_bound_managed_contract.py:53: in recalled
+    return api().materialize_recall(api().RecallWire.model_validate(data or rec), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.evidence_bound_managed_contract'), 'managed evidence-bound wire missing'
+E       AssertionError: managed evidence-bound wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x7e7ff9bae0c0>('evaluations.evidence_bound_managed_contract')
+E        +    where <function find_spec at 0x7e7ff9bae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_evidence_bound_managed_contract.py:18: AssertionError
+____________ test_recall_rejects_wrong_exact_grain_references[self] ____________
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7e7ff67a0950>
+mutation = 'self'
+
+    @pytest.mark.parametrize('mutation', ['empty','unknown','wrong_kind','duplicate','self','independent_refs','no_binding','injected_candidates'])
+    def test_recall_rejects_wrong_exact_grain_references(catalog, mutation):
+        _, rec, _, _ = inputs(catalog)
+        r = rec['requirements'][0]
+        if mutation == 'empty': r['grain_requirement_ids'] = []
+        if mutation == 'unknown': r['grain_requirement_ids'] = ['unknown']
+        if mutation == 'wrong_kind': r['grain_requirement_ids'] = ['channel']
+        if mutation == 'duplicate': r['grain_requirement_ids'] = ['grain','grain']
+        if mutation == 'self': r['grain_requirement_ids'] = ['stock']
+        if mutation == 'independent_refs': r['grain_binding'] = 'independent'
+        if mutation == 'no_binding': r.pop('grain_binding')
+        if mutation == 'injected_candidates': rec['candidate_views'] = []
+>       with pytest.raises(ValueError): recalled(catalog, rec)
+                                        ^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_evidence_bound_managed_contract.py:96: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_evidence_bound_managed_contract.py:53: in recalled
+    return api().materialize_recall(api().RecallWire.model_validate(data or rec), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.evidence_bound_managed_contract'), 'managed evidence-bound wire missing'
+E       AssertionError: managed evidence-bound wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x7e7ff9bae0c0>('evaluations.evidence_bound_managed_contract')
+E        +    where <function find_spec at 0x7e7ff9bae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_evidence_bound_managed_contract.py:18: AssertionError
+______ test_recall_rejects_wrong_exact_grain_references[independent_refs] ______
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7e7ff6658770>
+mutation = 'independent_refs'
+
+    @pytest.mark.parametrize('mutation', ['empty','unknown','wrong_kind','duplicate','self','independent_refs','no_binding','injected_candidates'])
+    def test_recall_rejects_wrong_exact_grain_references(catalog, mutation):
+        _, rec, _, _ = inputs(catalog)
+        r = rec['requirements'][0]
+        if mutation == 'empty': r['grain_requirement_ids'] = []
+        if mutation == 'unknown': r['grain_requirement_ids'] = ['unknown']
+        if mutation == 'wrong_kind': r['grain_requirement_ids'] = ['channel']
+        if mutation == 'duplicate': r['grain_requirement_ids'] = ['grain','grain']
+        if mutation == 'self': r['grain_requirement_ids'] = ['stock']
+        if mutation == 'independent_refs': r['grain_binding'] = 'independent'
+        if mutation == 'no_binding': r.pop('grain_binding')
+        if mutation == 'injected_candidates': rec['candidate_views'] = []
+>       with pytest.raises(ValueError): recalled(catalog, rec)
+                                        ^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_evidence_bound_managed_contract.py:96: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_evidence_bound_managed_contract.py:53: in recalled
+    return api().materialize_recall(api().RecallWire.model_validate(data or rec), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.evidence_bound_managed_contract'), 'managed evidence-bound wire missing'
+E       AssertionError: managed evidence-bound wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x7e7ff9bae0c0>('evaluations.evidence_bound_managed_contract')
+E        +    where <function find_spec at 0x7e7ff9bae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_evidence_bound_managed_contract.py:18: AssertionError
+_________ test_recall_rejects_wrong_exact_grain_references[no_binding] _________
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7e7ff65fbbf0>
+mutation = 'no_binding'
+
+    @pytest.mark.parametrize('mutation', ['empty','unknown','wrong_kind','duplicate','self','independent_refs','no_binding','injected_candidates'])
+    def test_recall_rejects_wrong_exact_grain_references(catalog, mutation):
+        _, rec, _, _ = inputs(catalog)
+        r = rec['requirements'][0]
+        if mutation == 'empty': r['grain_requirement_ids'] = []
+        if mutation == 'unknown': r['grain_requirement_ids'] = ['unknown']
+        if mutation == 'wrong_kind': r['grain_requirement_ids'] = ['channel']
+        if mutation == 'duplicate': r['grain_requirement_ids'] = ['grain','grain']
+        if mutation == 'self': r['grain_requirement_ids'] = ['stock']
+        if mutation == 'independent_refs': r['grain_binding'] = 'independent'
+        if mutation == 'no_binding': r.pop('grain_binding')
+        if mutation == 'injected_candidates': rec['candidate_views'] = []
+>       with pytest.raises(ValueError): recalled(catalog, rec)
+                                        ^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_evidence_bound_managed_contract.py:96: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_evidence_bound_managed_contract.py:53: in recalled
+    return api().materialize_recall(api().RecallWire.model_validate(data or rec), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.evidence_bound_managed_contract'), 'managed evidence-bound wire missing'
+E       AssertionError: managed evidence-bound wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x7e7ff9bae0c0>('evaluations.evidence_bound_managed_contract')
+E        +    where <function find_spec at 0x7e7ff9bae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_evidence_bound_managed_contract.py:18: AssertionError
+____ test_recall_rejects_wrong_exact_grain_references[injected_candidates] _____
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7e7ff6684500>
+mutation = 'injected_candidates'
+
+    @pytest.mark.parametrize('mutation', ['empty','unknown','wrong_kind','duplicate','self','independent_refs','no_binding','injected_candidates'])
+    def test_recall_rejects_wrong_exact_grain_references(catalog, mutation):
+        _, rec, _, _ = inputs(catalog)
+        r = rec['requirements'][0]
+        if mutation == 'empty': r['grain_requirement_ids'] = []
+        if mutation == 'unknown': r['grain_requirement_ids'] = ['unknown']
+        if mutation == 'wrong_kind': r['grain_requirement_ids'] = ['channel']
+        if mutation == 'duplicate': r['grain_requirement_ids'] = ['grain','grain']
+        if mutation == 'self': r['grain_requirement_ids'] = ['stock']
+        if mutation == 'independent_refs': r['grain_binding'] = 'independent'
+        if mutation == 'no_binding': r.pop('grain_binding')
+        if mutation == 'injected_candidates': rec['candidate_views'] = []
+>       with pytest.raises(ValueError): recalled(catalog, rec)
+                                        ^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_evidence_bound_managed_contract.py:96: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_evidence_bound_managed_contract.py:53: in recalled
+    return api().materialize_recall(api().RecallWire.model_validate(data or rec), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.evidence_bound_managed_contract'), 'managed evidence-bound wire missing'
+E       AssertionError: managed evidence-bound wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x7e7ff9bae0c0>('evaluations.evidence_bound_managed_contract')
+E        +    where <function find_spec at 0x7e7ff9bae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_evidence_bound_managed_contract.py:18: AssertionError
+_____ test_arbitrary_requirement_ids_and_catalog_order_are_preserved[ids0] _____
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7e7ff6686630>
+ids = ['🧾']
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7e7ff66a5490>
+
+    @pytest.mark.parametrize('ids', [['🧾'], ['model_dump','a/b~c','中文','slot_0']])
+    def test_arbitrary_requirement_ids_and_catalog_order_are_preserved(catalog, ids, monkeypatch):
+        request, rec, _, _ = inputs(catalog)
+        one = dict(rec['requirements'][2], grain_requirement_ids=[])
+        rec['requirements'] = [dict(one, requirement_id=i) for i in ids]
+        views = list(catalog.views())[::-1]
+        monkeypatch.setattr(catalog, 'views', lambda: views)
+>       result = recalled(catalog,rec)
+                 ^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_evidence_bound_managed_contract.py:106: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_evidence_bound_managed_contract.py:53: in recalled
+    return api().materialize_recall(api().RecallWire.model_validate(data or rec), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.evidence_bound_managed_contract'), 'managed evidence-bound wire missing'
+E       AssertionError: managed evidence-bound wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x7e7ff9bae0c0>('evaluations.evidence_bound_managed_contract')
+E        +    where <function find_spec at 0x7e7ff9bae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_evidence_bound_managed_contract.py:18: AssertionError
+_____ test_arbitrary_requirement_ids_and_catalog_order_are_preserved[ids1] _____
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7e7ff66a5dc0>
+ids = ['model_dump', 'a/b~c', '中文', 'slot_0']
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7e7ff6685e20>
+
+    @pytest.mark.parametrize('ids', [['🧾'], ['model_dump','a/b~c','中文','slot_0']])
+    def test_arbitrary_requirement_ids_and_catalog_order_are_preserved(catalog, ids, monkeypatch):
+        request, rec, _, _ = inputs(catalog)
+        one = dict(rec['requirements'][2], grain_requirement_ids=[])
+        rec['requirements'] = [dict(one, requirement_id=i) for i in ids]
+        views = list(catalog.views())[::-1]
+        monkeypatch.setattr(catalog, 'views', lambda: views)
+>       result = recalled(catalog,rec)
+                 ^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_evidence_bound_managed_contract.py:106: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_evidence_bound_managed_contract.py:53: in recalled
+    return api().materialize_recall(api().RecallWire.model_validate(data or rec), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.evidence_bound_managed_contract'), 'managed evidence-bound wire missing'
+E       AssertionError: managed evidence-bound wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x7e7ff9bae0c0>('evaluations.evidence_bound_managed_contract')
+E        +    where <function find_spec at 0x7e7ff9bae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_evidence_bound_managed_contract.py:18: AssertionError
+_______ test_linked_metric_cannot_be_supported_when_grain_is_unsupported _______
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7e7ff6686210>
+
+    def test_linked_metric_cannot_be_supported_when_grain_is_unsupported(catalog):
+        _, _, maps, _ = inputs(catalog)
+        data = maps[2]
+        data['entries']['grain'].update(status='unsupported',mappings=[],gaps=[dict(aspect='mapping',requirement_ids=['grain'])])
+>       with pytest.raises(ValueError, match='grain'): mapped(catalog,data,index=2)
+                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_evidence_bound_managed_contract.py:118: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_evidence_bound_managed_contract.py:58: in mapped
+    rec = rec or recalled(catalog)
+                 ^^^^^^^^^^^^^^^^^
+tests/unit/test_evidence_bound_managed_contract.py:53: in recalled
+    return api().materialize_recall(api().RecallWire.model_validate(data or rec), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.evidence_bound_managed_contract'), 'managed evidence-bound wire missing'
+E       AssertionError: managed evidence-bound wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x7e7ff9bae0c0>('evaluations.evidence_bound_managed_contract')
+E        +    where <function find_spec at 0x7e7ff9bae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_evidence_bound_managed_contract.py:18: AssertionError
+_ test_independent_scalar_and_distinct_linked_grain_do_not_inherit_unrelated_grain _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7e7ff6687890>
+
+    def test_independent_scalar_and_distinct_linked_grain_do_not_inherit_unrelated_grain(catalog):
+        _, rec, maps, _ = inputs(catalog)
+        rec['requirements'][0].update(grain_binding='independent',grain_requirement_ids=[])
+        own = dict(rec['requirements'][-2], requirement_id='另一粒度')
+        rec['requirements'].append(own)
+        rec['requirements'][1]['grain_requirement_ids'] = ['另一粒度']
+        data = maps[2]
+        data['entries']['另一粒度'] = deepcopy(data['entries']['grain'])
+        data['entries']['grain'].update(status='unsupported',mappings=[],gaps=[dict(aspect='mapping',requirement_ids=['grain'])])
+>       result = mapped(catalog,data,index=2,rec=recalled(catalog,rec))
+                                                 ^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_evidence_bound_managed_contract.py:138: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_evidence_bound_managed_contract.py:53: in recalled
+    return api().materialize_recall(api().RecallWire.model_validate(data or rec), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.evidence_bound_managed_contract'), 'managed evidence-bound wire missing'
+E       AssertionError: managed evidence-bound wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x7e7ff9bae0c0>('evaluations.evidence_bound_managed_contract')
+E        +    where <function find_spec at 0x7e7ff9bae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_evidence_bound_managed_contract.py:18: AssertionError
+_ test_gap_references_cannot_invent_source_facts_or_contradict_coverage[wrong_ref] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7e7ff66a4b30>
+mutation = 'wrong_ref'
+
+    @pytest.mark.parametrize('mutation', ['wrong_ref','supported_scope','unlinked_grain','empty_partial','false_no_mapping','extra_fact','wrong_population','unknown_aspect'])
+    def test_gap_references_cannot_invent_source_facts_or_contradict_coverage(catalog,mutation):
+        _, _, maps, _ = inputs(catalog)
+        data = maps[1]
+        target = data['entries']['sales']
+        if mutation == 'wrong_ref': target['gaps'] = [dict(aspect='scope',requirement_ids=['not-real'])]
+        if mutation == 'supported_scope': target['gaps'] = [dict(aspect='scope',requirement_ids=['period'])]
+        if mutation == 'unlinked_grain': target['gaps'] = [dict(aspect='grain',requirement_ids=['population'])]
+        if mutation == 'empty_partial': target['gaps'] = []
+        if mutation == 'false_no_mapping': target['gaps'] = [dict(aspect='mapping',requirement_ids=['sales'])]
+        if mutation == 'extra_fact': target['gaps'][0]['reason'] = '來源僅含銷售'
+        if mutation == 'wrong_population': target['gaps'] = [dict(aspect='population',requirement_ids=['stock'])]
+        if mutation == 'unknown_aspect': target['gaps'] = [dict(aspect='made_up',requirement_ids=['sales'])]
+>       with pytest.raises(ValueError): mapped(catalog,data,index=1)
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_evidence_bound_managed_contract.py:159: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_evidence_bound_managed_contract.py:58: in mapped
+    rec = rec or recalled(catalog)
+                 ^^^^^^^^^^^^^^^^^
+tests/unit/test_evidence_bound_managed_contract.py:53: in recalled
+    return api().materialize_recall(api().RecallWire.model_validate(data or rec), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.evidence_bound_managed_contract'), 'managed evidence-bound wire missing'
+E       AssertionError: managed evidence-bound wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x7e7ff9bae0c0>('evaluations.evidence_bound_managed_contract')
+E        +    where <function find_spec at 0x7e7ff9bae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_evidence_bound_managed_contract.py:18: AssertionError
+_ test_gap_references_cannot_invent_source_facts_or_contradict_coverage[supported_scope] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7e7ff65e42c0>
+mutation = 'supported_scope'
+
+    @pytest.mark.parametrize('mutation', ['wrong_ref','supported_scope','unlinked_grain','empty_partial','false_no_mapping','extra_fact','wrong_population','unknown_aspect'])
+    def test_gap_references_cannot_invent_source_facts_or_contradict_coverage(catalog,mutation):
+        _, _, maps, _ = inputs(catalog)
+        data = maps[1]
+        target = data['entries']['sales']
+        if mutation == 'wrong_ref': target['gaps'] = [dict(aspect='scope',requirement_ids=['not-real'])]
+        if mutation == 'supported_scope': target['gaps'] = [dict(aspect='scope',requirement_ids=['period'])]
+        if mutation == 'unlinked_grain': target['gaps'] = [dict(aspect='grain',requirement_ids=['population'])]
+        if mutation == 'empty_partial': target['gaps'] = []
+        if mutation == 'false_no_mapping': target['gaps'] = [dict(aspect='mapping',requirement_ids=['sales'])]
+        if mutation == 'extra_fact': target['gaps'][0]['reason'] = '來源僅含銷售'
+        if mutation == 'wrong_population': target['gaps'] = [dict(aspect='population',requirement_ids=['stock'])]
+        if mutation == 'unknown_aspect': target['gaps'] = [dict(aspect='made_up',requirement_ids=['sales'])]
+>       with pytest.raises(ValueError): mapped(catalog,data,index=1)
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_evidence_bound_managed_contract.py:159: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_evidence_bound_managed_contract.py:58: in mapped
+    rec = rec or recalled(catalog)
+                 ^^^^^^^^^^^^^^^^^
+tests/unit/test_evidence_bound_managed_contract.py:53: in recalled
+    return api().materialize_recall(api().RecallWire.model_validate(data or rec), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.evidence_bound_managed_contract'), 'managed evidence-bound wire missing'
+E       AssertionError: managed evidence-bound wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x7e7ff9bae0c0>('evaluations.evidence_bound_managed_contract')
+E        +    where <function find_spec at 0x7e7ff9bae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_evidence_bound_managed_contract.py:18: AssertionError
+_ test_gap_references_cannot_invent_source_facts_or_contradict_coverage[unlinked_grain] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7e7ff6657e00>
+mutation = 'unlinked_grain'
+
+    @pytest.mark.parametrize('mutation', ['wrong_ref','supported_scope','unlinked_grain','empty_partial','false_no_mapping','extra_fact','wrong_population','unknown_aspect'])
+    def test_gap_references_cannot_invent_source_facts_or_contradict_coverage(catalog,mutation):
+        _, _, maps, _ = inputs(catalog)
+        data = maps[1]
+        target = data['entries']['sales']
+        if mutation == 'wrong_ref': target['gaps'] = [dict(aspect='scope',requirement_ids=['not-real'])]
+        if mutation == 'supported_scope': target['gaps'] = [dict(aspect='scope',requirement_ids=['period'])]
+        if mutation == 'unlinked_grain': target['gaps'] = [dict(aspect='grain',requirement_ids=['population'])]
+        if mutation == 'empty_partial': target['gaps'] = []
+        if mutation == 'false_no_mapping': target['gaps'] = [dict(aspect='mapping',requirement_ids=['sales'])]
+        if mutation == 'extra_fact': target['gaps'][0]['reason'] = '來源僅含銷售'
+        if mutation == 'wrong_population': target['gaps'] = [dict(aspect='population',requirement_ids=['stock'])]
+        if mutation == 'unknown_aspect': target['gaps'] = [dict(aspect='made_up',requirement_ids=['sales'])]
+>       with pytest.raises(ValueError): mapped(catalog,data,index=1)
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_evidence_bound_managed_contract.py:159: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_evidence_bound_managed_contract.py:58: in mapped
+    rec = rec or recalled(catalog)
+                 ^^^^^^^^^^^^^^^^^
+tests/unit/test_evidence_bound_managed_contract.py:53: in recalled
+    return api().materialize_recall(api().RecallWire.model_validate(data or rec), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.evidence_bound_managed_contract'), 'managed evidence-bound wire missing'
+E       AssertionError: managed evidence-bound wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x7e7ff9bae0c0>('evaluations.evidence_bound_managed_contract')
+E        +    where <function find_spec at 0x7e7ff9bae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_evidence_bound_managed_contract.py:18: AssertionError
+_ test_gap_references_cannot_invent_source_facts_or_contradict_coverage[empty_partial] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7e7ff67a2ab0>
+mutation = 'empty_partial'
+
+    @pytest.mark.parametrize('mutation', ['wrong_ref','supported_scope','unlinked_grain','empty_partial','false_no_mapping','extra_fact','wrong_population','unknown_aspect'])
+    def test_gap_references_cannot_invent_source_facts_or_contradict_coverage(catalog,mutation):
+        _, _, maps, _ = inputs(catalog)
+        data = maps[1]
+        target = data['entries']['sales']
+        if mutation == 'wrong_ref': target['gaps'] = [dict(aspect='scope',requirement_ids=['not-real'])]
+        if mutation == 'supported_scope': target['gaps'] = [dict(aspect='scope',requirement_ids=['period'])]
+        if mutation == 'unlinked_grain': target['gaps'] = [dict(aspect='grain',requirement_ids=['population'])]
+        if mutation == 'empty_partial': target['gaps'] = []
+        if mutation == 'false_no_mapping': target['gaps'] = [dict(aspect='mapping',requirement_ids=['sales'])]
+        if mutation == 'extra_fact': target['gaps'][0]['reason'] = '來源僅含銷售'
+        if mutation == 'wrong_population': target['gaps'] = [dict(aspect='population',requirement_ids=['stock'])]
+        if mutation == 'unknown_aspect': target['gaps'] = [dict(aspect='made_up',requirement_ids=['sales'])]
+>       with pytest.raises(ValueError): mapped(catalog,data,index=1)
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_evidence_bound_managed_contract.py:159: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_evidence_bound_managed_contract.py:58: in mapped
+    rec = rec or recalled(catalog)
+                 ^^^^^^^^^^^^^^^^^
+tests/unit/test_evidence_bound_managed_contract.py:53: in recalled
+    return api().materialize_recall(api().RecallWire.model_validate(data or rec), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.evidence_bound_managed_contract'), 'managed evidence-bound wire missing'
+E       AssertionError: managed evidence-bound wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x7e7ff9bae0c0>('evaluations.evidence_bound_managed_contract')
+E        +    where <function find_spec at 0x7e7ff9bae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_evidence_bound_managed_contract.py:18: AssertionError
+_ test_gap_references_cannot_invent_source_facts_or_contradict_coverage[false_no_mapping] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7e7ff6658110>
+mutation = 'false_no_mapping'
+
+    @pytest.mark.parametrize('mutation', ['wrong_ref','supported_scope','unlinked_grain','empty_partial','false_no_mapping','extra_fact','wrong_population','unknown_aspect'])
+    def test_gap_references_cannot_invent_source_facts_or_contradict_coverage(catalog,mutation):
+        _, _, maps, _ = inputs(catalog)
+        data = maps[1]
+        target = data['entries']['sales']
+        if mutation == 'wrong_ref': target['gaps'] = [dict(aspect='scope',requirement_ids=['not-real'])]
+        if mutation == 'supported_scope': target['gaps'] = [dict(aspect='scope',requirement_ids=['period'])]
+        if mutation == 'unlinked_grain': target['gaps'] = [dict(aspect='grain',requirement_ids=['population'])]
+        if mutation == 'empty_partial': target['gaps'] = []
+        if mutation == 'false_no_mapping': target['gaps'] = [dict(aspect='mapping',requirement_ids=['sales'])]
+        if mutation == 'extra_fact': target['gaps'][0]['reason'] = '來源僅含銷售'
+        if mutation == 'wrong_population': target['gaps'] = [dict(aspect='population',requirement_ids=['stock'])]
+        if mutation == 'unknown_aspect': target['gaps'] = [dict(aspect='made_up',requirement_ids=['sales'])]
+>       with pytest.raises(ValueError): mapped(catalog,data,index=1)
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_evidence_bound_managed_contract.py:159: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_evidence_bound_managed_contract.py:58: in mapped
+    rec = rec or recalled(catalog)
+                 ^^^^^^^^^^^^^^^^^
+tests/unit/test_evidence_bound_managed_contract.py:53: in recalled
+    return api().materialize_recall(api().RecallWire.model_validate(data or rec), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.evidence_bound_managed_contract'), 'managed evidence-bound wire missing'
+E       AssertionError: managed evidence-bound wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x7e7ff9bae0c0>('evaluations.evidence_bound_managed_contract')
+E        +    where <function find_spec at 0x7e7ff9bae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_evidence_bound_managed_contract.py:18: AssertionError
+_ test_gap_references_cannot_invent_source_facts_or_contradict_coverage[extra_fact] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7e7ff65d8680>
+mutation = 'extra_fact'
+
+    @pytest.mark.parametrize('mutation', ['wrong_ref','supported_scope','unlinked_grain','empty_partial','false_no_mapping','extra_fact','wrong_population','unknown_aspect'])
+    def test_gap_references_cannot_invent_source_facts_or_contradict_coverage(catalog,mutation):
+        _, _, maps, _ = inputs(catalog)
+        data = maps[1]
+        target = data['entries']['sales']
+        if mutation == 'wrong_ref': target['gaps'] = [dict(aspect='scope',requirement_ids=['not-real'])]
+        if mutation == 'supported_scope': target['gaps'] = [dict(aspect='scope',requirement_ids=['period'])]
+        if mutation == 'unlinked_grain': target['gaps'] = [dict(aspect='grain',requirement_ids=['population'])]
+        if mutation == 'empty_partial': target['gaps'] = []
+        if mutation == 'false_no_mapping': target['gaps'] = [dict(aspect='mapping',requirement_ids=['sales'])]
+        if mutation == 'extra_fact': target['gaps'][0]['reason'] = '來源僅含銷售'
+        if mutation == 'wrong_population': target['gaps'] = [dict(aspect='population',requirement_ids=['stock'])]
+        if mutation == 'unknown_aspect': target['gaps'] = [dict(aspect='made_up',requirement_ids=['sales'])]
+>       with pytest.raises(ValueError): mapped(catalog,data,index=1)
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_evidence_bound_managed_contract.py:159: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_evidence_bound_managed_contract.py:58: in mapped
+    rec = rec or recalled(catalog)
+                 ^^^^^^^^^^^^^^^^^
+tests/unit/test_evidence_bound_managed_contract.py:53: in recalled
+    return api().materialize_recall(api().RecallWire.model_validate(data or rec), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.evidence_bound_managed_contract'), 'managed evidence-bound wire missing'
+E       AssertionError: managed evidence-bound wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x7e7ff9bae0c0>('evaluations.evidence_bound_managed_contract')
+E        +    where <function find_spec at 0x7e7ff9bae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_evidence_bound_managed_contract.py:18: AssertionError
+_ test_gap_references_cannot_invent_source_facts_or_contradict_coverage[wrong_population] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7e7ff665a2d0>
+mutation = 'wrong_population'
+
+    @pytest.mark.parametrize('mutation', ['wrong_ref','supported_scope','unlinked_grain','empty_partial','false_no_mapping','extra_fact','wrong_population','unknown_aspect'])
+    def test_gap_references_cannot_invent_source_facts_or_contradict_coverage(catalog,mutation):
+        _, _, maps, _ = inputs(catalog)
+        data = maps[1]
+        target = data['entries']['sales']
+        if mutation == 'wrong_ref': target['gaps'] = [dict(aspect='scope',requirement_ids=['not-real'])]
+        if mutation == 'supported_scope': target['gaps'] = [dict(aspect='scope',requirement_ids=['period'])]
+        if mutation == 'unlinked_grain': target['gaps'] = [dict(aspect='grain',requirement_ids=['population'])]
+        if mutation == 'empty_partial': target['gaps'] = []
+        if mutation == 'false_no_mapping': target['gaps'] = [dict(aspect='mapping',requirement_ids=['sales'])]
+        if mutation == 'extra_fact': target['gaps'][0]['reason'] = '來源僅含銷售'
+        if mutation == 'wrong_population': target['gaps'] = [dict(aspect='population',requirement_ids=['stock'])]
+        if mutation == 'unknown_aspect': target['gaps'] = [dict(aspect='made_up',requirement_ids=['sales'])]
+>       with pytest.raises(ValueError): mapped(catalog,data,index=1)
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_evidence_bound_managed_contract.py:159: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_evidence_bound_managed_contract.py:58: in mapped
+    rec = rec or recalled(catalog)
+                 ^^^^^^^^^^^^^^^^^
+tests/unit/test_evidence_bound_managed_contract.py:53: in recalled
+    return api().materialize_recall(api().RecallWire.model_validate(data or rec), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.evidence_bound_managed_contract'), 'managed evidence-bound wire missing'
+E       AssertionError: managed evidence-bound wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x7e7ff9bae0c0>('evaluations.evidence_bound_managed_contract')
+E        +    where <function find_spec at 0x7e7ff9bae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_evidence_bound_managed_contract.py:18: AssertionError
+_ test_gap_references_cannot_invent_source_facts_or_contradict_coverage[unknown_aspect] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7e7ff65e4890>
+mutation = 'unknown_aspect'
+
+    @pytest.mark.parametrize('mutation', ['wrong_ref','supported_scope','unlinked_grain','empty_partial','false_no_mapping','extra_fact','wrong_population','unknown_aspect'])
+    def test_gap_references_cannot_invent_source_facts_or_contradict_coverage(catalog,mutation):
+        _, _, maps, _ = inputs(catalog)
+        data = maps[1]
+        target = data['entries']['sales']
+        if mutation == 'wrong_ref': target['gaps'] = [dict(aspect='scope',requirement_ids=['not-real'])]
+        if mutation == 'supported_scope': target['gaps'] = [dict(aspect='scope',requirement_ids=['period'])]
+        if mutation == 'unlinked_grain': target['gaps'] = [dict(aspect='grain',requirement_ids=['population'])]
+        if mutation == 'empty_partial': target['gaps'] = []
+        if mutation == 'false_no_mapping': target['gaps'] = [dict(aspect='mapping',requirement_ids=['sales'])]
+        if mutation == 'extra_fact': target['gaps'][0]['reason'] = '來源僅含銷售'
+        if mutation == 'wrong_population': target['gaps'] = [dict(aspect='population',requirement_ids=['stock'])]
+        if mutation == 'unknown_aspect': target['gaps'] = [dict(aspect='made_up',requirement_ids=['sales'])]
+>       with pytest.raises(ValueError): mapped(catalog,data,index=1)
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_evidence_bound_managed_contract.py:159: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_evidence_bound_managed_contract.py:58: in mapped
+    rec = rec or recalled(catalog)
+                 ^^^^^^^^^^^^^^^^^
+tests/unit/test_evidence_bound_managed_contract.py:53: in recalled
+    return api().materialize_recall(api().RecallWire.model_validate(data or rec), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.evidence_bound_managed_contract'), 'managed evidence-bound wire missing'
+E       AssertionError: managed evidence-bound wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x7e7ff9bae0c0>('evaluations.evidence_bound_managed_contract')
+E        +    where <function find_spec at 0x7e7ff9bae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_evidence_bound_managed_contract.py:18: AssertionError
+________ test_population_gap_says_unproven_without_asserting_sales_only ________
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7e7ff67a2b70>
+
+    def test_population_gap_says_unproven_without_asserting_sales_only(catalog):
+        _, _, maps, _ = inputs(catalog)
+        maps[1]['entries']['population'].update(status='unsupported',mappings=[],gaps=[dict(aspect='population',requirement_ids=['population'])])
+>       result=mapped(catalog,maps[1],index=1)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_evidence_bound_managed_contract.py:165: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_evidence_bound_managed_contract.py:58: in mapped
+    rec = rec or recalled(catalog)
+                 ^^^^^^^^^^^^^^^^^
+tests/unit/test_evidence_bound_managed_contract.py:53: in recalled
+    return api().materialize_recall(api().RecallWire.model_validate(data or rec), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.evidence_bound_managed_contract'), 'managed evidence-bound wire missing'
+E       AssertionError: managed evidence-bound wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x7e7ff9bae0c0>('evaluations.evidence_bound_managed_contract')
+E        +    where <function find_spec at 0x7e7ff9bae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_evidence_bound_managed_contract.py:18: AssertionError
+___ test_complete_typed_selection_reuses_original_finish_and_keeps_metadata ____
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7e7ff67a2960>
+
+    def test_complete_typed_selection_reuses_original_finish_and_keeps_metadata(catalog):
+>       result=selected(catalog)
+               ^^^^^^^^^^^^^^^^^
+
+tests/unit/test_evidence_bound_managed_contract.py:172: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_evidence_bound_managed_contract.py:67: in selected
+    rec = recalled(catalog)
+          ^^^^^^^^^^^^^^^^^
+tests/unit/test_evidence_bound_managed_contract.py:53: in recalled
+    return api().materialize_recall(api().RecallWire.model_validate(data or rec), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.evidence_bound_managed_contract'), 'managed evidence-bound wire missing'
+E       AssertionError: managed evidence-bound wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x7e7ff9bae0c0>('evaluations.evidence_bound_managed_contract')
+E        +    where <function find_spec at 0x7e7ff9bae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_evidence_bound_managed_contract.py:18: AssertionError
+________ test_every_typed_field_is_required_in_parser_and_schema[task] _________
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7e7ff66586b0>
+location = 'task'
+
+    @pytest.mark.parametrize('location', ['task','draft','integration','edge','preparation','filter'])
+    def test_every_typed_field_is_required_in_parser_and_schema(catalog,location):
+        _,_,_,sel=inputs(catalog)
+        sel['draft']['integration']['preparation']=[dict(task_id='sales',kind='aggregate',keys=['store_id','product_id'],description='先彙總')]
+        target={'task':sel['draft']['tasks'][0],'draft':sel['draft'],'integration':sel['draft']['integration'],
+                'edge':sel['draft']['integration']['edges'][0], 'preparation':sel['draft']['integration']['preparation'][0],
+                'filter':sel['draft']['tasks'][1]['filters'][0]}[location]
+        for key in list(target):
+            value=target.pop(key)
+>           with pytest.raises(ValueError): api().SelectionWire.model_validate(sel)
+                                            ^^^^^
+
+tests/unit/test_evidence_bound_managed_contract.py:190: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.evidence_bound_managed_contract'), 'managed evidence-bound wire missing'
+E       AssertionError: managed evidence-bound wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x7e7ff9bae0c0>('evaluations.evidence_bound_managed_contract')
+E        +    where <function find_spec at 0x7e7ff9bae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_evidence_bound_managed_contract.py:18: AssertionError
+________ test_every_typed_field_is_required_in_parser_and_schema[draft] ________
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7e7ff65d8bf0>
+location = 'draft'
+
+    @pytest.mark.parametrize('location', ['task','draft','integration','edge','preparation','filter'])
+    def test_every_typed_field_is_required_in_parser_and_schema(catalog,location):
+        _,_,_,sel=inputs(catalog)
+        sel['draft']['integration']['preparation']=[dict(task_id='sales',kind='aggregate',keys=['store_id','product_id'],description='先彙總')]
+        target={'task':sel['draft']['tasks'][0],'draft':sel['draft'],'integration':sel['draft']['integration'],
+                'edge':sel['draft']['integration']['edges'][0], 'preparation':sel['draft']['integration']['preparation'][0],
+                'filter':sel['draft']['tasks'][1]['filters'][0]}[location]
+        for key in list(target):
+            value=target.pop(key)
+>           with pytest.raises(ValueError): api().SelectionWire.model_validate(sel)
+                                            ^^^^^
+
+tests/unit/test_evidence_bound_managed_contract.py:190: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.evidence_bound_managed_contract'), 'managed evidence-bound wire missing'
+E       AssertionError: managed evidence-bound wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x7e7ff9bae0c0>('evaluations.evidence_bound_managed_contract')
+E        +    where <function find_spec at 0x7e7ff9bae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_evidence_bound_managed_contract.py:18: AssertionError
+_____ test_every_typed_field_is_required_in_parser_and_schema[integration] _____
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7e7ff665a5a0>
+location = 'integration'
+
+    @pytest.mark.parametrize('location', ['task','draft','integration','edge','preparation','filter'])
+    def test_every_typed_field_is_required_in_parser_and_schema(catalog,location):
+        _,_,_,sel=inputs(catalog)
+        sel['draft']['integration']['preparation']=[dict(task_id='sales',kind='aggregate',keys=['store_id','product_id'],description='先彙總')]
+        target={'task':sel['draft']['tasks'][0],'draft':sel['draft'],'integration':sel['draft']['integration'],
+                'edge':sel['draft']['integration']['edges'][0], 'preparation':sel['draft']['integration']['preparation'][0],
+                'filter':sel['draft']['tasks'][1]['filters'][0]}[location]
+        for key in list(target):
+            value=target.pop(key)
+>           with pytest.raises(ValueError): api().SelectionWire.model_validate(sel)
+                                            ^^^^^
+
+tests/unit/test_evidence_bound_managed_contract.py:190: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.evidence_bound_managed_contract'), 'managed evidence-bound wire missing'
+E       AssertionError: managed evidence-bound wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x7e7ff9bae0c0>('evaluations.evidence_bound_managed_contract')
+E        +    where <function find_spec at 0x7e7ff9bae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_evidence_bound_managed_contract.py:18: AssertionError
+________ test_every_typed_field_is_required_in_parser_and_schema[edge] _________
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7e7ff65fb0b0>
+location = 'edge'
+
+    @pytest.mark.parametrize('location', ['task','draft','integration','edge','preparation','filter'])
+    def test_every_typed_field_is_required_in_parser_and_schema(catalog,location):
+        _,_,_,sel=inputs(catalog)
+        sel['draft']['integration']['preparation']=[dict(task_id='sales',kind='aggregate',keys=['store_id','product_id'],description='先彙總')]
+        target={'task':sel['draft']['tasks'][0],'draft':sel['draft'],'integration':sel['draft']['integration'],
+                'edge':sel['draft']['integration']['edges'][0], 'preparation':sel['draft']['integration']['preparation'][0],
+                'filter':sel['draft']['tasks'][1]['filters'][0]}[location]
+        for key in list(target):
+            value=target.pop(key)
+>           with pytest.raises(ValueError): api().SelectionWire.model_validate(sel)
+                                            ^^^^^
+
+tests/unit/test_evidence_bound_managed_contract.py:190: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.evidence_bound_managed_contract'), 'managed evidence-bound wire missing'
+E       AssertionError: managed evidence-bound wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x7e7ff9bae0c0>('evaluations.evidence_bound_managed_contract')
+E        +    where <function find_spec at 0x7e7ff9bae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_evidence_bound_managed_contract.py:18: AssertionError
+_____ test_every_typed_field_is_required_in_parser_and_schema[preparation] _____
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7e7ff66c76e0>
+location = 'preparation'
+
+    @pytest.mark.parametrize('location', ['task','draft','integration','edge','preparation','filter'])
+    def test_every_typed_field_is_required_in_parser_and_schema(catalog,location):
+        _,_,_,sel=inputs(catalog)
+        sel['draft']['integration']['preparation']=[dict(task_id='sales',kind='aggregate',keys=['store_id','product_id'],description='先彙總')]
+        target={'task':sel['draft']['tasks'][0],'draft':sel['draft'],'integration':sel['draft']['integration'],
+                'edge':sel['draft']['integration']['edges'][0], 'preparation':sel['draft']['integration']['preparation'][0],
+                'filter':sel['draft']['tasks'][1]['filters'][0]}[location]
+        for key in list(target):
+            value=target.pop(key)
+>           with pytest.raises(ValueError): api().SelectionWire.model_validate(sel)
+                                            ^^^^^
+
+tests/unit/test_evidence_bound_managed_contract.py:190: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.evidence_bound_managed_contract'), 'managed evidence-bound wire missing'
+E       AssertionError: managed evidence-bound wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x7e7ff9bae0c0>('evaluations.evidence_bound_managed_contract')
+E        +    where <function find_spec at 0x7e7ff9bae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_evidence_bound_managed_contract.py:18: AssertionError
+_______ test_every_typed_field_is_required_in_parser_and_schema[filter] ________
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7e7ff65d89b0>
+location = 'filter'
+
+    @pytest.mark.parametrize('location', ['task','draft','integration','edge','preparation','filter'])
+    def test_every_typed_field_is_required_in_parser_and_schema(catalog,location):
+        _,_,_,sel=inputs(catalog)
+        sel['draft']['integration']['preparation']=[dict(task_id='sales',kind='aggregate',keys=['store_id','product_id'],description='先彙總')]
+        target={'task':sel['draft']['tasks'][0],'draft':sel['draft'],'integration':sel['draft']['integration'],
+                'edge':sel['draft']['integration']['edges'][0], 'preparation':sel['draft']['integration']['preparation'][0],
+                'filter':sel['draft']['tasks'][1]['filters'][0]}[location]
+        for key in list(target):
+            value=target.pop(key)
+>           with pytest.raises(ValueError): api().SelectionWire.model_validate(sel)
+                                            ^^^^^
+
+tests/unit/test_evidence_bound_managed_contract.py:190: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.evidence_bound_managed_contract'), 'managed evidence-bound wire missing'
+E       AssertionError: managed evidence-bound wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x7e7ff9bae0c0>('evaluations.evidence_bound_managed_contract')
+E        +    where <function find_spec at 0x7e7ff9bae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_evidence_bound_managed_contract.py:18: AssertionError
+_ test_selection_cannot_hide_typed_responsibility_in_request_or_borrow_reasons[null_integration] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7e7ff65fbda0>
+mutation = 'null_integration'
+
+    @pytest.mark.parametrize('mutation',['null_integration','empty_filters','empty_metrics','empty_metadata','gap_wrong_view','redundant_unselected','redundant_unsupported','extra_reason'])
+    def test_selection_cannot_hide_typed_responsibility_in_request_or_borrow_reasons(catalog,mutation):
+        _,_,_,sel=inputs(catalog)
+        if mutation=='null_integration': sel['draft']['integration']=None
+        if mutation=='empty_filters': sel['draft']['tasks'][1]['filters']=[]
+        if mutation=='empty_metrics': sel['draft']['tasks'][1]['metrics']={}
+        if mutation=='empty_metadata': sel['draft']['tasks'][0]['metadata_collections']=[]
+        if mutation=='gap_wrong_view': sel['exclusions'][0]['refs']=[dict(kind='gap',requirement_ids=['grain'],selected_view=None)]
+        if mutation=='redundant_unselected': sel['exclusions'][0]['refs']=[dict(kind='redundant',requirement_ids=['grain'],selected_view=MONTH)]
+        if mutation=='redundant_unsupported': sel['exclusions'][0]['refs']=[dict(kind='redundant',requirement_ids=['stock'],selected_view=INV)]
+        if mutation=='extra_reason': sel['assignments'][0]['reason']='臆測能力'
+>       with pytest.raises(ValueError): selected(catalog,sel)
+                                        ^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_evidence_bound_managed_contract.py:208: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_evidence_bound_managed_contract.py:67: in selected
+    rec = recalled(catalog)
+          ^^^^^^^^^^^^^^^^^
+tests/unit/test_evidence_bound_managed_contract.py:53: in recalled
+    return api().materialize_recall(api().RecallWire.model_validate(data or rec), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.evidence_bound_managed_contract'), 'managed evidence-bound wire missing'
+E       AssertionError: managed evidence-bound wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x7e7ff9bae0c0>('evaluations.evidence_bound_managed_contract')
+E        +    where <function find_spec at 0x7e7ff9bae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_evidence_bound_managed_contract.py:18: AssertionError
+_ test_selection_cannot_hide_typed_responsibility_in_request_or_borrow_reasons[empty_filters] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7e7ff6524fe0>
+mutation = 'empty_filters'
+
+    @pytest.mark.parametrize('mutation',['null_integration','empty_filters','empty_metrics','empty_metadata','gap_wrong_view','redundant_unselected','redundant_unsupported','extra_reason'])
+    def test_selection_cannot_hide_typed_responsibility_in_request_or_borrow_reasons(catalog,mutation):
+        _,_,_,sel=inputs(catalog)
+        if mutation=='null_integration': sel['draft']['integration']=None
+        if mutation=='empty_filters': sel['draft']['tasks'][1]['filters']=[]
+        if mutation=='empty_metrics': sel['draft']['tasks'][1]['metrics']={}
+        if mutation=='empty_metadata': sel['draft']['tasks'][0]['metadata_collections']=[]
+        if mutation=='gap_wrong_view': sel['exclusions'][0]['refs']=[dict(kind='gap',requirement_ids=['grain'],selected_view=None)]
+        if mutation=='redundant_unselected': sel['exclusions'][0]['refs']=[dict(kind='redundant',requirement_ids=['grain'],selected_view=MONTH)]
+        if mutation=='redundant_unsupported': sel['exclusions'][0]['refs']=[dict(kind='redundant',requirement_ids=['stock'],selected_view=INV)]
+        if mutation=='extra_reason': sel['assignments'][0]['reason']='臆測能力'
+>       with pytest.raises(ValueError): selected(catalog,sel)
+                                        ^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_evidence_bound_managed_contract.py:208: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_evidence_bound_managed_contract.py:67: in selected
+    rec = recalled(catalog)
+          ^^^^^^^^^^^^^^^^^
+tests/unit/test_evidence_bound_managed_contract.py:53: in recalled
+    return api().materialize_recall(api().RecallWire.model_validate(data or rec), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.evidence_bound_managed_contract'), 'managed evidence-bound wire missing'
+E       AssertionError: managed evidence-bound wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x7e7ff9bae0c0>('evaluations.evidence_bound_managed_contract')
+E        +    where <function find_spec at 0x7e7ff9bae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_evidence_bound_managed_contract.py:18: AssertionError
+_ test_selection_cannot_hide_typed_responsibility_in_request_or_borrow_reasons[empty_metrics] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7e7ff64e2ab0>
+mutation = 'empty_metrics'
+
+    @pytest.mark.parametrize('mutation',['null_integration','empty_filters','empty_metrics','empty_metadata','gap_wrong_view','redundant_unselected','redundant_unsupported','extra_reason'])
+    def test_selection_cannot_hide_typed_responsibility_in_request_or_borrow_reasons(catalog,mutation):
+        _,_,_,sel=inputs(catalog)
+        if mutation=='null_integration': sel['draft']['integration']=None
+        if mutation=='empty_filters': sel['draft']['tasks'][1]['filters']=[]
+        if mutation=='empty_metrics': sel['draft']['tasks'][1]['metrics']={}
+        if mutation=='empty_metadata': sel['draft']['tasks'][0]['metadata_collections']=[]
+        if mutation=='gap_wrong_view': sel['exclusions'][0]['refs']=[dict(kind='gap',requirement_ids=['grain'],selected_view=None)]
+        if mutation=='redundant_unselected': sel['exclusions'][0]['refs']=[dict(kind='redundant',requirement_ids=['grain'],selected_view=MONTH)]
+        if mutation=='redundant_unsupported': sel['exclusions'][0]['refs']=[dict(kind='redundant',requirement_ids=['stock'],selected_view=INV)]
+        if mutation=='extra_reason': sel['assignments'][0]['reason']='臆測能力'
+>       with pytest.raises(ValueError): selected(catalog,sel)
+                                        ^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_evidence_bound_managed_contract.py:208: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_evidence_bound_managed_contract.py:67: in selected
+    rec = recalled(catalog)
+          ^^^^^^^^^^^^^^^^^
+tests/unit/test_evidence_bound_managed_contract.py:53: in recalled
+    return api().materialize_recall(api().RecallWire.model_validate(data or rec), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.evidence_bound_managed_contract'), 'managed evidence-bound wire missing'
+E       AssertionError: managed evidence-bound wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x7e7ff9bae0c0>('evaluations.evidence_bound_managed_contract')
+E        +    where <function find_spec at 0x7e7ff9bae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_evidence_bound_managed_contract.py:18: AssertionError
+_ test_selection_cannot_hide_typed_responsibility_in_request_or_borrow_reasons[empty_metadata] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7e7ff6659430>
+mutation = 'empty_metadata'
+
+    @pytest.mark.parametrize('mutation',['null_integration','empty_filters','empty_metrics','empty_metadata','gap_wrong_view','redundant_unselected','redundant_unsupported','extra_reason'])
+    def test_selection_cannot_hide_typed_responsibility_in_request_or_borrow_reasons(catalog,mutation):
+        _,_,_,sel=inputs(catalog)
+        if mutation=='null_integration': sel['draft']['integration']=None
+        if mutation=='empty_filters': sel['draft']['tasks'][1]['filters']=[]
+        if mutation=='empty_metrics': sel['draft']['tasks'][1]['metrics']={}
+        if mutation=='empty_metadata': sel['draft']['tasks'][0]['metadata_collections']=[]
+        if mutation=='gap_wrong_view': sel['exclusions'][0]['refs']=[dict(kind='gap',requirement_ids=['grain'],selected_view=None)]
+        if mutation=='redundant_unselected': sel['exclusions'][0]['refs']=[dict(kind='redundant',requirement_ids=['grain'],selected_view=MONTH)]
+        if mutation=='redundant_unsupported': sel['exclusions'][0]['refs']=[dict(kind='redundant',requirement_ids=['stock'],selected_view=INV)]
+        if mutation=='extra_reason': sel['assignments'][0]['reason']='臆測能力'
+>       with pytest.raises(ValueError): selected(catalog,sel)
+                                        ^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_evidence_bound_managed_contract.py:208: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_evidence_bound_managed_contract.py:67: in selected
+    rec = recalled(catalog)
+          ^^^^^^^^^^^^^^^^^
+tests/unit/test_evidence_bound_managed_contract.py:53: in recalled
+    return api().materialize_recall(api().RecallWire.model_validate(data or rec), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.evidence_bound_managed_contract'), 'managed evidence-bound wire missing'
+E       AssertionError: managed evidence-bound wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x7e7ff9bae0c0>('evaluations.evidence_bound_managed_contract')
+E        +    where <function find_spec at 0x7e7ff9bae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_evidence_bound_managed_contract.py:18: AssertionError
+_ test_selection_cannot_hide_typed_responsibility_in_request_or_borrow_reasons[gap_wrong_view] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7e7ff652f500>
+mutation = 'gap_wrong_view'
+
+    @pytest.mark.parametrize('mutation',['null_integration','empty_filters','empty_metrics','empty_metadata','gap_wrong_view','redundant_unselected','redundant_unsupported','extra_reason'])
+    def test_selection_cannot_hide_typed_responsibility_in_request_or_borrow_reasons(catalog,mutation):
+        _,_,_,sel=inputs(catalog)
+        if mutation=='null_integration': sel['draft']['integration']=None
+        if mutation=='empty_filters': sel['draft']['tasks'][1]['filters']=[]
+        if mutation=='empty_metrics': sel['draft']['tasks'][1]['metrics']={}
+        if mutation=='empty_metadata': sel['draft']['tasks'][0]['metadata_collections']=[]
+        if mutation=='gap_wrong_view': sel['exclusions'][0]['refs']=[dict(kind='gap',requirement_ids=['grain'],selected_view=None)]
+        if mutation=='redundant_unselected': sel['exclusions'][0]['refs']=[dict(kind='redundant',requirement_ids=['grain'],selected_view=MONTH)]
+        if mutation=='redundant_unsupported': sel['exclusions'][0]['refs']=[dict(kind='redundant',requirement_ids=['stock'],selected_view=INV)]
+        if mutation=='extra_reason': sel['assignments'][0]['reason']='臆測能力'
+>       with pytest.raises(ValueError): selected(catalog,sel)
+                                        ^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_evidence_bound_managed_contract.py:208: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_evidence_bound_managed_contract.py:67: in selected
+    rec = recalled(catalog)
+          ^^^^^^^^^^^^^^^^^
+tests/unit/test_evidence_bound_managed_contract.py:53: in recalled
+    return api().materialize_recall(api().RecallWire.model_validate(data or rec), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.evidence_bound_managed_contract'), 'managed evidence-bound wire missing'
+E       AssertionError: managed evidence-bound wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x7e7ff9bae0c0>('evaluations.evidence_bound_managed_contract')
+E        +    where <function find_spec at 0x7e7ff9bae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_evidence_bound_managed_contract.py:18: AssertionError
+_ test_selection_cannot_hide_typed_responsibility_in_request_or_borrow_reasons[redundant_unselected] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7e7ff6578320>
+mutation = 'redundant_unselected'
+
+    @pytest.mark.parametrize('mutation',['null_integration','empty_filters','empty_metrics','empty_metadata','gap_wrong_view','redundant_unselected','redundant_unsupported','extra_reason'])
+    def test_selection_cannot_hide_typed_responsibility_in_request_or_borrow_reasons(catalog,mutation):
+        _,_,_,sel=inputs(catalog)
+        if mutation=='null_integration': sel['draft']['integration']=None
+        if mutation=='empty_filters': sel['draft']['tasks'][1]['filters']=[]
+        if mutation=='empty_metrics': sel['draft']['tasks'][1]['metrics']={}
+        if mutation=='empty_metadata': sel['draft']['tasks'][0]['metadata_collections']=[]
+        if mutation=='gap_wrong_view': sel['exclusions'][0]['refs']=[dict(kind='gap',requirement_ids=['grain'],selected_view=None)]
+        if mutation=='redundant_unselected': sel['exclusions'][0]['refs']=[dict(kind='redundant',requirement_ids=['grain'],selected_view=MONTH)]
+        if mutation=='redundant_unsupported': sel['exclusions'][0]['refs']=[dict(kind='redundant',requirement_ids=['stock'],selected_view=INV)]
+        if mutation=='extra_reason': sel['assignments'][0]['reason']='臆測能力'
+>       with pytest.raises(ValueError): selected(catalog,sel)
+                                        ^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_evidence_bound_managed_contract.py:208: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_evidence_bound_managed_contract.py:67: in selected
+    rec = recalled(catalog)
+          ^^^^^^^^^^^^^^^^^
+tests/unit/test_evidence_bound_managed_contract.py:53: in recalled
+    return api().materialize_recall(api().RecallWire.model_validate(data or rec), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.evidence_bound_managed_contract'), 'managed evidence-bound wire missing'
+E       AssertionError: managed evidence-bound wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x7e7ff9bae0c0>('evaluations.evidence_bound_managed_contract')
+E        +    where <function find_spec at 0x7e7ff9bae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_evidence_bound_managed_contract.py:18: AssertionError
+_ test_selection_cannot_hide_typed_responsibility_in_request_or_borrow_reasons[redundant_unsupported] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7e7ff6525220>
+mutation = 'redundant_unsupported'
+
+    @pytest.mark.parametrize('mutation',['null_integration','empty_filters','empty_metrics','empty_metadata','gap_wrong_view','redundant_unselected','redundant_unsupported','extra_reason'])
+    def test_selection_cannot_hide_typed_responsibility_in_request_or_borrow_reasons(catalog,mutation):
+        _,_,_,sel=inputs(catalog)
+        if mutation=='null_integration': sel['draft']['integration']=None
+        if mutation=='empty_filters': sel['draft']['tasks'][1]['filters']=[]
+        if mutation=='empty_metrics': sel['draft']['tasks'][1]['metrics']={}
+        if mutation=='empty_metadata': sel['draft']['tasks'][0]['metadata_collections']=[]
+        if mutation=='gap_wrong_view': sel['exclusions'][0]['refs']=[dict(kind='gap',requirement_ids=['grain'],selected_view=None)]
+        if mutation=='redundant_unselected': sel['exclusions'][0]['refs']=[dict(kind='redundant',requirement_ids=['grain'],selected_view=MONTH)]
+        if mutation=='redundant_unsupported': sel['exclusions'][0]['refs']=[dict(kind='redundant',requirement_ids=['stock'],selected_view=INV)]
+        if mutation=='extra_reason': sel['assignments'][0]['reason']='臆測能力'
+>       with pytest.raises(ValueError): selected(catalog,sel)
+                                        ^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_evidence_bound_managed_contract.py:208: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_evidence_bound_managed_contract.py:67: in selected
+    rec = recalled(catalog)
+          ^^^^^^^^^^^^^^^^^
+tests/unit/test_evidence_bound_managed_contract.py:53: in recalled
+    return api().materialize_recall(api().RecallWire.model_validate(data or rec), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.evidence_bound_managed_contract'), 'managed evidence-bound wire missing'
+E       AssertionError: managed evidence-bound wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x7e7ff9bae0c0>('evaluations.evidence_bound_managed_contract')
+E        +    where <function find_spec at 0x7e7ff9bae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_evidence_bound_managed_contract.py:18: AssertionError
+_ test_selection_cannot_hide_typed_responsibility_in_request_or_borrow_reasons[extra_reason] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7e7ff65d80e0>
+mutation = 'extra_reason'
+
+    @pytest.mark.parametrize('mutation',['null_integration','empty_filters','empty_metrics','empty_metadata','gap_wrong_view','redundant_unselected','redundant_unsupported','extra_reason'])
+    def test_selection_cannot_hide_typed_responsibility_in_request_or_borrow_reasons(catalog,mutation):
+        _,_,_,sel=inputs(catalog)
+        if mutation=='null_integration': sel['draft']['integration']=None
+        if mutation=='empty_filters': sel['draft']['tasks'][1]['filters']=[]
+        if mutation=='empty_metrics': sel['draft']['tasks'][1]['metrics']={}
+        if mutation=='empty_metadata': sel['draft']['tasks'][0]['metadata_collections']=[]
+        if mutation=='gap_wrong_view': sel['exclusions'][0]['refs']=[dict(kind='gap',requirement_ids=['grain'],selected_view=None)]
+        if mutation=='redundant_unselected': sel['exclusions'][0]['refs']=[dict(kind='redundant',requirement_ids=['grain'],selected_view=MONTH)]
+        if mutation=='redundant_unsupported': sel['exclusions'][0]['refs']=[dict(kind='redundant',requirement_ids=['stock'],selected_view=INV)]
+        if mutation=='extra_reason': sel['assignments'][0]['reason']='臆測能力'
+>       with pytest.raises(ValueError): selected(catalog,sel)
+                                        ^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_evidence_bound_managed_contract.py:208: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_evidence_bound_managed_contract.py:67: in selected
+    rec = recalled(catalog)
+          ^^^^^^^^^^^^^^^^^
+tests/unit/test_evidence_bound_managed_contract.py:53: in recalled
+    return api().materialize_recall(api().RecallWire.model_validate(data or rec), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.evidence_bound_managed_contract'), 'managed evidence-bound wire missing'
+E       AssertionError: managed evidence-bound wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x7e7ff9bae0c0>('evaluations.evidence_bound_managed_contract')
+E        +    where <function find_spec at 0x7e7ff9bae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_evidence_bound_managed_contract.py:18: AssertionError
+_ test_all_wire_parsers_reject_duplicate_keys_and_non_json_constants[{"requirements":[],"requirements":[]}] _
+
+raw = '{"requirements":[],"requirements":[]}'
+
+    @pytest.mark.parametrize('raw', ['{"requirements":[],"requirements":[]}', '{"requirements":NaN}', '{"draft":{"status":"ready","status":"error"}}'])
+    def test_all_wire_parsers_reject_duplicate_keys_and_non_json_constants(raw):
+>       with pytest.raises(ValueError): api().parse_wire(AIMessage(content=raw),api().RecallWire)
+                                        ^^^^^
+
+tests/unit/test_evidence_bound_managed_contract.py:213: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.evidence_bound_managed_contract'), 'managed evidence-bound wire missing'
+E       AssertionError: managed evidence-bound wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x7e7ff9bae0c0>('evaluations.evidence_bound_managed_contract')
+E        +    where <function find_spec at 0x7e7ff9bae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_evidence_bound_managed_contract.py:18: AssertionError
+_ test_all_wire_parsers_reject_duplicate_keys_and_non_json_constants[{"requirements":NaN}] _
+
+raw = '{"requirements":NaN}'
+
+    @pytest.mark.parametrize('raw', ['{"requirements":[],"requirements":[]}', '{"requirements":NaN}', '{"draft":{"status":"ready","status":"error"}}'])
+    def test_all_wire_parsers_reject_duplicate_keys_and_non_json_constants(raw):
+>       with pytest.raises(ValueError): api().parse_wire(AIMessage(content=raw),api().RecallWire)
+                                        ^^^^^
+
+tests/unit/test_evidence_bound_managed_contract.py:213: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.evidence_bound_managed_contract'), 'managed evidence-bound wire missing'
+E       AssertionError: managed evidence-bound wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x7e7ff9bae0c0>('evaluations.evidence_bound_managed_contract')
+E        +    where <function find_spec at 0x7e7ff9bae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_evidence_bound_managed_contract.py:18: AssertionError
+_ test_all_wire_parsers_reject_duplicate_keys_and_non_json_constants[{"draft":{"status":"ready","status":"error"}}] _
+
+raw = '{"draft":{"status":"ready","status":"error"}}'
+
+    @pytest.mark.parametrize('raw', ['{"requirements":[],"requirements":[]}', '{"requirements":NaN}', '{"draft":{"status":"ready","status":"error"}}'])
+    def test_all_wire_parsers_reject_duplicate_keys_and_non_json_constants(raw):
+>       with pytest.raises(ValueError): api().parse_wire(AIMessage(content=raw),api().RecallWire)
+                                        ^^^^^
+
+tests/unit/test_evidence_bound_managed_contract.py:213: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.evidence_bound_managed_contract'), 'managed evidence-bound wire missing'
+E       AssertionError: managed evidence-bound wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x7e7ff9bae0c0>('evaluations.evidence_bound_managed_contract')
+E        +    where <function find_spec at 0x7e7ff9bae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_evidence_bound_managed_contract.py:18: AssertionError
+=========================== short test summary info ============================
+FAILED tests/unit/test_evidence_bound_managed_contract.py::test_recall_keeps_exact_policy_facts_and_explicit_dependencies
+FAILED tests/unit/test_evidence_bound_managed_contract.py::test_recall_rejects_wrong_exact_grain_references[empty]
+FAILED tests/unit/test_evidence_bound_managed_contract.py::test_recall_rejects_wrong_exact_grain_references[unknown]
+FAILED tests/unit/test_evidence_bound_managed_contract.py::test_recall_rejects_wrong_exact_grain_references[wrong_kind]
+FAILED tests/unit/test_evidence_bound_managed_contract.py::test_recall_rejects_wrong_exact_grain_references[duplicate]
+FAILED tests/unit/test_evidence_bound_managed_contract.py::test_recall_rejects_wrong_exact_grain_references[self]
+FAILED tests/unit/test_evidence_bound_managed_contract.py::test_recall_rejects_wrong_exact_grain_references[independent_refs]
+FAILED tests/unit/test_evidence_bound_managed_contract.py::test_recall_rejects_wrong_exact_grain_references[no_binding]
+FAILED tests/unit/test_evidence_bound_managed_contract.py::test_recall_rejects_wrong_exact_grain_references[injected_candidates]
+FAILED tests/unit/test_evidence_bound_managed_contract.py::test_arbitrary_requirement_ids_and_catalog_order_are_preserved[ids0]
+FAILED tests/unit/test_evidence_bound_managed_contract.py::test_arbitrary_requirement_ids_and_catalog_order_are_preserved[ids1]
+FAILED tests/unit/test_evidence_bound_managed_contract.py::test_linked_metric_cannot_be_supported_when_grain_is_unsupported
+FAILED tests/unit/test_evidence_bound_managed_contract.py::test_independent_scalar_and_distinct_linked_grain_do_not_inherit_unrelated_grain
+FAILED tests/unit/test_evidence_bound_managed_contract.py::test_gap_references_cannot_invent_source_facts_or_contradict_coverage[wrong_ref]
+FAILED tests/unit/test_evidence_bound_managed_contract.py::test_gap_references_cannot_invent_source_facts_or_contradict_coverage[supported_scope]
+FAILED tests/unit/test_evidence_bound_managed_contract.py::test_gap_references_cannot_invent_source_facts_or_contradict_coverage[unlinked_grain]
+FAILED tests/unit/test_evidence_bound_managed_contract.py::test_gap_references_cannot_invent_source_facts_or_contradict_coverage[empty_partial]
+FAILED tests/unit/test_evidence_bound_managed_contract.py::test_gap_references_cannot_invent_source_facts_or_contradict_coverage[false_no_mapping]
+FAILED tests/unit/test_evidence_bound_managed_contract.py::test_gap_references_cannot_invent_source_facts_or_contradict_coverage[extra_fact]
+FAILED tests/unit/test_evidence_bound_managed_contract.py::test_gap_references_cannot_invent_source_facts_or_contradict_coverage[wrong_population]
+FAILED tests/unit/test_evidence_bound_managed_contract.py::test_gap_references_cannot_invent_source_facts_or_contradict_coverage[unknown_aspect]
+FAILED tests/unit/test_evidence_bound_managed_contract.py::test_population_gap_says_unproven_without_asserting_sales_only
+FAILED tests/unit/test_evidence_bound_managed_contract.py::test_complete_typed_selection_reuses_original_finish_and_keeps_metadata
+FAILED tests/unit/test_evidence_bound_managed_contract.py::test_every_typed_field_is_required_in_parser_and_schema[task]
+FAILED tests/unit/test_evidence_bound_managed_contract.py::test_every_typed_field_is_required_in_parser_and_schema[draft]
+FAILED tests/unit/test_evidence_bound_managed_contract.py::test_every_typed_field_is_required_in_parser_and_schema[integration]
+FAILED tests/unit/test_evidence_bound_managed_contract.py::test_every_typed_field_is_required_in_parser_and_schema[edge]
+FAILED tests/unit/test_evidence_bound_managed_contract.py::test_every_typed_field_is_required_in_parser_and_schema[preparation]
+FAILED tests/unit/test_evidence_bound_managed_contract.py::test_every_typed_field_is_required_in_parser_and_schema[filter]
+FAILED tests/unit/test_evidence_bound_managed_contract.py::test_selection_cannot_hide_typed_responsibility_in_request_or_borrow_reasons[null_integration]
+FAILED tests/unit/test_evidence_bound_managed_contract.py::test_selection_cannot_hide_typed_responsibility_in_request_or_borrow_reasons[empty_filters]
+FAILED tests/unit/test_evidence_bound_managed_contract.py::test_selection_cannot_hide_typed_responsibility_in_request_or_borrow_reasons[empty_metrics]
+FAILED tests/unit/test_evidence_bound_managed_contract.py::test_selection_cannot_hide_typed_responsibility_in_request_or_borrow_reasons[empty_metadata]
+FAILED tests/unit/test_evidence_bound_managed_contract.py::test_selection_cannot_hide_typed_responsibility_in_request_or_borrow_reasons[gap_wrong_view]
+FAILED tests/unit/test_evidence_bound_managed_contract.py::test_selection_cannot_hide_typed_responsibility_in_request_or_borrow_reasons[redundant_unselected]
+FAILED tests/unit/test_evidence_bound_managed_contract.py::test_selection_cannot_hide_typed_responsibility_in_request_or_borrow_reasons[redundant_unsupported]
+FAILED tests/unit/test_evidence_bound_managed_contract.py::test_selection_cannot_hide_typed_responsibility_in_request_or_borrow_reasons[extra_reason]
+FAILED tests/unit/test_evidence_bound_managed_contract.py::test_all_wire_parsers_reject_duplicate_keys_and_non_json_constants[{"requirements":[],"requirements":[]}]
+FAILED tests/unit/test_evidence_bound_managed_contract.py::test_all_wire_parsers_reject_duplicate_keys_and_non_json_constants[{"requirements":NaN}]
+FAILED tests/unit/test_evidence_bound_managed_contract.py::test_all_wire_parsers_reject_duplicate_keys_and_non_json_constants[{"draft":{"status":"ready","status":"error"}}]
+40 failed in 2.99s

@@ -1,0 +1,29 @@
+{
+  "ticket": "b4f64cfcb8da49dc8946e63413fa3147",
+  "verdict": "CONTINUE",
+  "reviewed_rounds": [
+    1,
+    2,
+    3
+  ],
+  "evidence": [
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-1-3/focused.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-1-3/hash-check.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-1-3/replay-check.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-1-3/natural-prefix-check.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-0/handoff.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-contract/historical-replay.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-contract/regression-final.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-1/semantic-review.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T161155Z-cb9cb4/map-05-parsed.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-2/handoff.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-2/diagnosis.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-slots/test-correction.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-slots/regression.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-slots/offline-final.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-slots/source-freeze.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-slots/sources-after/evaluations/slotted_view_coverage.py",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-slots/sources-after/tests/unit/test_slotted_view_coverage.py"
+  ],
+  "summary": "覆蓋第1、2、3輪及全部祖先驗收後判定CONTINUE，允許凍結現有managed-indexed-slots-three-stage-2進入全新自然單樣本，並非自然或根驗收通過。第1輪背景/真正metadata責任切分有原始失敗與正反例支持，原request保留，沒有依R_PURPOSE刪答案或允許空supported；193回歸與fake只證離線節點。第2輪6個本地POST正常完成但map05重複channel ID，原FAIL有效；map06/07、selection、prepared未執行。自行對照原raw確認recall monthly通路理由錯誤及map03 population「不含退貨」無契約保證，兩項不能因後續操作判定正確而算整份自然語意PASS。\n第3輪屬可追蹤實質候選變更：schema以當次任意ID建立全部required且extra=forbid的具名槽位，安全alias避免保留名與位置配對；原JSON在Pydantic前拒絕全層重複key及NaN，沒有first/last、去重、補項或repair。Python只恢復已知ID與精確admitted policy的view/grain/完整keys/summary原文；summary包含其他說明也逐字保留，非另行推導母體。模型仍負status、mapping、scope、缺口及population支持，程式未自動設supported。舊materialize/selection守門未改；來源摘要不能變成未明示退貨排除。\n日期負例界線經審核可接受：合法snapshot_date filter能結構通過屬既有能力，不能據此宣稱它是sales期間。現有完整selection負例實際移動period到inventory並移除sales日期，確由同源scope mapping守門拒絕；它只證這個不一致反例，不證所有日期語意錯誤都被程式攔截。研究要求的inventory套sales日期不可通過，須同時由下一輪逐View語意門檻落實：即使未被selection使用，也不能將inventory任意sales月份標supported；日期正確性必比對原句業務對象及來源契約。這是保留語意驗收責任，非把結構ready當替代。第3輪首次green兩失敗與測試修正皆有保留，未刪舊guard。\n本審核獨立實跑67 focused通過，重播1完整及4失敗fake共18 raw一致；完整fake僅證prepared串接，無自然效力。34項round/plan證據hash均一致；485與823檔基線僅出現各輪授權改動，兩src、舊wire、歷史raw/分數維持，38題Gate仍未通過。來源freeze與現版吻合。確認唯一推論POST經loopctl，6本地/0雲端/0retry，stream=false、num_predict=-1、HTTP/外層無timeout；metadata GET的15秒不是推論限制。本審核0模型/SQL/DB，未改Task/control/實作。\n後續必從新recall開始，七候選各一次mapping後selection/prepared；所有理由、缺口、母體斷言均比對契約，捏造monthly通路或退貨排除仍屬完整語意不通過，不能只記warning後宣稱PASS。首provider/parse/contract錯誤保存停止；成功HTTP錯答FAIL交fresh研究，不改case或原樣重送挑分。若完成，仍須natural_qwen_three_stage父層自身全語意及同版raw重播證據，再three_stage_integration回歸/歷史核對與root逐條驗收，最後fresh verifier ACCEPT；各祖先不得從children自動PASS。現有樹與研究交接已保留此完整路徑，無需需求或額度變更。"
+}

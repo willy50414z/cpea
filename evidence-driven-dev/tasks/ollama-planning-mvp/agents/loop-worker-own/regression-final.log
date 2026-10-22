@@ -1,0 +1,8 @@
+[".venv/bin/python", "-m", "pytest", "tests/unit/test_managed_three_stage_runner.py", "tests/unit/test_indexed_requirement_recall.py", "tests/unit/test_referenced_view_coverage.py", "tests/unit/test_slotted_view_coverage.py", "tests/unit/test_three_stage_view_selection.py", "tests/unit/test_planning_mvp.py", "tests/unit/test_task_decomposition_contract.py", "tests/unit/test_task_decomposition_workflow.py", "tests/unit/test_decomposition_evaluation.py", "tests/unit/test_decomposition_decision_chain.py", "tests/unit/test_decomposition_decision_summary.py", "tests/unit/test_planning_reasoning_probe.py", "tests/unit/test_evidence_bound_managed_contract.py", "tests/unit/test_evidence_bound_managed_runner.py", "-q", "tests/unit/test_own_responsibility_managed_contract.py", "tests/unit/test_own_responsibility_managed_runner.py"]
+........................................................................ [ 18%]
+........................................................................ [ 37%]
+........................................................................ [ 56%]
+........................................................................ [ 75%]
+........................................................................ [ 93%]
+........................                                                 [100%]
+384 passed in 40.22s

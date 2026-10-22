@@ -1,0 +1,23 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+________ test_redundancy_requires_matching_capabilities_on_both_sources ________
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7fcdff33d130>
+
+    def test_redundancy_requires_matching_capabilities_on_both_sources(catalog):
+        request,_,_,sel=inputs(catalog);rec=recalled(catalog)
+        cov=[mapped(catalog,index=i,rec=rec) for i in range(7)]
+        monthly=next(e for e in sel['exclusions'] if e['view']==MONTH)
+        monthly['refs']=[dict(kind='redundant',requirement_ids=['grain'],selected_view=INV)]
+        result=api().materialize_selection(api().SelectionWire.model_validate(sel),rec,cov,request,catalog)
+        assert 'redundant' in next(e.reason for e in result.exclusions if e.view==MONTH)
+        # A scalar/key subset cannot substantiate the same two-key capability.
+        row=next(e for c in cov if c.view==MONTH for e in c.entries if e.requirement_id=='grain')
+        row.mappings=row.mappings[:1]
+>       with pytest.raises(ValueError,match='redundan'):
+E       Failed: DID NOT RAISE ValueError
+
+tests/unit/test_evidence_bound_managed_contract.py:354: Failed
+=========================== short test summary info ============================
+FAILED tests/unit/test_evidence_bound_managed_contract.py::test_redundancy_requires_matching_capabilities_on_both_sources
+1 failed, 59 deselected in 0.39s

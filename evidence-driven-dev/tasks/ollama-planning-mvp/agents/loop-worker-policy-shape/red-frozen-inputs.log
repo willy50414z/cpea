@@ -1,0 +1,20 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+__________ test_full_frozen_sources_rebuild_new_body_and_all_prefixes __________
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-65/test_full_frozen_sources_rebui0')
+
+    def test_full_frozen_sources_rebuild_new_body_and_all_prefixes(tmp_path):
+        import os
+        import subprocess
+        mod=api();package=mod.load_package();frozen=mod.freeze_sources(tmp_path/'frozen',package)
+        for name in ['messages','body','schema','upstream']:
+>           assert (frozen/'evaluations/fixtures/kind_diagnostics_policy_shape/inputs'/('SEL-ISO-v1-01-'+name+'.json')).is_file()
+E           AssertionError: assert False
+E            +  where False = is_file()
+E            +    where is_file = ((PosixPath('/tmp/pytest-of-willy/pytest-65/test_full_frozen_sources_rebui0/frozen') / 'evaluations/fixtures/kind_diagnostics_policy_shape/inputs') / (('SEL-ISO-v1-01-' + 'messages') + '.json')).is_file
+
+tests/diagnostics/test_managed_policy_shape.py:241: AssertionError
+=========================== short test summary info ============================
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_full_frozen_sources_rebuild_new_body_and_all_prefixes
+1 failed in 3.55s

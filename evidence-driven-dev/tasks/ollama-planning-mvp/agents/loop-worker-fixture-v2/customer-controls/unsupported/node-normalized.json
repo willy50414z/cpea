@@ -1,0 +1,100 @@
+{
+  "view": "demo_retail.v_customer_value",
+  "entries": [
+    {
+      "requirement_id": "GRN-001",
+      "status": "unsupported",
+      "mappings": [],
+      "contract_evidence": [
+        {
+          "path": "/grain/description",
+          "quote": "每會員一列，包含未下單會員"
+        }
+      ],
+      "missing_requirements": [
+        "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"self\", \"requirements\": [{\"requirement_id\": \"GRN-001\", \"quote\": \"各店各商品\", \"status\": \"unsupported\"}]}"
+      ]
+    },
+    {
+      "requirement_id": "MET-001",
+      "status": "unsupported",
+      "mappings": [],
+      "contract_evidence": [],
+      "missing_requirements": [
+        "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"self\", \"requirements\": [{\"requirement_id\": \"MET-001\", \"quote\": \"盤點庫存件數\", \"status\": \"unsupported\"}]}",
+        "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"grain\", \"requirements\": [{\"requirement_id\": \"GRN-001\", \"quote\": \"各店各商品\", \"status\": \"unsupported\"}]}"
+      ]
+    },
+    {
+      "requirement_id": "FILT-001",
+      "status": "unsupported",
+      "mappings": [],
+      "contract_evidence": [],
+      "missing_requirements": [
+        "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"self\", \"requirements\": [{\"requirement_id\": \"FILT-001\", \"quote\": \"2026 年 9 月\", \"status\": \"unsupported\"}]}"
+      ]
+    },
+    {
+      "requirement_id": "FILT-002",
+      "status": "unsupported",
+      "mappings": [],
+      "contract_evidence": [],
+      "missing_requirements": [
+        "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"self\", \"requirements\": [{\"requirement_id\": \"FILT-002\", \"quote\": \"線上通路\", \"status\": \"unsupported\"}]}"
+      ]
+    },
+    {
+      "requirement_id": "MET-002",
+      "status": "unsupported",
+      "mappings": [],
+      "contract_evidence": [],
+      "missing_requirements": [
+        "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"self\", \"requirements\": [{\"requirement_id\": \"MET-002\", \"quote\": \"折扣金額\", \"status\": \"unsupported\"}]}",
+        "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"scope\", \"requirements\": [{\"requirement_id\": \"FILT-001\", \"quote\": \"2026 年 9 月\", \"status\": \"unsupported\"}, {\"requirement_id\": \"FILT-002\", \"quote\": \"線上通路\", \"status\": \"unsupported\"}]}",
+        "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"grain\", \"requirements\": [{\"requirement_id\": \"GRN-001\", \"quote\": \"各店各商品\", \"status\": \"unsupported\"}]}"
+      ]
+    },
+    {
+      "requirement_id": "MET-003",
+      "status": "unsupported",
+      "mappings": [],
+      "contract_evidence": [],
+      "missing_requirements": [
+        "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"self\", \"requirements\": [{\"requirement_id\": \"MET-003\", \"quote\": \"淨銷售額\", \"status\": \"unsupported\"}]}",
+        "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"scope\", \"requirements\": [{\"requirement_id\": \"FILT-001\", \"quote\": \"2026 年 9 月\", \"status\": \"unsupported\"}, {\"requirement_id\": \"FILT-002\", \"quote\": \"線上通路\", \"status\": \"unsupported\"}]}",
+        "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"grain\", \"requirements\": [{\"requirement_id\": \"GRN-001\", \"quote\": \"各店各商品\", \"status\": \"unsupported\"}]}"
+      ]
+    },
+    {
+      "requirement_id": "META-001",
+      "status": "unsupported",
+      "mappings": [],
+      "contract_evidence": [],
+      "missing_requirements": [
+        "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"self\", \"requirements\": [{\"requirement_id\": \"META-001\", \"quote\": \"庫存盤點日期\", \"status\": \"unsupported\"}]}",
+        "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"grain\", \"requirements\": [{\"requirement_id\": \"GRN-001\", \"quote\": \"各店各商品\", \"status\": \"unsupported\"}]}"
+      ]
+    },
+    {
+      "requirement_id": "POP-001",
+      "status": "unsupported",
+      "mappings": [],
+      "contract_evidence": [],
+      "missing_requirements": [
+        "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"self\", \"requirements\": [{\"requirement_id\": \"POP-001\", \"quote\": \"保留所有庫存商品\", \"status\": \"unsupported\"}]}",
+        "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"grain\", \"requirements\": [{\"requirement_id\": \"GRN-001\", \"quote\": \"各店各商品\", \"status\": \"unsupported\"}]}"
+      ]
+    }
+  ],
+  "grain": "每會員一列，包含未下單會員",
+  "keys": [
+    "customer_id"
+  ],
+  "population": "粒度：每會員一列，包含未下單會員；",
+  "contract_evidence": [
+    {
+      "path": "/summary",
+      "quote": "粒度：每會員一列，包含未下單會員；"
+    }
+  ]
+}

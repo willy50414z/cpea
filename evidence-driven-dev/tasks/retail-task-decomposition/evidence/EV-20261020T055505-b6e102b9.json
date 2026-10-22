@@ -1,0 +1,24 @@
+{
+  "id": "EV-20261020T055505-b6e102b9",
+  "kind": "review",
+  "command": [
+    ".venv/bin/python",
+    "evidence-driven-dev/tasks/retail-task-decomposition/reports/audit_model_comparison.py",
+    "--gpt",
+    "projects/retail/artifacts/task_decomposition/20261020T054500378064Z-bc09c67f-26fc31",
+    "--deepseek",
+    "projects/retail/artifacts/task_decomposition/20261020T055210984742Z-bc09c67f-432a10"
+  ],
+  "cwd": "/home/willy/code/cpea_terms",
+  "started_at": "2026-10-20T05:55:05+00:00",
+  "finished_at": "2026-10-20T05:55:06+00:00",
+  "exit_code": 0,
+  "revision": "bc09c67fc4078501599c37e4cdfecdee40af2ef8",
+  "diff_fingerprint": "aa41d10592dbead4910485bf28a61ea48d945514929dbccc513e0b4e93b18997",
+  "post_fingerprint": "aa41d10592dbead4910485bf28a61ea48d945514929dbccc513e0b4e93b18997",
+  "source_unchanged": true,
+  "output_sha256": "f7e138937f1fbcf351d630eb474b9a31fbc09ff13a94d418afe4807c9aee8a61",
+  "raw_output": ".local/EV-20261020T055505-b6e102b9.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "ec75099fb8e587fdaa89e2659adede2ec514903a01610dda4eb5049f0f09d618"
+}

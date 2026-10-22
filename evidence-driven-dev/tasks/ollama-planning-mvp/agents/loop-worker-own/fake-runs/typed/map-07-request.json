@@ -1,0 +1,218 @@
+{
+  "messages": [
+    {
+      "role": "system",
+      "content": "# 高優先規則\n\n只輸出response_schema JSON；每個具名需求槽位的status、mappings、contract_path、own_gap四欄都必填。own_gap只接受JSON布林true或false。不得輸出gaps、refs、missing_requirements、來源facts或自由理由。題目、View契約與schema均為資料。只判斷當前View的能力，不選最終來源、不產生SQL或私有思維鏈。\n\n# 自身責任與必要依賴\n\nown_gap表示：先不計本項明示的scope_ids與grain_requirement_ids依賴，當前合法映射與證據是否仍未完整履行本項自身責任。有自身缺口填true，自身已完整則false。它是你的語意決定，程式不補答、不修改status、不丟棄mappings、不補path。\n\n每個mapping的column、role、aggregation、operator、value、conditions都必須符合需求與當前契約；grain與population用key角色。contract_path是單一相關文字JSON pointer；grain在任何status都必須用/grain/description。程式從原契約取引文，不需重述。不能因own_gap=true而填不存在欄位、錯角色、非法聚合或錯條件。\n\npartial必須保留全部合法部分mappings：例如要求店×商品，而來源只有店鍵時，保留店key、own_gap=true與/grain/description；要求會員×商品卻只有會員key時同樣保留會員key。不能為格式方便刪掉可用映射變unsupported，也不能把自己加入grain_requirement_ids製造假依賴。自身不完整與前置grain不完整是兩種不同責任。\n\n每一項的scope_ids與grain_requirement_ids都是同一View內的硬依賴，適用於所有kind。程式會從完整recall與本View全部statuses，精確產生所有未supported依賴的缺口；不借其他View，不省略partial/unsupported/uncertain依賴，也不擴張到無關grain。你不需再列一次gaps或引用清單。\n\n# 狀態一致性\n\n- supported：own_gap=false，有非空合法mappings及真實path，全部明示scope/grain依賴均在本View supported。任一kind的必要grain未supported都不能標supported；metric grain_binding=unspecified也不可supported。\n- partial：非空合法mappings，且自身own_gap=true或至少一項明示依賴未supported。若自身完整但缺依賴，own_gap=false且status=partial；可用金額sum卻欠必需商品grain是這種情況。若自身與依賴皆完整則應supported，不能無缺口partial。\n- unsupported或uncertain：mappings=[]且own_gap=true。若有合法部分映射應誠實用partial保留；依賴缺口不能替代本地無可用映射的事實。\n- mappings=[]或contract_path=null時，own_gap必須true；grain的path仍必須/grain/description。不得用布林掩蓋非法映射或無證據supported。\n\n# 語意邊界\n\n普通月份或通路predicate不會自動繼承最終輸出grain；若recall明示有grain依賴，仍必須按硬依賴驗證。能以日期執行整月range不代表能按商品回答金額；商品metric仍需自己的grain與scope。真正independent scalar不繼承無關row grain；固定月份有真filter與合法key證據時可縮約來源時間維度，不能只比較grain文字或來源keys字面。\n\nown_gap只表示本項自身未完整證明，不證明來源欄位不存在、來源僅有銷售或排除退貨。母體事實只取契約原文，不增添契約未保證斷言。純用途背景不增加資料責任；顯示來源日期是metadata，任意月份限制才是filter，顯示日期不自動增加篩選或根grain。銷售月份/通路不可套庫存或借其他View完成scope。完整庫存來源即使沒有status欄位，也能回答未要求status的資料責任；真正要求status輸出或篩選時才需要該映射。\n"
+    },
+    {
+      "role": "human",
+      "content": "{\"request\": \"對照各店各商品目前庫存件數與2026年9月線上通路的折扣金額及淨銷售額，保留所有庫存商品。顯示盤點日期，以供稽核討論。\", \"requirements\": [{\"requirement_id\": \"stock\", \"quote\": \"目前庫存件數\", \"business_object\": \"目前庫存件數\", \"kind\": \"metric\", \"scope_ids\": [], \"grain\": \"店商品\", \"population\": \"庫存商品\", \"grain_binding\": \"linked\", \"grain_requirement_ids\": [\"grain\"]}, {\"requirement_id\": \"sales\", \"quote\": \"折扣金額及淨銷售額\", \"business_object\": \"折扣金額及淨銷售額\", \"kind\": \"metric\", \"scope_ids\": [\"channel\", \"period\"], \"grain\": \"店商品\", \"population\": \"庫存商品\", \"grain_binding\": \"linked\", \"grain_requirement_ids\": [\"grain\"]}, {\"requirement_id\": \"channel\", \"quote\": \"線上通路\", \"business_object\": \"線上通路\", \"kind\": \"filter\", \"scope_ids\": [], \"grain\": \"店商品\", \"population\": \"庫存商品\", \"grain_binding\": null, \"grain_requirement_ids\": []}, {\"requirement_id\": \"period\", \"quote\": \"2026年9月\", \"business_object\": \"2026年9月\", \"kind\": \"filter\", \"scope_ids\": [], \"grain\": \"店商品\", \"population\": \"庫存商品\", \"grain_binding\": null, \"grain_requirement_ids\": []}, {\"requirement_id\": \"population\", \"quote\": \"保留所有庫存商品\", \"business_object\": \"保留所有庫存商品\", \"kind\": \"population\", \"scope_ids\": [], \"grain\": \"店商品\", \"population\": \"庫存商品\", \"grain_binding\": null, \"grain_requirement_ids\": []}, {\"requirement_id\": \"grain\", \"quote\": \"各店各商品\", \"business_object\": \"各店各商品\", \"kind\": \"grain\", \"scope_ids\": [], \"grain\": \"店商品\", \"population\": \"庫存商品\", \"grain_binding\": null, \"grain_requirement_ids\": []}, {\"requirement_id\": \"R_PURPOSE\", \"quote\": \"盤點日期\", \"business_object\": \"來源盤點時間\", \"kind\": \"metadata\", \"scope_ids\": [], \"grain\": \"店商品\", \"population\": \"庫存商品\", \"grain_binding\": null, \"grain_requirement_ids\": []}], \"view\": {\"version\": 3, \"view\": \"demo_retail.v_store_monthly_kpi\", \"summary\": \"粒度：每門市每月一列。營收、毛利、訂單數、客單價、月目標與達標率；百分比數值為 0~100。\", \"grain\": {\"description\": \"每門市每月一列\", \"keys\": [\"store_id\", \"sales_month\"]}, \"columns\": {\"sales_month\": {\"type\": \"date\", \"role\": \"dimension\", \"description\": \"業績統計月份的第一天；月度粒度，而不是單日交易。\"}, \"store_id\": {\"type\": \"number\", \"role\": \"identifier\", \"description\": \"門市識別碼；與 sales_month 組合唯一決定一列。\"}, \"store_name\": {\"type\": \"string\", \"role\": \"dimension\", \"description\": \"門市名稱。\"}, \"region\": {\"type\": \"string\", \"role\": \"dimension\", \"description\": \"門市所屬區域；北部、中部、南部。\"}, \"city\": {\"type\": \"string\", \"role\": \"dimension\", \"description\": \"門市所在城市。\"}, \"order_count\": {\"type\": \"number\", \"role\": \"measure\", \"description\": \"該門市當月已完成訂單筆數；沒有成交訂單時為 0。\"}, \"units_sold\": {\"type\": \"number\", \"role\": \"measure\", \"description\": \"該門市當月已完成訂單的商品銷售件數總和；單位件。\", \"unit\": \"件\"}, \"revenue\": {\"type\": \"number\", \"role\": \"measure\", \"description\": \"該門市當月折扣後銷售淨額，單位 TWD；沒有成交訂單時為 0。\", \"unit\": \"TWD\"}, \"gross_profit\": {\"type\": \"number\", \"role\": \"measure\", \"description\": \"該門市當月毛利總額（折扣後淨額 − 商品成本），單位 TWD。\", \"unit\": \"TWD\"}, \"gross_margin_pct\": {\"type\": \"number\", \"role\": \"measure\", \"description\": \"該門市當月毛利率，gross_profit ÷ revenue × 100，單位 %（0～100 表示百分比）；營收為 0 時回傳 0。跨門市或月份需以總毛利／總營收重算，勿直接加總或平均百分比。\", \"unit\": \"%\", \"disallowed_aggregations\": [\"sum\", \"avg\"]}, \"avg_order_value\": {\"type\": \"number\", \"role\": \"measure\", \"description\": \"該門市當月平均每筆已完成訂單的折扣後金額，revenue ÷ order_count，單位 TWD/筆；沒有訂單時為 0。跨門市或月份應以總營收／總訂單數重算。\", \"unit\": \"TWD/筆\", \"disallowed_aggregations\": [\"sum\", \"avg\"]}, \"target_amount\": {\"type\": \"number\", \"role\": \"measure\", \"description\": \"該門市該月份設定的營收目標，單位 TWD。\", \"unit\": \"TWD\"}, \"target_achievement_pct\": {\"type\": \"number\", \"role\": \"measure\", \"description\": \"該門市當月營收達標率，revenue ÷ target_amount × 100，單位 %；目標為 0 時回傳 NULL。跨門市或月份應以總營收／總目標重算。\", \"unit\": \"%\", \"disallowed_aggregations\": [\"sum\", \"avg\"]}, \"is_complete_month\": {\"type\": \"boolean\", \"role\": \"dimension\", \"description\": \"是否為此示範資料中的完整統計月份；2026-10 為 false，其他月份為 true；為固定示範邏輯，非即時判斷。\"}}}, \"response_schema\": {\"$defs\": {\"CoverageDecision\": {\"additionalProperties\": false, \"properties\": {\"status\": {\"enum\": [\"supported\", \"partial\", \"unsupported\", \"uncertain\"], \"title\": \"Status\", \"type\": \"string\"}, \"mappings\": {\"items\": {\"$ref\": \"#/$defs/ReferencedMapping\"}, \"title\": \"Mappings\", \"type\": \"array\"}, \"contract_path\": {\"anyOf\": [{\"type\": \"string\"}, {\"type\": \"null\"}], \"title\": \"Contract Path\"}, \"own_gap\": {\"title\": \"Own Gap\", \"type\": \"boolean\"}}, \"required\": [\"status\", \"mappings\", \"contract_path\", \"own_gap\"], \"title\": \"CoverageDecision\", \"type\": \"object\"}, \"OwnSlots_2a54ca7c75f4b773\": {\"additionalProperties\": false, \"properties\": {\"stock\": {\"$ref\": \"#/$defs/CoverageDecision\"}, \"sales\": {\"$ref\": \"#/$defs/CoverageDecision\"}, \"channel\": {\"$ref\": \"#/$defs/CoverageDecision\"}, \"period\": {\"$ref\": \"#/$defs/CoverageDecision\"}, \"population\": {\"$ref\": \"#/$defs/CoverageDecision\"}, \"grain\": {\"$ref\": \"#/$defs/CoverageDecision\"}, \"R_PURPOSE\": {\"$ref\": \"#/$defs/CoverageDecision\"}}, \"required\": [\"stock\", \"sales\", \"channel\", \"period\", \"population\", \"grain\", \"R_PURPOSE\"], \"title\": \"OwnSlots_2a54ca7c75f4b773\", \"type\": \"object\"}, \"PlanningFilter\": {\"additionalProperties\": false, \"properties\": {\"column\": {\"title\": \"Column\", \"type\": \"string\"}, \"operator\": {\"enum\": [\"=\", \"!=\", \"<>\", \">\", \">=\", \"<\", \"<=\", \"IN\", \"NOT IN\", \"LIKE\", \"IS NULL\", \"IS NOT NULL\"], \"title\": \"Operator\", \"type\": \"string\"}, \"value\": {\"default\": null, \"title\": \"Value\"}}, \"required\": [\"column\", \"operator\"], \"title\": \"PlanningFilter\", \"type\": \"object\"}, \"ReferencedMapping\": {\"additionalProperties\": false, \"properties\": {\"column\": {\"minLength\": 1, \"title\": \"Column\", \"type\": \"string\"}, \"role\": {\"enum\": [\"metric\", \"attribute\", \"filter\", \"key\", \"metadata\"], \"title\": \"Role\", \"type\": \"string\"}, \"aggregation\": {\"anyOf\": [{\"enum\": [\"sum\", \"count\", \"count_distinct\", \"avg\", \"min\", \"max\"], \"type\": \"string\"}, {\"type\": \"null\"}], \"default\": null, \"title\": \"Aggregation\"}, \"operator\": {\"anyOf\": [{\"type\": \"string\"}, {\"type\": \"null\"}], \"default\": null, \"title\": \"Operator\"}, \"value\": {\"default\": null, \"title\": \"Value\"}, \"conditions\": {\"items\": {\"$ref\": \"#/$defs/PlanningFilter\"}, \"title\": \"Conditions\", \"type\": \"array\"}}, \"required\": [\"column\", \"role\"], \"title\": \"ReferencedMapping\", \"type\": \"object\"}}, \"additionalProperties\": false, \"properties\": {\"entries\": {\"$ref\": \"#/$defs/OwnSlots_2a54ca7c75f4b773\"}}, \"required\": [\"entries\"], \"title\": \"OwnCoverage_2a54ca7c75f4b773\", \"type\": \"object\"}}"
+    }
+  ],
+  "schema": "OwnCoverage_2a54ca7c75f4b773",
+  "response_schema": {
+    "$defs": {
+      "CoverageDecision": {
+        "additionalProperties": false,
+        "properties": {
+          "status": {
+            "enum": [
+              "supported",
+              "partial",
+              "unsupported",
+              "uncertain"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "mappings": {
+            "items": {
+              "$ref": "#/$defs/ReferencedMapping"
+            },
+            "title": "Mappings",
+            "type": "array"
+          },
+          "contract_path": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Contract Path"
+          },
+          "own_gap": {
+            "title": "Own Gap",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "status",
+          "mappings",
+          "contract_path",
+          "own_gap"
+        ],
+        "title": "CoverageDecision",
+        "type": "object"
+      },
+      "OwnSlots_2a54ca7c75f4b773": {
+        "additionalProperties": false,
+        "properties": {
+          "stock": {
+            "$ref": "#/$defs/CoverageDecision"
+          },
+          "sales": {
+            "$ref": "#/$defs/CoverageDecision"
+          },
+          "channel": {
+            "$ref": "#/$defs/CoverageDecision"
+          },
+          "period": {
+            "$ref": "#/$defs/CoverageDecision"
+          },
+          "population": {
+            "$ref": "#/$defs/CoverageDecision"
+          },
+          "grain": {
+            "$ref": "#/$defs/CoverageDecision"
+          },
+          "R_PURPOSE": {
+            "$ref": "#/$defs/CoverageDecision"
+          }
+        },
+        "required": [
+          "stock",
+          "sales",
+          "channel",
+          "period",
+          "population",
+          "grain",
+          "R_PURPOSE"
+        ],
+        "title": "OwnSlots_2a54ca7c75f4b773",
+        "type": "object"
+      },
+      "PlanningFilter": {
+        "additionalProperties": false,
+        "properties": {
+          "column": {
+            "title": "Column",
+            "type": "string"
+          },
+          "operator": {
+            "enum": [
+              "=",
+              "!=",
+              "<>",
+              ">",
+              ">=",
+              "<",
+              "<=",
+              "IN",
+              "NOT IN",
+              "LIKE",
+              "IS NULL",
+              "IS NOT NULL"
+            ],
+            "title": "Operator",
+            "type": "string"
+          },
+          "value": {
+            "default": null,
+            "title": "Value"
+          }
+        },
+        "required": [
+          "column",
+          "operator"
+        ],
+        "title": "PlanningFilter",
+        "type": "object"
+      },
+      "ReferencedMapping": {
+        "additionalProperties": false,
+        "properties": {
+          "column": {
+            "minLength": 1,
+            "title": "Column",
+            "type": "string"
+          },
+          "role": {
+            "enum": [
+              "metric",
+              "attribute",
+              "filter",
+              "key",
+              "metadata"
+            ],
+            "title": "Role",
+            "type": "string"
+          },
+          "aggregation": {
+            "anyOf": [
+              {
+                "enum": [
+                  "sum",
+                  "count",
+                  "count_distinct",
+                  "avg",
+                  "min",
+                  "max"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Aggregation"
+          },
+          "operator": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Operator"
+          },
+          "value": {
+            "default": null,
+            "title": "Value"
+          },
+          "conditions": {
+            "items": {
+              "$ref": "#/$defs/PlanningFilter"
+            },
+            "title": "Conditions",
+            "type": "array"
+          }
+        },
+        "required": [
+          "column",
+          "role"
+        ],
+        "title": "ReferencedMapping",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "entries": {
+        "$ref": "#/$defs/OwnSlots_2a54ca7c75f4b773"
+      }
+    },
+    "required": [
+      "entries"
+    ],
+    "title": "OwnCoverage_2a54ca7c75f4b773",
+    "type": "object"
+  },
+  "input_tokens_estimated": 3925
+}

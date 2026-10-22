@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/willy/code/cpea_terms/evaluations/managed_node_diagnostics.py", line 474, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/home/willy/code/cpea_terms/evaluations/managed_node_diagnostics.py", line 448, in main
+    authorization = preflight(package, contexts, review)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/willy/code/cpea_terms/evaluations/managed_node_diagnostics.py", line 170, in preflight
+    raise ValueError('execute requires fresh ACCEPT fixture review')
+ValueError: execute requires fresh ACCEPT fixture review

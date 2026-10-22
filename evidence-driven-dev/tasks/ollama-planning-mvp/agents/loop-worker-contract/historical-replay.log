@@ -1,0 +1,3 @@
+[map-01] START view=demo_retail.v_inventory_status
+[map-01] FAIL view=demo_retail.v_inventory_status ValueError: supported requires mappings/evidence and no missing requirements
+{"result": "PASS", "raw_replays": 1, "calls": 1, "valid_views": 0, "stopped": {"node": "map-01", "view": "demo_retail.v_inventory_status", "error_type": "ValueError", "error": "supported requires mappings/evidence and no missing requirements"}, "input_tokens_actual": 2559, "output_tokens_actual": 3004}

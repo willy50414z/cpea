@@ -1,0 +1,12 @@
+{
+  "result": "PASS",
+  "replayed": 12,
+  "current_sources_match_frozen": true,
+  "actual_case_hashes_match_independent_approval": true,
+  "raw_response_payload_score_diagnostic_exact": true,
+  "calls_unchanged": true,
+  "new_model_calls": 0,
+  "sql_db_calls": 0,
+  "ollama_calls": 0,
+  "meaning": "實驗完整性通過；B1品質僅2/6 ready，MVP1 Gate失敗。"
+}

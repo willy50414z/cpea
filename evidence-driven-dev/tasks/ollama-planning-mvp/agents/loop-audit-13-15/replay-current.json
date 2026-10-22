@@ -1,0 +1,21 @@
+{
+  "result": "FAIL",
+  "replay_verification": "PASS",
+  "stopped": {
+    "error_type": "ValueError",
+    "error": "fixed diagnostic semantic checks failed"
+  },
+  "inner": {
+    "result": "PASS",
+    "raw_replays": 1,
+    "stopped": {
+      "error_type": "ValueError",
+      "error": "fixed diagnostic semantic checks failed"
+    },
+    "upstream_injected": true,
+    "provider_calls": 0
+  },
+  "outer_receipt_sha256": "d614136521733536adc94c82d997575492c74417a87d98398ced63ca1f451278",
+  "provider_calls": 0,
+  "independent_semantic_approval": "PENDING"
+}

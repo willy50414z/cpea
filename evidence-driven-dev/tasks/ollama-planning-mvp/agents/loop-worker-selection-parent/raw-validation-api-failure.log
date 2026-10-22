@@ -1,0 +1,1 @@
+父驗收腳本呼叫parse_wire時誤傳(schema, str)，實際介面為(AIMessage, schema)。原30objects walker已完成，隨後API呼叫AttributeError: content；未變更產品、schema或raw。修正驗證呼叫方式後重新獨立核對；此失敗log保留。

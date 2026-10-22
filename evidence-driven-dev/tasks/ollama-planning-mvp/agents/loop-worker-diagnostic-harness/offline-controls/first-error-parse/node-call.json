@@ -1,0 +1,13 @@
+{
+  "response": "not JSON",
+  "usage": {
+    "input_tokens": 10,
+    "output_tokens": 20,
+    "total_tokens": 30
+  },
+  "response_metadata": {
+    "origin": "OFFLINE_SYNTHETIC_CONTROL",
+    "model_POSTs": 0
+  },
+  "elapsed_seconds": 4.023998917546123e-05
+}

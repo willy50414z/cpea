@@ -1,0 +1,89 @@
+{
+  "result": "PASS",
+  "replayed_case_arms": 30,
+  "replayed_calls": 57,
+  "summary": {
+    "A_original": {
+      "completed": 10,
+      "model_calls": 10,
+      "views_and_columns": 9,
+      "ready": 7,
+      "automated_pass": 7,
+      "control_pass": 3,
+      "elapsed_ms": 91806.25644800239,
+      "usage": {
+        "input_tokens": 74663,
+        "output_tokens": 8744
+      },
+      "stop_stages": {
+        "complete": 10
+      },
+      "failures": [
+        "cross-view-21",
+        "cross-view-24",
+        "cross-view-26"
+      ]
+    },
+    "B_checklist": {
+      "completed": 10,
+      "model_calls": 10,
+      "views_and_columns": 4,
+      "ready": 5,
+      "automated_pass": 2,
+      "control_pass": 2,
+      "elapsed_ms": 70131.39810900248,
+      "usage": {
+        "input_tokens": 78103,
+        "output_tokens": 7466
+      },
+      "stop_stages": {
+        "complete": 9,
+        "single_parse": 1
+      },
+      "failures": [
+        "cross-view-07",
+        "cross-view-11",
+        "cross-view-14",
+        "cross-view-16",
+        "cross-view-21",
+        "cross-view-24",
+        "cross-view-26",
+        "cross-view-29"
+      ]
+    },
+    "C_staged": {
+      "completed": 10,
+      "model_calls": 37,
+      "views_and_columns": 6,
+      "ready": 5,
+      "automated_pass": 2,
+      "control_pass": 1,
+      "elapsed_ms": 130817.62594000247,
+      "usage": {
+        "input_tokens": 161045,
+        "output_tokens": 10839
+      },
+      "stop_stages": {
+        "complete": 8,
+        "task_contract": 2
+      },
+      "failures": [
+        "cross-view-07",
+        "cross-view-18",
+        "cross-view-11",
+        "cross-view-14",
+        "cross-view-21",
+        "cross-view-24",
+        "cross-view-26",
+        "cross-view-29"
+      ]
+    }
+  },
+  "run": "evidence-driven-dev/tasks/retail-planning-stages/.local/stages-20261020T094053Z",
+  "model": "DeepSeek-V4.1-Flash",
+  "hashes": {
+    "run.json": "6e44bfccd4fe213a7af535df184a021af5e7e14ff0db002ed0ce65215a2634cd",
+    "calls.jsonl": "8411da7382c12f1a6b37d7feaeaab3b7012b8f92c432ad1b6f3479f6b9c9413f",
+    "results.jsonl": "83189b595ad2c8fcb394c55edb0f568b9f4a67e2f596792ba1d7e9b27c05c12c"
+  }
+}

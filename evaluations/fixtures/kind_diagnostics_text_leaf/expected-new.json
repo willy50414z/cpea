@@ -1,0 +1,260 @@
+{
+  "COV-LEAF-v1-06": {
+    "entries": {
+      "slot_0/🧾": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": []
+      },
+      "model_dump": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      },
+      "月~邊界": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      },
+      "scope-channel": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      },
+      "m_discount": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      },
+      "amount/net": {
+        "status": "partial",
+        "own_gap": true,
+        "mappings": [
+          {
+            "column": "value_total",
+            "aggregation": "sum",
+            "conditions": []
+          }
+        ],
+        "contract_path": "/columns/value_total/description"
+      },
+      "元資料": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      },
+      "保留/全部": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      }
+    }
+  },
+  "COV-LEAF-v1-07": {
+    "entries": {
+      "GRN-001": {
+        "status": "supported",
+        "own_gap": false,
+        "mappings": [
+          {
+            "column": "site_key"
+          },
+          {
+            "column": "item_key"
+          }
+        ]
+      },
+      "MET-001": {
+        "status": "supported",
+        "own_gap": false,
+        "mappings": [
+          {
+            "column": "onhand_value",
+            "aggregation": "sum",
+            "conditions": []
+          }
+        ],
+        "contract_path": "/columns/onhand_value/description"
+      },
+      "FILT-001": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      },
+      "FILT-002": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      },
+      "MET-002": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      },
+      "MET-003": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      },
+      "META-001": {
+        "status": "supported",
+        "own_gap": false,
+        "mappings": [
+          {
+            "column": "counted_day"
+          }
+        ],
+        "contract_path": "/columns/counted_day/description"
+      },
+      "POP-001": {
+        "status": "supported",
+        "own_gap": false,
+        "mappings": [
+          {
+            "column": "site_key"
+          },
+          {
+            "column": "item_key"
+          }
+        ],
+        "contract_path": "/summary"
+      }
+    }
+  },
+  "COV-LEAF-v1-08": {
+    "entries": {
+      "GRN-001": {
+        "status": "supported",
+        "own_gap": false,
+        "mappings": [
+          {
+            "column": "site_key"
+          },
+          {
+            "column": "item_key"
+          }
+        ]
+      },
+      "MET-001": {
+        "status": "supported",
+        "own_gap": false,
+        "mappings": [
+          {
+            "column": "onhand_value",
+            "aggregation": "sum",
+            "conditions": []
+          }
+        ],
+        "contract_path": "/columns/onhand_value/description"
+      },
+      "FILT-001": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      },
+      "FILT-002": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      },
+      "MET-002": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      },
+      "MET-003": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      },
+      "META-001": {
+        "status": "supported",
+        "own_gap": false,
+        "mappings": [
+          {
+            "column": "counted_day"
+          }
+        ],
+        "contract_path": "/columns/counted_day/description"
+      },
+      "POP-001": {
+        "status": "partial",
+        "own_gap": true,
+        "mappings": [
+          {
+            "column": "site_key"
+          },
+          {
+            "column": "item_key"
+          }
+        ],
+        "contract_path": "/summary"
+      }
+    }
+  },
+  "COV-LEAF-v1-09": {
+    "entries": {
+      "slot_0/🧾": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": []
+      },
+      "model_dump": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      },
+      "月~邊界": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      },
+      "scope-channel": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      },
+      "m_discount": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      },
+      "amount/net": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      },
+      "元資料": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      },
+      "保留/全部": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      }
+    }
+  }
+}

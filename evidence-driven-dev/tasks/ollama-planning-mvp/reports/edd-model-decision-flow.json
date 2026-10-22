@@ -1,0 +1,21 @@
+{
+  "result": "PASS",
+  "skill_frontmatter": "3/3",
+  "utf8_no_bom_and_preserved_lf": "4/4",
+  "local_links": "PASS",
+  "external_skill_sha256": {
+    "/home/willy/.codex/skills/edd/SKILL.md": "10410ba80708498a583460952514c2d9db58f248cb3ee87747bf907571e7053d",
+    "/home/willy/.codex/skills/edd-investigate/SKILL.md": "c52b2ab873257e5d2a74c4e7bc186cba06e3488a9e24abe7b29053d9b7498e1a",
+    "/home/willy/.codex/skills/edd-verify/SKILL.md": "045bda3348d38a29386c9b86824b0a17877b333fe6c0d4d559173b2dd364a822",
+    "/home/willy/.codex/skills/edd-investigate/references/model-decision-comparison.md": "bd5e5528963abc6135009e8b9359542143f2902f1a055b43bb2ee90791119ee9"
+  },
+  "behavioral_review": {
+    "baseline_agent": "/root/edd_reason_baseline",
+    "baseline_observation": "原技能下已主動提出理由比較；但規劃四次呼叫、每次塞入六題，未先停在單一失敗案例的最小比較。不是證明原技能完全不會比較理由。",
+    "forward_agent": "/root/edd_reason_forward",
+    "forward_observation": "改後先選一題兩次呼叫，足以決定實驗即停止；已有理由時零新診斷呼叫；辨識粒度便利不能取代online必要條件，保留首次與事後證據。",
+    "scope": "一次修改前與一次修改後的獨立情境測試，後者含兩種情境；不代表統計穩定性或產品正確率提升。"
+  },
+  "new_planner_provider_calls": 0,
+  "product_changes_this_turn": false
+}

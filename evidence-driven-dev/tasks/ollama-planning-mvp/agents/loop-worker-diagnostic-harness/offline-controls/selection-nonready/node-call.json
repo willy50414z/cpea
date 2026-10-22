@@ -1,0 +1,13 @@
+{
+  "response": "{\"selected_views\": [\"demo_retail.v_inventory_status\", \"demo_retail.v_sales_detail\"], \"assignments\": [{\"requirement_id\": \"GRN-001\", \"view\": \"demo_retail.v_inventory_status\", \"task_id\": \"inventory-observation\"}, {\"requirement_id\": \"MET-001\", \"view\": \"demo_retail.v_inventory_status\", \"task_id\": \"inventory-observation\"}, {\"requirement_id\": \"FILT-001\", \"view\": \"demo_retail.v_sales_detail\", \"task_id\": \"period-sales\"}, {\"requirement_id\": \"FILT-002\", \"view\": \"demo_retail.v_sales_detail\", \"task_id\": \"period-sales\"}, {\"requirement_id\": \"MET-002\", \"view\": \"demo_retail.v_sales_detail\", \"task_id\": \"period-sales\"}, {\"requirement_id\": \"MET-003\", \"view\": \"demo_retail.v_sales_detail\", \"task_id\": \"period-sales\"}, {\"requirement_id\": \"META-001\", \"view\": \"demo_retail.v_inventory_status\", \"task_id\": \"inventory-observation\"}, {\"requirement_id\": \"POP-001\", \"view\": \"demo_retail.v_inventory_status\", \"task_id\": \"inventory-observation\"}], \"exclusions\": [{\"view\": \"demo_retail.v_customer_value\", \"refs\": [{\"kind\": \"gap\", \"requirement_ids\": [\"MET-001\"], \"selected_view\": null}]}, {\"view\": \"demo_retail.v_daily_sales\", \"refs\": [{\"kind\": \"gap\", \"requirement_ids\": [\"MET-001\"], \"selected_view\": null}]}, {\"view\": \"demo_retail.v_order_summary\", \"refs\": [{\"kind\": \"gap\", \"requirement_ids\": [\"MET-001\"], \"selected_view\": null}]}, {\"view\": \"demo_retail.v_product_monthly\", \"refs\": [{\"kind\": \"gap\", \"requirement_ids\": [\"MET-001\"], \"selected_view\": null}]}, {\"view\": \"demo_retail.v_store_monthly_kpi\", \"refs\": [{\"kind\": \"gap\", \"requirement_ids\": [\"MET-001\"], \"selected_view\": null}]}], \"draft\": {\"status\": \"unsupported\", \"strategy\": \"multi_view\", \"tasks\": [], \"integration\": null, \"clarifications\": [], \"unsupported_reasons\": [\"無能力\"]}}",
+  "usage": {
+    "input_tokens": 10,
+    "output_tokens": 20,
+    "total_tokens": 30
+  },
+  "response_metadata": {
+    "origin": "OFFLINE_SYNTHETIC_CONTROL",
+    "model_POSTs": 0
+  },
+  "elapsed_seconds": 3.9910999475978315e-05
+}

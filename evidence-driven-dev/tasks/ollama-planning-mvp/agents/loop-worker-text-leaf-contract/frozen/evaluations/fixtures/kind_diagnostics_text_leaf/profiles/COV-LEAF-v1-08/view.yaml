@@ -1,0 +1,87 @@
+{
+  "version": 3,
+  "view": "diagnostic_leaf.stock_subset",
+  "summary": "此來源僅保留 onhand_value > 0 的庫存列，缺貨列不出現。粒度：門市×商品；estimated_days_of_supply 根據最近30日銷量估算，無銷量時為 NULL。",
+  "grain": {
+    "description": "門市×商品",
+    "keys": [
+      "site_key",
+      "item_key"
+    ]
+  },
+  "columns": {
+    "counted_day": {
+      "type": "date",
+      "role": "dimension",
+      "description": "庫存盤點日期"
+    },
+    "site_key": {
+      "type": "number",
+      "role": "identifier",
+      "description": "庫存所屬門市識別碼；與 item_key 組合唯一決定一列。"
+    },
+    "store_name": {
+      "type": "string",
+      "role": "dimension",
+      "description": "庫存所屬門市名稱。"
+    },
+    "region": {
+      "type": "string",
+      "role": "dimension",
+      "description": "庫存門市所屬區域；北部、中部、南部。"
+    },
+    "city": {
+      "type": "string",
+      "role": "dimension",
+      "description": "庫存門市所在城市。"
+    },
+    "item_key": {
+      "type": "number",
+      "role": "identifier",
+      "description": "庫存商品識別碼；與 site_key 組合唯一決定一列。"
+    },
+    "sku": {
+      "type": "string",
+      "role": "identifier",
+      "description": "商品庫存單位代碼（SKU）。"
+    },
+    "product_name": {
+      "type": "string",
+      "role": "dimension",
+      "description": "庫存商品名稱。"
+    },
+    "category": {
+      "type": "string",
+      "role": "dimension",
+      "description": "庫存商品分類。"
+    },
+    "onhand_value": {
+      "type": "number",
+      "role": "measure",
+      "description": "快照當日此門市此商品的庫存件數，單位件；同商品跨門市可加總，不可跨不同快照日期直接加總。",
+      "unit": "件"
+    },
+    "reorder_point": {
+      "type": "number",
+      "role": "measure",
+      "description": "此門市此商品的補貨警戒件數；onhand_value 不高於此值即判定需補貨（若為 0 件則為缺貨）。"
+    },
+    "inventory_cost_value": {
+      "type": "number",
+      "role": "measure",
+      "description": "庫存成本估值，onhand_value × 商品主檔 unit_cost，單位 TWD；不是預估銷售額。",
+      "unit": "TWD"
+    },
+    "sold_qty_30d": {
+      "type": "number",
+      "role": "measure",
+      "description": "過去 30 個曆日，此門市此商品已完成訂單銷售件數；無銷量為 0。"
+    },
+    "estimated_days_of_supply": {
+      "type": "number",
+      "role": "measure",
+      "description": "預估庫存可銷售天數，onhand_value × 30 ÷ sold_qty_30d，單位天；近 30 日銷量為 0 時為 NULL，屬簡化估計。",
+      "unit": "天"
+    }
+  }
+}

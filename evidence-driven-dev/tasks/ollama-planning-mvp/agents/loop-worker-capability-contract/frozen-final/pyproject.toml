@@ -1,0 +1,58 @@
+[build-system]
+requires = ["hatchling>=1.32,<2"]
+build-backend = "hatchling.build"
+
+[project]
+name = "cpea"
+version = "0.1.0"
+description = "Configurable ERP assistant with governed single-view SQL generation"
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+  "fastapi>=0.143,<1",
+  "uvicorn>=0.30,<1",
+  "pydantic>=2.14,<3",
+  "langgraph>=1.2,<2",
+  "langchain-core>=1.6,<2",
+  "langchain-ollama>=1.1,<2",
+  "python-dotenv>=1.2,<2",
+  "PyYAML>=6,<7",
+  "requests>=2.34,<3",
+  "tiktoken>=0.14,<1",
+  "numpy>=2.4,<3",
+  "gradio>=6.30,<7",
+]
+
+[project.scripts]
+cpea = "cpea.interfaces.cli.main:main"
+cpea-query-eval = "evaluations.runners.query_reliability:main"
+cpea-governance-eval = "evaluations.governance_runner:main"
+cpea-eval = "evaluations.project_runner:main"
+cpea-plan-eval = "evaluations.decomposition_runner:main"
+
+[project.optional-dependencies]
+azure = [
+    "langchain-openai>=1,<2",
+]
+postgres-contracts = [
+    "psycopg[binary]>=3.2,<4",
+]
+sqlserver = [
+    "pymssql>=2.3,<3",
+    "sqlalchemy>=2.0,<3",
+]
+
+[dependency-groups]
+dev = ["pytest>=9,<10", "httpx>=0.28,<1", "hatchling>=1.32,<2"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/cpea", "evaluations"]
+exclude = ["projects/**", "**/private/**", "**/__pycache__/**", "**/*.pyc", "**/terms_mapping.json", "**/.terms_mapping.json-*"]
+
+[tool.hatch.build.targets.sdist]
+include = ["src/cpea", "evaluations/runners", "evaluations/datasets", "evaluations/config", "evaluations/governance_*.py", "evaluations/decomposition_*.py", "evaluations/project_runner.py", "evaluations/hilp_cases.py", "evaluations/view_matching_*.py", "evaluations/retail_view_benchmark.py", "evaluations/retail_view_retrieval.py", "evaluations/call_budget.py", "evaluations/metadata.py", "evaluations/__init__.py", "evaluations/README.md", "requirements", "tests", "docs", "examples", "README.md", "pyproject.toml", "uv.lock", "langgraph.json", ".env.example", "config/tenants/example.yaml"]
+exclude = ["projects/**", "**/private/**", "**/__pycache__/**", "**/*.pyc", "**/terms_mapping.json", "**/.terms_mapping.json-*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"

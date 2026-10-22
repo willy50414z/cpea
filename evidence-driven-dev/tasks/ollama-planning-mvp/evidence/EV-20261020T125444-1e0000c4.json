@@ -1,0 +1,20 @@
+{
+  "id": "EV-20261020T125444-1e0000c4",
+  "kind": "baseline",
+  "command": [
+    ".venv/bin/python",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/reports/replay_mvp0.py"
+  ],
+  "cwd": "/home/willy/code/cpea_terms",
+  "started_at": "2026-10-20T12:54:44+00:00",
+  "finished_at": "2026-10-20T12:54:45+00:00",
+  "exit_code": 0,
+  "revision": "bc09c67fc4078501599c37e4cdfecdee40af2ef8",
+  "diff_fingerprint": "7e28142bd10969edc6ce090853beb98e3e9afd65fb1aea6ce17cacb30afbc3a9",
+  "post_fingerprint": "7e28142bd10969edc6ce090853beb98e3e9afd65fb1aea6ce17cacb30afbc3a9",
+  "source_unchanged": true,
+  "output_sha256": "4cd139b91065132bd6ce51f8e6c04b71f04944c49b01e14bc55e4c3151083b4b",
+  "raw_output": ".local/EV-20261020T125444-1e0000c4.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "92c05cd0821a1d43284650778482e0026089490b749dc54adfe0d35a556bde9a"
+}

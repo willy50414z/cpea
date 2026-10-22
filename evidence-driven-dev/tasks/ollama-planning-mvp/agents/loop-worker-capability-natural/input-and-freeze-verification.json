@@ -1,0 +1,114 @@
+{
+  "result": "PASS",
+  "upstream_injected": true,
+  "samples": [
+    {
+      "id": "COV-ISO-v1-01",
+      "rows": 8,
+      "lossless": true,
+      "original_request_schema_upstream": true,
+      "schema_required_presence": true,
+      "view": "demo_retail.v_daily_sales",
+      "input_tokens": 5147,
+      "body_options": {
+        "num_predict": -1,
+        "num_ctx": 32768,
+        "temperature": 1,
+        "top_p": 1,
+        "seed": 42
+      },
+      "stream": false,
+      "think": true
+    },
+    {
+      "id": "COV-ISO-v1-02",
+      "rows": 1,
+      "lossless": true,
+      "original_request_schema_upstream": true,
+      "schema_required_presence": true,
+      "view": "demo_retail.v_customer_value",
+      "input_tokens": 3239,
+      "body_options": {
+        "num_predict": -1,
+        "num_ctx": 32768,
+        "temperature": 1,
+        "top_p": 1,
+        "seed": 42
+      },
+      "stream": false,
+      "think": true
+    },
+    {
+      "id": "COV-ISO-v1-03",
+      "rows": 8,
+      "lossless": true,
+      "original_request_schema_upstream": true,
+      "schema_required_presence": true,
+      "view": "diagnostic9.observation",
+      "input_tokens": 5077,
+      "body_options": {
+        "num_predict": -1,
+        "num_ctx": 32768,
+        "temperature": 1,
+        "top_p": 1,
+        "seed": 42
+      },
+      "stream": false,
+      "think": true
+    },
+    {
+      "id": "COV-CAP-v1-04",
+      "rows": 8,
+      "lossless": true,
+      "original_request_schema_upstream": true,
+      "schema_required_presence": true,
+      "view": "demo_retail.v_customer_value",
+      "input_tokens": 5194,
+      "body_options": {
+        "num_predict": -1,
+        "num_ctx": 32768,
+        "temperature": 1,
+        "top_p": 1,
+        "seed": 42
+      },
+      "stream": false,
+      "think": true
+    },
+    {
+      "id": "COV-CAP-v1-05",
+      "rows": 8,
+      "lossless": true,
+      "original_request_schema_upstream": true,
+      "schema_required_presence": true,
+      "view": "demo_retail.v_inventory_status",
+      "input_tokens": 5568,
+      "body_options": {
+        "num_predict": -1,
+        "num_ctx": 32768,
+        "temperature": 1,
+        "top_p": 1,
+        "seed": 42
+      },
+      "stream": false,
+      "think": true
+    }
+  ],
+  "frozen": {
+    "freeze.json": {
+      "files": 239,
+      "mismatches": []
+    },
+    "policy-freeze.json": {
+      "files": 12,
+      "mismatches": []
+    },
+    "capability-freeze.json": {
+      "files": 35,
+      "mismatches": []
+    }
+  },
+  "endpoint_hash": "1d0a0c2cf65d77fc9c44511b032d4c429aae3b479fc98184ee38d5c1e4b44bdd",
+  "HTTP_timeout": null,
+  "outer_timeout": null,
+  "provider_calls": 0
+}

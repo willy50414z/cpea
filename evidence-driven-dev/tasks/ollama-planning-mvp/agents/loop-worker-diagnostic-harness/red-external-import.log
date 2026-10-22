@@ -1,0 +1,24 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+______________ test_frozen_replay_and_artifact_drift_are_enforced ______________
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-49/test_frozen_replay_and_artifac0')
+
+    def test_frozen_replay_and_artifact_drift_are_enforced(tmp_path):
+        mod = api(); package = mod.load_package(); context = mod.prepare(package, 'COV-ISO-v1-03')
+        raw = json.dumps(package['oracle']['positive_outputs'][context['sample']['id']], ensure_ascii=False)
+        folder = tmp_path / 'run'
+        meta = mod.record_sample(folder, context, lambda *a: AIMessage(content=raw))
+        assert meta['stopped'] is None
+        frozen = mod.freeze_sources(tmp_path / 'frozen', package)
+        assert (frozen / 'evaluations/managed_node_diagnostics.py').is_file()
+        assert (frozen / 'src/cpea/infrastructure/catalog/yaml_catalog.py').is_file()
+>       assert (frozen / '_external/edd/ledger.py').is_file()
+E       AssertionError: assert False
+E        +  where False = is_file()
+E        +    where is_file = (PosixPath('/tmp/pytest-of-willy/pytest-49/test_frozen_replay_and_artifac0/frozen') / '_external/edd/ledger.py').is_file
+
+tests/unit/test_managed_node_diagnostics.py:162: AssertionError
+=========================== short test summary info ============================
+FAILED tests/unit/test_managed_node_diagnostics.py::test_frozen_replay_and_artifact_drift_are_enforced
+1 failed, 47 deselected in 3.12s

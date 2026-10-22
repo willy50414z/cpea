@@ -1,0 +1,70 @@
+{
+  "ticket": "e229c1b487464971b1c8f7f1470dbcd6",
+  "result": "FAIL",
+  "evidence": [
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-1/preflight.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-1/replay.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-1/semantic-review.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T161155Z-cb9cb4/run.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T161155Z-cb9cb4/map-05-call.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T161155Z-cb9cb4/map-05-provider-response.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T161155Z-cb9cb4/map-05-parsed.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T161155Z-cb9cb4/map-05-error.json"
+  ],
+  "summary": "固定自然單樣本在第5個View daily_sales首錯停止：HTTP 200正常stop，8項requirements卻輸出9項coverage entries，filter_channel_online在entries[1]與[4]重複。共6次本機受控POST、0重試/雲端/SQL/DB。需求拆分與前4View本題責任已核對；sales_detail population額外「不含退貨」缺契約保證，完整差異見semantic-review.log。map-06/07、selection及prepared_requests未執行，不能宣稱端到端通過。失敗前綴6個raw離線replay一致，來源凍結仍匹配；不改來源或答案。交fresh研究，不重送成功HTTP挑分。",
+  "run_directory": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T161155Z-cb9cb4",
+  "execute_exit_code": 1,
+  "replay": {
+    "result": "PASS",
+    "raw_replays": 6,
+    "stopped": {
+      "error_type": "ValueError",
+      "error": "duplicate coverage requirement IDs"
+    }
+  },
+  "failure_paths": {
+    "node": "map-05",
+    "view": "demo_retail.v_daily_sales",
+    "error": {
+      "error_type": "ValueError",
+      "error": "duplicate coverage requirement IDs",
+      "raw_saved": true
+    },
+    "entries_count": 9,
+    "unique_count": 8,
+    "duplicate_requirement_id": "filter_channel_online",
+    "zero_based_entry_indices": [
+      1,
+      4
+    ],
+    "json_pointers": [
+      "/entries/1/requirement_id",
+      "/entries/4/requirement_id"
+    ],
+    "original_request": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T161155Z-cb9cb4/map-05-request.json",
+    "original_post_body": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T161155Z-cb9cb4/map-05-body.json",
+    "raw_model_response": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T161155Z-cb9cb4/map-05-call.json",
+    "parsed": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T161155Z-cb9cb4/map-05-parsed.json",
+    "error_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T161155Z-cb9cb4/map-05-error.json",
+    "provider_response": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T161155Z-cb9cb4/map-05-provider-response.json",
+    "diagnosis": "HTTP 200且正常完成；自然輸出9個entries對應8個requirements，線上通路ID重複。既有coverage唯一性守門拒絕；未去重、未修raw、未重送。"
+  },
+  "population_caveat": {
+    "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T161155Z-cb9cb4/map-03-result.json",
+    "json_pointer": "/population",
+    "model_text": "已完成訂單之每個商品品項明細（僅含已完成訂單，不含未成交、退貨或無銷售之庫存商品）",
+    "contract_path": "projects/retail/views/demo_retail/v_sales_detail.yaml",
+    "contract_json_pointer": "/summary",
+    "contract_text": "粒度：每筆已完成訂單的每個商品品項；僅含已完成訂單。銷售額為折扣後淨額，毛利=淨額-成本。請勿以 COUNT(*) 當訂單數。",
+    "difference": "模型多稱「不含退貨」，契約僅保證已完成訂單，未明確保證排除退貨。未將此自述當契約保證或新增filter；依Main指示繼續固定流程收集，影響由fresh研究／獨立驗證者判定。"
+  },
+  "source_freeze_still_matches": true,
+  "resource_facts": {
+    "local_posts": 6,
+    "cloud_posts": 0,
+    "retries": 0,
+    "sql_or_db": 0,
+    "source_or_test_changes": 0
+  },
+  "next_step_boundary": "此成功HTTP錯答不能原樣重試或換case名稱抽樣。下一步須fresh研究以本次重複ID／既有契約／原messages重新判定可否證假設；若實作新候選，來源或prompt／版本應有可追蹤差異後才執行新自然樣本。此worker未選修法。"
+}

@@ -1,0 +1,110 @@
+{
+  "result": "FAIL",
+  "candidate": "managed-own-responsibility-1",
+  "run": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T194515Z-8cb75b",
+  "contract_first_error": {
+    "artifact": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T194515Z-8cb75b/map-02-error.json",
+    "error": {
+      "error_type": "ValueError",
+      "error": "only metric mapping may aggregate"
+    },
+    "raw_pointer": "/entries/FILT-001/mappings/0/conditions",
+    "invalid_representation": "role=filter 以 conditions 放兩個range條件，operator/value省略；conditions僅供metric，非metric不得有conditions",
+    "guard": "evaluations/three_stage_view_selection.py:202",
+    "raw_mapping": {
+      "column": "sales_date",
+      "role": "filter",
+      "conditions": [
+        {
+          "column": "sales_date",
+          "operator": ">=",
+          "value": "2026-09-01"
+        },
+        {
+          "column": "sales_date",
+          "operator": "<=",
+          "value": "2026-09-30"
+        }
+      ]
+    },
+    "parsed_mapping": {
+      "column": "sales_date",
+      "role": "filter",
+      "aggregation": null,
+      "operator": null,
+      "value": null,
+      "conditions": [
+        {
+          "column": "sales_date",
+          "operator": ">=",
+          "value": "2026-09-01"
+        },
+        {
+          "column": "sales_date",
+          "operator": "<=",
+          "value": "2026-09-30"
+        }
+      ]
+    },
+    "raw_field_presence": {
+      "column": true,
+      "role": true,
+      "aggregation": false,
+      "operator": false,
+      "value": false,
+      "conditions": true
+    }
+  },
+  "confirmed_semantic_failure": {
+    "artifact": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T194515Z-8cb75b/map-02-call.json",
+    "pointers": [
+      "/entries/GRN-001/status",
+      "/entries/GRN-001/mappings"
+    ],
+    "actual": {
+      "status": "unsupported",
+      "mappings": [],
+      "contract_path": "/grain/description",
+      "own_gap": true
+    },
+    "requirement_quote": "各店各商品",
+    "policy_view": "demo_retail.v_daily_sales",
+    "policy_pointer": "/columns/store_id",
+    "policy_evidence": {
+      "type": "number",
+      "role": "identifier",
+      "description": "門市id"
+    },
+    "reason": "契約有store_id合法key，店×商品缺product應誠實保留店key為partial；unsupported空mapping遺失可用部分能力，違反固定自然gate及own prompt。",
+    "acceptance_source": {
+      "research": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-6/handoff.json#/natural_gate/2",
+      "prompt": "evaluations/prompts/own_responsibility/coverage.md 自身責任與必要依賴第3段",
+      "boundary": "依固定自然gate核對遺漏合法部分mapping；不推測模型為何省略或是否為躲格式。fresh研究再判斷此責任必要性與語意。"
+    }
+  },
+  "ambiguities_not_failure": {
+    "recall_MET003_population": "所有在庫商品用詞可能含混，沒有selection/prepared證明排除0庫存，不以此單獨FAIL",
+    "MET003_own_gap": "revenue sum有合法自身金額，true可能把scope/grain缺口誤當自身；本輪無自由理由可確證精確原因，未作獨立主FAIL依據"
+  },
+  "completed_nodes": [
+    "recall",
+    "map-01"
+  ],
+  "contract_failed_node": "map-02",
+  "not_verified": [
+    "map-03",
+    "map-04",
+    "map-05",
+    "map-06",
+    "map-07",
+    "selection",
+    "prepared"
+  ],
+  "model_POSTs": 3,
+  "retry": 0,
+  "cloud": 0,
+  "SQL": 0,
+  "DB": 0,
+  "replay_live": "PASS same 3 raw and exact first error",
+  "replay_frozen": "PASS same 3 raw and exact first error"
+}

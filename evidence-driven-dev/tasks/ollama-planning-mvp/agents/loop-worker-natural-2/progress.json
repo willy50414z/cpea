@@ -1,0 +1,20 @@
+{
+  "ticket": "35d0dc38e8c64f1d8f60df54e2862009",
+  "result": "FAIL",
+  "runner_status": "FINISHED",
+  "session_id": 73726,
+  "run": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T171721Z-fa4587",
+  "completed": [
+    "recall",
+    "map-01",
+    "map-02",
+    "map-03",
+    "map-04",
+    "map-05",
+    "map-06",
+    "map-07",
+    "selection"
+  ],
+  "prepared_requests": "NOT_CREATED",
+  "next": "Main機械finish FAIL後交fresh研究；不重送。"
+}

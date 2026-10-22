@@ -1,0 +1,8 @@
+{
+  "result": "PASS",
+  "raw_replays": 6,
+  "stopped": {
+    "error_type": "ValueError",
+    "error": "duplicate coverage requirement IDs"
+  }
+}

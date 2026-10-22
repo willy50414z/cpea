@@ -1,0 +1,52 @@
+{
+  "entries": {
+    "GRN-001": {
+      "status": "unsupported",
+      "mappings": [],
+      "contract_path": "/grain/description",
+      "own_gap": true
+    },
+    "MET-001": {
+      "status": "unsupported",
+      "mappings": [],
+      "contract_path": null,
+      "own_gap": true
+    },
+    "FILT-001": {
+      "status": "unsupported",
+      "mappings": [],
+      "contract_path": null,
+      "own_gap": true
+    },
+    "FILT-002": {
+      "status": "unsupported",
+      "mappings": [],
+      "contract_path": null,
+      "own_gap": true
+    },
+    "MET-002": {
+      "status": "unsupported",
+      "mappings": [],
+      "contract_path": null,
+      "own_gap": true
+    },
+    "MET-003": {
+      "status": "unsupported",
+      "mappings": [],
+      "contract_path": null,
+      "own_gap": true
+    },
+    "META-001": {
+      "status": "unsupported",
+      "mappings": [],
+      "contract_path": null,
+      "own_gap": true
+    },
+    "POP-001": {
+      "status": "unsupported",
+      "mappings": [],
+      "contract_path": null,
+      "own_gap": true
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "model_POST_count": 0,
+  "notes": [
+    {
+      "issue": "凍結重播啟動cwd=/tmp使prompt相對路徑缺檔，首次stdout JSON解析失敗，第二次診斷保存原stderr。",
+      "resolution": "採用完整freeze為cwd與其src/root PYTHONPATH，三raw成功重播。",
+      "proof": "frozen-startup-error.log"
+    },
+    {
+      "issue": "首次最終證據檢查誤以node-body格式化檔案SHA等同controller request_sha，assert失敗。",
+      "resolution": "controller request_sha使用ensure_ascii=false、sort_keys=true與compact separators的canonical JSON；獨立計算三者均吻合。另獨立保存實體node-body檔案SHA，未更改body或任何expected hash。",
+      "scope": "0POST，不影響模型原raw及語意FAIL。"
+    }
+  ]
+}

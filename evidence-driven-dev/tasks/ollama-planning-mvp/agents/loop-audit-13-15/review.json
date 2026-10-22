@@ -1,0 +1,21 @@
+{
+  "ticket": "53c4b924fde9402aa540b459bc6aa47a",
+  "verdict": "REPLAN",
+  "reviewed_rounds": [
+    13,
+    14,
+    15
+  ],
+  "evidence": [
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-13-15/independent-check.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-13-15/controller-check-evidence.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-13-15/replay-current.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-13-15/selected-round13-replays.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-13-15/replay-frozen.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-13-15/policy-isolation-controls.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-13-15/direction-analysis.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-13-15/research-facts.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-13-15/evidence-index.json"
+  ],
+  "summary": "完整13–15輪及所有祖先進度獨立審核：REPLAN。13離線重綁與14全8需求/56列固定上游核准有據；本audit真三方closed PASS/preflight及全167-source/13-lineage吻合，4237舊保護檔除Main正常推進Task外均未變，三snapshot各239檔吻合，原v2 live保持預期拒絕。15唯一首次selection HTTP200完整raw/30物件/8 assignments/5排除/2 prepared及全部自由文字已審核，除policy形狀未定之外符合必要scope/店商品grain/庫存母體/stock sum/日期metadata/同task月份online兩sum/先aggregate再left；raw typed完全由模型填，不從文字補答。唯一machine FAIL是checker硬比第一missing-policy literal，但prompt明允許模型所選EMPTY_POLICY且原guard ready。獨立記憶體對照連語意同樣保母體/缺值/不補零的NULL_POLICY也被誤拒，確證Oracle literal不能當補零判據；顯式補零仍被原guard拒絕。EMPTY另有子集合形狀字義，本raw one_to_one left無nest，尚不能直接當flat scalar missing等價，亦不能因此指控補零或翻原FAIL。下一fresh研究先0POST釐清policy/shape的必要業務不變量及prompt/guard/checker一致性，提出可區分flat缺值、nested空集合、補零及丟母體的最小正反例與新版本計畫；不預選修法、不偷改舊Oracle或刪guard。目前無需使用者介入。獨立同版/frozen replay忠實重現FAIL；保留一次錯runtime重播啟動及改用原.venv成功紀錄，無POST。原父自然9POST、coverage3樣本及所有祖先整合/fresh final驗收未過，歷史38×2 Gate不變未過，root不完成。全局22 local/0retry/0cloud，本audit0POST/SQL/DB，未改source/tests/fixtures/Task/control、不commit/push。"
+}

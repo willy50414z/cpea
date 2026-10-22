@@ -1,0 +1,180 @@
+{
+  "result": "PASS",
+  "old_node_definitions_exact": 21,
+  "new_children_only_unpassed_coverage": true,
+  "root_goal_and_acceptance_exact": true,
+  "round20_unique_first_requests": [
+    {
+      "id": "832021b283e84ab7889b546e3258c2ad",
+      "provider": "local",
+      "case_key": "kind-isolation-v2-rebind-1:ISOLATION:COV-ISO-v1-01:node",
+      "retry_number": 0,
+      "status": "ok",
+      "round": 20
+    },
+    {
+      "id": "8108409018d643cfb61f968dc9f469ee",
+      "provider": "local",
+      "case_key": "kind-isolation-v2-rebind-1:ISOLATION:COV-ISO-v1-02:node",
+      "retry_number": 0,
+      "status": "ok",
+      "round": 20
+    },
+    {
+      "id": "f4b1153ed3ab48eba9298c9db1fefe40",
+      "provider": "local",
+      "case_key": "kind-isolation-v2-rebind-1:ISOLATION:COV-ISO-v1-03:node",
+      "retry_number": 0,
+      "status": "ok",
+      "round": 20
+    }
+  ],
+  "verified_existing_test_logs": {
+    "focused-authoritative.log": {
+      "sha256": "8ea496b36ed3abe4718c77b5c6e8765d8c81afc741c9e5a716550167e5f16b13",
+      "last_line": "81 passed in 158.35s (0:02:38)"
+    },
+    "direct-regression.log": {
+      "sha256": "06316d7fe701c13e37a47b577f9ed02cc86bd76438ae4380e2640806c28770ad",
+      "last_line": "227 passed, 1 deselected in 344.44s (0:05:44)"
+    },
+    "historical-open-state-test.log": {
+      "sha256": "0d5d7300416f92408111e8f284117f7ddff6dcfafdbbca57c5ad8236c6d6f0be",
+      "last_line": "1 passed in 4.15s"
+    }
+  },
+  "round19_parent_prepared_checks": {
+    "result": "PASS",
+    "inventory_anchor": true,
+    "no_inventory_scope_filter": true,
+    "both_sides_store_product": true,
+    "sales_same_task_full_month_online_two_sums": true,
+    "metadata_not_group_or_scalar": true,
+    "left_preserve_inventory": true,
+    "one_to_one_both_keys": true,
+    "flat_policy_no_zero": true,
+    "no_nest": true,
+    "prepared": [
+      {
+        "task_id": "task_inventory",
+        "exact_raw_typed_payload": true,
+        "payload": {
+          "view": "demo_retail.v_inventory_status",
+          "required_columns": [
+            "store_id",
+            "product_id",
+            "stock_qty",
+            "snapshot_date"
+          ],
+          "filters": [],
+          "metrics": {
+            "stock_qty": "sum"
+          },
+          "conditional_metrics": [],
+          "metadata_collections": [
+            "snapshot_date"
+          ],
+          "attributes": [],
+          "group_by": [
+            "store_id",
+            "product_id"
+          ],
+          "output_grain": [
+            "store_id",
+            "product_id"
+          ]
+        },
+        "request_prefix": "只執行以下單一 View 資料查詢；保留全部條件及指定輸出粒度，不作跨來源整合或業務決策。 metadata_collections 為每組完整 DISTINCT 值集合，不增加分組，不任取單值。日期集合僅記錄資料時間，不代表日期一致；混合日期不得宣稱同日總額，仍須遵守契約的跨日禁止加總限制。"
+      },
+      {
+        "task_id": "task_sales",
+        "exact_raw_typed_payload": true,
+        "payload": {
+          "view": "demo_retail.v_sales_detail",
+          "required_columns": [
+            "store_id",
+            "product_id",
+            "discount_amount",
+            "net_sales",
+            "order_date",
+            "sales_channel"
+          ],
+          "filters": [
+            {
+              "column": "order_date",
+              "operator": ">=",
+              "value": "2026-09-01"
+            },
+            {
+              "column": "order_date",
+              "operator": "<",
+              "value": "2026-10-01"
+            },
+            {
+              "column": "sales_channel",
+              "operator": "=",
+              "value": "online"
+            }
+          ],
+          "metrics": {
+            "discount_amount": "sum",
+            "net_sales": "sum"
+          },
+          "conditional_metrics": [],
+          "metadata_collections": [],
+          "attributes": [],
+          "group_by": [
+            "store_id",
+            "product_id"
+          ],
+          "output_grain": [
+            "store_id",
+            "product_id"
+          ]
+        },
+        "request_prefix": "只執行以下單一 View 資料查詢；保留全部條件及指定輸出粒度，不作跨來源整合或業務決策。"
+      }
+    ]
+  },
+  "ancestor_status": {
+    "root": "pending",
+    "three_stage_integration": "pending",
+    "contract_and_managed_runner": "passed",
+    "natural_qwen_three_stage": "failed",
+    "coverage_slots_contract": "passed",
+    "natural_slots_three_stage": "failed",
+    "evidence_bound_managed_contract": "passed",
+    "natural_evidence_bound_three_stage": "failed",
+    "own_responsibility_managed_contract": "passed",
+    "natural_own_responsibility_three_stage": "failed",
+    "kind_mapping_managed_contract": "passed",
+    "natural_kind_mapping_three_stage": "pending",
+    "kind_diagnostic_fixture_harness": "passed",
+    "kind_diagnostic_fixture_semantics": "passed",
+    "natural_kind_selection_isolation": "passed",
+    "natural_kind_coverage_isolation": "failed",
+    "kind_diagnostic_fixture_v2_correction": "passed",
+    "kind_diagnostic_evidence_rebinding": "passed",
+    "kind_policy_shape_contract": "passed",
+    "kind_policy_shape_semantics": "passed",
+    "natural_kind_policy_shape_selection": "passed",
+    "capability_projection_contract": "passed",
+    "capability_projection_semantics": "pending",
+    "natural_capability_projection_coverage": "pending"
+  },
+  "root_acceptance_status": {
+    "LOOP1": "PENDING",
+    "LOOP2": "PENDING",
+    "LOOP3": "PENDING",
+    "LOOP4": "PENDING"
+  },
+  "historical_Gate": "38×2 未通過，歷史未改",
+  "resources": {
+    "POST": 0,
+    "SQL_DB": 0,
+    "cloud": 0,
+    "retry": 0,
+    "tests_rerun": 0,
+    "commit_push": 0
+  }
+}

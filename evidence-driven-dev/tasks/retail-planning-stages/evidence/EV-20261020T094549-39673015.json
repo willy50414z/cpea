@@ -1,0 +1,21 @@
+{
+  "id": "EV-20261020T094549-39673015",
+  "kind": "negative",
+  "command": [
+    ".venv/bin/python",
+    "evidence-driven-dev/tasks/retail-planning-stages/reports/check_representation_witnesses.py",
+    "evidence-driven-dev/tasks/retail-planning-stages/.local/stages-20261020T094053Z"
+  ],
+  "cwd": "/home/willy/code/cpea_terms",
+  "started_at": "2026-10-20T09:45:49+00:00",
+  "finished_at": "2026-10-20T09:45:49+00:00",
+  "exit_code": 0,
+  "revision": "bc09c67fc4078501599c37e4cdfecdee40af2ef8",
+  "diff_fingerprint": "aa41d10592dbead4910485bf28a61ea48d945514929dbccc513e0b4e93b18997",
+  "post_fingerprint": "aa41d10592dbead4910485bf28a61ea48d945514929dbccc513e0b4e93b18997",
+  "source_unchanged": true,
+  "output_sha256": "ac8ca2923f28d8700a7184d1b1f47fefa552bb0c6d5eccbb59ffe2f0e561624c",
+  "raw_output": ".local/EV-20261020T094549-39673015.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "5a12aacc9406a63824fd7fa524c36a25ffad9e8807033df8313b807101db9f69"
+}

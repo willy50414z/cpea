@@ -1,0 +1,731 @@
+{
+  "result": "PASS",
+  "assignments": 8,
+  "exclusions": 5,
+  "normalized_evidence_refs": 49,
+  "all56_upstream_contract_quotes_checked": true,
+  "quote_references_checked": 56,
+  "full_reasons": [
+    {
+      "kind": "assignment",
+      "requirement_id": "GRN-001",
+      "view": "demo_retail.v_inventory_status",
+      "evidence_requirements": [
+        "GRN-001"
+      ],
+      "exact_upstream_rows": true
+    },
+    {
+      "kind": "assignment",
+      "requirement_id": "MET-001",
+      "view": "demo_retail.v_inventory_status",
+      "evidence_requirements": [
+        "MET-001",
+        "GRN-001"
+      ],
+      "exact_upstream_rows": true
+    },
+    {
+      "kind": "assignment",
+      "requirement_id": "FILT-001",
+      "view": "demo_retail.v_sales_detail",
+      "evidence_requirements": [
+        "FILT-001"
+      ],
+      "exact_upstream_rows": true
+    },
+    {
+      "kind": "assignment",
+      "requirement_id": "FILT-002",
+      "view": "demo_retail.v_sales_detail",
+      "evidence_requirements": [
+        "FILT-002"
+      ],
+      "exact_upstream_rows": true
+    },
+    {
+      "kind": "assignment",
+      "requirement_id": "MET-002",
+      "view": "demo_retail.v_sales_detail",
+      "evidence_requirements": [
+        "MET-002",
+        "FILT-001",
+        "FILT-002",
+        "GRN-001"
+      ],
+      "exact_upstream_rows": true
+    },
+    {
+      "kind": "assignment",
+      "requirement_id": "MET-003",
+      "view": "demo_retail.v_sales_detail",
+      "evidence_requirements": [
+        "MET-003",
+        "FILT-001",
+        "FILT-002",
+        "GRN-001"
+      ],
+      "exact_upstream_rows": true
+    },
+    {
+      "kind": "assignment",
+      "requirement_id": "META-001",
+      "view": "demo_retail.v_inventory_status",
+      "evidence_requirements": [
+        "META-001",
+        "GRN-001"
+      ],
+      "exact_upstream_rows": true
+    },
+    {
+      "kind": "assignment",
+      "requirement_id": "POP-001",
+      "view": "demo_retail.v_inventory_status",
+      "evidence_requirements": [
+        "POP-001",
+        "GRN-001"
+      ],
+      "exact_upstream_rows": true
+    },
+    {
+      "kind": "exclusion",
+      "view": "demo_retail.v_customer_value",
+      "rows": [
+        {
+          "requirement_id": "GRN-001",
+          "status": "unsupported",
+          "mappings": [],
+          "gaps": [
+            [
+              "self",
+              [
+                "GRN-001"
+              ]
+            ]
+          ]
+        },
+        {
+          "requirement_id": "MET-001",
+          "status": "unsupported",
+          "mappings": [],
+          "gaps": [
+            [
+              "self",
+              [
+                "MET-001"
+              ]
+            ],
+            [
+              "grain",
+              [
+                "GRN-001"
+              ]
+            ]
+          ]
+        },
+        {
+          "requirement_id": "FILT-001",
+          "status": "unsupported",
+          "mappings": [],
+          "gaps": [
+            [
+              "self",
+              [
+                "FILT-001"
+              ]
+            ]
+          ]
+        },
+        {
+          "requirement_id": "FILT-002",
+          "status": "unsupported",
+          "mappings": [],
+          "gaps": [
+            [
+              "self",
+              [
+                "FILT-002"
+              ]
+            ]
+          ]
+        },
+        {
+          "requirement_id": "MET-002",
+          "status": "unsupported",
+          "mappings": [],
+          "gaps": [
+            [
+              "self",
+              [
+                "MET-002"
+              ]
+            ],
+            [
+              "scope",
+              [
+                "FILT-001",
+                "FILT-002"
+              ]
+            ],
+            [
+              "grain",
+              [
+                "GRN-001"
+              ]
+            ]
+          ]
+        },
+        {
+          "requirement_id": "MET-003",
+          "status": "partial",
+          "mappings": [
+            [
+              "lifetime_spend",
+              "sum"
+            ]
+          ],
+          "gaps": [
+            [
+              "self",
+              [
+                "MET-003"
+              ]
+            ],
+            [
+              "scope",
+              [
+                "FILT-001",
+                "FILT-002"
+              ]
+            ],
+            [
+              "grain",
+              [
+                "GRN-001"
+              ]
+            ]
+          ]
+        },
+        {
+          "requirement_id": "META-001",
+          "status": "unsupported",
+          "mappings": [],
+          "gaps": [
+            [
+              "self",
+              [
+                "META-001"
+              ]
+            ],
+            [
+              "grain",
+              [
+                "GRN-001"
+              ]
+            ]
+          ]
+        },
+        {
+          "requirement_id": "POP-001",
+          "status": "unsupported",
+          "mappings": [],
+          "gaps": [
+            [
+              "self",
+              [
+                "POP-001"
+              ]
+            ],
+            [
+              "grain",
+              [
+                "GRN-001"
+              ]
+            ]
+          ]
+        }
+      ],
+      "exact_upstream_rows": true
+    },
+    {
+      "kind": "exclusion",
+      "view": "demo_retail.v_daily_sales",
+      "rows": [
+        {
+          "requirement_id": "GRN-001",
+          "status": "partial",
+          "mappings": [
+            [
+              "store_id",
+              null
+            ]
+          ],
+          "gaps": [
+            [
+              "self",
+              [
+                "GRN-001"
+              ]
+            ]
+          ]
+        },
+        {
+          "requirement_id": "MET-001",
+          "status": "unsupported",
+          "mappings": [],
+          "gaps": [
+            [
+              "self",
+              [
+                "MET-001"
+              ]
+            ],
+            [
+              "grain",
+              [
+                "GRN-001"
+              ]
+            ]
+          ]
+        },
+        {
+          "requirement_id": "FILT-002",
+          "status": "unsupported",
+          "mappings": [],
+          "gaps": [
+            [
+              "self",
+              [
+                "FILT-002"
+              ]
+            ]
+          ]
+        },
+        {
+          "requirement_id": "MET-002",
+          "status": "unsupported",
+          "mappings": [],
+          "gaps": [
+            [
+              "self",
+              [
+                "MET-002"
+              ]
+            ],
+            [
+              "scope",
+              [
+                "FILT-002"
+              ]
+            ],
+            [
+              "grain",
+              [
+                "GRN-001"
+              ]
+            ]
+          ]
+        },
+        {
+          "requirement_id": "META-001",
+          "status": "unsupported",
+          "mappings": [],
+          "gaps": [
+            [
+              "self",
+              [
+                "META-001"
+              ]
+            ],
+            [
+              "grain",
+              [
+                "GRN-001"
+              ]
+            ]
+          ]
+        },
+        {
+          "requirement_id": "POP-001",
+          "status": "unsupported",
+          "mappings": [],
+          "gaps": [
+            [
+              "self",
+              [
+                "POP-001"
+              ]
+            ],
+            [
+              "grain",
+              [
+                "GRN-001"
+              ]
+            ]
+          ]
+        }
+      ],
+      "exact_upstream_rows": true
+    },
+    {
+      "kind": "exclusion",
+      "view": "demo_retail.v_order_summary",
+      "rows": [
+        {
+          "requirement_id": "GRN-001",
+          "status": "partial",
+          "mappings": [
+            [
+              "store_id",
+              null
+            ]
+          ],
+          "gaps": [
+            [
+              "self",
+              [
+                "GRN-001"
+              ]
+            ]
+          ]
+        },
+        {
+          "requirement_id": "MET-001",
+          "status": "unsupported",
+          "mappings": [],
+          "gaps": [
+            [
+              "self",
+              [
+                "MET-001"
+              ]
+            ],
+            [
+              "grain",
+              [
+                "GRN-001"
+              ]
+            ]
+          ]
+        },
+        {
+          "requirement_id": "MET-002",
+          "status": "unsupported",
+          "mappings": [],
+          "gaps": [
+            [
+              "self",
+              [
+                "MET-002"
+              ]
+            ],
+            [
+              "grain",
+              [
+                "GRN-001"
+              ]
+            ]
+          ]
+        },
+        {
+          "requirement_id": "MET-003",
+          "status": "partial",
+          "mappings": [
+            [
+              "order_amount",
+              "sum"
+            ]
+          ],
+          "gaps": [
+            [
+              "grain",
+              [
+                "GRN-001"
+              ]
+            ]
+          ]
+        },
+        {
+          "requirement_id": "META-001",
+          "status": "unsupported",
+          "mappings": [],
+          "gaps": [
+            [
+              "self",
+              [
+                "META-001"
+              ]
+            ],
+            [
+              "grain",
+              [
+                "GRN-001"
+              ]
+            ]
+          ]
+        },
+        {
+          "requirement_id": "POP-001",
+          "status": "unsupported",
+          "mappings": [],
+          "gaps": [
+            [
+              "self",
+              [
+                "POP-001"
+              ]
+            ],
+            [
+              "grain",
+              [
+                "GRN-001"
+              ]
+            ]
+          ]
+        }
+      ],
+      "exact_upstream_rows": true
+    },
+    {
+      "kind": "exclusion",
+      "view": "demo_retail.v_product_monthly",
+      "rows": [
+        {
+          "requirement_id": "FILT-002",
+          "status": "unsupported",
+          "mappings": [],
+          "gaps": [
+            [
+              "self",
+              [
+                "FILT-002"
+              ]
+            ]
+          ]
+        },
+        {
+          "requirement_id": "MET-002",
+          "status": "partial",
+          "mappings": [
+            [
+              "discount_amount",
+              "sum"
+            ]
+          ],
+          "gaps": [
+            [
+              "scope",
+              [
+                "FILT-002"
+              ]
+            ]
+          ]
+        },
+        {
+          "requirement_id": "MET-003",
+          "status": "partial",
+          "mappings": [
+            [
+              "net_sales",
+              "sum"
+            ]
+          ],
+          "gaps": [
+            [
+              "scope",
+              [
+                "FILT-002"
+              ]
+            ]
+          ]
+        },
+        {
+          "requirement_id": "MET-001",
+          "status": "unsupported",
+          "mappings": [],
+          "gaps": [
+            [
+              "self",
+              [
+                "MET-001"
+              ]
+            ]
+          ]
+        },
+        {
+          "requirement_id": "META-001",
+          "status": "unsupported",
+          "mappings": [],
+          "gaps": [
+            [
+              "self",
+              [
+                "META-001"
+              ]
+            ]
+          ]
+        },
+        {
+          "requirement_id": "POP-001",
+          "status": "unsupported",
+          "mappings": [],
+          "gaps": [
+            [
+              "self",
+              [
+                "POP-001"
+              ]
+            ]
+          ]
+        }
+      ],
+      "exact_upstream_rows": true
+    },
+    {
+      "kind": "exclusion",
+      "view": "demo_retail.v_store_monthly_kpi",
+      "rows": [
+        {
+          "requirement_id": "GRN-001",
+          "status": "partial",
+          "mappings": [
+            [
+              "store_id",
+              null
+            ]
+          ],
+          "gaps": [
+            [
+              "self",
+              [
+                "GRN-001"
+              ]
+            ]
+          ]
+        },
+        {
+          "requirement_id": "MET-001",
+          "status": "unsupported",
+          "mappings": [],
+          "gaps": [
+            [
+              "self",
+              [
+                "MET-001"
+              ]
+            ],
+            [
+              "grain",
+              [
+                "GRN-001"
+              ]
+            ]
+          ]
+        },
+        {
+          "requirement_id": "FILT-002",
+          "status": "unsupported",
+          "mappings": [],
+          "gaps": [
+            [
+              "self",
+              [
+                "FILT-002"
+              ]
+            ]
+          ]
+        },
+        {
+          "requirement_id": "MET-002",
+          "status": "unsupported",
+          "mappings": [],
+          "gaps": [
+            [
+              "self",
+              [
+                "MET-002"
+              ]
+            ],
+            [
+              "scope",
+              [
+                "FILT-002"
+              ]
+            ],
+            [
+              "grain",
+              [
+                "GRN-001"
+              ]
+            ]
+          ]
+        },
+        {
+          "requirement_id": "META-001",
+          "status": "unsupported",
+          "mappings": [],
+          "gaps": [
+            [
+              "self",
+              [
+                "META-001"
+              ]
+            ],
+            [
+              "grain",
+              [
+                "GRN-001"
+              ]
+            ]
+          ]
+        },
+        {
+          "requirement_id": "POP-001",
+          "status": "unsupported",
+          "mappings": [],
+          "gaps": [
+            [
+              "self",
+              [
+                "POP-001"
+              ]
+            ],
+            [
+              "grain",
+              [
+                "GRN-001"
+              ]
+            ]
+          ]
+        }
+      ],
+      "exact_upstream_rows": true
+    }
+  ],
+  "free_text": [
+    {
+      "path": "/draft/tasks/0/request",
+      "text": "從 v_inventory_status 取門市×商品粒度的盤點庫存件數(stock_qty)加總與庫存盤點日期(snapshot_date)，保留所有庫存商品作為母體。"
+    },
+    {
+      "path": "/draft/tasks/1/request",
+      "text": "從 v_sales_detail 篩選 order_date 在 2026-09-01(含)至 2026-10-01(不含) 且 sales_channel=online 的訂單明細，按門市×商品彙總折扣金額(discount_amount)與淨銷售額(net_sales)。"
+    },
+    {
+      "path": "/draft/integration/preparation/0/description",
+      "text": "將 v_sales_detail 自訂單明細粒度彙總至門市×商品粒度，以 store_id、product_id 對齊左母體"
+    },
+    {
+      "path": "/draft/integration/missing_data_policy",
+      "text": "保留未匹配資料並標記缺值；契約沒有保證時不可把缺值當成零。"
+    },
+    {
+      "path": "/draft/integration/notes/0",
+      "text": "無線上通路銷售的庫存商品，折扣金額與淨銷售額以缺值呈現，不補零。"
+    }
+  ],
+  "empty_prose_fields": {
+    "clarifications": [],
+    "unsupported_reasons": []
+  }
+}

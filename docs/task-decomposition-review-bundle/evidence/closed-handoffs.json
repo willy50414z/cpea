@@ -1,0 +1,27 @@
+{
+  "paths": [
+    "payload/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-bound/handoff.json",
+    "payload/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/handoff.json",
+    "payload/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-semantics/handoff.json",
+    "payload/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-contract/handoff.json",
+    "payload/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-coverage-isolation/handoff.json",
+    "payload/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-harness/handoff.json",
+    "payload/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-semantics/handoff.json",
+    "payload/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-semantics-rebound/handoff.json",
+    "payload/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-fixture-v2/handoff.json",
+    "payload/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-kind/handoff.json",
+    "payload/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-1/handoff.json",
+    "payload/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-2/handoff.json",
+    "payload/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-3/handoff.json",
+    "payload/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-4/handoff.json",
+    "payload/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-own/handoff.json",
+    "payload/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-natural/handoff.json",
+    "payload/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-semantics/handoff.json",
+    "payload/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-shape/handoff.json",
+    "payload/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/handoff.json",
+    "payload/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-selection-isolation/handoff.json",
+    "payload/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-selection-parent/handoff.json",
+    "payload/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-slots/handoff.json"
+  ],
+  "note": "只列真closed worker handoff；未完成工作者不當作已結案交接。"
+}

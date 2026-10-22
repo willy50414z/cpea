@@ -1,0 +1,505 @@
+{
+  "$defs": {
+    "ColumnMapping": {
+      "additionalProperties": false,
+      "properties": {
+        "column": {
+          "minLength": 1,
+          "title": "Column",
+          "type": "string"
+        }
+      },
+      "required": [
+        "column"
+      ],
+      "title": "ColumnMapping",
+      "type": "object"
+    },
+    "KindDecision_filter_dd4dc44649024186": {
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "enum": [
+            "supported",
+            "partial",
+            "unsupported",
+            "uncertain"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "own_gap": {
+          "title": "Own Gap",
+          "type": "boolean"
+        },
+        "mappings": {
+          "items": {
+            "$ref": "#/$defs/RequiredFilter"
+          },
+          "title": "Mappings",
+          "type": "array"
+        },
+        "contract_path": {
+          "anyOf": [
+            {
+              "enum": [
+                "/columns/amount_value/description",
+                "/columns/amount_value/role",
+                "/columns/amount_value/type",
+                "/columns/amount_value/unit",
+                "/columns/city/description",
+                "/columns/city/role",
+                "/columns/city/type",
+                "/columns/day_key/description",
+                "/columns/day_key/role",
+                "/columns/day_key/type",
+                "/columns/gross_profit/description",
+                "/columns/gross_profit/role",
+                "/columns/gross_profit/type",
+                "/columns/gross_profit/unit",
+                "/columns/loc_key/description",
+                "/columns/loc_key/role",
+                "/columns/loc_key/type",
+                "/columns/order_count/description",
+                "/columns/order_count/role",
+                "/columns/order_count/type",
+                "/columns/piece_value/description",
+                "/columns/piece_value/role",
+                "/columns/piece_value/type",
+                "/columns/piece_value/unit",
+                "/columns/region/description",
+                "/columns/region/role",
+                "/columns/region/type",
+                "/columns/store_name/description",
+                "/columns/store_name/role",
+                "/columns/store_name/type",
+                "/grain/description",
+                "/grain/keys/0",
+                "/grain/keys/1",
+                "/summary",
+                "/view"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Contract Path"
+        }
+      },
+      "required": [
+        "status",
+        "own_gap",
+        "mappings",
+        "contract_path"
+      ],
+      "title": "KindDecision_filter_dd4dc44649024186",
+      "type": "object"
+    },
+    "KindDecision_grain_dd4dc44649024186": {
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "enum": [
+            "supported",
+            "partial",
+            "unsupported",
+            "uncertain"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "own_gap": {
+          "title": "Own Gap",
+          "type": "boolean"
+        },
+        "mappings": {
+          "items": {
+            "$ref": "#/$defs/ColumnMapping"
+          },
+          "title": "Mappings",
+          "type": "array"
+        }
+      },
+      "required": [
+        "status",
+        "own_gap",
+        "mappings"
+      ],
+      "title": "KindDecision_grain_dd4dc44649024186",
+      "type": "object"
+    },
+    "KindDecision_metadata_dd4dc44649024186": {
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "enum": [
+            "supported",
+            "partial",
+            "unsupported",
+            "uncertain"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "own_gap": {
+          "title": "Own Gap",
+          "type": "boolean"
+        },
+        "mappings": {
+          "items": {
+            "$ref": "#/$defs/ColumnMapping"
+          },
+          "title": "Mappings",
+          "type": "array"
+        },
+        "contract_path": {
+          "anyOf": [
+            {
+              "enum": [
+                "/columns/amount_value/description",
+                "/columns/amount_value/role",
+                "/columns/amount_value/type",
+                "/columns/amount_value/unit",
+                "/columns/city/description",
+                "/columns/city/role",
+                "/columns/city/type",
+                "/columns/day_key/description",
+                "/columns/day_key/role",
+                "/columns/day_key/type",
+                "/columns/gross_profit/description",
+                "/columns/gross_profit/role",
+                "/columns/gross_profit/type",
+                "/columns/gross_profit/unit",
+                "/columns/loc_key/description",
+                "/columns/loc_key/role",
+                "/columns/loc_key/type",
+                "/columns/order_count/description",
+                "/columns/order_count/role",
+                "/columns/order_count/type",
+                "/columns/piece_value/description",
+                "/columns/piece_value/role",
+                "/columns/piece_value/type",
+                "/columns/piece_value/unit",
+                "/columns/region/description",
+                "/columns/region/role",
+                "/columns/region/type",
+                "/columns/store_name/description",
+                "/columns/store_name/role",
+                "/columns/store_name/type",
+                "/grain/description",
+                "/grain/keys/0",
+                "/grain/keys/1",
+                "/summary",
+                "/view"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Contract Path"
+        }
+      },
+      "required": [
+        "status",
+        "own_gap",
+        "mappings",
+        "contract_path"
+      ],
+      "title": "KindDecision_metadata_dd4dc44649024186",
+      "type": "object"
+    },
+    "KindDecision_metric_dd4dc44649024186": {
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "enum": [
+            "supported",
+            "partial",
+            "unsupported",
+            "uncertain"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "own_gap": {
+          "title": "Own Gap",
+          "type": "boolean"
+        },
+        "mappings": {
+          "items": {
+            "$ref": "#/$defs/MetricMapping"
+          },
+          "title": "Mappings",
+          "type": "array"
+        },
+        "contract_path": {
+          "anyOf": [
+            {
+              "enum": [
+                "/columns/amount_value/description",
+                "/columns/amount_value/role",
+                "/columns/amount_value/type",
+                "/columns/amount_value/unit",
+                "/columns/city/description",
+                "/columns/city/role",
+                "/columns/city/type",
+                "/columns/day_key/description",
+                "/columns/day_key/role",
+                "/columns/day_key/type",
+                "/columns/gross_profit/description",
+                "/columns/gross_profit/role",
+                "/columns/gross_profit/type",
+                "/columns/gross_profit/unit",
+                "/columns/loc_key/description",
+                "/columns/loc_key/role",
+                "/columns/loc_key/type",
+                "/columns/order_count/description",
+                "/columns/order_count/role",
+                "/columns/order_count/type",
+                "/columns/piece_value/description",
+                "/columns/piece_value/role",
+                "/columns/piece_value/type",
+                "/columns/piece_value/unit",
+                "/columns/region/description",
+                "/columns/region/role",
+                "/columns/region/type",
+                "/columns/store_name/description",
+                "/columns/store_name/role",
+                "/columns/store_name/type",
+                "/grain/description",
+                "/grain/keys/0",
+                "/grain/keys/1",
+                "/summary",
+                "/view"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Contract Path"
+        }
+      },
+      "required": [
+        "status",
+        "own_gap",
+        "mappings",
+        "contract_path"
+      ],
+      "title": "KindDecision_metric_dd4dc44649024186",
+      "type": "object"
+    },
+    "KindDecision_population_dd4dc44649024186": {
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "enum": [
+            "supported",
+            "partial",
+            "unsupported",
+            "uncertain"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "own_gap": {
+          "title": "Own Gap",
+          "type": "boolean"
+        },
+        "mappings": {
+          "items": {
+            "$ref": "#/$defs/ColumnMapping"
+          },
+          "title": "Mappings",
+          "type": "array"
+        },
+        "contract_path": {
+          "anyOf": [
+            {
+              "enum": [
+                "/columns/amount_value/description",
+                "/columns/amount_value/role",
+                "/columns/amount_value/type",
+                "/columns/amount_value/unit",
+                "/columns/city/description",
+                "/columns/city/role",
+                "/columns/city/type",
+                "/columns/day_key/description",
+                "/columns/day_key/role",
+                "/columns/day_key/type",
+                "/columns/gross_profit/description",
+                "/columns/gross_profit/role",
+                "/columns/gross_profit/type",
+                "/columns/gross_profit/unit",
+                "/columns/loc_key/description",
+                "/columns/loc_key/role",
+                "/columns/loc_key/type",
+                "/columns/order_count/description",
+                "/columns/order_count/role",
+                "/columns/order_count/type",
+                "/columns/piece_value/description",
+                "/columns/piece_value/role",
+                "/columns/piece_value/type",
+                "/columns/piece_value/unit",
+                "/columns/region/description",
+                "/columns/region/role",
+                "/columns/region/type",
+                "/columns/store_name/description",
+                "/columns/store_name/role",
+                "/columns/store_name/type",
+                "/grain/description",
+                "/grain/keys/0",
+                "/grain/keys/1",
+                "/summary",
+                "/view"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Contract Path"
+        }
+      },
+      "required": [
+        "status",
+        "own_gap",
+        "mappings",
+        "contract_path"
+      ],
+      "title": "KindDecision_population_dd4dc44649024186",
+      "type": "object"
+    },
+    "KindSlots_dd4dc44649024186": {
+      "additionalProperties": false,
+      "properties": {
+        "slot_0/🧾": {
+          "$ref": "#/$defs/KindDecision_grain_dd4dc44649024186"
+        },
+        "model_dump": {
+          "$ref": "#/$defs/KindDecision_metric_dd4dc44649024186"
+        },
+        "月~邊界": {
+          "$ref": "#/$defs/KindDecision_filter_dd4dc44649024186"
+        },
+        "scope-channel": {
+          "$ref": "#/$defs/KindDecision_filter_dd4dc44649024186"
+        },
+        "m_discount": {
+          "$ref": "#/$defs/KindDecision_metric_dd4dc44649024186"
+        },
+        "amount/net": {
+          "$ref": "#/$defs/KindDecision_metric_dd4dc44649024186"
+        },
+        "元資料": {
+          "$ref": "#/$defs/KindDecision_metadata_dd4dc44649024186"
+        },
+        "保留/全部": {
+          "$ref": "#/$defs/KindDecision_population_dd4dc44649024186"
+        }
+      },
+      "required": [
+        "slot_0/🧾",
+        "model_dump",
+        "月~邊界",
+        "scope-channel",
+        "m_discount",
+        "amount/net",
+        "元資料",
+        "保留/全部"
+      ],
+      "title": "KindSlots_dd4dc44649024186",
+      "type": "object"
+    },
+    "MetricMapping": {
+      "additionalProperties": false,
+      "properties": {
+        "column": {
+          "minLength": 1,
+          "title": "Column",
+          "type": "string"
+        },
+        "aggregation": {
+          "enum": [
+            "sum",
+            "count",
+            "count_distinct",
+            "avg",
+            "min",
+            "max"
+          ],
+          "title": "Aggregation",
+          "type": "string"
+        },
+        "conditions": {
+          "items": {
+            "$ref": "#/$defs/RequiredFilter"
+          },
+          "title": "Conditions",
+          "type": "array"
+        }
+      },
+      "required": [
+        "column",
+        "aggregation",
+        "conditions"
+      ],
+      "title": "MetricMapping",
+      "type": "object"
+    },
+    "RequiredFilter": {
+      "additionalProperties": false,
+      "properties": {
+        "column": {
+          "title": "Column",
+          "type": "string"
+        },
+        "operator": {
+          "enum": [
+            "=",
+            "!=",
+            "<>",
+            ">",
+            ">=",
+            "<",
+            "<=",
+            "IN",
+            "NOT IN",
+            "LIKE",
+            "IS NULL",
+            "IS NOT NULL"
+          ],
+          "title": "Operator",
+          "type": "string"
+        },
+        "value": {
+          "title": "Value"
+        }
+      },
+      "required": [
+        "column",
+        "operator",
+        "value"
+      ],
+      "title": "RequiredFilter",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "entries": {
+      "$ref": "#/$defs/KindSlots_dd4dc44649024186"
+    }
+  },
+  "required": [
+    "entries"
+  ],
+  "title": "KindCoverage_dd4dc44649024186",
+  "type": "object"
+}

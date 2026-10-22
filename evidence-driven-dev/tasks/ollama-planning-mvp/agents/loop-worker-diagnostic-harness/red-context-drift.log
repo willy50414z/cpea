@@ -1,0 +1,94 @@
+FFF                                                                      [100%]
+=================================== FAILURES ===================================
+___ test_execute_preflight_refuses_any_unreviewed_or_drifted_input[messages] ___
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-47/test_execute_preflight_refuses0')
+mutation = 'messages'
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x76dbc7a77380>
+
+    @pytest.mark.parametrize('mutation', ['missing', 'reject', 'self_review', 'manifest', 'binding', 'context', 'body', 'schema', 'source', 'fixture', 'omitted_view', 'messages', 'recall', 'actual_schema'])
+    def test_execute_preflight_refuses_any_unreviewed_or_drifted_input(tmp_path, mutation, monkeypatch):
+        mod = api(); package = mod.load_package()
+        review, _ = accepted_offline_review(mod, package, tmp_path, monkeypatch)
+        context = mod.prepare(package, 'SEL-ISO-v1-01')
+        if mutation == 'missing': review = None
+        elif mutation == 'reject': review['verdict'] = 'REJECT'
+        elif mutation == 'self_review': review['ticket'] = package['manifest']['author_ticket']
+        elif mutation == 'manifest': review['manifest_sha256'] = '0' * 64
+        elif mutation == 'binding': review['bindings'].pop(next(iter(review['bindings'])))
+        elif mutation == 'context': context['input_tokens'] = 32768
+        elif mutation == 'body': context['body']['think'] = False
+        elif mutation == 'schema': context['schema_json']['additionalProperties'] = True
+        elif mutation == 'source': package['manifest']['bindings']['sources']['evaluations/managed_node_diagnostics.py'] = '0' * 64
+        elif mutation == 'fixture': package['manifest']['bindings']['fixtures']['request-original.txt'] = '0' * 64
+        elif mutation == 'omitted_view': context['coverages'].pop()
+        elif mutation == 'messages': context['messages'][1].content = '{}'
+        elif mutation == 'recall': context['recall'].requirements.pop()
+        elif mutation == 'actual_schema': context['schema'] = mod.contract.RecallWire
+>       with pytest.raises(ValueError): mod.preflight(package, [context], review)
+E       Failed: DID NOT RAISE ValueError
+
+tests/unit/test_managed_node_diagnostics.py:150: Failed
+____ test_execute_preflight_refuses_any_unreviewed_or_drifted_input[recall] ____
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-47/test_execute_preflight_refuses1')
+mutation = 'recall'
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x76db9c069520>
+
+    @pytest.mark.parametrize('mutation', ['missing', 'reject', 'self_review', 'manifest', 'binding', 'context', 'body', 'schema', 'source', 'fixture', 'omitted_view', 'messages', 'recall', 'actual_schema'])
+    def test_execute_preflight_refuses_any_unreviewed_or_drifted_input(tmp_path, mutation, monkeypatch):
+        mod = api(); package = mod.load_package()
+        review, _ = accepted_offline_review(mod, package, tmp_path, monkeypatch)
+        context = mod.prepare(package, 'SEL-ISO-v1-01')
+        if mutation == 'missing': review = None
+        elif mutation == 'reject': review['verdict'] = 'REJECT'
+        elif mutation == 'self_review': review['ticket'] = package['manifest']['author_ticket']
+        elif mutation == 'manifest': review['manifest_sha256'] = '0' * 64
+        elif mutation == 'binding': review['bindings'].pop(next(iter(review['bindings'])))
+        elif mutation == 'context': context['input_tokens'] = 32768
+        elif mutation == 'body': context['body']['think'] = False
+        elif mutation == 'schema': context['schema_json']['additionalProperties'] = True
+        elif mutation == 'source': package['manifest']['bindings']['sources']['evaluations/managed_node_diagnostics.py'] = '0' * 64
+        elif mutation == 'fixture': package['manifest']['bindings']['fixtures']['request-original.txt'] = '0' * 64
+        elif mutation == 'omitted_view': context['coverages'].pop()
+        elif mutation == 'messages': context['messages'][1].content = '{}'
+        elif mutation == 'recall': context['recall'].requirements.pop()
+        elif mutation == 'actual_schema': context['schema'] = mod.contract.RecallWire
+>       with pytest.raises(ValueError): mod.preflight(package, [context], review)
+E       Failed: DID NOT RAISE ValueError
+
+tests/unit/test_managed_node_diagnostics.py:150: Failed
+_ test_execute_preflight_refuses_any_unreviewed_or_drifted_input[actual_schema] _
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-47/test_execute_preflight_refuses2')
+mutation = 'actual_schema'
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x76db9c313ec0>
+
+    @pytest.mark.parametrize('mutation', ['missing', 'reject', 'self_review', 'manifest', 'binding', 'context', 'body', 'schema', 'source', 'fixture', 'omitted_view', 'messages', 'recall', 'actual_schema'])
+    def test_execute_preflight_refuses_any_unreviewed_or_drifted_input(tmp_path, mutation, monkeypatch):
+        mod = api(); package = mod.load_package()
+        review, _ = accepted_offline_review(mod, package, tmp_path, monkeypatch)
+        context = mod.prepare(package, 'SEL-ISO-v1-01')
+        if mutation == 'missing': review = None
+        elif mutation == 'reject': review['verdict'] = 'REJECT'
+        elif mutation == 'self_review': review['ticket'] = package['manifest']['author_ticket']
+        elif mutation == 'manifest': review['manifest_sha256'] = '0' * 64
+        elif mutation == 'binding': review['bindings'].pop(next(iter(review['bindings'])))
+        elif mutation == 'context': context['input_tokens'] = 32768
+        elif mutation == 'body': context['body']['think'] = False
+        elif mutation == 'schema': context['schema_json']['additionalProperties'] = True
+        elif mutation == 'source': package['manifest']['bindings']['sources']['evaluations/managed_node_diagnostics.py'] = '0' * 64
+        elif mutation == 'fixture': package['manifest']['bindings']['fixtures']['request-original.txt'] = '0' * 64
+        elif mutation == 'omitted_view': context['coverages'].pop()
+        elif mutation == 'messages': context['messages'][1].content = '{}'
+        elif mutation == 'recall': context['recall'].requirements.pop()
+        elif mutation == 'actual_schema': context['schema'] = mod.contract.RecallWire
+>       with pytest.raises(ValueError): mod.preflight(package, [context], review)
+E       Failed: DID NOT RAISE ValueError
+
+tests/unit/test_managed_node_diagnostics.py:150: Failed
+=========================== short test summary info ============================
+FAILED tests/unit/test_managed_node_diagnostics.py::test_execute_preflight_refuses_any_unreviewed_or_drifted_input[messages]
+FAILED tests/unit/test_managed_node_diagnostics.py::test_execute_preflight_refuses_any_unreviewed_or_drifted_input[recall]
+FAILED tests/unit/test_managed_node_diagnostics.py::test_execute_preflight_refuses_any_unreviewed_or_drifted_input[actual_schema]
+3 failed, 45 deselected in 3.16s

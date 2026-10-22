@@ -1,0 +1,10 @@
+{
+  "response": "{\"requirements\": [{\"requirement_id\": \"stock\", \"start\": 7, \"end\": 13, \"business_object\": \"目前庫存件數\", \"kind\": \"metric\", \"scope_ids\": [], \"grain\": \"店商品\", \"population\": \"庫存商品\", \"grain_binding\": \"linked\", \"grain_requirement_ids\": [\"grain\"]}, {\"requirement_id\": \"sales\", \"start\": 26, \"end\": 35, \"business_object\": \"折扣金額及淨銷售額\", \"kind\": \"metric\", \"scope_ids\": [\"channel\", \"period\"], \"grain\": \"店商品\", \"population\": \"庫存商品\", \"grain_binding\": \"linked\", \"grain_requirement_ids\": [\"grain\"]}, {\"requirement_id\": \"channel\", \"start\": 21, \"end\": 25, \"business_object\": \"線上通路\", \"kind\": \"filter\", \"scope_ids\": [], \"grain\": \"店商品\", \"population\": \"庫存商品\", \"grain_binding\": null, \"grain_requirement_ids\": []}, {\"requirement_id\": \"period\", \"start\": 14, \"end\": 21, \"business_object\": \"2026年9月\", \"kind\": \"filter\", \"scope_ids\": [], \"grain\": \"店商品\", \"population\": \"庫存商品\", \"grain_binding\": null, \"grain_requirement_ids\": []}, {\"requirement_id\": \"population\", \"start\": 36, \"end\": 44, \"business_object\": \"保留所有庫存商品\", \"kind\": \"population\", \"scope_ids\": [], \"grain\": \"店商品\", \"population\": \"庫存商品\", \"grain_binding\": null, \"grain_requirement_ids\": []}, {\"requirement_id\": \"grain\", \"start\": 2, \"end\": 7, \"business_object\": \"各店各商品\", \"kind\": \"grain\", \"scope_ids\": [], \"grain\": \"店商品\", \"population\": \"庫存商品\", \"grain_binding\": null, \"grain_requirement_ids\": []}, {\"requirement_id\": \"R_PURPOSE\", \"start\": 47, \"end\": 51, \"business_object\": \"來源盤點時間\", \"kind\": \"metadata\", \"scope_ids\": [], \"grain\": \"店商品\", \"population\": \"庫存商品\", \"grain_binding\": null, \"grain_requirement_ids\": []}]}",
+  "usage": {
+    "input_tokens": 10,
+    "output_tokens": 20,
+    "total_tokens": 30
+  },
+  "response_metadata": {},
+  "elapsed_seconds": 0.0014553159999195486
+}

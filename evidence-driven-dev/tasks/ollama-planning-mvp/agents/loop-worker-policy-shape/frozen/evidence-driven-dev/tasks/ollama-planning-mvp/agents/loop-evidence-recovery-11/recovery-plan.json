@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "decision": "ALLOW_EXACT_ADMINISTRATIVE_RECOVERY_ONLY",
+  "reviewer": "/root/loop_audit_10_12",
+  "ticket": "5dba3c040bf549e9b60ac427131e01e6",
+  "scope": "Main可依本方案執行已獨立裁定的可逆bytes備份及精確恢復；不做新技術取捨，不改controller expected hash/輪數/分數/FAIL/Oracle/source。",
+  "authorization": "使用者已授權本任務修正與保留全版本的必要可逆工作；本恢復無技能規定的額外user gate，亦不涉及不可逆操作。",
+  "preconditions": {
+    "Task_sha256_before_recovery": "d9e19e90dbf68e24516f3703d5becfcda9ece848526b053b1c21401fa042e779",
+    "controller_round11_expected_hashes_must_remain": {
+      "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-semantics/review.json": "aaa8b740cc30fbd1b8670fa45ce5b68280dc073b9ee5e662dc43eeb68b903dfa",
+      "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-semantics/semantic-review.log": "fa3e4654447f56bef7cffe64220195c4e2817ba20838d2c3b27eaf893a28eaaa"
+    },
+    "current_files_must_match": {
+      "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-semantics/review.json": "0200cc20e8aa288580c0a5036d4056a144555a272b6b4afe64da357734118d6b",
+      "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-semantics/semantic-review.log": "3b7c9f3b51626a0634405b8e2c14efbcf730b600138aa60b067e74aceffca4f0"
+    },
+    "v2_manifest_sha256_must_remain": "33cf44c84c10842adb60bfb7cbfbb269bac6dfa136c124a43159efabd27d543f",
+    "v2_manifest_and_frozen_must_not_be_modified": true,
+    "no_model_POST_SQL_DB": true
+  },
+  "files": [
+    {
+      "target": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-semantics/review.json",
+      "current_sha256": "0200cc20e8aa288580c0a5036d4056a144555a272b6b4afe64da357734118d6b",
+      "restore_sha256": "aaa8b740cc30fbd1b8670fa45ce5b68280dc073b9ee5e662dc43eeb68b903dfa",
+      "late_source": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-10-12/round11-late-review.json.raw.log",
+      "restore_source": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-10-12/round11-original-review.json.raw.log",
+      "original_mtime": "2026-10-21T21:01:39.235729+00:00",
+      "late_addition_utf8_bytes": 173
+    },
+    {
+      "target": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-semantics/semantic-review.log",
+      "current_sha256": "3b7c9f3b51626a0634405b8e2c14efbcf730b600138aa60b067e74aceffca4f0",
+      "restore_sha256": "fa3e4654447f56bef7cffe64220195c4e2817ba20838d2c3b27eaf893a28eaaa",
+      "late_source": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-10-12/round11-late-semantic-review.log.raw.log",
+      "restore_source": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-10-12/round11-original-semantic-review.log.raw.log",
+      "original_mtime": "2026-10-21T21:01:39.233729+00:00",
+      "late_addition_utf8_bytes": 434
+    }
+  ],
+  "backup_directory": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-evidence-recovery-11",
+  "ordered_steps": [
+    "建立新的空backup_directory；若已存在且非空，停止並核對既有receipt，不能覆蓋或重複恢復。",
+    "重讀兩target、audit late_source、restore_source及Task/controller的實際bytes/hash；全部符合preconditions才繼續。",
+    "先將兩target現有bytes完整copy2至backup_directory/<basename>.late.raw.log，保存原mtime_ns/ctime_ns/mode/size與sha256於receipt.json；再copy兩restore_source至backup_directory/<basename>.original.raw.log並核對restore_sha256。所有副本及此plan本身另記hash；後補版是原REJECT後的own_gap澄清，不是新ACCEPT。",
+    "只有4份副本與metadata全部核對後，將各original.raw.log bytes複製回對應target；逐檔重讀，必精確符合既有controller restore_sha256。不得重編JSON/改換行/BOM或調整controller expected hash。若中斷，只依receipt及四副本恢復此二檔一致狀態，不能變更其他檔。",
+    "以真loopctl check-evidence執行且必exit0/PASS，保存stdout與exit code於backup_directory；確認Task/輪數/used/expected hashes未被恢復程序修改。",
+    "驗證v2_manifest及第12輪frozen保持原hash；用v2 load_package或CLI無execute dry-run確認因lineage不同而拒絕，保存實際首錯。此為預期保護，不能修改v2讓它通過。",
+    "保存恢復receipt並停止行政恢復。只有控制器check-evidence已PASS才可提交本audit REPLAN；後續交fresh研究處理版本化後補證據及新診斷綁定，不直接semantic parent/selection POST。"
+  ],
+  "lineage_after_restore": {
+    "round11_original": "兩原路徑恢復controller封存原hash，原FAIL/REJECT不變。",
+    "round11_late_clarification": "原後補bytes及mtime/hash保留於audit與recovery目錄；與原版精確差異由recovery-analysis.json證明。",
+    "round12_v2": "既完成v2 manifest/frozen不改，記錄它綁後補版舊原路徑；修復後live v2 lineage不匹配，故不可execute，原離線執行證據仍是其當時版本歷史。",
+    "future": "fresh研究決定合法新版本/新child與原始及後補證據的明確lineage；之後仍需fresh原semantic parent全8需求/56row/typed/free-text驗收、Main真finish及所有既有局部/自然/祖先/final gates。"
+  },
+  "status_after_recovery": "REPLAN_REQUIRED; FIXTURE_SEMANTICS_PENDING; MODEL_POST_FORBIDDEN"
+}

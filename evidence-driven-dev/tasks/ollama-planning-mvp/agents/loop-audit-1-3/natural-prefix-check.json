@@ -1,0 +1,46 @@
+{
+  "raw_map05_entries": 9,
+  "raw_map05_duplicate_ids": {
+    "filter_channel_online": 2
+  },
+  "map03_population": "已完成訂單之每個商品品項明細（僅含已完成訂單，不含未成交、退貨或無銷售之庫存商品）",
+  "sales_summary": "粒度：每筆已完成訂單的每個商品品項；僅含已完成訂單。銷售額為折扣後淨額，毛利=淨額-成本。請勿以 COUNT(*) 當訂單數。",
+  "recall_candidates": [
+    {
+      "view": "demo_retail.v_inventory_status",
+      "reason": "門市×商品粒度可直接提供 stock_qty、snapshot_date，符合庫存件數與盤點日期需求"
+    },
+    {
+      "view": "demo_retail.v_product_monthly",
+      "reason": "門市×月份×商品粒度具 discount_amount 與 net_sales，可按 2026-09 及通路篩選後與庫存對照"
+    },
+    {
+      "view": "demo_retail.v_sales_detail",
+      "reason": "含 sales_channel 與 product_id、discount_amount、net_sales，可用於線上通路商品級篩選"
+    },
+    {
+      "view": "demo_retail.v_order_summary",
+      "reason": "含 sales_channel 與 store_id、order_amount，但為訂單級粒度，不直接提供商品級折扣/淨額"
+    },
+    {
+      "view": "demo_retail.v_daily_sales",
+      "reason": "門市×日粒度，有 revenue 但無商品級折扣金額，召回備選"
+    },
+    {
+      "view": "demo_retail.v_store_monthly_kpi",
+      "reason": "門市×月 KPI，無商品粒度，召回備選"
+    },
+    {
+      "view": "demo_retail.v_customer_value",
+      "reason": "會員粒度，與本题庫存/銷售需求無直接關聯，仍列出以完整召回"
+    }
+  ],
+  "not_executed": {
+    "map-06": true,
+    "map-07": true,
+    "selection": true
+  },
+  "body_count": 6,
+  "all_bodies_nonstream_unlimited_correct_model": true,
+  "natural_candidate_version": "managed-indexed-path-three-stage-1"
+}

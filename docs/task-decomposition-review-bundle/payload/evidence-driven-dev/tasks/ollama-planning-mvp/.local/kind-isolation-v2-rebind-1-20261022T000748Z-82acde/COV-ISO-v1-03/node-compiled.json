@@ -1,0 +1,89 @@
+{
+  "entries": {
+    "slot_0/🧾": {
+      "status": "unsupported",
+      "mappings": [],
+      "contract_path": "/grain/description",
+      "own_gap": true
+    },
+    "model_dump": {
+      "status": "unsupported",
+      "mappings": [],
+      "contract_path": null,
+      "own_gap": true
+    },
+    "月~邊界": {
+      "status": "supported",
+      "mappings": [
+        {
+          "column": "day_key",
+          "role": "filter",
+          "aggregation": null,
+          "operator": ">=",
+          "value": "2032-02-01",
+          "conditions": []
+        },
+        {
+          "column": "day_key",
+          "role": "filter",
+          "aggregation": null,
+          "operator": "<",
+          "value": "2032-03-01",
+          "conditions": []
+        }
+      ],
+      "contract_path": "/columns/day_key/description",
+      "own_gap": false
+    },
+    "scope-channel": {
+      "status": "unsupported",
+      "mappings": [],
+      "contract_path": null,
+      "own_gap": true
+    },
+    "m_discount": {
+      "status": "unsupported",
+      "mappings": [],
+      "contract_path": null,
+      "own_gap": true
+    },
+    "amount/net": {
+      "status": "partial",
+      "mappings": [
+        {
+          "column": "amount_value",
+          "role": "metric",
+          "aggregation": "sum",
+          "operator": null,
+          "value": null,
+          "conditions": [
+            {
+              "column": "day_key",
+              "operator": ">=",
+              "value": "2032-02-01"
+            },
+            {
+              "column": "day_key",
+              "operator": "<",
+              "value": "2032-03-01"
+            }
+          ]
+        }
+      ],
+      "contract_path": "/columns/amount_value/description",
+      "own_gap": false
+    },
+    "元資料": {
+      "status": "unsupported",
+      "mappings": [],
+      "contract_path": null,
+      "own_gap": true
+    },
+    "保留/全部": {
+      "status": "unsupported",
+      "mappings": [],
+      "contract_path": null,
+      "own_gap": true
+    }
+  }
+}

@@ -1,0 +1,236 @@
+{
+  "original_replay": 30,
+  "original_automated_pass": 18,
+  "original_ready": 22,
+  "closure_ready": 22,
+  "guarded_ready": 19,
+  "new_ready": 0,
+  "closed_ready_typed_coverage": true,
+  "unsafe_mutations": [
+    {
+      "label": "未表達期間",
+      "case_id": "cross-view-07",
+      "runtime_rejected": false,
+      "oracle_rejected": true,
+      "errors": [
+        "sales: conditions/period"
+      ],
+      "boundary": "僅oracle可判定需求不符；runtime證據不足"
+    },
+    {
+      "label": "非法來源欄位",
+      "case_id": "cross-view-07",
+      "runtime_rejected": true,
+      "oracle_rejected": true,
+      "errors": [
+        "status",
+        "sales: extra metric roles",
+        "sales: used column absent from required_columns",
+        "payload unavailable"
+      ],
+      "boundary": "型別護欄可拒絕"
+    },
+    {
+      "label": "漏通路",
+      "case_id": "cross-view-07",
+      "runtime_rejected": false,
+      "oracle_rejected": true,
+      "errors": [
+        "sales: conditions/period"
+      ],
+      "boundary": "僅oracle可判定需求不符；runtime證據不足"
+    },
+    {
+      "label": "inner刪母體",
+      "case_id": "cross-view-07",
+      "runtime_rejected": true,
+      "oracle_rejected": true,
+      "errors": [
+        "status",
+        "inner cannot guarantee the declared preserved population",
+        "population preservation",
+        "payload integrity"
+      ],
+      "boundary": "型別護欄可拒絕"
+    },
+    {
+      "label": "缺nest",
+      "case_id": "cross-view-20",
+      "runtime_rejected": true,
+      "oracle_rejected": true,
+      "errors": [
+        "status",
+        "finer output grain requires an explicit preparation",
+        "child collection shape",
+        "payload unavailable"
+      ],
+      "boundary": "型別護欄可拒絕"
+    },
+    {
+      "label": "錯final grain",
+      "case_id": "cross-view-20",
+      "runtime_rejected": true,
+      "oracle_rejected": true,
+      "errors": [
+        "status",
+        "final output grain must come from the anchor grain",
+        "root grain",
+        "payload unavailable"
+      ],
+      "boundary": "型別護欄可拒絕"
+    },
+    {
+      "label": "任意FD",
+      "case_id": "cross-view-14",
+      "runtime_rejected": true,
+      "oracle_rejected": true,
+      "errors": [
+        "status",
+        "inventory: attributes lack uniqueness proof",
+        "payload integrity"
+      ],
+      "boundary": "型別護欄可拒絕"
+    },
+    {
+      "label": "非加性百分比",
+      "case_id": "cross-view-07",
+      "runtime_rejected": true,
+      "oracle_rejected": true,
+      "errors": [
+        "status",
+        "sales: extra metric roles",
+        "sales: used column absent from required_columns",
+        "contract: column is not in view contract: demo_retail.v_sales_detail.gross_margin_pct",
+        "payload unavailable"
+      ],
+      "boundary": "型別護欄可拒絕"
+    },
+    {
+      "label": "條件count誤變filter",
+      "case_id": "cross-view-14",
+      "runtime_rejected": false,
+      "oracle_rejected": true,
+      "errors": [
+        "inventory: conditions/period",
+        "inventory: conditional metrics"
+      ],
+      "boundary": "僅oracle可判定需求不符；runtime證據不足"
+    },
+    {
+      "label": "跨快照sum",
+      "case_id": "cross-view-05",
+      "runtime_rejected": true,
+      "oracle_rejected": true,
+      "errors": [
+        "status",
+        "inventory: extra metric roles",
+        "inventory: cross-snapshot stock sum",
+        "payload integrity"
+      ],
+      "boundary": "型別護欄可拒絕"
+    },
+    {
+      "label": "缺月份值",
+      "case_id": "cross-view-04",
+      "runtime_rejected": false,
+      "oracle_rejected": true,
+      "errors": [
+        "product_sales: conditions/period"
+      ],
+      "boundary": "僅oracle可判定需求不符；runtime證據不足"
+    },
+    {
+      "label": "缺值填零",
+      "case_id": "cross-view-07",
+      "runtime_rejected": false,
+      "oracle_rejected": true,
+      "errors": [
+        "missing policy requires independent review"
+      ],
+      "boundary": "僅oracle可判定需求不符；runtime證據不足"
+    }
+  ],
+  "legal_controls": [
+    {
+      "case_id": "cross-view-02",
+      "safe": true
+    },
+    {
+      "case_id": "cross-view-07",
+      "safe": true
+    },
+    {
+      "case_id": "cross-view-09",
+      "safe": true
+    },
+    {
+      "case_id": "cross-view-14",
+      "safe": true
+    },
+    {
+      "case_id": "cross-view-16",
+      "safe": true
+    },
+    {
+      "case_id": "cross-view-28",
+      "safe": true
+    }
+  ],
+  "safe_omission_recovered": true,
+  "compiler_injected_controls": 6,
+  "usage": {
+    "deepseek": {
+      "input_tokens": {
+        "n": 30,
+        "median": 7463.5,
+        "p95": 7476,
+        "max": 7478
+      },
+      "output_tokens": {
+        "n": 30,
+        "median": 868.0,
+        "p95": 1305,
+        "max": 1322
+      },
+      "total_tokens": {
+        "n": 30,
+        "median": 8335.5,
+        "p95": 8770,
+        "max": 8795
+      }
+    },
+    "qwen": {
+      "path": "projects/retail/artifacts/task_decomposition/20261020T061325410052Z-bc09c67f-ollama-0e14eb",
+      "tokens": {
+        "input_tokens": {
+          "n": 30,
+          "median": 7090.0,
+          "p95": 7101,
+          "max": 7103
+        },
+        "output_tokens": {
+          "n": 30,
+          "median": 3028.0,
+          "p95": 5128,
+          "max": 5600
+        },
+        "total_tokens": {
+          "n": 30,
+          "median": 10115.5,
+          "p95": 12226,
+          "max": 12689
+        }
+      },
+      "thinking_token_accounting": "既有usage未分開thinking，口徑未知"
+    }
+  },
+  "source_hashes": {
+    "calls.jsonl": "019028288bec32292c395bd57ca7d9477115402b059960f79ca14baafd28218d",
+    "results.jsonl": "2b73d985a1bac72f36471ef8e538e9e41f6bf96db0c7a39bc5b51d679a226159"
+  },
+  "catalog": "e5e5a5a2cc29a1be93dc4d6875aba8c47a35ed48c019c7d6838a45831d0441dc",
+  "model_calls": 0,
+  "sql_db_calls": 0,
+  "decision": "A安全可救0<3，只保留型別護欄；B人工參考注入節點通過，待獨立核准後測六題自然抽取。",
+  "limitation": "oracle檢查不是runtime證明；free-text缺值政策需人工審查。編譯注入不代表模型能產生骨架。"
+}

@@ -1,0 +1,38 @@
+{
+  "objects": [
+    {
+      "path": "",
+      "keys": [
+        "entries"
+      ]
+    },
+    {
+      "path": "/entries",
+      "keys": [
+        "unrelated/識別~鍵"
+      ]
+    },
+    {
+      "path": "/entries/unrelated~1識別~0鍵",
+      "keys": [
+        "mappings",
+        "own_gap",
+        "status"
+      ]
+    }
+  ],
+  "object_key_sequences_in_parse_order": [
+    [
+      "mappings",
+      "own_gap",
+      "status"
+    ],
+    [
+      "unrelated/識別~鍵"
+    ],
+    [
+      "entries"
+    ]
+  ],
+  "note": "raw JSON key sequences include duplicates; strict parser verdict recorded separately"
+}

@@ -1,0 +1,602 @@
+{
+  "run": "evidence-driven-dev/tasks/retail-planning-stages/.local/stages-20261020T094053Z",
+  "summary": {
+    "A_original": {
+      "completed": 10,
+      "model_calls": 10,
+      "views_and_columns": 9,
+      "ready": 7,
+      "automated_pass": 7,
+      "control_pass": 3,
+      "elapsed_ms": 91806.25644800239,
+      "usage": {
+        "input_tokens": 74663,
+        "output_tokens": 8744
+      },
+      "stop_stages": {
+        "complete": 10
+      },
+      "failures": [
+        "cross-view-21",
+        "cross-view-24",
+        "cross-view-26"
+      ]
+    },
+    "B_checklist": {
+      "completed": 10,
+      "model_calls": 10,
+      "views_and_columns": 4,
+      "ready": 5,
+      "automated_pass": 2,
+      "control_pass": 2,
+      "elapsed_ms": 70131.39810900248,
+      "usage": {
+        "input_tokens": 78103,
+        "output_tokens": 7466
+      },
+      "stop_stages": {
+        "complete": 9,
+        "single_parse": 1
+      },
+      "failures": [
+        "cross-view-07",
+        "cross-view-11",
+        "cross-view-14",
+        "cross-view-16",
+        "cross-view-21",
+        "cross-view-24",
+        "cross-view-26",
+        "cross-view-29"
+      ]
+    },
+    "C_staged": {
+      "completed": 10,
+      "model_calls": 37,
+      "views_and_columns": 6,
+      "ready": 5,
+      "automated_pass": 2,
+      "control_pass": 1,
+      "elapsed_ms": 130817.62594000247,
+      "usage": {
+        "input_tokens": 161045,
+        "output_tokens": 10839
+      },
+      "stop_stages": {
+        "complete": 8,
+        "task_contract": 2
+      },
+      "failures": [
+        "cross-view-07",
+        "cross-view-18",
+        "cross-view-11",
+        "cross-view-14",
+        "cross-view-21",
+        "cross-view-24",
+        "cross-view-26",
+        "cross-view-29"
+      ]
+    }
+  },
+  "paired_changes": {
+    "A_original_to_B_checklist": {
+      "improved": [],
+      "regressed": [
+        "cross-view-07",
+        "cross-view-11",
+        "cross-view-14",
+        "cross-view-16",
+        "cross-view-29"
+      ],
+      "both_pass": [
+        "cross-view-02",
+        "cross-view-18"
+      ],
+      "both_fail": [
+        "cross-view-21",
+        "cross-view-24",
+        "cross-view-26"
+      ]
+    },
+    "A_original_to_C_staged": {
+      "improved": [],
+      "regressed": [
+        "cross-view-07",
+        "cross-view-18",
+        "cross-view-11",
+        "cross-view-14",
+        "cross-view-29"
+      ],
+      "both_pass": [
+        "cross-view-02",
+        "cross-view-16"
+      ],
+      "both_fail": [
+        "cross-view-21",
+        "cross-view-24",
+        "cross-view-26"
+      ]
+    },
+    "B_checklist_to_C_staged": {
+      "improved": [
+        "cross-view-16"
+      ],
+      "regressed": [
+        "cross-view-18"
+      ],
+      "both_pass": [
+        "cross-view-02"
+      ],
+      "both_fail": [
+        "cross-view-07",
+        "cross-view-11",
+        "cross-view-14",
+        "cross-view-21",
+        "cross-view-24",
+        "cross-view-26",
+        "cross-view-29"
+      ]
+    }
+  },
+  "phase_diagnostics": {
+    "routes": [
+      {
+        "case_id": "cross-view-02",
+        "status": "ready",
+        "views": [
+          "demo_retail.v_inventory_status",
+          "demo_retail.v_product_monthly"
+        ],
+        "output_grain": [
+          "store_id",
+          "product_id"
+        ],
+        "canonical_views_match": true,
+        "anchor_task": "t1_inventory"
+      },
+      {
+        "case_id": "cross-view-07",
+        "status": "ready",
+        "views": [
+          "demo_retail.v_inventory_status",
+          "demo_retail.v_sales_detail"
+        ],
+        "output_grain": [
+          "store_id",
+          "product_id"
+        ],
+        "canonical_views_match": true,
+        "anchor_task": "t1"
+      },
+      {
+        "case_id": "cross-view-18",
+        "status": "ready",
+        "views": [
+          "demo_retail.v_customer_value",
+          "demo_retail.v_order_summary"
+        ],
+        "output_grain": [
+          "customer_id"
+        ],
+        "canonical_views_match": true,
+        "anchor_task": "t1"
+      },
+      {
+        "case_id": "cross-view-11",
+        "status": "ready",
+        "views": [
+          "demo_retail.v_inventory_status",
+          "demo_retail.v_product_monthly"
+        ],
+        "output_grain": [
+          "store_id",
+          "product_id"
+        ],
+        "canonical_views_match": false,
+        "anchor_task": "inventory_by_store_product"
+      },
+      {
+        "case_id": "cross-view-14",
+        "status": "ready",
+        "views": [
+          "demo_retail.v_inventory_status",
+          "demo_retail.v_store_monthly_kpi"
+        ],
+        "output_grain": [
+          "store_id"
+        ],
+        "canonical_views_match": true,
+        "anchor_task": "task_inventory_count"
+      },
+      {
+        "case_id": "cross-view-16",
+        "status": "ready",
+        "views": [
+          "demo_retail.v_customer_value",
+          "demo_retail.v_order_summary"
+        ],
+        "output_grain": [
+          "customer_id"
+        ],
+        "canonical_views_match": true,
+        "anchor_task": "t1"
+      },
+      {
+        "case_id": "cross-view-21",
+        "status": "ready",
+        "views": [
+          "demo_retail.v_customer_value",
+          "demo_retail.v_sales_detail"
+        ],
+        "output_grain": [
+          "customer_id",
+          "category"
+        ],
+        "canonical_views_match": true,
+        "anchor_task": "t1"
+      },
+      {
+        "case_id": "cross-view-24",
+        "status": "ready",
+        "views": [
+          "demo_retail.v_store_monthly_kpi",
+          "demo_retail.v_product_monthly"
+        ],
+        "output_grain": [
+          "store_id",
+          "product_id"
+        ],
+        "canonical_views_match": true,
+        "anchor_task": "store_month_target"
+      },
+      {
+        "case_id": "cross-view-26",
+        "status": "ready",
+        "views": [
+          "demo_retail.v_store_monthly_kpi",
+          "demo_retail.v_order_summary"
+        ],
+        "output_grain": [
+          "store_id",
+          "sales_channel"
+        ],
+        "canonical_views_match": true,
+        "anchor_task": "task_kpi_target"
+      },
+      {
+        "case_id": "cross-view-29",
+        "status": "ready",
+        "views": [
+          "demo_retail.v_inventory_status",
+          "demo_retail.v_sales_detail",
+          "demo_retail.v_store_monthly_kpi"
+        ],
+        "output_grain": [
+          "store_id",
+          "product_id"
+        ],
+        "canonical_views_match": true,
+        "anchor_task": "inventory_snapshot"
+      }
+    ],
+    "generated_task_calls": 19,
+    "generated_integration_calls": 8,
+    "task_contract_failure_cases": [
+      "cross-view-07",
+      "cross-view-11"
+    ],
+    "route_status_failure_cases": []
+  },
+  "supplementary_semantic_risk_flags": [
+    {
+      "case_id": "cross-view-14",
+      "arm": "C_staged",
+      "task_id": "task_inventory_count",
+      "kind": "required_column_without_explicit_role_review_needed",
+      "columns": [
+        "product_id"
+      ]
+    },
+    {
+      "case_id": "cross-view-14",
+      "arm": "A_original",
+      "task_id": "inventory_out_of_stock_by_store",
+      "kind": "required_column_without_explicit_role_review_needed",
+      "columns": [
+        "stock_status"
+      ]
+    },
+    {
+      "case_id": "cross-view-16",
+      "arm": "B_checklist",
+      "task_id": "customer_lifetime_spend_by_city",
+      "kind": "required_column_without_explicit_role_review_needed",
+      "columns": [
+        "customer_id"
+      ]
+    },
+    {
+      "case_id": "cross-view-24",
+      "arm": "C_staged",
+      "task_id": "category_gross_profit",
+      "kind": "aggregate_scalar_attributes_without_unique_key_proof",
+      "columns": [
+        "category"
+      ]
+    },
+    {
+      "case_id": "cross-view-29",
+      "arm": "A_original",
+      "task_id": "inventory_snapshot",
+      "kind": "required_column_without_explicit_role_review_needed",
+      "columns": [
+        "estimated_days_of_supply",
+        "reorder_point",
+        "stock_qty"
+      ]
+    }
+  ],
+  "case_results": [
+    {
+      "case_id": "cross-view-02",
+      "control": true,
+      "arms": {
+        "A_original": {
+          "pass": true,
+          "ready": true,
+          "stop": "complete",
+          "errors": []
+        },
+        "B_checklist": {
+          "pass": true,
+          "ready": true,
+          "stop": "complete",
+          "errors": []
+        },
+        "C_staged": {
+          "pass": true,
+          "ready": true,
+          "stop": "complete",
+          "errors": []
+        }
+      }
+    },
+    {
+      "case_id": "cross-view-07",
+      "control": true,
+      "arms": {
+        "A_original": {
+          "pass": true,
+          "ready": true,
+          "stop": "complete",
+          "errors": []
+        },
+        "B_checklist": {
+          "pass": false,
+          "ready": false,
+          "stop": "complete",
+          "errors": []
+        },
+        "C_staged": {
+          "pass": false,
+          "ready": false,
+          "stop": "task_contract",
+          "errors": [
+            "t1: metadata collections must be unique and separate from output fields"
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "cross-view-18",
+      "control": true,
+      "arms": {
+        "A_original": {
+          "pass": true,
+          "ready": true,
+          "stop": "complete",
+          "errors": []
+        },
+        "B_checklist": {
+          "pass": true,
+          "ready": true,
+          "stop": "complete",
+          "errors": []
+        },
+        "C_staged": {
+          "pass": false,
+          "ready": true,
+          "stop": "complete",
+          "errors": []
+        }
+      }
+    },
+    {
+      "case_id": "cross-view-11",
+      "control": false,
+      "arms": {
+        "A_original": {
+          "pass": true,
+          "ready": true,
+          "stop": "complete",
+          "errors": []
+        },
+        "B_checklist": {
+          "pass": false,
+          "ready": true,
+          "stop": "complete",
+          "errors": []
+        },
+        "C_staged": {
+          "pass": false,
+          "ready": false,
+          "stop": "task_contract",
+          "errors": [
+            "inventory_by_store_product: metadata collections must be unique and separate from output fields",
+            "inventory_by_store_product: aggregate grain differs from group_by"
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "cross-view-14",
+      "control": false,
+      "arms": {
+        "A_original": {
+          "pass": true,
+          "ready": true,
+          "stop": "complete",
+          "errors": []
+        },
+        "B_checklist": {
+          "pass": false,
+          "ready": true,
+          "stop": "complete",
+          "errors": []
+        },
+        "C_staged": {
+          "pass": false,
+          "ready": true,
+          "stop": "complete",
+          "errors": []
+        }
+      }
+    },
+    {
+      "case_id": "cross-view-16",
+      "control": false,
+      "arms": {
+        "A_original": {
+          "pass": true,
+          "ready": true,
+          "stop": "complete",
+          "errors": []
+        },
+        "B_checklist": {
+          "pass": false,
+          "ready": false,
+          "stop": "complete",
+          "errors": []
+        },
+        "C_staged": {
+          "pass": true,
+          "ready": true,
+          "stop": "complete",
+          "errors": []
+        }
+      }
+    },
+    {
+      "case_id": "cross-view-21",
+      "control": false,
+      "arms": {
+        "A_original": {
+          "pass": false,
+          "ready": false,
+          "stop": "complete",
+          "errors": []
+        },
+        "B_checklist": {
+          "pass": false,
+          "ready": false,
+          "stop": "complete",
+          "errors": []
+        },
+        "C_staged": {
+          "pass": false,
+          "ready": false,
+          "stop": "complete",
+          "errors": [
+            "final output grain must come from the anchor grain"
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "cross-view-24",
+      "control": false,
+      "arms": {
+        "A_original": {
+          "pass": false,
+          "ready": false,
+          "stop": "complete",
+          "errors": [
+            "final output grain must come from the anchor grain",
+            "finer output grain requires an explicit preparation"
+          ]
+        },
+        "B_checklist": {
+          "pass": false,
+          "ready": false,
+          "stop": "complete",
+          "errors": []
+        },
+        "C_staged": {
+          "pass": false,
+          "ready": false,
+          "stop": "complete",
+          "errors": [
+            "final output grain must come from the anchor grain",
+            "finer output grain requires an explicit preparation"
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "cross-view-26",
+      "control": false,
+      "arms": {
+        "A_original": {
+          "pass": false,
+          "ready": false,
+          "stop": "complete",
+          "errors": []
+        },
+        "B_checklist": {
+          "pass": false,
+          "ready": true,
+          "stop": "complete",
+          "errors": []
+        },
+        "C_staged": {
+          "pass": false,
+          "ready": false,
+          "stop": "complete",
+          "errors": [
+            "final output grain must come from the anchor grain",
+            "finer output grain requires an explicit preparation"
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "cross-view-29",
+      "control": false,
+      "arms": {
+        "A_original": {
+          "pass": true,
+          "ready": true,
+          "stop": "complete",
+          "errors": []
+        },
+        "B_checklist": {
+          "pass": false,
+          "ready": false,
+          "stop": "single_parse",
+          "errors": []
+        },
+        "C_staged": {
+          "pass": false,
+          "ready": true,
+          "stop": "complete",
+          "errors": []
+        }
+      }
+    }
+  ],
+  "caveats": [
+    "單次、已見案例的診斷小樣本，不是外部holdout或全30題結果。",
+    "原始自動分數不等於完整語意正確率；補充風險標記不回寫原分。",
+    "C改變schema、上下文與呼叫數；只能比較整體策略，不能隔離呼叫數本身。",
+    "C任務契約失敗即停止，最終來源欄位分數會因部分任務缺席而失分，需另看route指標。"
+  ]
+}

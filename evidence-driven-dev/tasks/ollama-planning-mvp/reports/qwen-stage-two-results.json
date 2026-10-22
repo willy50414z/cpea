@@ -1,0 +1,188 @@
+{
+  "experiment": "EXP-020",
+  "stage": 2,
+  "provider": "ollama",
+  "model": "qwen3.8:27b",
+  "model_digest": "aaee06c39dcf2437cde036998d960e1fc1494b8191be7cc9657d01e509097813",
+  "source_recall_run": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-indexed-20261021T075802Z-66d3ec",
+  "source_recall_run_sha256": "039832c8497af176cc18228b0ce421333a22a8713796f2e61ec5c7da8ecb4cb1",
+  "source_recall_provider_calls": 0,
+  "new_provider_calls": 1,
+  "new_calls_max": 7,
+  "retry_calls": 0,
+  "selection_provider_calls": 0,
+  "num_predict": -1,
+  "input_token_quota": null,
+  "output_token_quota": null,
+  "HTTP_timeout_seconds": null,
+  "outer_timeout_seconds": null,
+  "thinking": true,
+  "context_window": 32768,
+  "elapsed_seconds": 646.6148816009954,
+  "usage": {
+    "input_tokens": 2706,
+    "output_tokens": 5220,
+    "total_tokens": 7926
+  },
+  "provider_done_reason": "stop",
+  "JSON_parsing": "PASS",
+  "ViewCoverage_contract_validation": "FAIL",
+  "attempted_views": 1,
+  "valid_attempted_views": 0,
+  "total_candidate_views": 7,
+  "unattempted_views": 6,
+  "stopped": {
+    "node": "map-01",
+    "view": "demo_retail.v_inventory_status",
+    "error_type": "ValueError",
+    "error": "invalid contract evidence quote /grain/keys"
+  },
+  "inventory_model_claims": [
+    {
+      "requirement_id": "R_GRAIN",
+      "model_status": "supported",
+      "columns": [
+        "store_id",
+        "product_id"
+      ],
+      "missing_requirements": []
+    },
+    {
+      "requirement_id": "R_STOCK_QTY",
+      "model_status": "supported",
+      "columns": [
+        "stock_qty"
+      ],
+      "missing_requirements": []
+    },
+    {
+      "requirement_id": "F_TIME",
+      "model_status": "unsupported",
+      "columns": [],
+      "missing_requirements": [
+        "本 View 無可按特定月份（2026-09）篩選的銷售日期欄位；sold_qty_30d 為固定 30 日滾動窗口，無法指定任意月份，snapshot_date 為庫存盤點日期而非銷售日期"
+      ]
+    },
+    {
+      "requirement_id": "F_CHANNEL",
+      "model_status": "unsupported",
+      "columns": [],
+      "missing_requirements": [
+        "本 View 無通路（channel）欄位，所有欄位均為庫存維度，無法區分線上或實體通路"
+      ]
+    },
+    {
+      "requirement_id": "R_DISCOUNT",
+      "model_status": "unsupported",
+      "columns": [],
+      "missing_requirements": [
+        "本 View 無折扣金額欄位；inventory_cost_value 為庫存成本非折扣；亦無通路與特定月份篩選能力以限定 scope"
+      ]
+    },
+    {
+      "requirement_id": "R_NET_SALES",
+      "model_status": "unsupported",
+      "columns": [],
+      "missing_requirements": [
+        "本 View 無淨銷售額（金額）欄位；sold_qty_30d 為销售件數非金額；亦無通路與特定月份篩選能力以限定 scope"
+      ]
+    },
+    {
+      "requirement_id": "R_SNAPSHOT_DATE",
+      "model_status": "supported",
+      "columns": [
+        "snapshot_date"
+      ],
+      "missing_requirements": []
+    },
+    {
+      "requirement_id": "R_PURPOSE",
+      "model_status": "unsupported",
+      "columns": [],
+      "missing_requirements": [
+        "「準備促銷後補貨評估」為業務背景說明，非本 View 任何可映射的資料欄位或屬性；本 View 可透過 stock_status、reorder_point、estimated_days_of_supply 支持補貨評估，但無欄位承載此業務目的標註"
+      ]
+    },
+    {
+      "requirement_id": "R_POPULATION",
+      "model_status": "supported",
+      "columns": [
+        "store_id",
+        "product_id"
+      ],
+      "missing_requirements": []
+    }
+  ],
+  "findings": [
+    {
+      "requirement_id": "R_GRAIN",
+      "path": "/grain/keys",
+      "error": "invalid contract evidence quote /grain/keys"
+    },
+    {
+      "requirement_id": "R_POPULATION",
+      "column": "store_id",
+      "required_path": "/columns/store_id/description",
+      "error": "missing own column description evidence"
+    },
+    {
+      "requirement_id": "R_POPULATION",
+      "column": "product_id",
+      "required_path": "/columns/product_id/description",
+      "error": "missing own column description evidence"
+    }
+  ],
+  "inventory_semantic_observations": {
+    "stock_qty": "stock_qty/sum matches inventory quantity requirement",
+    "snapshot_date": "snapshot_date/attribute matches displayed inventory date",
+    "sales_scope": "no invented month/channel mapping on inventory; unsupported as expected",
+    "purpose": "recognized as business background, not a database output column",
+    "population": "preserves all statuses in prose, but mapping evidence incomplete",
+    "unproven_text": "依快照日期存檔 is not guaranteed by contract; does not establish historical snapshot grain"
+  },
+  "views": [
+    {
+      "view": "demo_retail.v_inventory_status",
+      "status": "FAIL: evidence contract"
+    },
+    {
+      "view": "demo_retail.v_product_monthly",
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "view": "demo_retail.v_sales_detail",
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "view": "demo_retail.v_order_summary",
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "view": "demo_retail.v_daily_sales",
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "view": "demo_retail.v_store_monthly_kpi",
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "view": "demo_retail.v_customer_value",
+      "status": "NOT_EXECUTED"
+    }
+  ],
+  "raw_replay": "PASS: 1 raw produces identical parsed coverage and validation error",
+  "raw_modified_or_repaired": false,
+  "source_mapping_overall": "FAIL for attempted inventory coverage; remaining views NOT_EXECUTED",
+  "stage_two_semantic_acceptance": "NOT_VERIFIED for complete seven-view stage",
+  "end_to_end": "NOT_VERIFIED",
+  "reviewer": "主Agent與fresh subprocess，非新增跨Agent獨立oracle",
+  "raw_run_sha256": "662bd063d465bee74ab1f2affd0ec7c8a85a7ce4d91123340716a061d1b5ee5e",
+  "harness_sha256": "e430416700aebf5940b4d24f62bd8f7dba96bf21eb01875889a93c284084d184",
+  "cost_usd": null,
+  "evidence": [
+    "evidence/EV-20261021T100747-34878c00.json",
+    "evidence/EV-20261021T100802-33d75213.json",
+    "evidence/EV-20261021T101943-dfb8648d.json",
+    "evidence/EV-20261021T102130-1fa8fe6e.json"
+  ]
+}

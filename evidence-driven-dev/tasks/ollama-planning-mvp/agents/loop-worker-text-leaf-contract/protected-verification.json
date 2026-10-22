@@ -1,0 +1,37 @@
+{
+  "result": "PASS",
+  "old_non_task_files": 8047,
+  "differences": {},
+  "old_rebound_bindings_equal": true,
+  "capability_bindings_equal": true,
+  "candidate_bindings_equal": true,
+  "author_ticket": {
+    "id": "8ef15624ec38441da20ff256197a6af6",
+    "role": "worker",
+    "node": "text_leaf_evidence_contract",
+    "round": 24,
+    "platform_id": "/root/loop_worker_text_leaf_contract",
+    "closed": false,
+    "reserved_at": "2026-10-22T03:13:31.197642+00:00"
+  },
+  "active": {
+    "round": 24,
+    "node": "text_leaf_evidence_contract",
+    "started_at": "2026-10-22T03:13:31.029660+00:00"
+  },
+  "closed_rounds": 23,
+  "usage": {
+    "agent_dispatches": 42,
+    "cloud_calls": 0,
+    "local_calls": 31,
+    "model_retries": 0
+  },
+  "source_changes": "Only new nested module/test/new fixture and this worker evidence; no old file altered",
+  "excluded_mutable_task": "evidence-driven-dev/tasks/ollama-planning-mvp/task.md",
+  "used": {
+    "agent_dispatches": 42,
+    "cloud_calls": 0,
+    "local_calls": 31,
+    "model_retries": 0
+  }
+}

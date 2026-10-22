@@ -1,0 +1,63 @@
+{
+  "result": "PASS",
+  "upstream_injected": true,
+  "author_reviewer_closed_distinct": true,
+  "worker": {
+    "id": "afed9ab55d0f44db8d04242d0f9c99e7",
+    "role": "worker",
+    "node": "natural_capability_projection_coverage",
+    "round": 23,
+    "platform_id": "/root/loop_worker_capability_natural",
+    "closed": false,
+    "reserved_at": "2026-10-22T01:38:51.934608+00:00"
+  },
+  "pre_used": {
+    "agent_dispatches": 40,
+    "cloud_calls": 0,
+    "local_calls": 26,
+    "model_retries": 0
+  },
+  "closed_rounds": 22,
+  "samples": [
+    {
+      "id": "COV-ISO-v1-01",
+      "case": "kind-capability-projection-1:ISOLATION:COV-ISO-v1-01:node",
+      "tokens": 5147,
+      "body_sha256": "a6ada1d7ccc25b1de72636678b88c8736eff5996d9879d4655e8c8862d7dea6e",
+      "schema_sha256": "c2616383e4953dff2e0895490ba820987c5c2e857be380abe48d3ed9ce18dd21",
+      "cards_sha256": "09eb0348c65c7614757f3ec468591e0f3ea2ab34a65db104e8eb591997c59e59"
+    },
+    {
+      "id": "COV-ISO-v1-02",
+      "case": "kind-capability-projection-1:ISOLATION:COV-ISO-v1-02:node",
+      "tokens": 3239,
+      "body_sha256": "c187e835b9f7eff3bc0d452dd08d1999e54e80dc71244e6dfd8363e8d01f61e9",
+      "schema_sha256": "a2150f2537a278a6e05ddcd5f64f7bba7ffaf5c4e48a486463ce47c997e59a16",
+      "cards_sha256": "d27c1b882fccd0552a75897ff338adc13089d280a032de8264ecc7ef7d8a0564"
+    },
+    {
+      "id": "COV-ISO-v1-03",
+      "case": "kind-capability-projection-1:ISOLATION:COV-ISO-v1-03:node",
+      "tokens": 5077,
+      "body_sha256": "3acb2826fe0de504e9fb507d48d0441205f46ad1327a71211263a1106f0076b0",
+      "schema_sha256": "0e8dc947d00e70def0522fa9ffae3583afcfd0b62b0bd223e140b687b5cece60",
+      "cards_sha256": "95e6bb76ac5c7f79562a4bb77f6228731166a5ef6fca6c516be0b45b2f4221eb"
+    },
+    {
+      "id": "COV-CAP-v1-04",
+      "case": "kind-capability-projection-1:ISOLATION:COV-CAP-v1-04:node",
+      "tokens": 5194,
+      "body_sha256": "3a9e5812366b06eff6f8394743ad1504545bcd73159d582d5da7980f64b5d67c",
+      "schema_sha256": "c2616383e4953dff2e0895490ba820987c5c2e857be380abe48d3ed9ce18dd21",
+      "cards_sha256": "09eb0348c65c7614757f3ec468591e0f3ea2ab34a65db104e8eb591997c59e59"
+    },
+    {
+      "id": "COV-CAP-v1-05",
+      "case": "kind-capability-projection-1:ISOLATION:COV-CAP-v1-05:node",
+      "tokens": 5568,
+      "body_sha256": "596e571c8b0a501c325e479297201b39431e211b286b6fb45c15388da13aba93",
+      "schema_sha256": "c2616383e4953dff2e0895490ba820987c5c2e857be380abe48d3ed9ce18dd21",
+      "cards_sha256": "09eb0348c65c7614757f3ec468591e0f3ea2ab34a65db104e8eb591997c59e59"
+    }
+  ]
+}

@@ -1,0 +1,80 @@
+version: 3
+view: demo_retail.v_order_summary
+summary: 粒度：每筆已完成訂單一列；適合訂單數、客單價、單筆訂單金額與通路分析；取消訂單已排除。
+grain:
+  description: 每筆已完成訂單一列
+  keys:
+  - order_id
+columns:
+  order_id:
+    type: number
+    role: identifier
+    description: 已完成訂單的唯一識別碼；本 View 每筆訂單只有一列。
+  order_no:
+    type: string
+    role: identifier
+    description: 訂單編號；本 View 每筆已完成訂單只有一列。
+  order_date:
+    type: date
+    role: dimension
+    description: 訂單成立日期（曆日），不含時間。
+  order_month:
+    type: date
+    role: dimension
+    description: 訂單成立月份的第一天，供月份統計與篩選。
+  store_id:
+    type: number
+    role: identifier
+    description: 訂單所屬門市識別碼。
+  store_name:
+    type: string
+    role: dimension
+    description: 訂單所屬門市名稱。
+  region:
+    type: string
+    role: dimension
+    description: 訂單門市所屬區域；北部、中部、南部。
+  store_city:
+    type: string
+    role: dimension
+    description: 訂單門市所在城市，不是會員居住城市。
+  sales_channel:
+    type: string
+    role: dimension
+    description: 訂單銷售通路；in_store=實體門市，online=線上。
+  customer_id:
+    type: number
+    role: identifier
+    description: 下單會員識別碼。
+  customer_name:
+    type: string
+    role: dimension
+    description: 下單會員名稱；為虛構測試資料。
+  membership_tier:
+    type: string
+    role: dimension
+    description: 下單會員等級；一般、銀卡、金卡、VIP。
+  item_lines:
+    type: number
+    role: measure
+    description: 此訂單的商品明細列數（COUNT order_item_id）；不是總銷售件數。
+  total_quantity:
+    type: number
+    role: measure
+    description: 此訂單全部明細的商品銷售件數加總；單位件。
+    unit: 件
+  order_amount:
+    type: number
+    role: measure
+    description: 此訂單折扣後的總銷售金額（各明細 quantity × unit_price − discount），單位 TWD。
+    unit: TWD
+  cost_amount:
+    type: number
+    role: measure
+    description: 此訂單全部明細的商品成本總額，單位 TWD。
+    unit: TWD
+  gross_profit:
+    type: number
+    role: measure
+    description: 此訂單毛利，order_amount − cost_amount，單位 TWD。
+    unit: TWD

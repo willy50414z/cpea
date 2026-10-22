@@ -1,0 +1,54 @@
+{
+  "artifact_result": "PASS",
+  "purpose": "事後來源選擇說明，非重新規劃或首次驗收",
+  "question": "請針對上一份規劃中你選擇的銷售來源，提供簡短、可核對的選擇理由：哪些需求與View契約支持此選擇？v_sales_detail與v_product_monthly的適用差異為何？所選來源能否滿足指定線上通路條件？如有不足請明說。僅說明原選擇，不重做規劃或修改原輸出；不要求私有逐步思維鏈。",
+  "calls": 2,
+  "elapsed_seconds": 12.314969838000252,
+  "same_request_contract_question": true,
+  "each_model_sees_only_own_prior_response": true,
+  "original_artifacts_unchanged": true,
+  "parsed_replays": 2,
+  "results": [
+    {
+      "model": "gpt-6-sol",
+      "reason": {
+        "originally_selected_sales_view": "demo_retail.v_sales_detail",
+        "selection_reason": "原規劃選用此 View，因需求須按門市、商品對照 2026 年 9 月線上通路的折扣金額與淨銷售額；它同時提供對應識別碼、月份、通路及兩項金額欄位。",
+        "contract_evidence": [
+          "需求指定「各店各商品」及「2026 年 9 月線上通路」。",
+          "v_sales_detail 具有 store_id、product_id、order_month 與 sales_channel；sales_channel 的 online 代表線上。",
+          "v_sales_detail 的 discount_amount 為明細折扣金額，net_sales 為折扣後銷售金額，且僅含已完成訂單。",
+          "v_inventory_status 以 store_id、product_id 為列鍵，提供 stock_qty 與 snapshot_date，可作為保留所有庫存商品的對照母體。"
+        ],
+        "alternative_comparison": "v_product_monthly 已是門市×月份×商品粒度，也有 discount_amount、net_sales，適合不區分通路的月度商品統計；但契約沒有 sales_channel，無法單獨限定線上。v_sales_detail 是訂單商品明細，雖須彙總至門市×商品，卻能先依月份及 online 篩選。",
+        "fulfills_online_condition": true,
+        "limitation": "所選來源只涵蓋已完成訂單明細；沒有匹配銷售列時，不能僅憑此 View 證實銷售金額為零。庫存的 snapshot_date 是盤點日期，目前庫存不可解讀為 2026 年 9 月的歷史庫存。"
+      },
+      "parse_error": null
+    },
+    {
+      "model": "DeepSeek-V4.1-Flash",
+      "reason": {
+        "originally_selected_sales_view": "demo_retail.v_product_monthly",
+        "selection_reason": "原規劃的促銷任務 t_online_promo 指定用於 2026 年 9 月、以門市×商品粒度彙總折扣金額與淨銷售額，而 v_product_monthly 的粒度正是門市×月份×商品，且具備 sales_month、store_id、product_id、discount_amount、net_sales 等欄位，能直接以月份篩選後聚合至門市×商品，因此原選擇此 View 取得折扣金額與淨銷售額。",
+        "contract_evidence": [
+          "v_product_monthly 粒度：門市×月份×商品，鍵為 store_id、sales_month、product_id",
+          "v_product_monthly 含 discount_amount（折扣金額合計）與 net_sales（折扣後銷售額）兩個 measure",
+          "v_product_monthly 含 sales_month 欄位（當月第一天），可用於篩選 2026 年 9 月",
+          "v_product_monthly 的 net_sales 契約明示適合跨門市彙總商品營收",
+          "v_product_monthly 不含 sales_channel 欄位，契約未提供通路維度"
+        ],
+        "alternative_comparison": "v_sales_detail 粒度為每筆已完成訂單的每個商品明細，具備 sales_channel、quantity、discount_amount、net_sales，可精確表達線上通路並自行彙總至門市×商品×月份；但它是明細層，需求只要月度門市×商品的折扣金額與淨銷售額，v_product_monthly 已是對應粒度且已內建 discount_amount 與 net_sales，無須再自行聚合明細，故原規劃選擇 v_product_monthly 較直接。",
+        "fulfills_online_condition": false,
+        "limitation": "原規劃的促銷任務僅以 sales_month = 2026-09-01 篩選，未能表達線上通路條件：v_product_monthly 契約未提供 sales_channel 欄位，故無法在 filters 中限定 online，該需求的線上通路條件未被滿足；此點已於原輸出的 decision_summary.conditions 與 decision_chain 第 3 步承認。若要真正滿足通路條件，契約上有 sales_channel 的 v_sales_detail 才是可行來源，但這不改變原選擇的事實。"
+      },
+      "parse_error": null
+    }
+  ],
+  "raw_folder": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/source-reasons-20261020T155003Z-1cfda9",
+  "verification_model_calls": 0,
+  "sql_db_calls": 0,
+  "ollama_calls": 0,
+  "reviewer": "同一主 agent 依 View 契約核對，沒有新增獨立 reviewer",
+  "interpretation": "GPT 自述優先確保月份、通路、金額等需求均能表達；DeepSeek 自述月表粒度貼近需求且較直接，但承認缺通路欄位而未滿足需求。事後理由不能證明首次內部思考或因果。"
+}

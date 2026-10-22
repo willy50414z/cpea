@@ -1,0 +1,21 @@
+{
+  "id": "EV-20261020T094610-93ca08da",
+  "kind": "focused",
+  "command": [
+    ".venv/bin/python",
+    "evidence-driven-dev/tasks/retail-planning-stages/reports/analyze_stages.py",
+    "evidence-driven-dev/tasks/retail-planning-stages/.local/stages-20261020T094053Z"
+  ],
+  "cwd": "/home/willy/code/cpea_terms",
+  "started_at": "2026-10-20T09:46:10+00:00",
+  "finished_at": "2026-10-20T09:46:13+00:00",
+  "exit_code": 0,
+  "revision": "bc09c67fc4078501599c37e4cdfecdee40af2ef8",
+  "diff_fingerprint": "aa41d10592dbead4910485bf28a61ea48d945514929dbccc513e0b4e93b18997",
+  "post_fingerprint": "aa41d10592dbead4910485bf28a61ea48d945514929dbccc513e0b4e93b18997",
+  "source_unchanged": true,
+  "output_sha256": "c2da6be928721692dfc12eca1f25048b7bf9970e0b64068a95fc57f0bc2a3ba4",
+  "raw_output": ".local/EV-20261020T094610-93ca08da.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "d365d8d64c7b2ee295357fdad01126ce567f096f1bd95e28a2e9d48d8ac73762"
+}

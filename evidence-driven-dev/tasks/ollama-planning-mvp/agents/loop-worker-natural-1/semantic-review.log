@@ -1,0 +1,178 @@
+{
+  "result": "FAIL",
+  "run": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T161155Z-cb9cb4",
+  "source_freeze_still_matches": true,
+  "first_failure": {
+    "node": "map-05",
+    "view": "demo_retail.v_daily_sales",
+    "error": {
+      "error_type": "ValueError",
+      "error": "duplicate coverage requirement IDs",
+      "raw_saved": true
+    },
+    "entries_count": 9,
+    "unique_count": 8,
+    "duplicate_requirement_id": "filter_channel_online",
+    "zero_based_entry_indices": [
+      1,
+      4
+    ],
+    "json_pointers": [
+      "/entries/1/requirement_id",
+      "/entries/4/requirement_id"
+    ],
+    "original_request": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T161155Z-cb9cb4/map-05-request.json",
+    "original_post_body": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T161155Z-cb9cb4/map-05-body.json",
+    "raw_model_response": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T161155Z-cb9cb4/map-05-call.json",
+    "parsed": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T161155Z-cb9cb4/map-05-parsed.json",
+    "error_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T161155Z-cb9cb4/map-05-error.json",
+    "provider_response": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T161155Z-cb9cb4/map-05-provider-response.json",
+    "diagnosis": "HTTP 200且正常完成；自然輸出9個entries對應8個requirements，線上通路ID重複。既有coverage唯一性守門拒絕；未去重、未修raw、未重送。"
+  },
+  "completed_prefix_semantics": [
+    {
+      "node": "recall",
+      "result": "資料責任與背景邊界通過",
+      "evidence": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T161155Z-cb9cb4/recall-result.json",
+      "checks": [
+        "8項資料責任完整且索引均為精確Unicode切片：店×商品、stock_qty、2026-09、online、discount_amount、net_sales、snapshot_date顯示、保留inventory母體。",
+        "純準備促銷後補貨評估未列requirement，原request完整保留。",
+        "sales兩度量scope_ids均綁月份與online；inventory stock/date不借scope；全部7候選恰一次。",
+        "sales度量grain含月但期間固定，最終根grain仍待selection驗證。"
+      ],
+      "caveat": "candidate_views/1/reason誤稱product_monthly可通路篩選；map-02自然結果明確修正為通路unsupported、兩度量partial，不能將此reason當來源能力證據。"
+    },
+    {
+      "node": "map-01",
+      "result": "本題資料責任語意通過",
+      "evidence": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T161155Z-cb9cb4/map-01-result.json",
+      "checks": [
+        "inventory支持store_id/product_id鍵、stock_qty sum、snapshot_date metadata、完整庫存母體；唯一store×product契約下不跨快照日期加總。",
+        "sales月份/online/折扣/淨額均unsupported，無捏造歷史快照粒度或套銷售條件。"
+      ]
+    },
+    {
+      "node": "map-02",
+      "result": "本題資料責任語意通過",
+      "evidence": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T161155Z-cb9cb4/map-02-result.json",
+      "checks": [
+        "product_monthly月份為2026-09-01至2026-10-01不含上界；online unsupported。",
+        "兩銷售度量partial且明列同源通路缺口；庫存、盤點日期與庫存母體unsupported。",
+        "來源grain保留store×month×product及三鍵；本題根grain是否正確需selection確認，未宣稱完成。"
+      ]
+    },
+    {
+      "node": "map-03",
+      "result": "本題資料責任通過，population附帶斷言待獨立判定",
+      "evidence": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T161155Z-cb9cb4/map-03-result.json",
+      "checks": [
+        "sales_detail支持store/product鍵；order_month=2026-09-01、sales_channel=online同源篩選。",
+        "discount_amount、net_sales皆sum且conditions均重申同樣月份與online。",
+        "庫存、snapshot_date與完整庫存母體unsupported。"
+      ],
+      "population_difference": {
+        "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T161155Z-cb9cb4/map-03-result.json",
+        "json_pointer": "/population",
+        "model_text": "已完成訂單之每個商品品項明細（僅含已完成訂單，不含未成交、退貨或無銷售之庫存商品）",
+        "contract_path": "projects/retail/views/demo_retail/v_sales_detail.yaml",
+        "contract_json_pointer": "/summary",
+        "contract_text": "粒度：每筆已完成訂單的每個商品品項；僅含已完成訂單。銷售額為折扣後淨額，毛利=淨額-成本。請勿以 COUNT(*) 當訂單數。",
+        "difference": "模型多稱「不含退貨」，契約僅保證已完成訂單，未明確保證排除退貨。未將此自述當契約保證或新增filter；依Main指示繼續固定流程收集，影響由fresh研究／獨立驗證者判定。"
+      }
+    },
+    {
+      "node": "map-04",
+      "result": "本題資料責任語意通過",
+      "evidence": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T161155Z-cb9cb4/map-04-result.json",
+      "checks": [
+        "order_summary支持order_month與online；無商品grain、庫存、折扣、盤點日期、庫存母體。",
+        "order_amount sum僅partial，明列無商品粒度，未發明商品級能力。"
+      ]
+    },
+    {
+      "node": "map-05",
+      "result": "FAIL：尚未materialize，不能視為完成映射",
+      "evidence": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T161155Z-cb9cb4/map-05-parsed.json",
+      "checks": [
+        "草稿對月份範圍、無online、無商品grain、revenue淨額partial等敘述看似符合契約，但重複ID已觸發首錯，不能挑出正確片段當PASS。"
+      ]
+    }
+  ],
+  "not_executed": [
+    "map-06 v_store_monthly_kpi",
+    "map-07 v_customer_value",
+    "selection",
+    "prepared_requests"
+  ],
+  "requests": [
+    {
+      "node": "recall",
+      "request_id": "436132c5fc81426ba2d2988fbc336844",
+      "result": "ok",
+      "http_status": 200,
+      "response_path": "/home/willy/code/cpea_terms/evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/436132c5fc81426ba2d2988fbc336844.response.txt",
+      "calls_charged": 1,
+      "automatic_retries": 0
+    },
+    {
+      "node": "map-01",
+      "request_id": "cd42974eb8894d0283b362ab938b8bbf",
+      "result": "ok",
+      "http_status": 200,
+      "response_path": "/home/willy/code/cpea_terms/evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/cd42974eb8894d0283b362ab938b8bbf.response.txt",
+      "calls_charged": 1,
+      "automatic_retries": 0
+    },
+    {
+      "node": "map-02",
+      "request_id": "026ee1b04a924d59b1cb8c5eb79e8b5a",
+      "result": "ok",
+      "http_status": 200,
+      "response_path": "/home/willy/code/cpea_terms/evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/026ee1b04a924d59b1cb8c5eb79e8b5a.response.txt",
+      "calls_charged": 1,
+      "automatic_retries": 0
+    },
+    {
+      "node": "map-03",
+      "request_id": "6a9eb995d6ef4c708e3b30bc8bf5e55e",
+      "result": "ok",
+      "http_status": 200,
+      "response_path": "/home/willy/code/cpea_terms/evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/6a9eb995d6ef4c708e3b30bc8bf5e55e.response.txt",
+      "calls_charged": 1,
+      "automatic_retries": 0
+    },
+    {
+      "node": "map-04",
+      "request_id": "2c03ff55d59745849b3e0f9524942571",
+      "result": "ok",
+      "http_status": 200,
+      "response_path": "/home/willy/code/cpea_terms/evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/2c03ff55d59745849b3e0f9524942571.response.txt",
+      "calls_charged": 1,
+      "automatic_retries": 0
+    },
+    {
+      "node": "map-05",
+      "request_id": "7a725bd28f414097ba31bd4c4cd0be0c",
+      "result": "ok",
+      "http_status": 200,
+      "response_path": "/home/willy/code/cpea_terms/evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/7a725bd28f414097ba31bd4c4cd0be0c.response.txt",
+      "calls_charged": 1,
+      "automatic_retries": 0
+    }
+  ],
+  "usage": {
+    "calls": 6,
+    "input_tokens_actual": 18874,
+    "output_tokens_actual": 21960,
+    "usage_missing_calls": 0
+  },
+  "resource_facts": {
+    "local_posts": 6,
+    "cloud_posts": 0,
+    "retries": 0,
+    "sql_or_db": 0,
+    "source_or_test_changes": 0
+  },
+  "new_hypothesis_boundary": "此成功HTTP錯答不能原樣重試或換case名稱抽樣。下一步須fresh研究以本次重複ID／既有契約／原messages重新判定可否證假設；若實作新候選，來源或prompt／版本應有可追蹤差異後才執行新自然樣本。此worker未選修法。",
+  "root_complete": false
+}

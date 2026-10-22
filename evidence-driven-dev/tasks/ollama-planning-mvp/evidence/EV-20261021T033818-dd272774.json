@@ -1,0 +1,32 @@
+{
+  "id": "EV-20261021T033818-dd272774",
+  "kind": "regression",
+  "command": [
+    ".venv/bin/python",
+    "-m",
+    "pytest",
+    "tests/unit/test_indexed_requirement_recall.py",
+    "tests/unit/test_three_stage_view_selection.py",
+    "tests/unit/test_task_decomposition_workflow.py",
+    "tests/unit/test_task_decomposition_contract.py",
+    "tests/unit/test_decomposition_evaluation.py",
+    "tests/unit/test_decomposition_decision_chain.py",
+    "tests/unit/test_decomposition_decision_summary.py",
+    "tests/unit/test_evidence_review_probe.py",
+    "tests/unit/test_planning_mvp.py",
+    "tests/unit/test_planning_reasoning_probe.py",
+    "-q"
+  ],
+  "cwd": "/home/willy/code/cpea_terms",
+  "started_at": "2026-10-21T03:38:18+00:00",
+  "finished_at": "2026-10-21T03:38:27+00:00",
+  "exit_code": 0,
+  "revision": "bc09c67fc4078501599c37e4cdfecdee40af2ef8",
+  "diff_fingerprint": "7055794fccfac615aaa94cdd99d6e17a66113c46da353a4d231b958a8476f3a5",
+  "post_fingerprint": "7055794fccfac615aaa94cdd99d6e17a66113c46da353a4d231b958a8476f3a5",
+  "source_unchanged": true,
+  "output_sha256": "7f661181c94c372b8730267342592bd0aa4ec5393d487a9609e33ef15bebaf39",
+  "raw_output": ".local/EV-20261021T033818-dd272774.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "bf24a9aeb1b5e5bf221957ec7bd583d6cb3e80b34ab6e9812e546942ace7c974"
+}

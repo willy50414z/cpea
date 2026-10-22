@@ -1,0 +1,36 @@
+{
+  "result": "PASS",
+  "product_restored_to": "v3",
+  "source_diff_empty": true,
+  "replayed_calls": 136,
+  "rounds": {
+    "v4": {
+      "replayed": 16,
+      "partial": true,
+      "hashes": {
+        "run.json": "f2b072255411558972125b7d3c1cbcfc6297641f0056c7265d549f0c547b7b97",
+        "calls.jsonl": "ba8dca2782d4319e4077a1e12848fa894ddda9dd5969265d0fbd205a7caa2782",
+        "results.jsonl": "ad711c8bb9468f6315528ede8dc1a7babec2a849105ea25d3b9873c320580818"
+      }
+    },
+    "v5": {
+      "replayed": 60,
+      "partial": false,
+      "hashes": {
+        "run.json": "7e8b26341d2bc50fd023ff9cc7a649e7c3334263c1b0b74c7d8223373d093a4c",
+        "calls.jsonl": "3f4c893d0860e283f2d8a648a1a2a95df02ff29113da814f1060b2e3e586a53f",
+        "results.jsonl": "aa3e69c1fe6674c2cec67e71b6ebb85bd96a4750d8e73e13358916f41508563b"
+      }
+    },
+    "v6": {
+      "replayed": 60,
+      "partial": false,
+      "hashes": {
+        "run.json": "09414c7d7b25f7264b392f5e87029473c342ffa08b7d02af674e9e6987ff7d3a",
+        "calls.jsonl": "0f6fda448be3549763357f3de0004ee6e56fb8247050587ad9625bf310383b36",
+        "results.jsonl": "db7e5d72ed87dba6437597b1348b24a7d78dbe6378351386e6e4397e1c278ab8"
+      }
+    }
+  },
+  "report_sha256": "20ce84399144a4348aba2193441477378a9c6aed9a71979bc5a6c82484fef55e"
+}

@@ -1,0 +1,22 @@
+{
+  "id": "EV-20261020T112732-0d2ad90b",
+  "kind": "review",
+  "command": [
+    ".venv/bin/python",
+    "evidence-driven-dev/tasks/retail-planning-stages/reports/review_prompt_comparison.py",
+    "evidence-driven-dev/tasks/retail-planning-stages/.local/prompt-v4-20261020T112256Z",
+    "--partial"
+  ],
+  "cwd": "/home/willy/code/cpea_terms",
+  "started_at": "2026-10-20T11:27:32+00:00",
+  "finished_at": "2026-10-20T11:27:32+00:00",
+  "exit_code": 0,
+  "revision": "bc09c67fc4078501599c37e4cdfecdee40af2ef8",
+  "diff_fingerprint": "2b4fa2a7dd97525d742b7137e68114a118be1277b11dcadac5124dff070eec64",
+  "post_fingerprint": "2b4fa2a7dd97525d742b7137e68114a118be1277b11dcadac5124dff070eec64",
+  "source_unchanged": true,
+  "output_sha256": "a6bea37378d446c6f8c5e21f16321512c3909bd9ea5be1ce549f6ad9435e1041",
+  "raw_output": ".local/EV-20261020T112732-0d2ad90b.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "2096bf2e53602863a0c4df1112b1d4aa3b82e71bde56bdd175801d475a49a0ad"
+}

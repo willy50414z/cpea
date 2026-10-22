@@ -1,0 +1,397 @@
+{
+  "used": {
+    "agent_dispatches": 22,
+    "cloud_calls": 0,
+    "local_calls": 21,
+    "model_retries": 0
+  },
+  "requests": {
+    "436132c5fc81426ba2d2988fbc336844": {
+      "id": "436132c5fc81426ba2d2988fbc336844",
+      "ticket_id": "e229c1b487464971b1c8f7f1470dbcd6",
+      "provider": "local",
+      "case_key": "diagnostic-request-1cf6e584921c:managed-indexed-path-three-stage-1:recall",
+      "request_sha": "3184811ed70d27994635d212472cc72edca35e33db21a4d484e1bbc3dd3a5c36",
+      "retry_number": 0,
+      "retry_of": null,
+      "status": "ok",
+      "round": 2,
+      "reserved_at": "2026-10-21T16:11:56.184950+00:00",
+      "finished_at": "2026-10-21T16:20:42.561356+00:00",
+      "details": {
+        "http_status": 200,
+        "response_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/436132c5fc81426ba2d2988fbc336844.response.txt",
+        "response_sha256": "5cca299ea32c9061fa20e882572aa4f7ddbd3a56105a0f35d152a9bb93f2dd17"
+      }
+    },
+    "cd42974eb8894d0283b362ab938b8bbf": {
+      "id": "cd42974eb8894d0283b362ab938b8bbf",
+      "ticket_id": "e229c1b487464971b1c8f7f1470dbcd6",
+      "provider": "local",
+      "case_key": "diagnostic-request-1cf6e584921c:managed-indexed-path-three-stage-1:map-01",
+      "request_sha": "c16c4738ec9c02201be03fa9f34846599ffb863ef9441db25bf481f1b8cb1973",
+      "retry_number": 0,
+      "retry_of": null,
+      "status": "ok",
+      "round": 2,
+      "reserved_at": "2026-10-21T16:20:42.801537+00:00",
+      "finished_at": "2026-10-21T16:25:46.377906+00:00",
+      "details": {
+        "http_status": 200,
+        "response_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/cd42974eb8894d0283b362ab938b8bbf.response.txt",
+        "response_sha256": "8b19e1902cef9df6c446820446249f137465c319e5cab04f9f9614d189defcc0"
+      }
+    },
+    "026ee1b04a924d59b1cb8c5eb79e8b5a": {
+      "id": "026ee1b04a924d59b1cb8c5eb79e8b5a",
+      "ticket_id": "e229c1b487464971b1c8f7f1470dbcd6",
+      "provider": "local",
+      "case_key": "diagnostic-request-1cf6e584921c:managed-indexed-path-three-stage-1:map-02",
+      "request_sha": "41c1208c45aac4daa1c49b6b8e34698a3507ddc41b76847e366ef9cf0fba06ce",
+      "retry_number": 0,
+      "retry_of": null,
+      "status": "ok",
+      "round": 2,
+      "reserved_at": "2026-10-21T16:25:46.588199+00:00",
+      "finished_at": "2026-10-21T16:35:33.227814+00:00",
+      "details": {
+        "http_status": 200,
+        "response_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/026ee1b04a924d59b1cb8c5eb79e8b5a.response.txt",
+        "response_sha256": "e1028971cc4a1a9c3d01700050ebb5a9c4325c10c0a99e6854a6089e863bf3a0"
+      }
+    },
+    "6a9eb995d6ef4c708e3b30bc8bf5e55e": {
+      "id": "6a9eb995d6ef4c708e3b30bc8bf5e55e",
+      "ticket_id": "e229c1b487464971b1c8f7f1470dbcd6",
+      "provider": "local",
+      "case_key": "diagnostic-request-1cf6e584921c:managed-indexed-path-three-stage-1:map-03",
+      "request_sha": "725f5903516d2b48773fe13ce3d48d32a6c405f2ccaf3d7c70532bc022961435",
+      "retry_number": 0,
+      "retry_of": null,
+      "status": "ok",
+      "round": 2,
+      "reserved_at": "2026-10-21T16:35:33.440363+00:00",
+      "finished_at": "2026-10-21T16:45:42.352261+00:00",
+      "details": {
+        "http_status": 200,
+        "response_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/6a9eb995d6ef4c708e3b30bc8bf5e55e.response.txt",
+        "response_sha256": "02fc088de753bc47d601f2edc4e0c52971371dffde3dff2d8edb5c83bb48e8ae"
+      }
+    },
+    "2c03ff55d59745849b3e0f9524942571": {
+      "id": "2c03ff55d59745849b3e0f9524942571",
+      "ticket_id": "e229c1b487464971b1c8f7f1470dbcd6",
+      "provider": "local",
+      "case_key": "diagnostic-request-1cf6e584921c:managed-indexed-path-three-stage-1:map-04",
+      "request_sha": "51d60bdc20d350a81bb2913e8bd16805d4be3750ef663fef3c436725ec0f24dc",
+      "retry_number": 0,
+      "retry_of": null,
+      "status": "ok",
+      "round": 2,
+      "reserved_at": "2026-10-21T16:45:42.567524+00:00",
+      "finished_at": "2026-10-21T16:52:15.957081+00:00",
+      "details": {
+        "http_status": 200,
+        "response_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/2c03ff55d59745849b3e0f9524942571.response.txt",
+        "response_sha256": "8a5bc955ef497d533a94adb83050b9ad56c173b3aa95ec0a37122483c6d8fe44"
+      }
+    },
+    "7a725bd28f414097ba31bd4c4cd0be0c": {
+      "id": "7a725bd28f414097ba31bd4c4cd0be0c",
+      "ticket_id": "e229c1b487464971b1c8f7f1470dbcd6",
+      "provider": "local",
+      "case_key": "diagnostic-request-1cf6e584921c:managed-indexed-path-three-stage-1:map-05",
+      "request_sha": "29e580bd10a558f71e7f75a36b81fcdf7967e0dc90c420ccc198b0c737d1a719",
+      "retry_number": 0,
+      "retry_of": null,
+      "status": "ok",
+      "round": 2,
+      "reserved_at": "2026-10-21T16:52:16.167794+00:00",
+      "finished_at": "2026-10-21T16:57:41.079271+00:00",
+      "details": {
+        "http_status": 200,
+        "response_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/7a725bd28f414097ba31bd4c4cd0be0c.response.txt",
+        "response_sha256": "e59e537129dbd20a8265e986ed573991fb8fb2262f347f758c83ba5d9404c4dd"
+      }
+    },
+    "df5631459c074270a9a1ec82825f1c17": {
+      "id": "df5631459c074270a9a1ec82825f1c17",
+      "ticket_id": "35d0dc38e8c64f1d8f60df54e2862009",
+      "provider": "local",
+      "case_key": "diagnostic-request-1cf6e584921c:managed-indexed-slots-three-stage-2:recall",
+      "request_sha": "3184811ed70d27994635d212472cc72edca35e33db21a4d484e1bbc3dd3a5c36",
+      "retry_number": 0,
+      "retry_of": null,
+      "status": "ok",
+      "round": 4,
+      "reserved_at": "2026-10-21T17:17:22.251905+00:00",
+      "finished_at": "2026-10-21T17:25:46.054357+00:00",
+      "details": {
+        "http_status": 200,
+        "response_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/df5631459c074270a9a1ec82825f1c17.response.txt",
+        "response_sha256": "fda9fb5f96e135920282065af190372e7fe48da56f219ec29508e54d30ac609b"
+      }
+    },
+    "a7d3b31b5a30475ab9e035cd9d16e28e": {
+      "id": "a7d3b31b5a30475ab9e035cd9d16e28e",
+      "ticket_id": "35d0dc38e8c64f1d8f60df54e2862009",
+      "provider": "local",
+      "case_key": "diagnostic-request-1cf6e584921c:managed-indexed-slots-three-stage-2:map-01",
+      "request_sha": "c9ba3e6421e0c6f00f732778cb7ba8026e41d2d4311ecd41fdc64e11827947b0",
+      "retry_number": 0,
+      "retry_of": null,
+      "status": "ok",
+      "round": 4,
+      "reserved_at": "2026-10-21T17:25:46.308676+00:00",
+      "finished_at": "2026-10-21T17:31:32.021070+00:00",
+      "details": {
+        "http_status": 200,
+        "response_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/a7d3b31b5a30475ab9e035cd9d16e28e.response.txt",
+        "response_sha256": "f1f90d34f72a69a54bcd38d8e23233cf474286fe6ac9dfa983cc3343bbc4bd15"
+      }
+    },
+    "b90af932503c41698e38cdca7491cb26": {
+      "id": "b90af932503c41698e38cdca7491cb26",
+      "ticket_id": "35d0dc38e8c64f1d8f60df54e2862009",
+      "provider": "local",
+      "case_key": "diagnostic-request-1cf6e584921c:managed-indexed-slots-three-stage-2:map-02",
+      "request_sha": "fdfa4c26e975a7a2a23241571b29a1b9a29c63b403fe6062511ad59caab747b1",
+      "retry_number": 0,
+      "retry_of": null,
+      "status": "ok",
+      "round": 4,
+      "reserved_at": "2026-10-21T17:31:32.257893+00:00",
+      "finished_at": "2026-10-21T17:39:20.655414+00:00",
+      "details": {
+        "http_status": 200,
+        "response_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/b90af932503c41698e38cdca7491cb26.response.txt",
+        "response_sha256": "04ad82e1cb63d1787d5129bc5d4acee6fdb601b421f0bb9755e1d2f6076938c9"
+      }
+    },
+    "b12b822d99fb44f3b7acdaca225916b1": {
+      "id": "b12b822d99fb44f3b7acdaca225916b1",
+      "ticket_id": "35d0dc38e8c64f1d8f60df54e2862009",
+      "provider": "local",
+      "case_key": "diagnostic-request-1cf6e584921c:managed-indexed-slots-three-stage-2:map-03",
+      "request_sha": "c3e08801e1e6174d9f214b0539d4203d45ec8de8270a96eb3963f1de847b8e67",
+      "retry_number": 0,
+      "retry_of": null,
+      "status": "ok",
+      "round": 4,
+      "reserved_at": "2026-10-21T17:39:20.877156+00:00",
+      "finished_at": "2026-10-21T17:46:18.809484+00:00",
+      "details": {
+        "http_status": 200,
+        "response_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/b12b822d99fb44f3b7acdaca225916b1.response.txt",
+        "response_sha256": "5ebc6ea2cfb48e170bcc70e3b47a6e45c679be4ed5f83a62058c534286307116"
+      }
+    },
+    "bed783eebcab4f5ca557d1b11fb795ff": {
+      "id": "bed783eebcab4f5ca557d1b11fb795ff",
+      "ticket_id": "35d0dc38e8c64f1d8f60df54e2862009",
+      "provider": "local",
+      "case_key": "diagnostic-request-1cf6e584921c:managed-indexed-slots-three-stage-2:map-04",
+      "request_sha": "60bf42e288b15de32e5a235f0da681e03b2156e2bc89db2b8e1a828b089ae85c",
+      "retry_number": 0,
+      "retry_of": null,
+      "status": "ok",
+      "round": 4,
+      "reserved_at": "2026-10-21T17:46:19.028206+00:00",
+      "finished_at": "2026-10-21T17:52:31.284172+00:00",
+      "details": {
+        "http_status": 200,
+        "response_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/bed783eebcab4f5ca557d1b11fb795ff.response.txt",
+        "response_sha256": "072e91e80743cb446a9ebf5024bb14404281581f166bbc36886aeced5701b452"
+      }
+    },
+    "536b3f8ea3584ca6989db87f47532e1e": {
+      "id": "536b3f8ea3584ca6989db87f47532e1e",
+      "ticket_id": "35d0dc38e8c64f1d8f60df54e2862009",
+      "provider": "local",
+      "case_key": "diagnostic-request-1cf6e584921c:managed-indexed-slots-three-stage-2:map-05",
+      "request_sha": "0bbe030c4c1afc9ae5222309c5dc2df1d33b73be304b51c84ff0eeb1f6e99d6b",
+      "retry_number": 0,
+      "retry_of": null,
+      "status": "ok",
+      "round": 4,
+      "reserved_at": "2026-10-21T17:52:31.502123+00:00",
+      "finished_at": "2026-10-21T18:03:15.729493+00:00",
+      "details": {
+        "http_status": 200,
+        "response_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/536b3f8ea3584ca6989db87f47532e1e.response.txt",
+        "response_sha256": "6544a96932db05b92da6ebb9aee5f0032c227d10f6602d56aebe99de88d2fa3c"
+      }
+    },
+    "da1ff903ad37462d860aac3644fa96d5": {
+      "id": "da1ff903ad37462d860aac3644fa96d5",
+      "ticket_id": "35d0dc38e8c64f1d8f60df54e2862009",
+      "provider": "local",
+      "case_key": "diagnostic-request-1cf6e584921c:managed-indexed-slots-three-stage-2:map-06",
+      "request_sha": "ca079579bd5c49fe193a32501b877fa9e6129ef714617f8143e45126dbef0de9",
+      "retry_number": 0,
+      "retry_of": null,
+      "status": "ok",
+      "round": 4,
+      "reserved_at": "2026-10-21T18:03:15.949158+00:00",
+      "finished_at": "2026-10-21T18:10:25.818240+00:00",
+      "details": {
+        "http_status": 200,
+        "response_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/da1ff903ad37462d860aac3644fa96d5.response.txt",
+        "response_sha256": "aee22c304bd80673d758e828fab656e46a7d5ae69e7055c9ff244b4376d3b9f8"
+      }
+    },
+    "7775675acbd54532aee0a7da3bd419fa": {
+      "id": "7775675acbd54532aee0a7da3bd419fa",
+      "ticket_id": "35d0dc38e8c64f1d8f60df54e2862009",
+      "provider": "local",
+      "case_key": "diagnostic-request-1cf6e584921c:managed-indexed-slots-three-stage-2:map-07",
+      "request_sha": "0e94a289abd181d920308ae6f2325184c394a107ae71b706d546a6deddb91ea4",
+      "retry_number": 0,
+      "retry_of": null,
+      "status": "ok",
+      "round": 4,
+      "reserved_at": "2026-10-21T18:10:26.036785+00:00",
+      "finished_at": "2026-10-21T18:13:36.898782+00:00",
+      "details": {
+        "http_status": 200,
+        "response_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/7775675acbd54532aee0a7da3bd419fa.response.txt",
+        "response_sha256": "b05f1e2ad4d0ed94ceb01e77bc1ba171e70cf1a1b0286f92a59675d239cb27fa"
+      }
+    },
+    "2cae2f57ac5143599a6e09ecce5f65af": {
+      "id": "2cae2f57ac5143599a6e09ecce5f65af",
+      "ticket_id": "35d0dc38e8c64f1d8f60df54e2862009",
+      "provider": "local",
+      "case_key": "diagnostic-request-1cf6e584921c:managed-indexed-slots-three-stage-2:selection",
+      "request_sha": "41b37b0d2b1a0581c52a8299897d708566e89e0da70baafe2e37f59fae1f3f7a",
+      "retry_number": 0,
+      "retry_of": null,
+      "status": "ok",
+      "round": 4,
+      "reserved_at": "2026-10-21T18:13:37.138077+00:00",
+      "finished_at": "2026-10-21T18:29:19.943545+00:00",
+      "details": {
+        "http_status": 200,
+        "response_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/2cae2f57ac5143599a6e09ecce5f65af.response.txt",
+        "response_sha256": "ab558065ee0eea6c2349e2f05c19a014a6a1c74f67454f18e4ee410bb12ee2ca"
+      }
+    },
+    "377ff38423074cddac989cc4e4f4895e": {
+      "id": "377ff38423074cddac989cc4e4f4895e",
+      "ticket_id": "378cab1f79c6485ab7c4df5b18a7e598",
+      "provider": "local",
+      "case_key": "diagnostic-request-1cf6e584921c:managed-evidence-bound-1:recall",
+      "request_sha": "c332b7ac449ce31ae7c9ccb971ae331b7c2a0e1e0f7215c4962fc122ce8e33f1",
+      "retry_number": 0,
+      "retry_of": null,
+      "status": "ok",
+      "round": 6,
+      "reserved_at": "2026-10-21T18:54:23.620983+00:00",
+      "finished_at": "2026-10-21T19:00:57.830128+00:00",
+      "details": {
+        "http_status": 200,
+        "response_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/377ff38423074cddac989cc4e4f4895e.response.txt",
+        "response_sha256": "d14dfafe4bb95911651bcb5f4203c6e4f371d8457aab645025101964b4e13cd0"
+      }
+    },
+    "aef43469408a47e9bbc3ffc30068bd32": {
+      "id": "aef43469408a47e9bbc3ffc30068bd32",
+      "ticket_id": "378cab1f79c6485ab7c4df5b18a7e598",
+      "provider": "local",
+      "case_key": "diagnostic-request-1cf6e584921c:managed-evidence-bound-1:map-01",
+      "request_sha": "6c7a939783e0f20b6e93ee8c46802f32a55a815e74af0b8f529f78986e5a92c9",
+      "retry_number": 0,
+      "retry_of": null,
+      "status": "ok",
+      "round": 6,
+      "reserved_at": "2026-10-21T19:00:58.065139+00:00",
+      "finished_at": "2026-10-21T19:05:12.074155+00:00",
+      "details": {
+        "http_status": 200,
+        "response_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/aef43469408a47e9bbc3ffc30068bd32.response.txt",
+        "response_sha256": "d64e1e7ab1d210b812c6ee8e876f63b97608e225e5bf8f3fa3d1d085c1a200df"
+      }
+    },
+    "418b473a92214f108bd17228c4de1786": {
+      "id": "418b473a92214f108bd17228c4de1786",
+      "ticket_id": "378cab1f79c6485ab7c4df5b18a7e598",
+      "provider": "local",
+      "case_key": "diagnostic-request-1cf6e584921c:managed-evidence-bound-1:map-02",
+      "request_sha": "8659e964bd9a899c12e0ac4eb8a7330036841970d83446598897f359b06028e3",
+      "retry_number": 0,
+      "retry_of": null,
+      "status": "ok",
+      "round": 6,
+      "reserved_at": "2026-10-21T19:05:12.307558+00:00",
+      "finished_at": "2026-10-21T19:16:05.914580+00:00",
+      "details": {
+        "http_status": 200,
+        "response_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/418b473a92214f108bd17228c4de1786.response.txt",
+        "response_sha256": "32b79e76a32f5a8979c7583108d034cbd419c2f07d92c6416f54dd5bbe120375"
+      }
+    },
+    "b11f0629e8224e9b9f6f99d3603169c8": {
+      "id": "b11f0629e8224e9b9f6f99d3603169c8",
+      "ticket_id": "efb4eb78622b40fe8110e2aac2197280",
+      "provider": "local",
+      "case_key": "diagnostic-request-1cf6e584921c:managed-own-responsibility-1:recall",
+      "request_sha": "6b67d996389b1ad5f62afcbda45f51480fe09c4744ce600f32c4d376860d67aa",
+      "retry_number": 0,
+      "retry_of": null,
+      "status": "ok",
+      "round": 8,
+      "reserved_at": "2026-10-21T19:45:16.282263+00:00",
+      "finished_at": "2026-10-21T19:58:42.494533+00:00",
+      "details": {
+        "http_status": 200,
+        "response_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/b11f0629e8224e9b9f6f99d3603169c8.response.txt",
+        "response_sha256": "29e75488fe84e02e4365321c11e3b37f872769e79b1c53623a54cea7aadd9c79"
+      }
+    },
+    "55272c8e63f84d9fa04f9c87a7c979bb": {
+      "id": "55272c8e63f84d9fa04f9c87a7c979bb",
+      "ticket_id": "efb4eb78622b40fe8110e2aac2197280",
+      "provider": "local",
+      "case_key": "diagnostic-request-1cf6e584921c:managed-own-responsibility-1:map-01",
+      "request_sha": "6728ed5ba19975074ebd9d2bb94c18e9dd2079a54ce9e1593ba3d661caa7d07f",
+      "retry_number": 0,
+      "retry_of": null,
+      "status": "ok",
+      "round": 8,
+      "reserved_at": "2026-10-21T19:58:42.729102+00:00",
+      "finished_at": "2026-10-21T20:01:24.347567+00:00",
+      "details": {
+        "http_status": 200,
+        "response_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/55272c8e63f84d9fa04f9c87a7c979bb.response.txt",
+        "response_sha256": "dd1f6a05d737230598d68555527fdc0d8710cb9ee636d895cf0cc35fc5dad5ce"
+      }
+    },
+    "67ce668444f348b1886ffa9dd9247db1": {
+      "id": "67ce668444f348b1886ffa9dd9247db1",
+      "ticket_id": "efb4eb78622b40fe8110e2aac2197280",
+      "provider": "local",
+      "case_key": "diagnostic-request-1cf6e584921c:managed-own-responsibility-1:map-02",
+      "request_sha": "07c8fffbfdad5c894f6a370108126a92719dbb6925754ab9bde345a19a603dde",
+      "retry_number": 0,
+      "retry_of": null,
+      "status": "ok",
+      "round": 8,
+      "reserved_at": "2026-10-21T20:01:24.583349+00:00",
+      "finished_at": "2026-10-21T20:07:34.201060+00:00",
+      "details": {
+        "http_status": 200,
+        "response_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/67ce668444f348b1886ffa9dd9247db1.response.txt",
+        "response_sha256": "6e4b991d03a5dc3681fe1d708f64ec70fb23c0460203f6e6731250d7d06ed1e9"
+      }
+    }
+  },
+  "author": {
+    "id": "4810e837bb3e44d5a05d9392d9140e84",
+    "role": "worker",
+    "node": "kind_diagnostic_fixture_v2_correction",
+    "round": 12,
+    "platform_id": "/root/loop_worker_fixture_v2",
+    "closed": false,
+    "reserved_at": "2026-10-21T21:09:02.160531+00:00"
+  }
+}

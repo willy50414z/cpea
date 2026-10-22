@@ -1,0 +1,287 @@
+{
+  "reviewer": "oracle-audit",
+  "new_model_calls": 0,
+  "new_db_sql_calls": 0,
+  "catalog_fingerprint": "e5e5a5a2cc29a1be93dc4d6875aba8c47a35ed48c019c7d6838a45831d0441dc",
+  "results": [
+    {
+      "id": "baseline-c01",
+      "meaning": "核對合成canonical建構有效",
+      "result": {
+        "validation_errors": [],
+        "score": {
+          "status_match": true,
+          "canonical_views_match": true,
+          "views_and_columns_match": true,
+          "equivalent_tasks_match": true,
+          "payload_ready": true,
+          "integration_keys_match": true,
+          "automated_pass": true,
+          "semantic_review_required": true,
+          "task_scores": [
+            {
+              "view": true,
+              "columns": true,
+              "column_recall": 1.0,
+              "column_precision": 1.0,
+              "filters": true,
+              "metrics": true,
+              "conditional_metrics": true,
+              "metadata": true,
+              "grain": true
+            },
+            {
+              "view": true,
+              "columns": true,
+              "column_recall": 1.0,
+              "column_precision": 1.0,
+              "filters": true,
+              "metrics": true,
+              "conditional_metrics": true,
+              "metadata": true,
+              "grain": true
+            }
+          ],
+          "strategy_match": true
+        }
+      }
+    },
+    {
+      "id": "missing-output-role",
+      "meaning": "庫存量與盤點日期仍列required_columns但不選出，grader不比對attributes",
+      "result": {
+        "validation_errors": [],
+        "score": {
+          "status_match": true,
+          "canonical_views_match": true,
+          "views_and_columns_match": true,
+          "equivalent_tasks_match": true,
+          "payload_ready": true,
+          "integration_keys_match": true,
+          "automated_pass": true,
+          "semantic_review_required": true,
+          "task_scores": [
+            {
+              "view": true,
+              "columns": true,
+              "column_recall": 1.0,
+              "column_precision": 1.0,
+              "filters": true,
+              "metrics": true,
+              "conditional_metrics": true,
+              "metadata": true,
+              "grain": true
+            },
+            {
+              "view": true,
+              "columns": true,
+              "column_recall": 1.0,
+              "column_precision": 1.0,
+              "filters": true,
+              "metrics": true,
+              "conditional_metrics": true,
+              "metadata": true,
+              "grain": true
+            }
+          ],
+          "strategy_match": true
+        }
+      }
+    },
+    {
+      "id": "extra-metric",
+      "meaning": "加入未要求度量，metrics子集檢查仍過",
+      "result": {
+        "validation_errors": [],
+        "score": {
+          "status_match": true,
+          "canonical_views_match": true,
+          "views_and_columns_match": true,
+          "equivalent_tasks_match": true,
+          "payload_ready": true,
+          "integration_keys_match": true,
+          "automated_pass": true,
+          "semantic_review_required": true,
+          "task_scores": [
+            {
+              "view": true,
+              "columns": true,
+              "column_recall": 1.0,
+              "column_precision": 1.0,
+              "filters": true,
+              "metrics": true,
+              "conditional_metrics": true,
+              "metadata": true,
+              "grain": true
+            },
+            {
+              "view": true,
+              "columns": true,
+              "column_recall": 1.0,
+              "column_precision": 0.8,
+              "filters": true,
+              "metrics": true,
+              "conditional_metrics": true,
+              "metadata": true,
+              "grain": true
+            }
+          ],
+          "strategy_match": true
+        }
+      }
+    },
+    {
+      "id": "fill-zero",
+      "meaning": "缺值政策與oracle相反，grader仍過",
+      "result": {
+        "validation_errors": [],
+        "score": {
+          "status_match": true,
+          "canonical_views_match": true,
+          "views_and_columns_match": true,
+          "equivalent_tasks_match": true,
+          "payload_ready": true,
+          "integration_keys_match": true,
+          "automated_pass": true,
+          "semantic_review_required": true,
+          "task_scores": [
+            {
+              "view": true,
+              "columns": true,
+              "column_recall": 1.0,
+              "column_precision": 1.0,
+              "filters": true,
+              "metrics": true,
+              "conditional_metrics": true,
+              "metadata": true,
+              "grain": true
+            },
+            {
+              "view": true,
+              "columns": true,
+              "column_recall": 1.0,
+              "column_precision": 1.0,
+              "filters": true,
+              "metrics": true,
+              "conditional_metrics": true,
+              "metadata": true,
+              "grain": true
+            }
+          ],
+          "strategy_match": true
+        }
+      }
+    },
+    {
+      "id": "wrong-payload-body",
+      "meaning": "payload僅非空且頂層鍵正確，未核對request內容與view",
+      "result": {
+        "validation_errors": [],
+        "score": {
+          "status_match": true,
+          "canonical_views_match": true,
+          "views_and_columns_match": true,
+          "equivalent_tasks_match": true,
+          "payload_ready": true,
+          "integration_keys_match": true,
+          "automated_pass": true,
+          "semantic_review_required": true,
+          "task_scores": [
+            {
+              "view": true,
+              "columns": true,
+              "column_recall": 1.0,
+              "column_precision": 1.0,
+              "filters": true,
+              "metrics": true,
+              "conditional_metrics": true,
+              "metadata": true,
+              "grain": true
+            },
+            {
+              "view": true,
+              "columns": true,
+              "column_recall": 1.0,
+              "column_precision": 1.0,
+              "filters": true,
+              "metrics": true,
+              "conditional_metrics": true,
+              "metadata": true,
+              "grain": true
+            }
+          ],
+          "strategy_match": true
+        }
+      }
+    },
+    {
+      "id": "wrong-child-preparation",
+      "meaning": "應nest每日子集合卻aggregate抹掉日期，grader與validator仍接受",
+      "result": {
+        "validation_errors": [],
+        "score": {
+          "status_match": true,
+          "canonical_views_match": true,
+          "views_and_columns_match": true,
+          "equivalent_tasks_match": true,
+          "payload_ready": true,
+          "integration_keys_match": true,
+          "automated_pass": true,
+          "semantic_review_required": true,
+          "task_scores": [
+            {
+              "view": true,
+              "columns": true,
+              "column_recall": 1.0,
+              "column_precision": 1.0,
+              "filters": true,
+              "metrics": true,
+              "conditional_metrics": true,
+              "metadata": true,
+              "grain": true
+            },
+            {
+              "view": true,
+              "columns": true,
+              "column_recall": 1.0,
+              "column_precision": 1.0,
+              "filters": true,
+              "metrics": true,
+              "conditional_metrics": true,
+              "metadata": true,
+              "grain": true
+            }
+          ],
+          "strategy_match": true
+        }
+      }
+    },
+    {
+      "id": "unproved-count-equivalence",
+      "meaning": "依未證實order_id/product_id唯一鍵將COUNT(order_id)視為COUNT DISTINCT；兩筆相同order/product明細反例count=2 distinct=1",
+      "result": {
+        "view": true,
+        "columns": true,
+        "column_recall": 1.0,
+        "column_precision": 1.0,
+        "filters": true,
+        "metrics": true,
+        "conditional_metrics": true,
+        "metadata": true,
+        "grain": true
+      },
+      "witness_rows": [
+        {
+          "order_id": 1,
+          "product_id": 10
+        },
+        {
+          "order_id": 1,
+          "product_id": 10
+        }
+      ],
+      "expected_count_distinct": 1,
+      "actual_count": 2
+    }
+  ]
+}

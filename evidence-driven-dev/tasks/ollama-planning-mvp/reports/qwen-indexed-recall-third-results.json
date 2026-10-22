@@ -1,0 +1,58 @@
+{
+  "experiment": "EXP-016",
+  "repeat_of": [
+    "EXP-014",
+    "EXP-015"
+  ],
+  "provider": "ollama",
+  "model": "qwen3.8:27b",
+  "model_digest": "aaee06c39dcf2437cde036998d960e1fc1494b8191be7cc9657d01e509097813",
+  "same_source_schema_catalog_case_messages_settings_harness": true,
+  "request": "對照各店各商品的盤點庫存件數與 2026 年 9 月線上通路的折扣金額及淨銷售額，並顯示庫存盤點日期，準備促銷後補貨評估；保留所有庫存商品。",
+  "calls": 1,
+  "retries": 0,
+  "reasoning": true,
+  "temperature": 1,
+  "top_p": 1,
+  "seed": 42,
+  "context_window": 32768,
+  "output_limit": 4096,
+  "network_read_timeout_seconds": 300,
+  "outer_hard_timeout_seconds": 420,
+  "elapsed_seconds": 420.0,
+  "termination": "EDD subprocess timeout, exit 124",
+  "model_answer_saved": false,
+  "semantic_result": "NOT_VERIFIED",
+  "complete_target_terms": null,
+  "actual_input_tokens": null,
+  "actual_output_tokens": null,
+  "cost_usd": null,
+  "source_mapping": "NOT_EXECUTED",
+  "end_to_end": "NOT_VERIFIED",
+  "raw_replay": "NOT_AVAILABLE: no completed response or provider error",
+  "run_metadata_finalized": false,
+  "artifact_folder": ".local/qwen-indexed-20261021T042058Z-e7e449",
+  "artifact_hashes": {
+    "run.json": "1d6697555bb3cce7dd12106747d3f27352a038ce57aa95bed9ef19c253adf603",
+    "recall-request.json": "ab71c215d48bd96cdf97177b6459760703cabbe6c1c1bbf567bed29678994e43",
+    "budget.json": "3777acffc88daea3002bc319381ac2ec048c57a79194c6080918bcd7c8bd243e"
+  },
+  "runtime_observation": {
+    "timestamp": "2026-10-21T04:21:35.785905+00:00",
+    "models": [
+      {
+        "name": "qwen3.8:27b",
+        "size_vram": 12603401173,
+        "context_length": 32768
+      }
+    ]
+  },
+  "runtime_observation_path": ".local/qwen-third-runtime-observation.json",
+  "runtime_observation_sha256": "bbd0f5ebd611953c363b4de38568206b0e4ffb9e0643a4391465de1b630d3eaa",
+  "evidence": [
+    "evidence/EV-20261021T042057-87b8ad21.json",
+    "evidence/EV-20261021T042842-e7ac3938.json"
+  ],
+  "reviewer": "主Agent及fresh subprocess，非跨Agent獨立驗證",
+  "offline_artifact_verification": "PASS"
+}

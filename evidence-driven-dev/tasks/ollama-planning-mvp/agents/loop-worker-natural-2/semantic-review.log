@@ -1,0 +1,651 @@
+{
+  "ticket": "35d0dc38e8c64f1d8f60df54e2862009",
+  "result": "FAIL",
+  "run": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T171721Z-fa4587",
+  "candidate": "managed-indexed-slots-three-stage-2",
+  "model_identity": {
+    "name": "qwen3.8:27b",
+    "digest": "aaee06c39dcf2437cde036998d960e1fc1494b8191be7cc9657d01e509097813",
+    "checked_at": "2026-10-21T17:17:21.855655+00:00"
+  },
+  "source_freeze_still_matches": true,
+  "source_facts": [
+    {
+      "node": "map-01",
+      "view": "demo_retail.v_inventory_status",
+      "source_facts_exact": true,
+      "required_slots_complete": true,
+      "statuses": {
+        "grain_store_product": "supported",
+        "metric_stock_qty": "supported",
+        "filter_period_202609": "unsupported",
+        "filter_channel_online": "unsupported",
+        "metric_discount_amount": "unsupported",
+        "metric_net_sales": "unsupported",
+        "metadata_snapshot_date": "supported",
+        "population_all_inventory": "supported"
+      }
+    },
+    {
+      "node": "map-02",
+      "view": "demo_retail.v_product_monthly",
+      "source_facts_exact": true,
+      "required_slots_complete": true,
+      "statuses": {
+        "grain_store_product": "partial",
+        "metric_stock_qty": "unsupported",
+        "filter_period_202609": "supported",
+        "filter_channel_online": "unsupported",
+        "metric_discount_amount": "partial",
+        "metric_net_sales": "partial",
+        "metadata_snapshot_date": "unsupported",
+        "population_all_inventory": "unsupported"
+      }
+    },
+    {
+      "node": "map-03",
+      "view": "demo_retail.v_sales_detail",
+      "source_facts_exact": true,
+      "required_slots_complete": true,
+      "statuses": {
+        "grain_store_product": "supported",
+        "metric_stock_qty": "unsupported",
+        "filter_period_202609": "supported",
+        "filter_channel_online": "supported",
+        "metric_discount_amount": "supported",
+        "metric_net_sales": "supported",
+        "metadata_snapshot_date": "unsupported",
+        "population_all_inventory": "unsupported"
+      }
+    },
+    {
+      "node": "map-04",
+      "view": "demo_retail.v_order_summary",
+      "source_facts_exact": true,
+      "required_slots_complete": true,
+      "statuses": {
+        "grain_store_product": "unsupported",
+        "metric_stock_qty": "unsupported",
+        "filter_period_202609": "supported",
+        "filter_channel_online": "supported",
+        "metric_discount_amount": "unsupported",
+        "metric_net_sales": "supported",
+        "metadata_snapshot_date": "unsupported",
+        "population_all_inventory": "unsupported"
+      }
+    },
+    {
+      "node": "map-05",
+      "view": "demo_retail.v_daily_sales",
+      "source_facts_exact": true,
+      "required_slots_complete": true,
+      "statuses": {
+        "grain_store_product": "unsupported",
+        "metric_stock_qty": "unsupported",
+        "filter_period_202609": "supported",
+        "filter_channel_online": "unsupported",
+        "metric_discount_amount": "unsupported",
+        "metric_net_sales": "partial",
+        "metadata_snapshot_date": "unsupported",
+        "population_all_inventory": "unsupported"
+      }
+    },
+    {
+      "node": "map-06",
+      "view": "demo_retail.v_store_monthly_kpi",
+      "source_facts_exact": true,
+      "required_slots_complete": true,
+      "statuses": {
+        "grain_store_product": "unsupported",
+        "metric_stock_qty": "unsupported",
+        "filter_period_202609": "supported",
+        "filter_channel_online": "unsupported",
+        "metric_discount_amount": "unsupported",
+        "metric_net_sales": "partial",
+        "metadata_snapshot_date": "unsupported",
+        "population_all_inventory": "unsupported"
+      }
+    },
+    {
+      "node": "map-07",
+      "view": "demo_retail.v_customer_value",
+      "source_facts_exact": true,
+      "required_slots_complete": true,
+      "statuses": {
+        "grain_store_product": "unsupported",
+        "metric_stock_qty": "unsupported",
+        "filter_period_202609": "unsupported",
+        "filter_channel_online": "unsupported",
+        "metric_discount_amount": "unsupported",
+        "metric_net_sales": "unsupported",
+        "metadata_snapshot_date": "unsupported",
+        "population_all_inventory": "unsupported"
+      }
+    }
+  ],
+  "index_role_scope_checks": [
+    {
+      "requirement_id": "grain_store_product",
+      "start": 2,
+      "end": 7,
+      "quote": "各店各商品",
+      "kind": "grain",
+      "scope_ids": []
+    },
+    {
+      "requirement_id": "metric_stock_qty",
+      "start": 8,
+      "end": 14,
+      "quote": "盤點庫存件數",
+      "kind": "metric",
+      "scope_ids": []
+    },
+    {
+      "requirement_id": "filter_period_202609",
+      "start": 16,
+      "end": 26,
+      "quote": "2026 年 9 月",
+      "kind": "filter",
+      "scope_ids": []
+    },
+    {
+      "requirement_id": "filter_channel_online",
+      "start": 26,
+      "end": 30,
+      "quote": "線上通路",
+      "kind": "filter",
+      "scope_ids": []
+    },
+    {
+      "requirement_id": "metric_discount_amount",
+      "start": 31,
+      "end": 35,
+      "quote": "折扣金額",
+      "kind": "metric",
+      "scope_ids": [
+        "filter_period_202609",
+        "filter_channel_online"
+      ]
+    },
+    {
+      "requirement_id": "metric_net_sales",
+      "start": 36,
+      "end": 40,
+      "quote": "淨銷售額",
+      "kind": "metric",
+      "scope_ids": [
+        "filter_period_202609",
+        "filter_channel_online"
+      ]
+    },
+    {
+      "requirement_id": "metadata_snapshot_date",
+      "start": 44,
+      "end": 50,
+      "quote": "庫存盤點日期",
+      "kind": "metadata",
+      "scope_ids": []
+    },
+    {
+      "requirement_id": "population_all_inventory",
+      "start": 61,
+      "end": 69,
+      "quote": "保留所有庫存商品",
+      "kind": "population",
+      "scope_ids": []
+    }
+  ],
+  "first_semantic_deviation": "F1 recall /candidate_views/1/reason",
+  "first_programmatic_stop": {
+    "error_type": "ValueError",
+    "error": "final grain differs from verified requirement keys"
+  },
+  "semantic_failures": [
+    {
+      "id": "F1",
+      "classification": "確證能力理由錯誤",
+      "file": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T171721Z-fa4587/recall-result.json",
+      "pointer": "/candidate_views/1/reason",
+      "text": "門市×月份×商品粒度具 discount_amount 與 net_sales，可按 2026-09 及通路篩選後與庫存對照",
+      "contract": "projects/retail/views/demo_retail/v_product_monthly.yaml",
+      "contract_pointers": [
+        "/columns",
+        "/grain",
+        "/summary"
+      ],
+      "finding": "理由明稱可按通路篩選；本View完整契約沒有通路欄位。後續mapping/exclusion正確標通路不支持，不能回溯使此理由正確。第一個自然語意偏離即在recall。"
+    },
+    {
+      "id": "F2",
+      "classification": "未選View的商品級度量支持判定錯誤",
+      "file": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T171721Z-fa4587/map-04-result.json",
+      "pointer": "/entries/5",
+      "entry": {
+        "requirement_id": "metric_net_sales",
+        "status": "supported",
+        "mappings": [
+          {
+            "column": "order_amount",
+            "role": "metric",
+            "source_quote": "淨銷售額",
+            "aggregation": "sum",
+            "operator": null,
+            "value": null,
+            "conditions": [],
+            "contract_evidence": [
+              {
+                "path": "/columns/order_amount/description",
+                "quote": "此訂單折扣後的總銷售金額（各明細 quantity × unit_price − discount），單位 TWD。"
+              }
+            ]
+          }
+        ],
+        "contract_evidence": [
+          {
+            "path": "/columns/order_amount/description",
+            "quote": "此訂單折扣後的總銷售金額（各明細 quantity × unit_price − discount），單位 TWD。"
+          }
+        ],
+        "missing_requirements": []
+      },
+      "requirement": {
+        "requirement_id": "metric_net_sales",
+        "quote": "淨銷售額",
+        "business_object": "sales",
+        "kind": "metric",
+        "scope_ids": [
+          "filter_period_202609",
+          "filter_channel_online"
+        ],
+        "grain": "門市×商品×月",
+        "population": "線上通路已完成訂單"
+      },
+      "related_pointer": "/entries/0",
+      "related_entry": {
+        "requirement_id": "grain_store_product",
+        "status": "unsupported",
+        "mappings": [],
+        "contract_evidence": [
+          {
+            "path": "/grain/description",
+            "quote": "每筆已完成訂單一列"
+          }
+        ],
+        "missing_requirements": [
+          "本 View 粒度為每筆已完成訂單（key: order_id），無商品層級欄位，無法支持門市×商品粒度"
+        ]
+      },
+      "contract": "projects/retail/views/demo_retail/v_order_summary.yaml",
+      "finding": "本題net_sales要求門市×商品×月；訂單級order_amount sum僅有部分金額能力，該View無商品欄位且grain項自己標unsupported。度量卻標supported且缺口為空，未保留商品grain缺口。未選用不免除此完整自然語意責任。"
+    },
+    {
+      "id": "F3",
+      "classification": "契約未支持的額外母體斷言",
+      "file": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T171721Z-fa4587/map-02-result.json",
+      "pointer": "/entries/7/missing_requirements/0",
+      "text": "本View為銷售統計，母體僅包含有銷售紀錄之門市×商品組合，無法涵蓋無銷售之全量庫存商品（含缺貨、需補貨狀態）",
+      "contract": "projects/retail/views/demo_retail/v_product_monthly.yaml",
+      "contract_pointer": "/summary",
+      "contract_text": "粒度：門市×月份×商品；適合商品/分類排行、商品銷量及毛利，不含訂單筆數；商品跨店排行需加總 net_sales/units_sold。",
+      "finding": "契約提供銷售統計粒度與度量，沒有明保證「母體僅包含有銷售紀錄」；無完整庫存保證可判unsupported，但不能把未明示的only-sales母體說法當成契約事實。",
+      "propagation": {
+        "file": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T171721Z-fa4587/selection-parsed.json",
+        "pointer": "/exclusions/0/reason",
+        "text": "discount_amount 與 net_sales 雖存在但無通路（channel）欄位，無法施加線上通路篩選（state: partial）；grain 為門市×月份×商品多出 sales_month 維度（state: partial）；無 stock_qty、snapshot_date（state: unsupported）；母體僅含有銷售紀錄之組合，無法保留全量庫存（state: unsupported）。"
+      }
+    },
+    {
+      "id": "F4",
+      "classification": "selection遺漏typed draft；首程式契約拒絕",
+      "file": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T171721Z-fa4587/selection-call.json",
+      "pointer": "/response（內嵌JSON的/draft）",
+      "first_validator_failure": {
+        "error_type": "ValueError",
+        "error": "final grain differs from verified requirement keys",
+        "raw_saved": true
+      },
+      "raw_draft_keys": [
+        "status",
+        "strategy",
+        "tasks",
+        "unsupported_reasons"
+      ],
+      "missing_integration": true,
+      "typed_task_omissions": [
+        {
+          "task_id": "task_inventory",
+          "raw_pointer": "/draft/tasks/0",
+          "omitted_typed_fields": [
+            "filters",
+            "metrics",
+            "group_by",
+            "attributes",
+            "metadata_collections",
+            "conditional_metrics"
+          ],
+          "parsed_defaults": {
+            "filters": [],
+            "metrics": {},
+            "group_by": [],
+            "attributes": [],
+            "metadata_collections": [],
+            "conditional_metrics": []
+          }
+        },
+        {
+          "task_id": "task_sales",
+          "raw_pointer": "/draft/tasks/1",
+          "omitted_typed_fields": [
+            "filters",
+            "metrics",
+            "group_by",
+            "attributes",
+            "metadata_collections",
+            "conditional_metrics"
+          ],
+          "parsed_defaults": {
+            "filters": [],
+            "metrics": {},
+            "group_by": [],
+            "attributes": [],
+            "metadata_collections": [],
+            "conditional_metrics": []
+          }
+        }
+      ],
+      "finding": "原始模型JSON僅在task.request自然語句提sum、月份與online，未輸出integration，也未填typed filters/metrics/group_by/metadata_collections。解析後integration=null，第一個grain assignment即由既有guard拒絕。沒有明確anchor、先彙總preparation、left edge、根grain、no-zero missing policy；未產生prepared requests。"
+    }
+  ],
+  "ambiguities": [
+    {
+      "file": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T171721Z-fa4587/map-07-result.json",
+      "pointer": "/entries/7",
+      "full_entry": {
+        "requirement_id": "population_all_inventory",
+        "status": "unsupported",
+        "mappings": [],
+        "contract_evidence": [
+          {
+            "path": "/summary",
+            "quote": "粒度：每會員一列，包含未下單會員；"
+          }
+        ],
+        "missing_requirements": [
+          "需要庫存商品母體（含缺貨、需補貨、正常各狀態）",
+          "需要庫存狀態欄位",
+          "当前 View 母體為會員，非庫存商品"
+        ]
+      },
+      "classification": "額外欄位必要性待fresh研究，不單列確證FAIL",
+      "finding": "原文確為「需要庫存狀態欄位」，但不能僅憑詞彙自動等同具名stock_status；保留全部上下文，由fresh研究判此為額外必要性或一般母體描述。"
+    }
+  ],
+  "per_node_semantic_review": [
+    {
+      "node": "recall",
+      "result": "FAIL（F1）；資料責任/索引/role/scope本身正確",
+      "checks": [
+        "8項責任完整：店商品grain、盤點件數、2026-09銷售期間、online、折扣、淨額、盤點日期metadata、保留庫存母體。",
+        "所有Unicode start:end精確取得完整片段；七候選恰一次。",
+        "用途保留於原request背景，未新增補貨預測/促銷日期/目前日期或用途欄位；兩sales metric scope_ids均綁月份與online，inventory stock/date未借sales scope。",
+        "sales已完成訂單母體符合sales_detail契約；固定月份的月grain不增加最後分組。",
+        "全部7個candidate理由已比對；monthly通路能力理由確證錯誤，其餘能力敘述符合契約。"
+      ]
+    },
+    {
+      "node": "map-01",
+      "result": "資料責任/缺口語意通過",
+      "checks": [
+        "store_id/product_id雙key、stock_qty sum與snapshot_date metadata、完整庫存母體支持；唯一店商品契約下無跨快照加總或最新快照捏造。",
+        "sales月份/online/兩金額全unsupported，缺口均對應缺少的sales能力；snapshot_date未充作銷售期間。"
+      ]
+    },
+    {
+      "node": "map-02",
+      "result": "FAIL（F3），主要欄位及scope判定正確",
+      "checks": [
+        "月份sales_month=2026-09-01，online unsupported；discount_amount/net_sales sum僅partial，缺口明列無channel。",
+        "store/product鍵保留但grain partial（月維度）；無stock、盤點日期與完整庫存母體。",
+        "來源population精確取契約summary，但missing_requirements仍額外自述only-sales母體，須完整判FAIL。"
+      ]
+    },
+    {
+      "node": "map-03",
+      "result": "資料責任/缺口語意通過",
+      "checks": [
+        "store/product鍵；order_month=2026-09-01及sales_channel=online同View supported；兩金額sum supported。",
+        "庫存/盤點日期/完整庫存母體unsupported。",
+        "population精確summary，missing_requirements只稱已完成訂單；本輪沒有捏造不含退貨。",
+        "同task篩選與先彙總left需selection填typed欄位，mapping通過不代替prepared驗收。"
+      ]
+    },
+    {
+      "node": "map-04",
+      "result": "FAIL（F2）",
+      "checks": [
+        "訂單grain與缺商品欄位如實指出；月份order_month及online篩選正確；無折扣、庫存、盤點日期與全量庫存母體。",
+        "order_amount sum雖為淨額，但商品級net_sales責任被過度標supported且無缺口。",
+        "已完成訂單與取消訂單排除均有原契約支持，沒有加退貨排除。"
+      ]
+    },
+    {
+      "node": "map-05",
+      "result": "資料責任/缺口語意通過",
+      "checks": [
+        "8具名槽位完整，前輪duplicate-ID未再出現；不代表整份自然PASS。",
+        "sales_date date型別>=2026-09-01且<=2026-09-30正確；無商品/online/折扣/庫存，revenue sum partial且明列channel與商品grain缺口。",
+        "完整庫存母體不支持，理由援引明示無交易門市日期不出現的契約。"
+      ]
+    },
+    {
+      "node": "map-06",
+      "result": "主要資料責任與來源事實符合；缺口範圍保留上下文",
+      "checks": [
+        "sales_month=2026-09-01；無商品grain、stock/channel/discount/snapshot/庫存母體。",
+        "revenue sum僅partial；此metric缺口列channel，商品grain缺口另在entries/0可追蹤，未宣稱完整商品級supported。",
+        "沒有推斷此View排除未成交列，來源明有無成交訂單為0規則。"
+      ]
+    },
+    {
+      "node": "map-07",
+      "result": "主要unsupported判定正確；額外缺口必要性有歧義",
+      "checks": [
+        "每會員含未下單會員母體精確；無store/product與本題庫存、月份sales期間、online、折扣、商品級net_sales、盤點日期能力，全unsupported。",
+        "最後訂單日期不能代表本題月份全部銷售，故未拿來冒充period支持。",
+        "「需要庫存狀態欄位」保留完整上下文交fresh研究判必要性，未自動等同stock_status，未單憑用詞硬列確證FAIL。"
+      ]
+    },
+    {
+      "node": "selection",
+      "result": "FAIL（F4）；無prepared",
+      "checks": [
+        "選inventory與sales_detail、全部8項assignment及5個exclusion完整；來源與大多理由正確。",
+        "assignment理由正確提相同task月份/online/兩sum，但typed欄位未填，無法由request文字代替結構責任。",
+        "product_monthly exclusion再帶入F3未保證母體說法；未選View描述同樣不能跳過。",
+        "inventory task未施sales filters，task.output_grain兩邊均store/product；這些局部正確不補足integration、aggregation、metadata與filter缺漏。",
+        "根grain/anchor/先彙總再left/不補零/metadata顯示及prepared requests均未通過；不宣稱ready成功。"
+      ]
+    }
+  ],
+  "prepared_requests": "NOT_CREATED；既有guard於selection停止，不能宣稱先彙總/left/no-zero/根grain或端到端通過。",
+  "raw_preservation": {
+    "initial_and_failure_raw_saved": true,
+    "raw_nodes": [
+      {
+        "node": "recall",
+        "request_id": "df5631459c074270a9a1ec82825f1c17",
+        "result": "ok",
+        "http_status": 200,
+        "raw_call": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T171721Z-fa4587/recall-call.json",
+        "provider_response": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T171721Z-fa4587/recall-provider-response.json"
+      },
+      {
+        "node": "map-01",
+        "request_id": "a7d3b31b5a30475ab9e035cd9d16e28e",
+        "result": "ok",
+        "http_status": 200,
+        "raw_call": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T171721Z-fa4587/map-01-call.json",
+        "provider_response": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T171721Z-fa4587/map-01-provider-response.json"
+      },
+      {
+        "node": "map-02",
+        "request_id": "b90af932503c41698e38cdca7491cb26",
+        "result": "ok",
+        "http_status": 200,
+        "raw_call": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T171721Z-fa4587/map-02-call.json",
+        "provider_response": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T171721Z-fa4587/map-02-provider-response.json"
+      },
+      {
+        "node": "map-03",
+        "request_id": "b12b822d99fb44f3b7acdaca225916b1",
+        "result": "ok",
+        "http_status": 200,
+        "raw_call": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T171721Z-fa4587/map-03-call.json",
+        "provider_response": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T171721Z-fa4587/map-03-provider-response.json"
+      },
+      {
+        "node": "map-04",
+        "request_id": "bed783eebcab4f5ca557d1b11fb795ff",
+        "result": "ok",
+        "http_status": 200,
+        "raw_call": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T171721Z-fa4587/map-04-call.json",
+        "provider_response": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T171721Z-fa4587/map-04-provider-response.json"
+      },
+      {
+        "node": "map-05",
+        "request_id": "536b3f8ea3584ca6989db87f47532e1e",
+        "result": "ok",
+        "http_status": 200,
+        "raw_call": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T171721Z-fa4587/map-05-call.json",
+        "provider_response": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T171721Z-fa4587/map-05-provider-response.json"
+      },
+      {
+        "node": "map-06",
+        "request_id": "da1ff903ad37462d860aac3644fa96d5",
+        "result": "ok",
+        "http_status": 200,
+        "raw_call": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T171721Z-fa4587/map-06-call.json",
+        "provider_response": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T171721Z-fa4587/map-06-provider-response.json"
+      },
+      {
+        "node": "map-07",
+        "request_id": "7775675acbd54532aee0a7da3bd419fa",
+        "result": "ok",
+        "http_status": 200,
+        "raw_call": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T171721Z-fa4587/map-07-call.json",
+        "provider_response": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T171721Z-fa4587/map-07-provider-response.json"
+      },
+      {
+        "node": "selection",
+        "request_id": "2cae2f57ac5143599a6e09ecce5f65af",
+        "result": "ok",
+        "http_status": 200,
+        "raw_call": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T171721Z-fa4587/selection-call.json",
+        "provider_response": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T171721Z-fa4587/selection-provider-response.json"
+      }
+    ],
+    "run_artifact_hashes": {
+      "map-01-normalized.json": "7c2f6db38c442168a29661abca8b2dfed228efed5021c3444c840dbd1aa17ac4",
+      "map-04-provider-response.json": "ea0867900d1b797cce945ac642d1b8d242c09d6dab5880ab12c46c48d85e33cd",
+      "map-04-body.json": "c6e8ec9dd9396bb915f14665054b71034b224b3763271f40cb76a782f6e8f283",
+      "selection-provider-response.json": "f0209284a40ca9acc71b503edbb37cb04cadd4a34bbe7550084450bf4448c6d1",
+      "selection-call.json": "39a8c2bf035d2c912a1074ce117b988a1f5e5ff51e8ea8c0f0bac8b396800763",
+      "map-01-provider-response.json": "9c0defa8c114f6de112dc3f5727acc3177951e6b52e6928780c05742a7ee8198",
+      "map-03-normalized.json": "8f4a202291fb63d0529288c19f12ea2612bb9a8d141858b65a4153d8d87715a5",
+      "selection-request.json": "95e0ddec7127b5d1ade9d45c8d1d0cb67c03b1330f82e818cdff52b5d970787f",
+      "map-02-provider-response.json": "64969d10960703748cb596ef62f6188bc2b3cfadc0aff9d492d6e30b266a4195",
+      "recall-managed.json": "bddf3ba591103bcf9e1b4eb5fbc2b93bde55a1b772fcb5f99399d830449f9b3c",
+      "map-01-call.json": "46cacc62dc61e97af18fd5098ca9a958302c9fba5378e57a358f84b99d5b0513",
+      "map-06-result.json": "81e5048c82db277c67eaca101ff963694d991577f7b327b769c257298fb0a3c3",
+      "map-02-result.json": "fc82ecb9291b2a973a3a9b0832d5a4a5e66f8dcf84fb7f363ae0a6d3704cbf8c",
+      "map-07-request.json": "6c36c10de6f83bf9263fcd5f947241bfa1818d97ad520dc93fe1d31ab241ef98",
+      "map-02-body.json": "1e26de894e3a1790602e07be77d041e5ca3d442bc40e5eae2946f91e71f5c219",
+      "map-05-call.json": "25acad3790df0c43b4fad85ddbefdfc6f94b8dc5870bad0986143bf2ad27e98c",
+      "map-05-normalized.json": "e97bb586dfa0a4031ee352d968d1d94ef3d1a359f1e510ae67c474e441f56141",
+      "map-04-managed.json": "7ca915b2bb182285c2eb04d65d46096879660b0ec0047174333033f4765f6aaa",
+      "selection-error.json": "b9f95f5cee50e2913ec4b4d150c35c53a506c2f760a700e6acffaeeb05b78d56",
+      "map-04-call.json": "ad57aa38c9820e36bb8d6e835e4eeb47074400da7d1fbd879ca3091b2007d4ce",
+      "selection-body.json": "02c3a16531064da544956db9169e8d85784804d4f0a9cd6c58d041a81f5dbb34",
+      "recall-body.json": "74cf4a4b7304c9591f6196fa910940d7f6405e7477ec4c77b74efcf8964d53fd",
+      "map-06-request.json": "571c8dc00d25f73218403e29767bc69490ca3f24c49feed9e1683ff95b83f9e7",
+      "map-02-normalized.json": "fc82ecb9291b2a973a3a9b0832d5a4a5e66f8dcf84fb7f363ae0a6d3704cbf8c",
+      "map-05-parsed.json": "3213ce0df25e475ec39c8a44ba131f4e692ac58a9d617ff04c0d27e6ea0af148",
+      "map-02-request.json": "ebde6d69f3f8a55dff3b5bdbf9ebd174a6e1064d612d815cfdbba73c0cd27569",
+      "map-04-result.json": "8e28887756bb565daa355324239317093ad46f8c6bd2d8d20adcb30b116fc512",
+      "recall-normalized.json": "7b040cfc84fba927561c1254685c242af3b831ddefc4cfd185d9ee253cce776e",
+      "map-07-managed.json": "14deb5bb8a9583a162667f53136337e8d33f9f2758e0916abeb3d358dc9b8d5c",
+      "map-03-request.json": "49cd04cf219e6c5f72a58aa83c5d420acf4b14cacf5338c983d2b714f309b322",
+      "map-02-managed.json": "e32c395d0ebdc1918b1ec9f8805ccd49b0b25499759e153296da066342de5e4c",
+      "map-07-provider-response.json": "53ed8aabb04465fed0d160a41aa2d4c4793b92ce2d8b741c28ad824aff2e751b",
+      "map-03-call.json": "fac6bf211441a922156ab5852282cc732432d90994bf2d10eab1b1172b773b23",
+      "recall-request.json": "ac36325e087346d17394e1577ba369689703ed50f2c5999ddf2d547102518c31",
+      "map-05-managed.json": "b4dd2473accf87dde1f6daeb3939e8a91e7a064e3e491afc5b3c50131de5aa2b",
+      "usage.json": "ebee44852b0f56f5309cbfaa79c72978e0ad98a95dedb6a0efa00f48d144141a",
+      "map-01-managed.json": "09af7b3185ae52be13470fd4bc0dfc245dd758267086789881e8f80d5b7bf7a0",
+      "recall-parsed.json": "6fb29ea2cd56b587efdddf21318f1b5e6b89c70d45360b3e9e6ac2ee3c2496ed",
+      "recall-call.json": "4c3b61c9dca58d271b24c0e16a9bf95749e3121f7dcb167bd4f33210b9490d81",
+      "map-03-result.json": "8f4a202291fb63d0529288c19f12ea2612bb9a8d141858b65a4153d8d87715a5",
+      "map-06-managed.json": "02c6bdcfb08c52475d21467ef4bbe60afb2993197fd57020a2f346da022b6de8",
+      "map-05-body.json": "15c11c94dbd7e9e7ec558db3f040623b1c6f6747e36d28bad14f3df4625ffc8c",
+      "recall-result.json": "7b040cfc84fba927561c1254685c242af3b831ddefc4cfd185d9ee253cce776e",
+      "map-07-result.json": "39f63af513a01f79c5a31292cfcf065f4d30b5df6e0b12a8cb508cf6a52bdc33",
+      "map-06-parsed.json": "8355f2e4f8e018512c0a1e19c36468bc73ccaa52f6ee0aae78410b377470d150",
+      "map-06-call.json": "73bc999f4d0347e1184edd4bc884a81a37ed061400f5386fdf21cbb47bca05bd",
+      "map-06-normalized.json": "81e5048c82db277c67eaca101ff963694d991577f7b327b769c257298fb0a3c3",
+      "map-03-parsed.json": "1101b00171f7e91a10b3db55d8f79472ab01ab5dac210fbe6676650eb55b2e6e",
+      "map-03-body.json": "835f799b848bf0b3e4867a325e6c871cb054895933c1c86da323e8ee92d38e0f",
+      "map-05-provider-response.json": "ed79dc196f34f14b0f3a74e34a952238e58b486f6deb1dcd20c957ea2a9ce063",
+      "recall-provider-response.json": "bde4e8fcc2e769b539ddd28ac0a49d0d6880478aff4ccdbf3d50cb4b2fa04beb",
+      "map-02-parsed.json": "b83855feee525cae45ee53b93c87d31eb96f48255039baabde5f67a9aa61bc39",
+      "map-06-body.json": "d36bc9b7c24de4a69d6757fa58548568a00d1306342c12b3ecf23b47d718b3b1",
+      "map-04-parsed.json": "d2b5aa29526279f56c33b17795e12ec945b7bfea70859fbd4ce70db128b1c729",
+      "map-06-provider-response.json": "4a8469f2a1f5b44068f9c419b6ede285cafb44ee6f12f9d92f69b5c2421ebe48",
+      "map-01-body.json": "36e621190bac9436670ce00de9141377605dd4a5a942c8c0768bd475b272f102",
+      "map-07-body.json": "044f10f98d0e7a43d69c903fac3ad6c3cfc25d12ce371160b15abb0d9c46f940",
+      "map-02-call.json": "d6092fe74a6b61b66881cb504f2edd983e71bf66b5fda5272b91941c40a51fc8",
+      "map-07-parsed.json": "5be37b2ee3886e1ecf2962d91a4c8a899d27b5ba3942683c98fb0eadf5e1c7be",
+      "map-01-parsed.json": "a7395454ead599be39502496a595932f4dd49f6c6e020e97716c8300c9aca497",
+      "selection-parsed.json": "248fa67c0280cf4d907797282ff0e969bbb7eb83d7f1ab5e6502ddfd6f1c5f7f",
+      "map-03-managed.json": "78738fc7ccaa6100d2a27409e711dd47fbb3998b39892a79996852910281a127",
+      "map-05-result.json": "e97bb586dfa0a4031ee352d968d1d94ef3d1a359f1e510ae67c474e441f56141",
+      "map-07-normalized.json": "39f63af513a01f79c5a31292cfcf065f4d30b5df6e0b12a8cb508cf6a52bdc33",
+      "selection-managed.json": "300251f80f76889ec98ac4626a3a2490b0972e1679d4f89f523314a8f6f6e30d",
+      "map-01-result.json": "7c2f6db38c442168a29661abca8b2dfed228efed5021c3444c840dbd1aa17ac4",
+      "map-04-normalized.json": "8e28887756bb565daa355324239317093ad46f8c6bd2d8d20adcb30b116fc512",
+      "map-01-request.json": "6a6db91f989567c5a463a14e3bb9f37f01c2d48356821902ed98f352308993ba",
+      "map-07-call.json": "b71b567dc3bbdcd2f24c0c3ed73a734356aa9f1ce7638037d0eba2abf1f61e25",
+      "map-05-request.json": "01bd23b328922a3c1fb6e0a6c207251346e68780e1d667b9072c6b093bcf3d27",
+      "map-04-request.json": "18203a9c3e42f78d26dffc85656549d13ed32a4066cca16e794de89c550d9528",
+      "map-03-provider-response.json": "5853c0cb52622c5455e541215872b0453faa496403f5291070651c5b2913beff"
+    }
+  },
+  "usage": {
+    "calls": 9,
+    "input_tokens_actual": 38693,
+    "output_tokens_actual": 31134,
+    "usage_missing_calls": 0
+  },
+  "resources": {
+    "this_round_local_POSTs": 9,
+    "cumulative_local_POSTs": 15,
+    "cloud_POSTs": 0,
+    "model_retries": 0,
+    "SQL": 0,
+    "DB": 0,
+    "stream": false,
+    "num_predict": -1,
+    "HTTP_timeout_seconds": null,
+    "outer_timeout_seconds": null
+  },
+  "replay": {
+    "result": "PASS",
+    "raw_replays": 9,
+    "stopped": {
+      "error_type": "ValueError",
+      "error": "final grain differs from verified requirement keys"
+    }
+  },
+  "scope": "未更動sources/tests；未自行修改Task/control（僅loopctl正常請求記帳）；未repair、補項、去重、重送、commit/push；僅raw/log/必要handoff。",
+  "started_at": "2026-10-21T17:17:21.883921+00:00",
+  "finished_at": "2026-10-21T18:29:19.978391+00:00"
+}

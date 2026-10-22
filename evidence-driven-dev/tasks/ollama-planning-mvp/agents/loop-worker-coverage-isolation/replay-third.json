@@ -1,0 +1,48 @@
+{
+  "sample": "COV-ISO-v1-03",
+  "live": {
+    "result": "FAIL",
+    "replay_verification": "PASS",
+    "stopped": {
+      "error_type": "ValueError",
+      "error": "fixed diagnostic semantic checks failed"
+    },
+    "inner": {
+      "result": "PASS",
+      "raw_replays": 1,
+      "stopped": {
+        "error_type": "ValueError",
+        "error": "fixed diagnostic semantic checks failed"
+      },
+      "upstream_injected": true,
+      "provider_calls": 0
+    },
+    "outer_receipt_sha256": "837ee94de9c62fa87a2c9a5058d86fcbced98ab3d3a26cdef1c8f456cc2e483e",
+    "provider_calls": 0,
+    "independent_semantic_approval": "PENDING"
+  },
+  "frozen": {
+    "result": "FAIL",
+    "replay_verification": "PASS",
+    "stopped": {
+      "error_type": "ValueError",
+      "error": "fixed diagnostic semantic checks failed"
+    },
+    "inner": {
+      "result": "PASS",
+      "raw_replays": 1,
+      "stopped": {
+        "error_type": "ValueError",
+        "error": "fixed diagnostic semantic checks failed"
+      },
+      "upstream_injected": true,
+      "provider_calls": 0
+    },
+    "outer_receipt_sha256": "837ee94de9c62fa87a2c9a5058d86fcbced98ab3d3a26cdef1c8f456cc2e483e",
+    "provider_calls": 0,
+    "independent_semantic_approval": "PENDING"
+  },
+  "frozen_exit_code": 1,
+  "frozen_stderr": "",
+  "equal": true
+}

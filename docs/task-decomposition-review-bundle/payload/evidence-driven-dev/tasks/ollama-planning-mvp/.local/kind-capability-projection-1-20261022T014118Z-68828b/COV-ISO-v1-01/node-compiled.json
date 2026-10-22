@@ -1,0 +1,87 @@
+{
+  "entries": {
+    "GRN-001": {
+      "status": "partial",
+      "mappings": [
+        {
+          "column": "store_id",
+          "role": "key",
+          "aggregation": null,
+          "operator": null,
+          "value": null,
+          "conditions": []
+        }
+      ],
+      "contract_path": "/grain/description",
+      "own_gap": true
+    },
+    "MET-001": {
+      "status": "unsupported",
+      "mappings": [],
+      "contract_path": null,
+      "own_gap": true
+    },
+    "FILT-001": {
+      "status": "supported",
+      "mappings": [
+        {
+          "column": "sales_date",
+          "role": "filter",
+          "aggregation": null,
+          "operator": ">=",
+          "value": "2026-09-01",
+          "conditions": []
+        },
+        {
+          "column": "sales_date",
+          "role": "filter",
+          "aggregation": null,
+          "operator": "<=",
+          "value": "2026-09-30",
+          "conditions": []
+        }
+      ],
+      "contract_path": "/columns/sales_date",
+      "own_gap": false
+    },
+    "FILT-002": {
+      "status": "unsupported",
+      "mappings": [],
+      "contract_path": null,
+      "own_gap": true
+    },
+    "MET-002": {
+      "status": "unsupported",
+      "mappings": [],
+      "contract_path": null,
+      "own_gap": true
+    },
+    "MET-003": {
+      "status": "partial",
+      "mappings": [
+        {
+          "column": "revenue",
+          "role": "metric",
+          "aggregation": "sum",
+          "operator": null,
+          "value": null,
+          "conditions": []
+        }
+      ],
+      "contract_path": "/columns/revenue",
+      "own_gap": false
+    },
+    "META-001": {
+      "status": "unsupported",
+      "mappings": [],
+      "contract_path": null,
+      "own_gap": true
+    },
+    "POP-001": {
+      "status": "unsupported",
+      "mappings": [],
+      "contract_path": null,
+      "own_gap": true
+    }
+  }
+}

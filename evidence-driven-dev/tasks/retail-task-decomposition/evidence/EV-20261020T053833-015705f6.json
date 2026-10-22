@@ -1,0 +1,30 @@
+{
+  "id": "EV-20261020T053833-015705f6",
+  "kind": "holdout",
+  "command": [
+    ".venv/bin/python",
+    "-m",
+    "evaluations.decomposition_runner",
+    "--project",
+    "retail",
+    "--env-file",
+    ".env",
+    "--model",
+    "gpt-6-sol",
+    "--runs",
+    "3",
+    "--exploratory"
+  ],
+  "cwd": "/home/willy/code/cpea_terms",
+  "started_at": "2026-10-20T05:38:33+00:00",
+  "finished_at": "2026-10-20T05:42:12+00:00",
+  "exit_code": -15,
+  "revision": "74ef295223b22c1d4eed3c73a5bbc98ca5e52e64",
+  "diff_fingerprint": "a62f6016d176315de2635dcaabcc93e99cce9fe74e75b6085e82d754360b81c3",
+  "post_fingerprint": "a62f6016d176315de2635dcaabcc93e99cce9fe74e75b6085e82d754360b81c3",
+  "source_unchanged": true,
+  "output_sha256": "023c87a6488974cba16311f492a8c11a406d840354c4ded98e9a0ea33e45bd61",
+  "raw_output": ".local/EV-20261020T053833-015705f6.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "2fc36f3c9aaa54349480588b36b248bbb5cc42d6dc3c02591cd8e92e244b852e"
+}

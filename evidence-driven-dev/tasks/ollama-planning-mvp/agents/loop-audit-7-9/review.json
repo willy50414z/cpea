@@ -1,0 +1,29 @@
+{
+  "ticket": "1389e7c3acfd40afa0b6aaba3cc2532c",
+  "verdict": "REPLAN",
+  "reviewed_rounds": [
+    7,
+    8,
+    9
+  ],
+  "evidence": [
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-7-9/focused.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-7-9/hash-check.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-7-9/independent-raw-schema.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-7-9/round8-frozen-replay.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-7-9/kind-fake-frozen-replay.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-4-6/review.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/reports/three-stage-view-selection-plan.md",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-6/handoff.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-own/regression-final.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-own/prepared-verification.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-4/semantic-review.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-4/failure-context.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-8/research-probe.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-kind/semantic-review.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-kind/regression.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-kind/frozen-replays.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-kind/final-verification.log"
+  ],
+  "summary": "完整覆蓋第7、8、9輪與 natural_own_responsibility_three_stage → natural_evidence_bound_three_stage → natural_slots_three_stage → natural_qwen_three_stage → three_stage_integration → root，裁決 REPLAN。保留第7/9輪離線成果，不改業務需求或既有驗收，不需使用者追加授權；下一步先交fresh研究制定有辨識力的最小自然可行性節點，不直接再跑整體單樣本。\n第7輪責任切分合理：own_gap是模型對自身責任的嚴格布林決定；Python只依已驗recall與同View原statuses完整導出scope/grain缺口，沒有改status、補mapping、猜依賴或借別View。所有kind的明示grain refs是硬依賴；普通月份predicate可在refs=[]時獨立supported，即使輸出商品grain未完成。partial必須保留有用映射且有自身或依賴缺口，無缺口partial及supported有未完成硬依賴均拒絕。384項既有執行證據只證離線，不能抵自然驗收。\n第8輪FAIL有效。直接讀原call.response確認filter用conditions放>=2026-09-01及<=2026-09-30；aggregation/operator/value三欄原raw皆省略，parse後default null。only metric mapping may aggregate是非metric有conditions觸發，不代表模型實填aggregation=sum；月份範圍業務語意本身可成立。另店×商品grain在daily_sales有明示store_id門市key卻unsupported空mapping，遺漏有用部分能力；此責任原三階段計畫第二步已要求，並非事後加分項。只需獨立必要能力分量，不枚舉等價替代寫法；customer_id不是本題店商品鍵，store_id也不保證完整庫存母體，兩者不得硬湊partial。recall與customer可接受，daily後5View及selection/prepared未驗；原3raw凍結重播仍同首錯，不能修答翻案。\n第9輪改動有明確邊界：依已驗kind生成專用mapping schema，真正必需欄位required、所有object extra forbid、JSON全層duplicate/NaN先拒絕；Python只編譯kind已決定role、不適用null/[]、grain唯一/grain/description。模型仍負column、日期/value、聚合、條件、非grain path、status、own_gap、scope/grain適用性及完整typed選擇/整合。原own/referenced/selection/finish guards保留；未將舊filter.conditions展平或改raw追PASS。496測試與完整2prepared/十類首錯51raw之既有離線證據一致，但不是Qwen自然可行性證明。SEMANTIC_REJECT是預先人工定義對照且runtime接受，測試正確揭露邊界，不能稱parser已攔住漏店鍵、假independent、錯月份或錯母體。\n本audit獨立實跑55項focused通過（109 deselected），涵蓋跨來源partial、全部kind硬依賴、依賴精確導出、普通月份獨立、真scalar/多grain、schema必填與semantic對照；未重跑496。另實跑第8輪155-source frozen的3raw及第9輪162-source完整fake的9raw重播，各與原artifact/停止狀態一致；直接probe根/槽位/mapping/nested condition重複key及nested NaN均拒絕。獨立hash核對41項第7–9輪證據、162份live與frozen source、1164歷史工件無差異，兩src既存hash保持；歷史38Gate仍PENDING/未通，不從本診斷升級。frozen使用同.venv/lockfile，未vendor外部套件。\nREPLAN的理由是實驗方向辨識力不足，不是上述schema修改本身錯誤或已證架構不可行。四個自然候選至今全FAIL：第2/6/8輪都在daily停，只有第4輪到舊selection且漏typed/integration；第5輪建立完整required typed wire後從未自然驗到selection。新kind shape能約束第8輪格式錯，卻未證能修店鍵/own責任等核心語意；離線手工fixture無法回答這點。再次從recall與customer開始整體首錯停止，仍可能遮住下游最重要的typed可行性，累積更多綠測試或無限額度不能替代此證據。\n下一位fresh研究者須先回答兩個問題並預先固定小節點輸入、樣本數及失敗門檻：(1) 在不代填業務答案下，kind候選能否自然同時保留有用partial key、區分自身與依賴缺口、正確輸出獨立整月雙predicate？必要對照含有用key與無關identifier、同店鍵不等於庫存母體、dependency-only partial對own_gap的區分；至少一個改名/任意ID的對照排除只記本題。可用獨立核對的固定recall隔離coverage，明列為注入上游的節點診斷，不能冒稱自然端到端。(2) 在獨立核對且完整正確的固定coverage輸入下，目前required typed selection能否由Qwen自然明填全部typed欄位及integration，正確形成inventory店商品anchor、stock_qty sum/日期metadata、sales同task整月online兩sum、先彙總再left與不補零？不可直接把現fake全部未選View當已驗真實coverage；須先核對其語意。若失敗，研究責任切分/表示能力而非再添欄位、repair或原樣重抽；若小節點可行，才回原完整自然門檻。這些是研究問題與必要反例，不由auditor指定實作方案。\n小節點不能替代最終全新單樣本recall→全7View→完整typed selection/prepared；所有View含未選來源與所有剩餘文字均須語意核對、同版及凍結重播，任何錯誤FAIL交fresh研究。之後依controller返回 natural_kind_mapping_three_stage 的父 natural_own_responsibility_three_stage，再 natural_evidence_bound_three_stage、natural_slots_three_stage、natural_qwen_three_stage、three_stage_integration、root，各自有整合驗收；不得因子節點綠燈自動PASS。每3輪fresh audit及root通過後fresh final verifier ACCEPT仍必要。累計21 local POST/0retry/0cloud未重置；本audit 0POST/SQL/DB、不改實作/Task/control、不commit/push，只寫本目錄log與必要JSON。所有自然未驗及父層效果仍NOT_VERIFIED/root PENDING。"
+}

@@ -1,0 +1,61 @@
+{
+  "entries": {
+    "GRN-001": {
+      "status": "unsupported",
+      "mappings": [],
+      "contract_path": "/grain/description",
+      "own_gap": true
+    },
+    "MET-001": {
+      "status": "unsupported",
+      "mappings": [],
+      "contract_path": null,
+      "own_gap": true
+    },
+    "FILT-001": {
+      "status": "unsupported",
+      "mappings": [],
+      "contract_path": null,
+      "own_gap": true
+    },
+    "FILT-002": {
+      "status": "unsupported",
+      "mappings": [],
+      "contract_path": null,
+      "own_gap": true
+    },
+    "MET-002": {
+      "status": "unsupported",
+      "mappings": [],
+      "contract_path": null,
+      "own_gap": true
+    },
+    "MET-003": {
+      "status": "partial",
+      "mappings": [
+        {
+          "column": "lifetime_spend",
+          "role": "metric",
+          "aggregation": "sum",
+          "operator": null,
+          "value": null,
+          "conditions": []
+        }
+      ],
+      "contract_path": "/columns/lifetime_spend/description",
+      "own_gap": false
+    },
+    "META-001": {
+      "status": "unsupported",
+      "mappings": [],
+      "contract_path": null,
+      "own_gap": true
+    },
+    "POP-001": {
+      "status": "unsupported",
+      "mappings": [],
+      "contract_path": null,
+      "own_gap": true
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "entries": {
+    "unrelated/識別~鍵": {
+      "status": "partial",
+      "mappings": [
+        {
+          "column": "customer_id",
+          "role": "key",
+          "aggregation": null,
+          "operator": null,
+          "value": null,
+          "conditions": []
+        }
+      ],
+      "contract_path": "/grain/description",
+      "own_gap": true
+    }
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "controller_round_result": "FAIL",
+  "handoff_result": "FAIL",
+  "raw_policy": "保留未匹配母體；未匹配子集合為空集合，不製造零值元素或將數值缺值補零。",
+  "raw_has_nest": false,
+  "new_contract_shape_negative": [
+    {
+      "aspect": "empty collection policy lacks typed preserved nested child shape",
+      "actual": {
+        "anchor_task": "task_inv",
+        "edges": [
+          {
+            "cardinality": "one_to_one",
+            "left_keys": [
+              "store_id",
+              "product_id"
+            ],
+            "left_task": "task_inv",
+            "mode": "left",
+            "preserve_task": "task_inv",
+            "right_keys": [
+              "store_id",
+              "product_id"
+            ],
+            "right_task": "task_sales"
+          }
+        ],
+        "missing_data_policy": "保留未匹配母體；未匹配子集合為空集合，不製造零值元素或將數值缺值補零。",
+        "notes": [],
+        "output_grain": [
+          "store_id",
+          "product_id"
+        ],
+        "preparation": [
+          {
+            "description": "彙總 2026 年 9 月線上通路各門市各商品的折扣金額與淨銷售額至門市×商品粒度",
+            "keys": [
+              "store_id",
+              "product_id"
+            ],
+            "kind": "aggregate",
+            "task_id": "task_sales"
+          }
+        ]
+      }
+    }
+  ],
+  "no_reclassification": true
+}

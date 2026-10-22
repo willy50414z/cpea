@@ -1,0 +1,1535 @@
+{
+  "schema_version": 1,
+  "ticket": "2f5da4941f9c46ed902d310981e37f7d",
+  "result": "FAIL",
+  "upstream_injected": true,
+  "scope": "三個固定單coverage隔離診斷；不代表自然recall或完整三階段",
+  "cases": [
+    {
+      "id": "COV-ISO-v1-01",
+      "independent_result": "FAIL",
+      "machine_verdict": "FAIL",
+      "request_body_and_schema_unchanged": true,
+      "upstream_only_request_requirements_single_view_schema_no_oracle_or_expected_output": true,
+      "presence_checks": [
+        {
+          "path": "",
+          "required": [
+            "entries"
+          ],
+          "actual_keys": [
+            "entries"
+          ],
+          "missing": [],
+          "extra": []
+        },
+        {
+          "path": "/entries",
+          "required": [
+            "GRN-001",
+            "MET-001",
+            "FILT-001",
+            "FILT-002",
+            "MET-002",
+            "MET-003",
+            "META-001",
+            "POP-001"
+          ],
+          "actual_keys": [
+            "FILT-001",
+            "FILT-002",
+            "GRN-001",
+            "MET-001",
+            "MET-002",
+            "MET-003",
+            "META-001",
+            "POP-001"
+          ],
+          "missing": [],
+          "extra": []
+        },
+        {
+          "path": "/entries/FILT-001",
+          "required": [
+            "status",
+            "own_gap",
+            "mappings",
+            "contract_path"
+          ],
+          "actual_keys": [
+            "contract_path",
+            "mappings",
+            "own_gap",
+            "status"
+          ],
+          "missing": [],
+          "extra": []
+        },
+        {
+          "path": "/entries/FILT-001/mappings/0",
+          "required": [
+            "column",
+            "operator",
+            "value"
+          ],
+          "actual_keys": [
+            "column",
+            "operator",
+            "value"
+          ],
+          "missing": [],
+          "extra": []
+        },
+        {
+          "path": "/entries/FILT-001/mappings/1",
+          "required": [
+            "column",
+            "operator",
+            "value"
+          ],
+          "actual_keys": [
+            "column",
+            "operator",
+            "value"
+          ],
+          "missing": [],
+          "extra": []
+        },
+        {
+          "path": "/entries/FILT-002",
+          "required": [
+            "status",
+            "own_gap",
+            "mappings",
+            "contract_path"
+          ],
+          "actual_keys": [
+            "contract_path",
+            "mappings",
+            "own_gap",
+            "status"
+          ],
+          "missing": [],
+          "extra": []
+        },
+        {
+          "path": "/entries/GRN-001",
+          "required": [
+            "status",
+            "own_gap",
+            "mappings"
+          ],
+          "actual_keys": [
+            "mappings",
+            "own_gap",
+            "status"
+          ],
+          "missing": [],
+          "extra": []
+        },
+        {
+          "path": "/entries/MET-001",
+          "required": [
+            "status",
+            "own_gap",
+            "mappings",
+            "contract_path"
+          ],
+          "actual_keys": [
+            "contract_path",
+            "mappings",
+            "own_gap",
+            "status"
+          ],
+          "missing": [],
+          "extra": []
+        },
+        {
+          "path": "/entries/MET-002",
+          "required": [
+            "status",
+            "own_gap",
+            "mappings",
+            "contract_path"
+          ],
+          "actual_keys": [
+            "contract_path",
+            "mappings",
+            "own_gap",
+            "status"
+          ],
+          "missing": [],
+          "extra": []
+        },
+        {
+          "path": "/entries/MET-003",
+          "required": [
+            "status",
+            "own_gap",
+            "mappings",
+            "contract_path"
+          ],
+          "actual_keys": [
+            "contract_path",
+            "mappings",
+            "own_gap",
+            "status"
+          ],
+          "missing": [],
+          "extra": []
+        },
+        {
+          "path": "/entries/MET-003/mappings/0",
+          "required": [
+            "column",
+            "aggregation",
+            "conditions"
+          ],
+          "actual_keys": [
+            "aggregation",
+            "column",
+            "conditions"
+          ],
+          "missing": [],
+          "extra": []
+        },
+        {
+          "path": "/entries/META-001",
+          "required": [
+            "status",
+            "own_gap",
+            "mappings",
+            "contract_path"
+          ],
+          "actual_keys": [
+            "contract_path",
+            "mappings",
+            "own_gap",
+            "status"
+          ],
+          "missing": [],
+          "extra": []
+        },
+        {
+          "path": "/entries/POP-001",
+          "required": [
+            "status",
+            "own_gap",
+            "mappings",
+            "contract_path"
+          ],
+          "actual_keys": [
+            "contract_path",
+            "mappings",
+            "own_gap",
+            "status"
+          ],
+          "missing": [],
+          "extra": []
+        }
+      ],
+      "all_raw_entries_required_present_without_repair": true,
+      "all_contract_source_paths_and_quotes_match": true,
+      "contract_evidence_occurrences": 7,
+      "all_raw_and_normalized_strings_reviewed": true,
+      "provider_thinking_review": "模型反覆承認partial規則，仍因缺商品否定店鍵，並將grain依賴重算為自身own_gap；與最終兩根錯誤一致。",
+      "rows": [
+        {
+          "requirement_id": "GRN-001",
+          "kind": "grain",
+          "direct_semantics": "FAIL",
+          "reason": "store_id明示門市識別，對店×商品為有用部分鍵；沒有商品鍵只阻止完整supported，不能清空店鍵。應partial/own_gap=true/store_id；原raw unsupported/[]為實質能力遺漏。",
+          "raw": {
+            "mappings": [],
+            "own_gap": true,
+            "status": "unsupported"
+          },
+          "derived_actual": [
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "self",
+              "requirements": [
+                {
+                  "requirement_id": "GRN-001",
+                  "quote": "各店各商品",
+                  "status": "unsupported"
+                }
+              ]
+            }
+          ],
+          "derived_expected_semantics": [
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "self",
+              "requirements": [
+                {
+                  "requirement_id": "GRN-001",
+                  "quote": "各店各商品",
+                  "status": "partial"
+                }
+              ]
+            }
+          ],
+          "derived_matches_model_decisions": true,
+          "derived_semantic_match": false,
+          "derived_difference_cause": "承襲本樣本grain錯誤unsupported，應partial；並非Python少導依賴"
+        },
+        {
+          "requirement_id": "MET-001",
+          "kind": "metric",
+          "direct_semantics": "PASS",
+          "reason": "units_sold是已完成銷售件數，非盤點庫存，unsupported/own=true/[]正確；grain缺口狀態受GRN錯誤影響。",
+          "raw": {
+            "contract_path": null,
+            "mappings": [],
+            "own_gap": true,
+            "status": "unsupported"
+          },
+          "derived_actual": [
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "self",
+              "requirements": [
+                {
+                  "requirement_id": "MET-001",
+                  "quote": "盤點庫存件數",
+                  "status": "unsupported"
+                }
+              ]
+            },
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "grain",
+              "requirements": [
+                {
+                  "requirement_id": "GRN-001",
+                  "quote": "各店各商品",
+                  "status": "unsupported"
+                }
+              ]
+            }
+          ],
+          "derived_expected_semantics": [
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "self",
+              "requirements": [
+                {
+                  "requirement_id": "MET-001",
+                  "quote": "盤點庫存件數",
+                  "status": "unsupported"
+                }
+              ]
+            },
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "grain",
+              "requirements": [
+                {
+                  "requirement_id": "GRN-001",
+                  "quote": "各店各商品",
+                  "status": "partial"
+                }
+              ]
+            }
+          ],
+          "derived_matches_model_decisions": true,
+          "derived_semantic_match": false,
+          "derived_difference_cause": "承襲本樣本grain錯誤unsupported，應partial；並非Python少導依賴"
+        },
+        {
+          "requirement_id": "FILT-001",
+          "kind": "filter",
+          "direct_semantics": "PASS",
+          "reason": "sales_date >=2026-09-01 AND <2026-10-01精確整月，獨立supported/own=false；未被商品grain降級。",
+          "raw": {
+            "contract_path": "/columns/sales_date/description",
+            "mappings": [
+              {
+                "column": "sales_date",
+                "operator": ">=",
+                "value": "2026-09-01"
+              },
+              {
+                "column": "sales_date",
+                "operator": "<",
+                "value": "2026-10-01"
+              }
+            ],
+            "own_gap": false,
+            "status": "supported"
+          },
+          "derived_actual": [],
+          "derived_expected_semantics": [],
+          "derived_matches_model_decisions": true,
+          "derived_semantic_match": true,
+          "derived_difference_cause": null
+        },
+        {
+          "requirement_id": "FILT-002",
+          "kind": "filter",
+          "direct_semantics": "PASS",
+          "reason": "契約沒有通路欄位，unsupported/own=true/[]/path=null正確。",
+          "raw": {
+            "contract_path": null,
+            "mappings": [],
+            "own_gap": true,
+            "status": "unsupported"
+          },
+          "derived_actual": [
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "self",
+              "requirements": [
+                {
+                  "requirement_id": "FILT-002",
+                  "quote": "線上通路",
+                  "status": "unsupported"
+                }
+              ]
+            }
+          ],
+          "derived_expected_semantics": [
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "self",
+              "requirements": [
+                {
+                  "requirement_id": "FILT-002",
+                  "quote": "線上通路",
+                  "status": "unsupported"
+                }
+              ]
+            }
+          ],
+          "derived_matches_model_decisions": true,
+          "derived_semantic_match": true,
+          "derived_difference_cause": null
+        },
+        {
+          "requirement_id": "MET-002",
+          "kind": "metric",
+          "direct_semantics": "PASS",
+          "reason": "revenue為折扣後淨額、gross_profit為毛利，均不是折扣金額，無可用自身mapping；self與online、grain缺口必要。",
+          "raw": {
+            "contract_path": null,
+            "mappings": [],
+            "own_gap": true,
+            "status": "unsupported"
+          },
+          "derived_actual": [
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "self",
+              "requirements": [
+                {
+                  "requirement_id": "MET-002",
+                  "quote": "折扣金額",
+                  "status": "unsupported"
+                }
+              ]
+            },
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "scope",
+              "requirements": [
+                {
+                  "requirement_id": "FILT-002",
+                  "quote": "線上通路",
+                  "status": "unsupported"
+                }
+              ]
+            },
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "grain",
+              "requirements": [
+                {
+                  "requirement_id": "GRN-001",
+                  "quote": "各店各商品",
+                  "status": "unsupported"
+                }
+              ]
+            }
+          ],
+          "derived_expected_semantics": [
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "self",
+              "requirements": [
+                {
+                  "requirement_id": "MET-002",
+                  "quote": "折扣金額",
+                  "status": "unsupported"
+                }
+              ]
+            },
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "scope",
+              "requirements": [
+                {
+                  "requirement_id": "FILT-002",
+                  "quote": "線上通路",
+                  "status": "unsupported"
+                }
+              ]
+            },
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "grain",
+              "requirements": [
+                {
+                  "requirement_id": "GRN-001",
+                  "quote": "各店各商品",
+                  "status": "partial"
+                }
+              ]
+            }
+          ],
+          "derived_matches_model_decisions": true,
+          "derived_semantic_match": false,
+          "derived_difference_cause": "承襲本樣本grain錯誤unsupported，應partial；並非Python少導依賴"
+        },
+        {
+          "requirement_id": "MET-003",
+          "kind": "metric",
+          "direct_semantics": "FAIL",
+          "reason": "revenue明證完整折扣後淨額，可sum，原column/aggregation/conditions/path正確；只有online與完整店商品grain依賴不足，own_gap應false。raw true造成不必要self缺口；grain狀態亦承襲GRN錯誤。",
+          "raw": {
+            "contract_path": "/columns/revenue/description",
+            "mappings": [
+              {
+                "aggregation": "sum",
+                "column": "revenue",
+                "conditions": []
+              }
+            ],
+            "own_gap": true,
+            "status": "partial"
+          },
+          "derived_actual": [
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "self",
+              "requirements": [
+                {
+                  "requirement_id": "MET-003",
+                  "quote": "淨銷售額",
+                  "status": "partial"
+                }
+              ]
+            },
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "scope",
+              "requirements": [
+                {
+                  "requirement_id": "FILT-002",
+                  "quote": "線上通路",
+                  "status": "unsupported"
+                }
+              ]
+            },
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "grain",
+              "requirements": [
+                {
+                  "requirement_id": "GRN-001",
+                  "quote": "各店各商品",
+                  "status": "unsupported"
+                }
+              ]
+            }
+          ],
+          "derived_expected_semantics": [
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "scope",
+              "requirements": [
+                {
+                  "requirement_id": "FILT-002",
+                  "quote": "線上通路",
+                  "status": "unsupported"
+                }
+              ]
+            },
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "grain",
+              "requirements": [
+                {
+                  "requirement_id": "GRN-001",
+                  "quote": "各店各商品",
+                  "status": "partial"
+                }
+              ]
+            }
+          ],
+          "derived_matches_model_decisions": true,
+          "derived_semantic_match": false,
+          "derived_difference_cause": "錯誤own_gap導出多餘self，並承襲grain狀態錯誤"
+        },
+        {
+          "requirement_id": "META-001",
+          "kind": "metadata",
+          "direct_semantics": "PASS",
+          "reason": "sales_date是成交銷售日期，不能代盤點日期；unsupported/own=true/[]正確，grain缺口保留。",
+          "raw": {
+            "contract_path": null,
+            "mappings": [],
+            "own_gap": true,
+            "status": "unsupported"
+          },
+          "derived_actual": [
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "self",
+              "requirements": [
+                {
+                  "requirement_id": "META-001",
+                  "quote": "庫存盤點日期",
+                  "status": "unsupported"
+                }
+              ]
+            },
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "grain",
+              "requirements": [
+                {
+                  "requirement_id": "GRN-001",
+                  "quote": "各店各商品",
+                  "status": "unsupported"
+                }
+              ]
+            }
+          ],
+          "derived_expected_semantics": [
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "self",
+              "requirements": [
+                {
+                  "requirement_id": "META-001",
+                  "quote": "庫存盤點日期",
+                  "status": "unsupported"
+                }
+              ]
+            },
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "grain",
+              "requirements": [
+                {
+                  "requirement_id": "GRN-001",
+                  "quote": "各店各商品",
+                  "status": "partial"
+                }
+              ]
+            }
+          ],
+          "derived_matches_model_decisions": true,
+          "derived_semantic_match": false,
+          "derived_difference_cause": "承襲本樣本grain錯誤unsupported，應partial；並非Python少導依賴"
+        },
+        {
+          "requirement_id": "POP-001",
+          "kind": "population",
+          "direct_semantics": "PASS",
+          "reason": "僅有交易的門市日期，不含商品鍵或庫存母體；店鍵不證保留全部庫存，unsupported/own=true/[]正確，grain缺口保留。",
+          "raw": {
+            "contract_path": null,
+            "mappings": [],
+            "own_gap": true,
+            "status": "unsupported"
+          },
+          "derived_actual": [
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "self",
+              "requirements": [
+                {
+                  "requirement_id": "POP-001",
+                  "quote": "保留所有庫存商品",
+                  "status": "unsupported"
+                }
+              ]
+            },
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "grain",
+              "requirements": [
+                {
+                  "requirement_id": "GRN-001",
+                  "quote": "各店各商品",
+                  "status": "unsupported"
+                }
+              ]
+            }
+          ],
+          "derived_expected_semantics": [
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "self",
+              "requirements": [
+                {
+                  "requirement_id": "POP-001",
+                  "quote": "保留所有庫存商品",
+                  "status": "unsupported"
+                }
+              ]
+            },
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "grain",
+              "requirements": [
+                {
+                  "requirement_id": "GRN-001",
+                  "quote": "各店各商品",
+                  "status": "partial"
+                }
+              ]
+            }
+          ],
+          "derived_matches_model_decisions": true,
+          "derived_semantic_match": false,
+          "derived_difference_cause": "承襲本樣本grain錯誤unsupported，應partial；並非Python少導依賴"
+        }
+      ]
+    },
+    {
+      "id": "COV-ISO-v1-02",
+      "independent_result": "PASS",
+      "machine_verdict": "PASS",
+      "request_body_and_schema_unchanged": true,
+      "upstream_only_request_requirements_single_view_schema_no_oracle_or_expected_output": true,
+      "presence_checks": [
+        {
+          "path": "",
+          "required": [
+            "entries"
+          ],
+          "actual_keys": [
+            "entries"
+          ],
+          "missing": [],
+          "extra": []
+        },
+        {
+          "path": "/entries",
+          "required": [
+            "unrelated/識別~鍵"
+          ],
+          "actual_keys": [
+            "unrelated/識別~鍵"
+          ],
+          "missing": [],
+          "extra": []
+        },
+        {
+          "path": "/entries/unrelated~1識別~0鍵",
+          "required": [
+            "status",
+            "own_gap",
+            "mappings"
+          ],
+          "actual_keys": [
+            "mappings",
+            "own_gap",
+            "status"
+          ],
+          "missing": [],
+          "extra": []
+        }
+      ],
+      "all_raw_entries_required_present_without_repair": true,
+      "all_contract_source_paths_and_quotes_match": true,
+      "contract_evidence_occurrences": 2,
+      "all_raw_and_normalized_strings_reviewed": true,
+      "provider_thinking_review": "完整thinking與final一致：會員鍵無關，正確拒絕。",
+      "rows": [
+        {
+          "requirement_id": "unrelated/識別~鍵",
+          "kind": "grain",
+          "direct_semantics": "PASS",
+          "reason": "會員customer_id與店商品兩鍵均無關；city明示會員登記城市，不能當門市。unsupported/own=true/[]正確，未硬湊partial。自有grain證據為每會員一列，source與字串均一致。",
+          "raw": {
+            "mappings": [],
+            "own_gap": true,
+            "status": "unsupported"
+          },
+          "derived_actual": [
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "self",
+              "requirements": [
+                {
+                  "requirement_id": "unrelated/識別~鍵",
+                  "quote": "各店各商品",
+                  "status": "unsupported"
+                }
+              ]
+            }
+          ],
+          "derived_expected_semantics": [
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "self",
+              "requirements": [
+                {
+                  "requirement_id": "unrelated/識別~鍵",
+                  "quote": "各店各商品",
+                  "status": "unsupported"
+                }
+              ]
+            }
+          ],
+          "derived_matches_model_decisions": true,
+          "derived_semantic_match": true,
+          "derived_difference_cause": null
+        }
+      ]
+    },
+    {
+      "id": "COV-ISO-v1-03",
+      "independent_result": "FAIL",
+      "machine_verdict": "FAIL",
+      "request_body_and_schema_unchanged": true,
+      "upstream_only_request_requirements_single_view_schema_no_oracle_or_expected_output": true,
+      "presence_checks": [
+        {
+          "path": "",
+          "required": [
+            "entries"
+          ],
+          "actual_keys": [
+            "entries"
+          ],
+          "missing": [],
+          "extra": []
+        },
+        {
+          "path": "/entries",
+          "required": [
+            "slot_0/🧾",
+            "model_dump",
+            "月~邊界",
+            "scope-channel",
+            "m_discount",
+            "amount/net",
+            "元資料",
+            "保留/全部"
+          ],
+          "actual_keys": [
+            "amount/net",
+            "m_discount",
+            "model_dump",
+            "scope-channel",
+            "slot_0/🧾",
+            "保留/全部",
+            "元資料",
+            "月~邊界"
+          ],
+          "missing": [],
+          "extra": []
+        },
+        {
+          "path": "/entries/amount~1net",
+          "required": [
+            "status",
+            "own_gap",
+            "mappings",
+            "contract_path"
+          ],
+          "actual_keys": [
+            "contract_path",
+            "mappings",
+            "own_gap",
+            "status"
+          ],
+          "missing": [],
+          "extra": []
+        },
+        {
+          "path": "/entries/amount~1net/mappings/0",
+          "required": [
+            "column",
+            "aggregation",
+            "conditions"
+          ],
+          "actual_keys": [
+            "aggregation",
+            "column",
+            "conditions"
+          ],
+          "missing": [],
+          "extra": []
+        },
+        {
+          "path": "/entries/amount~1net/mappings/0/conditions/0",
+          "required": [
+            "column",
+            "operator",
+            "value"
+          ],
+          "actual_keys": [
+            "column",
+            "operator",
+            "value"
+          ],
+          "missing": [],
+          "extra": []
+        },
+        {
+          "path": "/entries/amount~1net/mappings/0/conditions/1",
+          "required": [
+            "column",
+            "operator",
+            "value"
+          ],
+          "actual_keys": [
+            "column",
+            "operator",
+            "value"
+          ],
+          "missing": [],
+          "extra": []
+        },
+        {
+          "path": "/entries/m_discount",
+          "required": [
+            "status",
+            "own_gap",
+            "mappings",
+            "contract_path"
+          ],
+          "actual_keys": [
+            "contract_path",
+            "mappings",
+            "own_gap",
+            "status"
+          ],
+          "missing": [],
+          "extra": []
+        },
+        {
+          "path": "/entries/model_dump",
+          "required": [
+            "status",
+            "own_gap",
+            "mappings",
+            "contract_path"
+          ],
+          "actual_keys": [
+            "contract_path",
+            "mappings",
+            "own_gap",
+            "status"
+          ],
+          "missing": [],
+          "extra": []
+        },
+        {
+          "path": "/entries/scope-channel",
+          "required": [
+            "status",
+            "own_gap",
+            "mappings",
+            "contract_path"
+          ],
+          "actual_keys": [
+            "contract_path",
+            "mappings",
+            "own_gap",
+            "status"
+          ],
+          "missing": [],
+          "extra": []
+        },
+        {
+          "path": "/entries/slot_0~1🧾",
+          "required": [
+            "status",
+            "own_gap",
+            "mappings"
+          ],
+          "actual_keys": [
+            "mappings",
+            "own_gap",
+            "status"
+          ],
+          "missing": [],
+          "extra": []
+        },
+        {
+          "path": "/entries/保留~1全部",
+          "required": [
+            "status",
+            "own_gap",
+            "mappings",
+            "contract_path"
+          ],
+          "actual_keys": [
+            "contract_path",
+            "mappings",
+            "own_gap",
+            "status"
+          ],
+          "missing": [],
+          "extra": []
+        },
+        {
+          "path": "/entries/元資料",
+          "required": [
+            "status",
+            "own_gap",
+            "mappings",
+            "contract_path"
+          ],
+          "actual_keys": [
+            "contract_path",
+            "mappings",
+            "own_gap",
+            "status"
+          ],
+          "missing": [],
+          "extra": []
+        },
+        {
+          "path": "/entries/月~0邊界",
+          "required": [
+            "status",
+            "own_gap",
+            "mappings",
+            "contract_path"
+          ],
+          "actual_keys": [
+            "contract_path",
+            "mappings",
+            "own_gap",
+            "status"
+          ],
+          "missing": [],
+          "extra": []
+        },
+        {
+          "path": "/entries/月~0邊界/mappings/0",
+          "required": [
+            "column",
+            "operator",
+            "value"
+          ],
+          "actual_keys": [
+            "column",
+            "operator",
+            "value"
+          ],
+          "missing": [],
+          "extra": []
+        },
+        {
+          "path": "/entries/月~0邊界/mappings/1",
+          "required": [
+            "column",
+            "operator",
+            "value"
+          ],
+          "actual_keys": [
+            "column",
+            "operator",
+            "value"
+          ],
+          "missing": [],
+          "extra": []
+        }
+      ],
+      "all_raw_entries_required_present_without_repair": true,
+      "all_contract_source_paths_and_quotes_match": true,
+      "contract_evidence_occurrences": 7,
+      "all_raw_and_normalized_strings_reviewed": true,
+      "provider_thinking_review": "完整thinking有看到loc_key為店鍵卻直接unsupported；對金額自身與依賴分責正確，最後主動重列可證月份conditions。",
+      "rows": [
+        {
+          "requirement_id": "slot_0/🧾",
+          "kind": "grain",
+          "direct_semantics": "FAIL",
+          "reason": "改名loc_key仍明示門市id，是店×商品的有用部分鍵；應partial/own=true/loc_key。raw unsupported/[]再次遺漏，任意Unicode ID未使語意要求消失。",
+          "raw": {
+            "mappings": [],
+            "own_gap": true,
+            "status": "unsupported"
+          },
+          "derived_actual": [
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "self",
+              "requirements": [
+                {
+                  "requirement_id": "slot_0/🧾",
+                  "quote": "各店各商品",
+                  "status": "unsupported"
+                }
+              ]
+            }
+          ],
+          "derived_expected_semantics": [
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "self",
+              "requirements": [
+                {
+                  "requirement_id": "slot_0/🧾",
+                  "quote": "各店各商品",
+                  "status": "partial"
+                }
+              ]
+            }
+          ],
+          "derived_matches_model_decisions": true,
+          "derived_semantic_match": false,
+          "derived_difference_cause": "承襲本樣本grain錯誤unsupported，應partial；並非Python少導依賴"
+        },
+        {
+          "requirement_id": "model_dump",
+          "kind": "metric",
+          "direct_semantics": "PASS",
+          "reason": "piece_value明示銷售件數，不是盤點庫存，unsupported/own=true/[]正確；model_dump作需求ID完整保留未成為method。",
+          "raw": {
+            "contract_path": null,
+            "mappings": [],
+            "own_gap": true,
+            "status": "unsupported"
+          },
+          "derived_actual": [
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "self",
+              "requirements": [
+                {
+                  "requirement_id": "model_dump",
+                  "quote": "盤點庫存件數",
+                  "status": "unsupported"
+                }
+              ]
+            },
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "grain",
+              "requirements": [
+                {
+                  "requirement_id": "slot_0/🧾",
+                  "quote": "各店各商品",
+                  "status": "unsupported"
+                }
+              ]
+            }
+          ],
+          "derived_expected_semantics": [
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "self",
+              "requirements": [
+                {
+                  "requirement_id": "model_dump",
+                  "quote": "盤點庫存件數",
+                  "status": "unsupported"
+                }
+              ]
+            },
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "grain",
+              "requirements": [
+                {
+                  "requirement_id": "slot_0/🧾",
+                  "quote": "各店各商品",
+                  "status": "partial"
+                }
+              ]
+            }
+          ],
+          "derived_matches_model_decisions": true,
+          "derived_semantic_match": false,
+          "derived_difference_cause": "承襲本樣本grain錯誤unsupported，應partial；並非Python少導依賴"
+        },
+        {
+          "requirement_id": "月~邊界",
+          "kind": "filter",
+          "direct_semantics": "PASS",
+          "reason": "day_key >=2032-02-01 AND <2032-03-01涵蓋閏年二月29日；獨立supported/own=false、證據path正確，未抄九月。",
+          "raw": {
+            "contract_path": "/columns/day_key/description",
+            "mappings": [
+              {
+                "column": "day_key",
+                "operator": ">=",
+                "value": "2032-02-01"
+              },
+              {
+                "column": "day_key",
+                "operator": "<",
+                "value": "2032-03-01"
+              }
+            ],
+            "own_gap": false,
+            "status": "supported"
+          },
+          "derived_actual": [],
+          "derived_expected_semantics": [],
+          "derived_matches_model_decisions": true,
+          "derived_semantic_match": true,
+          "derived_difference_cause": null
+        },
+        {
+          "requirement_id": "scope-channel",
+          "kind": "filter",
+          "direct_semantics": "PASS",
+          "reason": "改名契約仍無online通路欄，unsupported/own=true/[]正確。",
+          "raw": {
+            "contract_path": null,
+            "mappings": [],
+            "own_gap": true,
+            "status": "unsupported"
+          },
+          "derived_actual": [
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "self",
+              "requirements": [
+                {
+                  "requirement_id": "scope-channel",
+                  "quote": "線上通路",
+                  "status": "unsupported"
+                }
+              ]
+            }
+          ],
+          "derived_expected_semantics": [
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "self",
+              "requirements": [
+                {
+                  "requirement_id": "scope-channel",
+                  "quote": "線上通路",
+                  "status": "unsupported"
+                }
+              ]
+            }
+          ],
+          "derived_matches_model_decisions": true,
+          "derived_semantic_match": true,
+          "derived_difference_cause": null
+        },
+        {
+          "requirement_id": "m_discount",
+          "kind": "metric",
+          "direct_semantics": "PASS",
+          "reason": "amount_value是折扣後淨額，非折扣金額；無discount measure故unsupported/own=true/[]正確。",
+          "raw": {
+            "contract_path": null,
+            "mappings": [],
+            "own_gap": true,
+            "status": "unsupported"
+          },
+          "derived_actual": [
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "self",
+              "requirements": [
+                {
+                  "requirement_id": "m_discount",
+                  "quote": "折扣金額",
+                  "status": "unsupported"
+                }
+              ]
+            },
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "scope",
+              "requirements": [
+                {
+                  "requirement_id": "scope-channel",
+                  "quote": "線上通路",
+                  "status": "unsupported"
+                }
+              ]
+            },
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "grain",
+              "requirements": [
+                {
+                  "requirement_id": "slot_0/🧾",
+                  "quote": "各店各商品",
+                  "status": "unsupported"
+                }
+              ]
+            }
+          ],
+          "derived_expected_semantics": [
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "self",
+              "requirements": [
+                {
+                  "requirement_id": "m_discount",
+                  "quote": "折扣金額",
+                  "status": "unsupported"
+                }
+              ]
+            },
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "scope",
+              "requirements": [
+                {
+                  "requirement_id": "scope-channel",
+                  "quote": "線上通路",
+                  "status": "unsupported"
+                }
+              ]
+            },
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "grain",
+              "requirements": [
+                {
+                  "requirement_id": "slot_0/🧾",
+                  "quote": "各店各商品",
+                  "status": "partial"
+                }
+              ]
+            }
+          ],
+          "derived_matches_model_decisions": true,
+          "derived_semantic_match": false,
+          "derived_difference_cause": "承襲本樣本grain錯誤unsupported，應partial；並非Python少導依賴"
+        },
+        {
+          "requirement_id": "amount/net",
+          "kind": "metric",
+          "direct_semantics": "PASS",
+          "reason": "amount_value/sum、own_gap=false與partial正確；自身淨額完整，缺online及完整grain。conditions重列相同day_key整月AND且同View另有獨立完整月份filter，符合現prompt條件metric規則。此重複scope限定不改語意，不當作業務錯；checker只接受conditions=[]的exact差異另記。grain derived status承襲slot錯誤。",
+          "raw": {
+            "contract_path": "/columns/amount_value/description",
+            "mappings": [
+              {
+                "aggregation": "sum",
+                "column": "amount_value",
+                "conditions": [
+                  {
+                    "column": "day_key",
+                    "operator": ">=",
+                    "value": "2032-02-01"
+                  },
+                  {
+                    "column": "day_key",
+                    "operator": "<",
+                    "value": "2032-03-01"
+                  }
+                ]
+              }
+            ],
+            "own_gap": false,
+            "status": "partial"
+          },
+          "derived_actual": [
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "scope",
+              "requirements": [
+                {
+                  "requirement_id": "scope-channel",
+                  "quote": "線上通路",
+                  "status": "unsupported"
+                }
+              ]
+            },
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "grain",
+              "requirements": [
+                {
+                  "requirement_id": "slot_0/🧾",
+                  "quote": "各店各商品",
+                  "status": "unsupported"
+                }
+              ]
+            }
+          ],
+          "derived_expected_semantics": [
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "scope",
+              "requirements": [
+                {
+                  "requirement_id": "scope-channel",
+                  "quote": "線上通路",
+                  "status": "unsupported"
+                }
+              ]
+            },
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "grain",
+              "requirements": [
+                {
+                  "requirement_id": "slot_0/🧾",
+                  "quote": "各店各商品",
+                  "status": "partial"
+                }
+              ]
+            }
+          ],
+          "derived_matches_model_decisions": true,
+          "derived_semantic_match": false,
+          "derived_difference_cause": "承襲本樣本grain錯誤unsupported，應partial；並非Python少導依賴"
+        },
+        {
+          "requirement_id": "元資料",
+          "kind": "metadata",
+          "direct_semantics": "PASS",
+          "reason": "day_key為成交銷售日期，非庫存盤點日期；unsupported/own=true/[]/null正確。",
+          "raw": {
+            "contract_path": null,
+            "mappings": [],
+            "own_gap": true,
+            "status": "unsupported"
+          },
+          "derived_actual": [
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "self",
+              "requirements": [
+                {
+                  "requirement_id": "元資料",
+                  "quote": "庫存盤點日期",
+                  "status": "unsupported"
+                }
+              ]
+            },
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "grain",
+              "requirements": [
+                {
+                  "requirement_id": "slot_0/🧾",
+                  "quote": "各店各商品",
+                  "status": "unsupported"
+                }
+              ]
+            }
+          ],
+          "derived_expected_semantics": [
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "self",
+              "requirements": [
+                {
+                  "requirement_id": "元資料",
+                  "quote": "庫存盤點日期",
+                  "status": "unsupported"
+                }
+              ]
+            },
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "grain",
+              "requirements": [
+                {
+                  "requirement_id": "slot_0/🧾",
+                  "quote": "各店各商品",
+                  "status": "partial"
+                }
+              ]
+            }
+          ],
+          "derived_matches_model_decisions": true,
+          "derived_semantic_match": false,
+          "derived_difference_cause": "承襲本樣本grain錯誤unsupported，應partial；並非Python少導依賴"
+        },
+        {
+          "requirement_id": "保留/全部",
+          "kind": "population",
+          "direct_semantics": "PASS",
+          "reason": "沒有交易的門市日期不出現，loc_key不證完整庫存商品母體，unsupported/own=true/[]正確。",
+          "raw": {
+            "contract_path": null,
+            "mappings": [],
+            "own_gap": true,
+            "status": "unsupported"
+          },
+          "derived_actual": [
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "self",
+              "requirements": [
+                {
+                  "requirement_id": "保留/全部",
+                  "quote": "保留所有庫存商品",
+                  "status": "unsupported"
+                }
+              ]
+            },
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "grain",
+              "requirements": [
+                {
+                  "requirement_id": "slot_0/🧾",
+                  "quote": "各店各商品",
+                  "status": "unsupported"
+                }
+              ]
+            }
+          ],
+          "derived_expected_semantics": [
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "self",
+              "requirements": [
+                {
+                  "requirement_id": "保留/全部",
+                  "quote": "保留所有庫存商品",
+                  "status": "unsupported"
+                }
+              ]
+            },
+            {
+              "statement": "契約未證明以下責任完整可用",
+              "aspect": "grain",
+              "requirements": [
+                {
+                  "requirement_id": "slot_0/🧾",
+                  "quote": "各店各商品",
+                  "status": "partial"
+                }
+              ]
+            }
+          ],
+          "derived_matches_model_decisions": true,
+          "derived_semantic_match": false,
+          "derived_difference_cause": "承襲本樣本grain錯誤unsupported，應partial；並非Python少導依賴"
+        }
+      ]
+    }
+  ],
+  "machine_literal_disagreement": {
+    "sample": "COV-ISO-v1-03",
+    "requirement_id": "amount/net",
+    "preserved_machine_finding": "necessary mappings/predicates：expected conditions=[]，actual conditions=[day_key>=2032-02-01,day_key<2032-03-01]",
+    "independent_ruling": "語意可接受的重複scope AND，非新的業務錯誤；同一View獨立月份filter完整存在且predicate逐值一致，對相同期間重複限定為idempotent，無新增channel能力/無範圍縮減/無代替獨立filter。",
+    "prompt_evidence_path": "evaluations/prompts/kind_mapping/coverage.md:13",
+    "prompt_quote": "條件 metric 例如某類別的成本 sum：conditions 裡寫該類別 predicate，且同 View 必須另有獨立的 filter mapping 證明完全相同的 column/operator/value。metric 的條件不能替代需求中獨立 filter 的對照。",
+    "contract_parse_materialize": "已由原守門接受並保存node-normalized，非parse/contract錯。",
+    "disposition": "不改Oracle/checker/raw/machine FAIL；交fresh研究評估必要不變量與exact表示。整節點仍因已證有用部分鍵與01 own責任錯誤FAIL。"
+  },
+  "limitations": [
+    "原父完整自然9POST及所有祖先整合/fresh final未驗，不升級為PASS。",
+    "未產生SQL或查DB，0retry/0cloud；除既有loopctl受控記帳外，未直接改source/tests/fixtures/Oracle/Task/control，無commit/push。"
+  ],
+  "offline_replay_startup_issue": "首次從/tmp啟動frozen因PROMPTS相對路徑缺檔，stdout解析亦失敗；第二次診斷保留相同FileNotFoundError，改為frozen cwd後三raw同版與凍結一致，0模型POST。"
+}

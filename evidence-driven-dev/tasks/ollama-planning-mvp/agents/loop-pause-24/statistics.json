@@ -1,0 +1,691 @@
+{
+  "schema_version": 1,
+  "scope": "本次EDD loop；不包含迴圈啟動前的歷史任務",
+  "paused_at_utc": "2026-10-22T03:39:03.470583+00:00",
+  "task_id": "ollama-planning-mvp",
+  "task_status": "WAITING_USER",
+  "pause_requested_by_user": "這一輪結束先暫停,統計一下目前的執行結果",
+  "resume_question_id": "Q-001",
+  "loop_started_at_utc": "2026-10-21T15:57:24.677383+00:00",
+  "elapsed_wall_seconds": 42098.7932,
+  "rounds_completed": 24,
+  "round_results": {
+    "PASS": 15,
+    "FAIL": 9
+  },
+  "used": {
+    "agent_dispatches": 42,
+    "cloud_calls": 0,
+    "local_calls": 31,
+    "model_retries": 0
+  },
+  "dispatch_roles": {
+    "research": 11,
+    "worker": 24,
+    "auditor": 7
+  },
+  "completed_direction_reviews": 7,
+  "direction_verdicts": {
+    "CONTINUE": 3,
+    "REPLAN": 4
+  },
+  "pending_direction_review": [
+    22,
+    23,
+    24
+  ],
+  "model_statistics": {
+    "models": {
+      "qwen3.8:27b": 31
+    },
+    "completed": 31,
+    "inflight": 0,
+    "stages": {
+      "recall": 4,
+      "coverage": 24,
+      "selection": 3
+    },
+    "input_tokens": 138589,
+    "output_tokens": 111241,
+    "total_tokens": 249830,
+    "ollama_total_duration_seconds": 19899.385615607,
+    "duration_min_seconds": 161.571681333,
+    "duration_median_seconds": 468.352974143,
+    "duration_max_seconds": 2151.863244417,
+    "counting_note": "Tokens與推理時間為Ollama原始回覆欄位總和；不含subagent自身平台推理token，不將重跑回歸加總為獨立測試數。"
+  },
+  "outcomes": {
+    "full_natural_pipeline_attempts": 4,
+    "full_natural_pipeline_passed": 0,
+    "isolated_selection_results": [
+      "FAIL",
+      "PASS"
+    ],
+    "selection_parent_integration": "PASS",
+    "round20_coverage_results": [
+      "FAIL",
+      "PASS",
+      "FAIL"
+    ],
+    "round23_coverage_results": [
+      "FAIL",
+      "PASS",
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "root_accepted": false,
+    "historical_38x2_gate": "未通過，保持原紀錄"
+  },
+  "round24": {
+    "result": "FAIL",
+    "focused": {
+      "passed": 65,
+      "failed": 1
+    },
+    "related_regression": {
+      "passed": 133,
+      "failed": 16
+    },
+    "offline_controls_passed": 5,
+    "historical_live_frozen_replays_passed": 20,
+    "protected_old_non_task_files": 8047,
+    "protected_file_drift": 0,
+    "new_model_calls": 0,
+    "new_candidate_frozen_replay": "尚未執行",
+    "natural_panel": "9案65rows/27預固定seed格；尚未自然執行",
+    "handoff": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/handoff.json",
+    "handoff_sha256": "22802b2de6859ceeac37ab3d099c7863633fb74937897ed27af95ac24457c5d1"
+  },
+  "unresolved": [
+    "第24輪1項新測試負例預期與16項舊provenance回歸生命週期假設，待fresh audit獨立裁定；不繞過守門。",
+    "第23輪四個引用path指物件、會員lifetime_spend部分能力遺漏、庫存完整母體複合key與證據不足。",
+    "A1尚未完成fresh review與新候選frozen重播，也未執行新自然面板。",
+    "coverage父層、完整自然三階段、所有祖先整合與fresh final尚未通過。"
+  ],
+  "advice": {
+    "path": "docs/next_enhance_advice.md",
+    "sha256": "91e8dcee858369d84838ec249cc0785515a59c346aa8e0778f804c15fd8f09de",
+    "fully_evaluated_by": "/root/loop_research_23",
+    "evaluation": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-23/advice-evaluation.json",
+    "conclusion": "有限A1為待驗證假設；語意失敗後再研究B1，C暫緩，非正式架構採用。"
+  },
+  "SQL_DB_calls": 0,
+  "commit_push": 0,
+  "git_head": "bc09c67fc4078501599c37e4cdfecdee40af2ef8",
+  "rounds": [
+    {
+      "round": 1,
+      "node": "contract_and_managed_runner",
+      "result": "PASS",
+      "started_at": "2026-10-21T16:01:52.555909+00:00",
+      "finished_at": "2026-10-21T16:10:56.648542+00:00"
+    },
+    {
+      "round": 2,
+      "node": "natural_qwen_three_stage",
+      "result": "FAIL",
+      "started_at": "2026-10-21T16:11:00.755935+00:00",
+      "finished_at": "2026-10-21T16:59:15.923598+00:00"
+    },
+    {
+      "round": 3,
+      "node": "coverage_slots_contract",
+      "result": "PASS",
+      "started_at": "2026-10-21T17:04:27.931991+00:00",
+      "finished_at": "2026-10-21T17:12:52.243129+00:00"
+    },
+    {
+      "round": 4,
+      "node": "natural_slots_three_stage",
+      "result": "FAIL",
+      "started_at": "2026-10-21T17:16:00.750189+00:00",
+      "finished_at": "2026-10-21T18:31:51.447819+00:00"
+    },
+    {
+      "round": 5,
+      "node": "evidence_bound_managed_contract",
+      "result": "PASS",
+      "started_at": "2026-10-21T18:38:40.917156+00:00",
+      "finished_at": "2026-10-21T18:53:10.220376+00:00"
+    },
+    {
+      "round": 6,
+      "node": "natural_evidence_bound_three_stage",
+      "result": "FAIL",
+      "started_at": "2026-10-21T18:53:10.344084+00:00",
+      "finished_at": "2026-10-21T19:19:23.531413+00:00"
+    },
+    {
+      "round": 7,
+      "node": "own_responsibility_managed_contract",
+      "result": "PASS",
+      "started_at": "2026-10-21T19:32:40.431691+00:00",
+      "finished_at": "2026-10-21T19:44:14.445340+00:00"
+    },
+    {
+      "round": 8,
+      "node": "natural_own_responsibility_three_stage",
+      "result": "FAIL",
+      "started_at": "2026-10-21T19:44:14.570501+00:00",
+      "finished_at": "2026-10-21T20:09:26.270900+00:00"
+    },
+    {
+      "round": 9,
+      "node": "kind_mapping_managed_contract",
+      "result": "PASS",
+      "started_at": "2026-10-21T20:15:38.604202+00:00",
+      "finished_at": "2026-10-21T20:26:29.359764+00:00"
+    },
+    {
+      "round": 10,
+      "node": "kind_diagnostic_fixture_harness",
+      "result": "PASS",
+      "started_at": "2026-10-21T20:39:18.891637+00:00",
+      "finished_at": "2026-10-21T20:56:21.962270+00:00"
+    },
+    {
+      "round": 11,
+      "node": "kind_diagnostic_fixture_semantics",
+      "result": "FAIL",
+      "started_at": "2026-10-21T20:56:22.090645+00:00",
+      "finished_at": "2026-10-21T21:01:32.642132+00:00"
+    },
+    {
+      "round": 12,
+      "node": "kind_diagnostic_fixture_v2_correction",
+      "result": "PASS",
+      "started_at": "2026-10-21T21:09:02.031678+00:00",
+      "finished_at": "2026-10-21T21:19:20.461451+00:00"
+    },
+    {
+      "round": 13,
+      "node": "kind_diagnostic_evidence_rebinding",
+      "result": "PASS",
+      "started_at": "2026-10-21T21:34:17.620282+00:00",
+      "finished_at": "2026-10-21T21:48:21.073587+00:00"
+    },
+    {
+      "round": 14,
+      "node": "kind_diagnostic_fixture_semantics",
+      "result": "PASS",
+      "started_at": "2026-10-21T21:48:28.812703+00:00",
+      "finished_at": "2026-10-21T21:56:35.497896+00:00"
+    },
+    {
+      "round": 15,
+      "node": "natural_kind_selection_isolation",
+      "result": "FAIL",
+      "started_at": "2026-10-21T21:56:39.642661+00:00",
+      "finished_at": "2026-10-21T22:34:45.354003+00:00"
+    },
+    {
+      "round": 16,
+      "node": "kind_policy_shape_contract",
+      "result": "PASS",
+      "started_at": "2026-10-21T22:47:57.044876+00:00",
+      "finished_at": "2026-10-21T23:03:58.349046+00:00"
+    },
+    {
+      "round": 17,
+      "node": "kind_policy_shape_semantics",
+      "result": "PASS",
+      "started_at": "2026-10-21T23:03:58.524476+00:00",
+      "finished_at": "2026-10-21T23:10:33.993529+00:00"
+    },
+    {
+      "round": 18,
+      "node": "natural_kind_policy_shape_selection",
+      "result": "PASS",
+      "started_at": "2026-10-21T23:10:34.171195+00:00",
+      "finished_at": "2026-10-21T23:51:44.930788+00:00"
+    },
+    {
+      "round": 19,
+      "node": "natural_kind_selection_isolation",
+      "result": "PASS",
+      "started_at": "2026-10-21T23:56:54.456495+00:00",
+      "finished_at": "2026-10-22T00:06:22.645888+00:00"
+    },
+    {
+      "round": 20,
+      "node": "natural_kind_coverage_isolation",
+      "result": "FAIL",
+      "started_at": "2026-10-22T00:06:22.820313+00:00",
+      "finished_at": "2026-10-22T00:50:27.976096+00:00"
+    },
+    {
+      "round": 21,
+      "node": "capability_projection_contract",
+      "result": "PASS",
+      "started_at": "2026-10-22T00:59:36.404890+00:00",
+      "finished_at": "2026-10-22T01:20:27.783958+00:00"
+    },
+    {
+      "round": 22,
+      "node": "capability_projection_semantics",
+      "result": "PASS",
+      "started_at": "2026-10-22T01:28:19.444910+00:00",
+      "finished_at": "2026-10-22T01:38:51.582441+00:00"
+    },
+    {
+      "round": 23,
+      "node": "natural_capability_projection_coverage",
+      "result": "FAIL",
+      "started_at": "2026-10-22T01:38:51.759123+00:00",
+      "finished_at": "2026-10-22T02:55:02.729750+00:00"
+    },
+    {
+      "round": 24,
+      "node": "text_leaf_evidence_contract",
+      "result": "FAIL",
+      "started_at": "2026-10-22T03:13:31.029660+00:00",
+      "finished_at": "2026-10-22T03:37:44.917677+00:00"
+    }
+  ],
+  "model_requests": [
+    {
+      "id": "436132c5fc81426ba2d2988fbc336844",
+      "round": 2,
+      "case_key": "diagnostic-request-1cf6e584921c:managed-indexed-path-three-stage-1:recall",
+      "status": "ok",
+      "model": "qwen3.8:27b",
+      "input_tokens": 6644,
+      "output_tokens": 3464,
+      "ollama_duration_seconds": 526.330296982,
+      "done": true,
+      "done_reason": "stop",
+      "response_sha256": "5cca299ea32c9061fa20e882572aa4f7ddbd3a56105a0f35d152a9bb93f2dd17"
+    },
+    {
+      "id": "cd42974eb8894d0283b362ab938b8bbf",
+      "round": 2,
+      "case_key": "diagnostic-request-1cf6e584921c:managed-indexed-path-three-stage-1:map-01",
+      "status": "ok",
+      "model": "qwen3.8:27b",
+      "input_tokens": 2474,
+      "output_tokens": 2643,
+      "ollama_duration_seconds": 303.532954817,
+      "done": true,
+      "done_reason": "stop",
+      "response_sha256": "8b19e1902cef9df6c446820446249f137465c319e5cab04f9f9614d189defcc0"
+    },
+    {
+      "id": "026ee1b04a924d59b1cb8c5eb79e8b5a",
+      "round": 2,
+      "case_key": "diagnostic-request-1cf6e584921c:managed-indexed-path-three-stage-1:map-02",
+      "status": "ok",
+      "model": "qwen3.8:27b",
+      "input_tokens": 2371,
+      "output_tokens": 4746,
+      "ollama_duration_seconds": 586.595916726,
+      "done": true,
+      "done_reason": "stop",
+      "response_sha256": "e1028971cc4a1a9c3d01700050ebb5a9c4325c10c0a99e6854a6089e863bf3a0"
+    },
+    {
+      "id": "6a9eb995d6ef4c708e3b30bc8bf5e55e",
+      "round": 2,
+      "case_key": "diagnostic-request-1cf6e584921c:managed-indexed-path-three-stage-1:map-03",
+      "status": "ok",
+      "model": "qwen3.8:27b",
+      "input_tokens": 2780,
+      "output_tokens": 5022,
+      "ollama_duration_seconds": 608.867608032,
+      "done": true,
+      "done_reason": "stop",
+      "response_sha256": "02fc088de753bc47d601f2edc4e0c52971371dffde3dff2d8edb5c83bb48e8ae"
+    },
+    {
+      "id": "2c03ff55d59745849b3e0f9524942571",
+      "round": 2,
+      "case_key": "diagnostic-request-1cf6e584921c:managed-indexed-path-three-stage-1:map-04",
+      "status": "ok",
+      "model": "qwen3.8:27b",
+      "input_tokens": 2462,
+      "output_tokens": 3341,
+      "ollama_duration_seconds": 393.345462557,
+      "done": true,
+      "done_reason": "stop",
+      "response_sha256": "8a5bc955ef497d533a94adb83050b9ad56c173b3aa95ec0a37122483c6d8fe44"
+    },
+    {
+      "id": "7a725bd28f414097ba31bd4c4cd0be0c",
+      "round": 2,
+      "case_key": "diagnostic-request-1cf6e584921c:managed-indexed-path-three-stage-1:map-05",
+      "status": "ok",
+      "model": "qwen3.8:27b",
+      "input_tokens": 2143,
+      "output_tokens": 2744,
+      "ollama_duration_seconds": 324.86810622,
+      "done": true,
+      "done_reason": "stop",
+      "response_sha256": "e59e537129dbd20a8265e986ed573991fb8fb2262f347f758c83ba5d9404c4dd"
+    },
+    {
+      "id": "df5631459c074270a9a1ec82825f1c17",
+      "round": 4,
+      "case_key": "diagnostic-request-1cf6e584921c:managed-indexed-slots-three-stage-2:recall",
+      "status": "ok",
+      "model": "qwen3.8:27b",
+      "input_tokens": 6644,
+      "output_tokens": 3464,
+      "ollama_duration_seconds": 503.755005187,
+      "done": true,
+      "done_reason": "stop",
+      "response_sha256": "fda9fb5f96e135920282065af190372e7fe48da56f219ec29508e54d30ac609b"
+    },
+    {
+      "id": "a7d3b31b5a30475ab9e035cd9d16e28e",
+      "round": 4,
+      "case_key": "diagnostic-request-1cf6e584921c:managed-indexed-slots-three-stage-2:map-01",
+      "status": "ok",
+      "model": "qwen3.8:27b",
+      "input_tokens": 2611,
+      "output_tokens": 2973,
+      "ollama_duration_seconds": 345.667866965,
+      "done": true,
+      "done_reason": "stop",
+      "response_sha256": "f1f90d34f72a69a54bcd38d8e23233cf474286fe6ac9dfa983cc3343bbc4bd15"
+    },
+    {
+      "id": "b90af932503c41698e38cdca7491cb26",
+      "round": 4,
+      "case_key": "diagnostic-request-1cf6e584921c:managed-indexed-slots-three-stage-2:map-02",
+      "status": "ok",
+      "model": "qwen3.8:27b",
+      "input_tokens": 2508,
+      "output_tokens": 3831,
+      "ollama_duration_seconds": 468.352974143,
+      "done": true,
+      "done_reason": "stop",
+      "response_sha256": "04ad82e1cb63d1787d5129bc5d4acee6fdb601b421f0bb9755e1d2f6076938c9"
+    },
+    {
+      "id": "b12b822d99fb44f3b7acdaca225916b1",
+      "round": 4,
+      "case_key": "diagnostic-request-1cf6e584921c:managed-indexed-slots-three-stage-2:map-03",
+      "status": "ok",
+      "model": "qwen3.8:27b",
+      "input_tokens": 2917,
+      "output_tokens": 3299,
+      "ollama_duration_seconds": 417.886000183,
+      "done": true,
+      "done_reason": "stop",
+      "response_sha256": "5ebc6ea2cfb48e170bcc70e3b47a6e45c679be4ed5f83a62058c534286307116"
+    },
+    {
+      "id": "bed783eebcab4f5ca557d1b11fb795ff",
+      "round": 4,
+      "case_key": "diagnostic-request-1cf6e584921c:managed-indexed-slots-three-stage-2:map-04",
+      "status": "ok",
+      "model": "qwen3.8:27b",
+      "input_tokens": 2599,
+      "output_tokens": 2999,
+      "ollama_duration_seconds": 372.210864579,
+      "done": true,
+      "done_reason": "stop",
+      "response_sha256": "072e91e80743cb446a9ebf5024bb14404281581f166bbc36886aeced5701b452"
+    },
+    {
+      "id": "536b3f8ea3584ca6989db87f47532e1e",
+      "round": 4,
+      "case_key": "diagnostic-request-1cf6e584921c:managed-indexed-slots-three-stage-2:map-05",
+      "status": "ok",
+      "model": "qwen3.8:27b",
+      "input_tokens": 2280,
+      "output_tokens": 5056,
+      "ollama_duration_seconds": 644.181506529,
+      "done": true,
+      "done_reason": "stop",
+      "response_sha256": "6544a96932db05b92da6ebb9aee5f0032c227d10f6602d56aebe99de88d2fa3c"
+    },
+    {
+      "id": "da1ff903ad37462d860aac3644fa96d5",
+      "round": 4,
+      "case_key": "diagnostic-request-1cf6e584921c:managed-indexed-slots-three-stage-2:map-06",
+      "status": "ok",
+      "model": "qwen3.8:27b",
+      "input_tokens": 2723,
+      "output_tokens": 3394,
+      "ollama_duration_seconds": 429.824146066,
+      "done": true,
+      "done_reason": "stop",
+      "response_sha256": "aee22c304bd80673d758e828fab656e46a7d5ae69e7055c9ff244b4376d3b9f8"
+    },
+    {
+      "id": "7775675acbd54532aee0a7da3bd419fa",
+      "round": 4,
+      "case_key": "diagnostic-request-1cf6e584921c:managed-indexed-slots-three-stage-2:map-07",
+      "status": "ok",
+      "model": "qwen3.8:27b",
+      "input_tokens": 2329,
+      "output_tokens": 1587,
+      "ollama_duration_seconds": 190.814537549,
+      "done": true,
+      "done_reason": "stop",
+      "response_sha256": "b05f1e2ad4d0ed94ceb01e77bc1ba171e70cf1a1b0286f92a59675d239cb27fa"
+    },
+    {
+      "id": "2cae2f57ac5143599a6e09ecce5f65af",
+      "round": 4,
+      "case_key": "diagnostic-request-1cf6e584921c:managed-indexed-slots-three-stage-2:selection",
+      "status": "ok",
+      "model": "qwen3.8:27b",
+      "input_tokens": 14082,
+      "output_tokens": 4531,
+      "ollama_duration_seconds": 942.760316354,
+      "done": true,
+      "done_reason": "stop",
+      "response_sha256": "ab558065ee0eea6c2349e2f05c19a014a6a1c74f67454f18e4ee410bb12ee2ca"
+    },
+    {
+      "id": "377ff38423074cddac989cc4e4f4895e",
+      "round": 6,
+      "case_key": "diagnostic-request-1cf6e584921c:managed-evidence-bound-1:recall",
+      "status": "ok",
+      "model": "qwen3.8:27b",
+      "input_tokens": 2247,
+      "output_tokens": 3062,
+      "ollama_duration_seconds": 394.160987372,
+      "done": true,
+      "done_reason": "stop",
+      "response_sha256": "d14dfafe4bb95911651bcb5f4203c6e4f371d8457aab645025101964b4e13cd0"
+    },
+    {
+      "id": "aef43469408a47e9bbc3ffc30068bd32",
+      "round": 6,
+      "case_key": "diagnostic-request-1cf6e584921c:managed-evidence-bound-1:map-01",
+      "status": "ok",
+      "model": "qwen3.8:27b",
+      "input_tokens": 2496,
+      "output_tokens": 2226,
+      "ollama_duration_seconds": 253.96193169,
+      "done": true,
+      "done_reason": "stop",
+      "response_sha256": "d64e1e7ab1d210b812c6ee8e876f63b97608e225e5bf8f3fa3d1d085c1a200df"
+    },
+    {
+      "id": "418b473a92214f108bd17228c4de1786",
+      "round": 6,
+      "case_key": "diagnostic-request-1cf6e584921c:managed-evidence-bound-1:map-02",
+      "status": "ok",
+      "model": "qwen3.8:27b",
+      "input_tokens": 2447,
+      "output_tokens": 5034,
+      "ollama_duration_seconds": 653.553850875,
+      "done": true,
+      "done_reason": "stop",
+      "response_sha256": "32b79e76a32f5a8979c7583108d034cbd419c2f07d92c6416f54dd5bbe120375"
+    },
+    {
+      "id": "b11f0629e8224e9b9f6f99d3603169c8",
+      "round": 8,
+      "case_key": "diagnostic-request-1cf6e584921c:managed-own-responsibility-1:recall",
+      "status": "ok",
+      "model": "qwen3.8:27b",
+      "input_tokens": 2485,
+      "output_tokens": 6714,
+      "ollama_duration_seconds": 806.163255625,
+      "done": true,
+      "done_reason": "stop",
+      "response_sha256": "29e75488fe84e02e4365321c11e3b37f872769e79b1c53623a54cea7aadd9c79"
+    },
+    {
+      "id": "55272c8e63f84d9fa04f9c87a7c979bb",
+      "round": 8,
+      "case_key": "diagnostic-request-1cf6e584921c:managed-own-responsibility-1:map-01",
+      "status": "ok",
+      "model": "qwen3.8:27b",
+      "input_tokens": 2814,
+      "output_tokens": 1363,
+      "ollama_duration_seconds": 161.571681333,
+      "done": true,
+      "done_reason": "stop",
+      "response_sha256": "dd1f6a05d737230598d68555527fdc0d8710cb9ee636d895cf0cc35fc5dad5ce"
+    },
+    {
+      "id": "67ce668444f348b1886ffa9dd9247db1",
+      "round": 8,
+      "case_key": "diagnostic-request-1cf6e584921c:managed-own-responsibility-1:map-02",
+      "status": "ok",
+      "model": "qwen3.8:27b",
+      "input_tokens": 2765,
+      "output_tokens": 3011,
+      "ollama_duration_seconds": 369.569842462,
+      "done": true,
+      "done_reason": "stop",
+      "response_sha256": "6e4b991d03a5dc3681fe1d708f64ec70fb23c0460203f6e6731250d7d06ed1e9"
+    },
+    {
+      "id": "028e83ec169e4780ae1bb11f226185cd",
+      "round": 15,
+      "case_key": "kind-isolation-v2-rebind-1:ISOLATION:SEL-ISO-v1-01:node",
+      "status": "ok",
+      "model": "qwen3.8:27b",
+      "input_tokens": 18127,
+      "output_tokens": 8394,
+      "ollama_duration_seconds": 1961.838453375,
+      "done": true,
+      "done_reason": "stop",
+      "response_sha256": "451ae7485fe593ef358b12db9ebc324dd8ac2204378da8cf40e8e49573aed393"
+    },
+    {
+      "id": "52128e22c3864f24a84bef58cb85c369",
+      "round": 18,
+      "case_key": "kind-policy-shape-1:ISOLATION:SEL-ISO-v1-01:node",
+      "status": "ok",
+      "model": "qwen3.8:27b",
+      "input_tokens": 18347,
+      "output_tokens": 8938,
+      "ollama_duration_seconds": 2151.863244417,
+      "done": true,
+      "done_reason": "stop",
+      "response_sha256": "7617b9526368d4bd7c365a99de025b2bcf53f9a6a25c98132cfd13902a392a4f"
+    },
+    {
+      "id": "832021b283e84ab7889b546e3258c2ad",
+      "round": 20,
+      "case_key": "kind-isolation-v2-rebind-1:ISOLATION:COV-ISO-v1-01:node",
+      "status": "ok",
+      "model": "qwen3.8:27b",
+      "input_tokens": 3886,
+      "output_tokens": 4998,
+      "ollama_duration_seconds": 710.471784867,
+      "done": true,
+      "done_reason": "stop",
+      "response_sha256": "4dd4df54302a397afb87134529310919f15ddbbc7169b744bc3e012c30434a25"
+    },
+    {
+      "id": "8108409018d643cfb61f968dc9f469ee",
+      "round": 20,
+      "case_key": "kind-isolation-v2-rebind-1:ISOLATION:COV-ISO-v1-02:node",
+      "status": "ok",
+      "model": "qwen3.8:27b",
+      "input_tokens": 2027,
+      "output_tokens": 410,
+      "ollama_duration_seconds": 200.626283559,
+      "done": true,
+      "done_reason": "stop",
+      "response_sha256": "c923fafd081ca26c313f1a3c85c8e0a917ce61851ed0e27916e632f2bfe8671f"
+    },
+    {
+      "id": "f4b1153ed3ab48eba9298c9db1fefe40",
+      "round": 20,
+      "case_key": "kind-isolation-v2-rebind-1:ISOLATION:COV-ISO-v1-03:node",
+      "status": "ok",
+      "model": "qwen3.8:27b",
+      "input_tokens": 3799,
+      "output_tokens": 3163,
+      "ollama_duration_seconds": 1280.044047544,
+      "done": true,
+      "done_reason": "stop",
+      "response_sha256": "259633fabd6eb98e6b80a5c3bd9132a312f2bba52f8b05b3993dde6133f66ff8"
+    },
+    {
+      "id": "b2bca399f95d43b5a93e901ba5e237ce",
+      "round": 23,
+      "case_key": "kind-capability-projection-1:ISOLATION:COV-ISO-v1-01:node",
+      "status": "ok",
+      "model": "qwen3.8:27b",
+      "input_tokens": 4245,
+      "output_tokens": 2371,
+      "ollama_duration_seconds": 340.916458558,
+      "done": true,
+      "done_reason": "stop",
+      "response_sha256": "ffc8df337e934d4a29643967401ae8a0cd4681fec3e1d03b02b869ec666b8a2b"
+    },
+    {
+      "id": "b5a046baca9c498fbd4502d607f9a98c",
+      "round": 23,
+      "case_key": "kind-capability-projection-1:ISOLATION:COV-ISO-v1-02:node",
+      "status": "ok",
+      "model": "qwen3.8:27b",
+      "input_tokens": 2309,
+      "output_tokens": 524,
+      "ollama_duration_seconds": 245.669870764,
+      "done": true,
+      "done_reason": "stop",
+      "response_sha256": "ec262e80d1d2ec745ebe4fb19c5cc03d119efd1507221636450b2dc3daebd99f"
+    },
+    {
+      "id": "92d30768809a449ca1e21a0638e7827e",
+      "round": 23,
+      "case_key": "kind-capability-projection-1:ISOLATION:COV-ISO-v1-03:node",
+      "status": "ok",
+      "model": "qwen3.8:27b",
+      "input_tokens": 4158,
+      "output_tokens": 2310,
+      "ollama_duration_seconds": 915.675978573,
+      "done": true,
+      "done_reason": "stop",
+      "response_sha256": "a11df15c322b38359fb19c8736696e7ec22758473b9d622d1db16b550999f190"
+    },
+    {
+      "id": "6da4b8f97a904821bf8f2221c151e65a",
+      "round": 23,
+      "case_key": "kind-capability-projection-1:ISOLATION:COV-CAP-v1-04:node",
+      "status": "ok",
+      "model": "qwen3.8:27b",
+      "input_tokens": 4294,
+      "output_tokens": 1842,
+      "ollama_duration_seconds": 811.849214273,
+      "done": true,
+      "done_reason": "stop",
+      "response_sha256": "f150acacbe1f1caf2ff9ea7be1b3867fc1d108cb384f05fb25da02f2f2d2b305"
+    },
+    {
+      "id": "3b787d488b6c46919e5577c430a614d1",
+      "round": 23,
+      "case_key": "kind-capability-projection-1:ISOLATION:COV-CAP-v1-05:node",
+      "status": "ok",
+      "model": "qwen3.8:27b",
+      "input_tokens": 4576,
+      "output_tokens": 3787,
+      "ollama_duration_seconds": 1582.455167431,
+      "done": true,
+      "done_reason": "stop",
+      "response_sha256": "fa23700b32eb848f83b94071a9b5762c191728964a3f17f356f6bf826573b633"
+    }
+  ]
+}

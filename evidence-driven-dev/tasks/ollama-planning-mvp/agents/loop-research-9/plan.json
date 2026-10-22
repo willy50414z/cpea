@@ -1,0 +1,174 @@
+{
+  "nodes": [
+    {
+      "id": "root",
+      "parent": null,
+      "goal": "修正目前三階段任務拆分測試的失敗，以本機 Ollama qwen3.8:27b 完成目前診斷案例的自然端到端驗證與必要回歸。",
+      "acceptance": [
+        "以既有 raw 重現並定位目前失敗；修正保留必要資料需求、條件、角色、scope 與母體驗證，新增有辨識力的正反例且相關回歸通過。",
+        "本機 qwen3.8:27b 自然完成目前診斷案例的需求拆分、全部候選 View 映射及來源選擇，語意涵蓋與 prepared requests 驗收通過；不執行 SQL 或 DB。",
+        "保存所有首次與失敗 raw/log、版本及模型設定；新結果可離線重播，歷史 raw、分數與完整 38 題 Gate 狀態不變。",
+        "fresh-context 獨立驗證者核對修正、父層整合、自然結果語意與必要回歸並 ACCEPT。"
+      ]
+    },
+    {
+      "id": "three_stage_integration",
+      "parent": "root",
+      "goal": "修正候選的三階段父層整合與必要回歸",
+      "acceptance": [
+        "以新自然完整raw離線重播，prepared requests與各階段語意一致且必要回歸通過；歷史raw、分數與38題Gate狀態未變。",
+        "整合證據涵蓋所有子節點，交由fresh最終驗證者核對root驗收。"
+      ]
+    },
+    {
+      "id": "contract_and_managed_runner",
+      "parent": "three_stage_integration",
+      "goal": "重現背景誤列資料需求並建立最小修正與受控三階段runner",
+      "acceptance": [
+        "既有raw重現精確失敗，背景與真正metadata責任區別有辨識力的正反例通過，所有必要coverage/selection guards保留。",
+        "最小recall prompt修正完成；受控本機runner使用indexed recall與path-only mapping串至selection，所有模型POST走loopctl，dry-run/離線fake全階段/失敗保存與replay測試通過。",
+        "先保存舊版本及歷史工件hash，相關focused測試實跑通過；不以手工刪除背景或放寬supported驗證取得PASS。"
+      ]
+    },
+    {
+      "id": "natural_qwen_three_stage",
+      "parent": "three_stage_integration",
+      "goal": "固定修正版以本機Qwen自然完成當前診斷案例三階段",
+      "acceptance": [
+        "全新自然需求拆分完整保留資料責任並將純業務目的留背景，全7候選View各自然映射通過；不重用或修復舊recall當自然結果。",
+        "自然selection為ready且prepared requests正確表達庫存anchor、店商品根粒度、sales同task月份/online篩選與金額sum、left保母體與不補零政策；無SQL/DB。",
+        "保存固定單樣本所有首次/失敗raw、request id、模型設定、來源指紋與語意核對log；錯答FAIL回研究，不重送相同成功HTTP請求挑分。"
+      ]
+    },
+    {
+      "id": "coverage_slots_contract",
+      "parent": "natural_qwen_three_stage",
+      "goal": "將已知需求身分與來源事實交由程式綁定，保留模型的逐項語意判定及全部既有守門",
+      "acceptance": [
+        "既有map05 raw精確重現重複ID失敗，保留原始證據；新wire以輸入requirement IDs為固定必填槽位，缺項、額外項、重複JSON key與非法輸出皆拒絕，不去重、不挑一筆或補答案。",
+        "來源view、grain、keys與population由當次唯讀契約產生；母體文字保留summary原文與證據路徑，不附加退貨等契約未保證的斷言；模型仍須決定status、合法mappings、scope及缺口。",
+        "離線正反例、完整fake三階段prepared requests、首錯保存/停止、replay、受控request及必要193相關回歸實跑通過；舊wire/歷史raw/分數/Gate與兩src既存變更保持。"
+      ]
+    },
+    {
+      "id": "natural_slots_three_stage",
+      "parent": "natural_qwen_three_stage",
+      "goal": "凍結新槽位契約候選，以本機Qwen全新自然執行需求拆分、七候選映射及來源選擇",
+      "acceptance": [
+        "全新自然recall完整保留本題資料責任與原文背景，七View映射皆通過必要結構及逐項語意驗收；不重用或修正前輪答案作自然結果。",
+        "自然selection ready與prepared requests符合原父層所有庫存母體、根粒度、同源條件、left及不補零責任；所有來源母體及理由斷言均比對契約，記錄無支持文字並依完整語意門檻判定。",
+        "同一固定候選預定單樣本保存所有首次/失敗raw、設定、request id、動態schema與來源指紋，成功或失敗前綴可離線重播；首錯停止FAIL回研究，不原樣重試挑分、不執行SQL/DB。"
+      ]
+    },
+    {
+      "id": "evidence_bound_managed_contract",
+      "parent": "natural_slots_three_stage",
+      "goal": "離線建立有證據依據的managed需求、缺口與完整typed selection契約，定位並阻止第4輪三類失敗",
+      "acceptance": [
+        "以凍結舊版精確重播第4輪全部9 raw與原selection首錯，保留recall能力理由、未選View粒度過度支持、未保證母體與typed欄位遺漏之完整FAIL證據；不得覆寫舊版或修答案。",
+        "新managed recall只生成自然索引需求與明示grain關聯；Python僅列全部admitted候選與契約原文召回依據。模型仍負需求語意、scope、grain依賴、逐View狀態/映射/缺口與來源選擇；缺口及選擇理由以可驗證refs表達，不自由改寫來源母體。",
+        "新增managed專用完整typed selection schema：各typed欄位明確required，ready integration非null；不從task.request推導或補filters/metrics/grain/metadata/integration。新wire正規化後重用全部既有coverage/selection/finish守門，新增同源metric-grain依賴一致性拒絕。",
+        "有辨識力的任意ID/改名契約/不同粒度/不同需求組合正反例、完整fake prepared與首錯保存停止/replay/dry-run/受控request及238既有相關回歸實跑通過；歷史raw/分數/Gate、兩src既存變更與舊wire保持；0模型/SQL/DB。"
+      ]
+    },
+    {
+      "id": "natural_evidence_bound_three_stage",
+      "parent": "natural_slots_three_stage",
+      "goal": "凍結新證據式managed候選，以Qwen自然驗證全部需求、七View映射及完整typed選擇",
+      "acceptance": [
+        "以新requirements-only recall格式開始單一預定自然樣本；全部本題必要資料責任、原文背景、scope與grain關聯正確，全部七View逐項語意及缺口驗收通過，包括未選來源；不重用、修復或重送前輪錯答案。",
+        "自然模型明確填出全部typed draft與integration；ready/prepared正確實現inventory anchor、店商品根粒度、stock_qty sum、snapshot_date metadata、sales同task月份/online/兩sum、先彙總再left及不補零；任何理由或其他文字不得新增未保證能力/母體或額外資料義務。",
+        "保存所有首次/失敗raw、模型設定/request ID、refs/schema、來源指紋與完整語意log；同版raw全管線replay一致。首provider/parse/contract錯誤即停FAIL、成功HTTP錯答回fresh研究；不執行SQL/DB。第6輪後先fresh審核完整4–6輪，再返回全部既有父節點各自驗證。"
+      ]
+    },
+    {
+      "id": "own_responsibility_managed_contract",
+      "parent": "natural_evidence_bound_three_stage",
+      "goal": "離線區分自身未完成與明示依賴未完成，建立可完整表達partial的最小managed候選",
+      "acceptance": [
+        "原第6輪3raw以凍結v1精確重現FAIL；保留原unsupported R1可用mapping/self表達及兩來源任意ID的自身partial grain表示缺口證據，不改原wire/guard/raw或溯及翻案。",
+        "新增獨立版本的own_gap必填嚴格布林wire；模型仍決定status、所有合法部分mappings與證據路徑。程式只從既有recall與同View statuses完整導出scope/grain缺口；所有kind的明示硬依賴一致驗證，不自動改狀態、丟mapping或補業務答案。普通月份filter不繼承輸出grain，真正grain相依的非metric仍不得冒稱supported。",
+        "跨daily_sales店×商品及customer_value會員×商品的自身partial、完整grain、合法unsupported、依賴完整性、非metric必要依賴、獨立月份filter、真order grain、不同metric各連不同grain、independent scalar與固定月份縮約等有辨識力正反例通過；完整fake至2prepared、各類首錯保存/停止與replay/dry-run通過。",
+        "既有307相關回歸原樣加新測試實跑通過；舊v1與所有舊wire/guard/測試/歷史raw/分數/38Gate及兩src既存變更hash保持，0模型POST/SQL/DB；新candidate與完整imports/prompts/schema/tests凍結。"
+      ]
+    },
+    {
+      "id": "natural_own_responsibility_three_stage",
+      "parent": "natural_evidence_bound_three_stage",
+      "goal": "以固定新自身責任候選自然驗證完整七View、typed選擇及prepared並返回全部既有父節點",
+      "acceptance": [
+        "固定新candidate僅一個預定全新自然樣本：requirements-only recall、全部七View各一次、完整typed selection；全題必要資料責任、背景、scope及實質grain依賴正確；普通月份/通路能力不因無關輸出grain被誤降partial，所有自身與派生缺口逐項語意驗收，包含未選來源。",
+        "模型自行明確填出所有typed draft/integration且ready，prepared正確實現inventory店商品anchor、stock_qty sum、snapshot_date metadata、sales同task月份/online與兩sum、店商品先彙總再left及不補零；不從task.request補答案，不增加未保證母體/能力或status欄位義務。",
+        "保存所有首次/失敗raw、request ID、模型設定/來源freeze/schema/自身及派生缺口與語意log，同版完整或失敗前綴replay一致；首provider/parse/contract錯即停，任一語意錯亦FAIL交fresh研究，0SQL/DB且不原樣重試挑分。",
+        "依controller返回natural_evidence_bound_three_stage再至natural_slots_three_stage、natural_qwen_three_stage、three_stage_integration及root，各父節點須自身整合證據；每3輪fresh audit及根通過後fresh final verifier ACCEPT不可省略，所有未執行父層效果仍PENDING。"
+      ]
+    },
+    {
+      "id": "kind_mapping_managed_contract",
+      "parent": "natural_own_responsibility_three_stage",
+      "goal": "離線以需求kind約束最小mapping形狀，保留部分能力與原全部語意守門",
+      "acceptance": [
+        "以第8輪原raw及凍結版本精確重現filter.conditions首錯，保留GRN店鍵遺漏之語意FAIL；獨立區分部分能力完整性與結構合法性，不修raw、不改原分數或舊wire。",
+        "新獨立版本依recall kind生成各槽位專用mapping schema；程式只導出既有不變量已決定的role、不適用null/空欄及grain固定證據path，模型仍明確決定全部欄位、聚合、predicate/條件、自身缺口、狀態、其他證據path及原typed來源整合。所有舊guard原樣重用，不能搬移或補答舊filter條件。",
+        "正反例涵蓋整月雙predicate、條件metric、所有kind與跨來源/任意ID/改名契約部分grain、無關key不冒充母體、own_gap及全部硬依賴一致性；完整fake至2prepared、各首錯與同版/凍結replay通過。原384相關測試原樣加新focused測試實跑通過，0模型POST/SQL/DB。",
+        "保存新版完整sources/schema/prompts/imports/tests與歷史hash；兩src既存變更及全部舊wire/guards/raw/分數/38Gate保持。第9輪完成後先由fresh audit完整覆蓋7–9，未獲CONTINUE或新研究裁決前不發新自然POST。"
+      ]
+    },
+    {
+      "id": "natural_kind_mapping_three_stage",
+      "parent": "natural_own_responsibility_three_stage",
+      "goal": "經7–9輪fresh審核後以固定kind專用mapping候選完成單樣本自然三階段並逐層返回",
+      "acceptance": [
+        "固定新候選單一預定全新自然recall、七View各一次及完整typed selection；全部本題資料責任、scope/grain、每View有用部分能力、自身與派生缺口逐項語意正確，包含未選來源。全程只loopctl受控本機Qwen，首結構錯或任一語意錯均FAIL回fresh研究，不修答或原樣重試挑分。",
+        "模型完整typed ready及prepared正確實現inventory店商品anchor、stock_qty sum、snapshot_date metadata、sales同task月份/online/兩sum、店商品先彙總再left及不補零；不從request補答案、不加未保證能力/母體或status資料義務，0SQL/DB。",
+        "所有首次/失敗raw、原JSON欄位presence、schema/設定/request ID/freeze與完整語意log保存；成功或失敗前綴同版及凍結replay一致，歷史raw/分數/38Gate不改。",
+        "依controller返回natural_own_responsibility_three_stage、natural_evidence_bound_three_stage、natural_slots_three_stage、natural_qwen_three_stage、three_stage_integration及root各自驗收；每3輪fresh audit及根通過後fresh final verifier ACCEPT不可省略。"
+      ]
+    },
+    {
+      "id": "kind_diagnostic_fixture_harness",
+      "parent": "natural_kind_mapping_three_stage",
+      "goal": "離線建立固定注入上游的coverage與selection診斷套件及可重播受控單節點runner",
+      "acceptance": [
+        "固定kind-isolation-v1三個coverage樣本及一個selection樣本、全部輸入/Oracle/版本/樣本角色與數量；完整七View coverage逐責任列真契約依據，不沿用全unsupported fake當Oracle，不把診斷標成自然端到端。",
+        "新獨立runner只重用managed-kind-mapping-1 messages/schema/parse/materialize與原finish守門、ManagedInvoke/loopctl；coverage僅注入已核對recall，selection僅注入已核對recall及完整coverage，絕不注入該階段輸出或從request補答案。dry-run/離線正反例/首錯保存/同版及完整import凍結replay實跑通過，原496相關測試原樣加focused測試通過，0POST/SQL/DB。",
+        "fixture、各request body、獨立Oracle及source/schema/model設定hash全部封存；舊raw/分數/38Gate/兩src/舊module及guards保持。全部新fixture仍待下一個fresh獨立語意節點核准，不能在本節點結束後直接POST。"
+      ]
+    },
+    {
+      "id": "kind_diagnostic_fixture_semantics",
+      "parent": "natural_kind_mapping_three_stage",
+      "goal": "由不同fresh agent在模型呼叫前獨立核對固定診斷輸入與Oracle",
+      "acceptance": [
+        "核對原題全部八項責任、scope/grain依賴、精確索引/背景及改名/任意ID/日期控制；對selection全部七View共56項逐筆確認status/有用mapping/own_gap/條件/依賴與來源事實，包含未選來源，不能只重跑parser或相信作者自述。",
+        "預先定義正反例與容許等價表達皆合理；特別核對customer無關identifier與累計會員金額、daily店鍵/整月/淨額部分能力、order店鍵/日期/online/訂單淨額、product_monthly商品鍵/固定月/兩sum但缺online、store_monthly店鍵/月/淨額；庫存母體只由inventory證明。逐項引用真契約並判斷，不因上輪結果改Oracle。",
+        "獨立review JSON綁定fixture/Oracle/messages/schema/source/model/manifest全部hash並ACCEPT；任何未決語意或fixture錯誤FAIL交fresh研究，先固定新版本再重驗，0模型POST/SQL/DB。"
+      ]
+    },
+    {
+      "id": "natural_kind_selection_isolation",
+      "parent": "natural_kind_mapping_three_stage",
+      "goal": "固定正確完整coverage上游注入後自然測目前required typed selection可行性",
+      "acceptance": [
+        "前兩離線節點通過、獨立review hash精確匹配後，只執行SEL-ISO-v1-01一個預定首次local POST；輸入原題、固定recall與完整七View normalized coverage，使用現行SelectionWire及selection prompt，不附Oracle/預填draft/typed答案。",
+        "模型原raw自行明填所有required typed及integration，ready並產兩prepared：inventory店商品anchor、stock_qty sum、snapshot_date metadata；sales同task整月/online/discount_amount及net_sales兩sum；兩側先彙總到店商品後left、正確一對一鍵、保庫存且不補零。所有assignment/exclusion/free text及原JSON欄位presence逐項語意驗收，任何錯誤FAIL回fresh研究，不加欄位/repair/原樣重抽。",
+        "保存所有首次/失敗raw/receipt/設定/body/schema/freeze/語意log，原結果不可改判；同版及凍結replay一致。明標上游注入的selection節點診斷，不能替代自然recall/coverage或任何父層。第12輪後先fresh audit完整10–12，0SQL/DB。"
+      ]
+    },
+    {
+      "id": "natural_kind_coverage_isolation",
+      "parent": "natural_kind_mapping_three_stage",
+      "goal": "固定獨立recall上游注入後自然區分有用部分鍵、依賴缺口與獨立整月predicate",
+      "acceptance": [
+        "離線輸入與Oracle已fresh ACCEPT且hash一致；依manifest固定順序COV-ISO-v1-01/02/03各一次首次local POST，三個獨立單coverage樣本全部保留，不事後增減/換ID/重抽。單樣本provider/parse/contract錯保存即結束該樣本；無控制器停止條件時完成預先固定的其餘獨立樣本，以避免首錯掩蓋對照；整節點任一錯均FAIL。",
+        "daily原題full-eight同時保留store_id合法partial grain且own_gap=true；revenue sum為dependency-only partial且own_gap=false，精確欠online及完整grain；整月雙predicate independently supported/own_gap=false，store key不能證保全部庫存，units_sold不代stock_qty。customer單grain對照不把customer_id當店商品鍵；改名daily/任意ID/2032閏年二月仍正確保留部分鍵、依賴與整月邊界，所有其餘欄位亦語意正確。",
+        "使用現行kind messages/schema/parse/materialize及原guards；只注入recall/單View契約，不附預期status/mapping/own_gap或語意Oracle。原raw、欄位presence、精確derived gaps及每項語意核對/設定/requestID/freeze保存，同版及凍結replay一致；明標上游注入診斷、任何FAIL交fresh研究重判責任切分/可行性，0SQL/DB。"
+      ]
+    }
+  ],
+  "evidence": [
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-9/handoff.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-9/diagnosis.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-9/research-probe.log"
+  ]
+}

@@ -1,0 +1,2315 @@
+FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF [ 93%]
+FFFFF                                                                    [100%]
+=================================== FAILURES ===================================
+_ test_self_partial_grain_keeps_available_key_without_inventing_self_dependency[demo_retail.v_daily_sales-store_id-\u5404\u5e97\u5404\u5546\u54c1-a/b~\u5e97\U0001f9fe] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe4a83b0>
+view = 'demo_retail.v_daily_sales', key = 'store_id', quote = '各店各商品'
+rid = 'a/b~店🧾'
+
+    @pytest.mark.parametrize('view,key,quote,rid', [
+        ('demo_retail.v_daily_sales', 'store_id', '各店各商品', 'a/b~店🧾'),
+        ('demo_retail.v_customer_value', 'customer_id', '各會員各商品', 'model_dump'),
+    ])
+    def test_self_partial_grain_keeps_available_key_without_inventing_self_dependency(catalog, view, key, quote, rid):
+>       rec = recall(catalog, quote, [requirement(quote, rid, quote, 'grain')])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_own_responsibility_managed_contract.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+_ test_self_partial_grain_keeps_available_key_without_inventing_self_dependency[demo_retail.v_customer_value-customer_id-\u5404\u6703\u54e1\u5404\u5546\u54c1-model_dump] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe345040>
+view = 'demo_retail.v_customer_value', key = 'customer_id', quote = '各會員各商品'
+rid = 'model_dump'
+
+    @pytest.mark.parametrize('view,key,quote,rid', [
+        ('demo_retail.v_daily_sales', 'store_id', '各店各商品', 'a/b~店🧾'),
+        ('demo_retail.v_customer_value', 'customer_id', '各會員各商品', 'model_dump'),
+    ])
+    def test_self_partial_grain_keeps_available_key_without_inventing_self_dependency(catalog, view, key, quote, rid):
+>       rec = recall(catalog, quote, [requirement(quote, rid, quote, 'grain')])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_own_responsibility_managed_contract.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+___ test_status_and_own_decision_are_never_repaired[partial-True-True-True] ____
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe33d4f0>
+status = 'partial', own = True, mapped = True, valid = True
+
+    @pytest.mark.parametrize('status,own,mapped,valid', [
+        ('partial', True, True, True), ('partial', False, True, False), ('partial', True, False, False),
+        ('supported', True, True, False), ('supported', False, True, True),
+        ('supported', False, False, False), ('unsupported', True, False, True),
+        ('uncertain', True, False, True), ('unsupported', False, False, False),
+        ('uncertain', False, False, False), ('unsupported', True, True, False),
+    ])
+    def test_status_and_own_decision_are_never_repaired(catalog, status, own, mapped, valid):
+        request = '各店各商品'
+>       rec = recall(catalog, request, [requirement(request, 'G', request, 'grain')])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_own_responsibility_managed_contract.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+__ test_status_and_own_decision_are_never_repaired[partial-False-True-False] ___
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe390860>
+status = 'partial', own = False, mapped = True, valid = False
+
+    @pytest.mark.parametrize('status,own,mapped,valid', [
+        ('partial', True, True, True), ('partial', False, True, False), ('partial', True, False, False),
+        ('supported', True, True, False), ('supported', False, True, True),
+        ('supported', False, False, False), ('unsupported', True, False, True),
+        ('uncertain', True, False, True), ('unsupported', False, False, False),
+        ('uncertain', False, False, False), ('unsupported', True, True, False),
+    ])
+    def test_status_and_own_decision_are_never_repaired(catalog, status, own, mapped, valid):
+        request = '各店各商品'
+>       rec = recall(catalog, request, [requirement(request, 'G', request, 'grain')])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_own_responsibility_managed_contract.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+__ test_status_and_own_decision_are_never_repaired[partial-True-False-False] ___
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe359b50>
+status = 'partial', own = True, mapped = False, valid = False
+
+    @pytest.mark.parametrize('status,own,mapped,valid', [
+        ('partial', True, True, True), ('partial', False, True, False), ('partial', True, False, False),
+        ('supported', True, True, False), ('supported', False, True, True),
+        ('supported', False, False, False), ('unsupported', True, False, True),
+        ('uncertain', True, False, True), ('unsupported', False, False, False),
+        ('uncertain', False, False, False), ('unsupported', True, True, False),
+    ])
+    def test_status_and_own_decision_are_never_repaired(catalog, status, own, mapped, valid):
+        request = '各店各商品'
+>       rec = recall(catalog, request, [requirement(request, 'G', request, 'grain')])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_own_responsibility_managed_contract.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+__ test_status_and_own_decision_are_never_repaired[supported-True-True-False] __
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe300530>
+status = 'supported', own = True, mapped = True, valid = False
+
+    @pytest.mark.parametrize('status,own,mapped,valid', [
+        ('partial', True, True, True), ('partial', False, True, False), ('partial', True, False, False),
+        ('supported', True, True, False), ('supported', False, True, True),
+        ('supported', False, False, False), ('unsupported', True, False, True),
+        ('uncertain', True, False, True), ('unsupported', False, False, False),
+        ('uncertain', False, False, False), ('unsupported', True, True, False),
+    ])
+    def test_status_and_own_decision_are_never_repaired(catalog, status, own, mapped, valid):
+        request = '各店各商品'
+>       rec = recall(catalog, request, [requirement(request, 'G', request, 'grain')])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_own_responsibility_managed_contract.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+__ test_status_and_own_decision_are_never_repaired[supported-False-True-True] __
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe2480b0>
+status = 'supported', own = False, mapped = True, valid = True
+
+    @pytest.mark.parametrize('status,own,mapped,valid', [
+        ('partial', True, True, True), ('partial', False, True, False), ('partial', True, False, False),
+        ('supported', True, True, False), ('supported', False, True, True),
+        ('supported', False, False, False), ('unsupported', True, False, True),
+        ('uncertain', True, False, True), ('unsupported', False, False, False),
+        ('uncertain', False, False, False), ('unsupported', True, True, False),
+    ])
+    def test_status_and_own_decision_are_never_repaired(catalog, status, own, mapped, valid):
+        request = '各店各商品'
+>       rec = recall(catalog, request, [requirement(request, 'G', request, 'grain')])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_own_responsibility_managed_contract.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+_ test_status_and_own_decision_are_never_repaired[supported-False-False-False] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe216540>
+status = 'supported', own = False, mapped = False, valid = False
+
+    @pytest.mark.parametrize('status,own,mapped,valid', [
+        ('partial', True, True, True), ('partial', False, True, False), ('partial', True, False, False),
+        ('supported', True, True, False), ('supported', False, True, True),
+        ('supported', False, False, False), ('unsupported', True, False, True),
+        ('uncertain', True, False, True), ('unsupported', False, False, False),
+        ('uncertain', False, False, False), ('unsupported', True, True, False),
+    ])
+    def test_status_and_own_decision_are_never_repaired(catalog, status, own, mapped, valid):
+        request = '各店各商品'
+>       rec = recall(catalog, request, [requirement(request, 'G', request, 'grain')])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_own_responsibility_managed_contract.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+_ test_status_and_own_decision_are_never_repaired[unsupported-True-False-True] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe2162d0>
+status = 'unsupported', own = True, mapped = False, valid = True
+
+    @pytest.mark.parametrize('status,own,mapped,valid', [
+        ('partial', True, True, True), ('partial', False, True, False), ('partial', True, False, False),
+        ('supported', True, True, False), ('supported', False, True, True),
+        ('supported', False, False, False), ('unsupported', True, False, True),
+        ('uncertain', True, False, True), ('unsupported', False, False, False),
+        ('uncertain', False, False, False), ('unsupported', True, True, False),
+    ])
+    def test_status_and_own_decision_are_never_repaired(catalog, status, own, mapped, valid):
+        request = '各店各商品'
+>       rec = recall(catalog, request, [requirement(request, 'G', request, 'grain')])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_own_responsibility_managed_contract.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+__ test_status_and_own_decision_are_never_repaired[uncertain-True-False-True] __
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe303410>
+status = 'uncertain', own = True, mapped = False, valid = True
+
+    @pytest.mark.parametrize('status,own,mapped,valid', [
+        ('partial', True, True, True), ('partial', False, True, False), ('partial', True, False, False),
+        ('supported', True, True, False), ('supported', False, True, True),
+        ('supported', False, False, False), ('unsupported', True, False, True),
+        ('uncertain', True, False, True), ('unsupported', False, False, False),
+        ('uncertain', False, False, False), ('unsupported', True, True, False),
+    ])
+    def test_status_and_own_decision_are_never_repaired(catalog, status, own, mapped, valid):
+        request = '各店各商品'
+>       rec = recall(catalog, request, [requirement(request, 'G', request, 'grain')])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_own_responsibility_managed_contract.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+_ test_status_and_own_decision_are_never_repaired[unsupported-False-False-False] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe3602f0>
+status = 'unsupported', own = False, mapped = False, valid = False
+
+    @pytest.mark.parametrize('status,own,mapped,valid', [
+        ('partial', True, True, True), ('partial', False, True, False), ('partial', True, False, False),
+        ('supported', True, True, False), ('supported', False, True, True),
+        ('supported', False, False, False), ('unsupported', True, False, True),
+        ('uncertain', True, False, True), ('unsupported', False, False, False),
+        ('uncertain', False, False, False), ('unsupported', True, True, False),
+    ])
+    def test_status_and_own_decision_are_never_repaired(catalog, status, own, mapped, valid):
+        request = '各店各商品'
+>       rec = recall(catalog, request, [requirement(request, 'G', request, 'grain')])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_own_responsibility_managed_contract.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+_ test_status_and_own_decision_are_never_repaired[uncertain-False-False-False] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe275160>
+status = 'uncertain', own = False, mapped = False, valid = False
+
+    @pytest.mark.parametrize('status,own,mapped,valid', [
+        ('partial', True, True, True), ('partial', False, True, False), ('partial', True, False, False),
+        ('supported', True, True, False), ('supported', False, True, True),
+        ('supported', False, False, False), ('unsupported', True, False, True),
+        ('uncertain', True, False, True), ('unsupported', False, False, False),
+        ('uncertain', False, False, False), ('unsupported', True, True, False),
+    ])
+    def test_status_and_own_decision_are_never_repaired(catalog, status, own, mapped, valid):
+        request = '各店各商品'
+>       rec = recall(catalog, request, [requirement(request, 'G', request, 'grain')])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_own_responsibility_managed_contract.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+_ test_status_and_own_decision_are_never_repaired[unsupported-True-True-False] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe5427b0>
+status = 'unsupported', own = True, mapped = True, valid = False
+
+    @pytest.mark.parametrize('status,own,mapped,valid', [
+        ('partial', True, True, True), ('partial', False, True, False), ('partial', True, False, False),
+        ('supported', True, True, False), ('supported', False, True, True),
+        ('supported', False, False, False), ('unsupported', True, False, True),
+        ('uncertain', True, False, True), ('unsupported', False, False, False),
+        ('uncertain', False, False, False), ('unsupported', True, True, False),
+    ])
+    def test_status_and_own_decision_are_never_repaired(catalog, status, own, mapped, valid):
+        request = '各店各商品'
+>       rec = recall(catalog, request, [requirement(request, 'G', request, 'grain')])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_own_responsibility_managed_contract.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+________________ test_own_gap_is_required_strict_boolean[None] _________________
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe392c00>
+bad = None
+
+    @pytest.mark.parametrize('bad', [None, 0, 1, 'true', 'false', [], {}])
+    def test_own_gap_is_required_strict_boolean(catalog, bad):
+        request, data, maps, _ = inputs(catalog)
+>       rec = recall(catalog, request, data['requirements'])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_own_responsibility_managed_contract.py:96: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+__________________ test_own_gap_is_required_strict_boolean[0] __________________
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe346e70>
+bad = 0
+
+    @pytest.mark.parametrize('bad', [None, 0, 1, 'true', 'false', [], {}])
+    def test_own_gap_is_required_strict_boolean(catalog, bad):
+        request, data, maps, _ = inputs(catalog)
+>       rec = recall(catalog, request, data['requirements'])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_own_responsibility_managed_contract.py:96: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+__________________ test_own_gap_is_required_strict_boolean[1] __________________
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe391f70>
+bad = 1
+
+    @pytest.mark.parametrize('bad', [None, 0, 1, 'true', 'false', [], {}])
+    def test_own_gap_is_required_strict_boolean(catalog, bad):
+        request, data, maps, _ = inputs(catalog)
+>       rec = recall(catalog, request, data['requirements'])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_own_responsibility_managed_contract.py:96: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+________________ test_own_gap_is_required_strict_boolean[true] _________________
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe3e19d0>
+bad = 'true'
+
+    @pytest.mark.parametrize('bad', [None, 0, 1, 'true', 'false', [], {}])
+    def test_own_gap_is_required_strict_boolean(catalog, bad):
+        request, data, maps, _ = inputs(catalog)
+>       rec = recall(catalog, request, data['requirements'])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_own_responsibility_managed_contract.py:96: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+________________ test_own_gap_is_required_strict_boolean[false] ________________
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe392660>
+bad = 'false'
+
+    @pytest.mark.parametrize('bad', [None, 0, 1, 'true', 'false', [], {}])
+    def test_own_gap_is_required_strict_boolean(catalog, bad):
+        request, data, maps, _ = inputs(catalog)
+>       rec = recall(catalog, request, data['requirements'])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_own_responsibility_managed_contract.py:96: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+________________ test_own_gap_is_required_strict_boolean[bad5] _________________
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe80c5f0>
+bad = []
+
+    @pytest.mark.parametrize('bad', [None, 0, 1, 'true', 'false', [], {}])
+    def test_own_gap_is_required_strict_boolean(catalog, bad):
+        request, data, maps, _ = inputs(catalog)
+>       rec = recall(catalog, request, data['requirements'])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_own_responsibility_managed_contract.py:96: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+________________ test_own_gap_is_required_strict_boolean[bad6] _________________
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe3906e0>
+bad = {}
+
+    @pytest.mark.parametrize('bad', [None, 0, 1, 'true', 'false', [], {}])
+    def test_own_gap_is_required_strict_boolean(catalog, bad):
+        request, data, maps, _ = inputs(catalog)
+>       rec = recall(catalog, request, data['requirements'])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_own_responsibility_managed_contract.py:96: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+__ test_new_slots_reject_omissions_old_output_and_ambiguous_json[missing_own] __
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe360860>
+mutation = 'missing_own'
+
+    @pytest.mark.parametrize('mutation', ['missing_own', 'old_gaps', 'reason', 'missing_slot', 'unknown_slot', 'duplicate', 'nan'])
+    def test_new_slots_reject_omissions_old_output_and_ambiguous_json(catalog, mutation):
+        request, data, maps, _ = inputs(catalog)
+>       rec = recall(catalog, request, data['requirements'])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_own_responsibility_managed_contract.py:105: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+___ test_new_slots_reject_omissions_old_output_and_ambiguous_json[old_gaps] ____
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe2313d0>
+mutation = 'old_gaps'
+
+    @pytest.mark.parametrize('mutation', ['missing_own', 'old_gaps', 'reason', 'missing_slot', 'unknown_slot', 'duplicate', 'nan'])
+    def test_new_slots_reject_omissions_old_output_and_ambiguous_json(catalog, mutation):
+        request, data, maps, _ = inputs(catalog)
+>       rec = recall(catalog, request, data['requirements'])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_own_responsibility_managed_contract.py:105: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+____ test_new_slots_reject_omissions_old_output_and_ambiguous_json[reason] _____
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe540710>
+mutation = 'reason'
+
+    @pytest.mark.parametrize('mutation', ['missing_own', 'old_gaps', 'reason', 'missing_slot', 'unknown_slot', 'duplicate', 'nan'])
+    def test_new_slots_reject_omissions_old_output_and_ambiguous_json(catalog, mutation):
+        request, data, maps, _ = inputs(catalog)
+>       rec = recall(catalog, request, data['requirements'])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_own_responsibility_managed_contract.py:105: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+_ test_new_slots_reject_omissions_old_output_and_ambiguous_json[missing_slot] __
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe392840>
+mutation = 'missing_slot'
+
+    @pytest.mark.parametrize('mutation', ['missing_own', 'old_gaps', 'reason', 'missing_slot', 'unknown_slot', 'duplicate', 'nan'])
+    def test_new_slots_reject_omissions_old_output_and_ambiguous_json(catalog, mutation):
+        request, data, maps, _ = inputs(catalog)
+>       rec = recall(catalog, request, data['requirements'])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_own_responsibility_managed_contract.py:105: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+_ test_new_slots_reject_omissions_old_output_and_ambiguous_json[unknown_slot] __
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe303230>
+mutation = 'unknown_slot'
+
+    @pytest.mark.parametrize('mutation', ['missing_own', 'old_gaps', 'reason', 'missing_slot', 'unknown_slot', 'duplicate', 'nan'])
+    def test_new_slots_reject_omissions_old_output_and_ambiguous_json(catalog, mutation):
+        request, data, maps, _ = inputs(catalog)
+>       rec = recall(catalog, request, data['requirements'])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_own_responsibility_managed_contract.py:105: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+___ test_new_slots_reject_omissions_old_output_and_ambiguous_json[duplicate] ___
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe3004d0>
+mutation = 'duplicate'
+
+    @pytest.mark.parametrize('mutation', ['missing_own', 'old_gaps', 'reason', 'missing_slot', 'unknown_slot', 'duplicate', 'nan'])
+    def test_new_slots_reject_omissions_old_output_and_ambiguous_json(catalog, mutation):
+        request, data, maps, _ = inputs(catalog)
+>       rec = recall(catalog, request, data['requirements'])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_own_responsibility_managed_contract.py:105: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+______ test_new_slots_reject_omissions_old_output_and_ambiguous_json[nan] ______
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe7e3770>
+mutation = 'nan'
+
+    @pytest.mark.parametrize('mutation', ['missing_own', 'old_gaps', 'reason', 'missing_slot', 'unknown_slot', 'duplicate', 'nan'])
+    def test_new_slots_reject_omissions_old_output_and_ambiguous_json(catalog, mutation):
+        request, data, maps, _ = inputs(catalog)
+>       rec = recall(catalog, request, data['requirements'])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_own_responsibility_managed_contract.py:105: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+_ test_all_unfinished_scope_and_grain_dependencies_are_derived_in_exact_order[partial-partial] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe345040>
+scope_status = 'partial', grain_status = 'partial'
+
+    @pytest.mark.parametrize('scope_status', ['partial', 'unsupported', 'uncertain'])
+    @pytest.mark.parametrize('grain_status', ['partial', 'unsupported', 'uncertain'])
+    def test_all_unfinished_scope_and_grain_dependencies_are_derived_in_exact_order(catalog, scope_status, grain_status):
+>       request, rec, rows = graph(catalog, scope_status=scope_status, grain_status=grain_status)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_own_responsibility_managed_contract.py:134: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:124: in graph
+    rec = recall(catalog, request, reqs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+_ test_all_unfinished_scope_and_grain_dependencies_are_derived_in_exact_order[partial-unsupported] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe29b9b0>
+scope_status = 'unsupported', grain_status = 'partial'
+
+    @pytest.mark.parametrize('scope_status', ['partial', 'unsupported', 'uncertain'])
+    @pytest.mark.parametrize('grain_status', ['partial', 'unsupported', 'uncertain'])
+    def test_all_unfinished_scope_and_grain_dependencies_are_derived_in_exact_order(catalog, scope_status, grain_status):
+>       request, rec, rows = graph(catalog, scope_status=scope_status, grain_status=grain_status)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_own_responsibility_managed_contract.py:134: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:124: in graph
+    rec = recall(catalog, request, reqs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+_ test_all_unfinished_scope_and_grain_dependencies_are_derived_in_exact_order[partial-uncertain] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe30a060>
+scope_status = 'uncertain', grain_status = 'partial'
+
+    @pytest.mark.parametrize('scope_status', ['partial', 'unsupported', 'uncertain'])
+    @pytest.mark.parametrize('grain_status', ['partial', 'unsupported', 'uncertain'])
+    def test_all_unfinished_scope_and_grain_dependencies_are_derived_in_exact_order(catalog, scope_status, grain_status):
+>       request, rec, rows = graph(catalog, scope_status=scope_status, grain_status=grain_status)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_own_responsibility_managed_contract.py:134: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:124: in graph
+    rec = recall(catalog, request, reqs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+_ test_all_unfinished_scope_and_grain_dependencies_are_derived_in_exact_order[unsupported-partial] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe232480>
+scope_status = 'partial', grain_status = 'unsupported'
+
+    @pytest.mark.parametrize('scope_status', ['partial', 'unsupported', 'uncertain'])
+    @pytest.mark.parametrize('grain_status', ['partial', 'unsupported', 'uncertain'])
+    def test_all_unfinished_scope_and_grain_dependencies_are_derived_in_exact_order(catalog, scope_status, grain_status):
+>       request, rec, rows = graph(catalog, scope_status=scope_status, grain_status=grain_status)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_own_responsibility_managed_contract.py:134: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:124: in graph
+    rec = recall(catalog, request, reqs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+_ test_all_unfinished_scope_and_grain_dependencies_are_derived_in_exact_order[unsupported-unsupported] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe33cec0>
+scope_status = 'unsupported', grain_status = 'unsupported'
+
+    @pytest.mark.parametrize('scope_status', ['partial', 'unsupported', 'uncertain'])
+    @pytest.mark.parametrize('grain_status', ['partial', 'unsupported', 'uncertain'])
+    def test_all_unfinished_scope_and_grain_dependencies_are_derived_in_exact_order(catalog, scope_status, grain_status):
+>       request, rec, rows = graph(catalog, scope_status=scope_status, grain_status=grain_status)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_own_responsibility_managed_contract.py:134: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:124: in graph
+    rec = recall(catalog, request, reqs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+_ test_all_unfinished_scope_and_grain_dependencies_are_derived_in_exact_order[unsupported-uncertain] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe4f3140>
+scope_status = 'uncertain', grain_status = 'unsupported'
+
+    @pytest.mark.parametrize('scope_status', ['partial', 'unsupported', 'uncertain'])
+    @pytest.mark.parametrize('grain_status', ['partial', 'unsupported', 'uncertain'])
+    def test_all_unfinished_scope_and_grain_dependencies_are_derived_in_exact_order(catalog, scope_status, grain_status):
+>       request, rec, rows = graph(catalog, scope_status=scope_status, grain_status=grain_status)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_own_responsibility_managed_contract.py:134: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:124: in graph
+    rec = recall(catalog, request, reqs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+_ test_all_unfinished_scope_and_grain_dependencies_are_derived_in_exact_order[uncertain-partial] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe361550>
+scope_status = 'partial', grain_status = 'uncertain'
+
+    @pytest.mark.parametrize('scope_status', ['partial', 'unsupported', 'uncertain'])
+    @pytest.mark.parametrize('grain_status', ['partial', 'unsupported', 'uncertain'])
+    def test_all_unfinished_scope_and_grain_dependencies_are_derived_in_exact_order(catalog, scope_status, grain_status):
+>       request, rec, rows = graph(catalog, scope_status=scope_status, grain_status=grain_status)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_own_responsibility_managed_contract.py:134: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:124: in graph
+    rec = recall(catalog, request, reqs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+_ test_all_unfinished_scope_and_grain_dependencies_are_derived_in_exact_order[uncertain-unsupported] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe347e60>
+scope_status = 'unsupported', grain_status = 'uncertain'
+
+    @pytest.mark.parametrize('scope_status', ['partial', 'unsupported', 'uncertain'])
+    @pytest.mark.parametrize('grain_status', ['partial', 'unsupported', 'uncertain'])
+    def test_all_unfinished_scope_and_grain_dependencies_are_derived_in_exact_order(catalog, scope_status, grain_status):
+>       request, rec, rows = graph(catalog, scope_status=scope_status, grain_status=grain_status)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_own_responsibility_managed_contract.py:134: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:124: in graph
+    rec = recall(catalog, request, reqs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+_ test_all_unfinished_scope_and_grain_dependencies_are_derived_in_exact_order[uncertain-uncertain] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe274ec0>
+scope_status = 'uncertain', grain_status = 'uncertain'
+
+    @pytest.mark.parametrize('scope_status', ['partial', 'unsupported', 'uncertain'])
+    @pytest.mark.parametrize('grain_status', ['partial', 'unsupported', 'uncertain'])
+    def test_all_unfinished_scope_and_grain_dependencies_are_derived_in_exact_order(catalog, scope_status, grain_status):
+>       request, rec, rows = graph(catalog, scope_status=scope_status, grain_status=grain_status)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_own_responsibility_managed_contract.py:134: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:124: in graph
+    rec = recall(catalog, request, reqs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+____________ test_own_gap_and_both_dependency_sets_remain_distinct _____________
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe2acec0>
+
+    def test_own_gap_and_both_dependency_sets_remain_distinct(catalog):
+>       request, rec, rows = graph(catalog, own=True)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_own_responsibility_managed_contract.py:149: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:124: in graph
+    rec = recall(catalog, request, reqs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+_ test_every_kind_treats_explicit_grain_refs_as_hard_dependencies[metric-stock_qty-metric] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe235940>
+kind = 'metric', column = 'stock_qty', role = 'metric'
+
+    @pytest.mark.parametrize('kind,column,role', [
+        ('metric','stock_qty','metric'), ('attribute','stock_status','attribute'),
+        ('metadata','snapshot_date','metadata'), ('filter','snapshot_date','filter'),
+        ('key','store_id','key'), ('population','store_id','key'), ('grain','store_id','key')])
+    def test_every_kind_treats_explicit_grain_refs_as_hard_dependencies(catalog, kind, column, role):
+        request = '各店各商品顯示資料'
+>       rec = recall(catalog, request, [requirement(request,'G','各店各商品','grain'),
+            requirement(request,'X','顯示資料',kind,grains=['G'],binding='linked' if kind=='metric' else None)])
+
+tests/unit/test_own_responsibility_managed_contract.py:161: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+_ test_every_kind_treats_explicit_grain_refs_as_hard_dependencies[attribute-stock_status-attribute] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe29ad80>
+kind = 'attribute', column = 'stock_status', role = 'attribute'
+
+    @pytest.mark.parametrize('kind,column,role', [
+        ('metric','stock_qty','metric'), ('attribute','stock_status','attribute'),
+        ('metadata','snapshot_date','metadata'), ('filter','snapshot_date','filter'),
+        ('key','store_id','key'), ('population','store_id','key'), ('grain','store_id','key')])
+    def test_every_kind_treats_explicit_grain_refs_as_hard_dependencies(catalog, kind, column, role):
+        request = '各店各商品顯示資料'
+>       rec = recall(catalog, request, [requirement(request,'G','各店各商品','grain'),
+            requirement(request,'X','顯示資料',kind,grains=['G'],binding='linked' if kind=='metric' else None)])
+
+tests/unit/test_own_responsibility_managed_contract.py:161: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+_ test_every_kind_treats_explicit_grain_refs_as_hard_dependencies[metadata-snapshot_date-metadata] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe347530>
+kind = 'metadata', column = 'snapshot_date', role = 'metadata'
+
+    @pytest.mark.parametrize('kind,column,role', [
+        ('metric','stock_qty','metric'), ('attribute','stock_status','attribute'),
+        ('metadata','snapshot_date','metadata'), ('filter','snapshot_date','filter'),
+        ('key','store_id','key'), ('population','store_id','key'), ('grain','store_id','key')])
+    def test_every_kind_treats_explicit_grain_refs_as_hard_dependencies(catalog, kind, column, role):
+        request = '各店各商品顯示資料'
+>       rec = recall(catalog, request, [requirement(request,'G','各店各商品','grain'),
+            requirement(request,'X','顯示資料',kind,grains=['G'],binding='linked' if kind=='metric' else None)])
+
+tests/unit/test_own_responsibility_managed_contract.py:161: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+_ test_every_kind_treats_explicit_grain_refs_as_hard_dependencies[filter-snapshot_date-filter] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe23c320>
+kind = 'filter', column = 'snapshot_date', role = 'filter'
+
+    @pytest.mark.parametrize('kind,column,role', [
+        ('metric','stock_qty','metric'), ('attribute','stock_status','attribute'),
+        ('metadata','snapshot_date','metadata'), ('filter','snapshot_date','filter'),
+        ('key','store_id','key'), ('population','store_id','key'), ('grain','store_id','key')])
+    def test_every_kind_treats_explicit_grain_refs_as_hard_dependencies(catalog, kind, column, role):
+        request = '各店各商品顯示資料'
+>       rec = recall(catalog, request, [requirement(request,'G','各店各商品','grain'),
+            requirement(request,'X','顯示資料',kind,grains=['G'],binding='linked' if kind=='metric' else None)])
+
+tests/unit/test_own_responsibility_managed_contract.py:161: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+_ test_every_kind_treats_explicit_grain_refs_as_hard_dependencies[key-store_id-key] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe3303e0>
+kind = 'key', column = 'store_id', role = 'key'
+
+    @pytest.mark.parametrize('kind,column,role', [
+        ('metric','stock_qty','metric'), ('attribute','stock_status','attribute'),
+        ('metadata','snapshot_date','metadata'), ('filter','snapshot_date','filter'),
+        ('key','store_id','key'), ('population','store_id','key'), ('grain','store_id','key')])
+    def test_every_kind_treats_explicit_grain_refs_as_hard_dependencies(catalog, kind, column, role):
+        request = '各店各商品顯示資料'
+>       rec = recall(catalog, request, [requirement(request,'G','各店各商品','grain'),
+            requirement(request,'X','顯示資料',kind,grains=['G'],binding='linked' if kind=='metric' else None)])
+
+tests/unit/test_own_responsibility_managed_contract.py:161: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+_ test_every_kind_treats_explicit_grain_refs_as_hard_dependencies[population-store_id-key] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe231280>
+kind = 'population', column = 'store_id', role = 'key'
+
+    @pytest.mark.parametrize('kind,column,role', [
+        ('metric','stock_qty','metric'), ('attribute','stock_status','attribute'),
+        ('metadata','snapshot_date','metadata'), ('filter','snapshot_date','filter'),
+        ('key','store_id','key'), ('population','store_id','key'), ('grain','store_id','key')])
+    def test_every_kind_treats_explicit_grain_refs_as_hard_dependencies(catalog, kind, column, role):
+        request = '各店各商品顯示資料'
+>       rec = recall(catalog, request, [requirement(request,'G','各店各商品','grain'),
+            requirement(request,'X','顯示資料',kind,grains=['G'],binding='linked' if kind=='metric' else None)])
+
+tests/unit/test_own_responsibility_managed_contract.py:161: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+_ test_every_kind_treats_explicit_grain_refs_as_hard_dependencies[grain-store_id-key] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe229370>
+kind = 'grain', column = 'store_id', role = 'key'
+
+    @pytest.mark.parametrize('kind,column,role', [
+        ('metric','stock_qty','metric'), ('attribute','stock_status','attribute'),
+        ('metadata','snapshot_date','metadata'), ('filter','snapshot_date','filter'),
+        ('key','store_id','key'), ('population','store_id','key'), ('grain','store_id','key')])
+    def test_every_kind_treats_explicit_grain_refs_as_hard_dependencies(catalog, kind, column, role):
+        request = '各店各商品顯示資料'
+>       rec = recall(catalog, request, [requirement(request,'G','各店各商品','grain'),
+            requirement(request,'X','顯示資料',kind,grains=['G'],binding='linked' if kind=='metric' else None)])
+
+tests/unit/test_own_responsibility_managed_contract.py:161: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+_ test_month_predicate_is_independent_of_unavailable_output_grain_until_explicitly_linked _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe3083b0>
+
+    def test_month_predicate_is_independent_of_unavailable_output_grain_until_explicitly_linked(catalog):
+        request = '各店各商品2026年9月'
+        reqs = [requirement(request,'G','各店各商品','grain'),requirement(request,'F','2026年9月','filter')]
+>       rec = recall(catalog, request, reqs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_own_responsibility_managed_contract.py:180: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+_ test_supported_dependencies_emit_no_phantom_gaps_and_partial_without_gap_is_rejected _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe3e1ca0>
+
+    def test_supported_dependencies_emit_no_phantom_gaps_and_partial_without_gap_is_rejected(catalog):
+        request, recdata, maps, _ = inputs(catalog)
+>       rec = recall(catalog, request, recdata['requirements'])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_own_responsibility_managed_contract.py:193: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+____________ test_reused_recall_and_metric_binding_guards[unknown] _____________
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe2f71a0>
+mutation = 'unknown'
+
+    @pytest.mark.parametrize('mutation',['unknown','wrong_kind','self','duplicate','empty_link','independent_refs','unspecified'])
+    def test_reused_recall_and_metric_binding_guards(catalog,mutation):
+        request,recdata,maps,_ = inputs(catalog)
+        item = recdata['requirements'][1]
+        if mutation=='unknown': item['grain_requirement_ids']=['?']
+        if mutation=='wrong_kind': item['grain_requirement_ids']=['period']
+        if mutation=='self': item['grain_requirement_ids']=['sales']
+        if mutation=='duplicate': item['grain_requirement_ids']=['grain','grain']
+        if mutation=='empty_link': item['grain_requirement_ids']=[]
+        if mutation=='independent_refs': item['grain_binding']='independent'
+        if mutation=='unspecified': item.update(grain_binding='unspecified',grain_requirement_ids=[])
+        with pytest.raises(ValueError):
+>           rec=recall(catalog,request,recdata['requirements'])
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_own_responsibility_managed_contract.py:213: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+___________ test_reused_recall_and_metric_binding_guards[wrong_kind] ___________
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe274fe0>
+mutation = 'wrong_kind'
+
+    @pytest.mark.parametrize('mutation',['unknown','wrong_kind','self','duplicate','empty_link','independent_refs','unspecified'])
+    def test_reused_recall_and_metric_binding_guards(catalog,mutation):
+        request,recdata,maps,_ = inputs(catalog)
+        item = recdata['requirements'][1]
+        if mutation=='unknown': item['grain_requirement_ids']=['?']
+        if mutation=='wrong_kind': item['grain_requirement_ids']=['period']
+        if mutation=='self': item['grain_requirement_ids']=['sales']
+        if mutation=='duplicate': item['grain_requirement_ids']=['grain','grain']
+        if mutation=='empty_link': item['grain_requirement_ids']=[]
+        if mutation=='independent_refs': item['grain_binding']='independent'
+        if mutation=='unspecified': item.update(grain_binding='unspecified',grain_requirement_ids=[])
+        with pytest.raises(ValueError):
+>           rec=recall(catalog,request,recdata['requirements'])
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_own_responsibility_managed_contract.py:213: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+______________ test_reused_recall_and_metric_binding_guards[self] ______________
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe541730>
+mutation = 'self'
+
+    @pytest.mark.parametrize('mutation',['unknown','wrong_kind','self','duplicate','empty_link','independent_refs','unspecified'])
+    def test_reused_recall_and_metric_binding_guards(catalog,mutation):
+        request,recdata,maps,_ = inputs(catalog)
+        item = recdata['requirements'][1]
+        if mutation=='unknown': item['grain_requirement_ids']=['?']
+        if mutation=='wrong_kind': item['grain_requirement_ids']=['period']
+        if mutation=='self': item['grain_requirement_ids']=['sales']
+        if mutation=='duplicate': item['grain_requirement_ids']=['grain','grain']
+        if mutation=='empty_link': item['grain_requirement_ids']=[]
+        if mutation=='independent_refs': item['grain_binding']='independent'
+        if mutation=='unspecified': item.update(grain_binding='unspecified',grain_requirement_ids=[])
+        with pytest.raises(ValueError):
+>           rec=recall(catalog,request,recdata['requirements'])
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_own_responsibility_managed_contract.py:213: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+___________ test_reused_recall_and_metric_binding_guards[duplicate] ____________
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe345b80>
+mutation = 'duplicate'
+
+    @pytest.mark.parametrize('mutation',['unknown','wrong_kind','self','duplicate','empty_link','independent_refs','unspecified'])
+    def test_reused_recall_and_metric_binding_guards(catalog,mutation):
+        request,recdata,maps,_ = inputs(catalog)
+        item = recdata['requirements'][1]
+        if mutation=='unknown': item['grain_requirement_ids']=['?']
+        if mutation=='wrong_kind': item['grain_requirement_ids']=['period']
+        if mutation=='self': item['grain_requirement_ids']=['sales']
+        if mutation=='duplicate': item['grain_requirement_ids']=['grain','grain']
+        if mutation=='empty_link': item['grain_requirement_ids']=[]
+        if mutation=='independent_refs': item['grain_binding']='independent'
+        if mutation=='unspecified': item.update(grain_binding='unspecified',grain_requirement_ids=[])
+        with pytest.raises(ValueError):
+>           rec=recall(catalog,request,recdata['requirements'])
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_own_responsibility_managed_contract.py:213: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+___________ test_reused_recall_and_metric_binding_guards[empty_link] ___________
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe3e3e30>
+mutation = 'empty_link'
+
+    @pytest.mark.parametrize('mutation',['unknown','wrong_kind','self','duplicate','empty_link','independent_refs','unspecified'])
+    def test_reused_recall_and_metric_binding_guards(catalog,mutation):
+        request,recdata,maps,_ = inputs(catalog)
+        item = recdata['requirements'][1]
+        if mutation=='unknown': item['grain_requirement_ids']=['?']
+        if mutation=='wrong_kind': item['grain_requirement_ids']=['period']
+        if mutation=='self': item['grain_requirement_ids']=['sales']
+        if mutation=='duplicate': item['grain_requirement_ids']=['grain','grain']
+        if mutation=='empty_link': item['grain_requirement_ids']=[]
+        if mutation=='independent_refs': item['grain_binding']='independent'
+        if mutation=='unspecified': item.update(grain_binding='unspecified',grain_requirement_ids=[])
+        with pytest.raises(ValueError):
+>           rec=recall(catalog,request,recdata['requirements'])
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_own_responsibility_managed_contract.py:213: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+________ test_reused_recall_and_metric_binding_guards[independent_refs] ________
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe2f4350>
+mutation = 'independent_refs'
+
+    @pytest.mark.parametrize('mutation',['unknown','wrong_kind','self','duplicate','empty_link','independent_refs','unspecified'])
+    def test_reused_recall_and_metric_binding_guards(catalog,mutation):
+        request,recdata,maps,_ = inputs(catalog)
+        item = recdata['requirements'][1]
+        if mutation=='unknown': item['grain_requirement_ids']=['?']
+        if mutation=='wrong_kind': item['grain_requirement_ids']=['period']
+        if mutation=='self': item['grain_requirement_ids']=['sales']
+        if mutation=='duplicate': item['grain_requirement_ids']=['grain','grain']
+        if mutation=='empty_link': item['grain_requirement_ids']=[]
+        if mutation=='independent_refs': item['grain_binding']='independent'
+        if mutation=='unspecified': item.update(grain_binding='unspecified',grain_requirement_ids=[])
+        with pytest.raises(ValueError):
+>           rec=recall(catalog,request,recdata['requirements'])
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_own_responsibility_managed_contract.py:213: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+__________ test_reused_recall_and_metric_binding_guards[unspecified] ___________
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe228050>
+mutation = 'unspecified'
+
+    @pytest.mark.parametrize('mutation',['unknown','wrong_kind','self','duplicate','empty_link','independent_refs','unspecified'])
+    def test_reused_recall_and_metric_binding_guards(catalog,mutation):
+        request,recdata,maps,_ = inputs(catalog)
+        item = recdata['requirements'][1]
+        if mutation=='unknown': item['grain_requirement_ids']=['?']
+        if mutation=='wrong_kind': item['grain_requirement_ids']=['period']
+        if mutation=='self': item['grain_requirement_ids']=['sales']
+        if mutation=='duplicate': item['grain_requirement_ids']=['grain','grain']
+        if mutation=='empty_link': item['grain_requirement_ids']=[]
+        if mutation=='independent_refs': item['grain_binding']='independent'
+        if mutation=='unspecified': item.update(grain_binding='unspecified',grain_requirement_ids=[])
+        with pytest.raises(ValueError):
+>           rec=recall(catalog,request,recdata['requirements'])
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_own_responsibility_managed_contract.py:213: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+_ test_own_gap_does_not_exempt_partial_mappings_or_evidence_from_original_guards[column] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe3913d0>
+mutation = 'column'
+
+    @pytest.mark.parametrize('mutation',['column','path','role','aggregation','date','channel','grain_path','null_own'])
+    def test_own_gap_does_not_exempt_partial_mappings_or_evidence_from_original_guards(catalog,mutation):
+        request,recdata,maps,_=inputs(catalog)
+>       rec=recall(catalog,request,recdata['requirements']); rows=maps[5]['entries']
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_own_responsibility_managed_contract.py:220: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+_ test_own_gap_does_not_exempt_partial_mappings_or_evidence_from_original_guards[path] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe297a10>
+mutation = 'path'
+
+    @pytest.mark.parametrize('mutation',['column','path','role','aggregation','date','channel','grain_path','null_own'])
+    def test_own_gap_does_not_exempt_partial_mappings_or_evidence_from_original_guards(catalog,mutation):
+        request,recdata,maps,_=inputs(catalog)
+>       rec=recall(catalog,request,recdata['requirements']); rows=maps[5]['entries']
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_own_responsibility_managed_contract.py:220: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+_ test_own_gap_does_not_exempt_partial_mappings_or_evidence_from_original_guards[role] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe236bd0>
+mutation = 'role'
+
+    @pytest.mark.parametrize('mutation',['column','path','role','aggregation','date','channel','grain_path','null_own'])
+    def test_own_gap_does_not_exempt_partial_mappings_or_evidence_from_original_guards(catalog,mutation):
+        request,recdata,maps,_=inputs(catalog)
+>       rec=recall(catalog,request,recdata['requirements']); rows=maps[5]['entries']
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_own_responsibility_managed_contract.py:220: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+_ test_own_gap_does_not_exempt_partial_mappings_or_evidence_from_original_guards[aggregation] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe237500>
+mutation = 'aggregation'
+
+    @pytest.mark.parametrize('mutation',['column','path','role','aggregation','date','channel','grain_path','null_own'])
+    def test_own_gap_does_not_exempt_partial_mappings_or_evidence_from_original_guards(catalog,mutation):
+        request,recdata,maps,_=inputs(catalog)
+>       rec=recall(catalog,request,recdata['requirements']); rows=maps[5]['entries']
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_own_responsibility_managed_contract.py:220: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+_ test_own_gap_does_not_exempt_partial_mappings_or_evidence_from_original_guards[date] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe363b60>
+mutation = 'date'
+
+    @pytest.mark.parametrize('mutation',['column','path','role','aggregation','date','channel','grain_path','null_own'])
+    def test_own_gap_does_not_exempt_partial_mappings_or_evidence_from_original_guards(catalog,mutation):
+        request,recdata,maps,_=inputs(catalog)
+>       rec=recall(catalog,request,recdata['requirements']); rows=maps[5]['entries']
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_own_responsibility_managed_contract.py:220: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+_ test_own_gap_does_not_exempt_partial_mappings_or_evidence_from_original_guards[channel] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe3e0e30>
+mutation = 'channel'
+
+    @pytest.mark.parametrize('mutation',['column','path','role','aggregation','date','channel','grain_path','null_own'])
+    def test_own_gap_does_not_exempt_partial_mappings_or_evidence_from_original_guards(catalog,mutation):
+        request,recdata,maps,_=inputs(catalog)
+>       rec=recall(catalog,request,recdata['requirements']); rows=maps[5]['entries']
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_own_responsibility_managed_contract.py:220: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+_ test_own_gap_does_not_exempt_partial_mappings_or_evidence_from_original_guards[grain_path] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe217fb0>
+mutation = 'grain_path'
+
+    @pytest.mark.parametrize('mutation',['column','path','role','aggregation','date','channel','grain_path','null_own'])
+    def test_own_gap_does_not_exempt_partial_mappings_or_evidence_from_original_guards(catalog,mutation):
+        request,recdata,maps,_=inputs(catalog)
+>       rec=recall(catalog,request,recdata['requirements']); rows=maps[5]['entries']
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_own_responsibility_managed_contract.py:220: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+_ test_own_gap_does_not_exempt_partial_mappings_or_evidence_from_original_guards[null_own] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe3e1ca0>
+mutation = 'null_own'
+
+    @pytest.mark.parametrize('mutation',['column','path','role','aggregation','date','channel','grain_path','null_own'])
+    def test_own_gap_does_not_exempt_partial_mappings_or_evidence_from_original_guards(catalog,mutation):
+        request,recdata,maps,_=inputs(catalog)
+>       rec=recall(catalog,request,recdata['requirements']); rows=maps[5]['entries']
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_own_responsibility_managed_contract.py:220: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+__________ test_renamed_contract_and_unicode_id_keep_self_partial_key __________
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe3304d0>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x79cebe543860>
+
+    def test_renamed_contract_and_unicode_id_keep_self_partial_key(catalog,monkeypatch):
+        source=deepcopy(next(v.policy for v in catalog.views() if v.name.endswith('v_daily_sales')))
+        source['view']='other.rows'; source['grain']['keys']=['shop_key','sales_date']
+        source['columns']['shop_key']=source['columns'].pop('store_id')
+        monkeypatch.setattr(catalog,'views',lambda:[SimpleNamespace(name='other.rows',policy=source)])
+>       request='各店各商品'; rec=recall(catalog,request,[requirement(request,'slot_0/🧾',request,'grain')])
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_own_responsibility_managed_contract.py:238: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+_ test_two_distinct_grains_and_true_scalar_do_not_inherit_other_business_dependencies _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe346240>
+
+    def test_two_distinct_grains_and_true_scalar_do_not_inherit_other_business_dependencies(catalog):
+        request='各店各商品庫存件數；各訂單淨銷售額；全域庫存總件數'
+        specs=[('G1','各店各商品','grain',None,[]),('G2','各訂單','grain',None,[]),
+               ('M1','庫存件數','metric','linked',['G1']),('M2','淨銷售額','metric','linked',['G2']),
+               ('S','全域庫存總件數','metric','independent',[])]
+>       rec=recall(catalog,request,[requirement(request,i,q,k,grains=refs,binding=b) for i,q,k,b,refs in specs])
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_own_responsibility_managed_contract.py:248: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+_____ test_fixed_month_dimension_reduction_and_unmet_channel_are_separate ______
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe2986b0>
+
+    def test_fixed_month_dimension_reduction_and_unmet_channel_are_separate(catalog):
+        request,recdata,maps,_=inputs(catalog)
+        recdata['requirements'][1]['scope_ids']=['period']
+>       rec=recall(catalog,request,recdata['requirements']); rows=maps[4]['entries']
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_own_responsibility_managed_contract.py:263: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+_____ test_partial_is_not_assignable_and_typed_selection_is_still_required _____
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79cebe2af9b0>
+
+    def test_partial_is_not_assignable_and_typed_selection_is_still_required(catalog):
+>       request,recdata,maps,sel=inputs(catalog); rec=recall(catalog,request,recdata['requirements'])
+                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_own_responsibility_managed_contract.py:274: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_own_responsibility_managed_contract.py:46: in recall
+    return api().materialize_recall(api().RecallWire.model_validate(dict(requirements=requirements)), request, catalog)
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+______ test_record_replay_retains_complete_or_first_failure_prefix[None] _______
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-33/test_record_replay_retains_com0')
+failure = None
+
+    @pytest.mark.parametrize('failure',FAILURES)
+    def test_record_replay_retains_complete_or_first_failure_prefix(tmp_path,failure):
+        mod=importlib.import_module('evaluations.managed_three_stage_runner'); catalog=SchemaCatalog('projects/retail')
+        request,invoke,calls=fake(catalog,failure); case=mod.diagnostic_case(catalog,request)
+>       meta=mod.record_run(tmp_path,catalog,case,invoke,contract=api())
+                                                                  ^^^^^
+
+tests/unit/test_own_responsibility_managed_runner.py:41: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+____ test_record_replay_retains_complete_or_first_failure_prefix[provider] _____
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-33/test_record_replay_retains_com1')
+failure = 'provider'
+
+    @pytest.mark.parametrize('failure',FAILURES)
+    def test_record_replay_retains_complete_or_first_failure_prefix(tmp_path,failure):
+        mod=importlib.import_module('evaluations.managed_three_stage_runner'); catalog=SchemaCatalog('projects/retail')
+        request,invoke,calls=fake(catalog,failure); case=mod.diagnostic_case(catalog,request)
+>       meta=mod.record_run(tmp_path,catalog,case,invoke,contract=api())
+                                                                  ^^^^^
+
+tests/unit/test_own_responsibility_managed_runner.py:41: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+______ test_record_replay_retains_complete_or_first_failure_prefix[parse] ______
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-33/test_record_replay_retains_com2')
+failure = 'parse'
+
+    @pytest.mark.parametrize('failure',FAILURES)
+    def test_record_replay_retains_complete_or_first_failure_prefix(tmp_path,failure):
+        mod=importlib.import_module('evaluations.managed_three_stage_runner'); catalog=SchemaCatalog('projects/retail')
+        request,invoke,calls=fake(catalog,failure); case=mod.diagnostic_case(catalog,request)
+>       meta=mod.record_run(tmp_path,catalog,case,invoke,contract=api())
+                                                                  ^^^^^
+
+tests/unit/test_own_responsibility_managed_runner.py:41: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+_____ test_record_replay_retains_complete_or_first_failure_prefix[own_gap] _____
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-33/test_record_replay_retains_com3')
+failure = 'own_gap'
+
+    @pytest.mark.parametrize('failure',FAILURES)
+    def test_record_replay_retains_complete_or_first_failure_prefix(tmp_path,failure):
+        mod=importlib.import_module('evaluations.managed_three_stage_runner'); catalog=SchemaCatalog('projects/retail')
+        request,invoke,calls=fake(catalog,failure); case=mod.diagnostic_case(catalog,request)
+>       meta=mod.record_run(tmp_path,catalog,case,invoke,contract=api())
+                                                                  ^^^^^
+
+tests/unit/test_own_responsibility_managed_runner.py:41: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+___ test_record_replay_retains_complete_or_first_failure_prefix[dependency] ____
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-33/test_record_replay_retains_com4')
+failure = 'dependency'
+
+    @pytest.mark.parametrize('failure',FAILURES)
+    def test_record_replay_retains_complete_or_first_failure_prefix(tmp_path,failure):
+        mod=importlib.import_module('evaluations.managed_three_stage_runner'); catalog=SchemaCatalog('projects/retail')
+        request,invoke,calls=fake(catalog,failure); case=mod.diagnostic_case(catalog,request)
+>       meta=mod.record_run(tmp_path,catalog,case,invoke,contract=api())
+                                                                  ^^^^^
+
+tests/unit/test_own_responsibility_managed_runner.py:41: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+_____ test_record_replay_retains_complete_or_first_failure_prefix[mapping] _____
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-33/test_record_replay_retains_com5')
+failure = 'mapping'
+
+    @pytest.mark.parametrize('failure',FAILURES)
+    def test_record_replay_retains_complete_or_first_failure_prefix(tmp_path,failure):
+        mod=importlib.import_module('evaluations.managed_three_stage_runner'); catalog=SchemaCatalog('projects/retail')
+        request,invoke,calls=fake(catalog,failure); case=mod.diagnostic_case(catalog,request)
+>       meta=mod.record_run(tmp_path,catalog,case,invoke,contract=api())
+                                                                  ^^^^^
+
+tests/unit/test_own_responsibility_managed_runner.py:41: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+______ test_record_replay_retains_complete_or_first_failure_prefix[typed] ______
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-33/test_record_replay_retains_com6')
+failure = 'typed'
+
+    @pytest.mark.parametrize('failure',FAILURES)
+    def test_record_replay_retains_complete_or_first_failure_prefix(tmp_path,failure):
+        mod=importlib.import_module('evaluations.managed_three_stage_runner'); catalog=SchemaCatalog('projects/retail')
+        request,invoke,calls=fake(catalog,failure); case=mod.diagnostic_case(catalog,request)
+>       meta=mod.record_run(tmp_path,catalog,case,invoke,contract=api())
+                                                                  ^^^^^
+
+tests/unit/test_own_responsibility_managed_runner.py:41: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+______ test_record_replay_retains_complete_or_first_failure_prefix[null] _______
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-33/test_record_replay_retains_com7')
+failure = 'null'
+
+    @pytest.mark.parametrize('failure',FAILURES)
+    def test_record_replay_retains_complete_or_first_failure_prefix(tmp_path,failure):
+        mod=importlib.import_module('evaluations.managed_three_stage_runner'); catalog=SchemaCatalog('projects/retail')
+        request,invoke,calls=fake(catalog,failure); case=mod.diagnostic_case(catalog,request)
+>       meta=mod.record_run(tmp_path,catalog,case,invoke,contract=api())
+                                                                  ^^^^^
+
+tests/unit/test_own_responsibility_managed_runner.py:41: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+____ test_record_replay_retains_complete_or_first_failure_prefix[duplicate] ____
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-33/test_record_replay_retains_com8')
+failure = 'duplicate'
+
+    @pytest.mark.parametrize('failure',FAILURES)
+    def test_record_replay_retains_complete_or_first_failure_prefix(tmp_path,failure):
+        mod=importlib.import_module('evaluations.managed_three_stage_runner'); catalog=SchemaCatalog('projects/retail')
+        request,invoke,calls=fake(catalog,failure); case=mod.diagnostic_case(catalog,request)
+>       meta=mod.record_run(tmp_path,catalog,case,invoke,contract=api())
+                                                                  ^^^^^
+
+tests/unit/test_own_responsibility_managed_runner.py:41: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+____ test_record_replay_retains_complete_or_first_failure_prefix[old_wire] _____
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-33/test_record_replay_retains_com9')
+failure = 'old_wire'
+
+    @pytest.mark.parametrize('failure',FAILURES)
+    def test_record_replay_retains_complete_or_first_failure_prefix(tmp_path,failure):
+        mod=importlib.import_module('evaluations.managed_three_stage_runner'); catalog=SchemaCatalog('projects/retail')
+        request,invoke,calls=fake(catalog,failure); case=mod.diagnostic_case(catalog,request)
+>       meta=mod.record_run(tmp_path,catalog,case,invoke,contract=api())
+                                                                  ^^^^^
+
+tests/unit/test_own_responsibility_managed_runner.py:41: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+___________ test_cli_own_contract_dry_run_and_conflicting_contracts ____________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x79ce92df82c0>
+capsys = <_pytest.capture.CaptureFixture object at 0x79cebe2ac8c0>
+
+    def test_cli_own_contract_dry_run_and_conflicting_contracts(monkeypatch,capsys):
+        mod=importlib.import_module('evaluations.managed_three_stage_runner')
+        monkeypatch.setattr(mod,'ManagedInvoke',lambda *a,**k:pytest.fail('provider constructed'))
+        monkeypatch.setattr(mod,'verify_model_identity',lambda *a:pytest.fail('network called'))
+>       assert mod.main(['--own-responsibility'])==0
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_own_responsibility_managed_runner.py:72: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluations/managed_three_stage_runner.py:293: in main
+    args = parser.parse_args(argv)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/argparse.py:1911: in parse_args
+    self.error(msg % ' '.join(argv))
+/usr/lib/python3.12/argparse.py:2677: in error
+    self.exit(2, _('%(prog)s: error: %(message)s\n') % args)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = ArgumentParser(prog='__main__.py', usage=None, description='Controller-managed local diagnostic; dry-run and replay never use the network.', formatter_class=<class 'argparse.HelpFormatter'>, conflict_handler='error', add_help=True)
+status = 2
+message = '__main__.py: error: unrecognized arguments: --own-responsibility\n'
+
+    def exit(self, status=0, message=None):
+        if message:
+            self._print_message(message, _sys.stderr)
+>       _sys.exit(status)
+E       SystemExit: 2
+
+/usr/lib/python3.12/argparse.py:2664: SystemExit
+----------------------------- Captured stderr call -----------------------------
+usage: __main__.py [-h] [--execute | --replay REPLAY] [--ticket TICKET]
+                   [--evidence-bound]
+__main__.py: error: unrecognized arguments: --own-responsibility
+___________ test_fingerprint_covers_new_and_reused_contract_sources ____________
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79ce92db0b00>
+
+    def test_fingerprint_covers_new_and_reused_contract_sources(catalog=None):
+        mod=importlib.import_module('evaluations.managed_three_stage_runner'); catalog=SchemaCatalog('projects/retail')
+>       frozen=mod.fingerprint(catalog,mod.diagnostic_case(catalog),contract=api())
+                                                                             ^^^^^
+
+tests/unit/test_own_responsibility_managed_runner.py:81: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.own_responsibility_managed_contract'), 'own responsibility wire missing'
+E       AssertionError: own responsibility wire missing
+E       assert None
+E        +  where None = <function find_spec at 0x79cec15aa0c0>('evaluations.own_responsibility_managed_contract')
+E        +    where <function find_spec at 0x79cec15aa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_own_responsibility_managed_contract.py:17: AssertionError
+=========================== short test summary info ============================
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_self_partial_grain_keeps_available_key_without_inventing_self_dependency[demo_retail.v_daily_sales-store_id-\u5404\u5e97\u5404\u5546\u54c1-a/b~\u5e97\U0001f9fe]
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_self_partial_grain_keeps_available_key_without_inventing_self_dependency[demo_retail.v_customer_value-customer_id-\u5404\u6703\u54e1\u5404\u5546\u54c1-model_dump]
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_status_and_own_decision_are_never_repaired[partial-True-True-True]
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_status_and_own_decision_are_never_repaired[partial-False-True-False]
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_status_and_own_decision_are_never_repaired[partial-True-False-False]
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_status_and_own_decision_are_never_repaired[supported-True-True-False]
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_status_and_own_decision_are_never_repaired[supported-False-True-True]
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_status_and_own_decision_are_never_repaired[supported-False-False-False]
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_status_and_own_decision_are_never_repaired[unsupported-True-False-True]
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_status_and_own_decision_are_never_repaired[uncertain-True-False-True]
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_status_and_own_decision_are_never_repaired[unsupported-False-False-False]
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_status_and_own_decision_are_never_repaired[uncertain-False-False-False]
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_status_and_own_decision_are_never_repaired[unsupported-True-True-False]
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_own_gap_is_required_strict_boolean[None]
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_own_gap_is_required_strict_boolean[0]
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_own_gap_is_required_strict_boolean[1]
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_own_gap_is_required_strict_boolean[true]
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_own_gap_is_required_strict_boolean[false]
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_own_gap_is_required_strict_boolean[bad5]
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_own_gap_is_required_strict_boolean[bad6]
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_new_slots_reject_omissions_old_output_and_ambiguous_json[missing_own]
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_new_slots_reject_omissions_old_output_and_ambiguous_json[old_gaps]
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_new_slots_reject_omissions_old_output_and_ambiguous_json[reason]
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_new_slots_reject_omissions_old_output_and_ambiguous_json[missing_slot]
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_new_slots_reject_omissions_old_output_and_ambiguous_json[unknown_slot]
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_new_slots_reject_omissions_old_output_and_ambiguous_json[duplicate]
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_new_slots_reject_omissions_old_output_and_ambiguous_json[nan]
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_all_unfinished_scope_and_grain_dependencies_are_derived_in_exact_order[partial-partial]
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_all_unfinished_scope_and_grain_dependencies_are_derived_in_exact_order[partial-unsupported]
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_all_unfinished_scope_and_grain_dependencies_are_derived_in_exact_order[partial-uncertain]
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_all_unfinished_scope_and_grain_dependencies_are_derived_in_exact_order[unsupported-partial]
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_all_unfinished_scope_and_grain_dependencies_are_derived_in_exact_order[unsupported-unsupported]
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_all_unfinished_scope_and_grain_dependencies_are_derived_in_exact_order[unsupported-uncertain]
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_all_unfinished_scope_and_grain_dependencies_are_derived_in_exact_order[uncertain-partial]
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_all_unfinished_scope_and_grain_dependencies_are_derived_in_exact_order[uncertain-unsupported]
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_all_unfinished_scope_and_grain_dependencies_are_derived_in_exact_order[uncertain-uncertain]
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_own_gap_and_both_dependency_sets_remain_distinct
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_every_kind_treats_explicit_grain_refs_as_hard_dependencies[metric-stock_qty-metric]
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_every_kind_treats_explicit_grain_refs_as_hard_dependencies[attribute-stock_status-attribute]
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_every_kind_treats_explicit_grain_refs_as_hard_dependencies[metadata-snapshot_date-metadata]
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_every_kind_treats_explicit_grain_refs_as_hard_dependencies[filter-snapshot_date-filter]
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_every_kind_treats_explicit_grain_refs_as_hard_dependencies[key-store_id-key]
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_every_kind_treats_explicit_grain_refs_as_hard_dependencies[population-store_id-key]
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_every_kind_treats_explicit_grain_refs_as_hard_dependencies[grain-store_id-key]
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_month_predicate_is_independent_of_unavailable_output_grain_until_explicitly_linked
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_supported_dependencies_emit_no_phantom_gaps_and_partial_without_gap_is_rejected
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_reused_recall_and_metric_binding_guards[unknown]
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_reused_recall_and_metric_binding_guards[wrong_kind]
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_reused_recall_and_metric_binding_guards[self]
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_reused_recall_and_metric_binding_guards[duplicate]
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_reused_recall_and_metric_binding_guards[empty_link]
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_reused_recall_and_metric_binding_guards[independent_refs]
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_reused_recall_and_metric_binding_guards[unspecified]
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_own_gap_does_not_exempt_partial_mappings_or_evidence_from_original_guards[column]
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_own_gap_does_not_exempt_partial_mappings_or_evidence_from_original_guards[path]
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_own_gap_does_not_exempt_partial_mappings_or_evidence_from_original_guards[role]
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_own_gap_does_not_exempt_partial_mappings_or_evidence_from_original_guards[aggregation]
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_own_gap_does_not_exempt_partial_mappings_or_evidence_from_original_guards[date]
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_own_gap_does_not_exempt_partial_mappings_or_evidence_from_original_guards[channel]
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_own_gap_does_not_exempt_partial_mappings_or_evidence_from_original_guards[grain_path]
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_own_gap_does_not_exempt_partial_mappings_or_evidence_from_original_guards[null_own]
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_renamed_contract_and_unicode_id_keep_self_partial_key
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_two_distinct_grains_and_true_scalar_do_not_inherit_other_business_dependencies
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_fixed_month_dimension_reduction_and_unmet_channel_are_separate
+FAILED tests/unit/test_own_responsibility_managed_contract.py::test_partial_is_not_assignable_and_typed_selection_is_still_required
+FAILED tests/unit/test_own_responsibility_managed_runner.py::test_record_replay_retains_complete_or_first_failure_prefix[None]
+FAILED tests/unit/test_own_responsibility_managed_runner.py::test_record_replay_retains_complete_or_first_failure_prefix[provider]
+FAILED tests/unit/test_own_responsibility_managed_runner.py::test_record_replay_retains_complete_or_first_failure_prefix[parse]
+FAILED tests/unit/test_own_responsibility_managed_runner.py::test_record_replay_retains_complete_or_first_failure_prefix[own_gap]
+FAILED tests/unit/test_own_responsibility_managed_runner.py::test_record_replay_retains_complete_or_first_failure_prefix[dependency]
+FAILED tests/unit/test_own_responsibility_managed_runner.py::test_record_replay_retains_complete_or_first_failure_prefix[mapping]
+FAILED tests/unit/test_own_responsibility_managed_runner.py::test_record_replay_retains_complete_or_first_failure_prefix[typed]
+FAILED tests/unit/test_own_responsibility_managed_runner.py::test_record_replay_retains_complete_or_first_failure_prefix[null]
+FAILED tests/unit/test_own_responsibility_managed_runner.py::test_record_replay_retains_complete_or_first_failure_prefix[duplicate]
+FAILED tests/unit/test_own_responsibility_managed_runner.py::test_record_replay_retains_complete_or_first_failure_prefix[old_wire]
+FAILED tests/unit/test_own_responsibility_managed_runner.py::test_cli_own_contract_dry_run_and_conflicting_contracts
+FAILED tests/unit/test_own_responsibility_managed_runner.py::test_fingerprint_covers_new_and_reused_contract_sources
+77 failed in 6.64s

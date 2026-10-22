@@ -1,8 +1,8 @@
 """Planning-only contracts; these carry no SQL or database results."""
 from __future__ import annotations
 
-from typing import Any, Literal
-from pydantic import BaseModel, ConfigDict, Field
+from typing import Annotated, Any, Literal
+from pydantic import BaseModel, ConfigDict, Field, StringConstraints, model_validator
 
 
 class PlanningModel(BaseModel):
@@ -91,3 +91,72 @@ class DecompositionResponse(PlanningModel):
     def model_post_init(self, __context):
         if self.status != 'ready' and self.prepared_requests:
             raise ValueError('only ready may expose prepared requests')
+
+
+class PlanningDecisionSummary(PlanningModel):
+    """Brief, auditable justifications; not a model's private reasoning trace."""
+    model_config = ConfigDict(extra='forbid', str_strip_whitespace=True)
+    source_selection: str = Field(min_length=1, max_length=600, description='Briefly justify selected sources using request requirements and admitted capabilities.')
+    field_roles: str = Field(min_length=1, max_length=600, description='Briefly justify output attributes, measures, conditional counts and time metadata.')
+    conditions: str = Field(min_length=1, max_length=600, description='State the period and business conditions, and which source each applies to.')
+    grain: str = Field(min_length=1, max_length=600, description='State root and child query grains and their contract basis.')
+    population: str = Field(min_length=1, max_length=600, description='State the preserved population and the effects of filtering and missing matches.')
+    integration: str = Field(min_length=1, max_length=600, description='Briefly justify alignment keys, join direction, child shape and background treatment.')
+
+
+class ExplainedDecompositionDraft(DecompositionDraft):
+    """Opt-in diagnostic generation schema; the original v3 schema is unchanged."""
+    decision_summary: PlanningDecisionSummary
+
+
+class ExplainedDecompositionResponse(DecompositionResponse):
+    """Expose the diagnostic summary without including it in SQL requests."""
+    decision_summary: PlanningDecisionSummary
+
+
+DecisionStage = Literal['source_selection', 'field_roles', 'conditions', 'grain', 'population', 'integration']
+DecisionEvidence = Annotated[str, StringConstraints(strip_whitespace=True, min_length=1, max_length=240)]
+
+
+class PlanningDecisionRecord(PlanningModel):
+    """A public decision and cited basis, never a private thought transcript."""
+    model_config = ConfigDict(extra='forbid', str_strip_whitespace=True)
+    step_id: int = Field(ge=1, le=6)
+    stage: DecisionStage
+    decision: str = Field(min_length=1, max_length=400, description='A brief final planning choice, not step-by-step private reasoning.')
+    evidence: list[DecisionEvidence] = Field(min_length=1, max_length=4, description='Short request quotes or admitted contract references; correctness is reviewed separately.')
+    task_ids: list[str] = Field(max_length=8, description='IDs of actual tasks affected by this decision; empty only when no task applies.')
+    depends_on: list[int] = Field(max_length=5, description='Only earlier step IDs in this public decision log; not a claim about internal thought order.')
+
+
+def _validate_decision_chain(chain, task_ids):
+    stages = {'source_selection', 'field_roles', 'conditions', 'grain', 'population', 'integration'}
+    if {record.stage for record in chain} != stages:
+        raise ValueError('decision_chain requires each of the six stages exactly once')
+    if [record.step_id for record in chain] != list(range(1, 7)):
+        raise ValueError('decision_chain step IDs must be ordered 1 through 6')
+    for record in chain:
+        if len(set(record.depends_on)) != len(record.depends_on) or any(dep < 1 or dep >= record.step_id for dep in record.depends_on):
+            raise ValueError('decision_chain dependencies must reference earlier unique steps')
+        if len(set(record.task_ids)) != len(record.task_ids) or not set(record.task_ids) <= task_ids:
+            raise ValueError('decision_chain references unknown or duplicate tasks')
+
+
+class DecisionChainDecompositionDraft(ExplainedDecompositionDraft):
+    """Opt-in schema requiring the model to fill an ordered decision audit log."""
+    decision_chain: list[PlanningDecisionRecord] = Field(min_length=6, max_length=6)
+
+    @model_validator(mode='after')
+    def check_decision_chain(self):
+        _validate_decision_chain(self.decision_chain, {task.task_id for task in self.tasks})
+        return self
+
+
+class DecisionChainDecompositionResponse(ExplainedDecompositionResponse):
+    decision_chain: list[PlanningDecisionRecord] = Field(min_length=6, max_length=6)
+
+    @model_validator(mode='after')
+    def check_decision_chain(self):
+        task_ids = {task.task_id for task in self.draft.tasks} if self.draft else set()
+        _validate_decision_chain(self.decision_chain, task_ids)
+        return self

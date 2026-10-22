@@ -1,0 +1,1098 @@
+{
+  "RecallWire": {
+    "$defs": {
+      "IndexedBoundRequirement": {
+        "additionalProperties": false,
+        "properties": {
+          "requirement_id": {
+            "minLength": 1,
+            "title": "Requirement Id",
+            "type": "string"
+          },
+          "start": {
+            "description": "Zero-based Python Unicode code-point index, inclusive.",
+            "minimum": 0,
+            "title": "Start",
+            "type": "integer"
+          },
+          "end": {
+            "description": "Zero-based Python Unicode code-point index, exclusive.",
+            "minimum": 1,
+            "title": "End",
+            "type": "integer"
+          },
+          "business_object": {
+            "minLength": 1,
+            "title": "Business Object",
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "metric",
+              "attribute",
+              "filter",
+              "key",
+              "metadata",
+              "grain",
+              "population"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "scope_ids": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Scope Ids",
+            "type": "array"
+          },
+          "grain": {
+            "minLength": 1,
+            "title": "Grain",
+            "type": "string"
+          },
+          "population": {
+            "minLength": 1,
+            "title": "Population",
+            "type": "string"
+          },
+          "grain_binding": {
+            "anyOf": [
+              {
+                "enum": [
+                  "linked",
+                  "independent",
+                  "unspecified"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Grain Binding"
+          },
+          "grain_requirement_ids": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Grain Requirement Ids",
+            "type": "array"
+          }
+        },
+        "required": [
+          "requirement_id",
+          "start",
+          "end",
+          "business_object",
+          "kind",
+          "scope_ids",
+          "grain",
+          "population",
+          "grain_binding",
+          "grain_requirement_ids"
+        ],
+        "title": "IndexedBoundRequirement",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "requirements": {
+        "items": {
+          "$ref": "#/$defs/IndexedBoundRequirement"
+        },
+        "maxItems": 24,
+        "minItems": 1,
+        "title": "Requirements",
+        "type": "array"
+      }
+    },
+    "required": [
+      "requirements"
+    ],
+    "title": "RecallWire",
+    "type": "object"
+  },
+  "CoverageDecision": {
+    "$defs": {
+      "PlanningFilter": {
+        "additionalProperties": false,
+        "properties": {
+          "column": {
+            "title": "Column",
+            "type": "string"
+          },
+          "operator": {
+            "enum": [
+              "=",
+              "!=",
+              "<>",
+              ">",
+              ">=",
+              "<",
+              "<=",
+              "IN",
+              "NOT IN",
+              "LIKE",
+              "IS NULL",
+              "IS NOT NULL"
+            ],
+            "title": "Operator",
+            "type": "string"
+          },
+          "value": {
+            "default": null,
+            "title": "Value"
+          }
+        },
+        "required": [
+          "column",
+          "operator"
+        ],
+        "title": "PlanningFilter",
+        "type": "object"
+      },
+      "ReferencedMapping": {
+        "additionalProperties": false,
+        "properties": {
+          "column": {
+            "minLength": 1,
+            "title": "Column",
+            "type": "string"
+          },
+          "role": {
+            "enum": [
+              "metric",
+              "attribute",
+              "filter",
+              "key",
+              "metadata"
+            ],
+            "title": "Role",
+            "type": "string"
+          },
+          "aggregation": {
+            "anyOf": [
+              {
+                "enum": [
+                  "sum",
+                  "count",
+                  "count_distinct",
+                  "avg",
+                  "min",
+                  "max"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Aggregation"
+          },
+          "operator": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Operator"
+          },
+          "value": {
+            "default": null,
+            "title": "Value"
+          },
+          "conditions": {
+            "items": {
+              "$ref": "#/$defs/PlanningFilter"
+            },
+            "title": "Conditions",
+            "type": "array"
+          }
+        },
+        "required": [
+          "column",
+          "role"
+        ],
+        "title": "ReferencedMapping",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "status": {
+        "enum": [
+          "supported",
+          "partial",
+          "unsupported",
+          "uncertain"
+        ],
+        "title": "Status",
+        "type": "string"
+      },
+      "mappings": {
+        "items": {
+          "$ref": "#/$defs/ReferencedMapping"
+        },
+        "title": "Mappings",
+        "type": "array"
+      },
+      "contract_path": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Contract Path"
+      },
+      "own_gap": {
+        "title": "Own Gap",
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "status",
+      "mappings",
+      "contract_path",
+      "own_gap"
+    ],
+    "title": "CoverageDecision",
+    "type": "object"
+  },
+  "fixture_coverage": {
+    "$defs": {
+      "CoverageDecision": {
+        "additionalProperties": false,
+        "properties": {
+          "status": {
+            "enum": [
+              "supported",
+              "partial",
+              "unsupported",
+              "uncertain"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "mappings": {
+            "items": {
+              "$ref": "#/$defs/ReferencedMapping"
+            },
+            "title": "Mappings",
+            "type": "array"
+          },
+          "contract_path": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Contract Path"
+          },
+          "own_gap": {
+            "title": "Own Gap",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "status",
+          "mappings",
+          "contract_path",
+          "own_gap"
+        ],
+        "title": "CoverageDecision",
+        "type": "object"
+      },
+      "OwnSlots_2a54ca7c75f4b773": {
+        "additionalProperties": false,
+        "properties": {
+          "stock": {
+            "$ref": "#/$defs/CoverageDecision"
+          },
+          "sales": {
+            "$ref": "#/$defs/CoverageDecision"
+          },
+          "channel": {
+            "$ref": "#/$defs/CoverageDecision"
+          },
+          "period": {
+            "$ref": "#/$defs/CoverageDecision"
+          },
+          "population": {
+            "$ref": "#/$defs/CoverageDecision"
+          },
+          "grain": {
+            "$ref": "#/$defs/CoverageDecision"
+          },
+          "R_PURPOSE": {
+            "$ref": "#/$defs/CoverageDecision"
+          }
+        },
+        "required": [
+          "stock",
+          "sales",
+          "channel",
+          "period",
+          "population",
+          "grain",
+          "R_PURPOSE"
+        ],
+        "title": "OwnSlots_2a54ca7c75f4b773",
+        "type": "object"
+      },
+      "PlanningFilter": {
+        "additionalProperties": false,
+        "properties": {
+          "column": {
+            "title": "Column",
+            "type": "string"
+          },
+          "operator": {
+            "enum": [
+              "=",
+              "!=",
+              "<>",
+              ">",
+              ">=",
+              "<",
+              "<=",
+              "IN",
+              "NOT IN",
+              "LIKE",
+              "IS NULL",
+              "IS NOT NULL"
+            ],
+            "title": "Operator",
+            "type": "string"
+          },
+          "value": {
+            "default": null,
+            "title": "Value"
+          }
+        },
+        "required": [
+          "column",
+          "operator"
+        ],
+        "title": "PlanningFilter",
+        "type": "object"
+      },
+      "ReferencedMapping": {
+        "additionalProperties": false,
+        "properties": {
+          "column": {
+            "minLength": 1,
+            "title": "Column",
+            "type": "string"
+          },
+          "role": {
+            "enum": [
+              "metric",
+              "attribute",
+              "filter",
+              "key",
+              "metadata"
+            ],
+            "title": "Role",
+            "type": "string"
+          },
+          "aggregation": {
+            "anyOf": [
+              {
+                "enum": [
+                  "sum",
+                  "count",
+                  "count_distinct",
+                  "avg",
+                  "min",
+                  "max"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Aggregation"
+          },
+          "operator": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Operator"
+          },
+          "value": {
+            "default": null,
+            "title": "Value"
+          },
+          "conditions": {
+            "items": {
+              "$ref": "#/$defs/PlanningFilter"
+            },
+            "title": "Conditions",
+            "type": "array"
+          }
+        },
+        "required": [
+          "column",
+          "role"
+        ],
+        "title": "ReferencedMapping",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "entries": {
+        "$ref": "#/$defs/OwnSlots_2a54ca7c75f4b773"
+      }
+    },
+    "required": [
+      "entries"
+    ],
+    "title": "OwnCoverage_2a54ca7c75f4b773",
+    "type": "object"
+  },
+  "SelectionWire": {
+    "$defs": {
+      "AssignmentRef": {
+        "additionalProperties": false,
+        "properties": {
+          "requirement_id": {
+            "title": "Requirement Id",
+            "type": "string"
+          },
+          "view": {
+            "title": "View",
+            "type": "string"
+          },
+          "task_id": {
+            "title": "Task Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "requirement_id",
+          "view",
+          "task_id"
+        ],
+        "title": "AssignmentRef",
+        "type": "object"
+      },
+      "ExclusionRef": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "enum": [
+              "gap",
+              "redundant"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "requirement_ids": {
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1,
+            "title": "Requirement Ids",
+            "type": "array"
+          },
+          "selected_view": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Selected View"
+          }
+        },
+        "required": [
+          "kind",
+          "requirement_ids",
+          "selected_view"
+        ],
+        "title": "ExclusionRef",
+        "type": "object"
+      },
+      "ExclusionWire": {
+        "additionalProperties": false,
+        "properties": {
+          "view": {
+            "title": "View",
+            "type": "string"
+          },
+          "refs": {
+            "items": {
+              "$ref": "#/$defs/ExclusionRef"
+            },
+            "minItems": 1,
+            "title": "Refs",
+            "type": "array"
+          }
+        },
+        "required": [
+          "view",
+          "refs"
+        ],
+        "title": "ExclusionWire",
+        "type": "object"
+      },
+      "NonreadyDraft": {
+        "additionalProperties": false,
+        "properties": {
+          "status": {
+            "enum": [
+              "needs_clarification",
+              "unsupported",
+              "error"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "strategy": {
+            "anyOf": [
+              {
+                "enum": [
+                  "single_view",
+                  "multi_view"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Strategy"
+          },
+          "tasks": {
+            "items": {
+              "$ref": "#/$defs/RequiredTask"
+            },
+            "title": "Tasks",
+            "type": "array"
+          },
+          "integration": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/RequiredIntegration"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "clarifications": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Clarifications",
+            "type": "array"
+          },
+          "unsupported_reasons": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Unsupported Reasons",
+            "type": "array"
+          }
+        },
+        "required": [
+          "status",
+          "strategy",
+          "tasks",
+          "integration",
+          "clarifications",
+          "unsupported_reasons"
+        ],
+        "title": "NonreadyDraft",
+        "type": "object"
+      },
+      "ReadyDraft": {
+        "additionalProperties": false,
+        "properties": {
+          "status": {
+            "const": "ready",
+            "title": "Status",
+            "type": "string"
+          },
+          "strategy": {
+            "anyOf": [
+              {
+                "enum": [
+                  "single_view",
+                  "multi_view"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Strategy"
+          },
+          "tasks": {
+            "items": {
+              "$ref": "#/$defs/RequiredTask"
+            },
+            "title": "Tasks",
+            "type": "array"
+          },
+          "integration": {
+            "$ref": "#/$defs/RequiredIntegration"
+          },
+          "clarifications": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Clarifications",
+            "type": "array"
+          },
+          "unsupported_reasons": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Unsupported Reasons",
+            "type": "array"
+          }
+        },
+        "required": [
+          "status",
+          "strategy",
+          "tasks",
+          "integration",
+          "clarifications",
+          "unsupported_reasons"
+        ],
+        "title": "ReadyDraft",
+        "type": "object"
+      },
+      "RequiredConditionalMetric": {
+        "additionalProperties": false,
+        "properties": {
+          "column": {
+            "title": "Column",
+            "type": "string"
+          },
+          "aggregation": {
+            "enum": [
+              "sum",
+              "count",
+              "count_distinct",
+              "avg",
+              "min",
+              "max"
+            ],
+            "title": "Aggregation",
+            "type": "string"
+          },
+          "conditions": {
+            "items": {
+              "$ref": "#/$defs/RequiredFilter"
+            },
+            "title": "Conditions",
+            "type": "array"
+          }
+        },
+        "required": [
+          "column",
+          "aggregation",
+          "conditions"
+        ],
+        "title": "RequiredConditionalMetric",
+        "type": "object"
+      },
+      "RequiredEdge": {
+        "additionalProperties": false,
+        "properties": {
+          "left_task": {
+            "title": "Left Task",
+            "type": "string"
+          },
+          "right_task": {
+            "title": "Right Task",
+            "type": "string"
+          },
+          "left_keys": {
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1,
+            "title": "Left Keys",
+            "type": "array"
+          },
+          "right_keys": {
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1,
+            "title": "Right Keys",
+            "type": "array"
+          },
+          "mode": {
+            "enum": [
+              "left",
+              "inner",
+              "full"
+            ],
+            "title": "Mode",
+            "type": "string"
+          },
+          "cardinality": {
+            "enum": [
+              "one_to_one",
+              "one_to_many",
+              "many_to_one",
+              "many_to_many"
+            ],
+            "title": "Cardinality",
+            "type": "string"
+          },
+          "preserve_task": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Preserve Task"
+          }
+        },
+        "required": [
+          "left_task",
+          "right_task",
+          "left_keys",
+          "right_keys",
+          "mode",
+          "cardinality",
+          "preserve_task"
+        ],
+        "title": "RequiredEdge",
+        "type": "object"
+      },
+      "RequiredFilter": {
+        "additionalProperties": false,
+        "properties": {
+          "column": {
+            "title": "Column",
+            "type": "string"
+          },
+          "operator": {
+            "enum": [
+              "=",
+              "!=",
+              "<>",
+              ">",
+              ">=",
+              "<",
+              "<=",
+              "IN",
+              "NOT IN",
+              "LIKE",
+              "IS NULL",
+              "IS NOT NULL"
+            ],
+            "title": "Operator",
+            "type": "string"
+          },
+          "value": {
+            "title": "Value"
+          }
+        },
+        "required": [
+          "column",
+          "operator",
+          "value"
+        ],
+        "title": "RequiredFilter",
+        "type": "object"
+      },
+      "RequiredIntegration": {
+        "additionalProperties": false,
+        "properties": {
+          "anchor_task": {
+            "title": "Anchor Task",
+            "type": "string"
+          },
+          "output_grain": {
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1,
+            "title": "Output Grain",
+            "type": "array"
+          },
+          "edges": {
+            "items": {
+              "$ref": "#/$defs/RequiredEdge"
+            },
+            "title": "Edges",
+            "type": "array"
+          },
+          "preparation": {
+            "items": {
+              "$ref": "#/$defs/RequiredPreparation"
+            },
+            "title": "Preparation",
+            "type": "array"
+          },
+          "missing_data_policy": {
+            "title": "Missing Data Policy",
+            "type": "string"
+          },
+          "notes": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Notes",
+            "type": "array"
+          }
+        },
+        "required": [
+          "anchor_task",
+          "output_grain",
+          "edges",
+          "preparation",
+          "missing_data_policy",
+          "notes"
+        ],
+        "title": "RequiredIntegration",
+        "type": "object"
+      },
+      "RequiredPreparation": {
+        "additionalProperties": false,
+        "properties": {
+          "task_id": {
+            "title": "Task Id",
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "aggregate",
+              "nest",
+              "pivot",
+              "attach_context"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "keys": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Keys",
+            "type": "array"
+          },
+          "description": {
+            "minLength": 1,
+            "title": "Description",
+            "type": "string"
+          }
+        },
+        "required": [
+          "task_id",
+          "kind",
+          "keys",
+          "description"
+        ],
+        "title": "RequiredPreparation",
+        "type": "object"
+      },
+      "RequiredTask": {
+        "additionalProperties": false,
+        "properties": {
+          "task_id": {
+            "minLength": 1,
+            "title": "Task Id",
+            "type": "string"
+          },
+          "view": {
+            "minLength": 1,
+            "title": "View",
+            "type": "string"
+          },
+          "required_columns": {
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1,
+            "title": "Required Columns",
+            "type": "array"
+          },
+          "filters": {
+            "items": {
+              "$ref": "#/$defs/RequiredFilter"
+            },
+            "title": "Filters",
+            "type": "array"
+          },
+          "metrics": {
+            "additionalProperties": {
+              "enum": [
+                "sum",
+                "count",
+                "count_distinct",
+                "avg",
+                "min",
+                "max"
+              ],
+              "type": "string"
+            },
+            "title": "Metrics",
+            "type": "object"
+          },
+          "conditional_metrics": {
+            "items": {
+              "$ref": "#/$defs/RequiredConditionalMetric"
+            },
+            "title": "Conditional Metrics",
+            "type": "array"
+          },
+          "attributes": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Attributes",
+            "type": "array"
+          },
+          "metadata_collections": {
+            "description": "Date/string provenance collected as DISTINCT values at output_grain; never an extra grouping dimension or a measure.",
+            "items": {
+              "type": "string"
+            },
+            "title": "Metadata Collections",
+            "type": "array"
+          },
+          "group_by": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Group By",
+            "type": "array"
+          },
+          "output_grain": {
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1,
+            "title": "Output Grain",
+            "type": "array"
+          },
+          "depends_on": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Depends On",
+            "type": "array"
+          },
+          "unbound_inputs": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Unbound Inputs",
+            "type": "array"
+          },
+          "request": {
+            "maxLength": 4000,
+            "minLength": 1,
+            "title": "Request",
+            "type": "string"
+          }
+        },
+        "required": [
+          "task_id",
+          "view",
+          "required_columns",
+          "filters",
+          "metrics",
+          "conditional_metrics",
+          "attributes",
+          "metadata_collections",
+          "group_by",
+          "output_grain",
+          "depends_on",
+          "unbound_inputs",
+          "request"
+        ],
+        "title": "RequiredTask",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "selected_views": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Selected Views",
+        "type": "array"
+      },
+      "assignments": {
+        "items": {
+          "$ref": "#/$defs/AssignmentRef"
+        },
+        "title": "Assignments",
+        "type": "array"
+      },
+      "exclusions": {
+        "items": {
+          "$ref": "#/$defs/ExclusionWire"
+        },
+        "title": "Exclusions",
+        "type": "array"
+      },
+      "draft": {
+        "discriminator": {
+          "mapping": {
+            "error": "#/$defs/NonreadyDraft",
+            "needs_clarification": "#/$defs/NonreadyDraft",
+            "ready": "#/$defs/ReadyDraft",
+            "unsupported": "#/$defs/NonreadyDraft"
+          },
+          "propertyName": "status"
+        },
+        "oneOf": [
+          {
+            "$ref": "#/$defs/ReadyDraft"
+          },
+          {
+            "$ref": "#/$defs/NonreadyDraft"
+          }
+        ],
+        "title": "Draft"
+      }
+    },
+    "required": [
+      "selected_views",
+      "assignments",
+      "exclusions",
+      "draft"
+    ],
+    "title": "SelectionWire",
+    "type": "object"
+  }
+}

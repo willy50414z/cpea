@@ -1,0 +1,474 @@
+{
+  "result": "PASS",
+  "objects": 30,
+  "duplicates": [],
+  "raw_equals_parsed": true,
+  "raw_equals_wire_model_dump": true,
+  "oneOf_and_anyOf_resolved": true,
+  "objects_detail": [
+    {
+      "path": "",
+      "required": [
+        "selected_views",
+        "assignments",
+        "exclusions",
+        "draft"
+      ],
+      "actual_keys": [
+        "assignments",
+        "draft",
+        "exclusions",
+        "selected_views"
+      ],
+      "missing": []
+    },
+    {
+      "path": "/assignments/0",
+      "required": [
+        "requirement_id",
+        "view",
+        "task_id"
+      ],
+      "actual_keys": [
+        "requirement_id",
+        "task_id",
+        "view"
+      ],
+      "missing": []
+    },
+    {
+      "path": "/assignments/1",
+      "required": [
+        "requirement_id",
+        "view",
+        "task_id"
+      ],
+      "actual_keys": [
+        "requirement_id",
+        "task_id",
+        "view"
+      ],
+      "missing": []
+    },
+    {
+      "path": "/assignments/2",
+      "required": [
+        "requirement_id",
+        "view",
+        "task_id"
+      ],
+      "actual_keys": [
+        "requirement_id",
+        "task_id",
+        "view"
+      ],
+      "missing": []
+    },
+    {
+      "path": "/assignments/3",
+      "required": [
+        "requirement_id",
+        "view",
+        "task_id"
+      ],
+      "actual_keys": [
+        "requirement_id",
+        "task_id",
+        "view"
+      ],
+      "missing": []
+    },
+    {
+      "path": "/assignments/4",
+      "required": [
+        "requirement_id",
+        "view",
+        "task_id"
+      ],
+      "actual_keys": [
+        "requirement_id",
+        "task_id",
+        "view"
+      ],
+      "missing": []
+    },
+    {
+      "path": "/assignments/5",
+      "required": [
+        "requirement_id",
+        "view",
+        "task_id"
+      ],
+      "actual_keys": [
+        "requirement_id",
+        "task_id",
+        "view"
+      ],
+      "missing": []
+    },
+    {
+      "path": "/assignments/6",
+      "required": [
+        "requirement_id",
+        "view",
+        "task_id"
+      ],
+      "actual_keys": [
+        "requirement_id",
+        "task_id",
+        "view"
+      ],
+      "missing": []
+    },
+    {
+      "path": "/assignments/7",
+      "required": [
+        "requirement_id",
+        "view",
+        "task_id"
+      ],
+      "actual_keys": [
+        "requirement_id",
+        "task_id",
+        "view"
+      ],
+      "missing": []
+    },
+    {
+      "path": "/draft",
+      "required": [
+        "status",
+        "strategy",
+        "tasks",
+        "integration",
+        "clarifications",
+        "unsupported_reasons"
+      ],
+      "actual_keys": [
+        "clarifications",
+        "integration",
+        "status",
+        "strategy",
+        "tasks",
+        "unsupported_reasons"
+      ],
+      "missing": []
+    },
+    {
+      "path": "/draft/integration",
+      "required": [
+        "anchor_task",
+        "output_grain",
+        "edges",
+        "preparation",
+        "missing_data_policy",
+        "notes"
+      ],
+      "actual_keys": [
+        "anchor_task",
+        "edges",
+        "missing_data_policy",
+        "notes",
+        "output_grain",
+        "preparation"
+      ],
+      "missing": []
+    },
+    {
+      "path": "/draft/integration/edges/0",
+      "required": [
+        "left_task",
+        "right_task",
+        "left_keys",
+        "right_keys",
+        "mode",
+        "cardinality",
+        "preserve_task"
+      ],
+      "actual_keys": [
+        "cardinality",
+        "left_keys",
+        "left_task",
+        "mode",
+        "preserve_task",
+        "right_keys",
+        "right_task"
+      ],
+      "missing": []
+    },
+    {
+      "path": "/draft/integration/preparation/0",
+      "required": [
+        "task_id",
+        "kind",
+        "keys",
+        "description"
+      ],
+      "actual_keys": [
+        "description",
+        "keys",
+        "kind",
+        "task_id"
+      ],
+      "missing": []
+    },
+    {
+      "path": "/draft/tasks/0",
+      "required": [
+        "task_id",
+        "view",
+        "required_columns",
+        "filters",
+        "metrics",
+        "conditional_metrics",
+        "attributes",
+        "metadata_collections",
+        "group_by",
+        "output_grain",
+        "depends_on",
+        "unbound_inputs",
+        "request"
+      ],
+      "actual_keys": [
+        "attributes",
+        "conditional_metrics",
+        "depends_on",
+        "filters",
+        "group_by",
+        "metadata_collections",
+        "metrics",
+        "output_grain",
+        "request",
+        "required_columns",
+        "task_id",
+        "unbound_inputs",
+        "view"
+      ],
+      "missing": []
+    },
+    {
+      "path": "/draft/tasks/0/metrics",
+      "required": [],
+      "actual_keys": [
+        "stock_qty"
+      ],
+      "missing": []
+    },
+    {
+      "path": "/draft/tasks/1",
+      "required": [
+        "task_id",
+        "view",
+        "required_columns",
+        "filters",
+        "metrics",
+        "conditional_metrics",
+        "attributes",
+        "metadata_collections",
+        "group_by",
+        "output_grain",
+        "depends_on",
+        "unbound_inputs",
+        "request"
+      ],
+      "actual_keys": [
+        "attributes",
+        "conditional_metrics",
+        "depends_on",
+        "filters",
+        "group_by",
+        "metadata_collections",
+        "metrics",
+        "output_grain",
+        "request",
+        "required_columns",
+        "task_id",
+        "unbound_inputs",
+        "view"
+      ],
+      "missing": []
+    },
+    {
+      "path": "/draft/tasks/1/filters/0",
+      "required": [
+        "column",
+        "operator",
+        "value"
+      ],
+      "actual_keys": [
+        "column",
+        "operator",
+        "value"
+      ],
+      "missing": []
+    },
+    {
+      "path": "/draft/tasks/1/filters/1",
+      "required": [
+        "column",
+        "operator",
+        "value"
+      ],
+      "actual_keys": [
+        "column",
+        "operator",
+        "value"
+      ],
+      "missing": []
+    },
+    {
+      "path": "/draft/tasks/1/filters/2",
+      "required": [
+        "column",
+        "operator",
+        "value"
+      ],
+      "actual_keys": [
+        "column",
+        "operator",
+        "value"
+      ],
+      "missing": []
+    },
+    {
+      "path": "/draft/tasks/1/metrics",
+      "required": [],
+      "actual_keys": [
+        "discount_amount",
+        "net_sales"
+      ],
+      "missing": []
+    },
+    {
+      "path": "/exclusions/0",
+      "required": [
+        "view",
+        "refs"
+      ],
+      "actual_keys": [
+        "refs",
+        "view"
+      ],
+      "missing": []
+    },
+    {
+      "path": "/exclusions/0/refs/0",
+      "required": [
+        "kind",
+        "requirement_ids",
+        "selected_view"
+      ],
+      "actual_keys": [
+        "kind",
+        "requirement_ids",
+        "selected_view"
+      ],
+      "missing": []
+    },
+    {
+      "path": "/exclusions/1",
+      "required": [
+        "view",
+        "refs"
+      ],
+      "actual_keys": [
+        "refs",
+        "view"
+      ],
+      "missing": []
+    },
+    {
+      "path": "/exclusions/1/refs/0",
+      "required": [
+        "kind",
+        "requirement_ids",
+        "selected_view"
+      ],
+      "actual_keys": [
+        "kind",
+        "requirement_ids",
+        "selected_view"
+      ],
+      "missing": []
+    },
+    {
+      "path": "/exclusions/2",
+      "required": [
+        "view",
+        "refs"
+      ],
+      "actual_keys": [
+        "refs",
+        "view"
+      ],
+      "missing": []
+    },
+    {
+      "path": "/exclusions/2/refs/0",
+      "required": [
+        "kind",
+        "requirement_ids",
+        "selected_view"
+      ],
+      "actual_keys": [
+        "kind",
+        "requirement_ids",
+        "selected_view"
+      ],
+      "missing": []
+    },
+    {
+      "path": "/exclusions/3",
+      "required": [
+        "view",
+        "refs"
+      ],
+      "actual_keys": [
+        "refs",
+        "view"
+      ],
+      "missing": []
+    },
+    {
+      "path": "/exclusions/3/refs/0",
+      "required": [
+        "kind",
+        "requirement_ids",
+        "selected_view"
+      ],
+      "actual_keys": [
+        "kind",
+        "requirement_ids",
+        "selected_view"
+      ],
+      "missing": []
+    },
+    {
+      "path": "/exclusions/4",
+      "required": [
+        "view",
+        "refs"
+      ],
+      "actual_keys": [
+        "refs",
+        "view"
+      ],
+      "missing": []
+    },
+    {
+      "path": "/exclusions/4/refs/0",
+      "required": [
+        "kind",
+        "requirement_ids",
+        "selected_view"
+      ],
+      "actual_keys": [
+        "kind",
+        "requirement_ids",
+        "selected_view"
+      ],
+      "missing": []
+    }
+  ],
+  "defaults_or_repair": false
+}

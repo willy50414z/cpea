@@ -1,0 +1,214 @@
+{
+  "objects": [
+    {
+      "path": "",
+      "keys": [
+        "entries"
+      ]
+    },
+    {
+      "path": "/entries",
+      "keys": [
+        "GRN-001",
+        "MET-001",
+        "FILT-001",
+        "FILT-002",
+        "MET-002",
+        "MET-003",
+        "META-001",
+        "POP-001"
+      ]
+    },
+    {
+      "path": "/entries/GRN-001",
+      "keys": [
+        "status",
+        "own_gap",
+        "mappings"
+      ]
+    },
+    {
+      "path": "/entries/GRN-001/mappings/0",
+      "keys": [
+        "column"
+      ]
+    },
+    {
+      "path": "/entries/MET-001",
+      "keys": [
+        "status",
+        "own_gap",
+        "mappings",
+        "contract_path"
+      ]
+    },
+    {
+      "path": "/entries/FILT-001",
+      "keys": [
+        "status",
+        "own_gap",
+        "mappings",
+        "contract_path"
+      ]
+    },
+    {
+      "path": "/entries/FILT-001/mappings/0",
+      "keys": [
+        "column",
+        "operator",
+        "value"
+      ]
+    },
+    {
+      "path": "/entries/FILT-001/mappings/1",
+      "keys": [
+        "column",
+        "operator",
+        "value"
+      ]
+    },
+    {
+      "path": "/entries/FILT-002",
+      "keys": [
+        "status",
+        "own_gap",
+        "mappings",
+        "contract_path"
+      ]
+    },
+    {
+      "path": "/entries/MET-002",
+      "keys": [
+        "status",
+        "own_gap",
+        "mappings",
+        "contract_path"
+      ]
+    },
+    {
+      "path": "/entries/MET-003",
+      "keys": [
+        "status",
+        "own_gap",
+        "mappings",
+        "contract_path"
+      ]
+    },
+    {
+      "path": "/entries/MET-003/mappings/0",
+      "keys": [
+        "column",
+        "aggregation",
+        "conditions"
+      ]
+    },
+    {
+      "path": "/entries/META-001",
+      "keys": [
+        "status",
+        "own_gap",
+        "mappings",
+        "contract_path"
+      ]
+    },
+    {
+      "path": "/entries/POP-001",
+      "keys": [
+        "status",
+        "own_gap",
+        "mappings",
+        "contract_path"
+      ]
+    },
+    {
+      "path": "/entries/POP-001/mappings/0",
+      "keys": [
+        "column"
+      ]
+    }
+  ],
+  "object_key_sequences_in_parse_order": [
+    [
+      "column"
+    ],
+    [
+      "status",
+      "own_gap",
+      "mappings"
+    ],
+    [
+      "status",
+      "own_gap",
+      "mappings",
+      "contract_path"
+    ],
+    [
+      "column",
+      "operator",
+      "value"
+    ],
+    [
+      "column",
+      "operator",
+      "value"
+    ],
+    [
+      "status",
+      "own_gap",
+      "mappings",
+      "contract_path"
+    ],
+    [
+      "status",
+      "own_gap",
+      "mappings",
+      "contract_path"
+    ],
+    [
+      "status",
+      "own_gap",
+      "mappings",
+      "contract_path"
+    ],
+    [
+      "column",
+      "aggregation",
+      "conditions"
+    ],
+    [
+      "status",
+      "own_gap",
+      "mappings",
+      "contract_path"
+    ],
+    [
+      "status",
+      "own_gap",
+      "mappings",
+      "contract_path"
+    ],
+    [
+      "column"
+    ],
+    [
+      "status",
+      "own_gap",
+      "mappings",
+      "contract_path"
+    ],
+    [
+      "GRN-001",
+      "MET-001",
+      "FILT-001",
+      "FILT-002",
+      "MET-002",
+      "MET-003",
+      "META-001",
+      "POP-001"
+    ],
+    [
+      "entries"
+    ]
+  ],
+  "note": "raw JSON key sequences include duplicates; strict parser verdict recorded separately"
+}

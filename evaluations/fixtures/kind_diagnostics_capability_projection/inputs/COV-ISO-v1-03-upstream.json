@@ -1,0 +1,119 @@
+{
+  "recall": {
+    "requirements": [
+      {
+        "requirement_id": "slot_0/🧾",
+        "quote": "各店各商品",
+        "business_object": "各店各商品",
+        "kind": "grain",
+        "scope_ids": [],
+        "grain": "門市×商品",
+        "population": "所有庫存商品",
+        "grain_binding": null,
+        "grain_requirement_ids": []
+      },
+      {
+        "requirement_id": "model_dump",
+        "quote": "盤點庫存件數",
+        "business_object": "盤點庫存件數",
+        "kind": "metric",
+        "scope_ids": [],
+        "grain": "門市×商品",
+        "population": "所有庫存商品",
+        "grain_binding": "linked",
+        "grain_requirement_ids": [
+          "slot_0/🧾"
+        ]
+      },
+      {
+        "requirement_id": "月~邊界",
+        "quote": "2032 年 2 月",
+        "business_object": "2032 年 2 月",
+        "kind": "filter",
+        "scope_ids": [],
+        "grain": "門市×商品",
+        "population": "所有庫存商品",
+        "grain_binding": null,
+        "grain_requirement_ids": []
+      },
+      {
+        "requirement_id": "scope-channel",
+        "quote": "線上通路",
+        "business_object": "線上通路",
+        "kind": "filter",
+        "scope_ids": [],
+        "grain": "門市×商品",
+        "population": "所有庫存商品",
+        "grain_binding": null,
+        "grain_requirement_ids": []
+      },
+      {
+        "requirement_id": "m_discount",
+        "quote": "折扣金額",
+        "business_object": "折扣金額",
+        "kind": "metric",
+        "scope_ids": [
+          "月~邊界",
+          "scope-channel"
+        ],
+        "grain": "門市×商品",
+        "population": "所有庫存商品",
+        "grain_binding": "linked",
+        "grain_requirement_ids": [
+          "slot_0/🧾"
+        ]
+      },
+      {
+        "requirement_id": "amount/net",
+        "quote": "淨銷售額",
+        "business_object": "淨銷售額",
+        "kind": "metric",
+        "scope_ids": [
+          "月~邊界",
+          "scope-channel"
+        ],
+        "grain": "門市×商品",
+        "population": "所有庫存商品",
+        "grain_binding": "linked",
+        "grain_requirement_ids": [
+          "slot_0/🧾"
+        ]
+      },
+      {
+        "requirement_id": "元資料",
+        "quote": "庫存盤點日期",
+        "business_object": "庫存盤點日期",
+        "kind": "metadata",
+        "scope_ids": [],
+        "grain": "門市×商品",
+        "population": "所有庫存商品",
+        "grain_binding": null,
+        "grain_requirement_ids": [
+          "slot_0/🧾"
+        ]
+      },
+      {
+        "requirement_id": "保留/全部",
+        "quote": "保留所有庫存商品",
+        "business_object": "保留所有庫存商品",
+        "kind": "population",
+        "scope_ids": [],
+        "grain": "門市×商品",
+        "population": "所有庫存商品",
+        "grain_binding": null,
+        "grain_requirement_ids": [
+          "slot_0/🧾"
+        ]
+      }
+    ],
+    "candidate_views": [
+      {
+        "view": "diagnostic9.observation",
+        "reason": "{\"policy\": \"本MVP保留全部admitted候選\", \"evidence\": [{\"path\": \"/summary\", \"quote\": \"粒度：門市×有銷售的日期；沒有交易的門市日期不出現。適合每日營收、門市趨勢\"}, {\"path\": \"/grain/description\", \"quote\": \"門市×有銷售的日期\"}]}"
+      }
+    ]
+  },
+  "coverages": [],
+  "profile_id": "kind_diag_renamed_v1",
+  "catalog_fingerprint": "0e0fc952adf4a875415d1ff054b37b98535ea6eceabdf5c863adad22cc86d21a"
+}

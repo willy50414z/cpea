@@ -1,0 +1,10 @@
+{
+  "entries": {
+    "unrelated/識別~鍵": {
+      "status": "unsupported",
+      "mappings": [],
+      "contract_path": "/grain/description",
+      "own_gap": true
+    }
+  }
+}

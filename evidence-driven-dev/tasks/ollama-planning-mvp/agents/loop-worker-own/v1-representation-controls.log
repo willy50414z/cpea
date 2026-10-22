@@ -1,0 +1,15 @@
+{"control": "original natural raw unchanged", "result": "REJECT", "detail": "gap aspect contradicts evidence or dependencies: grain"}
+{"control": "offline original unsupported with legal mapping/self gap; not a repaired natural answer", "result": "ACCEPT", "detail": [["R1", "unsupported", []], ["R2", "unsupported", []], ["F1", "partial", ["sales_date", "sales_date"]], ["F2", "unsupported", []], ["R3", "unsupported", []], ["R4", "partial", ["revenue"]], ["R5", "unsupported", []], ["R6", "unsupported", []]]}
+{"control": "demo_retail.v_daily_sales own partial grain", "result": "REJECT", "detail": "gap aspect contradicts evidence or dependencies: grain"}
+{"control": "demo_retail.v_daily_sales own partial mapping", "result": "REJECT", "detail": "gap aspect contradicts evidence or dependencies: mapping"}
+{"control": "demo_retail.v_daily_sales own partial scope", "result": "REJECT", "detail": "gap aspect contradicts evidence or dependencies: scope"}
+{"control": "demo_retail.v_daily_sales own partial population", "result": "REJECT", "detail": "gap aspect contradicts evidence or dependencies: population"}
+{"control": "demo_retail.v_daily_sales own partial evidence", "result": "REJECT", "detail": "gap aspect contradicts evidence or dependencies: evidence"}
+{"control": "demo_retail.v_daily_sales legacy referenced accepts same honest partial", "result": "ACCEPT", "key": "store_id"}
+{"control": "demo_retail.v_customer_value own partial grain", "result": "REJECT", "detail": "gap aspect contradicts evidence or dependencies: grain"}
+{"control": "demo_retail.v_customer_value own partial mapping", "result": "REJECT", "detail": "gap aspect contradicts evidence or dependencies: mapping"}
+{"control": "demo_retail.v_customer_value own partial scope", "result": "REJECT", "detail": "gap aspect contradicts evidence or dependencies: scope"}
+{"control": "demo_retail.v_customer_value own partial population", "result": "REJECT", "detail": "gap aspect contradicts evidence or dependencies: population"}
+{"control": "demo_retail.v_customer_value own partial evidence", "result": "REJECT", "detail": "gap aspect contradicts evidence or dependencies: evidence"}
+{"control": "demo_retail.v_customer_value legacy referenced accepts same honest partial", "result": "ACCEPT", "key": "customer_id"}
+0 model POST/SQL/DB; original natural FAIL unchanged.

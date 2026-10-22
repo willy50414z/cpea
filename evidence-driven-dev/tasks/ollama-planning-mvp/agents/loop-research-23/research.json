@@ -1,0 +1,261 @@
+{
+  "schema_version": 1,
+  "ticket": "8a59062f68c646139853d64a40f68171",
+  "result": "RECOMMEND_BOUNDED_A1_EXPERIMENT_NOT_ARCHITECTURE_ADOPTION",
+  "goal_unchanged": "修正目前三階段任務拆分測試的失敗，以本機 Ollama qwen3.8:27b 完成目前診斷案例的自然端到端驗證與必要回歸。",
+  "facts": {
+    "closed_rounds": 23,
+    "local_POST": 31,
+    "dispatches_after_this_bind": 41,
+    "retries": 0,
+    "cloud": 0,
+    "inflight": 0,
+    "latest_outcome": [
+      "FAIL",
+      "PASS",
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "root": "PENDING",
+    "research_POST": 0
+  },
+  "classification": {
+    "model_format": "四contract_path指向object；pointer存在不等於非空文字。",
+    "model_semantic": "customer刪有用累計淨額sum；inventory把商品ID/值域當完整母體證明，漏複合key。",
+    "oracle": "已知scope AND及policy問題在21/22與16/17有獨立處理；本23不存在證明應放寬的新增false reject。不同合法path仍應獨立判，不預設唯一字面。",
+    "integration": "23只是上游注入coverage，選擇已PASS；未取得自然recall與全部7coverage接selection之新九POST。",
+    "unknown": "A1消格式負擔能否改善語意，以及B分步是否比A有增益，均未實測。"
+  },
+  "responsibility_necessity": [
+    {
+      "field": "mappings/aggregation/predicate",
+      "decision": "模型業務責任必要；不能由column型別、expected或名稱預填；有用partial須完整保留"
+    },
+    {
+      "field": "own_gap",
+      "decision": "目前必要語意判斷，尤其會員母體及restricted inventory；不從有SUM直接推false"
+    },
+    {
+      "field": "status",
+      "decision": "與mapping/own/依賴有冗餘，但目前guards已完整驗一致；本輪無純status-only故障，暫不移轉程式"
+    },
+    {
+      "field": "scope/grain gaps",
+      "decision": "已由程式完整推導，保持原實作，不再叫模型自由寫"
+    },
+    {
+      "field": "pointer spelling/leafness/column quote",
+      "decision": "機械身分及格式可由程式限制；column引文已程式產生。A1只縮小pointer值域，不選其業務相關性、不補mapping"
+    },
+    {
+      "field": "population evidence",
+      "decision": "來源summary/完整雙key/保留操作之業務依據不可用identifier、status值域或grain任一單獨取代；正式業務母體仍未認證"
+    }
+  ],
+  "selected_minimum": {
+    "candidate": "managed-text-leaf-evidence-1",
+    "content_version": "kind-text-leaf-evidence-1",
+    "changes": "只將非grain contract_path的str|null縮成綁實際catalog文字leaf的enum|null；cards/system/模型業務責任及status/own/mappings原樣保留。只新nested diagnostics module/test/fixture版本，完全不改舊任何code/fixtures/Oracle/manifest/raw。",
+    "files": {
+      "module": "evaluations/diagnostics/managed_text_leaf_evidence.py",
+      "test": "tests/diagnostics/test_managed_text_leaf_evidence.py",
+      "manifest": "evaluations/fixtures/kind_diagnostics_text_leaf/manifest.json"
+    },
+    "view_binding": "優先以當次View生成文字leaf enum。原run_pipeline介面coverage_schema(recall)不含View，若保持原runner，可建立只讀綁當次catalog的contract物件，schema使用該catalog所有真文字leaf pointer聯集，materialize仍在當前View逐筆contract_text驗證；此界線須明記，聯集合法不代表當前View存在，更不代表證據相關。不得用mutable globals切View。消息response_schema與真provider format須同新schema，不能只改提示中的schema。",
+    "pointer_rules": [
+      "依dict/list實值遞迴，只列非空str；JSON pointer ~及/照規範escape，含Unicode；不列object/list/空白/number/bool/null",
+      "非grain仍可null，由原own/status守門處理；grain原固定/description不改",
+      "enum列全可用leaf而非按expected挑答案；mapping欄位及聚合/條件原schema不縮成Oracle答案",
+      "合法無關path保留拒絕/需fresh語意判定，絕不以leaf有效性取代業務證據"
+    ],
+    "falsifiable_hypothesis": "消除可機械約束的pointer自由生成後，現cards能否同時通過已曝光與新未POST語意控制？若04/05類遺漏仍出現，A1充分性被否證，回fresh研究B1，不加題目答案提示。",
+    "noncoverage": "完全委派已PASS managed-policy-shape-1的RecallWire/SelectionWire/messages/materialize/finish及三literal/typed guards；不重開selection parent或原56rows核准。",
+    "integration_entry": "輸出可供原run_pipeline(contract=新只讀bound contract物件)使用的自然入口與來源freeze，不複製runner/改globals/追加舊glob頂層檔；0POST fake必完整9節點2prepared。"
+  },
+  "panel": [
+    {
+      "id": "COV-ISO-v1-01",
+      "type": "歷史輸入在新版本的對照；非未見",
+      "input": "逐值保留23輪原request/recall/真View/IDs/cards，不複製或改舊raw；body只有新schema證據值域的實質變更",
+      "expected": "引用原fresh核准rows，仍核所有8列（02為1列）"
+    },
+    {
+      "id": "COV-ISO-v1-02",
+      "type": "歷史輸入在新版本的對照；非未見",
+      "input": "逐值保留23輪原request/recall/真View/IDs/cards，不複製或改舊raw；body只有新schema證據值域的實質變更",
+      "expected": "引用原fresh核准rows，仍核所有8列（02為1列）"
+    },
+    {
+      "id": "COV-ISO-v1-03",
+      "type": "歷史輸入在新版本的對照；非未見",
+      "input": "逐值保留23輪原request/recall/真View/IDs/cards，不複製或改舊raw；body只有新schema證據值域的實質變更",
+      "expected": "引用原fresh核准rows，仍核所有8列（02為1列）"
+    },
+    {
+      "id": "COV-CAP-v1-04",
+      "type": "歷史輸入在新版本的對照；非未見",
+      "input": "逐值保留23輪原request/recall/真View/IDs/cards，不複製或改舊raw；body只有新schema證據值域的實質變更",
+      "expected": "引用原fresh核准rows，仍核所有8列（02為1列）"
+    },
+    {
+      "id": "COV-CAP-v1-05",
+      "type": "歷史輸入在新版本的對照；非未見",
+      "input": "逐值保留23輪原request/recall/真View/IDs/cards，不複製或改舊raw；body只有新schema證據值域的實質變更",
+      "expected": "引用原fresh核准rows，仍核所有8列（02為1列）"
+    },
+    {
+      "id": "COV-LEAF-v1-06",
+      "type": "未POST會員正控制",
+      "base": "COV-CAP-v1-04",
+      "transform": {
+        "view": "diagnostic_leaf.member_a",
+        "columns": {
+          "customer_id": "person_key",
+          "lifetime_spend": "value_total",
+          "last_order_date": "latest_day"
+        },
+        "ids": "採原03的完整Unicode IDs雙射，保持scope/grain links；引用索引依原request不變"
+      },
+      "invariant": "淨額sum(value_total)仍partial/own=true，會員key仍無門市商品價值，缺完整交易日期/channel；七其他row不變；不是只更名抽舊body。"
+    },
+    {
+      "id": "COV-LEAF-v1-07",
+      "type": "未POST庫存無status正控制",
+      "base": "COV-CAP-v1-05",
+      "transform": {
+        "view": "diagnostic_leaf.stock_a",
+        "columns": {
+          "store_id": "site_key",
+          "product_id": "item_key",
+          "stock_qty": "onhand_value",
+          "snapshot_date": "counted_day"
+        },
+        "drop_column": "stock_status",
+        "summary": "只刪stock_status值域子句並依欄位rename引用；其餘來源語意不動"
+      },
+      "invariant": "完整庫存technical source的POP仍雙key/own=false/supported，庫存sum與metadata正確；不能因無status產生新義務或降unsupported。"
+    },
+    {
+      "id": "COV-LEAF-v1-08",
+      "type": "未POST庫存受限反控制",
+      "base": "COV-LEAF-v1-07",
+      "transform": {
+        "view": "diagnostic_leaf.stock_subset",
+        "summary_prefix": "此來源僅保留 onhand_value > 0 的庫存列，缺貨列不出現。"
+      },
+      "invariant": "GRN雙key及庫存件數有用能力仍可用；POP所有庫存不能supported/own=false，預期有用庫存子集的partial/own=true且雙key；具體其它row的自身母體依賴需fresh預先逐項裁定，不把同grain/keys當完整母體。"
+    },
+    {
+      "id": "COV-LEAF-v1-09",
+      "type": "未POST淨額誤映反控制",
+      "base": "COV-LEAF-v1-06",
+      "transform": {
+        "view": "diagnostic_leaf.member_profit",
+        "value_total_description": "會員累計毛利金額，單位 TWD；不是折扣後銷售淨額或消費金額。"
+      },
+      "invariant": "MET-003不能再以sum(value_total)作淨額partial；其餘原會員欄位不能合法補出完整/有用淨額sum，預期unsupported/own=true/[]。新期望仍需fresh確認，拒絕則本實驗不可POST。"
+    }
+  ],
+  "sampling": {
+    "panel_cases": 9,
+    "predeclared_seeds": [
+      42,
+      43,
+      44
+    ],
+    "first_block": "seed42按1至9固定順序，各唯一首次POST，沒有停止條件時即使語意FAIL也完成其餘獨立案例；每單案provider/parse/contract錯保raw停止該案，不repair。429/controller hard stop則全部停。",
+    "continuation": "僅seed42全9原raw/結構/證據/完整語意PASS後，才依預先固定seed43與44各9案；不是因錯答追加成功答案。任一block失敗仍不挑分，候選整體FAIL且下個block不啟動。",
+    "max_A1_POST": 27,
+    "case_identity": "kind-text-leaf-evidence-1:ISOLATION:A1:<sample-id>:seed<42|43|44>:node；27格在首次POST前全部manifest列明。原A0五案只是歷史參照，不冒稱同9案多seed配對實驗。",
+    "model": "qwen3.8:27b及既有digest；num_ctx32768,num_predict=-1,temperature1,top_p1,think=true；只有預先指定seed作受控穩定性因素，無HTTP或外層timeout。自然原題9POST採seed42。",
+    "why_seeds": "使用者建議每題至少三次及受控多seed；42保原設定，43/44測對已正確語意的局部穩定性。只全9通過才續，最多27；不是估可靠率或湊成功。每格直接檢驗原Task必需的部分能力完整性/來源母體安全，未涉SQL或新產品功能。",
+    "parameter_transport": "現ManagedInvoke與base._body硬綁MODEL_OPTIONS.seed=42；43/44不是直接可用旗標。新nested module須以最小明確body/managed transport介面傳入預固定seed，所有HTTP仍loopctl，實際body/receipt/run/meta/model-binding一致且no-timeout；不得改或暫改舊MODEL_OPTIONS/global，不複製record/replay框架。先以0POST捕獲body正反例證明43/44實際生效，無法維持完整綁定則FAIL，不能默默以42或記錄假seed。自然9POST仍原ManagedInvoke的42。"
+  },
+  "oracle": {
+    "existing": "原v2完整56rows及23用33rows不改。新manifest引用原來源/作者/審者/lineage；新案例為新技術控制非改正式業務契約。",
+    "new": "06/07等變沿用被證明語意；08/09應變須fresh核每一row、self/scope/grain缺口與source summary。不把本研究提出的預期當已ACCEPT。fresh若否決則STOP此版、回研究；不能測後改答案。",
+    "alternative": "新版本可預先列可證的alternative evidence path及理由，或產機器REVIEW_REQUIRED交fresh reviewer；不能讓作者以無證據path例外消finding。原有限日期/AND規則不擴。",
+    "diagnostics": "另存raw semantic observation，contract錯時不會repair或正式PASS；01/03需逐列看完而不只首錯。",
+    "independence": "作者與delta reviewer真不同platform/ticket；兩者必closed PASS+manifest完整bindings；自然worker不能扮fresh reviewer。"
+  },
+  "metrics": [
+    {
+      "name": "Evidence Recall",
+      "unit": "fresh預核必需且獨立有用的column/operator/aggregation/conditions能力atoms",
+      "formula": "找到的必要atoms/所有預核必要atoms；不以重複別名或多個finding重算"
+    },
+    {
+      "name": "Evidence Precision",
+      "unit": "model提出的能力atoms",
+      "formula": "確有契約語意支持的atoms/全部提出atoms；空集合記N/A並保Recall，不能用空輸出獲滿分"
+    },
+    {
+      "name": "OwnGap/Dependency/Status",
+      "unit": "預核row及其顯式依賴edge",
+      "formula": "各自正確數/已核row或edge數，另列旗標吻合但證據不支持的row"
+    },
+    {
+      "name": "Evidence Validity",
+      "unit": "非null pointer及其相關性",
+      "formula": "合法非空文字leaf/全部非null pointer，並分列雖合法但無關/不足的證據；null遺漏不能以分母排除掩蓋"
+    },
+    {
+      "name": "Oracle FR/FA",
+      "unit": "fresh預核合法/非法對照",
+      "formula": "錯拒合法數/合法總數、錯收非法數/非法總數；legacy finding與新獨立裁定均保存"
+    },
+    {
+      "name": "Metamorphic consistency",
+      "unit": "01↔03、04↔06、05↔07、07↔08、06↔09受控關係",
+      "formula": "符合預先不變/應變定義的關係數/全部已執行關係數；不是比較字串完全相等"
+    },
+    {
+      "name": "Planning safety/Natural E2E",
+      "unit": "零容忍安全錯／完整自然案例",
+      "formula": "任一錯supported/assignment、缺母體/錯grain/不安全join/補零即FAIL；isolation不計Natural E2E成功"
+    },
+    {
+      "name": "Cost",
+      "unit": "stage/physical POST",
+      "formula": "真實呼叫數、elapsed與usage token逐階段；缺usage明記missing，不把額外呼叫視為品質改善"
+    }
+  ],
+  "acceptance": "本隔離候選27/27所有必要能力/own/依賴/status/有效且相關證據逐項ACCEPT，FA=0且全負對照拒絕、無新回歸；只證有限面板可行性，不估計泛化可靠率。只有再完成父整合/全新自然9POST/各祖先/fresh final才root。",
+  "offline_controls": [
+    "四原object path拒絕；真description/summary合法，合法但不相關description仍不獲語意PASS",
+    "JSON pointer escape/Unicode及list索引；空白字串、物件、number/bool/null非法path；合法null仍保原規則",
+    "不完整enum或跨View path不能假通過；缺key/新增slot/重複raw key/非法mapping全部維持原拒絕",
+    "customer有用累計額正例與毛利反例；inventory同key受限母體反例與無status完整正例；不能自動補key或改own",
+    "原AND全群與半月/錯scope/錯月份/額外condition反例保持；default/NULL flat及EMPTY typed nest/假aggregate/inner drop母體控制",
+    "新fake完整9節點/2prepared及失敗首錯同版與完整frozen replay；舊15FAIL/18PASS/20三案/23五案舊frozen原樣重播；focused加直接相關回歸，不廣跑無關544"
+  ],
+  "fallback_B": {
+    "trigger": "A1任一語意FAIL；全raw/每階段指標交新fresh研究者，不再同版抽樣",
+    "minimum": "B1兩步隔離：第1步僅有用mapping與證據，無status/own/dependency決策；第2步唯讀validated mapping與完整未刪限制，模型仍判own/status，既有gap/typed guards驗證。第2步不能加刪改mapping，證據不足不得宣稱完整。",
+    "comparison": "同9案/seed42及相同leaf/schema機械層配對A1與B1；B1每案2首次POST，prefix18物理calls；若全過才預先固定43/44兩block，最多54。未建新版本/獨立review不准現在POST。沒有額外第三status-call或C假設。",
+    "failure": "B第1步仍漏能力或第2步錯母體/own，即否證分拆充分性；fresh方向審核，不無限拆分。",
+    "acceptance_conflict": "B內部多POST可能改變現既有9POST自然驗收，必由fresh方向審核記錄可否符合原七View各一次；重大驗收變更交明確決策，不能偷改24原nodes。"
+  },
+  "execution_sequence": [
+    "round24僅A1離線author；所有proof真FINAL後Main核hash/check-evidence再finish",
+    "必fresh audit22–24，包含22離線核准、23真FAIL及本候選，不只審24成功；獲CONTINUE才review",
+    "fresh delta semantics核新版本/新案例及舊核准不變，真closed PASS後才固定A1自然面板",
+    "自然隔離完成後natural_capability_projection_coverage自身0POST父整合新候選與原23歷史；不能翻原23結果",
+    "再natural_kind_coverage_isolation自身0POST整合及原20歷史；audit依每3輪照常",
+    "natural_kind_mapping_three_stage全新recall→全部7coverage→typed selection共9首次POST，2prepared完整語意/frozen回歸",
+    "依序返回natural_own_responsibility_three_stage、natural_evidence_bound_three_stage、natural_slots_three_stage、natural_qwen_three_stage、three_stage_integration、root，各自獨立整合；fresh final ACCEPT後才完成"
+  ],
+  "constraints": {
+    "research_only_POST_SQL_DB": 0,
+    "edit_scope": "本研究只新增本agent目錄JSON，無Markdown/測試報告/commit/push",
+    "historical_gate": "原38×2未過保持",
+    "budgets": "控制器10**30整數保持；local不限/0cloud/每3輪audit；成功HTTP錯答不原樣重試；必要POST全loopctl"
+  },
+  "panel_task_relevance": {
+    "COV-LEAF-v1-06": "針對23-04最直接語意遺漏，欄位/ID等變檢驗不是只記lifetime_spend。",
+    "COV-LEAF-v1-07": "針對23-05完整母體/key與status值域混淆，檢驗原題不要求的status欄不成新義務。",
+    "COV-LEAF-v1-08": "07的單一來源縮限反控制，防止只看keys/grain/有SUM就錯supported而丟全庫存。",
+    "COV-LEAF-v1-09": "06的單一指標語意應變，防止為追回有用partial而把任意TWD/毛利當淨額。"
+  }
+}

@@ -1,0 +1,647 @@
+{
+  "sample": {
+    "id": "SEL-ISO-v1-01",
+    "stage": "selection",
+    "role": "ISOLATION",
+    "count": 1,
+    "request": "request-original.txt",
+    "recall": "recall-original.json",
+    "profile": "projects/retail",
+    "coverage": "coverage-selection.json"
+  },
+  "upstream_injected": true,
+  "input_tokens_estimated": 21871,
+  "messages": [
+    {
+      "role": "system",
+      "content": "# 高優先規則\n\n必要需求完整滿足優先於少用來源、粒度方便或成本。只能使用經驗證的 ViewCoverage；partial 不得當 supported，不能新增未映射欄位或變更條件。所有度量及 scope 條件在同一 task 表達。只輸出 response_schema JSON，不產生 SQL、不執行查詢、不寫私有思維鏈。\n\n# 選擇與分工\n\nselected_views 列必要來源。assignments 對每一 requirement_id 指派一個 supported 的 view 與實際 task_id；不可輸出reason，程式從該精確requirement/view/task及其支持證據產生理由。exclusions對所有未選候選給出非空refs，不得輸出自由reason。每ref有kind、requirement_ids與selected_view：gap需精確引用該未選View非supported責任，selected_view=null；redundant需指出已選View，兩View對相同refs責任都supported且依賴完整，不能借別的View能力或只寫空通用理由。來源對齊鍵可重用該來源已驗證的 supported key 映射，即使最終 grain 的負責 task 是另一來源。\n\ndraft 沿用 DecompositionDraft。tasks 的 required_columns 必須包含全部實際引用，且全部在第二步有證據；filters、metrics、conditional_metrics、attributes、metadata_collections、group_by、output_grain 不得超出已驗證角色。scope 條件必須落在相同來源的同一 task.filters。保留母體的任務是 integration.anchor_task，從該母體以 left、正確鍵與基數整合；保留母體時不可 inner、不可把缺值直接補零。\n\nkind=grain 的需求代表最終輸出粒度，由 anchor task 負責；integration.output_grain 必須與該需求已驗證的 key mappings 一致。preparation 不可刪除對齊或最終粒度鍵。integration.missing_data_policy 請逐字選用輸入 missing_policy_options 其中之一，程式不推測任意自然語句是否允許補零。\n\n必要來源各自篩選、彙總到相容粒度，再整合；不能用另一來源條件篩選已彙總度量。request 完整描述單一來源子需求，不引用其他 View。unbound_inputs=[]，depends_on 不得自循環。output_grain、group_by、整合鍵與 preparation 必須符合契約；不能省略必要識別鍵或膨脹母體。\n\n若需求缺少合法支持或無法證明整合，draft 回 unsupported 或 needs_clarification，列明原因；此時 tasks、selected_views、assignments 為空，不可假裝 ready。\n\n# 完整typed輸出\n\n所有typed欄位必填，空list/dict或null也是明確選擇，不能省略。ready必須有非null integration，不能只在task.request文字提月份、通路、sum或metadata而省略filters/metrics/metadata_collections。tasks的filters、metrics、conditional_metrics、attributes、metadata_collections、group_by、output_grain、depends_on、unbound_inputs、required_columns、request，以及integration全部欄位、edge的mode/preserve_task和preparation全部欄位都必須由你填。程式不從文字補答案。nonready須無tasks/assignments/selected_views、integration=null並列明原因。\n\n全部剩餘自由文字（request、description、notes等）仍需有契約依據，不能增加未保證母體或額外資料義務。來源事實逐字由程式保留，這不免除你的語意決策責任。\n"
+    },
+    {
+      "role": "human",
+      "content": "{\"request\": \"對照各店各商品的盤點庫存件數與 2026 年 9 月線上通路的折扣金額及淨銷售額，並顯示庫存盤點日期，準備促銷後補貨評估；保留所有庫存商品。\", \"requirements\": [{\"requirement_id\": \"GRN-001\", \"quote\": \"各店各商品\", \"business_object\": \"各店各商品\", \"kind\": \"grain\", \"scope_ids\": [], \"grain\": \"門市×商品\", \"population\": \"所有庫存商品\", \"grain_binding\": null, \"grain_requirement_ids\": []}, {\"requirement_id\": \"MET-001\", \"quote\": \"盤點庫存件數\", \"business_object\": \"盤點庫存件數\", \"kind\": \"metric\", \"scope_ids\": [], \"grain\": \"門市×商品\", \"population\": \"所有庫存商品\", \"grain_binding\": \"linked\", \"grain_requirement_ids\": [\"GRN-001\"]}, {\"requirement_id\": \"FILT-001\", \"quote\": \"2026 年 9 月\", \"business_object\": \"2026 年 9 月\", \"kind\": \"filter\", \"scope_ids\": [], \"grain\": \"門市×商品\", \"population\": \"所有庫存商品\", \"grain_binding\": null, \"grain_requirement_ids\": []}, {\"requirement_id\": \"FILT-002\", \"quote\": \"線上通路\", \"business_object\": \"線上通路\", \"kind\": \"filter\", \"scope_ids\": [], \"grain\": \"門市×商品\", \"population\": \"所有庫存商品\", \"grain_binding\": null, \"grain_requirement_ids\": []}, {\"requirement_id\": \"MET-002\", \"quote\": \"折扣金額\", \"business_object\": \"折扣金額\", \"kind\": \"metric\", \"scope_ids\": [\"FILT-001\", \"FILT-002\"], \"grain\": \"門市×商品\", \"population\": \"所有庫存商品\", \"grain_binding\": \"linked\", \"grain_requirement_ids\": [\"GRN-001\"]}, {\"requirement_id\": \"MET-003\", \"quote\": \"淨銷售額\", \"business_object\": \"淨銷售額\", \"kind\": \"metric\", \"scope_ids\": [\"FILT-001\", \"FILT-002\"], \"grain\": \"門市×商品\", \"population\": \"所有庫存商品\", \"grain_binding\": \"linked\", \"grain_requirement_ids\": [\"GRN-001\"]}, {\"requirement_id\": \"META-001\", \"quote\": \"庫存盤點日期\", \"business_object\": \"庫存盤點日期\", \"kind\": \"metadata\", \"scope_ids\": [], \"grain\": \"門市×商品\", \"population\": \"所有庫存商品\", \"grain_binding\": null, \"grain_requirement_ids\": [\"GRN-001\"]}, {\"requirement_id\": \"POP-001\", \"quote\": \"保留所有庫存商品\", \"business_object\": \"保留所有庫存商品\", \"kind\": \"population\", \"scope_ids\": [], \"grain\": \"門市×商品\", \"population\": \"所有庫存商品\", \"grain_binding\": null, \"grain_requirement_ids\": [\"GRN-001\"]}], \"coverages\": [{\"view\": \"demo_retail.v_customer_value\", \"entries\": [{\"requirement_id\": \"GRN-001\", \"status\": \"unsupported\", \"mappings\": [], \"contract_evidence\": [{\"path\": \"/grain/description\", \"quote\": \"每會員一列，包含未下單會員\"}], \"missing_requirements\": [\"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"self\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"GRN-001\\\", \\\"quote\\\": \\\"各店各商品\\\", \\\"status\\\": \\\"unsupported\\\"}]}\"]}, {\"requirement_id\": \"MET-001\", \"status\": \"unsupported\", \"mappings\": [], \"contract_evidence\": [], \"missing_requirements\": [\"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"self\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"MET-001\\\", \\\"quote\\\": \\\"盤點庫存件數\\\", \\\"status\\\": \\\"unsupported\\\"}]}\", \"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"grain\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"GRN-001\\\", \\\"quote\\\": \\\"各店各商品\\\", \\\"status\\\": \\\"unsupported\\\"}]}\"]}, {\"requirement_id\": \"FILT-001\", \"status\": \"unsupported\", \"mappings\": [], \"contract_evidence\": [], \"missing_requirements\": [\"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"self\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"FILT-001\\\", \\\"quote\\\": \\\"2026 年 9 月\\\", \\\"status\\\": \\\"unsupported\\\"}]}\"]}, {\"requirement_id\": \"FILT-002\", \"status\": \"unsupported\", \"mappings\": [], \"contract_evidence\": [], \"missing_requirements\": [\"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"self\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"FILT-002\\\", \\\"quote\\\": \\\"線上通路\\\", \\\"status\\\": \\\"unsupported\\\"}]}\"]}, {\"requirement_id\": \"MET-002\", \"status\": \"unsupported\", \"mappings\": [], \"contract_evidence\": [], \"missing_requirements\": [\"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"self\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"MET-002\\\", \\\"quote\\\": \\\"折扣金額\\\", \\\"status\\\": \\\"unsupported\\\"}]}\", \"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"scope\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"FILT-001\\\", \\\"quote\\\": \\\"2026 年 9 月\\\", \\\"status\\\": \\\"unsupported\\\"}, {\\\"requirement_id\\\": \\\"FILT-002\\\", \\\"quote\\\": \\\"線上通路\\\", \\\"status\\\": \\\"unsupported\\\"}]}\", \"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"grain\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"GRN-001\\\", \\\"quote\\\": \\\"各店各商品\\\", \\\"status\\\": \\\"unsupported\\\"}]}\"]}, {\"requirement_id\": \"MET-003\", \"status\": \"unsupported\", \"mappings\": [], \"contract_evidence\": [], \"missing_requirements\": [\"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"self\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"MET-003\\\", \\\"quote\\\": \\\"淨銷售額\\\", \\\"status\\\": \\\"unsupported\\\"}]}\", \"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"scope\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"FILT-001\\\", \\\"quote\\\": \\\"2026 年 9 月\\\", \\\"status\\\": \\\"unsupported\\\"}, {\\\"requirement_id\\\": \\\"FILT-002\\\", \\\"quote\\\": \\\"線上通路\\\", \\\"status\\\": \\\"unsupported\\\"}]}\", \"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"grain\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"GRN-001\\\", \\\"quote\\\": \\\"各店各商品\\\", \\\"status\\\": \\\"unsupported\\\"}]}\"]}, {\"requirement_id\": \"META-001\", \"status\": \"unsupported\", \"mappings\": [], \"contract_evidence\": [], \"missing_requirements\": [\"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"self\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"META-001\\\", \\\"quote\\\": \\\"庫存盤點日期\\\", \\\"status\\\": \\\"unsupported\\\"}]}\", \"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"grain\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"GRN-001\\\", \\\"quote\\\": \\\"各店各商品\\\", \\\"status\\\": \\\"unsupported\\\"}]}\"]}, {\"requirement_id\": \"POP-001\", \"status\": \"unsupported\", \"mappings\": [], \"contract_evidence\": [], \"missing_requirements\": [\"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"self\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"POP-001\\\", \\\"quote\\\": \\\"保留所有庫存商品\\\", \\\"status\\\": \\\"unsupported\\\"}]}\", \"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"grain\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"GRN-001\\\", \\\"quote\\\": \\\"各店各商品\\\", \\\"status\\\": \\\"unsupported\\\"}]}\"]}], \"grain\": \"每會員一列，包含未下單會員\", \"keys\": [\"customer_id\"], \"population\": \"粒度：每會員一列，包含未下單會員；\", \"contract_evidence\": [{\"path\": \"/summary\", \"quote\": \"粒度：每會員一列，包含未下單會員；\"}]}, {\"view\": \"demo_retail.v_daily_sales\", \"entries\": [{\"requirement_id\": \"GRN-001\", \"status\": \"partial\", \"mappings\": [{\"column\": \"store_id\", \"role\": \"key\", \"source_quote\": \"各店各商品\", \"aggregation\": null, \"operator\": null, \"value\": null, \"conditions\": [], \"contract_evidence\": [{\"path\": \"/columns/store_id/description\", \"quote\": \"門市id\"}]}], \"contract_evidence\": [{\"path\": \"/grain/description\", \"quote\": \"門市×有銷售的日期\"}], \"missing_requirements\": [\"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"self\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"GRN-001\\\", \\\"quote\\\": \\\"各店各商品\\\", \\\"status\\\": \\\"partial\\\"}]}\"]}, {\"requirement_id\": \"MET-001\", \"status\": \"unsupported\", \"mappings\": [], \"contract_evidence\": [], \"missing_requirements\": [\"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"self\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"MET-001\\\", \\\"quote\\\": \\\"盤點庫存件數\\\", \\\"status\\\": \\\"unsupported\\\"}]}\", \"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"grain\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"GRN-001\\\", \\\"quote\\\": \\\"各店各商品\\\", \\\"status\\\": \\\"partial\\\"}]}\"]}, {\"requirement_id\": \"FILT-001\", \"status\": \"supported\", \"mappings\": [{\"column\": \"sales_date\", \"role\": \"filter\", \"source_quote\": \"2026 年 9 月\", \"aggregation\": null, \"operator\": \">=\", \"value\": \"2026-09-01\", \"conditions\": [], \"contract_evidence\": [{\"path\": \"/columns/sales_date/description\", \"quote\": \"已完成訂單的銷售日期；無交易的門市日期不會有資料列。\"}]}, {\"column\": \"sales_date\", \"role\": \"filter\", \"source_quote\": \"2026 年 9 月\", \"aggregation\": null, \"operator\": \"<\", \"value\": \"2026-10-01\", \"conditions\": [], \"contract_evidence\": [{\"path\": \"/columns/sales_date/description\", \"quote\": \"已完成訂單的銷售日期；無交易的門市日期不會有資料列。\"}]}], \"contract_evidence\": [{\"path\": \"/columns/sales_date/description\", \"quote\": \"已完成訂單的銷售日期；無交易的門市日期不會有資料列。\"}], \"missing_requirements\": []}, {\"requirement_id\": \"FILT-002\", \"status\": \"unsupported\", \"mappings\": [], \"contract_evidence\": [], \"missing_requirements\": [\"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"self\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"FILT-002\\\", \\\"quote\\\": \\\"線上通路\\\", \\\"status\\\": \\\"unsupported\\\"}]}\"]}, {\"requirement_id\": \"MET-002\", \"status\": \"unsupported\", \"mappings\": [], \"contract_evidence\": [], \"missing_requirements\": [\"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"self\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"MET-002\\\", \\\"quote\\\": \\\"折扣金額\\\", \\\"status\\\": \\\"unsupported\\\"}]}\", \"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"scope\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"FILT-002\\\", \\\"quote\\\": \\\"線上通路\\\", \\\"status\\\": \\\"unsupported\\\"}]}\", \"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"grain\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"GRN-001\\\", \\\"quote\\\": \\\"各店各商品\\\", \\\"status\\\": \\\"partial\\\"}]}\"]}, {\"requirement_id\": \"MET-003\", \"status\": \"partial\", \"mappings\": [{\"column\": \"revenue\", \"role\": \"metric\", \"source_quote\": \"淨銷售額\", \"aggregation\": \"sum\", \"operator\": null, \"value\": null, \"conditions\": [], \"contract_evidence\": [{\"path\": \"/columns/revenue/description\", \"quote\": \"門市折扣後的銷售淨額總和，單位 TWD\"}]}], \"contract_evidence\": [{\"path\": \"/columns/revenue/description\", \"quote\": \"門市折扣後的銷售淨額總和，單位 TWD\"}], \"missing_requirements\": [\"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"scope\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"FILT-002\\\", \\\"quote\\\": \\\"線上通路\\\", \\\"status\\\": \\\"unsupported\\\"}]}\", \"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"grain\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"GRN-001\\\", \\\"quote\\\": \\\"各店各商品\\\", \\\"status\\\": \\\"partial\\\"}]}\"]}, {\"requirement_id\": \"META-001\", \"status\": \"unsupported\", \"mappings\": [], \"contract_evidence\": [], \"missing_requirements\": [\"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"self\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"META-001\\\", \\\"quote\\\": \\\"庫存盤點日期\\\", \\\"status\\\": \\\"unsupported\\\"}]}\", \"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"grain\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"GRN-001\\\", \\\"quote\\\": \\\"各店各商品\\\", \\\"status\\\": \\\"partial\\\"}]}\"]}, {\"requirement_id\": \"POP-001\", \"status\": \"unsupported\", \"mappings\": [], \"contract_evidence\": [], \"missing_requirements\": [\"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"self\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"POP-001\\\", \\\"quote\\\": \\\"保留所有庫存商品\\\", \\\"status\\\": \\\"unsupported\\\"}]}\", \"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"grain\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"GRN-001\\\", \\\"quote\\\": \\\"各店各商品\\\", \\\"status\\\": \\\"partial\\\"}]}\"]}], \"grain\": \"門市×有銷售的日期\", \"keys\": [\"sales_date\", \"store_id\"], \"population\": \"粒度：門市×有銷售的日期；沒有交易的門市日期不出現。適合每日營收、門市趨勢\", \"contract_evidence\": [{\"path\": \"/summary\", \"quote\": \"粒度：門市×有銷售的日期；沒有交易的門市日期不出現。適合每日營收、門市趨勢\"}]}, {\"view\": \"demo_retail.v_inventory_status\", \"entries\": [{\"requirement_id\": \"GRN-001\", \"status\": \"supported\", \"mappings\": [{\"column\": \"store_id\", \"role\": \"key\", \"source_quote\": \"各店各商品\", \"aggregation\": null, \"operator\": null, \"value\": null, \"conditions\": [], \"contract_evidence\": [{\"path\": \"/columns/store_id/description\", \"quote\": \"庫存所屬門市識別碼；與 product_id 組合唯一決定一列。\"}]}, {\"column\": \"product_id\", \"role\": \"key\", \"source_quote\": \"各店各商品\", \"aggregation\": null, \"operator\": null, \"value\": null, \"conditions\": [], \"contract_evidence\": [{\"path\": \"/columns/product_id/description\", \"quote\": \"庫存商品識別碼；與 store_id 組合唯一決定一列。\"}]}], \"contract_evidence\": [{\"path\": \"/grain/description\", \"quote\": \"門市×商品\"}], \"missing_requirements\": []}, {\"requirement_id\": \"MET-001\", \"status\": \"supported\", \"mappings\": [{\"column\": \"stock_qty\", \"role\": \"metric\", \"source_quote\": \"盤點庫存件數\", \"aggregation\": \"sum\", \"operator\": null, \"value\": null, \"conditions\": [], \"contract_evidence\": [{\"path\": \"/columns/stock_qty/description\", \"quote\": \"快照當日此門市此商品的庫存件數，單位件；同商品跨門市可加總，不可跨不同快照日期直接加總。\"}]}], \"contract_evidence\": [{\"path\": \"/columns/stock_qty/description\", \"quote\": \"快照當日此門市此商品的庫存件數，單位件；同商品跨門市可加總，不可跨不同快照日期直接加總。\"}], \"missing_requirements\": []}, {\"requirement_id\": \"FILT-001\", \"status\": \"unsupported\", \"mappings\": [], \"contract_evidence\": [], \"missing_requirements\": [\"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"self\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"FILT-001\\\", \\\"quote\\\": \\\"2026 年 9 月\\\", \\\"status\\\": \\\"unsupported\\\"}]}\"]}, {\"requirement_id\": \"FILT-002\", \"status\": \"unsupported\", \"mappings\": [], \"contract_evidence\": [], \"missing_requirements\": [\"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"self\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"FILT-002\\\", \\\"quote\\\": \\\"線上通路\\\", \\\"status\\\": \\\"unsupported\\\"}]}\"]}, {\"requirement_id\": \"MET-002\", \"status\": \"unsupported\", \"mappings\": [], \"contract_evidence\": [], \"missing_requirements\": [\"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"self\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"MET-002\\\", \\\"quote\\\": \\\"折扣金額\\\", \\\"status\\\": \\\"unsupported\\\"}]}\", \"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"scope\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"FILT-001\\\", \\\"quote\\\": \\\"2026 年 9 月\\\", \\\"status\\\": \\\"unsupported\\\"}, {\\\"requirement_id\\\": \\\"FILT-002\\\", \\\"quote\\\": \\\"線上通路\\\", \\\"status\\\": \\\"unsupported\\\"}]}\"]}, {\"requirement_id\": \"MET-003\", \"status\": \"unsupported\", \"mappings\": [], \"contract_evidence\": [], \"missing_requirements\": [\"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"self\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"MET-003\\\", \\\"quote\\\": \\\"淨銷售額\\\", \\\"status\\\": \\\"unsupported\\\"}]}\", \"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"scope\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"FILT-001\\\", \\\"quote\\\": \\\"2026 年 9 月\\\", \\\"status\\\": \\\"unsupported\\\"}, {\\\"requirement_id\\\": \\\"FILT-002\\\", \\\"quote\\\": \\\"線上通路\\\", \\\"status\\\": \\\"unsupported\\\"}]}\"]}, {\"requirement_id\": \"META-001\", \"status\": \"supported\", \"mappings\": [{\"column\": \"snapshot_date\", \"role\": \"metadata\", \"source_quote\": \"庫存盤點日期\", \"aggregation\": null, \"operator\": null, \"value\": null, \"conditions\": [], \"contract_evidence\": [{\"path\": \"/columns/snapshot_date/description\", \"quote\": \"庫存盤點日期\"}]}], \"contract_evidence\": [{\"path\": \"/columns/snapshot_date/description\", \"quote\": \"庫存盤點日期\"}], \"missing_requirements\": []}, {\"requirement_id\": \"POP-001\", \"status\": \"supported\", \"mappings\": [{\"column\": \"store_id\", \"role\": \"key\", \"source_quote\": \"保留所有庫存商品\", \"aggregation\": null, \"operator\": null, \"value\": null, \"conditions\": [], \"contract_evidence\": [{\"path\": \"/columns/store_id/description\", \"quote\": \"庫存所屬門市識別碼；與 product_id 組合唯一決定一列。\"}]}, {\"column\": \"product_id\", \"role\": \"key\", \"source_quote\": \"保留所有庫存商品\", \"aggregation\": null, \"operator\": null, \"value\": null, \"conditions\": [], \"contract_evidence\": [{\"path\": \"/columns/product_id/description\", \"quote\": \"庫存商品識別碼；與 store_id 組合唯一決定一列。\"}]}], \"contract_evidence\": [{\"path\": \"/summary\", \"quote\": \"粒度：門市×商品；stock_status: 缺貨/需補貨/正常。estimated_days_of_supply 根據最近30日銷量估算，無銷量時為 NULL。\"}], \"missing_requirements\": []}], \"grain\": \"門市×商品\", \"keys\": [\"store_id\", \"product_id\"], \"population\": \"粒度：門市×商品；stock_status: 缺貨/需補貨/正常。estimated_days_of_supply 根據最近30日銷量估算，無銷量時為 NULL。\", \"contract_evidence\": [{\"path\": \"/summary\", \"quote\": \"粒度：門市×商品；stock_status: 缺貨/需補貨/正常。estimated_days_of_supply 根據最近30日銷量估算，無銷量時為 NULL。\"}]}, {\"view\": \"demo_retail.v_order_summary\", \"entries\": [{\"requirement_id\": \"GRN-001\", \"status\": \"partial\", \"mappings\": [{\"column\": \"store_id\", \"role\": \"key\", \"source_quote\": \"各店各商品\", \"aggregation\": null, \"operator\": null, \"value\": null, \"conditions\": [], \"contract_evidence\": [{\"path\": \"/columns/store_id/description\", \"quote\": \"訂單所屬門市識別碼。\"}]}], \"contract_evidence\": [{\"path\": \"/grain/description\", \"quote\": \"每筆已完成訂單一列\"}], \"missing_requirements\": [\"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"self\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"GRN-001\\\", \\\"quote\\\": \\\"各店各商品\\\", \\\"status\\\": \\\"partial\\\"}]}\"]}, {\"requirement_id\": \"MET-001\", \"status\": \"unsupported\", \"mappings\": [], \"contract_evidence\": [], \"missing_requirements\": [\"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"self\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"MET-001\\\", \\\"quote\\\": \\\"盤點庫存件數\\\", \\\"status\\\": \\\"unsupported\\\"}]}\", \"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"grain\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"GRN-001\\\", \\\"quote\\\": \\\"各店各商品\\\", \\\"status\\\": \\\"partial\\\"}]}\"]}, {\"requirement_id\": \"FILT-001\", \"status\": \"supported\", \"mappings\": [{\"column\": \"order_date\", \"role\": \"filter\", \"source_quote\": \"2026 年 9 月\", \"aggregation\": null, \"operator\": \">=\", \"value\": \"2026-09-01\", \"conditions\": [], \"contract_evidence\": [{\"path\": \"/columns/order_date/description\", \"quote\": \"訂單成立日期（曆日），不含時間。\"}]}, {\"column\": \"order_date\", \"role\": \"filter\", \"source_quote\": \"2026 年 9 月\", \"aggregation\": null, \"operator\": \"<\", \"value\": \"2026-10-01\", \"conditions\": [], \"contract_evidence\": [{\"path\": \"/columns/order_date/description\", \"quote\": \"訂單成立日期（曆日），不含時間。\"}]}], \"contract_evidence\": [{\"path\": \"/columns/order_date/description\", \"quote\": \"訂單成立日期（曆日），不含時間。\"}], \"missing_requirements\": []}, {\"requirement_id\": \"FILT-002\", \"status\": \"supported\", \"mappings\": [{\"column\": \"sales_channel\", \"role\": \"filter\", \"source_quote\": \"線上通路\", \"aggregation\": null, \"operator\": \"=\", \"value\": \"online\", \"conditions\": [], \"contract_evidence\": [{\"path\": \"/columns/sales_channel/description\", \"quote\": \"訂單銷售通路；in_store=實體門市，online=線上。\"}]}], \"contract_evidence\": [{\"path\": \"/columns/sales_channel/description\", \"quote\": \"訂單銷售通路；in_store=實體門市，online=線上。\"}], \"missing_requirements\": []}, {\"requirement_id\": \"MET-002\", \"status\": \"unsupported\", \"mappings\": [], \"contract_evidence\": [], \"missing_requirements\": [\"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"self\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"MET-002\\\", \\\"quote\\\": \\\"折扣金額\\\", \\\"status\\\": \\\"unsupported\\\"}]}\", \"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"grain\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"GRN-001\\\", \\\"quote\\\": \\\"各店各商品\\\", \\\"status\\\": \\\"partial\\\"}]}\"]}, {\"requirement_id\": \"MET-003\", \"status\": \"partial\", \"mappings\": [{\"column\": \"order_amount\", \"role\": \"metric\", \"source_quote\": \"淨銷售額\", \"aggregation\": \"sum\", \"operator\": null, \"value\": null, \"conditions\": [], \"contract_evidence\": [{\"path\": \"/columns/order_amount/description\", \"quote\": \"此訂單折扣後的總銷售金額（各明細 quantity × unit_price − discount），單位 TWD。\"}]}], \"contract_evidence\": [{\"path\": \"/columns/order_amount/description\", \"quote\": \"此訂單折扣後的總銷售金額（各明細 quantity × unit_price − discount），單位 TWD。\"}], \"missing_requirements\": [\"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"grain\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"GRN-001\\\", \\\"quote\\\": \\\"各店各商品\\\", \\\"status\\\": \\\"partial\\\"}]}\"]}, {\"requirement_id\": \"META-001\", \"status\": \"unsupported\", \"mappings\": [], \"contract_evidence\": [], \"missing_requirements\": [\"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"self\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"META-001\\\", \\\"quote\\\": \\\"庫存盤點日期\\\", \\\"status\\\": \\\"unsupported\\\"}]}\", \"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"grain\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"GRN-001\\\", \\\"quote\\\": \\\"各店各商品\\\", \\\"status\\\": \\\"partial\\\"}]}\"]}, {\"requirement_id\": \"POP-001\", \"status\": \"unsupported\", \"mappings\": [], \"contract_evidence\": [], \"missing_requirements\": [\"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"self\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"POP-001\\\", \\\"quote\\\": \\\"保留所有庫存商品\\\", \\\"status\\\": \\\"unsupported\\\"}]}\", \"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"grain\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"GRN-001\\\", \\\"quote\\\": \\\"各店各商品\\\", \\\"status\\\": \\\"partial\\\"}]}\"]}], \"grain\": \"每筆已完成訂單一列\", \"keys\": [\"order_id\"], \"population\": \"粒度：每筆已完成訂單一列；適合訂單數、客單價、單筆訂單金額與通路分析；取消訂單已排除。\", \"contract_evidence\": [{\"path\": \"/summary\", \"quote\": \"粒度：每筆已完成訂單一列；適合訂單數、客單價、單筆訂單金額與通路分析；取消訂單已排除。\"}]}, {\"view\": \"demo_retail.v_product_monthly\", \"entries\": [{\"requirement_id\": \"GRN-001\", \"status\": \"supported\", \"mappings\": [{\"column\": \"store_id\", \"role\": \"key\", \"source_quote\": \"各店各商品\", \"aggregation\": null, \"operator\": null, \"value\": null, \"conditions\": [], \"contract_evidence\": [{\"path\": \"/columns/store_id/description\", \"quote\": \"交易門市識別碼；與 sales_month、product_id 組合唯一決定一列。\"}]}, {\"column\": \"product_id\", \"role\": \"key\", \"source_quote\": \"各店各商品\", \"aggregation\": null, \"operator\": null, \"value\": null, \"conditions\": [], \"contract_evidence\": [{\"path\": \"/columns/product_id/description\", \"quote\": \"商品識別碼；與 store_id、sales_month 組合唯一決定一列。\"}]}], \"contract_evidence\": [{\"path\": \"/grain/description\", \"quote\": \"門市×月份×商品\"}], \"missing_requirements\": []}, {\"requirement_id\": \"MET-001\", \"status\": \"unsupported\", \"mappings\": [], \"contract_evidence\": [], \"missing_requirements\": [\"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"self\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"MET-001\\\", \\\"quote\\\": \\\"盤點庫存件數\\\", \\\"status\\\": \\\"unsupported\\\"}]}\"]}, {\"requirement_id\": \"FILT-001\", \"status\": \"supported\", \"mappings\": [{\"column\": \"sales_month\", \"role\": \"filter\", \"source_quote\": \"2026 年 9 月\", \"aggregation\": null, \"operator\": \"=\", \"value\": \"2026-09-01\", \"conditions\": [], \"contract_evidence\": [{\"path\": \"/columns/sales_month/description\", \"quote\": \"商品銷售統計月份的第一天；月度粒度。\"}]}], \"contract_evidence\": [{\"path\": \"/columns/sales_month/description\", \"quote\": \"商品銷售統計月份的第一天；月度粒度。\"}], \"missing_requirements\": []}, {\"requirement_id\": \"FILT-002\", \"status\": \"unsupported\", \"mappings\": [], \"contract_evidence\": [], \"missing_requirements\": [\"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"self\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"FILT-002\\\", \\\"quote\\\": \\\"線上通路\\\", \\\"status\\\": \\\"unsupported\\\"}]}\"]}, {\"requirement_id\": \"MET-002\", \"status\": \"partial\", \"mappings\": [{\"column\": \"discount_amount\", \"role\": \"metric\", \"source_quote\": \"折扣金額\", \"aggregation\": \"sum\", \"operator\": null, \"value\": null, \"conditions\": [], \"contract_evidence\": [{\"path\": \"/columns/discount_amount/description\", \"quote\": \"此門市此月份此商品的折扣金額合計，單位 TWD。\"}]}], \"contract_evidence\": [{\"path\": \"/columns/discount_amount/description\", \"quote\": \"此門市此月份此商品的折扣金額合計，單位 TWD。\"}], \"missing_requirements\": [\"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"scope\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"FILT-002\\\", \\\"quote\\\": \\\"線上通路\\\", \\\"status\\\": \\\"unsupported\\\"}]}\"]}, {\"requirement_id\": \"MET-003\", \"status\": \"partial\", \"mappings\": [{\"column\": \"net_sales\", \"role\": \"metric\", \"source_quote\": \"淨銷售額\", \"aggregation\": \"sum\", \"operator\": null, \"value\": null, \"conditions\": [], \"contract_evidence\": [{\"path\": \"/columns/net_sales/description\", \"quote\": \"此門市此月份此商品的折扣後銷售額，單位 TWD；適合跨門市彙總商品營收。\"}]}], \"contract_evidence\": [{\"path\": \"/columns/net_sales/description\", \"quote\": \"此門市此月份此商品的折扣後銷售額，單位 TWD；適合跨門市彙總商品營收。\"}], \"missing_requirements\": [\"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"scope\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"FILT-002\\\", \\\"quote\\\": \\\"線上通路\\\", \\\"status\\\": \\\"unsupported\\\"}]}\"]}, {\"requirement_id\": \"META-001\", \"status\": \"unsupported\", \"mappings\": [], \"contract_evidence\": [], \"missing_requirements\": [\"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"self\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"META-001\\\", \\\"quote\\\": \\\"庫存盤點日期\\\", \\\"status\\\": \\\"unsupported\\\"}]}\"]}, {\"requirement_id\": \"POP-001\", \"status\": \"unsupported\", \"mappings\": [], \"contract_evidence\": [], \"missing_requirements\": [\"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"self\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"POP-001\\\", \\\"quote\\\": \\\"保留所有庫存商品\\\", \\\"status\\\": \\\"unsupported\\\"}]}\"]}], \"grain\": \"門市×月份×商品\", \"keys\": [\"store_id\", \"sales_month\", \"product_id\"], \"population\": \"粒度：門市×月份×商品；適合商品/分類排行、商品銷量及毛利，不含訂單筆數；商品跨店排行需加總 net_sales/units_sold。\", \"contract_evidence\": [{\"path\": \"/summary\", \"quote\": \"粒度：門市×月份×商品；適合商品/分類排行、商品銷量及毛利，不含訂單筆數；商品跨店排行需加總 net_sales/units_sold。\"}]}, {\"view\": \"demo_retail.v_sales_detail\", \"entries\": [{\"requirement_id\": \"GRN-001\", \"status\": \"supported\", \"mappings\": [{\"column\": \"store_id\", \"role\": \"key\", \"source_quote\": \"各店各商品\", \"aggregation\": null, \"operator\": null, \"value\": null, \"conditions\": [], \"contract_evidence\": [{\"path\": \"/columns/store_id/description\", \"quote\": \"交易所屬門市的識別碼。\"}]}, {\"column\": \"product_id\", \"role\": \"key\", \"source_quote\": \"各店各商品\", \"aggregation\": null, \"operator\": null, \"value\": null, \"conditions\": [], \"contract_evidence\": [{\"path\": \"/columns/product_id/description\", \"quote\": \"商品識別碼；同商品可能出現在不同訂單明細。\"}]}], \"contract_evidence\": [{\"path\": \"/grain/description\", \"quote\": \"每筆已完成訂單的每筆商品明細\"}], \"missing_requirements\": []}, {\"requirement_id\": \"MET-001\", \"status\": \"unsupported\", \"mappings\": [], \"contract_evidence\": [], \"missing_requirements\": [\"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"self\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"MET-001\\\", \\\"quote\\\": \\\"盤點庫存件數\\\", \\\"status\\\": \\\"unsupported\\\"}]}\"]}, {\"requirement_id\": \"FILT-001\", \"status\": \"supported\", \"mappings\": [{\"column\": \"order_date\", \"role\": \"filter\", \"source_quote\": \"2026 年 9 月\", \"aggregation\": null, \"operator\": \">=\", \"value\": \"2026-09-01\", \"conditions\": [], \"contract_evidence\": [{\"path\": \"/columns/order_date/description\", \"quote\": \"訂單成立的曆日，由 ordered_at 轉為日期；不含時間。\"}]}, {\"column\": \"order_date\", \"role\": \"filter\", \"source_quote\": \"2026 年 9 月\", \"aggregation\": null, \"operator\": \"<\", \"value\": \"2026-10-01\", \"conditions\": [], \"contract_evidence\": [{\"path\": \"/columns/order_date/description\", \"quote\": \"訂單成立的曆日，由 ordered_at 轉為日期；不含時間。\"}]}], \"contract_evidence\": [{\"path\": \"/columns/order_date/description\", \"quote\": \"訂單成立的曆日，由 ordered_at 轉為日期；不含時間。\"}], \"missing_requirements\": []}, {\"requirement_id\": \"FILT-002\", \"status\": \"supported\", \"mappings\": [{\"column\": \"sales_channel\", \"role\": \"filter\", \"source_quote\": \"線上通路\", \"aggregation\": null, \"operator\": \"=\", \"value\": \"online\", \"conditions\": [], \"contract_evidence\": [{\"path\": \"/columns/sales_channel/description\", \"quote\": \"銷售通路；in_store=實體門市，online=線上。\"}]}], \"contract_evidence\": [{\"path\": \"/columns/sales_channel/description\", \"quote\": \"銷售通路；in_store=實體門市，online=線上。\"}], \"missing_requirements\": []}, {\"requirement_id\": \"MET-002\", \"status\": \"supported\", \"mappings\": [{\"column\": \"discount_amount\", \"role\": \"metric\", \"source_quote\": \"折扣金額\", \"aggregation\": \"sum\", \"operator\": null, \"value\": null, \"conditions\": [], \"contract_evidence\": [{\"path\": \"/columns/discount_amount/description\", \"quote\": \"本筆明細的折扣金額，單位 TWD；為非負數。\"}]}], \"contract_evidence\": [{\"path\": \"/columns/discount_amount/description\", \"quote\": \"本筆明細的折扣金額，單位 TWD；為非負數。\"}], \"missing_requirements\": []}, {\"requirement_id\": \"MET-003\", \"status\": \"supported\", \"mappings\": [{\"column\": \"net_sales\", \"role\": \"metric\", \"source_quote\": \"淨銷售額\", \"aggregation\": \"sum\", \"operator\": null, \"value\": null, \"conditions\": [], \"contract_evidence\": [{\"path\": \"/columns/net_sales/description\", \"quote\": \"本筆明細折扣後銷售金額，gross_sales − discount_amount，單位 TWD；不等於 gross_sales。\"}]}], \"contract_evidence\": [{\"path\": \"/columns/net_sales/description\", \"quote\": \"本筆明細折扣後銷售金額，gross_sales − discount_amount，單位 TWD；不等於 gross_sales。\"}], \"missing_requirements\": []}, {\"requirement_id\": \"META-001\", \"status\": \"unsupported\", \"mappings\": [], \"contract_evidence\": [], \"missing_requirements\": [\"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"self\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"META-001\\\", \\\"quote\\\": \\\"庫存盤點日期\\\", \\\"status\\\": \\\"unsupported\\\"}]}\"]}, {\"requirement_id\": \"POP-001\", \"status\": \"unsupported\", \"mappings\": [], \"contract_evidence\": [], \"missing_requirements\": [\"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"self\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"POP-001\\\", \\\"quote\\\": \\\"保留所有庫存商品\\\", \\\"status\\\": \\\"unsupported\\\"}]}\"]}], \"grain\": \"每筆已完成訂單的每筆商品明細\", \"keys\": [\"order_id\", \"product_id\"], \"population\": \"粒度：每筆已完成訂單的每個商品品項；僅含已完成訂單。銷售額為折扣後淨額，毛利=淨額-成本。請勿以 COUNT(*) 當訂單數。\", \"contract_evidence\": [{\"path\": \"/summary\", \"quote\": \"粒度：每筆已完成訂單的每個商品品項；僅含已完成訂單。銷售額為折扣後淨額，毛利=淨額-成本。請勿以 COUNT(*) 當訂單數。\"}]}, {\"view\": \"demo_retail.v_store_monthly_kpi\", \"entries\": [{\"requirement_id\": \"GRN-001\", \"status\": \"partial\", \"mappings\": [{\"column\": \"store_id\", \"role\": \"key\", \"source_quote\": \"各店各商品\", \"aggregation\": null, \"operator\": null, \"value\": null, \"conditions\": [], \"contract_evidence\": [{\"path\": \"/columns/store_id/description\", \"quote\": \"門市識別碼；與 sales_month 組合唯一決定一列。\"}]}], \"contract_evidence\": [{\"path\": \"/grain/description\", \"quote\": \"每門市每月一列\"}], \"missing_requirements\": [\"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"self\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"GRN-001\\\", \\\"quote\\\": \\\"各店各商品\\\", \\\"status\\\": \\\"partial\\\"}]}\"]}, {\"requirement_id\": \"MET-001\", \"status\": \"unsupported\", \"mappings\": [], \"contract_evidence\": [], \"missing_requirements\": [\"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"self\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"MET-001\\\", \\\"quote\\\": \\\"盤點庫存件數\\\", \\\"status\\\": \\\"unsupported\\\"}]}\", \"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"grain\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"GRN-001\\\", \\\"quote\\\": \\\"各店各商品\\\", \\\"status\\\": \\\"partial\\\"}]}\"]}, {\"requirement_id\": \"FILT-001\", \"status\": \"supported\", \"mappings\": [{\"column\": \"sales_month\", \"role\": \"filter\", \"source_quote\": \"2026 年 9 月\", \"aggregation\": null, \"operator\": \"=\", \"value\": \"2026-09-01\", \"conditions\": [], \"contract_evidence\": [{\"path\": \"/columns/sales_month/description\", \"quote\": \"業績統計月份的第一天；月度粒度，而不是單日交易。\"}]}], \"contract_evidence\": [{\"path\": \"/columns/sales_month/description\", \"quote\": \"業績統計月份的第一天；月度粒度，而不是單日交易。\"}], \"missing_requirements\": []}, {\"requirement_id\": \"FILT-002\", \"status\": \"unsupported\", \"mappings\": [], \"contract_evidence\": [], \"missing_requirements\": [\"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"self\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"FILT-002\\\", \\\"quote\\\": \\\"線上通路\\\", \\\"status\\\": \\\"unsupported\\\"}]}\"]}, {\"requirement_id\": \"MET-002\", \"status\": \"unsupported\", \"mappings\": [], \"contract_evidence\": [], \"missing_requirements\": [\"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"self\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"MET-002\\\", \\\"quote\\\": \\\"折扣金額\\\", \\\"status\\\": \\\"unsupported\\\"}]}\", \"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"scope\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"FILT-002\\\", \\\"quote\\\": \\\"線上通路\\\", \\\"status\\\": \\\"unsupported\\\"}]}\", \"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"grain\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"GRN-001\\\", \\\"quote\\\": \\\"各店各商品\\\", \\\"status\\\": \\\"partial\\\"}]}\"]}, {\"requirement_id\": \"MET-003\", \"status\": \"partial\", \"mappings\": [{\"column\": \"revenue\", \"role\": \"metric\", \"source_quote\": \"淨銷售額\", \"aggregation\": \"sum\", \"operator\": null, \"value\": null, \"conditions\": [], \"contract_evidence\": [{\"path\": \"/columns/revenue/description\", \"quote\": \"該門市當月折扣後銷售淨額，單位 TWD；沒有成交訂單時為 0。\"}]}], \"contract_evidence\": [{\"path\": \"/columns/revenue/description\", \"quote\": \"該門市當月折扣後銷售淨額，單位 TWD；沒有成交訂單時為 0。\"}], \"missing_requirements\": [\"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"scope\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"FILT-002\\\", \\\"quote\\\": \\\"線上通路\\\", \\\"status\\\": \\\"unsupported\\\"}]}\", \"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"grain\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"GRN-001\\\", \\\"quote\\\": \\\"各店各商品\\\", \\\"status\\\": \\\"partial\\\"}]}\"]}, {\"requirement_id\": \"META-001\", \"status\": \"unsupported\", \"mappings\": [], \"contract_evidence\": [], \"missing_requirements\": [\"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"self\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"META-001\\\", \\\"quote\\\": \\\"庫存盤點日期\\\", \\\"status\\\": \\\"unsupported\\\"}]}\", \"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"grain\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"GRN-001\\\", \\\"quote\\\": \\\"各店各商品\\\", \\\"status\\\": \\\"partial\\\"}]}\"]}, {\"requirement_id\": \"POP-001\", \"status\": \"unsupported\", \"mappings\": [], \"contract_evidence\": [], \"missing_requirements\": [\"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"self\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"POP-001\\\", \\\"quote\\\": \\\"保留所有庫存商品\\\", \\\"status\\\": \\\"unsupported\\\"}]}\", \"{\\\"statement\\\": \\\"契約未證明以下責任完整可用\\\", \\\"aspect\\\": \\\"grain\\\", \\\"requirements\\\": [{\\\"requirement_id\\\": \\\"GRN-001\\\", \\\"quote\\\": \\\"各店各商品\\\", \\\"status\\\": \\\"partial\\\"}]}\"]}], \"grain\": \"每門市每月一列\", \"keys\": [\"store_id\", \"sales_month\"], \"population\": \"粒度：每門市每月一列。營收、毛利、訂單數、客單價、月目標與達標率；百分比數值為 0~100。\", \"contract_evidence\": [{\"path\": \"/summary\", \"quote\": \"粒度：每門市每月一列。營收、毛利、訂單數、客單價、月目標與達標率；百分比數值為 0~100。\"}]}], \"views\": [{\"version\": 3, \"view\": \"demo_retail.v_customer_value\", \"summary\": \"粒度：每會員一列，包含未下單會員；\", \"grain\": {\"description\": \"每會員一列，包含未下單會員\", \"keys\": [\"customer_id\"]}, \"columns\": {\"customer_id\": {\"type\": \"number\", \"role\": \"identifier\", \"description\": \"會員id\"}, \"customer_name\": {\"type\": \"string\", \"role\": \"dimension\", \"description\": \"會員名稱\"}, \"membership_tier\": {\"type\": \"string\", \"role\": \"dimension\", \"description\": \"會員等級；一般、銀卡、金卡、VIP\"}, \"city\": {\"type\": \"string\", \"role\": \"dimension\", \"description\": \"會員登記城市，不是交易門市所在地\"}, \"registered_on\": {\"type\": \"date\", \"role\": \"dimension\", \"description\": \"會員註冊日期。\"}, \"completed_order_count\": {\"type\": \"number\", \"role\": \"measure\", \"description\": \"會員已完成訂單筆數；未下單為 0\"}, \"lifetime_spend\": {\"type\": \"number\", \"role\": \"measure\", \"description\": \"會員在累計折扣後消費金額，單位 TWD\", \"unit\": \"TWD\"}, \"avg_order_value\": {\"type\": \"number\", \"role\": \"measure\", \"description\": \"會員平均已完成訂單消費額，單位 TWD/筆\", \"unit\": \"TWD/筆\", \"disallowed_aggregations\": [\"sum\", \"avg\"]}, \"last_order_date\": {\"type\": \"date\", \"role\": \"dimension\", \"description\": \"會員最後一筆已完成訂單的日期；沒有已完成訂單時為 NULL\"}, \"active_in_last_90d\": {\"type\": \"boolean\", \"role\": \"dimension\", \"description\": \"最近 90 日內有已完成訂單；沒有則為 false。\"}}}, {\"version\": 3, \"view\": \"demo_retail.v_daily_sales\", \"summary\": \"粒度：門市×有銷售的日期；沒有交易的門市日期不出現。適合每日營收、門市趨勢\", \"grain\": {\"description\": \"門市×有銷售的日期\", \"keys\": [\"sales_date\", \"store_id\"]}, \"columns\": {\"sales_date\": {\"type\": \"date\", \"role\": \"dimension\", \"description\": \"已完成訂單的銷售日期；無交易的門市日期不會有資料列。\"}, \"store_id\": {\"type\": \"number\", \"role\": \"identifier\", \"description\": \"門市id\"}, \"store_name\": {\"type\": \"string\", \"role\": \"dimension\", \"description\": \"門市名稱\"}, \"region\": {\"type\": \"string\", \"role\": \"dimension\", \"description\": \"門市所屬區域；北部、中部、南部\"}, \"city\": {\"type\": \"string\", \"role\": \"dimension\", \"description\": \"門市所在城市\"}, \"order_count\": {\"type\": \"number\", \"role\": \"measure\", \"description\": \"門市已完成訂單筆數\"}, \"units_sold\": {\"type\": \"number\", \"role\": \"measure\", \"description\": \"門市已完成訂單銷售的商品總件數；單位件\", \"unit\": \"件\"}, \"revenue\": {\"type\": \"number\", \"role\": \"measure\", \"description\": \"門市折扣後的銷售淨額總和，單位 TWD\", \"unit\": \"TWD\"}, \"gross_profit\": {\"type\": \"number\", \"role\": \"measure\", \"description\": \"門市此日毛利總額（折扣後淨額 − 商品成本），單位 TWD\", \"unit\": \"TWD\"}}}, {\"version\": 3, \"view\": \"demo_retail.v_inventory_status\", \"summary\": \"粒度：門市×商品；stock_status: 缺貨/需補貨/正常。estimated_days_of_supply 根據最近30日銷量估算，無銷量時為 NULL。\", \"grain\": {\"description\": \"門市×商品\", \"keys\": [\"store_id\", \"product_id\"]}, \"columns\": {\"snapshot_date\": {\"type\": \"date\", \"role\": \"dimension\", \"description\": \"庫存盤點日期\"}, \"store_id\": {\"type\": \"number\", \"role\": \"identifier\", \"description\": \"庫存所屬門市識別碼；與 product_id 組合唯一決定一列。\"}, \"store_name\": {\"type\": \"string\", \"role\": \"dimension\", \"description\": \"庫存所屬門市名稱。\"}, \"region\": {\"type\": \"string\", \"role\": \"dimension\", \"description\": \"庫存門市所屬區域；北部、中部、南部。\"}, \"city\": {\"type\": \"string\", \"role\": \"dimension\", \"description\": \"庫存門市所在城市。\"}, \"product_id\": {\"type\": \"number\", \"role\": \"identifier\", \"description\": \"庫存商品識別碼；與 store_id 組合唯一決定一列。\"}, \"sku\": {\"type\": \"string\", \"role\": \"identifier\", \"description\": \"商品庫存單位代碼（SKU）。\"}, \"product_name\": {\"type\": \"string\", \"role\": \"dimension\", \"description\": \"庫存商品名稱。\"}, \"category\": {\"type\": \"string\", \"role\": \"dimension\", \"description\": \"庫存商品分類。\"}, \"stock_qty\": {\"type\": \"number\", \"role\": \"measure\", \"description\": \"快照當日此門市此商品的庫存件數，單位件；同商品跨門市可加總，不可跨不同快照日期直接加總。\", \"unit\": \"件\"}, \"reorder_point\": {\"type\": \"number\", \"role\": \"measure\", \"description\": \"此門市此商品的補貨警戒件數；stock_qty 不高於此值即判定需補貨（若為 0 件則為缺貨）。\"}, \"stock_status\": {\"type\": \"string\", \"role\": \"dimension\", \"description\": \"庫存狀態；stock_qty=0 為缺貨，0<stock_qty<=reorder_point 為需補貨，其餘為正常。\"}, \"inventory_cost_value\": {\"type\": \"number\", \"role\": \"measure\", \"description\": \"庫存成本估值，stock_qty × 商品主檔 unit_cost，單位 TWD；不是預估銷售額。\", \"unit\": \"TWD\"}, \"sold_qty_30d\": {\"type\": \"number\", \"role\": \"measure\", \"description\": \"過去 30 個曆日，此門市此商品已完成訂單銷售件數；無銷量為 0。\"}, \"estimated_days_of_supply\": {\"type\": \"number\", \"role\": \"measure\", \"description\": \"預估庫存可銷售天數，stock_qty × 30 ÷ sold_qty_30d，單位天；近 30 日銷量為 0 時為 NULL，屬簡化估計。\", \"unit\": \"天\"}}}, {\"version\": 3, \"view\": \"demo_retail.v_order_summary\", \"summary\": \"粒度：每筆已完成訂單一列；適合訂單數、客單價、單筆訂單金額與通路分析；取消訂單已排除。\", \"grain\": {\"description\": \"每筆已完成訂單一列\", \"keys\": [\"order_id\"]}, \"columns\": {\"order_id\": {\"type\": \"number\", \"role\": \"identifier\", \"description\": \"已完成訂單的唯一識別碼；本 View 每筆訂單只有一列。\"}, \"order_no\": {\"type\": \"string\", \"role\": \"identifier\", \"description\": \"訂單編號；本 View 每筆已完成訂單只有一列。\"}, \"order_date\": {\"type\": \"date\", \"role\": \"dimension\", \"description\": \"訂單成立日期（曆日），不含時間。\"}, \"order_month\": {\"type\": \"date\", \"role\": \"dimension\", \"description\": \"訂單成立月份的第一天，供月份統計與篩選。\"}, \"store_id\": {\"type\": \"number\", \"role\": \"identifier\", \"description\": \"訂單所屬門市識別碼。\"}, \"store_name\": {\"type\": \"string\", \"role\": \"dimension\", \"description\": \"訂單所屬門市名稱。\"}, \"region\": {\"type\": \"string\", \"role\": \"dimension\", \"description\": \"訂單門市所屬區域；北部、中部、南部。\"}, \"store_city\": {\"type\": \"string\", \"role\": \"dimension\", \"description\": \"訂單門市所在城市，不是會員居住城市。\"}, \"sales_channel\": {\"type\": \"string\", \"role\": \"dimension\", \"description\": \"訂單銷售通路；in_store=實體門市，online=線上。\"}, \"customer_id\": {\"type\": \"number\", \"role\": \"identifier\", \"description\": \"下單會員識別碼。\"}, \"customer_name\": {\"type\": \"string\", \"role\": \"dimension\", \"description\": \"下單會員名稱；為虛構測試資料。\"}, \"membership_tier\": {\"type\": \"string\", \"role\": \"dimension\", \"description\": \"下單會員等級；一般、銀卡、金卡、VIP。\"}, \"item_lines\": {\"type\": \"number\", \"role\": \"measure\", \"description\": \"此訂單的商品明細列數（COUNT order_item_id）；不是總銷售件數。\"}, \"total_quantity\": {\"type\": \"number\", \"role\": \"measure\", \"description\": \"此訂單全部明細的商品銷售件數加總；單位件。\", \"unit\": \"件\"}, \"order_amount\": {\"type\": \"number\", \"role\": \"measure\", \"description\": \"此訂單折扣後的總銷售金額（各明細 quantity × unit_price − discount），單位 TWD。\", \"unit\": \"TWD\"}, \"cost_amount\": {\"type\": \"number\", \"role\": \"measure\", \"description\": \"此訂單全部明細的商品成本總額，單位 TWD。\", \"unit\": \"TWD\"}, \"gross_profit\": {\"type\": \"number\", \"role\": \"measure\", \"description\": \"此訂單毛利，order_amount − cost_amount，單位 TWD。\", \"unit\": \"TWD\"}}}, {\"version\": 3, \"view\": \"demo_retail.v_product_monthly\", \"summary\": \"粒度：門市×月份×商品；適合商品/分類排行、商品銷量及毛利，不含訂單筆數；商品跨店排行需加總 net_sales/units_sold。\", \"grain\": {\"description\": \"門市×月份×商品\", \"keys\": [\"store_id\", \"sales_month\", \"product_id\"]}, \"columns\": {\"sales_month\": {\"type\": \"date\", \"role\": \"dimension\", \"description\": \"商品銷售統計月份的第一天；月度粒度。\"}, \"store_id\": {\"type\": \"number\", \"role\": \"identifier\", \"description\": \"交易門市識別碼；與 sales_month、product_id 組合唯一決定一列。\"}, \"store_name\": {\"type\": \"string\", \"role\": \"dimension\", \"description\": \"交易門市名稱。\"}, \"region\": {\"type\": \"string\", \"role\": \"dimension\", \"description\": \"交易門市所屬區域；北部、中部、南部。\"}, \"city\": {\"type\": \"string\", \"role\": \"dimension\", \"description\": \"交易門市所在城市。\"}, \"product_id\": {\"type\": \"number\", \"role\": \"identifier\", \"description\": \"商品識別碼；與 store_id、sales_month 組合唯一決定一列。\"}, \"sku\": {\"type\": \"string\", \"role\": \"identifier\", \"description\": \"商品庫存單位代碼（SKU）。\"}, \"product_name\": {\"type\": \"string\", \"role\": \"dimension\", \"description\": \"商品名稱。\"}, \"category\": {\"type\": \"string\", \"role\": \"dimension\", \"description\": \"商品分類，例如飲料、零食、日用品。\"}, \"units_sold\": {\"type\": \"number\", \"role\": \"measure\", \"description\": \"此門市此月份此商品的銷售件數合計；單位件。\", \"unit\": \"件\"}, \"gross_sales\": {\"type\": \"number\", \"role\": \"measure\", \"description\": \"此門市此月份此商品的折扣前銷售額，單位 TWD。\", \"unit\": \"TWD\"}, \"discount_amount\": {\"type\": \"number\", \"role\": \"measure\", \"description\": \"此門市此月份此商品的折扣金額合計，單位 TWD。\", \"unit\": \"TWD\"}, \"net_sales\": {\"type\": \"number\", \"role\": \"measure\", \"description\": \"此門市此月份此商品的折扣後銷售額，單位 TWD；適合跨門市彙總商品營收。\", \"unit\": \"TWD\"}, \"gross_profit\": {\"type\": \"number\", \"role\": \"measure\", \"description\": \"此門市此月份此商品的毛利總額，單位 TWD；不是毛利率。\", \"unit\": \"TWD\"}}}, {\"version\": 3, \"view\": \"demo_retail.v_sales_detail\", \"summary\": \"粒度：每筆已完成訂單的每個商品品項；僅含已完成訂單。銷售額為折扣後淨額，毛利=淨額-成本。請勿以 COUNT(*) 當訂單數。\", \"grain\": {\"description\": \"每筆已完成訂單的每筆商品明細\", \"keys\": [\"order_id\", \"product_id\"]}, \"columns\": {\"order_id\": {\"type\": \"number\", \"role\": \"identifier\", \"description\": \"訂單內部識別碼；同一訂單可有多筆商品明細，因此此欄位在本 View 不唯一。\"}, \"order_no\": {\"type\": \"string\", \"role\": \"identifier\", \"description\": \"提供使用者辨識訂單的訂單編號；同一訂單的多筆明細會重複。\"}, \"order_date\": {\"type\": \"date\", \"role\": \"dimension\", \"description\": \"訂單成立的曆日，由 ordered_at 轉為日期；不含時間。\"}, \"order_month\": {\"type\": \"date\", \"role\": \"dimension\", \"description\": \"訂單成立月份的第一天，供月度篩選與彙總；不是付款月份。\"}, \"store_id\": {\"type\": \"number\", \"role\": \"identifier\", \"description\": \"交易所屬門市的識別碼。\"}, \"store_name\": {\"type\": \"string\", \"role\": \"dimension\", \"description\": \"交易所屬門市名稱。\"}, \"region\": {\"type\": \"string\", \"role\": \"dimension\", \"description\": \"門市所屬區域；測試資料為北部、中部、南部。\"}, \"store_city\": {\"type\": \"string\", \"role\": \"dimension\", \"description\": \"交易門市所在城市；不是會員居住城市。\"}, \"sales_channel\": {\"type\": \"string\", \"role\": \"dimension\", \"description\": \"銷售通路；in_store=實體門市，online=線上。\"}, \"customer_id\": {\"type\": \"number\", \"role\": \"identifier\", \"description\": \"下單會員識別碼；同一會員可能有多筆訂單及明細。\"}, \"customer_name\": {\"type\": \"string\", \"role\": \"dimension\", \"description\": \"下單會員名稱；為虛構測試資料。\"}, \"membership_tier\": {\"type\": \"string\", \"role\": \"dimension\", \"description\": \"下單會員所屬等級；一般、銀卡、金卡、VIP。\"}, \"product_id\": {\"type\": \"number\", \"role\": \"identifier\", \"description\": \"商品識別碼；同商品可能出現在不同訂單明細。\"}, \"sku\": {\"type\": \"string\", \"role\": \"identifier\", \"description\": \"商品庫存單位代碼（SKU），用於辨識商品。\"}, \"product_name\": {\"type\": \"string\", \"role\": \"dimension\", \"description\": \"本筆訂單明細販售的商品名稱。\"}, \"category\": {\"type\": \"string\", \"role\": \"dimension\", \"description\": \"商品所屬分類，例如飲料、零食、日用品。\"}, \"quantity\": {\"type\": \"number\", \"role\": \"measure\", \"description\": \"本筆明細銷售件數；僅含已完成訂單，可依商品、門市、期間加總。\"}, \"unit_price\": {\"type\": \"number\", \"role\": \"measure\", \"description\": \"下單時每件商品的銷售單價，單位 TWD/件；不代表商品目前定價，不應直接加總單價。\", \"unit\": \"TWD/件\", \"disallowed_aggregations\": [\"sum\"]}, \"gross_sales\": {\"type\": \"number\", \"role\": \"measure\", \"description\": \"本筆明細折扣前銷售金額，計算為 quantity × unit_price，單位 TWD。\", \"unit\": \"TWD\"}, \"discount_amount\": {\"type\": \"number\", \"role\": \"measure\", \"description\": \"本筆明細的折扣金額，單位 TWD；為非負數。\", \"unit\": \"TWD\"}, \"net_sales\": {\"type\": \"number\", \"role\": \"measure\", \"description\": \"本筆明細折扣後銷售金額，gross_sales − discount_amount，單位 TWD；不等於 gross_sales。\", \"unit\": \"TWD\"}, \"cost_amount\": {\"type\": \"number\", \"role\": \"measure\", \"description\": \"本筆明細商品成本總額，quantity × 下單時 unit_cost，單位 TWD。\", \"unit\": \"TWD\"}, \"gross_profit\": {\"type\": \"number\", \"role\": \"measure\", \"description\": \"本筆明細毛利，net_sales − cost_amount，單位 TWD；不是毛利率。\", \"unit\": \"TWD\"}}}, {\"version\": 3, \"view\": \"demo_retail.v_store_monthly_kpi\", \"summary\": \"粒度：每門市每月一列。營收、毛利、訂單數、客單價、月目標與達標率；百分比數值為 0~100。\", \"grain\": {\"description\": \"每門市每月一列\", \"keys\": [\"store_id\", \"sales_month\"]}, \"columns\": {\"sales_month\": {\"type\": \"date\", \"role\": \"dimension\", \"description\": \"業績統計月份的第一天；月度粒度，而不是單日交易。\"}, \"store_id\": {\"type\": \"number\", \"role\": \"identifier\", \"description\": \"門市識別碼；與 sales_month 組合唯一決定一列。\"}, \"store_name\": {\"type\": \"string\", \"role\": \"dimension\", \"description\": \"門市名稱。\"}, \"region\": {\"type\": \"string\", \"role\": \"dimension\", \"description\": \"門市所屬區域；北部、中部、南部。\"}, \"city\": {\"type\": \"string\", \"role\": \"dimension\", \"description\": \"門市所在城市。\"}, \"order_count\": {\"type\": \"number\", \"role\": \"measure\", \"description\": \"該門市當月已完成訂單筆數；沒有成交訂單時為 0。\"}, \"units_sold\": {\"type\": \"number\", \"role\": \"measure\", \"description\": \"該門市當月已完成訂單的商品銷售件數總和；單位件。\", \"unit\": \"件\"}, \"revenue\": {\"type\": \"number\", \"role\": \"measure\", \"description\": \"該門市當月折扣後銷售淨額，單位 TWD；沒有成交訂單時為 0。\", \"unit\": \"TWD\"}, \"gross_profit\": {\"type\": \"number\", \"role\": \"measure\", \"description\": \"該門市當月毛利總額（折扣後淨額 − 商品成本），單位 TWD。\", \"unit\": \"TWD\"}, \"gross_margin_pct\": {\"type\": \"number\", \"role\": \"measure\", \"description\": \"該門市當月毛利率，gross_profit ÷ revenue × 100，單位 %（0～100 表示百分比）；營收為 0 時回傳 0。跨門市或月份需以總毛利／總營收重算，勿直接加總或平均百分比。\", \"unit\": \"%\", \"disallowed_aggregations\": [\"sum\", \"avg\"]}, \"avg_order_value\": {\"type\": \"number\", \"role\": \"measure\", \"description\": \"該門市當月平均每筆已完成訂單的折扣後金額，revenue ÷ order_count，單位 TWD/筆；沒有訂單時為 0。跨門市或月份應以總營收／總訂單數重算。\", \"unit\": \"TWD/筆\", \"disallowed_aggregations\": [\"sum\", \"avg\"]}, \"target_amount\": {\"type\": \"number\", \"role\": \"measure\", \"description\": \"該門市該月份設定的營收目標，單位 TWD。\", \"unit\": \"TWD\"}, \"target_achievement_pct\": {\"type\": \"number\", \"role\": \"measure\", \"description\": \"該門市當月營收達標率，revenue ÷ target_amount × 100，單位 %；目標為 0 時回傳 NULL。跨門市或月份應以總營收／總目標重算。\", \"unit\": \"%\", \"disallowed_aggregations\": [\"sum\", \"avg\"]}, \"is_complete_month\": {\"type\": \"boolean\", \"role\": \"dimension\", \"description\": \"是否為此示範資料中的完整統計月份；2026-10 為 false，其他月份為 true；為固定示範邏輯，非即時判斷。\"}}}], \"missing_policy_options\": [\"保留未匹配資料並標記缺值；契約沒有保證時不可把缺值當成零。\", \"保留未匹配母體並標記缺值；無契約保證不得補零。\", \"保留未匹配母體；未匹配子集合為空集合，不製造零值元素或將數值缺值補零。\"], \"response_schema\": {\"$defs\": {\"AssignmentRef\": {\"additionalProperties\": false, \"properties\": {\"requirement_id\": {\"title\": \"Requirement Id\", \"type\": \"string\"}, \"view\": {\"title\": \"View\", \"type\": \"string\"}, \"task_id\": {\"title\": \"Task Id\", \"type\": \"string\"}}, \"required\": [\"requirement_id\", \"view\", \"task_id\"], \"title\": \"AssignmentRef\", \"type\": \"object\"}, \"ExclusionRef\": {\"additionalProperties\": false, \"properties\": {\"kind\": {\"enum\": [\"gap\", \"redundant\"], \"title\": \"Kind\", \"type\": \"string\"}, \"requirement_ids\": {\"items\": {\"type\": \"string\"}, \"minItems\": 1, \"title\": \"Requirement Ids\", \"type\": \"array\"}, \"selected_view\": {\"anyOf\": [{\"type\": \"string\"}, {\"type\": \"null\"}], \"title\": \"Selected View\"}}, \"required\": [\"kind\", \"requirement_ids\", \"selected_view\"], \"title\": \"ExclusionRef\", \"type\": \"object\"}, \"ExclusionWire\": {\"additionalProperties\": false, \"properties\": {\"view\": {\"title\": \"View\", \"type\": \"string\"}, \"refs\": {\"items\": {\"$ref\": \"#/$defs/ExclusionRef\"}, \"minItems\": 1, \"title\": \"Refs\", \"type\": \"array\"}}, \"required\": [\"view\", \"refs\"], \"title\": \"ExclusionWire\", \"type\": \"object\"}, \"NonreadyDraft\": {\"additionalProperties\": false, \"properties\": {\"status\": {\"enum\": [\"needs_clarification\", \"unsupported\", \"error\"], \"title\": \"Status\", \"type\": \"string\"}, \"strategy\": {\"anyOf\": [{\"enum\": [\"single_view\", \"multi_view\"], \"type\": \"string\"}, {\"type\": \"null\"}], \"title\": \"Strategy\"}, \"tasks\": {\"items\": {\"$ref\": \"#/$defs/RequiredTask\"}, \"title\": \"Tasks\", \"type\": \"array\"}, \"integration\": {\"anyOf\": [{\"$ref\": \"#/$defs/RequiredIntegration\"}, {\"type\": \"null\"}]}, \"clarifications\": {\"items\": {\"type\": \"string\"}, \"title\": \"Clarifications\", \"type\": \"array\"}, \"unsupported_reasons\": {\"items\": {\"type\": \"string\"}, \"title\": \"Unsupported Reasons\", \"type\": \"array\"}}, \"required\": [\"status\", \"strategy\", \"tasks\", \"integration\", \"clarifications\", \"unsupported_reasons\"], \"title\": \"NonreadyDraft\", \"type\": \"object\"}, \"ReadyDraft\": {\"additionalProperties\": false, \"properties\": {\"status\": {\"const\": \"ready\", \"title\": \"Status\", \"type\": \"string\"}, \"strategy\": {\"anyOf\": [{\"enum\": [\"single_view\", \"multi_view\"], \"type\": \"string\"}, {\"type\": \"null\"}], \"title\": \"Strategy\"}, \"tasks\": {\"items\": {\"$ref\": \"#/$defs/RequiredTask\"}, \"title\": \"Tasks\", \"type\": \"array\"}, \"integration\": {\"$ref\": \"#/$defs/RequiredIntegration\"}, \"clarifications\": {\"items\": {\"type\": \"string\"}, \"title\": \"Clarifications\", \"type\": \"array\"}, \"unsupported_reasons\": {\"items\": {\"type\": \"string\"}, \"title\": \"Unsupported Reasons\", \"type\": \"array\"}}, \"required\": [\"status\", \"strategy\", \"tasks\", \"integration\", \"clarifications\", \"unsupported_reasons\"], \"title\": \"ReadyDraft\", \"type\": \"object\"}, \"RequiredConditionalMetric\": {\"additionalProperties\": false, \"properties\": {\"column\": {\"title\": \"Column\", \"type\": \"string\"}, \"aggregation\": {\"enum\": [\"sum\", \"count\", \"count_distinct\", \"avg\", \"min\", \"max\"], \"title\": \"Aggregation\", \"type\": \"string\"}, \"conditions\": {\"items\": {\"$ref\": \"#/$defs/RequiredFilter\"}, \"title\": \"Conditions\", \"type\": \"array\"}}, \"required\": [\"column\", \"aggregation\", \"conditions\"], \"title\": \"RequiredConditionalMetric\", \"type\": \"object\"}, \"RequiredEdge\": {\"additionalProperties\": false, \"properties\": {\"left_task\": {\"title\": \"Left Task\", \"type\": \"string\"}, \"right_task\": {\"title\": \"Right Task\", \"type\": \"string\"}, \"left_keys\": {\"items\": {\"type\": \"string\"}, \"minItems\": 1, \"title\": \"Left Keys\", \"type\": \"array\"}, \"right_keys\": {\"items\": {\"type\": \"string\"}, \"minItems\": 1, \"title\": \"Right Keys\", \"type\": \"array\"}, \"mode\": {\"enum\": [\"left\", \"inner\", \"full\"], \"title\": \"Mode\", \"type\": \"string\"}, \"cardinality\": {\"enum\": [\"one_to_one\", \"one_to_many\", \"many_to_one\", \"many_to_many\"], \"title\": \"Cardinality\", \"type\": \"string\"}, \"preserve_task\": {\"anyOf\": [{\"type\": \"string\"}, {\"type\": \"null\"}], \"title\": \"Preserve Task\"}}, \"required\": [\"left_task\", \"right_task\", \"left_keys\", \"right_keys\", \"mode\", \"cardinality\", \"preserve_task\"], \"title\": \"RequiredEdge\", \"type\": \"object\"}, \"RequiredFilter\": {\"additionalProperties\": false, \"properties\": {\"column\": {\"title\": \"Column\", \"type\": \"string\"}, \"operator\": {\"enum\": [\"=\", \"!=\", \"<>\", \">\", \">=\", \"<\", \"<=\", \"IN\", \"NOT IN\", \"LIKE\", \"IS NULL\", \"IS NOT NULL\"], \"title\": \"Operator\", \"type\": \"string\"}, \"value\": {\"title\": \"Value\"}}, \"required\": [\"column\", \"operator\", \"value\"], \"title\": \"RequiredFilter\", \"type\": \"object\"}, \"RequiredIntegration\": {\"additionalProperties\": false, \"properties\": {\"anchor_task\": {\"title\": \"Anchor Task\", \"type\": \"string\"}, \"output_grain\": {\"items\": {\"type\": \"string\"}, \"minItems\": 1, \"title\": \"Output Grain\", \"type\": \"array\"}, \"edges\": {\"items\": {\"$ref\": \"#/$defs/RequiredEdge\"}, \"title\": \"Edges\", \"type\": \"array\"}, \"preparation\": {\"items\": {\"$ref\": \"#/$defs/RequiredPreparation\"}, \"title\": \"Preparation\", \"type\": \"array\"}, \"missing_data_policy\": {\"title\": \"Missing Data Policy\", \"type\": \"string\"}, \"notes\": {\"items\": {\"type\": \"string\"}, \"title\": \"Notes\", \"type\": \"array\"}}, \"required\": [\"anchor_task\", \"output_grain\", \"edges\", \"preparation\", \"missing_data_policy\", \"notes\"], \"title\": \"RequiredIntegration\", \"type\": \"object\"}, \"RequiredPreparation\": {\"additionalProperties\": false, \"properties\": {\"task_id\": {\"title\": \"Task Id\", \"type\": \"string\"}, \"kind\": {\"enum\": [\"aggregate\", \"nest\", \"pivot\", \"attach_context\"], \"title\": \"Kind\", \"type\": \"string\"}, \"keys\": {\"items\": {\"type\": \"string\"}, \"title\": \"Keys\", \"type\": \"array\"}, \"description\": {\"minLength\": 1, \"title\": \"Description\", \"type\": \"string\"}}, \"required\": [\"task_id\", \"kind\", \"keys\", \"description\"], \"title\": \"RequiredPreparation\", \"type\": \"object\"}, \"RequiredTask\": {\"additionalProperties\": false, \"properties\": {\"task_id\": {\"minLength\": 1, \"title\": \"Task Id\", \"type\": \"string\"}, \"view\": {\"minLength\": 1, \"title\": \"View\", \"type\": \"string\"}, \"required_columns\": {\"items\": {\"type\": \"string\"}, \"minItems\": 1, \"title\": \"Required Columns\", \"type\": \"array\"}, \"filters\": {\"items\": {\"$ref\": \"#/$defs/RequiredFilter\"}, \"title\": \"Filters\", \"type\": \"array\"}, \"metrics\": {\"additionalProperties\": {\"enum\": [\"sum\", \"count\", \"count_distinct\", \"avg\", \"min\", \"max\"], \"type\": \"string\"}, \"title\": \"Metrics\", \"type\": \"object\"}, \"conditional_metrics\": {\"items\": {\"$ref\": \"#/$defs/RequiredConditionalMetric\"}, \"title\": \"Conditional Metrics\", \"type\": \"array\"}, \"attributes\": {\"items\": {\"type\": \"string\"}, \"title\": \"Attributes\", \"type\": \"array\"}, \"metadata_collections\": {\"description\": \"Date/string provenance collected as DISTINCT values at output_grain; never an extra grouping dimension or a measure.\", \"items\": {\"type\": \"string\"}, \"title\": \"Metadata Collections\", \"type\": \"array\"}, \"group_by\": {\"items\": {\"type\": \"string\"}, \"title\": \"Group By\", \"type\": \"array\"}, \"output_grain\": {\"items\": {\"type\": \"string\"}, \"minItems\": 1, \"title\": \"Output Grain\", \"type\": \"array\"}, \"depends_on\": {\"items\": {\"type\": \"string\"}, \"title\": \"Depends On\", \"type\": \"array\"}, \"unbound_inputs\": {\"items\": {\"type\": \"string\"}, \"title\": \"Unbound Inputs\", \"type\": \"array\"}, \"request\": {\"maxLength\": 4000, \"minLength\": 1, \"title\": \"Request\", \"type\": \"string\"}}, \"required\": [\"task_id\", \"view\", \"required_columns\", \"filters\", \"metrics\", \"conditional_metrics\", \"attributes\", \"metadata_collections\", \"group_by\", \"output_grain\", \"depends_on\", \"unbound_inputs\", \"request\"], \"title\": \"RequiredTask\", \"type\": \"object\"}}, \"additionalProperties\": false, \"properties\": {\"selected_views\": {\"items\": {\"type\": \"string\"}, \"title\": \"Selected Views\", \"type\": \"array\"}, \"assignments\": {\"items\": {\"$ref\": \"#/$defs/AssignmentRef\"}, \"title\": \"Assignments\", \"type\": \"array\"}, \"exclusions\": {\"items\": {\"$ref\": \"#/$defs/ExclusionWire\"}, \"title\": \"Exclusions\", \"type\": \"array\"}, \"draft\": {\"discriminator\": {\"mapping\": {\"error\": \"#/$defs/NonreadyDraft\", \"needs_clarification\": \"#/$defs/NonreadyDraft\", \"ready\": \"#/$defs/ReadyDraft\", \"unsupported\": \"#/$defs/NonreadyDraft\"}, \"propertyName\": \"status\"}, \"oneOf\": [{\"$ref\": \"#/$defs/ReadyDraft\"}, {\"$ref\": \"#/$defs/NonreadyDraft\"}], \"title\": \"Draft\"}}, \"required\": [\"selected_views\", \"assignments\", \"exclusions\", \"draft\"], \"title\": \"SelectionWire\", \"type\": \"object\"}}"
+    }
+  ],
+  "response_schema": {
+    "$defs": {
+      "AssignmentRef": {
+        "additionalProperties": false,
+        "properties": {
+          "requirement_id": {
+            "title": "Requirement Id",
+            "type": "string"
+          },
+          "view": {
+            "title": "View",
+            "type": "string"
+          },
+          "task_id": {
+            "title": "Task Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "requirement_id",
+          "view",
+          "task_id"
+        ],
+        "title": "AssignmentRef",
+        "type": "object"
+      },
+      "ExclusionRef": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "enum": [
+              "gap",
+              "redundant"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "requirement_ids": {
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1,
+            "title": "Requirement Ids",
+            "type": "array"
+          },
+          "selected_view": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Selected View"
+          }
+        },
+        "required": [
+          "kind",
+          "requirement_ids",
+          "selected_view"
+        ],
+        "title": "ExclusionRef",
+        "type": "object"
+      },
+      "ExclusionWire": {
+        "additionalProperties": false,
+        "properties": {
+          "view": {
+            "title": "View",
+            "type": "string"
+          },
+          "refs": {
+            "items": {
+              "$ref": "#/$defs/ExclusionRef"
+            },
+            "minItems": 1,
+            "title": "Refs",
+            "type": "array"
+          }
+        },
+        "required": [
+          "view",
+          "refs"
+        ],
+        "title": "ExclusionWire",
+        "type": "object"
+      },
+      "NonreadyDraft": {
+        "additionalProperties": false,
+        "properties": {
+          "status": {
+            "enum": [
+              "needs_clarification",
+              "unsupported",
+              "error"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "strategy": {
+            "anyOf": [
+              {
+                "enum": [
+                  "single_view",
+                  "multi_view"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Strategy"
+          },
+          "tasks": {
+            "items": {
+              "$ref": "#/$defs/RequiredTask"
+            },
+            "title": "Tasks",
+            "type": "array"
+          },
+          "integration": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/RequiredIntegration"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "clarifications": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Clarifications",
+            "type": "array"
+          },
+          "unsupported_reasons": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Unsupported Reasons",
+            "type": "array"
+          }
+        },
+        "required": [
+          "status",
+          "strategy",
+          "tasks",
+          "integration",
+          "clarifications",
+          "unsupported_reasons"
+        ],
+        "title": "NonreadyDraft",
+        "type": "object"
+      },
+      "ReadyDraft": {
+        "additionalProperties": false,
+        "properties": {
+          "status": {
+            "const": "ready",
+            "title": "Status",
+            "type": "string"
+          },
+          "strategy": {
+            "anyOf": [
+              {
+                "enum": [
+                  "single_view",
+                  "multi_view"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Strategy"
+          },
+          "tasks": {
+            "items": {
+              "$ref": "#/$defs/RequiredTask"
+            },
+            "title": "Tasks",
+            "type": "array"
+          },
+          "integration": {
+            "$ref": "#/$defs/RequiredIntegration"
+          },
+          "clarifications": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Clarifications",
+            "type": "array"
+          },
+          "unsupported_reasons": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Unsupported Reasons",
+            "type": "array"
+          }
+        },
+        "required": [
+          "status",
+          "strategy",
+          "tasks",
+          "integration",
+          "clarifications",
+          "unsupported_reasons"
+        ],
+        "title": "ReadyDraft",
+        "type": "object"
+      },
+      "RequiredConditionalMetric": {
+        "additionalProperties": false,
+        "properties": {
+          "column": {
+            "title": "Column",
+            "type": "string"
+          },
+          "aggregation": {
+            "enum": [
+              "sum",
+              "count",
+              "count_distinct",
+              "avg",
+              "min",
+              "max"
+            ],
+            "title": "Aggregation",
+            "type": "string"
+          },
+          "conditions": {
+            "items": {
+              "$ref": "#/$defs/RequiredFilter"
+            },
+            "title": "Conditions",
+            "type": "array"
+          }
+        },
+        "required": [
+          "column",
+          "aggregation",
+          "conditions"
+        ],
+        "title": "RequiredConditionalMetric",
+        "type": "object"
+      },
+      "RequiredEdge": {
+        "additionalProperties": false,
+        "properties": {
+          "left_task": {
+            "title": "Left Task",
+            "type": "string"
+          },
+          "right_task": {
+            "title": "Right Task",
+            "type": "string"
+          },
+          "left_keys": {
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1,
+            "title": "Left Keys",
+            "type": "array"
+          },
+          "right_keys": {
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1,
+            "title": "Right Keys",
+            "type": "array"
+          },
+          "mode": {
+            "enum": [
+              "left",
+              "inner",
+              "full"
+            ],
+            "title": "Mode",
+            "type": "string"
+          },
+          "cardinality": {
+            "enum": [
+              "one_to_one",
+              "one_to_many",
+              "many_to_one",
+              "many_to_many"
+            ],
+            "title": "Cardinality",
+            "type": "string"
+          },
+          "preserve_task": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Preserve Task"
+          }
+        },
+        "required": [
+          "left_task",
+          "right_task",
+          "left_keys",
+          "right_keys",
+          "mode",
+          "cardinality",
+          "preserve_task"
+        ],
+        "title": "RequiredEdge",
+        "type": "object"
+      },
+      "RequiredFilter": {
+        "additionalProperties": false,
+        "properties": {
+          "column": {
+            "title": "Column",
+            "type": "string"
+          },
+          "operator": {
+            "enum": [
+              "=",
+              "!=",
+              "<>",
+              ">",
+              ">=",
+              "<",
+              "<=",
+              "IN",
+              "NOT IN",
+              "LIKE",
+              "IS NULL",
+              "IS NOT NULL"
+            ],
+            "title": "Operator",
+            "type": "string"
+          },
+          "value": {
+            "title": "Value"
+          }
+        },
+        "required": [
+          "column",
+          "operator",
+          "value"
+        ],
+        "title": "RequiredFilter",
+        "type": "object"
+      },
+      "RequiredIntegration": {
+        "additionalProperties": false,
+        "properties": {
+          "anchor_task": {
+            "title": "Anchor Task",
+            "type": "string"
+          },
+          "output_grain": {
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1,
+            "title": "Output Grain",
+            "type": "array"
+          },
+          "edges": {
+            "items": {
+              "$ref": "#/$defs/RequiredEdge"
+            },
+            "title": "Edges",
+            "type": "array"
+          },
+          "preparation": {
+            "items": {
+              "$ref": "#/$defs/RequiredPreparation"
+            },
+            "title": "Preparation",
+            "type": "array"
+          },
+          "missing_data_policy": {
+            "title": "Missing Data Policy",
+            "type": "string"
+          },
+          "notes": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Notes",
+            "type": "array"
+          }
+        },
+        "required": [
+          "anchor_task",
+          "output_grain",
+          "edges",
+          "preparation",
+          "missing_data_policy",
+          "notes"
+        ],
+        "title": "RequiredIntegration",
+        "type": "object"
+      },
+      "RequiredPreparation": {
+        "additionalProperties": false,
+        "properties": {
+          "task_id": {
+            "title": "Task Id",
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "aggregate",
+              "nest",
+              "pivot",
+              "attach_context"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "keys": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Keys",
+            "type": "array"
+          },
+          "description": {
+            "minLength": 1,
+            "title": "Description",
+            "type": "string"
+          }
+        },
+        "required": [
+          "task_id",
+          "kind",
+          "keys",
+          "description"
+        ],
+        "title": "RequiredPreparation",
+        "type": "object"
+      },
+      "RequiredTask": {
+        "additionalProperties": false,
+        "properties": {
+          "task_id": {
+            "minLength": 1,
+            "title": "Task Id",
+            "type": "string"
+          },
+          "view": {
+            "minLength": 1,
+            "title": "View",
+            "type": "string"
+          },
+          "required_columns": {
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1,
+            "title": "Required Columns",
+            "type": "array"
+          },
+          "filters": {
+            "items": {
+              "$ref": "#/$defs/RequiredFilter"
+            },
+            "title": "Filters",
+            "type": "array"
+          },
+          "metrics": {
+            "additionalProperties": {
+              "enum": [
+                "sum",
+                "count",
+                "count_distinct",
+                "avg",
+                "min",
+                "max"
+              ],
+              "type": "string"
+            },
+            "title": "Metrics",
+            "type": "object"
+          },
+          "conditional_metrics": {
+            "items": {
+              "$ref": "#/$defs/RequiredConditionalMetric"
+            },
+            "title": "Conditional Metrics",
+            "type": "array"
+          },
+          "attributes": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Attributes",
+            "type": "array"
+          },
+          "metadata_collections": {
+            "description": "Date/string provenance collected as DISTINCT values at output_grain; never an extra grouping dimension or a measure.",
+            "items": {
+              "type": "string"
+            },
+            "title": "Metadata Collections",
+            "type": "array"
+          },
+          "group_by": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Group By",
+            "type": "array"
+          },
+          "output_grain": {
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1,
+            "title": "Output Grain",
+            "type": "array"
+          },
+          "depends_on": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Depends On",
+            "type": "array"
+          },
+          "unbound_inputs": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Unbound Inputs",
+            "type": "array"
+          },
+          "request": {
+            "maxLength": 4000,
+            "minLength": 1,
+            "title": "Request",
+            "type": "string"
+          }
+        },
+        "required": [
+          "task_id",
+          "view",
+          "required_columns",
+          "filters",
+          "metrics",
+          "conditional_metrics",
+          "attributes",
+          "metadata_collections",
+          "group_by",
+          "output_grain",
+          "depends_on",
+          "unbound_inputs",
+          "request"
+        ],
+        "title": "RequiredTask",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "selected_views": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Selected Views",
+        "type": "array"
+      },
+      "assignments": {
+        "items": {
+          "$ref": "#/$defs/AssignmentRef"
+        },
+        "title": "Assignments",
+        "type": "array"
+      },
+      "exclusions": {
+        "items": {
+          "$ref": "#/$defs/ExclusionWire"
+        },
+        "title": "Exclusions",
+        "type": "array"
+      },
+      "draft": {
+        "discriminator": {
+          "mapping": {
+            "error": "#/$defs/NonreadyDraft",
+            "needs_clarification": "#/$defs/NonreadyDraft",
+            "ready": "#/$defs/ReadyDraft",
+            "unsupported": "#/$defs/NonreadyDraft"
+          },
+          "propertyName": "status"
+        },
+        "oneOf": [
+          {
+            "$ref": "#/$defs/ReadyDraft"
+          },
+          {
+            "$ref": "#/$defs/NonreadyDraft"
+          }
+        ],
+        "title": "Draft"
+      }
+    },
+    "required": [
+      "selected_views",
+      "assignments",
+      "exclusions",
+      "draft"
+    ],
+    "title": "SelectionWire",
+    "type": "object"
+  }
+}

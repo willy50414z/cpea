@@ -1,0 +1,35 @@
+...............................................................F..       [100%]
+=================================== FAILURES ===================================
+_________ test_new_provenance_cannot_be_forged[reviewer-same_platform] _________
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-78/test_new_provenance_cannot_be_14')
+mutation = 'same_platform', who = 'reviewer'
+
+    @pytest.mark.parametrize('mutation',['open','missing','node','round','producer','fail','same_platform','evidence'])
+    @pytest.mark.parametrize('who',['author','reviewer'])
+    def test_new_provenance_cannot_be_forged(tmp_path,mutation,who):
+        m=api();p=m.load_package();review=dict(ticket='synthetic-review-only')
+        path=tmp_path/'review.json';m.base.write_json(path,review)
+        loop=dict(tickets={},rounds=[])
+        for role,ticket,node,n,platform in [('author',m.AUTHOR_TICKET,'text_leaf_evidence_contract',24,'/root/loop_worker_text_leaf_contract'),
+                ('reviewer',review['ticket'],'text_leaf_evidence_semantics',25,'synthetic-distinct-reviewer')]:
+            evidence=[dict(path=m.DEFAULT_MANIFEST.relative_to(m.ROOT).as_posix(),sha256=m.base.digest(m.DEFAULT_MANIFEST))] if role=='author' else [dict(path=str(path),sha256=m.base.digest(path))]
+            loop['tickets'][ticket]=dict(role='worker',node=node,round=n,platform_id=platform,closed=True)
+            loop['rounds'].append(dict(node=node,round=n,producer=platform,result='PASS',evidence=evidence))
+        assert len(m.roles(p,review,loop))==2
+        ticket=m.AUTHOR_TICKET if who=='author' else review['ticket'];item=loop['tickets'][ticket];completed=loop['rounds'][0 if who=='author' else 1]
+        if mutation=='open':item['closed']=False
+        if mutation=='missing':loop['tickets'].pop(ticket)
+        if mutation=='node':item['node']='other'
+        if mutation=='round':item['round']=99
+        if mutation=='producer':completed['producer']='other'
+        if mutation=='fail':completed['result']='FAIL'
+        if mutation=='same_platform':item['platform_id']='same';completed['producer']='same'
+        if mutation=='evidence':completed['evidence']=[]
+>       with pytest.raises(ValueError):m.roles(p,review,loop)
+E       Failed: DID NOT RAISE ValueError
+
+tests/diagnostics/test_managed_text_leaf_evidence.py:204: Failed
+=========================== short test summary info ============================
+FAILED tests/diagnostics/test_managed_text_leaf_evidence.py::test_new_provenance_cannot_be_forged[reviewer-same_platform]
+1 failed, 65 passed in 269.68s (0:04:29)

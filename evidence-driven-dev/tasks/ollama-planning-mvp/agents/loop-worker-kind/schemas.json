@@ -1,0 +1,1777 @@
+{
+  "RecallWire": {
+    "$defs": {
+      "IndexedBoundRequirement": {
+        "additionalProperties": false,
+        "properties": {
+          "requirement_id": {
+            "minLength": 1,
+            "title": "Requirement Id",
+            "type": "string"
+          },
+          "start": {
+            "description": "Zero-based Python Unicode code-point index, inclusive.",
+            "minimum": 0,
+            "title": "Start",
+            "type": "integer"
+          },
+          "end": {
+            "description": "Zero-based Python Unicode code-point index, exclusive.",
+            "minimum": 1,
+            "title": "End",
+            "type": "integer"
+          },
+          "business_object": {
+            "minLength": 1,
+            "title": "Business Object",
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "metric",
+              "attribute",
+              "filter",
+              "key",
+              "metadata",
+              "grain",
+              "population"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "scope_ids": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Scope Ids",
+            "type": "array"
+          },
+          "grain": {
+            "minLength": 1,
+            "title": "Grain",
+            "type": "string"
+          },
+          "population": {
+            "minLength": 1,
+            "title": "Population",
+            "type": "string"
+          },
+          "grain_binding": {
+            "anyOf": [
+              {
+                "enum": [
+                  "linked",
+                  "independent",
+                  "unspecified"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Grain Binding"
+          },
+          "grain_requirement_ids": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Grain Requirement Ids",
+            "type": "array"
+          }
+        },
+        "required": [
+          "requirement_id",
+          "start",
+          "end",
+          "business_object",
+          "kind",
+          "scope_ids",
+          "grain",
+          "population",
+          "grain_binding",
+          "grain_requirement_ids"
+        ],
+        "title": "IndexedBoundRequirement",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "requirements": {
+        "items": {
+          "$ref": "#/$defs/IndexedBoundRequirement"
+        },
+        "maxItems": 24,
+        "minItems": 1,
+        "title": "Requirements",
+        "type": "array"
+      }
+    },
+    "required": [
+      "requirements"
+    ],
+    "title": "RecallWire",
+    "type": "object"
+  },
+  "SelectionWire": {
+    "$defs": {
+      "AssignmentRef": {
+        "additionalProperties": false,
+        "properties": {
+          "requirement_id": {
+            "title": "Requirement Id",
+            "type": "string"
+          },
+          "view": {
+            "title": "View",
+            "type": "string"
+          },
+          "task_id": {
+            "title": "Task Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "requirement_id",
+          "view",
+          "task_id"
+        ],
+        "title": "AssignmentRef",
+        "type": "object"
+      },
+      "ExclusionRef": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "enum": [
+              "gap",
+              "redundant"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "requirement_ids": {
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1,
+            "title": "Requirement Ids",
+            "type": "array"
+          },
+          "selected_view": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Selected View"
+          }
+        },
+        "required": [
+          "kind",
+          "requirement_ids",
+          "selected_view"
+        ],
+        "title": "ExclusionRef",
+        "type": "object"
+      },
+      "ExclusionWire": {
+        "additionalProperties": false,
+        "properties": {
+          "view": {
+            "title": "View",
+            "type": "string"
+          },
+          "refs": {
+            "items": {
+              "$ref": "#/$defs/ExclusionRef"
+            },
+            "minItems": 1,
+            "title": "Refs",
+            "type": "array"
+          }
+        },
+        "required": [
+          "view",
+          "refs"
+        ],
+        "title": "ExclusionWire",
+        "type": "object"
+      },
+      "NonreadyDraft": {
+        "additionalProperties": false,
+        "properties": {
+          "status": {
+            "enum": [
+              "needs_clarification",
+              "unsupported",
+              "error"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "strategy": {
+            "anyOf": [
+              {
+                "enum": [
+                  "single_view",
+                  "multi_view"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Strategy"
+          },
+          "tasks": {
+            "items": {
+              "$ref": "#/$defs/RequiredTask"
+            },
+            "title": "Tasks",
+            "type": "array"
+          },
+          "integration": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/RequiredIntegration"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "clarifications": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Clarifications",
+            "type": "array"
+          },
+          "unsupported_reasons": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Unsupported Reasons",
+            "type": "array"
+          }
+        },
+        "required": [
+          "status",
+          "strategy",
+          "tasks",
+          "integration",
+          "clarifications",
+          "unsupported_reasons"
+        ],
+        "title": "NonreadyDraft",
+        "type": "object"
+      },
+      "ReadyDraft": {
+        "additionalProperties": false,
+        "properties": {
+          "status": {
+            "const": "ready",
+            "title": "Status",
+            "type": "string"
+          },
+          "strategy": {
+            "anyOf": [
+              {
+                "enum": [
+                  "single_view",
+                  "multi_view"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Strategy"
+          },
+          "tasks": {
+            "items": {
+              "$ref": "#/$defs/RequiredTask"
+            },
+            "title": "Tasks",
+            "type": "array"
+          },
+          "integration": {
+            "$ref": "#/$defs/RequiredIntegration"
+          },
+          "clarifications": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Clarifications",
+            "type": "array"
+          },
+          "unsupported_reasons": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Unsupported Reasons",
+            "type": "array"
+          }
+        },
+        "required": [
+          "status",
+          "strategy",
+          "tasks",
+          "integration",
+          "clarifications",
+          "unsupported_reasons"
+        ],
+        "title": "ReadyDraft",
+        "type": "object"
+      },
+      "RequiredConditionalMetric": {
+        "additionalProperties": false,
+        "properties": {
+          "column": {
+            "title": "Column",
+            "type": "string"
+          },
+          "aggregation": {
+            "enum": [
+              "sum",
+              "count",
+              "count_distinct",
+              "avg",
+              "min",
+              "max"
+            ],
+            "title": "Aggregation",
+            "type": "string"
+          },
+          "conditions": {
+            "items": {
+              "$ref": "#/$defs/RequiredFilter"
+            },
+            "title": "Conditions",
+            "type": "array"
+          }
+        },
+        "required": [
+          "column",
+          "aggregation",
+          "conditions"
+        ],
+        "title": "RequiredConditionalMetric",
+        "type": "object"
+      },
+      "RequiredEdge": {
+        "additionalProperties": false,
+        "properties": {
+          "left_task": {
+            "title": "Left Task",
+            "type": "string"
+          },
+          "right_task": {
+            "title": "Right Task",
+            "type": "string"
+          },
+          "left_keys": {
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1,
+            "title": "Left Keys",
+            "type": "array"
+          },
+          "right_keys": {
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1,
+            "title": "Right Keys",
+            "type": "array"
+          },
+          "mode": {
+            "enum": [
+              "left",
+              "inner",
+              "full"
+            ],
+            "title": "Mode",
+            "type": "string"
+          },
+          "cardinality": {
+            "enum": [
+              "one_to_one",
+              "one_to_many",
+              "many_to_one",
+              "many_to_many"
+            ],
+            "title": "Cardinality",
+            "type": "string"
+          },
+          "preserve_task": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Preserve Task"
+          }
+        },
+        "required": [
+          "left_task",
+          "right_task",
+          "left_keys",
+          "right_keys",
+          "mode",
+          "cardinality",
+          "preserve_task"
+        ],
+        "title": "RequiredEdge",
+        "type": "object"
+      },
+      "RequiredFilter": {
+        "additionalProperties": false,
+        "properties": {
+          "column": {
+            "title": "Column",
+            "type": "string"
+          },
+          "operator": {
+            "enum": [
+              "=",
+              "!=",
+              "<>",
+              ">",
+              ">=",
+              "<",
+              "<=",
+              "IN",
+              "NOT IN",
+              "LIKE",
+              "IS NULL",
+              "IS NOT NULL"
+            ],
+            "title": "Operator",
+            "type": "string"
+          },
+          "value": {
+            "title": "Value"
+          }
+        },
+        "required": [
+          "column",
+          "operator",
+          "value"
+        ],
+        "title": "RequiredFilter",
+        "type": "object"
+      },
+      "RequiredIntegration": {
+        "additionalProperties": false,
+        "properties": {
+          "anchor_task": {
+            "title": "Anchor Task",
+            "type": "string"
+          },
+          "output_grain": {
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1,
+            "title": "Output Grain",
+            "type": "array"
+          },
+          "edges": {
+            "items": {
+              "$ref": "#/$defs/RequiredEdge"
+            },
+            "title": "Edges",
+            "type": "array"
+          },
+          "preparation": {
+            "items": {
+              "$ref": "#/$defs/RequiredPreparation"
+            },
+            "title": "Preparation",
+            "type": "array"
+          },
+          "missing_data_policy": {
+            "title": "Missing Data Policy",
+            "type": "string"
+          },
+          "notes": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Notes",
+            "type": "array"
+          }
+        },
+        "required": [
+          "anchor_task",
+          "output_grain",
+          "edges",
+          "preparation",
+          "missing_data_policy",
+          "notes"
+        ],
+        "title": "RequiredIntegration",
+        "type": "object"
+      },
+      "RequiredPreparation": {
+        "additionalProperties": false,
+        "properties": {
+          "task_id": {
+            "title": "Task Id",
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "aggregate",
+              "nest",
+              "pivot",
+              "attach_context"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "keys": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Keys",
+            "type": "array"
+          },
+          "description": {
+            "minLength": 1,
+            "title": "Description",
+            "type": "string"
+          }
+        },
+        "required": [
+          "task_id",
+          "kind",
+          "keys",
+          "description"
+        ],
+        "title": "RequiredPreparation",
+        "type": "object"
+      },
+      "RequiredTask": {
+        "additionalProperties": false,
+        "properties": {
+          "task_id": {
+            "minLength": 1,
+            "title": "Task Id",
+            "type": "string"
+          },
+          "view": {
+            "minLength": 1,
+            "title": "View",
+            "type": "string"
+          },
+          "required_columns": {
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1,
+            "title": "Required Columns",
+            "type": "array"
+          },
+          "filters": {
+            "items": {
+              "$ref": "#/$defs/RequiredFilter"
+            },
+            "title": "Filters",
+            "type": "array"
+          },
+          "metrics": {
+            "additionalProperties": {
+              "enum": [
+                "sum",
+                "count",
+                "count_distinct",
+                "avg",
+                "min",
+                "max"
+              ],
+              "type": "string"
+            },
+            "title": "Metrics",
+            "type": "object"
+          },
+          "conditional_metrics": {
+            "items": {
+              "$ref": "#/$defs/RequiredConditionalMetric"
+            },
+            "title": "Conditional Metrics",
+            "type": "array"
+          },
+          "attributes": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Attributes",
+            "type": "array"
+          },
+          "metadata_collections": {
+            "description": "Date/string provenance collected as DISTINCT values at output_grain; never an extra grouping dimension or a measure.",
+            "items": {
+              "type": "string"
+            },
+            "title": "Metadata Collections",
+            "type": "array"
+          },
+          "group_by": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Group By",
+            "type": "array"
+          },
+          "output_grain": {
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1,
+            "title": "Output Grain",
+            "type": "array"
+          },
+          "depends_on": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Depends On",
+            "type": "array"
+          },
+          "unbound_inputs": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Unbound Inputs",
+            "type": "array"
+          },
+          "request": {
+            "maxLength": 4000,
+            "minLength": 1,
+            "title": "Request",
+            "type": "string"
+          }
+        },
+        "required": [
+          "task_id",
+          "view",
+          "required_columns",
+          "filters",
+          "metrics",
+          "conditional_metrics",
+          "attributes",
+          "metadata_collections",
+          "group_by",
+          "output_grain",
+          "depends_on",
+          "unbound_inputs",
+          "request"
+        ],
+        "title": "RequiredTask",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "selected_views": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Selected Views",
+        "type": "array"
+      },
+      "assignments": {
+        "items": {
+          "$ref": "#/$defs/AssignmentRef"
+        },
+        "title": "Assignments",
+        "type": "array"
+      },
+      "exclusions": {
+        "items": {
+          "$ref": "#/$defs/ExclusionWire"
+        },
+        "title": "Exclusions",
+        "type": "array"
+      },
+      "draft": {
+        "discriminator": {
+          "mapping": {
+            "error": "#/$defs/NonreadyDraft",
+            "needs_clarification": "#/$defs/NonreadyDraft",
+            "ready": "#/$defs/ReadyDraft",
+            "unsupported": "#/$defs/NonreadyDraft"
+          },
+          "propertyName": "status"
+        },
+        "oneOf": [
+          {
+            "$ref": "#/$defs/ReadyDraft"
+          },
+          {
+            "$ref": "#/$defs/NonreadyDraft"
+          }
+        ],
+        "title": "Draft"
+      }
+    },
+    "required": [
+      "selected_views",
+      "assignments",
+      "exclusions",
+      "draft"
+    ],
+    "title": "SelectionWire",
+    "type": "object"
+  },
+  "KindCoverage_917e5de3fe5e386d": {
+    "$defs": {
+      "ColumnMapping": {
+        "additionalProperties": false,
+        "properties": {
+          "column": {
+            "minLength": 1,
+            "title": "Column",
+            "type": "string"
+          }
+        },
+        "required": [
+          "column"
+        ],
+        "title": "ColumnMapping",
+        "type": "object"
+      },
+      "KindDecision_filter_917e5de3fe5e386d": {
+        "additionalProperties": false,
+        "properties": {
+          "status": {
+            "enum": [
+              "supported",
+              "partial",
+              "unsupported",
+              "uncertain"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "own_gap": {
+            "title": "Own Gap",
+            "type": "boolean"
+          },
+          "mappings": {
+            "items": {
+              "$ref": "#/$defs/RequiredFilter"
+            },
+            "title": "Mappings",
+            "type": "array"
+          },
+          "contract_path": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Contract Path"
+          }
+        },
+        "required": [
+          "status",
+          "own_gap",
+          "mappings",
+          "contract_path"
+        ],
+        "title": "KindDecision_filter_917e5de3fe5e386d",
+        "type": "object"
+      },
+      "KindDecision_grain_917e5de3fe5e386d": {
+        "additionalProperties": false,
+        "properties": {
+          "status": {
+            "enum": [
+              "supported",
+              "partial",
+              "unsupported",
+              "uncertain"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "own_gap": {
+            "title": "Own Gap",
+            "type": "boolean"
+          },
+          "mappings": {
+            "items": {
+              "$ref": "#/$defs/ColumnMapping"
+            },
+            "title": "Mappings",
+            "type": "array"
+          }
+        },
+        "required": [
+          "status",
+          "own_gap",
+          "mappings"
+        ],
+        "title": "KindDecision_grain_917e5de3fe5e386d",
+        "type": "object"
+      },
+      "KindDecision_metadata_917e5de3fe5e386d": {
+        "additionalProperties": false,
+        "properties": {
+          "status": {
+            "enum": [
+              "supported",
+              "partial",
+              "unsupported",
+              "uncertain"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "own_gap": {
+            "title": "Own Gap",
+            "type": "boolean"
+          },
+          "mappings": {
+            "items": {
+              "$ref": "#/$defs/ColumnMapping"
+            },
+            "title": "Mappings",
+            "type": "array"
+          },
+          "contract_path": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Contract Path"
+          }
+        },
+        "required": [
+          "status",
+          "own_gap",
+          "mappings",
+          "contract_path"
+        ],
+        "title": "KindDecision_metadata_917e5de3fe5e386d",
+        "type": "object"
+      },
+      "KindDecision_metric_917e5de3fe5e386d": {
+        "additionalProperties": false,
+        "properties": {
+          "status": {
+            "enum": [
+              "supported",
+              "partial",
+              "unsupported",
+              "uncertain"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "own_gap": {
+            "title": "Own Gap",
+            "type": "boolean"
+          },
+          "mappings": {
+            "items": {
+              "$ref": "#/$defs/MetricMapping"
+            },
+            "title": "Mappings",
+            "type": "array"
+          },
+          "contract_path": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Contract Path"
+          }
+        },
+        "required": [
+          "status",
+          "own_gap",
+          "mappings",
+          "contract_path"
+        ],
+        "title": "KindDecision_metric_917e5de3fe5e386d",
+        "type": "object"
+      },
+      "KindDecision_population_917e5de3fe5e386d": {
+        "additionalProperties": false,
+        "properties": {
+          "status": {
+            "enum": [
+              "supported",
+              "partial",
+              "unsupported",
+              "uncertain"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "own_gap": {
+            "title": "Own Gap",
+            "type": "boolean"
+          },
+          "mappings": {
+            "items": {
+              "$ref": "#/$defs/ColumnMapping"
+            },
+            "title": "Mappings",
+            "type": "array"
+          },
+          "contract_path": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Contract Path"
+          }
+        },
+        "required": [
+          "status",
+          "own_gap",
+          "mappings",
+          "contract_path"
+        ],
+        "title": "KindDecision_population_917e5de3fe5e386d",
+        "type": "object"
+      },
+      "KindSlots_917e5de3fe5e386d": {
+        "additionalProperties": false,
+        "properties": {
+          "stock": {
+            "$ref": "#/$defs/KindDecision_metric_917e5de3fe5e386d"
+          },
+          "sales": {
+            "$ref": "#/$defs/KindDecision_metric_917e5de3fe5e386d"
+          },
+          "channel": {
+            "$ref": "#/$defs/KindDecision_filter_917e5de3fe5e386d"
+          },
+          "period": {
+            "$ref": "#/$defs/KindDecision_filter_917e5de3fe5e386d"
+          },
+          "population": {
+            "$ref": "#/$defs/KindDecision_population_917e5de3fe5e386d"
+          },
+          "grain": {
+            "$ref": "#/$defs/KindDecision_grain_917e5de3fe5e386d"
+          },
+          "R_PURPOSE": {
+            "$ref": "#/$defs/KindDecision_metadata_917e5de3fe5e386d"
+          }
+        },
+        "required": [
+          "stock",
+          "sales",
+          "channel",
+          "period",
+          "population",
+          "grain",
+          "R_PURPOSE"
+        ],
+        "title": "KindSlots_917e5de3fe5e386d",
+        "type": "object"
+      },
+      "MetricMapping": {
+        "additionalProperties": false,
+        "properties": {
+          "column": {
+            "minLength": 1,
+            "title": "Column",
+            "type": "string"
+          },
+          "aggregation": {
+            "enum": [
+              "sum",
+              "count",
+              "count_distinct",
+              "avg",
+              "min",
+              "max"
+            ],
+            "title": "Aggregation",
+            "type": "string"
+          },
+          "conditions": {
+            "items": {
+              "$ref": "#/$defs/RequiredFilter"
+            },
+            "title": "Conditions",
+            "type": "array"
+          }
+        },
+        "required": [
+          "column",
+          "aggregation",
+          "conditions"
+        ],
+        "title": "MetricMapping",
+        "type": "object"
+      },
+      "RequiredFilter": {
+        "additionalProperties": false,
+        "properties": {
+          "column": {
+            "title": "Column",
+            "type": "string"
+          },
+          "operator": {
+            "enum": [
+              "=",
+              "!=",
+              "<>",
+              ">",
+              ">=",
+              "<",
+              "<=",
+              "IN",
+              "NOT IN",
+              "LIKE",
+              "IS NULL",
+              "IS NOT NULL"
+            ],
+            "title": "Operator",
+            "type": "string"
+          },
+          "value": {
+            "title": "Value"
+          }
+        },
+        "required": [
+          "column",
+          "operator",
+          "value"
+        ],
+        "title": "RequiredFilter",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "entries": {
+        "$ref": "#/$defs/KindSlots_917e5de3fe5e386d"
+      }
+    },
+    "required": [
+      "entries"
+    ],
+    "title": "KindCoverage_917e5de3fe5e386d",
+    "type": "object"
+  },
+  "KindCoverage_d264ddd3efb68d0a": {
+    "$defs": {
+      "KindDecision_metric_d264ddd3efb68d0a": {
+        "additionalProperties": false,
+        "properties": {
+          "status": {
+            "enum": [
+              "supported",
+              "partial",
+              "unsupported",
+              "uncertain"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "own_gap": {
+            "title": "Own Gap",
+            "type": "boolean"
+          },
+          "mappings": {
+            "items": {
+              "$ref": "#/$defs/MetricMapping"
+            },
+            "title": "Mappings",
+            "type": "array"
+          },
+          "contract_path": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Contract Path"
+          }
+        },
+        "required": [
+          "status",
+          "own_gap",
+          "mappings",
+          "contract_path"
+        ],
+        "title": "KindDecision_metric_d264ddd3efb68d0a",
+        "type": "object"
+      },
+      "KindSlots_d264ddd3efb68d0a": {
+        "additionalProperties": false,
+        "properties": {
+          "model_dump/🧾": {
+            "$ref": "#/$defs/KindDecision_metric_d264ddd3efb68d0a"
+          }
+        },
+        "required": [
+          "model_dump/🧾"
+        ],
+        "title": "KindSlots_d264ddd3efb68d0a",
+        "type": "object"
+      },
+      "MetricMapping": {
+        "additionalProperties": false,
+        "properties": {
+          "column": {
+            "minLength": 1,
+            "title": "Column",
+            "type": "string"
+          },
+          "aggregation": {
+            "enum": [
+              "sum",
+              "count",
+              "count_distinct",
+              "avg",
+              "min",
+              "max"
+            ],
+            "title": "Aggregation",
+            "type": "string"
+          },
+          "conditions": {
+            "items": {
+              "$ref": "#/$defs/RequiredFilter"
+            },
+            "title": "Conditions",
+            "type": "array"
+          }
+        },
+        "required": [
+          "column",
+          "aggregation",
+          "conditions"
+        ],
+        "title": "MetricMapping",
+        "type": "object"
+      },
+      "RequiredFilter": {
+        "additionalProperties": false,
+        "properties": {
+          "column": {
+            "title": "Column",
+            "type": "string"
+          },
+          "operator": {
+            "enum": [
+              "=",
+              "!=",
+              "<>",
+              ">",
+              ">=",
+              "<",
+              "<=",
+              "IN",
+              "NOT IN",
+              "LIKE",
+              "IS NULL",
+              "IS NOT NULL"
+            ],
+            "title": "Operator",
+            "type": "string"
+          },
+          "value": {
+            "title": "Value"
+          }
+        },
+        "required": [
+          "column",
+          "operator",
+          "value"
+        ],
+        "title": "RequiredFilter",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "entries": {
+        "$ref": "#/$defs/KindSlots_d264ddd3efb68d0a"
+      }
+    },
+    "required": [
+      "entries"
+    ],
+    "title": "KindCoverage_d264ddd3efb68d0a",
+    "type": "object"
+  },
+  "KindCoverage_89edd559744b746e": {
+    "$defs": {
+      "KindDecision_filter_89edd559744b746e": {
+        "additionalProperties": false,
+        "properties": {
+          "status": {
+            "enum": [
+              "supported",
+              "partial",
+              "unsupported",
+              "uncertain"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "own_gap": {
+            "title": "Own Gap",
+            "type": "boolean"
+          },
+          "mappings": {
+            "items": {
+              "$ref": "#/$defs/RequiredFilter"
+            },
+            "title": "Mappings",
+            "type": "array"
+          },
+          "contract_path": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Contract Path"
+          }
+        },
+        "required": [
+          "status",
+          "own_gap",
+          "mappings",
+          "contract_path"
+        ],
+        "title": "KindDecision_filter_89edd559744b746e",
+        "type": "object"
+      },
+      "KindSlots_89edd559744b746e": {
+        "additionalProperties": false,
+        "properties": {
+          "model_dump/🧾": {
+            "$ref": "#/$defs/KindDecision_filter_89edd559744b746e"
+          }
+        },
+        "required": [
+          "model_dump/🧾"
+        ],
+        "title": "KindSlots_89edd559744b746e",
+        "type": "object"
+      },
+      "RequiredFilter": {
+        "additionalProperties": false,
+        "properties": {
+          "column": {
+            "title": "Column",
+            "type": "string"
+          },
+          "operator": {
+            "enum": [
+              "=",
+              "!=",
+              "<>",
+              ">",
+              ">=",
+              "<",
+              "<=",
+              "IN",
+              "NOT IN",
+              "LIKE",
+              "IS NULL",
+              "IS NOT NULL"
+            ],
+            "title": "Operator",
+            "type": "string"
+          },
+          "value": {
+            "title": "Value"
+          }
+        },
+        "required": [
+          "column",
+          "operator",
+          "value"
+        ],
+        "title": "RequiredFilter",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "entries": {
+        "$ref": "#/$defs/KindSlots_89edd559744b746e"
+      }
+    },
+    "required": [
+      "entries"
+    ],
+    "title": "KindCoverage_89edd559744b746e",
+    "type": "object"
+  },
+  "KindCoverage_d12bceb755517989": {
+    "$defs": {
+      "ColumnMapping": {
+        "additionalProperties": false,
+        "properties": {
+          "column": {
+            "minLength": 1,
+            "title": "Column",
+            "type": "string"
+          }
+        },
+        "required": [
+          "column"
+        ],
+        "title": "ColumnMapping",
+        "type": "object"
+      },
+      "KindDecision_key_d12bceb755517989": {
+        "additionalProperties": false,
+        "properties": {
+          "status": {
+            "enum": [
+              "supported",
+              "partial",
+              "unsupported",
+              "uncertain"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "own_gap": {
+            "title": "Own Gap",
+            "type": "boolean"
+          },
+          "mappings": {
+            "items": {
+              "$ref": "#/$defs/ColumnMapping"
+            },
+            "title": "Mappings",
+            "type": "array"
+          },
+          "contract_path": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Contract Path"
+          }
+        },
+        "required": [
+          "status",
+          "own_gap",
+          "mappings",
+          "contract_path"
+        ],
+        "title": "KindDecision_key_d12bceb755517989",
+        "type": "object"
+      },
+      "KindSlots_d12bceb755517989": {
+        "additionalProperties": false,
+        "properties": {
+          "model_dump/🧾": {
+            "$ref": "#/$defs/KindDecision_key_d12bceb755517989"
+          }
+        },
+        "required": [
+          "model_dump/🧾"
+        ],
+        "title": "KindSlots_d12bceb755517989",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "entries": {
+        "$ref": "#/$defs/KindSlots_d12bceb755517989"
+      }
+    },
+    "required": [
+      "entries"
+    ],
+    "title": "KindCoverage_d12bceb755517989",
+    "type": "object"
+  },
+  "KindCoverage_30bd2eecff47698f": {
+    "$defs": {
+      "ColumnMapping": {
+        "additionalProperties": false,
+        "properties": {
+          "column": {
+            "minLength": 1,
+            "title": "Column",
+            "type": "string"
+          }
+        },
+        "required": [
+          "column"
+        ],
+        "title": "ColumnMapping",
+        "type": "object"
+      },
+      "KindDecision_grain_30bd2eecff47698f": {
+        "additionalProperties": false,
+        "properties": {
+          "status": {
+            "enum": [
+              "supported",
+              "partial",
+              "unsupported",
+              "uncertain"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "own_gap": {
+            "title": "Own Gap",
+            "type": "boolean"
+          },
+          "mappings": {
+            "items": {
+              "$ref": "#/$defs/ColumnMapping"
+            },
+            "title": "Mappings",
+            "type": "array"
+          }
+        },
+        "required": [
+          "status",
+          "own_gap",
+          "mappings"
+        ],
+        "title": "KindDecision_grain_30bd2eecff47698f",
+        "type": "object"
+      },
+      "KindSlots_30bd2eecff47698f": {
+        "additionalProperties": false,
+        "properties": {
+          "model_dump/🧾": {
+            "$ref": "#/$defs/KindDecision_grain_30bd2eecff47698f"
+          }
+        },
+        "required": [
+          "model_dump/🧾"
+        ],
+        "title": "KindSlots_30bd2eecff47698f",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "entries": {
+        "$ref": "#/$defs/KindSlots_30bd2eecff47698f"
+      }
+    },
+    "required": [
+      "entries"
+    ],
+    "title": "KindCoverage_30bd2eecff47698f",
+    "type": "object"
+  },
+  "KindCoverage_72de860da48d0e56": {
+    "$defs": {
+      "ColumnMapping": {
+        "additionalProperties": false,
+        "properties": {
+          "column": {
+            "minLength": 1,
+            "title": "Column",
+            "type": "string"
+          }
+        },
+        "required": [
+          "column"
+        ],
+        "title": "ColumnMapping",
+        "type": "object"
+      },
+      "KindDecision_population_72de860da48d0e56": {
+        "additionalProperties": false,
+        "properties": {
+          "status": {
+            "enum": [
+              "supported",
+              "partial",
+              "unsupported",
+              "uncertain"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "own_gap": {
+            "title": "Own Gap",
+            "type": "boolean"
+          },
+          "mappings": {
+            "items": {
+              "$ref": "#/$defs/ColumnMapping"
+            },
+            "title": "Mappings",
+            "type": "array"
+          },
+          "contract_path": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Contract Path"
+          }
+        },
+        "required": [
+          "status",
+          "own_gap",
+          "mappings",
+          "contract_path"
+        ],
+        "title": "KindDecision_population_72de860da48d0e56",
+        "type": "object"
+      },
+      "KindSlots_72de860da48d0e56": {
+        "additionalProperties": false,
+        "properties": {
+          "model_dump/🧾": {
+            "$ref": "#/$defs/KindDecision_population_72de860da48d0e56"
+          }
+        },
+        "required": [
+          "model_dump/🧾"
+        ],
+        "title": "KindSlots_72de860da48d0e56",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "entries": {
+        "$ref": "#/$defs/KindSlots_72de860da48d0e56"
+      }
+    },
+    "required": [
+      "entries"
+    ],
+    "title": "KindCoverage_72de860da48d0e56",
+    "type": "object"
+  },
+  "KindCoverage_b7461bd49fb2aa33": {
+    "$defs": {
+      "ColumnMapping": {
+        "additionalProperties": false,
+        "properties": {
+          "column": {
+            "minLength": 1,
+            "title": "Column",
+            "type": "string"
+          }
+        },
+        "required": [
+          "column"
+        ],
+        "title": "ColumnMapping",
+        "type": "object"
+      },
+      "KindDecision_attribute_b7461bd49fb2aa33": {
+        "additionalProperties": false,
+        "properties": {
+          "status": {
+            "enum": [
+              "supported",
+              "partial",
+              "unsupported",
+              "uncertain"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "own_gap": {
+            "title": "Own Gap",
+            "type": "boolean"
+          },
+          "mappings": {
+            "items": {
+              "$ref": "#/$defs/ColumnMapping"
+            },
+            "title": "Mappings",
+            "type": "array"
+          },
+          "contract_path": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Contract Path"
+          }
+        },
+        "required": [
+          "status",
+          "own_gap",
+          "mappings",
+          "contract_path"
+        ],
+        "title": "KindDecision_attribute_b7461bd49fb2aa33",
+        "type": "object"
+      },
+      "KindSlots_b7461bd49fb2aa33": {
+        "additionalProperties": false,
+        "properties": {
+          "model_dump/🧾": {
+            "$ref": "#/$defs/KindDecision_attribute_b7461bd49fb2aa33"
+          }
+        },
+        "required": [
+          "model_dump/🧾"
+        ],
+        "title": "KindSlots_b7461bd49fb2aa33",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "entries": {
+        "$ref": "#/$defs/KindSlots_b7461bd49fb2aa33"
+      }
+    },
+    "required": [
+      "entries"
+    ],
+    "title": "KindCoverage_b7461bd49fb2aa33",
+    "type": "object"
+  },
+  "KindCoverage_9d5dc9af60fa2496": {
+    "$defs": {
+      "ColumnMapping": {
+        "additionalProperties": false,
+        "properties": {
+          "column": {
+            "minLength": 1,
+            "title": "Column",
+            "type": "string"
+          }
+        },
+        "required": [
+          "column"
+        ],
+        "title": "ColumnMapping",
+        "type": "object"
+      },
+      "KindDecision_metadata_9d5dc9af60fa2496": {
+        "additionalProperties": false,
+        "properties": {
+          "status": {
+            "enum": [
+              "supported",
+              "partial",
+              "unsupported",
+              "uncertain"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "own_gap": {
+            "title": "Own Gap",
+            "type": "boolean"
+          },
+          "mappings": {
+            "items": {
+              "$ref": "#/$defs/ColumnMapping"
+            },
+            "title": "Mappings",
+            "type": "array"
+          },
+          "contract_path": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Contract Path"
+          }
+        },
+        "required": [
+          "status",
+          "own_gap",
+          "mappings",
+          "contract_path"
+        ],
+        "title": "KindDecision_metadata_9d5dc9af60fa2496",
+        "type": "object"
+      },
+      "KindSlots_9d5dc9af60fa2496": {
+        "additionalProperties": false,
+        "properties": {
+          "model_dump/🧾": {
+            "$ref": "#/$defs/KindDecision_metadata_9d5dc9af60fa2496"
+          }
+        },
+        "required": [
+          "model_dump/🧾"
+        ],
+        "title": "KindSlots_9d5dc9af60fa2496",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "entries": {
+        "$ref": "#/$defs/KindSlots_9d5dc9af60fa2496"
+      }
+    },
+    "required": [
+      "entries"
+    ],
+    "title": "KindCoverage_9d5dc9af60fa2496",
+    "type": "object"
+  }
+}

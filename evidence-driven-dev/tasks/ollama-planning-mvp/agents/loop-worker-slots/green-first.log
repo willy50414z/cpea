@@ -1,0 +1,98 @@
+...........................F.................................F.....      [100%]
+=================================== FAILURES ===================================
+_ test_slot_adapter_keeps_all_field_role_scope_and_evidence_guards[inventory_date] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7f664a3ca180>
+mutation = 'inventory_date'
+
+    @pytest.mark.parametrize('mutation', ['wrong_role', 'fake_column', 'bad_path', 'empty_supported',
+                                          'monthly_scope', 'monthly_channel', 'inventory_date', 'metadata_empty'])
+    def test_slot_adapter_keeps_all_field_role_scope_and_evidence_guards(catalog, mutation):
+        view = MONTH if mutation.startswith('monthly') else INV
+        data = slots(catalog, view)
+        if mutation == 'wrong_role': data['entries']['stock']['mappings'][0]['role'] = 'attribute'
+        if mutation == 'fake_column': data['entries']['stock']['mappings'][0]['column'] = 'invented'
+        if mutation == 'bad_path': data['entries']['stock']['contract_path'] = '/not-real'
+        if mutation == 'empty_supported': data['entries']['stock']['mappings'] = []
+        if mutation == 'monthly_scope': data['entries']['sales'].update(status='supported', missing_requirements=[])
+        if mutation == 'monthly_channel':
+            data['entries']['channel'].update(status='supported', mappings=[dict(column='sales_channel',role='filter',operator='=',value='online')],missing_requirements=[])
+        if mutation == 'inventory_date':
+            data['entries']['period'].update(status='supported', mappings=[dict(column='snapshot_date',role='filter',operator='>=',value='2026-09-01')],missing_requirements=[])
+        if mutation == 'metadata_empty':
+            rec = recall(catalog).model_dump()
+            rec['requirements'][0]['kind'] = 'metadata'
+            data['entries']['stock']['mappings'] = []
+            with pytest.raises(ValueError): materialize(catalog, data, rec=RecallResult.model_validate(rec))
+            return
+>       with pytest.raises(ValueError): materialize(catalog, data, view)
+E       Failed: DID NOT RAISE ValueError
+
+tests/unit/test_slotted_view_coverage.py:138: Failed
+_____ test_slots_first_error_saves_raw_stops_and_replays[nested_duplicate] _____
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-24/test_slots_first_error_saves_r2')
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7f664a414920>
+failure = 'nested_duplicate'
+
+    @pytest.mark.parametrize('failure', ['duplicate_slot', 'conflicting_slot', 'nested_duplicate', 'missing', 'extra', 'old_list', 'source_override'])
+    def test_slots_first_error_saves_raw_stops_and_replays(tmp_path, catalog, failure):
+        request, original, calls = fake(catalog)
+        invalid = None
+        def invoke(name, messages, schema):
+            nonlocal invalid
+            raw = original(name, messages, schema)
+            if name == 'map-01':
+                data = json.loads(raw.content)
+                if failure in ('duplicate_slot', 'conflicting_slot'):
+                    key, value = next(iter(data['entries'].items()))
+                    other = value if failure == 'duplicate_slot' else dict(status='unsupported',mappings=[],contract_path=None,missing_requirements=['衝突'])
+                    invalid = '{"entries":{' + json.dumps(key) + ':' + json.dumps(value) + ',' + json.dumps(key) + ':' + json.dumps(other) + '}}'
+                elif failure == 'nested_duplicate':
+                    invalid = raw.content.replace('"column": "stock_qty"', '"column": "fake", "column": "stock_qty"')
+                    assert invalid != raw.content
+                else:
+                    if failure == 'missing': data['entries'].pop('stock')
+                    if failure == 'extra': data['entries']['invented'] = data['entries']['stock']
+                    if failure == 'old_list': data['entries'] = list(data['entries'].values())
+                    if failure == 'source_override': data['population'] = '不含退貨'
+                    invalid = json.dumps(data)
+                return AIMessage(content=invalid)
+            return raw
+        case = runner().diagnostic_case(catalog, request)
+        meta = runner().record_run(tmp_path, catalog, case, invoke)
+        assert meta['stopped'] is not None
+        assert calls == ['recall', 'map-01']
+>       assert runner().read_json(tmp_path/'map-01-call.json')['response'] == invalid
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_managed_three_stage_runner.py:277: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluations/managed_three_stage_runner.py:43: in read_json
+    return json.loads(path.read_text(encoding='utf-8'))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/tmp/pytest-of-willy/pytest-24/test_slots_first_error_saves_r2/map-01-call.json')
+mode = 'r', buffering = -1, encoding = 'utf-8', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/tmp/pytest-of-willy/pytest-24/test_slots_first_error_saves_r2/map-01-call.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+=========================== short test summary info ============================
+FAILED tests/unit/test_slotted_view_coverage.py::test_slot_adapter_keeps_all_field_role_scope_and_evidence_guards[inventory_date]
+FAILED tests/unit/test_managed_three_stage_runner.py::test_slots_first_error_saves_raw_stops_and_replays[nested_duplicate]
+2 failed, 65 passed in 12.41s

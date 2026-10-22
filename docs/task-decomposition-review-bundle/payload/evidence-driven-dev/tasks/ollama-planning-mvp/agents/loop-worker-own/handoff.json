@@ -1,0 +1,114 @@
+{
+  "ticket": "43ff10eb2de14d6298fc1e80733386e9",
+  "result": "PASS",
+  "node": "own_responsibility_managed_contract",
+  "evidence": [
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-own/old-replays.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-own/v1-representation-controls.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-own/red.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-own/green-first.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-own/regression-final.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-own/fake-record-replay.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-own/fake-manifest.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-own/prepared-verification.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-own/frozen-replays-final.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-own/dry-run.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-own/hash-verification.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-own/candidate-fingerprint.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-own/sources-before.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-own/sources-after.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-own/schemas.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-own/replay_frozen.py",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-own/live-source-final.log"
+  ],
+  "summary": "第7輪純離線 managed-own-responsibility-1 PASS：必填strict own_gap保留自身partial可用key；程式僅依recall與同View statuses完整生成scope/grain缺口，所有kind明示grain refs統一硬依賴，普通月份條件不自動繼承輸出grain。原307相關加新77共384通過；完整fake9節點/2prepared、九種首錯及46raw同版/凍結版重播一致。原第4輪9raw及第6輪3raw保持原FAIL；1164歷史hash與兩src不變。本輪0模型POST/SQL/DB，僅完成離線子節點，未完成自然/父/root驗收。",
+  "changes": [
+    "新增evaluations/own_responsibility_managed_contract.py，重用v1 RecallWire/SelectionWire/parse_wire/materialize_recall/materialize_selection；新版四欄coverage只新增真正語意決定own_gap，原referenced/coverage/selection/finish守門完整保留。",
+    "新增evaluations/prompts/own_responsibility/{recall,coverage}.md；明定自身與前置責任、所有kind硬依賴與普通月份/通路predicate的界線；selection沿用v1完整required typed prompt。",
+    "managed_three_stage_runner.py僅新增與--evidence-bound互斥的--own-responsibility接線；共用既有pipeline/record/replay/fingerprint/ManagedInvoke/loopctl。",
+    "新增test_own_responsibility_managed_contract.py及test_own_responsibility_managed_runner.py；所有舊module/prompts/tests未改。"
+  ],
+  "verification": {
+    "command": ".venv/bin/python -m pytest tests/unit/test_managed_three_stage_runner.py tests/unit/test_indexed_requirement_recall.py tests/unit/test_referenced_view_coverage.py tests/unit/test_slotted_view_coverage.py tests/unit/test_three_stage_view_selection.py tests/unit/test_planning_mvp.py tests/unit/test_task_decomposition_contract.py tests/unit/test_task_decomposition_workflow.py tests/unit/test_decomposition_evaluation.py tests/unit/test_decomposition_decision_chain.py tests/unit/test_decomposition_decision_summary.py tests/unit/test_planning_reasoning_probe.py tests/unit/test_evidence_bound_managed_contract.py tests/unit/test_evidence_bound_managed_runner.py -q tests/unit/test_own_responsibility_managed_contract.py tests/unit/test_own_responsibility_managed_runner.py",
+    "result": "384 passed in 40.22s",
+    "existing_related_tests": 307,
+    "new_tests": 77,
+    "tdd": "red.log：77 failed，皆因新wire/CLI尚未存在；green-first.log：77 passed in 11.83s。實作前依契約更正新fixture的實際欄位revenue、數值filter與missing_data_policy；未改任何既有307測試或期望。",
+    "controls": "跨daily_sales店×商品/store_id與customer_value會員×商品/customer_id自身partial、Unicode/保留字/斜線ID及改名契約；嚴格bool/缺欄/額外gaps/重複key/NaN；status/own_gap/path矛盾拒絕；全部7種kind硬grain依賴；所有非supported狀態的scope/grain完整精確順序；普通整月predicate獨立及明示依賴對照；真正order grain、不同metric各連各自grain、independent scalar、固定月份縮約、原非法mapping guards與partial不可assignment。",
+    "original_v1": "原第4輪9raw凍結slots版原首錯 final grain differs from verified requirement keys；原第6輪3raw在現版及兩個v1快照同首錯 gap aspect contradicts evidence or dependencies: grain。14個獨立v1控制重現原unsupported可用mapping/self表示與兩種自身partial五方面皆拒、同樣舊referenced partial合法；控制不當自然修復。",
+    "fake": {
+      "runs": 10,
+      "complete_nodes": 9,
+      "prepared_requests": 2,
+      "raw_replays": 46,
+      "failures": [
+        "provider",
+        "parse",
+        "own_gap",
+        "dependency",
+        "mapping",
+        "typed",
+        "null",
+        "duplicate",
+        "old_wire"
+      ],
+      "same_version_replay": "PASS",
+      "frozen_replay": "PASS",
+      "prepared": "inventory店商品anchor/stock_qty sum/snapshot_date metadata；sales_detail同task整月/online/兩sum，店商品先彙總再left、preserve stock及不補零policy。"
+    },
+    "dry_run": "--own-responsibility不建立provider、不查網路；互斥契約拒絕。既有ManagedInvoke回歸確認單loopctl request、stream=false、num_predict=-1、無timeout/hidden retry。",
+    "encoding": "所有新增source/prompts/tests與runner均UTF-8無BOM；既有換行未轉換。"
+  },
+  "freeze": {
+    "before_files": 138,
+    "after_files": 155,
+    "test_sources": 19,
+    "historical_files": 1164,
+    "historical_changed": [],
+    "candidate_fingerprint_unchanged": true,
+    "schemas": "schemas.json含reused RecallWire/SelectionWire、新CoverageDecision與動態fixture coverage schema；每個run另保存實際request schema/refs/normalized。",
+    "snapshot": "sources-after含全部16個實跑測試及其repository imports、全部candidate imports/prompts/catalog/settings/schema與pyproject/uv.lock；來源同時保存canonical absolute fingerprint identity與可import的relative副本。",
+    "replay_command": ".venv/bin/python evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-own/replay_frozen.py --run evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-own/fake-runs/complete",
+    "replay_integrity": "replay_frozen.py先核對全部source hashes，僅還原搬移後絕對path的canonical identity；schema/原request/messages/raw/artifacts/error與artifact-set仍使用原比較，不修答案。",
+    "existing_src_hashes": {
+      "src/cpea/application/models/decomposition.py": {
+        "sha256": "1fe4eb06da88fc67c3e65250a93393ac944dbbba9f2c4ac3349134e044b10558",
+        "unchanged": true
+      },
+      "src/cpea/workflows/task_decomposition/prompt.py": {
+        "sha256": "4655d352feaaab93bdef78a2ced51da9ae93adf1f907aa99eb8c1a237876349b",
+        "unchanged": true
+      }
+    },
+    "protected_source_changes": [],
+    "post_regression_live_source_unchanged": true
+  },
+  "limits": [
+    "本輪純離線；fake與結構guard通過不代表Qwen自然語意成功。own_gap誤false、漏真正依賴、商品metric假independent、丟可用部分key及自由文字母體/能力斷言仍須下一自然逐項審查。",
+    "新wire是預先明定的責任編譯；不修改status/mappings/path、不從request猜業務答案、不補typed欄位。原第4/6輪FAIL、歷史分數與38Gate保持。",
+    "依授權只執行原307相關加新兩檔，未擴可能含provider/DB的無關全repository suite。凍結repository sources與lockfile，不vendor外部安裝套件；frozen replay使用同.venv。",
+    "worker未改Task/controller、不commit/push；Main負責finish及下一fresh worker。"
+  ],
+  "resources": {
+    "model_POSTs": 0,
+    "retry": 0,
+    "cloud": 0,
+    "SQL": 0,
+    "DB": 0,
+    "cumulative_before_finish": {
+      "rounds": 6,
+      "local_POSTs": 18,
+      "retry": 0
+    }
+  },
+  "next": {
+    "node": "natural_own_responsibility_three_stage",
+    "action": "Main finish本handoff後派fresh自然worker；本worker不續跑。",
+    "command": ".venv/bin/python -m evaluations.managed_three_stage_runner --own-responsibility --execute --ticket \"$EDD_WORKER_TICKET\"",
+    "candidate_version": "managed-own-responsibility-1",
+    "sample": "固定新版單一預定全新自然樣本：requirements-only recall、全部七View、完整typed selection；最多9正常POST。首provider/parse/contract錯停FAIL，語意錯同樣FAIL回fresh研究，不repair/原樣retry挑分。",
+    "semantic_gate": "逐項審所有View（含未選）、own_gap/完整依賴缺口/真正grain適用性/普通predicate獨立性/部分key/條件與母體，以及selection全部typed及剩餘自由文；自然ready與2prepared後仍須原父層驗收。",
+    "configuration": "qwen3.8:27b digest aaee06c39dcf2437cde036998d960e1fc1494b8191be7cc9657d01e509097813；think=true temperature=1 top_p=1 seed=42 num_ctx=32768 num_predict=-1；HTTP/外層timeout=None；只loopctl request。",
+    "parent_return": "自然子項PASS後依controller返回natural_evidence_bound_three_stage → natural_slots_three_stage → natural_qwen_three_stage → three_stage_integration → root各自驗收；每3輪fresh audit與最終fresh verifier ACCEPT不可省略。"
+  }
+}

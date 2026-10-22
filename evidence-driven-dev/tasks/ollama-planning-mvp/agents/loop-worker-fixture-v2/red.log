@@ -1,0 +1,68 @@
+FFF.                                                                     [100%]
+=================================== FAILURES ===================================
+__ test_fixture_keeps_useful_member_amount_and_separate_self_scope_grain_gaps __
+
+    def test_fixture_keeps_useful_member_amount_and_separate_self_scope_grain_gaps():
+        mod = api(); package = mod.load_package()
+        context = mod.prepare(package, 'SEL-ISO-v1-01')
+        coverage = next(c for c in context['coverages'] if c.view == CUSTOMER)
+        row = next(e for e in coverage.entries if e.requirement_id == 'MET-003')
+>       assert row.status == 'partial', 'useful member amount was dropped'
+E       AssertionError: useful member amount was dropped
+E       assert 'unsupported' == 'partial'
+E         
+E         - partial
+E         + unsupported
+
+tests/diagnostics/test_managed_node_diagnostics_v2.py:44: AssertionError
+_ test_original_omission_and_partial_without_self_are_structural_accept_semantic_fail[unsupported] _
+
+mutation = 'unsupported'
+
+    @pytest.mark.parametrize('mutation', ['unsupported', 'uncertain', 'own_false'])
+    def test_original_omission_and_partial_without_self_are_structural_accept_semantic_fail(mutation):
+        mod = api(); package = mod.load_package(); context = customer_context(mod, package)
+        value = deepcopy(context['package']['oracle']['positive_outputs']['customer-eight-offline'])
+        value['entries']['MET-003'] = deepcopy(ROW)
+        if mutation in ['unsupported', 'uncertain']:
+            value['entries']['MET-003'].update(status=mutation, mappings=[], own_gap=True, contract_path=None)
+        else:
+            value['entries']['MET-003']['own_gap'] = False
+        result = mod.evaluate(context, json.dumps(value, ensure_ascii=False))
+        assert result['normalized'], 'parser acceptance must remain visible'
+>       assert result['semantic']['machine_verdict'] == 'FAIL', 'fixture Oracle failed to reject dropped capability/self'
+E       AssertionError: fixture Oracle failed to reject dropped capability/self
+E       assert 'PASS' == 'FAIL'
+E         
+E         - FAIL
+E         + PASS
+
+tests/diagnostics/test_managed_node_diagnostics_v2.py:66: AssertionError
+_ test_original_omission_and_partial_without_self_are_structural_accept_semantic_fail[uncertain] _
+
+mutation = 'uncertain'
+
+    @pytest.mark.parametrize('mutation', ['unsupported', 'uncertain', 'own_false'])
+    def test_original_omission_and_partial_without_self_are_structural_accept_semantic_fail(mutation):
+        mod = api(); package = mod.load_package(); context = customer_context(mod, package)
+        value = deepcopy(context['package']['oracle']['positive_outputs']['customer-eight-offline'])
+        value['entries']['MET-003'] = deepcopy(ROW)
+        if mutation in ['unsupported', 'uncertain']:
+            value['entries']['MET-003'].update(status=mutation, mappings=[], own_gap=True, contract_path=None)
+        else:
+            value['entries']['MET-003']['own_gap'] = False
+        result = mod.evaluate(context, json.dumps(value, ensure_ascii=False))
+        assert result['normalized'], 'parser acceptance must remain visible'
+>       assert result['semantic']['machine_verdict'] == 'FAIL', 'fixture Oracle failed to reject dropped capability/self'
+E       AssertionError: fixture Oracle failed to reject dropped capability/self
+E       assert 'PASS' == 'FAIL'
+E         
+E         - FAIL
+E         + PASS
+
+tests/diagnostics/test_managed_node_diagnostics_v2.py:66: AssertionError
+=========================== short test summary info ============================
+FAILED tests/diagnostics/test_managed_node_diagnostics_v2.py::test_fixture_keeps_useful_member_amount_and_separate_self_scope_grain_gaps
+FAILED tests/diagnostics/test_managed_node_diagnostics_v2.py::test_original_omission_and_partial_without_self_are_structural_accept_semantic_fail[unsupported]
+FAILED tests/diagnostics/test_managed_node_diagnostics_v2.py::test_original_omission_and_partial_without_self_are_structural_accept_semantic_fail[uncertain]
+3 failed, 1 passed, 52 deselected in 1.89s

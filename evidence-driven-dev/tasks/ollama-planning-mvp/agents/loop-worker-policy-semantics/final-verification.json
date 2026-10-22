@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "ticket": "ed5abbeeea324bea8ac64d526e38fb55",
+  "node": "kind_policy_shape_semantics",
+  "result": "PASS",
+  "verdict": "ACCEPT",
+  "review_sha256": "2d47e702a0a6bb0fb9904ba972fcd6dccaf91645319729011728d3a900a242a4",
+  "manifest_sha256": "2ec21c08c50f1772538c61fbbd4d7c5ea00c3fb43527395ffe5fa10e61082992",
+  "bindings_sha256": "b0768af6a55350b6b5c143dddadee6022acc4209ddcc8aa1df3f81adc08041e5",
+  "focused": {
+    "passed": 31,
+    "deselected": 37
+  },
+  "independent_controls": 15,
+  "independent_live_replays": 5,
+  "independent_frozen_replays": 3,
+  "final_hash_checks": {
+    "protected": 5203,
+    "author_index": 668,
+    "review_evidence": "all exact",
+    "new_and_old_bindings": "exact"
+  },
+  "real_preflight_execute": "open reviewer rejected before settings/network",
+  "controller_check_evidence": "PASS; file provenance only",
+  "all_worker_processes_ended": true,
+  "evidence": {
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-semantics/controller-check-evidence.log": "6a7dee2df6decc78d70dd3a9fcef13555f24ec05ef34f4d611783f4084b4e866",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-semantics/empty-frozen.log": "d38dfe4fabef567497b3bec841bb073f01edd390a07c41b4a52e8c50e12d5b40",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-semantics/focused-checks.log": "d79a494d6fa326fe056e24a9e66b18d863ed4234538b1df56012a12e1f2220f6",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-semantics/independent-frozen-replays.json": "4526d7f6dece9d31633d3fcf009f431c2f7574c9897d5b4b7bc1f818e9def3ec",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-semantics/independent-replays.json": "00cef21a4cb8e0916cfeb0f4275ae94ecacb019916d105f99cd691769ad22ffb",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-semantics/null-frozen.log": "6d55c02b59aad38961fd07f458239dbb9f56828dc1396a892ff35a0fc7f0d7fd",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-semantics/offline-attempt.log": "1204a734deed0e351ea129c1a6548b3493f6219abeb0d982662cbb49aa7cd411",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-semantics/offline-checks.json": "7605db3ef0567be2b1b378a10b3debc7dbfe9484f0cde66ad0cc146ad8d3ca84",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-semantics/original15-frozen.log": "1934ed81ff102804c088d18b5f7630b881d7dea102e8d39fc121fcccd7391f64",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-semantics/real-open-execute.log": "42253b3b0b922f74c311fdac958709c57a313f2ca45ab92352675a12971b6760",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-semantics/real-provenance-gates.json": "9ccdd42f433d402920cacdb1b0aa4a01c47f0b6d9d90b699d1425f7ebf16f8d5",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-semantics/review.json": "2d47e702a0a6bb0fb9904ba972fcd6dccaf91645319729011728d3a900a242a4"
+  },
+  "state_at_final": {
+    "closed_rounds": 16,
+    "reviewer_closed": false,
+    "root": "pending",
+    "used": {
+      "agent_dispatches": 31,
+      "cloud_calls": 0,
+      "local_calls": 22,
+      "model_retries": 0
+    }
+  },
+  "pending": [
+    "Main核真FINAL hash並finish本review PASS",
+    "一次固定新selection及parent整合",
+    "三coverage自然樣本及完整自然9POST",
+    "所有祖先整合及fresh final verifier"
+  ],
+  "POST": 0,
+  "SQL_DB": 0,
+  "commit_push": 0
+}

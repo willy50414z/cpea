@@ -1,0 +1,8 @@
+{
+  "request_id": "b2bca399f95d43b5a93e901ba5e237ce",
+  "result": "ok",
+  "http_status": 200,
+  "response_path": "/home/willy/code/cpea_terms/evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/b2bca399f95d43b5a93e901ba5e237ce.response.txt",
+  "calls_charged": 1,
+  "automatic_retries": 0
+}

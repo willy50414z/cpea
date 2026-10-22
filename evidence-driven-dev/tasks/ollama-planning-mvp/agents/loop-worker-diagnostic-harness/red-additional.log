@@ -1,0 +1,47 @@
+F...........                                                             [100%]
+=================================== FAILURES ===================================
+_ test_execute_preflight_accepts_only_different_bound_completed_semantic_worker _
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-44/test_execute_preflight_accepts0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x777de845b050>
+
+    def test_execute_preflight_accepts_only_different_bound_completed_semantic_worker(tmp_path, monkeypatch):
+        mod = api(); package = mod.load_package()
+        author = package['manifest']['author_ticket']; reviewer = 'fresh-semantic-review'
+        review = dict(schema_version=1, verdict='ACCEPT', reviewer_role='fresh_fixture_semantics',
+            ticket=reviewer, author_ticket=author, manifest_sha256=mod.digest(package['manifest_path']),
+            bindings=deepcopy(package['manifest']['bindings']))
+        task = dict(plan=dict(edd_loop=dict(tickets={author:dict(platform_id='/author'),
+            reviewer:dict(role='worker', node='kind_diagnostic_fixture_semantics', platform_id='/reviewer', round=11, closed=True)},
+            rounds=[dict(round=11,node='kind_diagnostic_fixture_semantics',producer='/reviewer',result='PASS')])))
+        path = tmp_path / 'task.md'
+        def save(): path.write_text('---\n'+json.dumps(task, ensure_ascii=False)+'\n---\n', encoding='utf-8')
+        save(); monkeypatch.setattr(mod, 'TASK', tmp_path)
+        contexts = [mod.prepare(package, 'SEL-ISO-v1-01')]
+>       assert mod.preflight(package, contexts, review)['result'] == 'PASS'
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_managed_node_diagnostics.py:165: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+package = {'manifest': {'schema_version': 1, 'version': 'kind-isolation-v1', 'runner_version': 'managed-node-diagnostics-1', 'ca...on'}, 'scope-channel': {'status': 'unsupported', 'own_gap': True, 'mappings': [], 'contract_path': None}, ...}}}, ...}}
+contexts = [{'package': {'manifest': {'schema_version': 1, 'version': 'kind-isolation-v1', 'runner_version': 'managed-node-diagno...促銷後補貨評估；保留所有庫存商品。', 'catalog': <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x777dbca82420>, ...}]
+review = {'schema_version': 1, 'verdict': 'ACCEPT', 'reviewer_role': 'fresh_fixture_semantics', 'ticket': 'fresh-semantic-review', ...}
+
+    def preflight(package, contexts, review):
+        if (not isinstance(review, dict) or review.get('schema_version') != 1 or review.get('verdict') != 'ACCEPT'
+                or review.get('reviewer_role') != 'fresh_fixture_semantics' or not review.get('ticket')
+                or review['ticket'] == package['manifest']['author_ticket']
+                or review.get('author_ticket') != package['manifest']['author_ticket']):
+            raise ValueError('execute requires fresh ACCEPT fixture review')
+        if (read_json(package['manifest_path']) != package['manifest']
+                or review.get('manifest_sha256') != digest(package['manifest_path'])
+                or review.get('bindings') != package['manifest']['bindings']
+                or bindings(package) != package['manifest']['bindings']):
+>           raise ValueError('review/manifest/fixture/source/model/input hash drift')
+E           ValueError: review/manifest/fixture/source/model/input hash drift
+
+evaluations/managed_node_diagnostics.py:167: ValueError
+=========================== short test summary info ============================
+FAILED tests/unit/test_managed_node_diagnostics.py::test_execute_preflight_accepts_only_different_bound_completed_semantic_worker
+1 failed, 11 passed, 33 deselected in 3.39s

@@ -1,0 +1,5 @@
+{
+  "error_type": "ValueError",
+  "error": "draft validation: integration key absent from output grain",
+  "raw_saved": true
+}

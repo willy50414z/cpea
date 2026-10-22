@@ -1,0 +1,1 @@
+{"result": "PASS", "replay_verification": "PASS", "decision": {"status": "PASS", "legacy_findings": [], "accepted_scope_AND_equivalences": [], "other_findings": [], "independent_semantic_approval": "PENDING", "free_text_review": "PENDING"}, "stopped": null, "legacy_stopped": null, "raw_replays": 1, "provider_calls": 0}

@@ -1,0 +1,44 @@
+{
+  "stock": {
+    "grain_binding": "linked",
+    "grain_requirement_ids": [
+      "grain"
+    ],
+    "scope_ids": []
+  },
+  "sales": {
+    "grain_binding": "linked",
+    "grain_requirement_ids": [
+      "grain"
+    ],
+    "scope_ids": [
+      "channel",
+      "period"
+    ]
+  },
+  "channel": {
+    "grain_binding": null,
+    "grain_requirement_ids": [],
+    "scope_ids": []
+  },
+  "period": {
+    "grain_binding": null,
+    "grain_requirement_ids": [],
+    "scope_ids": []
+  },
+  "population": {
+    "grain_binding": null,
+    "grain_requirement_ids": [],
+    "scope_ids": []
+  },
+  "grain": {
+    "grain_binding": null,
+    "grain_requirement_ids": [],
+    "scope_ids": []
+  },
+  "R_PURPOSE": {
+    "grain_binding": null,
+    "grain_requirement_ids": [],
+    "scope_ids": []
+  }
+}

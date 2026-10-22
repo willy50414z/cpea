@@ -1,0 +1,5 @@
+{
+  "error_type": "ValueError",
+  "error": "empty collection policy lacks typed preserved nested child shape",
+  "raw_saved": true
+}

@@ -1,0 +1,39 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_____ test_managed_slots_complete_requests_bind_source_and_dynamic_schema ______
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x79f408799460>
+
+    def test_managed_slots_complete_requests_bind_source_and_dynamic_schema(catalog):
+        request, invoke, calls = fake(catalog)
+        saved = {}
+>       response = runner().run_pipeline(request, catalog, invoke, saved.__setitem__)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_managed_three_stage_runner.py:287: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluations/managed_three_stage_runner.py:121: in run_pipeline
+    coverages.append(node(f'map-{index:02}', reference_messages(ReferencedViewCoverage, request,
+evaluations/managed_three_stage_runner.py:87: in node
+    raw = invoke(name, messages, schema)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'map-01'
+messages = [SystemMessage(content='# 高優先規則\n\n只根據當次單一View契約逐項映射，保留合法部分支持。不得捏造欄位、能力、通路、日期或來源母體。度量與scope條件必須同一來源支持。只輸出response_sche... "contract_path"], "title": "ReferencedViewCoverage", "type": "object"}}', additional_kwargs={}, response_metadata={})]
+schema = <class 'evaluations.referenced_view_coverage.ReferencedViewCoverage'>
+
+    def invoke(name, messages, schema):
+        calls.append(name)
+        payload = json.loads(messages[1].content)
+        assert payload['request'] == request
+        assert payload['response_schema'] == schema.model_json_schema()
+        data = next(responses).model_dump()
+        if name.startswith('map-'):
+>           assert schema is not ReferencedViewCoverage
+E           AssertionError: assert <class 'evaluations.referenced_view_coverage.ReferencedViewCoverage'> is not ReferencedViewCoverage
+
+tests/unit/test_managed_three_stage_runner.py:63: AssertionError
+=========================== short test summary info ============================
+FAILED tests/unit/test_managed_three_stage_runner.py::test_managed_slots_complete_requests_bind_source_and_dynamic_schema
+1 failed in 1.21s

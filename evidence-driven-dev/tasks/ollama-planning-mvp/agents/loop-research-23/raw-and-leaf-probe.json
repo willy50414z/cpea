@@ -1,0 +1,371 @@
+{
+  "mode": "0POST只讀原輸出與真View；沒有編譯修復或改判歷史FAIL",
+  "cases": [
+    {
+      "id": "COV-ISO-v1-01",
+      "result": "FAIL",
+      "raw_entries": {
+        "FILT-001": {
+          "contract_path": "/columns/sales_date",
+          "mappings": [
+            {
+              "column": "sales_date",
+              "operator": ">=",
+              "value": "2026-09-01"
+            },
+            {
+              "column": "sales_date",
+              "operator": "<=",
+              "value": "2026-09-30"
+            }
+          ],
+          "own_gap": false,
+          "status": "supported"
+        },
+        "FILT-002": {
+          "contract_path": null,
+          "mappings": [],
+          "own_gap": true,
+          "status": "unsupported"
+        },
+        "GRN-001": {
+          "mappings": [
+            {
+              "column": "store_id"
+            }
+          ],
+          "own_gap": true,
+          "status": "partial"
+        },
+        "MET-001": {
+          "contract_path": null,
+          "mappings": [],
+          "own_gap": true,
+          "status": "unsupported"
+        },
+        "MET-002": {
+          "contract_path": null,
+          "mappings": [],
+          "own_gap": true,
+          "status": "unsupported"
+        },
+        "MET-003": {
+          "contract_path": "/columns/revenue",
+          "mappings": [
+            {
+              "aggregation": "sum",
+              "column": "revenue",
+              "conditions": []
+            }
+          ],
+          "own_gap": false,
+          "status": "partial"
+        },
+        "META-001": {
+          "contract_path": null,
+          "mappings": [],
+          "own_gap": true,
+          "status": "unsupported"
+        },
+        "POP-001": {
+          "contract_path": null,
+          "mappings": [],
+          "own_gap": true,
+          "status": "unsupported"
+        }
+      },
+      "thinking_sha256": "e58deefa8076992f76fe4a05f8342fcf34905a5d92e1132e205ec4ab0fc78ba5",
+      "independent_research_ruling": "兩object pointers是格式錯；store partial、sum revenue own=false、日期雙邊界與其餘六列均有實質改善，未完成materialize不等於全語意未知。"
+    },
+    {
+      "id": "COV-ISO-v1-02",
+      "result": "PASS",
+      "raw_entries": {
+        "unrelated/識別~鍵": {
+          "mappings": [],
+          "own_gap": true,
+          "status": "unsupported"
+        }
+      },
+      "thinking_sha256": "671de44837f42621489db13e3926d4b6a7fdb230d1ea50bc99efadd3eff9a804",
+      "independent_research_ruling": "會員identifier無門市或商品對應價值；unsupported/own=true/[]正確。"
+    },
+    {
+      "id": "COV-ISO-v1-03",
+      "result": "FAIL",
+      "raw_entries": {
+        "amount/net": {
+          "contract_path": "/columns/amount_value",
+          "mappings": [
+            {
+              "aggregation": "sum",
+              "column": "amount_value",
+              "conditions": []
+            }
+          ],
+          "own_gap": false,
+          "status": "partial"
+        },
+        "m_discount": {
+          "contract_path": null,
+          "mappings": [],
+          "own_gap": true,
+          "status": "unsupported"
+        },
+        "model_dump": {
+          "contract_path": null,
+          "mappings": [],
+          "own_gap": true,
+          "status": "unsupported"
+        },
+        "scope-channel": {
+          "contract_path": null,
+          "mappings": [],
+          "own_gap": true,
+          "status": "unsupported"
+        },
+        "slot_0/🧾": {
+          "mappings": [
+            {
+              "column": "loc_key"
+            }
+          ],
+          "own_gap": true,
+          "status": "partial"
+        },
+        "保留/全部": {
+          "contract_path": null,
+          "mappings": [],
+          "own_gap": true,
+          "status": "unsupported"
+        },
+        "元資料": {
+          "contract_path": null,
+          "mappings": [],
+          "own_gap": true,
+          "status": "unsupported"
+        },
+        "月~邊界": {
+          "contract_path": "/columns/day_key",
+          "mappings": [
+            {
+              "column": "day_key",
+              "operator": ">=",
+              "value": "2032-02-01"
+            },
+            {
+              "column": "day_key",
+              "operator": "<",
+              "value": "2032-03-01"
+            }
+          ],
+          "own_gap": false,
+          "status": "supported"
+        }
+      },
+      "thinking_sha256": "e315f4da05485683196685ea13d7809c9c3913f5c758b30973901dad6a70d40e",
+      "independent_research_ruling": "改名與閏年條件正確，兩object pointers仍錯；語意改善未證跨會員/母體泛化。"
+    },
+    {
+      "id": "COV-CAP-v1-04",
+      "result": "FAIL",
+      "raw_entries": {
+        "FILT-001": {
+          "contract_path": null,
+          "mappings": [],
+          "own_gap": true,
+          "status": "unsupported"
+        },
+        "FILT-002": {
+          "contract_path": null,
+          "mappings": [],
+          "own_gap": true,
+          "status": "unsupported"
+        },
+        "GRN-001": {
+          "mappings": [],
+          "own_gap": true,
+          "status": "unsupported"
+        },
+        "MET-001": {
+          "contract_path": null,
+          "mappings": [],
+          "own_gap": true,
+          "status": "unsupported"
+        },
+        "MET-002": {
+          "contract_path": null,
+          "mappings": [],
+          "own_gap": true,
+          "status": "unsupported"
+        },
+        "MET-003": {
+          "contract_path": null,
+          "mappings": [],
+          "own_gap": true,
+          "status": "unsupported"
+        },
+        "META-001": {
+          "contract_path": null,
+          "mappings": [],
+          "own_gap": true,
+          "status": "unsupported"
+        },
+        "POP-001": {
+          "contract_path": null,
+          "mappings": [],
+          "own_gap": true,
+          "status": "unsupported"
+        }
+      },
+      "thinking_sha256": "898d62d4478387ea738c66c0b4767467b78e8b45a83c3625de5e51e88c2e5586",
+      "independent_research_ruling": "thinking認出累計折扣後金額，卻用缺月份/通路/店商品依賴抹掉有用sum；own=true本身正確但不挽救mapping遺漏。"
+    },
+    {
+      "id": "COV-CAP-v1-05",
+      "result": "FAIL",
+      "raw_entries": {
+        "FILT-001": {
+          "contract_path": null,
+          "mappings": [],
+          "own_gap": true,
+          "status": "unsupported"
+        },
+        "FILT-002": {
+          "contract_path": null,
+          "mappings": [],
+          "own_gap": true,
+          "status": "unsupported"
+        },
+        "GRN-001": {
+          "mappings": [
+            {
+              "column": "store_id"
+            },
+            {
+              "column": "product_id"
+            }
+          ],
+          "own_gap": false,
+          "status": "supported"
+        },
+        "MET-001": {
+          "contract_path": "/columns/stock_qty/description",
+          "mappings": [
+            {
+              "aggregation": "sum",
+              "column": "stock_qty",
+              "conditions": []
+            }
+          ],
+          "own_gap": false,
+          "status": "supported"
+        },
+        "MET-002": {
+          "contract_path": null,
+          "mappings": [],
+          "own_gap": true,
+          "status": "unsupported"
+        },
+        "MET-003": {
+          "contract_path": null,
+          "mappings": [],
+          "own_gap": true,
+          "status": "unsupported"
+        },
+        "META-001": {
+          "contract_path": "/columns/snapshot_date/description",
+          "mappings": [
+            {
+              "column": "snapshot_date"
+            }
+          ],
+          "own_gap": false,
+          "status": "supported"
+        },
+        "POP-001": {
+          "contract_path": "/columns/product_id/description",
+          "mappings": [
+            {
+              "column": "product_id"
+            }
+          ],
+          "own_gap": false,
+          "status": "supported"
+        }
+      },
+      "thinking_sha256": "83717fd237d1a193d7e466c4b71edbfcf4275864d08f18ae99856e949fd4595b",
+      "independent_research_ruling": "GRN完整雙鍵及日期metadata正確；POP只選商品key在店商品母體中不足。欄位description只識別商品，列舉status值域不證母體完整。"
+    }
+  ],
+  "leaf_membership_probe": [
+    {
+      "id": "COV-ISO-v1-01",
+      "nonempty_text_leaf_count": 35,
+      "invalid_present_path": [
+        {
+          "requirement_id": "FILT-001",
+          "path": "/columns/sales_date"
+        },
+        {
+          "requirement_id": "MET-003",
+          "path": "/columns/revenue"
+        }
+      ],
+      "valid_present_paths": [],
+      "result_mutated": false
+    },
+    {
+      "id": "COV-ISO-v1-02",
+      "nonempty_text_leaf_count": 38,
+      "invalid_present_path": [],
+      "valid_present_paths": [],
+      "result_mutated": false
+    },
+    {
+      "id": "COV-ISO-v1-03",
+      "nonempty_text_leaf_count": 35,
+      "invalid_present_path": [
+        {
+          "requirement_id": "amount/net",
+          "path": "/columns/amount_value"
+        },
+        {
+          "requirement_id": "月~邊界",
+          "path": "/columns/day_key"
+        }
+      ],
+      "valid_present_paths": [],
+      "result_mutated": false
+    },
+    {
+      "id": "COV-CAP-v1-04",
+      "nonempty_text_leaf_count": 38,
+      "invalid_present_path": [],
+      "valid_present_paths": [],
+      "result_mutated": false
+    },
+    {
+      "id": "COV-CAP-v1-05",
+      "nonempty_text_leaf_count": 53,
+      "invalid_present_path": [],
+      "valid_present_paths": [
+        {
+          "requirement_id": "MET-001",
+          "path": "/columns/stock_qty/description"
+        },
+        {
+          "requirement_id": "META-001",
+          "path": "/columns/snapshot_date/description"
+        },
+        {
+          "requirement_id": "POP-001",
+          "path": "/columns/product_id/description"
+        }
+      ],
+      "result_mutated": false
+    }
+  ],
+  "finding": "恰4個原object path可由文字leaf枚舉排除；04的null/空mapping與05的不相關但有效文字path均不會由此自行修正。",
+  "limitations": "非重新執行舊replay；完整同版/凍結重播引用第23輪已封存證據。"
+}

@@ -1,0 +1,16 @@
+{
+  "requirements": [
+    {
+      "requirement_id": "unrelated/識別~鍵",
+      "start": 2,
+      "end": 7,
+      "kind": "grain",
+      "business_object": "各店各商品",
+      "scope_ids": [],
+      "grain": "門市×商品",
+      "population": "未指定",
+      "grain_binding": null,
+      "grain_requirement_ids": []
+    }
+  ]
+}

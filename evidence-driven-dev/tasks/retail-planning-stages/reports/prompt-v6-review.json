@@ -1,0 +1,1128 @@
+{
+  "run": "evidence-driven-dev/tasks/retail-planning-stages/.local/prompt-v6-20261020T113508Z",
+  "partial": false,
+  "arms": {
+    "v3_raw": {
+      "completed": 30,
+      "status_counts": {
+        "ready/None": 18,
+        "error/invalid_plan": 11,
+        "needs_clarification/None": 1
+      },
+      "error_occurrences": {
+        "metadata collections must be unique and separate from output fields": 2,
+        "used column absent from required_columns": 1,
+        "final output grain must come from the anchor grain": 4,
+        "aggregate grain differs from group_by": 1,
+        "finer output grain requires an explicit preparation": 4,
+        "invalid preparation source or keys": 1,
+        "invalid required columns": 1
+      },
+      "top_level_unbound_inputs_cases": [],
+      "extra_field_locations": [],
+      "required_columns_without_explicit_role": [
+        {
+          "case_id": "cross-view-05",
+          "task_id": "inventory_by_store_category",
+          "columns": [
+            "product_id"
+          ]
+        },
+        {
+          "case_id": "cross-view-05",
+          "task_id": "sep2026_net_sales_by_store_category",
+          "columns": [
+            "product_id"
+          ]
+        },
+        {
+          "case_id": "cross-view-06",
+          "task_id": "task_inventory_region",
+          "columns": [
+            "product_id",
+            "store_id"
+          ]
+        },
+        {
+          "case_id": "cross-view-06",
+          "task_id": "task_profit_region",
+          "columns": [
+            "product_id",
+            "store_id"
+          ]
+        },
+        {
+          "case_id": "cross-view-10",
+          "task_id": "vip_units_sold_sep2026_by_store_product",
+          "columns": [
+            "customer_id"
+          ]
+        },
+        {
+          "case_id": "cross-view-13",
+          "task_id": "store_kpi_sep2026",
+          "columns": [
+            "target_achievement_pct"
+          ]
+        },
+        {
+          "case_id": "cross-view-14",
+          "task_id": "task_inventory_oos",
+          "columns": [
+            "stock_qty"
+          ]
+        },
+        {
+          "case_id": "cross-view-15",
+          "task_id": "store_sep2026_kpi",
+          "columns": [
+            "avg_order_value",
+            "gross_margin_pct"
+          ]
+        }
+      ],
+      "aggregate_scalar_without_key_proof": [
+        {
+          "case_id": "cross-view-30",
+          "task_id": "task_inventory_store_value",
+          "columns": [
+            "store_name"
+          ]
+        }
+      ]
+    },
+    "v6_raw": {
+      "completed": 30,
+      "status_counts": {
+        "ready/None": 16,
+        "error/invalid_plan": 13,
+        "needs_clarification/None": 1
+      },
+      "error_occurrences": {
+        "metadata collections must be unique and separate from output fields": 4,
+        "invalid required columns": 2,
+        "final output grain must come from the anchor grain": 6,
+        "finer output grain requires an explicit preparation": 2,
+        "aggregate grain differs from group_by": 3,
+        "ready cannot have unresolved requirements": 1,
+        "integration requires a valid anchor": 1
+      },
+      "top_level_unbound_inputs_cases": [],
+      "extra_field_locations": [],
+      "required_columns_without_explicit_role": [
+        {
+          "case_id": "cross-view-05",
+          "task_id": "inventory_cost_by_store_category",
+          "columns": [
+            "product_id"
+          ]
+        },
+        {
+          "case_id": "cross-view-05",
+          "task_id": "category_net_sales_2026_09",
+          "columns": [
+            "product_id"
+          ]
+        },
+        {
+          "case_id": "cross-view-06",
+          "task_id": "task_inventory_cost",
+          "columns": [
+            "product_id",
+            "store_id"
+          ]
+        },
+        {
+          "case_id": "cross-view-08",
+          "task_id": "sept_instore_units",
+          "columns": [
+            "sales_channel"
+          ]
+        },
+        {
+          "case_id": "cross-view-14",
+          "task_id": "t1",
+          "columns": [
+            "stock_qty"
+          ]
+        },
+        {
+          "case_id": "cross-view-14",
+          "task_id": "t2",
+          "columns": [
+            "revenue"
+          ]
+        },
+        {
+          "case_id": "cross-view-18",
+          "task_id": "member_sep2026_instore_orders",
+          "columns": [
+            "order_date"
+          ]
+        },
+        {
+          "case_id": "cross-view-25",
+          "task_id": "store_category_sales_2026_09",
+          "columns": [
+            "product_id"
+          ]
+        },
+        {
+          "case_id": "cross-view-27",
+          "task_id": "vip_online_order_amount",
+          "columns": [
+            "order_id"
+          ]
+        }
+      ],
+      "aggregate_scalar_without_key_proof": [
+        {
+          "case_id": "cross-view-14",
+          "task_id": "t1",
+          "columns": [
+            "snapshot_date"
+          ]
+        }
+      ]
+    }
+  },
+  "diagnostics": [
+    {
+      "case_id": "cross-view-02",
+      "arm": "v3_raw",
+      "status": "error",
+      "code": "invalid_plan",
+      "errors": [
+        "inventory_by_store_product: metadata collections must be unique and separate from output fields"
+      ],
+      "clarifications": [],
+      "task_scores": [
+        {
+          "view": true,
+          "columns": true,
+          "column_recall": 1.0,
+          "column_precision": 1.0,
+          "filters": true,
+          "metrics": true,
+          "conditional_metrics": true,
+          "metadata": true,
+          "grain": true
+        },
+        {
+          "view": true,
+          "columns": true,
+          "column_recall": 1.0,
+          "column_precision": 1.0,
+          "filters": true,
+          "metrics": true,
+          "conditional_metrics": true,
+          "metadata": true,
+          "grain": true
+        }
+      ]
+    },
+    {
+      "case_id": "cross-view-04",
+      "arm": "v3_raw",
+      "status": "ready",
+      "code": null,
+      "errors": [],
+      "clarifications": [],
+      "task_scores": []
+    },
+    {
+      "case_id": "cross-view-09",
+      "arm": "v3_raw",
+      "status": "error",
+      "code": "invalid_plan",
+      "errors": [
+        "daily_sold_units_by_store_product: metadata collections must be unique and separate from output fields"
+      ],
+      "clarifications": [],
+      "task_scores": [
+        {
+          "view": true,
+          "columns": true,
+          "column_recall": 1.0,
+          "column_precision": 0.8,
+          "filters": true,
+          "metrics": true,
+          "conditional_metrics": true,
+          "metadata": true,
+          "grain": true
+        },
+        {
+          "view": true,
+          "columns": true,
+          "column_recall": 1.0,
+          "column_precision": 1.0,
+          "filters": true,
+          "metrics": false,
+          "conditional_metrics": true,
+          "metadata": true,
+          "grain": true
+        }
+      ]
+    },
+    {
+      "case_id": "cross-view-11",
+      "arm": "v3_raw",
+      "status": "error",
+      "code": "invalid_plan",
+      "errors": [
+        "online_discount_net_sales_by_store_product: used column absent from required_columns"
+      ],
+      "clarifications": [],
+      "task_scores": [
+        {
+          "view": true,
+          "columns": true,
+          "column_recall": 1.0,
+          "column_precision": 1.0,
+          "filters": true,
+          "metrics": true,
+          "conditional_metrics": true,
+          "metadata": true,
+          "grain": true
+        },
+        {
+          "view": false,
+          "columns": false,
+          "column_recall": 0.6666666666666666,
+          "column_precision": 0.8,
+          "filters": false,
+          "metrics": true,
+          "conditional_metrics": true,
+          "metadata": true,
+          "grain": true
+        }
+      ]
+    },
+    {
+      "case_id": "cross-view-14",
+      "arm": "v3_raw",
+      "status": "ready",
+      "code": null,
+      "errors": [],
+      "clarifications": [],
+      "task_scores": [
+        {
+          "view": true,
+          "columns": true,
+          "column_recall": 1.0,
+          "column_precision": 0.8,
+          "filters": true,
+          "metrics": true,
+          "conditional_metrics": false,
+          "metadata": true,
+          "grain": true
+        },
+        {
+          "view": true,
+          "columns": true,
+          "column_recall": 1.0,
+          "column_precision": 1.0,
+          "filters": true,
+          "metrics": true,
+          "conditional_metrics": true,
+          "metadata": true,
+          "grain": true
+        }
+      ]
+    },
+    {
+      "case_id": "cross-view-16",
+      "arm": "v3_raw",
+      "status": "error",
+      "code": "invalid_plan",
+      "errors": [
+        "final output grain must come from the anchor grain"
+      ],
+      "clarifications": [],
+      "task_scores": [
+        {
+          "view": true,
+          "columns": true,
+          "column_recall": 1.0,
+          "column_precision": 1.0,
+          "filters": true,
+          "metrics": true,
+          "conditional_metrics": true,
+          "metadata": true,
+          "grain": true
+        },
+        {
+          "view": true,
+          "columns": true,
+          "column_recall": 1.0,
+          "column_precision": 0.8,
+          "filters": true,
+          "metrics": true,
+          "conditional_metrics": true,
+          "metadata": true,
+          "grain": true
+        }
+      ]
+    },
+    {
+      "case_id": "cross-view-17",
+      "arm": "v3_raw",
+      "status": "error",
+      "code": "invalid_plan",
+      "errors": [
+        "cohort_members_2026_08: aggregate grain differs from group_by"
+      ],
+      "clarifications": [],
+      "task_scores": [
+        {
+          "view": true,
+          "columns": true,
+          "column_recall": 1.0,
+          "column_precision": 1.0,
+          "filters": true,
+          "metrics": true,
+          "conditional_metrics": true,
+          "metadata": true,
+          "grain": true
+        },
+        {
+          "view": true,
+          "columns": true,
+          "column_recall": 1.0,
+          "column_precision": 0.8,
+          "filters": true,
+          "metrics": true,
+          "conditional_metrics": true,
+          "metadata": true,
+          "grain": true
+        }
+      ]
+    },
+    {
+      "case_id": "cross-view-19",
+      "arm": "v3_raw",
+      "status": "error",
+      "code": "invalid_plan",
+      "errors": [
+        "finer output grain requires an explicit preparation"
+      ],
+      "clarifications": [],
+      "task_scores": [
+        {
+          "view": true,
+          "columns": true,
+          "column_recall": 1.0,
+          "column_precision": 1.0,
+          "filters": true,
+          "metrics": true,
+          "conditional_metrics": true,
+          "metadata": true,
+          "grain": true
+        },
+        {
+          "view": true,
+          "columns": true,
+          "column_recall": 1.0,
+          "column_precision": 0.75,
+          "filters": true,
+          "metrics": true,
+          "conditional_metrics": true,
+          "metadata": true,
+          "grain": true
+        }
+      ]
+    },
+    {
+      "case_id": "cross-view-20",
+      "arm": "v3_raw",
+      "status": "needs_clarification",
+      "code": null,
+      "errors": [],
+      "clarifications": [
+        "所選 View 中，無法以會員為單位取得「2026 年 9 月各商品購買件數」：v_product_monthly 的粒度是門市×月份×商品，沒有 customer_id；v_daily_sales 與 v_sales_detail 也沒有以會員×商品彙總 2026-09 購買件數的欄位組合。請提供或確認一個包含 customer_id、product_id、2026-09 時間維度與購買件數的來源，或確認可改用其他替代分析（例如以門市×月×商品呈現，不區分會員）。"
+      ],
+      "task_scores": []
+    },
+    {
+      "case_id": "cross-view-21",
+      "arm": "v3_raw",
+      "status": "error",
+      "code": "invalid_plan",
+      "errors": [
+        "final output grain must come from the anchor grain",
+        "invalid preparation source or keys",
+        "finer output grain requires an explicit preparation"
+      ],
+      "clarifications": [],
+      "task_scores": [
+        {
+          "view": true,
+          "columns": true,
+          "column_recall": 1.0,
+          "column_precision": 1.0,
+          "filters": true,
+          "metrics": true,
+          "conditional_metrics": true,
+          "metadata": true,
+          "grain": true
+        },
+        {
+          "view": true,
+          "columns": true,
+          "column_recall": 1.0,
+          "column_precision": 0.75,
+          "filters": true,
+          "metrics": true,
+          "conditional_metrics": true,
+          "metadata": true,
+          "grain": true
+        }
+      ]
+    },
+    {
+      "case_id": "cross-view-22",
+      "arm": "v3_raw",
+      "status": "error",
+      "code": "invalid_plan",
+      "errors": [
+        "final output grain must come from the anchor grain"
+      ],
+      "clarifications": [],
+      "task_scores": [
+        {
+          "view": true,
+          "columns": true,
+          "column_recall": 1.0,
+          "column_precision": 0.75,
+          "filters": true,
+          "metrics": true,
+          "conditional_metrics": true,
+          "metadata": true,
+          "grain": true
+        },
+        {
+          "view": true,
+          "columns": false,
+          "column_recall": 0.8,
+          "column_precision": 0.8,
+          "filters": false,
+          "metrics": true,
+          "conditional_metrics": true,
+          "metadata": true,
+          "grain": true
+        }
+      ]
+    },
+    {
+      "case_id": "cross-view-23",
+      "arm": "v3_raw",
+      "status": "error",
+      "code": "invalid_plan",
+      "errors": [
+        "finer output grain requires an explicit preparation"
+      ],
+      "clarifications": [],
+      "task_scores": [
+        {
+          "view": true,
+          "columns": true,
+          "column_recall": 1.0,
+          "column_precision": 0.75,
+          "filters": true,
+          "metrics": true,
+          "conditional_metrics": true,
+          "metadata": true,
+          "grain": true
+        },
+        {
+          "view": true,
+          "columns": true,
+          "column_recall": 1.0,
+          "column_precision": 1.0,
+          "filters": true,
+          "metrics": true,
+          "conditional_metrics": true,
+          "metadata": true,
+          "grain": true
+        }
+      ]
+    },
+    {
+      "case_id": "cross-view-24",
+      "arm": "v3_raw",
+      "status": "error",
+      "code": "invalid_plan",
+      "errors": [
+        "store_month_category_margin: invalid required columns"
+      ],
+      "clarifications": [],
+      "task_scores": [
+        {
+          "view": true,
+          "columns": true,
+          "column_recall": 1.0,
+          "column_precision": 1.0,
+          "filters": true,
+          "metrics": true,
+          "conditional_metrics": true,
+          "metadata": true,
+          "grain": true
+        },
+        {
+          "view": true,
+          "columns": true,
+          "column_recall": 1.0,
+          "column_precision": 0.8,
+          "filters": false,
+          "metrics": true,
+          "conditional_metrics": true,
+          "metadata": true,
+          "grain": true
+        }
+      ]
+    },
+    {
+      "case_id": "cross-view-25",
+      "arm": "v3_raw",
+      "status": "error",
+      "code": "invalid_plan",
+      "errors": [
+        "final output grain must come from the anchor grain",
+        "finer output grain requires an explicit preparation"
+      ],
+      "clarifications": [],
+      "task_scores": [
+        {
+          "view": true,
+          "columns": true,
+          "column_recall": 1.0,
+          "column_precision": 0.6,
+          "filters": true,
+          "metrics": true,
+          "conditional_metrics": true,
+          "metadata": true,
+          "grain": true
+        },
+        {
+          "view": true,
+          "columns": true,
+          "column_recall": 1.0,
+          "column_precision": 1.0,
+          "filters": true,
+          "metrics": true,
+          "conditional_metrics": true,
+          "metadata": true,
+          "grain": true
+        }
+      ]
+    },
+    {
+      "case_id": "cross-view-26",
+      "arm": "v3_raw",
+      "status": "ready",
+      "code": null,
+      "errors": [],
+      "clarifications": [],
+      "task_scores": [
+        {
+          "view": true,
+          "columns": true,
+          "column_recall": 1.0,
+          "column_precision": 1.0,
+          "filters": true,
+          "metrics": true,
+          "conditional_metrics": true,
+          "metadata": true,
+          "grain": true
+        },
+        {
+          "view": true,
+          "columns": false,
+          "column_recall": 0.8,
+          "column_precision": 0.8,
+          "filters": false,
+          "metrics": true,
+          "conditional_metrics": true,
+          "metadata": true,
+          "grain": true
+        }
+      ]
+    },
+    {
+      "case_id": "cross-view-04",
+      "arm": "v6_raw",
+      "status": "error",
+      "code": "invalid_plan",
+      "errors": [
+        "inventory_base: metadata collections must be unique and separate from output fields"
+      ],
+      "clarifications": [],
+      "task_scores": [
+        {
+          "view": true,
+          "columns": true,
+          "column_recall": 1.0,
+          "column_precision": 1.0,
+          "filters": true,
+          "metrics": true,
+          "conditional_metrics": true,
+          "metadata": true,
+          "grain": true
+        },
+        {
+          "view": true,
+          "columns": true,
+          "column_recall": 1.0,
+          "column_precision": 1.0,
+          "filters": true,
+          "metrics": true,
+          "conditional_metrics": true,
+          "metadata": true,
+          "grain": true
+        }
+      ]
+    },
+    {
+      "case_id": "cross-view-08",
+      "arm": "v6_raw",
+      "status": "error",
+      "code": "invalid_plan",
+      "errors": [
+        "sept_instore_units: invalid required columns"
+      ],
+      "clarifications": [],
+      "task_scores": [
+        {
+          "view": true,
+          "columns": true,
+          "column_recall": 1.0,
+          "column_precision": 0.36363636363636365,
+          "filters": true,
+          "metrics": true,
+          "conditional_metrics": true,
+          "metadata": true,
+          "grain": true
+        },
+        {
+          "view": false,
+          "columns": false,
+          "column_recall": 0.6,
+          "column_precision": 0.6,
+          "filters": false,
+          "metrics": false,
+          "conditional_metrics": true,
+          "metadata": true,
+          "grain": true
+        }
+      ]
+    },
+    {
+      "case_id": "cross-view-09",
+      "arm": "v6_raw",
+      "status": "error",
+      "code": "invalid_plan",
+      "errors": [
+        "task_inventory: metadata collections must be unique and separate from output fields"
+      ],
+      "clarifications": [],
+      "task_scores": [
+        {
+          "view": true,
+          "columns": true,
+          "column_recall": 1.0,
+          "column_precision": 1.0,
+          "filters": true,
+          "metrics": true,
+          "conditional_metrics": true,
+          "metadata": true,
+          "grain": true
+        },
+        {
+          "view": true,
+          "columns": true,
+          "column_recall": 1.0,
+          "column_precision": 1.0,
+          "filters": true,
+          "metrics": true,
+          "conditional_metrics": true,
+          "metadata": true,
+          "grain": false
+        }
+      ]
+    },
+    {
+      "case_id": "cross-view-10",
+      "arm": "v6_raw",
+      "status": "needs_clarification",
+      "code": null,
+      "errors": [],
+      "clarifications": [
+        "需求要依「各店各商品」彙整 2026 年 9 月 VIP 會員購買件數，但現有 View 的會員購買件數最細只到「商品×門市×月份」（v_product_monthly），無法提供「該店該商品由 VIP 會員購買」的會員等級口徑；若改自「訂單明細×會員等級」彙總，雖可取得 VIP 件數，但無法排除該店該商品屬線上通路或該店無實體交易之情形。請確認 VIP 購買件數是否可接受「不限通路、不限實體門市」的商品層級合計，或需限定實體門市。",
+        "「目前庫存」的來源 v_inventory_status 之 grain 為「門市×商品」且含 snapshot_date，庫存件數不得跨不同快照日期加總。目前需求未指定採用單一快照日期，且各店各商品可能有多個不同 snapshot_date，請確認要以哪一個庫存盤點日期（或日期區間）作為「目前庫存」的基準，或是否僅取最新 snapshot_date。"
+      ],
+      "task_scores": []
+    },
+    {
+      "case_id": "cross-view-14",
+      "arm": "v6_raw",
+      "status": "error",
+      "code": "invalid_plan",
+      "errors": [
+        "t1: metadata collections must be unique and separate from output fields"
+      ],
+      "clarifications": [],
+      "task_scores": [
+        {
+          "view": true,
+          "columns": true,
+          "column_recall": 1.0,
+          "column_precision": 0.8,
+          "filters": true,
+          "metrics": true,
+          "conditional_metrics": false,
+          "metadata": true,
+          "grain": true
+        },
+        {
+          "view": true,
+          "columns": true,
+          "column_recall": 1.0,
+          "column_precision": 0.75,
+          "filters": true,
+          "metrics": true,
+          "conditional_metrics": true,
+          "metadata": true,
+          "grain": true
+        }
+      ]
+    },
+    {
+      "case_id": "cross-view-16",
+      "arm": "v6_raw",
+      "status": "error",
+      "code": "invalid_plan",
+      "errors": [
+        "final output grain must come from the anchor grain",
+        "finer output grain requires an explicit preparation"
+      ],
+      "clarifications": [],
+      "task_scores": [
+        {
+          "view": true,
+          "columns": true,
+          "column_recall": 1.0,
+          "column_precision": 0.42857142857142855,
+          "filters": true,
+          "metrics": true,
+          "conditional_metrics": true,
+          "metadata": true,
+          "grain": true
+        },
+        {
+          "view": true,
+          "columns": true,
+          "column_recall": 1.0,
+          "column_precision": 0.8,
+          "filters": true,
+          "metrics": false,
+          "conditional_metrics": true,
+          "metadata": true,
+          "grain": true
+        }
+      ]
+    },
+    {
+      "case_id": "cross-view-18",
+      "arm": "v6_raw",
+      "status": "error",
+      "code": "invalid_plan",
+      "errors": [
+        "members_base: aggregate grain differs from group_by"
+      ],
+      "clarifications": [],
+      "task_scores": [
+        {
+          "view": true,
+          "columns": true,
+          "column_recall": 1.0,
+          "column_precision": 0.75,
+          "filters": true,
+          "metrics": true,
+          "conditional_metrics": true,
+          "metadata": true,
+          "grain": true
+        },
+        {
+          "view": true,
+          "columns": true,
+          "column_recall": 1.0,
+          "column_precision": 0.8,
+          "filters": true,
+          "metrics": true,
+          "conditional_metrics": true,
+          "metadata": true,
+          "grain": true
+        }
+      ]
+    },
+    {
+      "case_id": "cross-view-19",
+      "arm": "v6_raw",
+      "status": "error",
+      "code": "invalid_plan",
+      "errors": [
+        "final output grain must come from the anchor grain"
+      ],
+      "clarifications": [],
+      "task_scores": [
+        {
+          "view": true,
+          "columns": true,
+          "column_recall": 1.0,
+          "column_precision": 1.0,
+          "filters": true,
+          "metrics": true,
+          "conditional_metrics": true,
+          "metadata": true,
+          "grain": true
+        },
+        {
+          "view": true,
+          "columns": true,
+          "column_recall": 1.0,
+          "column_precision": 1.0,
+          "filters": true,
+          "metrics": true,
+          "conditional_metrics": true,
+          "metadata": true,
+          "grain": true
+        }
+      ]
+    },
+    {
+      "case_id": "cross-view-21",
+      "arm": "v6_raw",
+      "status": "error",
+      "code": "invalid_plan",
+      "errors": [
+        "ready cannot have unresolved requirements",
+        "task_category_net_sales: invalid required columns",
+        "integration requires a valid anchor"
+      ],
+      "clarifications": [],
+      "task_scores": [
+        {
+          "view": true,
+          "columns": true,
+          "column_recall": 1.0,
+          "column_precision": 1.0,
+          "filters": true,
+          "metrics": true,
+          "conditional_metrics": true,
+          "metadata": true,
+          "grain": true
+        },
+        {
+          "view": false,
+          "columns": false,
+          "column_recall": 0.75,
+          "column_precision": 0.75,
+          "filters": false,
+          "metrics": true,
+          "conditional_metrics": true,
+          "metadata": true,
+          "grain": true
+        }
+      ]
+    },
+    {
+      "case_id": "cross-view-22",
+      "arm": "v6_raw",
+      "status": "error",
+      "code": "invalid_plan",
+      "errors": [
+        "final output grain must come from the anchor grain"
+      ],
+      "clarifications": [],
+      "task_scores": [
+        {
+          "view": true,
+          "columns": true,
+          "column_recall": 1.0,
+          "column_precision": 0.75,
+          "filters": true,
+          "metrics": true,
+          "conditional_metrics": true,
+          "metadata": true,
+          "grain": true
+        },
+        {
+          "view": true,
+          "columns": true,
+          "column_recall": 1.0,
+          "column_precision": 0.8,
+          "filters": true,
+          "metrics": true,
+          "conditional_metrics": true,
+          "metadata": true,
+          "grain": true
+        }
+      ]
+    },
+    {
+      "case_id": "cross-view-23",
+      "arm": "v6_raw",
+      "status": "error",
+      "code": "invalid_plan",
+      "errors": [
+        "final output grain must come from the anchor grain"
+      ],
+      "clarifications": [],
+      "task_scores": [
+        {
+          "view": true,
+          "columns": true,
+          "column_recall": 1.0,
+          "column_precision": 0.75,
+          "filters": true,
+          "metrics": true,
+          "conditional_metrics": true,
+          "metadata": true,
+          "grain": true
+        },
+        {
+          "view": true,
+          "columns": true,
+          "column_recall": 1.0,
+          "column_precision": 1.0,
+          "filters": true,
+          "metrics": true,
+          "conditional_metrics": true,
+          "metadata": true,
+          "grain": true
+        }
+      ]
+    },
+    {
+      "case_id": "cross-view-25",
+      "arm": "v6_raw",
+      "status": "error",
+      "code": "invalid_plan",
+      "errors": [
+        "final output grain must come from the anchor grain",
+        "finer output grain requires an explicit preparation"
+      ],
+      "clarifications": [],
+      "task_scores": [
+        {
+          "view": true,
+          "columns": true,
+          "column_recall": 1.0,
+          "column_precision": 1.0,
+          "filters": true,
+          "metrics": true,
+          "conditional_metrics": true,
+          "metadata": true,
+          "grain": true
+        },
+        {
+          "view": true,
+          "columns": true,
+          "column_recall": 1.0,
+          "column_precision": 0.8333333333333334,
+          "filters": true,
+          "metrics": true,
+          "conditional_metrics": true,
+          "metadata": true,
+          "grain": true
+        }
+      ]
+    },
+    {
+      "case_id": "cross-view-26",
+      "arm": "v6_raw",
+      "status": "error",
+      "code": "invalid_plan",
+      "errors": [
+        "final output grain must come from the anchor grain"
+      ],
+      "clarifications": [],
+      "task_scores": [
+        {
+          "view": true,
+          "columns": true,
+          "column_recall": 1.0,
+          "column_precision": 1.0,
+          "filters": true,
+          "metrics": true,
+          "conditional_metrics": true,
+          "metadata": true,
+          "grain": true
+        },
+        {
+          "view": true,
+          "columns": false,
+          "column_recall": 0.8,
+          "column_precision": 0.8,
+          "filters": false,
+          "metrics": true,
+          "conditional_metrics": true,
+          "metadata": true,
+          "grain": true
+        }
+      ]
+    },
+    {
+      "case_id": "cross-view-28",
+      "arm": "v6_raw",
+      "status": "error",
+      "code": "invalid_plan",
+      "errors": [
+        "inv_store_product: metadata collections must be unique and separate from output fields",
+        "inv_store_product: aggregate grain differs from group_by",
+        "gp_store_product: aggregate grain differs from group_by"
+      ],
+      "clarifications": [],
+      "task_scores": [
+        {
+          "view": true,
+          "columns": true,
+          "column_recall": 1.0,
+          "column_precision": 0.26666666666666666,
+          "filters": true,
+          "metrics": true,
+          "conditional_metrics": true,
+          "metadata": true,
+          "grain": true
+        },
+        {
+          "view": true,
+          "columns": true,
+          "column_recall": 1.0,
+          "column_precision": 0.4444444444444444,
+          "filters": true,
+          "metrics": true,
+          "conditional_metrics": true,
+          "metadata": true,
+          "grain": true
+        },
+        {
+          "view": true,
+          "columns": true,
+          "column_recall": 1.0,
+          "column_precision": 0.375,
+          "filters": true,
+          "metrics": true,
+          "conditional_metrics": true,
+          "metadata": true,
+          "grain": true
+        }
+      ]
+    }
+  ],
+  "hashes": {
+    "calls.jsonl": "0f6fda448be3549763357f3de0004ee6e56fb8247050587ad9625bf310383b36",
+    "results.jsonl": "db7e5d72ed87dba6437597b1348b24a7d78dbe6378351386e6e4397e1c278ab8",
+    "run.json": "09414c7d7b25f7264b392f5e87029473c342ffa08b7d02af674e9e6987ff7d3a"
+  }
+}

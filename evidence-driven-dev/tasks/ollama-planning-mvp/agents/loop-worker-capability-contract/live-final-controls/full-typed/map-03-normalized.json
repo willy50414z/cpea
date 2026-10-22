@@ -1,0 +1,202 @@
+{
+  "view": "demo_retail.v_inventory_status",
+  "entries": [
+    {
+      "requirement_id": "stock",
+      "status": "supported",
+      "mappings": [
+        {
+          "column": "stock_qty",
+          "role": "metric",
+          "source_quote": "目前庫存件數",
+          "aggregation": "sum",
+          "operator": null,
+          "value": null,
+          "conditions": [],
+          "contract_evidence": [
+            {
+              "path": "/columns/stock_qty/description",
+              "quote": "快照當日此門市此商品的庫存件數，單位件；同商品跨門市可加總，不可跨不同快照日期直接加總。"
+            }
+          ]
+        }
+      ],
+      "contract_evidence": [
+        {
+          "path": "/grain/description",
+          "quote": "門市×商品"
+        }
+      ],
+      "missing_requirements": []
+    },
+    {
+      "requirement_id": "sales",
+      "status": "unsupported",
+      "mappings": [],
+      "contract_evidence": [
+        {
+          "path": "/grain/description",
+          "quote": "門市×商品"
+        }
+      ],
+      "missing_requirements": [
+        "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"self\", \"requirements\": [{\"requirement_id\": \"sales\", \"quote\": \"折扣金額及淨銷售額\", \"status\": \"unsupported\"}]}",
+        "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"scope\", \"requirements\": [{\"requirement_id\": \"channel\", \"quote\": \"線上通路\", \"status\": \"unsupported\"}, {\"requirement_id\": \"period\", \"quote\": \"2026年9月\", \"status\": \"unsupported\"}]}"
+      ]
+    },
+    {
+      "requirement_id": "channel",
+      "status": "unsupported",
+      "mappings": [],
+      "contract_evidence": [
+        {
+          "path": "/grain/description",
+          "quote": "門市×商品"
+        }
+      ],
+      "missing_requirements": [
+        "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"self\", \"requirements\": [{\"requirement_id\": \"channel\", \"quote\": \"線上通路\", \"status\": \"unsupported\"}]}"
+      ]
+    },
+    {
+      "requirement_id": "period",
+      "status": "unsupported",
+      "mappings": [],
+      "contract_evidence": [
+        {
+          "path": "/grain/description",
+          "quote": "門市×商品"
+        }
+      ],
+      "missing_requirements": [
+        "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"self\", \"requirements\": [{\"requirement_id\": \"period\", \"quote\": \"2026年9月\", \"status\": \"unsupported\"}]}"
+      ]
+    },
+    {
+      "requirement_id": "population",
+      "status": "supported",
+      "mappings": [
+        {
+          "column": "store_id",
+          "role": "key",
+          "source_quote": "保留所有庫存商品",
+          "aggregation": null,
+          "operator": null,
+          "value": null,
+          "conditions": [],
+          "contract_evidence": [
+            {
+              "path": "/columns/store_id/description",
+              "quote": "庫存所屬門市識別碼；與 product_id 組合唯一決定一列。"
+            }
+          ]
+        },
+        {
+          "column": "product_id",
+          "role": "key",
+          "source_quote": "保留所有庫存商品",
+          "aggregation": null,
+          "operator": null,
+          "value": null,
+          "conditions": [],
+          "contract_evidence": [
+            {
+              "path": "/columns/product_id/description",
+              "quote": "庫存商品識別碼；與 store_id 組合唯一決定一列。"
+            }
+          ]
+        }
+      ],
+      "contract_evidence": [
+        {
+          "path": "/grain/description",
+          "quote": "門市×商品"
+        }
+      ],
+      "missing_requirements": []
+    },
+    {
+      "requirement_id": "grain",
+      "status": "supported",
+      "mappings": [
+        {
+          "column": "store_id",
+          "role": "key",
+          "source_quote": "各店各商品",
+          "aggregation": null,
+          "operator": null,
+          "value": null,
+          "conditions": [],
+          "contract_evidence": [
+            {
+              "path": "/columns/store_id/description",
+              "quote": "庫存所屬門市識別碼；與 product_id 組合唯一決定一列。"
+            }
+          ]
+        },
+        {
+          "column": "product_id",
+          "role": "key",
+          "source_quote": "各店各商品",
+          "aggregation": null,
+          "operator": null,
+          "value": null,
+          "conditions": [],
+          "contract_evidence": [
+            {
+              "path": "/columns/product_id/description",
+              "quote": "庫存商品識別碼；與 store_id 組合唯一決定一列。"
+            }
+          ]
+        }
+      ],
+      "contract_evidence": [
+        {
+          "path": "/grain/description",
+          "quote": "門市×商品"
+        }
+      ],
+      "missing_requirements": []
+    },
+    {
+      "requirement_id": "R_PURPOSE",
+      "status": "supported",
+      "mappings": [
+        {
+          "column": "snapshot_date",
+          "role": "metadata",
+          "source_quote": "盤點日期",
+          "aggregation": null,
+          "operator": null,
+          "value": null,
+          "conditions": [],
+          "contract_evidence": [
+            {
+              "path": "/columns/snapshot_date/description",
+              "quote": "庫存盤點日期"
+            }
+          ]
+        }
+      ],
+      "contract_evidence": [
+        {
+          "path": "/columns/snapshot_date/description",
+          "quote": "庫存盤點日期"
+        }
+      ],
+      "missing_requirements": []
+    }
+  ],
+  "grain": "門市×商品",
+  "keys": [
+    "store_id",
+    "product_id"
+  ],
+  "population": "粒度：門市×商品；stock_status: 缺貨/需補貨/正常。estimated_days_of_supply 根據最近30日銷量估算，無銷量時為 NULL。",
+  "contract_evidence": [
+    {
+      "path": "/summary",
+      "quote": "粒度：門市×商品；stock_status: 缺貨/需補貨/正常。estimated_days_of_supply 根據最近30日銷量估算，無銷量時為 NULL。"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "<stdin>", line 5, in <module>
+  File "/home/willy/code/cpea_terms/evaluations/managed_three_stage_runner.py", line 43, in read_json
+    return json.loads(path.read_text(encoding='utf-8'))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/pathlib.py", line 1029, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/pathlib.py", line 1015, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/home/willy/code/cpea_terms/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-semantics/review.json'
+CORRECTION: review now written after builtin exact-schema validation; no dependency installation.
+FINAL PASS 15 authorization controls;exact review true open entry rejected before settings/model/network;0POST

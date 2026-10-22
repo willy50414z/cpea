@@ -1,0 +1,324 @@
+{
+  "scope": "0POST pure-memory probes of immutable first raw; prototype ruling only, no implementation/test/fixture changes",
+  "proposed_rule": "有限admitted policy保留；default及NULL代表保母體並保缺值；EMPTY須每條preserved left edge有同right_task/keys的明示nest子集合。aggregate、metadata_collections及空right relation皆不是typed nested output宣告。unknown/zero拒絕；原母體/role/scope守門另行保留。",
+  "cases": [
+    {
+      "id": "flat_default",
+      "mutation": "in-memory counterfactual only; not natural raw or fixture",
+      "policy": "保留未匹配資料並標記缺值；契約沒有保證時不可把缺值當成零。",
+      "shape": {
+        "edges": [
+          {
+            "cardinality": "one_to_one",
+            "left_keys": [
+              "store_id",
+              "product_id"
+            ],
+            "left_task": "task_inv",
+            "mode": "left",
+            "preserve_task": "task_inv",
+            "right_keys": [
+              "store_id",
+              "product_id"
+            ],
+            "right_task": "task_sales"
+          }
+        ],
+        "preparation": [
+          {
+            "description": "彙總 2026 年 9 月線上通路各門市各商品的折扣金額與淨銷售額至門市×商品粒度",
+            "keys": [
+              "store_id",
+              "product_id"
+            ],
+            "kind": "aggregate",
+            "task_id": "task_sales"
+          }
+        ]
+      },
+      "original_guard": {
+        "status": "ready",
+        "prepared_count": 2
+      },
+      "legacy_checker_findings": [],
+      "proposed_policy_findings": [],
+      "proposed_policy_scope_verdict": "PASS",
+      "whole_original_task_verdict": "NOT_ASSERTED; policy-only nested control is not acceptance of an unrequested original-task shape"
+    },
+    {
+      "id": "flat_null",
+      "mutation": "in-memory counterfactual only; not natural raw or fixture",
+      "policy": "保留未匹配母體並標記缺值；無契約保證不得補零。",
+      "shape": {
+        "edges": [
+          {
+            "cardinality": "one_to_one",
+            "left_keys": [
+              "store_id",
+              "product_id"
+            ],
+            "left_task": "task_inv",
+            "mode": "left",
+            "preserve_task": "task_inv",
+            "right_keys": [
+              "store_id",
+              "product_id"
+            ],
+            "right_task": "task_sales"
+          }
+        ],
+        "preparation": [
+          {
+            "description": "彙總 2026 年 9 月線上通路各門市各商品的折扣金額與淨銷售額至門市×商品粒度",
+            "keys": [
+              "store_id",
+              "product_id"
+            ],
+            "kind": "aggregate",
+            "task_id": "task_sales"
+          }
+        ]
+      },
+      "original_guard": {
+        "status": "ready",
+        "prepared_count": 2
+      },
+      "legacy_checker_findings": [
+        {
+          "aspect": "no unproven zero fill",
+          "actual": "保留未匹配母體並標記缺值；無契約保證不得補零。"
+        }
+      ],
+      "proposed_policy_findings": [],
+      "proposed_policy_scope_verdict": "PASS",
+      "whole_original_task_verdict": "NOT_ASSERTED; policy-only nested control is not acceptance of an unrequested original-task shape"
+    },
+    {
+      "id": "flat_empty_original",
+      "mutation": "in-memory counterfactual only; not natural raw or fixture",
+      "policy": "保留未匹配母體；未匹配子集合為空集合，不製造零值元素或將數值缺值補零。",
+      "shape": {
+        "edges": [
+          {
+            "cardinality": "one_to_one",
+            "left_keys": [
+              "store_id",
+              "product_id"
+            ],
+            "left_task": "task_inv",
+            "mode": "left",
+            "preserve_task": "task_inv",
+            "right_keys": [
+              "store_id",
+              "product_id"
+            ],
+            "right_task": "task_sales"
+          }
+        ],
+        "preparation": [
+          {
+            "description": "彙總 2026 年 9 月線上通路各門市各商品的折扣金額與淨銷售額至門市×商品粒度",
+            "keys": [
+              "store_id",
+              "product_id"
+            ],
+            "kind": "aggregate",
+            "task_id": "task_sales"
+          }
+        ]
+      },
+      "original_guard": {
+        "status": "ready",
+        "prepared_count": 2
+      },
+      "legacy_checker_findings": [
+        {
+          "aspect": "no unproven zero fill",
+          "actual": "保留未匹配母體；未匹配子集合為空集合，不製造零值元素或將數值缺值補零。"
+        }
+      ],
+      "proposed_policy_findings": [
+        "empty collection policy lacks typed preserved nested child shape"
+      ],
+      "proposed_policy_scope_verdict": "FAIL",
+      "whole_original_task_verdict": "NOT_ASSERTED; policy-only nested control is not acceptance of an unrequested original-task shape"
+    },
+    {
+      "id": "nested_empty",
+      "mutation": "in-memory counterfactual only; not natural raw or fixture",
+      "policy": "保留未匹配母體；未匹配子集合為空集合，不製造零值元素或將數值缺值補零。",
+      "shape": {
+        "edges": [
+          {
+            "cardinality": "one_to_one",
+            "left_keys": [
+              "store_id",
+              "product_id"
+            ],
+            "left_task": "task_inv",
+            "mode": "left",
+            "preserve_task": "task_inv",
+            "right_keys": [
+              "store_id",
+              "product_id"
+            ],
+            "right_task": "task_sales"
+          }
+        ],
+        "preparation": [
+          {
+            "description": "彙總 2026 年 9 月線上通路各門市各商品的折扣金額與淨銷售額至門市×商品粒度",
+            "keys": [
+              "store_id",
+              "product_id"
+            ],
+            "kind": "aggregate",
+            "task_id": "task_sales"
+          },
+          {
+            "task_id": "task_sales",
+            "kind": "nest",
+            "keys": [
+              "store_id",
+              "product_id"
+            ],
+            "description": "將子來源依對齊鍵收集成子集合；未匹配保留空集合。"
+          }
+        ]
+      },
+      "original_guard": {
+        "status": "ready",
+        "prepared_count": 2
+      },
+      "legacy_checker_findings": [
+        {
+          "aspect": "no unproven zero fill",
+          "actual": "保留未匹配母體；未匹配子集合為空集合，不製造零值元素或將數值缺值補零。"
+        }
+      ],
+      "proposed_policy_findings": [],
+      "proposed_policy_scope_verdict": "PASS",
+      "whole_original_task_verdict": "NOT_ASSERTED; policy-only nested control is not acceptance of an unrequested original-task shape"
+    },
+    {
+      "id": "flat_zero",
+      "mutation": "in-memory counterfactual only; not natural raw or fixture",
+      "policy": "未匹配的折扣金額與淨銷售額補零。",
+      "shape": {
+        "edges": [
+          {
+            "cardinality": "one_to_one",
+            "left_keys": [
+              "store_id",
+              "product_id"
+            ],
+            "left_task": "task_inv",
+            "mode": "left",
+            "preserve_task": "task_inv",
+            "right_keys": [
+              "store_id",
+              "product_id"
+            ],
+            "right_task": "task_sales"
+          }
+        ],
+        "preparation": [
+          {
+            "description": "彙總 2026 年 9 月線上通路各門市各商品的折扣金額與淨銷售額至門市×商品粒度",
+            "keys": [
+              "store_id",
+              "product_id"
+            ],
+            "kind": "aggregate",
+            "task_id": "task_sales"
+          }
+        ]
+      },
+      "original_guard": {
+        "exception": "ValueError",
+        "error": "missing-data policy must use an admitted no-zero policy"
+      },
+      "legacy_checker_findings": null,
+      "proposed_policy_findings": [
+        "unadmitted missing policy"
+      ],
+      "proposed_policy_scope_verdict": "FAIL",
+      "whole_original_task_verdict": "NOT_ASSERTED; policy-only nested control is not acceptance of an unrequested original-task shape"
+    },
+    {
+      "id": "flat_inner_drops_inventory",
+      "mutation": "in-memory counterfactual only; not natural raw or fixture",
+      "policy": "保留未匹配母體並標記缺值；無契約保證不得補零。",
+      "shape": {
+        "edges": [
+          {
+            "cardinality": "one_to_one",
+            "left_keys": [
+              "store_id",
+              "product_id"
+            ],
+            "left_task": "task_inv",
+            "mode": "inner",
+            "preserve_task": null,
+            "right_keys": [
+              "store_id",
+              "product_id"
+            ],
+            "right_task": "task_sales"
+          }
+        ],
+        "preparation": [
+          {
+            "description": "彙總 2026 年 9 月線上通路各門市各商品的折扣金額與淨銷售額至門市×商品粒度",
+            "keys": [
+              "store_id",
+              "product_id"
+            ],
+            "kind": "aggregate",
+            "task_id": "task_sales"
+          }
+        ]
+      },
+      "original_guard": {
+        "exception": "ValueError",
+        "error": "integration cannot preserve required anchor population"
+      },
+      "legacy_checker_findings": null,
+      "proposed_policy_findings": [],
+      "proposed_policy_scope_verdict": "PASS",
+      "whole_original_task_verdict": "NOT_ASSERTED; policy-only nested control is not acceptance of an unrequested original-task shape"
+    }
+  ],
+  "illustrative_semantics": {
+    "inventory_keys": [
+      [
+        "S1",
+        "P1"
+      ],
+      [
+        "S1",
+        "P2"
+      ]
+    ],
+    "matched_sales_key": [
+      "S1",
+      "P1"
+    ],
+    "flat_missing_for_S1_P2": {
+      "discount_amount": null,
+      "net_sales": null
+    },
+    "nested_missing_for_S1_P2": [],
+    "forbidden_flat_missing": {
+      "discount_amount": 0,
+      "net_sales": 0
+    },
+    "forbidden_population_drop": [
+      "S1",
+      "P2"
+    ],
+    "note": "說明性最小資料，非執行SQL/DB，null與[]不可混同，真數值0可保留但不得由無匹配製造。"
+  },
+  "POST": 0,
+  "SQL_DB": 0
+}

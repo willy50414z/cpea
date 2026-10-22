@@ -1,0 +1,73 @@
+{
+  "adopt": false,
+  "summary": {
+    "v3_raw": {
+      "completed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "model_calls": 30,
+      "canonical_views": 27,
+      "views_and_columns": 25,
+      "ready": 18,
+      "automated_pass": 15,
+      "elapsed_ms": 161926.94282802404,
+      "usage": {
+        "input_tokens": 223950,
+        "output_tokens": 26671
+      },
+      "failures": [
+        "cross-view-02",
+        "cross-view-04",
+        "cross-view-09",
+        "cross-view-11",
+        "cross-view-14",
+        "cross-view-16",
+        "cross-view-17",
+        "cross-view-19",
+        "cross-view-20",
+        "cross-view-21",
+        "cross-view-22",
+        "cross-view-23",
+        "cross-view-24",
+        "cross-view-25",
+        "cross-view-26"
+      ]
+    },
+    "v6_raw": {
+      "completed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "model_calls": 30,
+      "canonical_views": 27,
+      "views_and_columns": 26,
+      "ready": 16,
+      "automated_pass": 16,
+      "elapsed_ms": 236898.33257898135,
+      "usage": {
+        "input_tokens": 230220,
+        "output_tokens": 27648
+      },
+      "failures": [
+        "cross-view-04",
+        "cross-view-08",
+        "cross-view-09",
+        "cross-view-10",
+        "cross-view-14",
+        "cross-view-16",
+        "cross-view-18",
+        "cross-view-19",
+        "cross-view-21",
+        "cross-view-22",
+        "cross-view-23",
+        "cross-view-25",
+        "cross-view-26",
+        "cross-view-28"
+      ]
+    }
+  },
+  "source_and_fields_false_positive_cases": {
+    "v3_raw": [],
+    "v6_raw": []
+  },
+  "run": "evidence-driven-dev/tasks/retail-planning-stages/.local/prompt-v6-20261020T113508Z"
+}

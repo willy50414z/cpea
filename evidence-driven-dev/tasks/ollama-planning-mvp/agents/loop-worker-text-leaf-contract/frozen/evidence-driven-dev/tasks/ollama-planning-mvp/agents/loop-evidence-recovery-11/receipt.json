@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "plan_sha256": "3b895e7a9592786d6621df03e6dc1110ae0a507242b9b8410a1b647f224c6e4d",
+  "started_at": "2026-10-21T21:26:58.225432+00:00",
+  "task_sha256": "d9e19e90dbf68e24516f3703d5becfcda9ece848526b053b1c21401fa042e779",
+  "files": [
+    {
+      "target": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-semantics/review.json",
+      "late_copy": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-evidence-recovery-11/review.json.late.raw.log",
+      "original_copy": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-evidence-recovery-11/review.json.original.raw.log",
+      "late_sha256": "0200cc20e8aa288580c0a5036d4056a144555a272b6b4afe64da357734118d6b",
+      "original_sha256": "aaa8b740cc30fbd1b8670fa45ce5b68280dc073b9ee5e662dc43eeb68b903dfa",
+      "before_metadata": {
+        "mtime_ns": 1792616499235728727,
+        "ctime_ns": 1792616499235728727,
+        "mode": 436,
+        "size": 26997
+      },
+      "restored": true
+    },
+    {
+      "target": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-semantics/semantic-review.log",
+      "late_copy": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-evidence-recovery-11/semantic-review.log.late.raw.log",
+      "original_copy": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-evidence-recovery-11/semantic-review.log.original.raw.log",
+      "late_sha256": "3b7c9f3b51626a0634405b8e2c14efbcf730b600138aa60b067e74aceffca4f0",
+      "original_sha256": "fa3e4654447f56bef7cffe64220195c4e2817ba20838d2c3b27eaf893a28eaaa",
+      "before_metadata": {
+        "mtime_ns": 1792616499233728715,
+        "ctime_ns": 1792616499233728715,
+        "mode": 436,
+        "size": 129858
+      },
+      "restored": true
+    }
+  ],
+  "status": "EXACT_ORIGINAL_EVIDENCE_RESTORED_V2_LINEAGE_BLOCKED",
+  "no_model_POST_SQL_DB": true,
+  "check_evidence_exit_code": 0,
+  "v2_dry_run_exit_code": 1,
+  "finished_at": "2026-10-21T21:26:59.697230+00:00",
+  "task_unchanged": true,
+  "protected_v2_and_frozen_files": 260,
+  "protected_unchanged": true,
+  "verification_logs": {
+    "controller-check-evidence.log": "6a7dee2df6decc78d70dd3a9fcef13555f24ec05ef34f4d611783f4084b4e866",
+    "v2-expected-lineage-rejection.log": "6fc6fad47c0566b8004271cfe185c75d9a051175875b0c305c6e65442e0d4642"
+  }
+}

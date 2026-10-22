@@ -1,0 +1,178 @@
+FFFFFFFFF                                                                [100%]
+=================================== FAILURES ===================================
+_______ test_bound_record_replay_complete_and_first_failure_prefix[None] _______
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-28/test_bound_record_replay_compl0')
+failure = None
+
+    @pytest.mark.parametrize('failure',[None,'provider','parse','gap','typed','null','old_wire','nested_duplicate'])
+    def test_bound_record_replay_complete_and_first_failure_prefix(tmp_path,failure):
+        mod=importlib.import_module('evaluations.managed_three_stage_runner')
+        catalog=SchemaCatalog('projects/retail')
+        request,invoke,calls=fake(catalog,failure)
+        case=mod.diagnostic_case(catalog,request)
+>       meta=mod.record_run(tmp_path,catalog,case,invoke,contract=api())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: record_run() got an unexpected keyword argument 'contract'
+
+tests/unit/test_evidence_bound_managed_runner.py:40: TypeError
+_____ test_bound_record_replay_complete_and_first_failure_prefix[provider] _____
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-28/test_bound_record_replay_compl1')
+failure = 'provider'
+
+    @pytest.mark.parametrize('failure',[None,'provider','parse','gap','typed','null','old_wire','nested_duplicate'])
+    def test_bound_record_replay_complete_and_first_failure_prefix(tmp_path,failure):
+        mod=importlib.import_module('evaluations.managed_three_stage_runner')
+        catalog=SchemaCatalog('projects/retail')
+        request,invoke,calls=fake(catalog,failure)
+        case=mod.diagnostic_case(catalog,request)
+>       meta=mod.record_run(tmp_path,catalog,case,invoke,contract=api())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: record_run() got an unexpected keyword argument 'contract'
+
+tests/unit/test_evidence_bound_managed_runner.py:40: TypeError
+______ test_bound_record_replay_complete_and_first_failure_prefix[parse] _______
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-28/test_bound_record_replay_compl2')
+failure = 'parse'
+
+    @pytest.mark.parametrize('failure',[None,'provider','parse','gap','typed','null','old_wire','nested_duplicate'])
+    def test_bound_record_replay_complete_and_first_failure_prefix(tmp_path,failure):
+        mod=importlib.import_module('evaluations.managed_three_stage_runner')
+        catalog=SchemaCatalog('projects/retail')
+        request,invoke,calls=fake(catalog,failure)
+        case=mod.diagnostic_case(catalog,request)
+>       meta=mod.record_run(tmp_path,catalog,case,invoke,contract=api())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: record_run() got an unexpected keyword argument 'contract'
+
+tests/unit/test_evidence_bound_managed_runner.py:40: TypeError
+_______ test_bound_record_replay_complete_and_first_failure_prefix[gap] ________
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-28/test_bound_record_replay_compl3')
+failure = 'gap'
+
+    @pytest.mark.parametrize('failure',[None,'provider','parse','gap','typed','null','old_wire','nested_duplicate'])
+    def test_bound_record_replay_complete_and_first_failure_prefix(tmp_path,failure):
+        mod=importlib.import_module('evaluations.managed_three_stage_runner')
+        catalog=SchemaCatalog('projects/retail')
+        request,invoke,calls=fake(catalog,failure)
+        case=mod.diagnostic_case(catalog,request)
+>       meta=mod.record_run(tmp_path,catalog,case,invoke,contract=api())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: record_run() got an unexpected keyword argument 'contract'
+
+tests/unit/test_evidence_bound_managed_runner.py:40: TypeError
+______ test_bound_record_replay_complete_and_first_failure_prefix[typed] _______
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-28/test_bound_record_replay_compl4')
+failure = 'typed'
+
+    @pytest.mark.parametrize('failure',[None,'provider','parse','gap','typed','null','old_wire','nested_duplicate'])
+    def test_bound_record_replay_complete_and_first_failure_prefix(tmp_path,failure):
+        mod=importlib.import_module('evaluations.managed_three_stage_runner')
+        catalog=SchemaCatalog('projects/retail')
+        request,invoke,calls=fake(catalog,failure)
+        case=mod.diagnostic_case(catalog,request)
+>       meta=mod.record_run(tmp_path,catalog,case,invoke,contract=api())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: record_run() got an unexpected keyword argument 'contract'
+
+tests/unit/test_evidence_bound_managed_runner.py:40: TypeError
+_______ test_bound_record_replay_complete_and_first_failure_prefix[null] _______
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-28/test_bound_record_replay_compl5')
+failure = 'null'
+
+    @pytest.mark.parametrize('failure',[None,'provider','parse','gap','typed','null','old_wire','nested_duplicate'])
+    def test_bound_record_replay_complete_and_first_failure_prefix(tmp_path,failure):
+        mod=importlib.import_module('evaluations.managed_three_stage_runner')
+        catalog=SchemaCatalog('projects/retail')
+        request,invoke,calls=fake(catalog,failure)
+        case=mod.diagnostic_case(catalog,request)
+>       meta=mod.record_run(tmp_path,catalog,case,invoke,contract=api())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: record_run() got an unexpected keyword argument 'contract'
+
+tests/unit/test_evidence_bound_managed_runner.py:40: TypeError
+_____ test_bound_record_replay_complete_and_first_failure_prefix[old_wire] _____
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-28/test_bound_record_replay_compl6')
+failure = 'old_wire'
+
+    @pytest.mark.parametrize('failure',[None,'provider','parse','gap','typed','null','old_wire','nested_duplicate'])
+    def test_bound_record_replay_complete_and_first_failure_prefix(tmp_path,failure):
+        mod=importlib.import_module('evaluations.managed_three_stage_runner')
+        catalog=SchemaCatalog('projects/retail')
+        request,invoke,calls=fake(catalog,failure)
+        case=mod.diagnostic_case(catalog,request)
+>       meta=mod.record_run(tmp_path,catalog,case,invoke,contract=api())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: record_run() got an unexpected keyword argument 'contract'
+
+tests/unit/test_evidence_bound_managed_runner.py:40: TypeError
+_ test_bound_record_replay_complete_and_first_failure_prefix[nested_duplicate] _
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-28/test_bound_record_replay_compl7')
+failure = 'nested_duplicate'
+
+    @pytest.mark.parametrize('failure',[None,'provider','parse','gap','typed','null','old_wire','nested_duplicate'])
+    def test_bound_record_replay_complete_and_first_failure_prefix(tmp_path,failure):
+        mod=importlib.import_module('evaluations.managed_three_stage_runner')
+        catalog=SchemaCatalog('projects/retail')
+        request,invoke,calls=fake(catalog,failure)
+        case=mod.diagnostic_case(catalog,request)
+>       meta=mod.record_run(tmp_path,catalog,case,invoke,contract=api())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: record_run() got an unexpected keyword argument 'contract'
+
+tests/unit/test_evidence_bound_managed_runner.py:40: TypeError
+________ test_bound_dry_run_never_constructs_provider_or_calls_network _________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7a03e547d2b0>
+capsys = <_pytest.capture.CaptureFixture object at 0x7a03b9ca2330>
+
+    def test_bound_dry_run_never_constructs_provider_or_calls_network(monkeypatch,capsys):
+        mod=importlib.import_module('evaluations.managed_three_stage_runner')
+        monkeypatch.setattr(mod,'ManagedInvoke',lambda *a,**k:pytest.fail('provider constructed'))
+        monkeypatch.setattr(mod,'verify_model_identity',lambda *a:pytest.fail('network called'))
+>       assert mod.main(['--evidence-bound'])==0
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_evidence_bound_managed_runner.py:62: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluations/managed_three_stage_runner.py:264: in main
+    args = parser.parse_args(argv)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/argparse.py:1911: in parse_args
+    self.error(msg % ' '.join(argv))
+/usr/lib/python3.12/argparse.py:2677: in error
+    self.exit(2, _('%(prog)s: error: %(message)s\n') % args)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = ArgumentParser(prog='__main__.py', usage=None, description='Controller-managed local diagnostic; dry-run and replay never use the network.', formatter_class=<class 'argparse.HelpFormatter'>, conflict_handler='error', add_help=True)
+status = 2
+message = '__main__.py: error: unrecognized arguments: --evidence-bound\n'
+
+    def exit(self, status=0, message=None):
+        if message:
+            self._print_message(message, _sys.stderr)
+>       _sys.exit(status)
+E       SystemExit: 2
+
+/usr/lib/python3.12/argparse.py:2664: SystemExit
+----------------------------- Captured stderr call -----------------------------
+usage: __main__.py [-h] [--execute | --replay REPLAY] [--ticket TICKET]
+__main__.py: error: unrecognized arguments: --evidence-bound
+=========================== short test summary info ============================
+FAILED tests/unit/test_evidence_bound_managed_runner.py::test_bound_record_replay_complete_and_first_failure_prefix[None]
+FAILED tests/unit/test_evidence_bound_managed_runner.py::test_bound_record_replay_complete_and_first_failure_prefix[provider]
+FAILED tests/unit/test_evidence_bound_managed_runner.py::test_bound_record_replay_complete_and_first_failure_prefix[parse]
+FAILED tests/unit/test_evidence_bound_managed_runner.py::test_bound_record_replay_complete_and_first_failure_prefix[gap]
+FAILED tests/unit/test_evidence_bound_managed_runner.py::test_bound_record_replay_complete_and_first_failure_prefix[typed]
+FAILED tests/unit/test_evidence_bound_managed_runner.py::test_bound_record_replay_complete_and_first_failure_prefix[null]
+FAILED tests/unit/test_evidence_bound_managed_runner.py::test_bound_record_replay_complete_and_first_failure_prefix[old_wire]
+FAILED tests/unit/test_evidence_bound_managed_runner.py::test_bound_record_replay_complete_and_first_failure_prefix[nested_duplicate]
+FAILED tests/unit/test_evidence_bound_managed_runner.py::test_bound_dry_run_never_constructs_provider_or_calls_network
+9 failed in 1.43s

@@ -1,0 +1,19 @@
+{
+  "artifact_result": "PASS_WITH_WARNINGS",
+  "model_gate": "FAIL",
+  "baseline_review_cases": 30,
+  "natural_experiment_responses": 12,
+  "safe_ready": {
+    "v3": 2,
+    "B1": 2
+  },
+  "related_regression": "78 passed",
+  "frozen_planner_sources_current": true,
+  "sealed_files_unchanged": true,
+  "utf8_no_bom_files_checked": 47,
+  "product_catalog_original_oracle_unchanged": true,
+  "raw_git_ignored": true,
+  "new_calls_in_this_check": 0,
+  "overall_goal_complete": false,
+  "task_status": "PLANNING"
+}

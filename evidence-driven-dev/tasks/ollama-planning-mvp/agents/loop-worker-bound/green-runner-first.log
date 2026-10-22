@@ -1,0 +1,46 @@
+..............................................................F......... [ 91%]
+.......                                                                  [100%]
+=================================== FAILURES ===================================
+________ test_replay_rejects_changed_artifact_input_or_version[source] _________
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-29/test_replay_rejects_changed_ar2')
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x78269b4376e0>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x78269ae11ee0>
+tamper = 'source'
+
+    @pytest.mark.parametrize('tamper', ['artifact', 'input', 'source', 'extra'])
+    def test_replay_rejects_changed_artifact_input_or_version(tmp_path, catalog, monkeypatch, tamper):
+        request, invoke, _ = fake(catalog)
+        case = runner().diagnostic_case(catalog, request)
+        runner().record_run(tmp_path, catalog, case, invoke)
+        if tamper == 'artifact':
+            (tmp_path/'recall-call.json').write_text('{}', encoding='utf-8')
+        elif tamper == 'input':
+            case['request'] += '。'
+        elif tamper == 'source':
+            original = runner().fingerprint
+            monkeypatch.setattr(runner(), 'fingerprint', lambda *a: dict(original(*a), modified=True))
+        else:
+            (tmp_path/'extra.json').write_text('{}', encoding='utf-8')
+        with pytest.raises(ValueError, match='artifact|version'):
+>           runner().replay(tmp_path, catalog, case)
+
+tests/unit/test_managed_three_stage_runner.py:162: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+folder = PosixPath('/tmp/pytest-of-willy/pytest-29/test_replay_rejects_changed_ar2')
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x78269b4376e0>
+case = {'case_id': 'diagnostic-request-6a6612d2eb63', 'request': '對照各店各商品目前庫存件數與2026年9月線上通路的折扣金額及淨銷售額，保留所有庫存商品。顯示盤點日期，以供稽核討論。', 'source_case_id': 'cross-view-11', 'profile_id': 'demo_retail_draft', ...}
+contract = None
+
+    def replay(folder, catalog, case, *, contract=None):
+        meta = read_json(folder / 'run.json')
+        _verify_artifacts(folder, meta)
+>       if meta['frozen'] != fingerprint(catalog, case, contract=contract) or meta['case'] != case:
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: test_replay_rejects_changed_artifact_input_or_version.<locals>.<lambda>() got an unexpected keyword argument 'contract'
+
+evaluations/managed_three_stage_runner.py:240: TypeError
+=========================== short test summary info ============================
+FAILED tests/unit/test_managed_three_stage_runner.py::test_replay_rejects_changed_artifact_input_or_version[source]
+1 failed, 78 passed in 18.86s

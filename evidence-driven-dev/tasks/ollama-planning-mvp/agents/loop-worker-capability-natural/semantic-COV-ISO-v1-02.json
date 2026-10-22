@@ -1,0 +1,153 @@
+{
+  "sample": "COV-ISO-v1-02",
+  "result": "PASS",
+  "upstream_injected": true,
+  "rows": [
+    {
+      "requirement_id": "unrelated/識別~鍵",
+      "kind": "grain",
+      "verdict": "PASS",
+      "reason": "customer_id是會員鍵，不對應任一店商品分量；會員城市亦非店址。unsupported/own=true/[]正確，normalized唯一self gap與原summary/grain引文一致。",
+      "raw": {
+        "mappings": [],
+        "own_gap": true,
+        "status": "unsupported"
+      },
+      "required_presence": "PASS",
+      "independent_gap_graph": {
+        "self": [
+          "unrelated/識別~鍵"
+        ]
+      }
+    }
+  ],
+  "raw_equals_parsed": true,
+  "normalized_saved": true,
+  "normalization_limit": null,
+  "provider_all_strings": [
+    {
+      "path": "/model",
+      "characters": 11,
+      "sha256": "86005524442c923e1a1e23a3ac7685e9468c4e2ea9aab5cb2e2d50df43d77721",
+      "reviewed": true
+    },
+    {
+      "path": "/created_at",
+      "characters": 30,
+      "sha256": "bbe0e41de02e22557c186d5bbef390f0e898974d9f9d642cf33040b150d11c6d",
+      "reviewed": true
+    },
+    {
+      "path": "/message/role",
+      "characters": 9,
+      "sha256": "43f3a43f5a7fef31effcd812e256c8f245da366db65c225fcde611385a4df753",
+      "reviewed": true
+    },
+    {
+      "path": "/message/content",
+      "characters": 84,
+      "sha256": "b229ae8df58e8299656b4d0fbfdfc80ad6e35ebe10defb56d9caa49a9cf1dad1",
+      "reviewed": true
+    },
+    {
+      "path": "/message/thinking",
+      "characters": 1853,
+      "sha256": "8970816fa756f1826b0da913f5c44b1a2e63114084647d5c7a88131c0612d4d7",
+      "reviewed": true
+    },
+    {
+      "path": "/done_reason",
+      "characters": 4,
+      "sha256": "6f2be2fe58ca2ba48e809c9588269fb710ce2535ba22acafb1123cdbb7421a02",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/view",
+      "characters": 28,
+      "sha256": "48882a24400eaf4b4f006411ee1f0c25e82c5c0147a4db26e03bc3ba0421360e",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/0/requirement_id",
+      "characters": 14,
+      "sha256": "2e3bbd7597143eea8a84ca132739d62d462d730abbab664cd26c1b80283f152b",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/0/status",
+      "characters": 11,
+      "sha256": "0bc6f540bbf1d48a52b38b78f201053bc6ac6a49a3bd6105deccacea34c8b9b8",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/0/contract_evidence/0/path",
+      "characters": 18,
+      "sha256": "511b26ba0f57da50a36abadb3d0e805226404ea8c6d64c5c65f8265376e3f0f5",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/0/contract_evidence/0/quote",
+      "characters": 13,
+      "sha256": "21c1afb1e1c351faa11487340e3ee0952346b9749eefd61af3e8e7c902b279d7",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/0/missing_requirements/0",
+      "characters": 147,
+      "sha256": "e7bba5a7d6d6813e194fe26bd2dd2b022271933d37ccc4bd93c26ed4c6b07e77",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/grain",
+      "characters": 13,
+      "sha256": "21c1afb1e1c351faa11487340e3ee0952346b9749eefd61af3e8e7c902b279d7",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/keys/0",
+      "characters": 11,
+      "sha256": "1a8ce8893da413a39812afb211cee5c577c42b89e50e343cc7d8efb628dd5b4d",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/population",
+      "characters": 17,
+      "sha256": "0d1663044a0bd1909984b054a31619381a17bd1774b6a7da4f9c48dfa5f5395e",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/contract_evidence/0/path",
+      "characters": 8,
+      "sha256": "c6c3350785d93e170d9d80cb9edd112463bf1431e19f8074ed3c3224577d88e7",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/contract_evidence/0/quote",
+      "characters": 17,
+      "sha256": "0d1663044a0bd1909984b054a31619381a17bd1774b6a7da4f9c48dfa5f5395e",
+      "reviewed": true
+    }
+  ],
+  "provider_text_ruling": "已讀完整content/thinking及normalized所有文字；無關會員鍵、會員城市及來源母體描述皆與真契約一致，無虛增店商品能力。",
+  "accepted_scope_AND_equivalences": [],
+  "artifacts": {
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-02/node-provider-response.json": "894d2f4d2d97bcde7ac506ad166a2cdb6573754b0531293222b7e7e06356d409",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-02/node-managed.json": "71b1305c32294b85740940a75604875fc344ffae93e72c2a4a5bbf449eaf28ca",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-02/semantic-review.json": "83d601d5721c4766cefcf197d4aac01557f976d070d3f87081909f8753803bdc",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-02/run.json": "3400d9a13274528b0dc5f57deec7a6e1d13585720d5496c32c0acb34f6f9edb1",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-02/usage.json": "f0d5083a8cbdced6f25b6556ee4833e16d348641b72f729713544b9811151e81",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-02/node-body.json": "9c7a4b0573f08ea2e3647f3778aaa3bcfc4b7c59313945c7360c37378ac97830",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-02/node-call.json": "1f5fb138c02c4599d48d6707ca88b5c47f582562bca1da2c3d4e7405c153497f",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-02/node-compiled.json": "d00b98e3626ec71447dbfd0961fec74538a1531a29aab77be0da0ad092cbe4a1",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-02/node-normalized.json": "8a04bdf88e32436e291eed21dec8818c30a2577d3d26404c44753c2c26729db8",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-02/node-parsed.json": "4e0dc098ecf11b1b9f5df23f20a669539d08b56a85723229866c18ea388957ec",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-02/node-refs.json": "49de5a7fa00b83eb996002dbe390e4fc4346ef84f4487ea37c2fe2c65f771dc0",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-02/upstream.json": "58418ab1cca66e31ecceb6cede8e14b1e0a01640e210e42b7ffe2fe80f899076",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-02/node-request.json": "a0955f6e9d5f26619cff37784cf280b2515f29c3bd27ab18ceed59c745fee336",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-02/node-presence.json": "559703e5c604fd963d9d3d314c0138cea3b5b859e7489db45f553977995c6ed6"
+  },
+  "outer_receipt_sha256": "cc74387735bc572d463a8d9ef06db2820a6ff2f5aa2445d6816257c11bc949ea",
+  "POST": 1,
+  "retry": 0,
+  "SQL_DB": 0
+}

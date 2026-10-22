@@ -1,0 +1,21 @@
+..F.................                                                     [100%]
+=================================== FAILURES ===================================
+_______ test_true_metadata_requires_real_column_mapping_and_own_evidence _______
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x75bffbb5fe60>
+
+    def test_true_metadata_requires_real_column_mapping_and_own_evidence(catalog):
+        from evaluations.indexed_requirement_recall import materialize_recall
+        request, rec, maps, sel = fixture(catalog)
+        recalled = materialize_recall(rec, request, catalog)
+        mapped = [materialize_coverage(m, recalled, request, catalog) for m in maps]
+        assert finish_selection(sel, recalled, mapped, request, catalog).status == 'ready'
+        data = maps[0].model_dump()
+        data['entries'][-1]['mappings'] = []
+>       with pytest.raises(ValueError, match='supported requires mappings/evidence'):
+E       Failed: DID NOT RAISE ValueError
+
+tests/unit/test_managed_three_stage_runner.py:103: Failed
+=========================== short test summary info ============================
+FAILED tests/unit/test_managed_three_stage_runner.py::test_true_metadata_requires_real_column_mapping_and_own_evidence
+1 failed, 19 passed in 7.39s

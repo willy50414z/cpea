@@ -1,0 +1,7 @@
+{
+  "views": {
+    "diagnostic_leaf.member_a": {
+      "path": "view.yaml"
+    }
+  }
+}

@@ -1,0 +1,143 @@
+{
+  "recall": {
+    "requirements": [
+      {
+        "requirement_id": "GRN-001",
+        "quote": "各店各商品",
+        "business_object": "各店各商品",
+        "kind": "grain",
+        "scope_ids": [],
+        "grain": "門市×商品",
+        "population": "所有庫存商品",
+        "grain_binding": null,
+        "grain_requirement_ids": []
+      },
+      {
+        "requirement_id": "MET-001",
+        "quote": "盤點庫存件數",
+        "business_object": "盤點庫存件數",
+        "kind": "metric",
+        "scope_ids": [],
+        "grain": "門市×商品",
+        "population": "所有庫存商品",
+        "grain_binding": "linked",
+        "grain_requirement_ids": [
+          "GRN-001"
+        ]
+      },
+      {
+        "requirement_id": "FILT-001",
+        "quote": "2026 年 9 月",
+        "business_object": "2026 年 9 月",
+        "kind": "filter",
+        "scope_ids": [],
+        "grain": "門市×商品",
+        "population": "所有庫存商品",
+        "grain_binding": null,
+        "grain_requirement_ids": []
+      },
+      {
+        "requirement_id": "FILT-002",
+        "quote": "線上通路",
+        "business_object": "線上通路",
+        "kind": "filter",
+        "scope_ids": [],
+        "grain": "門市×商品",
+        "population": "所有庫存商品",
+        "grain_binding": null,
+        "grain_requirement_ids": []
+      },
+      {
+        "requirement_id": "MET-002",
+        "quote": "折扣金額",
+        "business_object": "折扣金額",
+        "kind": "metric",
+        "scope_ids": [
+          "FILT-001",
+          "FILT-002"
+        ],
+        "grain": "門市×商品",
+        "population": "所有庫存商品",
+        "grain_binding": "linked",
+        "grain_requirement_ids": [
+          "GRN-001"
+        ]
+      },
+      {
+        "requirement_id": "MET-003",
+        "quote": "淨銷售額",
+        "business_object": "淨銷售額",
+        "kind": "metric",
+        "scope_ids": [
+          "FILT-001",
+          "FILT-002"
+        ],
+        "grain": "門市×商品",
+        "population": "所有庫存商品",
+        "grain_binding": "linked",
+        "grain_requirement_ids": [
+          "GRN-001"
+        ]
+      },
+      {
+        "requirement_id": "META-001",
+        "quote": "庫存盤點日期",
+        "business_object": "庫存盤點日期",
+        "kind": "metadata",
+        "scope_ids": [],
+        "grain": "門市×商品",
+        "population": "所有庫存商品",
+        "grain_binding": null,
+        "grain_requirement_ids": [
+          "GRN-001"
+        ]
+      },
+      {
+        "requirement_id": "POP-001",
+        "quote": "保留所有庫存商品",
+        "business_object": "保留所有庫存商品",
+        "kind": "population",
+        "scope_ids": [],
+        "grain": "門市×商品",
+        "population": "所有庫存商品",
+        "grain_binding": null,
+        "grain_requirement_ids": [
+          "GRN-001"
+        ]
+      }
+    ],
+    "candidate_views": [
+      {
+        "view": "demo_retail.v_customer_value",
+        "reason": "{\"policy\": \"本MVP保留全部admitted候選\", \"evidence\": [{\"path\": \"/summary\", \"quote\": \"粒度：每會員一列，包含未下單會員；\"}, {\"path\": \"/grain/description\", \"quote\": \"每會員一列，包含未下單會員\"}]}"
+      },
+      {
+        "view": "demo_retail.v_daily_sales",
+        "reason": "{\"policy\": \"本MVP保留全部admitted候選\", \"evidence\": [{\"path\": \"/summary\", \"quote\": \"粒度：門市×有銷售的日期；沒有交易的門市日期不出現。適合每日營收、門市趨勢\"}, {\"path\": \"/grain/description\", \"quote\": \"門市×有銷售的日期\"}]}"
+      },
+      {
+        "view": "demo_retail.v_inventory_status",
+        "reason": "{\"policy\": \"本MVP保留全部admitted候選\", \"evidence\": [{\"path\": \"/summary\", \"quote\": \"粒度：門市×商品；stock_status: 缺貨/需補貨/正常。estimated_days_of_supply 根據最近30日銷量估算，無銷量時為 NULL。\"}, {\"path\": \"/grain/description\", \"quote\": \"門市×商品\"}]}"
+      },
+      {
+        "view": "demo_retail.v_order_summary",
+        "reason": "{\"policy\": \"本MVP保留全部admitted候選\", \"evidence\": [{\"path\": \"/summary\", \"quote\": \"粒度：每筆已完成訂單一列；適合訂單數、客單價、單筆訂單金額與通路分析；取消訂單已排除。\"}, {\"path\": \"/grain/description\", \"quote\": \"每筆已完成訂單一列\"}]}"
+      },
+      {
+        "view": "demo_retail.v_product_monthly",
+        "reason": "{\"policy\": \"本MVP保留全部admitted候選\", \"evidence\": [{\"path\": \"/summary\", \"quote\": \"粒度：門市×月份×商品；適合商品/分類排行、商品銷量及毛利，不含訂單筆數；商品跨店排行需加總 net_sales/units_sold。\"}, {\"path\": \"/grain/description\", \"quote\": \"門市×月份×商品\"}]}"
+      },
+      {
+        "view": "demo_retail.v_sales_detail",
+        "reason": "{\"policy\": \"本MVP保留全部admitted候選\", \"evidence\": [{\"path\": \"/summary\", \"quote\": \"粒度：每筆已完成訂單的每個商品品項；僅含已完成訂單。銷售額為折扣後淨額，毛利=淨額-成本。請勿以 COUNT(*) 當訂單數。\"}, {\"path\": \"/grain/description\", \"quote\": \"每筆已完成訂單的每筆商品明細\"}]}"
+      },
+      {
+        "view": "demo_retail.v_store_monthly_kpi",
+        "reason": "{\"policy\": \"本MVP保留全部admitted候選\", \"evidence\": [{\"path\": \"/summary\", \"quote\": \"粒度：每門市每月一列。營收、毛利、訂單數、客單價、月目標與達標率；百分比數值為 0~100。\"}, {\"path\": \"/grain/description\", \"quote\": \"每門市每月一列\"}]}"
+      }
+    ]
+  },
+  "coverages": [],
+  "profile_id": "demo_retail_draft",
+  "catalog_fingerprint": "e5e5a5a2cc29a1be93dc4d6875aba8c47a35ed48c019c7d6838a45831d0441dc"
+}

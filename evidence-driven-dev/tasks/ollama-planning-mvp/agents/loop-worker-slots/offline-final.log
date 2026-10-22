@@ -1,0 +1,160 @@
+{
+  "result": "PASS",
+  "model_calls": 0,
+  "sql_db_calls": 0,
+  "runs": [
+    {
+      "case": "complete",
+      "folder": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/slots-fake-complete-20261021T171039629709Z",
+      "calls": 9,
+      "replay": {
+        "result": "PASS",
+        "raw_replays": 9,
+        "stopped": null
+      }
+    },
+    {
+      "case": "duplicate_slot",
+      "folder": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/slots-fake-duplicate_slot-20261021T171039629709Z",
+      "calls": 2,
+      "replay": {
+        "result": "PASS",
+        "raw_replays": 2,
+        "stopped": {
+          "error_type": "ValueError",
+          "error": "duplicate JSON key: stock"
+        }
+      }
+    },
+    {
+      "case": "conflicting_slot",
+      "folder": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/slots-fake-conflicting_slot-20261021T171039629709Z",
+      "calls": 2,
+      "replay": {
+        "result": "PASS",
+        "raw_replays": 2,
+        "stopped": {
+          "error_type": "ValueError",
+          "error": "duplicate JSON key: stock"
+        }
+      }
+    },
+    {
+      "case": "nested_duplicate",
+      "folder": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/slots-fake-nested_duplicate-20261021T171039629709Z",
+      "calls": 2,
+      "replay": {
+        "result": "PASS",
+        "raw_replays": 2,
+        "stopped": {
+          "error_type": "ValueError",
+          "error": "duplicate JSON key: column"
+        }
+      }
+    },
+    {
+      "case": "missing",
+      "folder": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/slots-fake-missing-20261021T171039629709Z",
+      "calls": 2,
+      "replay": {
+        "result": "PASS",
+        "raw_replays": 2,
+        "stopped": {
+          "error_type": "ValidationError",
+          "error": "1 validation error for SlottedViewCoverage_2a54ca7c75f4b773\nentries.stock\n  Field required [type=missing, input_value={'sales': {'status': 'uns...提供盤點日期']}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing"
+        }
+      }
+    },
+    {
+      "case": "extra",
+      "folder": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/slots-fake-extra-20261021T171039629709Z",
+      "calls": 2,
+      "replay": {
+        "result": "PASS",
+        "raw_replays": 2,
+        "stopped": {
+          "error_type": "ValidationError",
+          "error": "1 validation error for SlottedViewCoverage_2a54ca7c75f4b773\nentries.unexpected\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'status': 'unsupported',...ents': ['缺少通路']}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden"
+        }
+      }
+    },
+    {
+      "case": "old_list",
+      "folder": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/slots-fake-old_list-20261021T171039629709Z",
+      "calls": 2,
+      "replay": {
+        "result": "PASS",
+        "raw_replays": 2,
+        "stopped": {
+          "error_type": "ValidationError",
+          "error": "1 validation error for SlottedViewCoverage_2a54ca7c75f4b773\nentries\n  Input should be a valid dictionary or instance of RequirementSlots_2a54ca7c75f4b773 [type=model_type, input_value=[{'status': 'unsupported'...提供盤點日期']}], input_type=list]\n    For further information visit https://errors.pydantic.dev/2.14/v/model_type"
+        }
+      }
+    },
+    {
+      "case": "source_override",
+      "folder": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/slots-fake-source_override-20261021T171039629709Z",
+      "calls": 2,
+      "replay": {
+        "result": "PASS",
+        "raw_replays": 2,
+        "stopped": {
+          "error_type": "ValidationError",
+          "error": "1 validation error for SlottedViewCoverage_2a54ca7c75f4b773\npopulation\n  Extra inputs are not permitted [type=extra_forbidden, input_value='不含退貨', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden"
+        }
+      }
+    },
+    {
+      "case": "contract",
+      "folder": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/slots-fake-contract-20261021T171039629709Z",
+      "calls": 3,
+      "replay": {
+        "result": "PASS",
+        "raw_replays": 3,
+        "stopped": {
+          "error_type": "ValueError",
+          "error": "invalid contract reference path /not-real"
+        }
+      }
+    },
+    {
+      "case": "provider",
+      "folder": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/slots-fake-provider-20261021T171039629709Z",
+      "calls": 1,
+      "replay": {
+        "result": "PASS",
+        "raw_replays": 0,
+        "stopped": {
+          "error_type": "OSError",
+          "error": "offline fake provider failure"
+        }
+      }
+    },
+    {
+      "case": "parse",
+      "folder": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/slots-fake-parse-20261021T171039629709Z",
+      "calls": 1,
+      "replay": {
+        "result": "PASS",
+        "raw_replays": 1,
+        "stopped": {
+          "error_type": "ValidationError",
+          "error": "1 validation error for IndexedRecallResult\n  Invalid JSON: expected ident at line 1 column 2 [type=json_invalid, input_value='not json', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/json_invalid"
+        }
+      }
+    },
+    {
+      "case": "input",
+      "folder": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/slots-fake-input-20261021T171039629709Z",
+      "calls": 0,
+      "replay": {
+        "result": "PASS",
+        "raw_replays": 0,
+        "stopped": {
+          "error_type": "ValueError",
+          "error": "input cannot fit model context"
+        }
+      }
+    }
+  ]
+}

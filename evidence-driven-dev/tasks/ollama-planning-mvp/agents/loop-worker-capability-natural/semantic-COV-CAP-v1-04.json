@@ -1,0 +1,646 @@
+{
+  "sample": "COV-CAP-v1-04",
+  "result": "FAIL",
+  "upstream_injected": true,
+  "rows": [
+    {
+      "requirement_id": "GRN-001",
+      "kind": "grain",
+      "verdict": "PASS",
+      "reason": "customer_id只識別會員，不提供店或商品有用部分，unsupported/own=true/[]正確。",
+      "raw": {
+        "mappings": [],
+        "own_gap": true,
+        "status": "unsupported"
+      },
+      "required_presence": "PASS",
+      "independent_gap_graph": {
+        "self": [
+          "GRN-001"
+        ]
+      },
+      "normalized_gap_graph_matches": true,
+      "normalized": {
+        "requirement_id": "GRN-001",
+        "status": "unsupported",
+        "mappings": [],
+        "contract_evidence": [
+          {
+            "path": "/grain/description",
+            "quote": "每會員一列，包含未下單會員"
+          }
+        ],
+        "missing_requirements": [
+          "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"self\", \"requirements\": [{\"requirement_id\": \"GRN-001\", \"quote\": \"各店各商品\", \"status\": \"unsupported\"}]}"
+        ]
+      }
+    },
+    {
+      "requirement_id": "MET-001",
+      "kind": "metric",
+      "verdict": "PASS",
+      "reason": "無庫存件數，訂單筆數/金額不能充盤點stock，unsupported自身與完整grain缺口正確。",
+      "raw": {
+        "contract_path": null,
+        "mappings": [],
+        "own_gap": true,
+        "status": "unsupported"
+      },
+      "required_presence": "PASS",
+      "independent_gap_graph": {
+        "self": [
+          "MET-001"
+        ],
+        "grain": [
+          "GRN-001"
+        ]
+      },
+      "normalized_gap_graph_matches": true,
+      "normalized": {
+        "requirement_id": "MET-001",
+        "status": "unsupported",
+        "mappings": [],
+        "contract_evidence": [],
+        "missing_requirements": [
+          "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"self\", \"requirements\": [{\"requirement_id\": \"MET-001\", \"quote\": \"盤點庫存件數\", \"status\": \"unsupported\"}]}",
+          "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"grain\", \"requirements\": [{\"requirement_id\": \"GRN-001\", \"quote\": \"各店各商品\", \"status\": \"unsupported\"}]}"
+        ]
+      }
+    },
+    {
+      "requirement_id": "FILT-001",
+      "kind": "filter",
+      "verdict": "PASS",
+      "reason": "registered_on是註冊日，last_order_date只最後一單，不是完整九月交易集合；獨立unsupported/own=true正確，沒有借其他View。",
+      "raw": {
+        "contract_path": null,
+        "mappings": [],
+        "own_gap": true,
+        "status": "unsupported"
+      },
+      "required_presence": "PASS",
+      "independent_gap_graph": {
+        "self": [
+          "FILT-001"
+        ]
+      },
+      "normalized_gap_graph_matches": true,
+      "normalized": {
+        "requirement_id": "FILT-001",
+        "status": "unsupported",
+        "mappings": [],
+        "contract_evidence": [],
+        "missing_requirements": [
+          "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"self\", \"requirements\": [{\"requirement_id\": \"FILT-001\", \"quote\": \"2026 年 9 月\", \"status\": \"unsupported\"}]}"
+        ]
+      }
+    },
+    {
+      "requirement_id": "FILT-002",
+      "kind": "filter",
+      "verdict": "PASS",
+      "reason": "無online/channel欄位，unsupported自身缺口正確。",
+      "raw": {
+        "contract_path": null,
+        "mappings": [],
+        "own_gap": true,
+        "status": "unsupported"
+      },
+      "required_presence": "PASS",
+      "independent_gap_graph": {
+        "self": [
+          "FILT-002"
+        ]
+      },
+      "normalized_gap_graph_matches": true,
+      "normalized": {
+        "requirement_id": "FILT-002",
+        "status": "unsupported",
+        "mappings": [],
+        "contract_evidence": [],
+        "missing_requirements": [
+          "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"self\", \"requirements\": [{\"requirement_id\": \"FILT-002\", \"quote\": \"線上通路\", \"status\": \"unsupported\"}]}"
+        ]
+      }
+    },
+    {
+      "requirement_id": "MET-002",
+      "kind": "metric",
+      "verdict": "PASS",
+      "reason": "lifetime_spend是折扣後累計額，不能當折扣額；自身/月/通路/grain各缺口完整。",
+      "raw": {
+        "contract_path": null,
+        "mappings": [],
+        "own_gap": true,
+        "status": "unsupported"
+      },
+      "required_presence": "PASS",
+      "independent_gap_graph": {
+        "self": [
+          "MET-002"
+        ],
+        "scope": [
+          "FILT-001",
+          "FILT-002"
+        ],
+        "grain": [
+          "GRN-001"
+        ]
+      },
+      "normalized_gap_graph_matches": true,
+      "normalized": {
+        "requirement_id": "MET-002",
+        "status": "unsupported",
+        "mappings": [],
+        "contract_evidence": [],
+        "missing_requirements": [
+          "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"self\", \"requirements\": [{\"requirement_id\": \"MET-002\", \"quote\": \"折扣金額\", \"status\": \"unsupported\"}]}",
+          "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"scope\", \"requirements\": [{\"requirement_id\": \"FILT-001\", \"quote\": \"2026 年 9 月\", \"status\": \"unsupported\"}, {\"requirement_id\": \"FILT-002\", \"quote\": \"線上通路\", \"status\": \"unsupported\"}]}",
+          "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"grain\", \"requirements\": [{\"requirement_id\": \"GRN-001\", \"quote\": \"各店各商品\", \"status\": \"unsupported\"}]}"
+        ]
+      }
+    },
+    {
+      "requirement_id": "MET-003",
+      "kind": "metric",
+      "verdict": "FAIL",
+      "reason": "lifetime_spend明確是會員累計折扣後TWD金額，sum有用部分必須保留；月份/通路/完整店商品缺口不應刪mapping。原raw unsupported/[]/null漏此部分及文字證據，應partial/own=true且原完整scope/grain gaps；會員母體未證一般銷售自身完整性仍在，但不能推定實際非會員交易存在。own=true旗標相符不等於本項判定通過，thinking以依賴不完整推unsupported且未獨立說清會員自身保證。",
+      "raw": {
+        "contract_path": null,
+        "mappings": [],
+        "own_gap": true,
+        "status": "unsupported"
+      },
+      "required_presence": "PASS",
+      "independent_gap_graph": {
+        "self": [
+          "MET-003"
+        ],
+        "scope": [
+          "FILT-001",
+          "FILT-002"
+        ],
+        "grain": [
+          "GRN-001"
+        ]
+      },
+      "normalized_gap_graph_matches": true,
+      "normalized": {
+        "requirement_id": "MET-003",
+        "status": "unsupported",
+        "mappings": [],
+        "contract_evidence": [],
+        "missing_requirements": [
+          "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"self\", \"requirements\": [{\"requirement_id\": \"MET-003\", \"quote\": \"淨銷售額\", \"status\": \"unsupported\"}]}",
+          "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"scope\", \"requirements\": [{\"requirement_id\": \"FILT-001\", \"quote\": \"2026 年 9 月\", \"status\": \"unsupported\"}, {\"requirement_id\": \"FILT-002\", \"quote\": \"線上通路\", \"status\": \"unsupported\"}]}",
+          "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"grain\", \"requirements\": [{\"requirement_id\": \"GRN-001\", \"quote\": \"各店各商品\", \"status\": \"unsupported\"}]}"
+        ]
+      }
+    },
+    {
+      "requirement_id": "META-001",
+      "kind": "metadata",
+      "verdict": "PASS",
+      "reason": "最後訂單日/註冊日非盤點日期，不虛增metadata；self與grain gaps完整。",
+      "raw": {
+        "contract_path": null,
+        "mappings": [],
+        "own_gap": true,
+        "status": "unsupported"
+      },
+      "required_presence": "PASS",
+      "independent_gap_graph": {
+        "self": [
+          "META-001"
+        ],
+        "grain": [
+          "GRN-001"
+        ]
+      },
+      "normalized_gap_graph_matches": true,
+      "normalized": {
+        "requirement_id": "META-001",
+        "status": "unsupported",
+        "mappings": [],
+        "contract_evidence": [],
+        "missing_requirements": [
+          "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"self\", \"requirements\": [{\"requirement_id\": \"META-001\", \"quote\": \"庫存盤點日期\", \"status\": \"unsupported\"}]}",
+          "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"grain\", \"requirements\": [{\"requirement_id\": \"GRN-001\", \"quote\": \"各店各商品\", \"status\": \"unsupported\"}]}"
+        ]
+      }
+    },
+    {
+      "requirement_id": "POP-001",
+      "kind": "population",
+      "verdict": "PASS",
+      "reason": "每會員含未下單會員並不證所有庫存商品母體，unsupported自身與grain gaps正確。",
+      "raw": {
+        "contract_path": null,
+        "mappings": [],
+        "own_gap": true,
+        "status": "unsupported"
+      },
+      "required_presence": "PASS",
+      "independent_gap_graph": {
+        "self": [
+          "POP-001"
+        ],
+        "grain": [
+          "GRN-001"
+        ]
+      },
+      "normalized_gap_graph_matches": true,
+      "normalized": {
+        "requirement_id": "POP-001",
+        "status": "unsupported",
+        "mappings": [],
+        "contract_evidence": [],
+        "missing_requirements": [
+          "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"self\", \"requirements\": [{\"requirement_id\": \"POP-001\", \"quote\": \"保留所有庫存商品\", \"status\": \"unsupported\"}]}",
+          "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"grain\", \"requirements\": [{\"requirement_id\": \"GRN-001\", \"quote\": \"各店各商品\", \"status\": \"unsupported\"}]}"
+        ]
+      }
+    }
+  ],
+  "raw_equals_parsed": true,
+  "normalized_saved": true,
+  "provider_all_strings": [
+    {
+      "path": "/model",
+      "characters": 11,
+      "sha256": "86005524442c923e1a1e23a3ac7685e9468c4e2ea9aab5cb2e2d50df43d77721",
+      "reviewed": true
+    },
+    {
+      "path": "/created_at",
+      "characters": 30,
+      "sha256": "b0058f80bfe2bae620b0afc109dfb6b19c4306af1a1e756956e9c69fcf60b4d1",
+      "reviewed": true
+    },
+    {
+      "path": "/message/role",
+      "characters": 9,
+      "sha256": "43f3a43f5a7fef31effcd812e256c8f245da366db65c225fcde611385a4df753",
+      "reviewed": true
+    },
+    {
+      "path": "/message/content",
+      "characters": 675,
+      "sha256": "d5eae19a6fdc571b08a50d1d26315940e67659bd0639ecaaa218a26f40baae01",
+      "reviewed": true
+    },
+    {
+      "path": "/message/thinking",
+      "characters": 6168,
+      "sha256": "792699d1640163e6c3bcca8953dab84b7413189f0556412a9cc74d63129b7ece",
+      "reviewed": true
+    },
+    {
+      "path": "/done_reason",
+      "characters": 4,
+      "sha256": "6f2be2fe58ca2ba48e809c9588269fb710ce2535ba22acafb1123cdbb7421a02",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/view",
+      "characters": 28,
+      "sha256": "48882a24400eaf4b4f006411ee1f0c25e82c5c0147a4db26e03bc3ba0421360e",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/0/requirement_id",
+      "characters": 7,
+      "sha256": "ebde217472c9b15ec682df136010e53715f5be0b5822c96e16050ef129120a52",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/0/status",
+      "characters": 11,
+      "sha256": "0bc6f540bbf1d48a52b38b78f201053bc6ac6a49a3bd6105deccacea34c8b9b8",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/0/contract_evidence/0/path",
+      "characters": 18,
+      "sha256": "511b26ba0f57da50a36abadb3d0e805226404ea8c6d64c5c65f8265376e3f0f5",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/0/contract_evidence/0/quote",
+      "characters": 13,
+      "sha256": "21c1afb1e1c351faa11487340e3ee0952346b9749eefd61af3e8e7c902b279d7",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/0/missing_requirements/0",
+      "characters": 140,
+      "sha256": "ac2dd4b04ff19c2ea056d4947393a6afd038b1f159cfd9fd84709a9164b83647",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/1/requirement_id",
+      "characters": 7,
+      "sha256": "df764536d5ba619c193ff64e81b43aea61758ff43f94f5dbe48bc95d8ed27050",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/1/status",
+      "characters": 11,
+      "sha256": "0bc6f540bbf1d48a52b38b78f201053bc6ac6a49a3bd6105deccacea34c8b9b8",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/1/missing_requirements/0",
+      "characters": 141,
+      "sha256": "878c2c23f2aa9f81f5d6f2e479bd3648ac3e3912ee8c0ec31232fcba588aa2e8",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/1/missing_requirements/1",
+      "characters": 141,
+      "sha256": "86fe957504c21fa347e60e8574c64e7415a2c1a73c2de647bbbdcb73f149519f",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/2/requirement_id",
+      "characters": 8,
+      "sha256": "50789821887b615572c76cb484ab6ad4fcc38dbf7f3aaa766bc5a3192de627e6",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/2/status",
+      "characters": 11,
+      "sha256": "0bc6f540bbf1d48a52b38b78f201053bc6ac6a49a3bd6105deccacea34c8b9b8",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/2/missing_requirements/0",
+      "characters": 146,
+      "sha256": "35e114b115c7b0b3dc436139b420599c2dc73bee31f0f0edd62f6814db860ebf",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/3/requirement_id",
+      "characters": 8,
+      "sha256": "04c19a1d4ee8a02759e89644f7e0b284699c6ed1b0a6da1d6e9aaa458fcb179d",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/3/status",
+      "characters": 11,
+      "sha256": "0bc6f540bbf1d48a52b38b78f201053bc6ac6a49a3bd6105deccacea34c8b9b8",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/3/missing_requirements/0",
+      "characters": 140,
+      "sha256": "fc09d728be5f4450e8327efb5a19656a839f6d957575fa3d6f041fab67c2f13e",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/4/requirement_id",
+      "characters": 7,
+      "sha256": "830697fdc859a0bea1f67c4c172b3f3ca89ca746410b73c4e9d7e92faa5bed01",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/4/status",
+      "characters": 11,
+      "sha256": "0bc6f540bbf1d48a52b38b78f201053bc6ac6a49a3bd6105deccacea34c8b9b8",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/4/missing_requirements/0",
+      "characters": 139,
+      "sha256": "c35e86a984abf94627e941334562ce6787f488038686f67bc6869d17c7f95231",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/4/missing_requirements/1",
+      "characters": 221,
+      "sha256": "d458933be06e953303c34f4f5352d6c851f0f481b4f23df474dd8d64e38a23ff",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/4/missing_requirements/2",
+      "characters": 141,
+      "sha256": "86fe957504c21fa347e60e8574c64e7415a2c1a73c2de647bbbdcb73f149519f",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/5/requirement_id",
+      "characters": 7,
+      "sha256": "2e3d7227af1d06577975df431501ce67d0b1327b29d50e21bacd808e2e4e623f",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/5/status",
+      "characters": 11,
+      "sha256": "0bc6f540bbf1d48a52b38b78f201053bc6ac6a49a3bd6105deccacea34c8b9b8",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/5/missing_requirements/0",
+      "characters": 139,
+      "sha256": "2c77e4919f161e4948fd85819a0798b91436b0bb15db6c84dd4b27fb40471725",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/5/missing_requirements/1",
+      "characters": 221,
+      "sha256": "d458933be06e953303c34f4f5352d6c851f0f481b4f23df474dd8d64e38a23ff",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/5/missing_requirements/2",
+      "characters": 141,
+      "sha256": "86fe957504c21fa347e60e8574c64e7415a2c1a73c2de647bbbdcb73f149519f",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/6/requirement_id",
+      "characters": 8,
+      "sha256": "e4bb67c81b9d592b0f3aa87a376e2f15f3bd70ca342230e747a9d11653ac71ed",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/6/status",
+      "characters": 11,
+      "sha256": "0bc6f540bbf1d48a52b38b78f201053bc6ac6a49a3bd6105deccacea34c8b9b8",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/6/missing_requirements/0",
+      "characters": 142,
+      "sha256": "6049b3fb6f23bb95656b8350864b8b9df6e8d9fdc26ff88434d9a88501dde058",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/6/missing_requirements/1",
+      "characters": 141,
+      "sha256": "86fe957504c21fa347e60e8574c64e7415a2c1a73c2de647bbbdcb73f149519f",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/7/requirement_id",
+      "characters": 7,
+      "sha256": "f487aad000dc53dfe1db6d3e1011ab1fc7231603977f50638265e1d5b188850c",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/7/status",
+      "characters": 11,
+      "sha256": "0bc6f540bbf1d48a52b38b78f201053bc6ac6a49a3bd6105deccacea34c8b9b8",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/7/missing_requirements/0",
+      "characters": 143,
+      "sha256": "41ad84c03dd4d0f6165dc101ee0a3eca5c77e5e5a171451f62656261a2b24edd",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/7/missing_requirements/1",
+      "characters": 141,
+      "sha256": "86fe957504c21fa347e60e8574c64e7415a2c1a73c2de647bbbdcb73f149519f",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/grain",
+      "characters": 13,
+      "sha256": "21c1afb1e1c351faa11487340e3ee0952346b9749eefd61af3e8e7c902b279d7",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/keys/0",
+      "characters": 11,
+      "sha256": "1a8ce8893da413a39812afb211cee5c577c42b89e50e343cc7d8efb628dd5b4d",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/population",
+      "characters": 17,
+      "sha256": "0d1663044a0bd1909984b054a31619381a17bd1774b6a7da4f9c48dfa5f5395e",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/contract_evidence/0/path",
+      "characters": 8,
+      "sha256": "c6c3350785d93e170d9d80cb9edd112463bf1431e19f8074ed3c3224577d88e7",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/contract_evidence/0/quote",
+      "characters": 17,
+      "sha256": "0d1663044a0bd1909984b054a31619381a17bd1774b6a7da4f9c48dfa5f5395e",
+      "reviewed": true
+    }
+  ],
+  "provider_text_ruling": "完整provider content/thinking及normalized每一字串已讀。識別/庫存/日期/通路/折扣/metadata/母體七row結論與契約相符；MET-003明知lifetime_spend為折扣後額仍因依賴不能完成刪全部mapping，實質漏部分，不能因schema通過而認為語意正確。normalized來源grain/keys/population引文逐值真實，gaps依原raw完整；其正確派生不挽救原漏mapping。無實際非會員交易存在斷言。",
+  "legacy_findings": [
+    {
+      "requirement_id": "MET-003",
+      "aspect": "status/own_gap",
+      "expected": {
+        "status": "partial",
+        "own_gap": true,
+        "mappings": [
+          {
+            "column": "lifetime_spend",
+            "aggregation": "sum",
+            "conditions": []
+          }
+        ],
+        "contract_path": "/columns/lifetime_spend/description"
+      },
+      "actual": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      }
+    },
+    {
+      "requirement_id": "MET-003",
+      "aspect": "necessary mappings/predicates",
+      "expected": [
+        {
+          "column": "lifetime_spend",
+          "aggregation": "sum",
+          "conditions": []
+        }
+      ],
+      "actual": []
+    },
+    {
+      "requirement_id": "MET-003",
+      "aspect": "contract_path requires review",
+      "expected": "/columns/lifetime_spend/description",
+      "actual": null
+    }
+  ],
+  "accepted_scope_AND_equivalences": [],
+  "new_other_findings": [
+    {
+      "requirement_id": "MET-003",
+      "aspect": "status/own_gap",
+      "expected": {
+        "status": "partial",
+        "own_gap": true,
+        "mappings": [
+          {
+            "column": "lifetime_spend",
+            "aggregation": "sum",
+            "conditions": []
+          }
+        ],
+        "contract_path": "/columns/lifetime_spend/description"
+      },
+      "actual": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      }
+    },
+    {
+      "requirement_id": "MET-003",
+      "aspect": "necessary mappings/predicates",
+      "expected": [
+        {
+          "column": "lifetime_spend",
+          "aggregation": "sum",
+          "conditions": []
+        }
+      ],
+      "actual": []
+    },
+    {
+      "requirement_id": "MET-003",
+      "aspect": "contract_path requires review",
+      "expected": "/columns/lifetime_spend/description",
+      "actual": null
+    }
+  ],
+  "artifacts": {
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-CAP-v1-04/node-provider-response.json": "54efb01ab56c444c167ec7f743f208d3d0c0166cd21abc1cb1c9b1806519b081",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-CAP-v1-04/node-managed.json": "57f5aea92d3c07507181bbcb7a93471a248c90bb6081451cb1c62427e2178c51",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-CAP-v1-04/semantic-review.json": "23529beedbe2d579637c9ba63209d7d9eee93f500de9e6ee3954c87708f795b0",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-CAP-v1-04/run.json": "6d4f0b166aaa47c59e1a2f3217324d0b849966edaac8b11985a53f7f42099331",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-CAP-v1-04/usage.json": "8ad50f0770b1b38ae2f12975d21a3e2d08c492fbd3af5916fb2d858bc0c39df9",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-CAP-v1-04/node-body.json": "35c0139ef177869d867ec7f964b7c1c24fad912b02e7c3614726de6213d4ae2b",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-CAP-v1-04/node-call.json": "278e14e64fc5324a8f420188090a93ad2232c23f8a24de39f905437d3ffa6650",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-CAP-v1-04/node-compiled.json": "5988d77d199fab3de6ad187d680c6c187e943de50f53d8faebd6718ccfb9d44b",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-CAP-v1-04/node-normalized.json": "d2f975b4202b305ee4d6c561641f624ff9d15e777488863b78edfc298eb12eca",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-CAP-v1-04/node-parsed.json": "d6a10cf588549e2c3c8b662787b9deaf1f1d3dc976e28cd1ef08f783d8c669b0",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-CAP-v1-04/node-refs.json": "979c3bb9d57a913ca014c829ce674b731f9e55201b04957a0cc98d5c3cdbebcb",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-CAP-v1-04/upstream.json": "036a95a6bfce7584579489eee72802bbaccb8cfd93f3a5392790759e5e21eeec",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-CAP-v1-04/node-request.json": "c396a49d46d96e0ab17d04fdfb3457f2ba4461268a6cf4af39cb0eb1322771c1",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-CAP-v1-04/node-presence.json": "558227713dfb4216fc0f99f22c61cdc0f43c4db8367d1a042417b9a9c60dca38",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-CAP-v1-04/node-error.json": "5eeb4c824f637c7d507cd527738ff1d1091b4ffcbe1591f3c4d75bf1805743a5"
+  },
+  "outer_receipt_sha256": "cf78e58095ff3f38fcc8f15615612d5b355f629b5b6bc6b0b546df2c8f5485ed",
+  "POST": 1,
+  "retry": 0,
+  "SQL_DB": 0
+}

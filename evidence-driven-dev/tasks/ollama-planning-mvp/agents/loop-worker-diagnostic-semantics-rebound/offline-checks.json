@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "ticket": "d6de6a4fd21f4e7e862b06ceb27b86f7",
+  "result": "PASS",
+  "manifest_sha256": "9efa86b883366ff1ef4edd555f59f08499fa123288c6ca1ffe98998d84156187",
+  "full_bindings_equal": true,
+  "sources": 167,
+  "lineage": 13,
+  "requirements": 8,
+  "rows": 56,
+  "coverage_samples": 3,
+  "wire_positive_probes": 4,
+  "free_text_negative_machine_PASS_independent_REJECT": true,
+  "actual_preflight": "EXPECTED_REJECT_REVIEWER_OPEN",
+  "protected_before_after_match": true,
+  "POSTs": 0,
+  "SQL_DB": 0,
+  "evidence_sha256": {
+    "semantic-review.log": "639f745e8d1cf8f2a2e19aa539b800fa90645e327781450ca129f78c686c2e02",
+    "offline-checks.log": "30238dd1a0044acf77ff4e39a394c75fbbe8638ae0529621a9e66bec5a142b50"
+  }
+}

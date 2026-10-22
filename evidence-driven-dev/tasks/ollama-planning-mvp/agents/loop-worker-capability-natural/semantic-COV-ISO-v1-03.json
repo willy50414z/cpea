@@ -1,0 +1,247 @@
+{
+  "sample": "COV-ISO-v1-03",
+  "result": "FAIL",
+  "upstream_injected": true,
+  "rows": [
+    {
+      "requirement_id": "slot_0/🧾",
+      "kind": "grain",
+      "verdict": "PASS",
+      "reason": "loc_key是門市分量，partial/own=true保留且不宣稱完整商品grain；任意Unicode ID精確。",
+      "raw": {
+        "mappings": [
+          {
+            "column": "loc_key"
+          }
+        ],
+        "own_gap": true,
+        "status": "partial"
+      },
+      "required_presence": "PASS",
+      "independent_gap_graph": {
+        "self": [
+          "slot_0/🧾"
+        ]
+      }
+    },
+    {
+      "requirement_id": "model_dump",
+      "kind": "metric",
+      "verdict": "PASS",
+      "reason": "piece_value只有已售件數，不是庫存；unsupported/own=true/[]正確，完整grain依賴仍欠。",
+      "raw": {
+        "contract_path": null,
+        "mappings": [],
+        "own_gap": true,
+        "status": "unsupported"
+      },
+      "required_presence": "PASS",
+      "independent_gap_graph": {
+        "self": [
+          "model_dump"
+        ],
+        "grain": [
+          "slot_0/🧾"
+        ]
+      }
+    },
+    {
+      "requirement_id": "月~邊界",
+      "kind": "filter",
+      "verdict": "FAIL",
+      "reason": "獨立supported/own=false及2032-02-01<=day_key<2032-03-01完整涵蓋閏二月；但/columns/day_key是object而非非空文字證據。",
+      "raw": {
+        "contract_path": "/columns/day_key",
+        "mappings": [
+          {
+            "column": "day_key",
+            "operator": ">=",
+            "value": "2032-02-01"
+          },
+          {
+            "column": "day_key",
+            "operator": "<",
+            "value": "2032-03-01"
+          }
+        ],
+        "own_gap": false,
+        "status": "supported"
+      },
+      "required_presence": "PASS",
+      "independent_gap_graph": {}
+    },
+    {
+      "requirement_id": "scope-channel",
+      "kind": "filter",
+      "verdict": "PASS",
+      "reason": "改名View仍無通路能力，unsupported/own=true且不借其他View。",
+      "raw": {
+        "contract_path": null,
+        "mappings": [],
+        "own_gap": true,
+        "status": "unsupported"
+      },
+      "required_presence": "PASS",
+      "independent_gap_graph": {
+        "self": [
+          "scope-channel"
+        ]
+      }
+    },
+    {
+      "requirement_id": "m_discount",
+      "kind": "metric",
+      "verdict": "PASS",
+      "reason": "amount_value是折扣後淨額，非折扣金額；gross_profit也不能構造折扣額，unsupported自身及scope/grain缺口正確。",
+      "raw": {
+        "contract_path": null,
+        "mappings": [],
+        "own_gap": true,
+        "status": "unsupported"
+      },
+      "required_presence": "PASS",
+      "independent_gap_graph": {
+        "self": [
+          "m_discount"
+        ],
+        "scope": [
+          "scope-channel"
+        ],
+        "grain": [
+          "slot_0/🧾"
+        ]
+      }
+    },
+    {
+      "requirement_id": "amount/net",
+      "kind": "metric",
+      "verdict": "FAIL",
+      "reason": "amount_value sum有用，partial/own=false及only-online/fullgrain依賴分工正確；conditions=[]無需有限AND豁免。但/columns/amount_value是object，非合法文字證據。",
+      "raw": {
+        "contract_path": "/columns/amount_value",
+        "mappings": [
+          {
+            "aggregation": "sum",
+            "column": "amount_value",
+            "conditions": []
+          }
+        ],
+        "own_gap": false,
+        "status": "partial"
+      },
+      "required_presence": "PASS",
+      "independent_gap_graph": {
+        "scope": [
+          "scope-channel"
+        ],
+        "grain": [
+          "slot_0/🧾"
+        ]
+      }
+    },
+    {
+      "requirement_id": "元資料",
+      "kind": "metadata",
+      "verdict": "PASS",
+      "reason": "day_key是銷售日期，非盤點日，不偷補metadata或filter。",
+      "raw": {
+        "contract_path": null,
+        "mappings": [],
+        "own_gap": true,
+        "status": "unsupported"
+      },
+      "required_presence": "PASS",
+      "independent_gap_graph": {
+        "self": [
+          "元資料"
+        ],
+        "grain": [
+          "slot_0/🧾"
+        ]
+      }
+    },
+    {
+      "requirement_id": "保留/全部",
+      "kind": "population",
+      "verdict": "PASS",
+      "reason": "只有有交易的店日，無庫存母體；loc_key不能證全庫存，未新增status/flag資料義務。",
+      "raw": {
+        "contract_path": null,
+        "mappings": [],
+        "own_gap": true,
+        "status": "unsupported"
+      },
+      "required_presence": "PASS",
+      "independent_gap_graph": {
+        "self": [
+          "保留/全部"
+        ],
+        "grain": [
+          "slot_0/🧾"
+        ]
+      }
+    }
+  ],
+  "raw_equals_parsed": true,
+  "normalized_saved": false,
+  "normalization_limit": "原materialize首錯，未產normalized/正式derived gaps；獨立依賴圖僅核原raw，不修path、不補答、不產替代normalized。",
+  "provider_all_strings": [
+    {
+      "path": "/model",
+      "characters": 11,
+      "sha256": "86005524442c923e1a1e23a3ac7685e9468c4e2ea9aab5cb2e2d50df43d77721",
+      "reviewed": true
+    },
+    {
+      "path": "/created_at",
+      "characters": 30,
+      "sha256": "1ad24a3cf9437625e1d175d4b84b78571ada038c4fe247f3f8b6fbd4a818560a",
+      "reviewed": true
+    },
+    {
+      "path": "/message/role",
+      "characters": 9,
+      "sha256": "43f3a43f5a7fef31effcd812e256c8f245da366db65c225fcde611385a4df753",
+      "reviewed": true
+    },
+    {
+      "path": "/message/content",
+      "characters": 899,
+      "sha256": "1dc60fdd02e48bf939a8a455e1935839cecf1b94d2a015512f7073b486450109",
+      "reviewed": true
+    },
+    {
+      "path": "/message/thinking",
+      "characters": 7506,
+      "sha256": "eebd97f6a518def404a076fb264225f964779e81f85275c1ef7cfca4ccddc9f2",
+      "reviewed": true
+    },
+    {
+      "path": "/done_reason",
+      "characters": 4,
+      "sha256": "6f2be2fe58ca2ba48e809c9588269fb710ce2535ba22acafb1123cdbb7421a02",
+      "reviewed": true
+    }
+  ],
+  "provider_text_ruling": "完整content/thinking已讀：日期/欄位/Unicode ID正確，銷售數量與庫存及折扣後淨額與折扣額分清；部分店鍵/自身與依賴有改善。thinking兩次object path重述仍錯；關於stores without transactions用語置於有交易店日的既有上下文，未推定全庫存母體或最終新增flag需求。",
+  "accepted_scope_AND_equivalences": [],
+  "artifacts": {
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-03/node-provider-response.json": "9c45e791037e801183d448f9bc04112f9c7332b673c48f518b6c5585697a6cd0",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-03/node-managed.json": "d7873a14d5727d2f92d06bbaed40f2164257f5034dfd58c62454938595966852",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-03/run.json": "aa695af6238a6e2a100a4ba613a369200c4402128b8b65908e3b414b616d9af7",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-03/usage.json": "5cfd2c2bd171aa92a8eb22e1aa97746abb48438b72cb3744186896ef3247c5cd",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-03/node-body.json": "f37deddc2c23747749bbf1ef74e5b72cf86bf069b6fccc55e684dffcea10e7fb",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-03/node-call.json": "5b8cacbb97f33072cf067133b182649243212130a1522ab7093a2fe440c80f5e",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-03/node-compiled.json": "1b9b654fd23a147b531ade8c685a3ac345c2a33cb01b2f192c6684e3e93c10dc",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-03/node-parsed.json": "1d03ced13b267292f20afdbb19e5d606fae42199774edcb32709aeaee4cead00",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-03/node-refs.json": "272406ed087a4a3c14670d39db7ed162c0564ed85fc98f2100fd86b14feeff17",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-03/upstream.json": "5afd2ee0ae2fcd93287c0863b68ef0518f89476fb60f157249f32901f3ff27a8",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-03/node-request.json": "4bed1a893551c5246744a9a0139af0458117989ba32f0b23b6a1e654fb4c24e1",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-03/node-presence.json": "28d2747fc5d06bb35c411ba59584cab7618e1be9ffdc01aa31e5aeeb2ffcb840",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-03/node-error.json": "2fd63dbeff0ee95a4717092efac6f464631e99a260ddde4a8da389f0d5d0fefe"
+  },
+  "outer_receipt_sha256": "c484497914ebe9cd35cfbff26d28a957de38537013eb8f4cd457f3029c461507",
+  "POST": 1,
+  "retry": 0,
+  "SQL_DB": 0
+}

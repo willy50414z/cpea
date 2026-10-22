@@ -1,0 +1,6 @@
+{
+  "response": "{\"entries\": {\"stock\": {\"status\": \"unsupported\", \"mappings\": [], \"contract_path\": \"/grain/description\", \"own_gap\": true}, \"sales\": {\"status\": \"partial\", \"mappings\": [{\"column\": \"discount_amount\", \"aggregation\": \"sum\", \"conditions\": []}, {\"column\": \"net_sales\", \"aggregation\": \"sum\", \"conditions\": []}], \"contract_path\": \"/grain/description\", \"own_gap\": false}, \"channel\": {\"status\": \"unsupported\", \"mappings\": [], \"contract_path\": \"/grain/description\", \"own_gap\": true}, \"period\": {\"status\": \"supported\", \"mappings\": [{\"column\": \"sales_month\", \"operator\": \">=\", \"value\": \"2026-09-01\"}, {\"column\": \"sales_month\", \"operator\": \"<\", \"value\": \"2026-10-01\"}], \"contract_path\": \"/grain/description\", \"own_gap\": false}, \"population\": {\"status\": \"supported\", \"mappings\": [{\"column\": \"store_id\"}, {\"column\": \"product_id\"}], \"contract_path\": \"/grain/description\", \"own_gap\": false}, \"grain\": {\"status\": \"supported\", \"mappings\": [{\"column\": \"store_id\"}, {\"column\": \"product_id\"}], \"own_gap\": false}, \"R_PURPOSE\": {\"status\": \"unsupported\", \"mappings\": [], \"contract_path\": null, \"own_gap\": true}}}",
+  "usage": null,
+  "response_metadata": {},
+  "elapsed_seconds": 0.0001272610097657889
+}

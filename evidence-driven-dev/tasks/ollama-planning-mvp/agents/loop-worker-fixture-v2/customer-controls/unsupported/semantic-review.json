@@ -1,0 +1,49 @@
+{
+  "machine_verdict": "FAIL",
+  "classification": "SEMANTIC_REJECT",
+  "findings": [
+    {
+      "requirement_id": "MET-003",
+      "aspect": "status/own_gap",
+      "expected": {
+        "status": "partial",
+        "own_gap": true,
+        "mappings": [
+          {
+            "column": "lifetime_spend",
+            "aggregation": "sum",
+            "conditions": []
+          }
+        ],
+        "contract_path": "/columns/lifetime_spend/description"
+      },
+      "actual": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      }
+    },
+    {
+      "requirement_id": "MET-003",
+      "aspect": "necessary mappings/predicates",
+      "expected": [
+        {
+          "column": "lifetime_spend",
+          "aggregation": "sum",
+          "conditions": []
+        }
+      ],
+      "actual": []
+    },
+    {
+      "requirement_id": "MET-003",
+      "aspect": "contract_path requires review",
+      "expected": "/columns/lifetime_spend/description",
+      "actual": null
+    }
+  ],
+  "independent_semantic_approval": "PENDING",
+  "free_text_review": "PENDING: all raw/normalized text, tasks.request, preparation, notes, policies, assignment/exclusion refs and remaining claims require independent semantic review",
+  "fixture_approval": "PENDING_FRESH_INDEPENDENT_REVIEW"
+}

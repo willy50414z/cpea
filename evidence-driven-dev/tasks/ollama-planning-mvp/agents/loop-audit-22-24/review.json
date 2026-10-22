@@ -1,0 +1,15 @@
+{
+  "ticket": "52e22eb4e62b4142995079d89efb29c2",
+  "verdict": "REPLAN",
+  "reviewed_rounds": [
+    22,
+    23,
+    24
+  ],
+  "evidence": [
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-22-24/inspection.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-22-24/direction-findings.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-22-24/final-verification.json"
+  ],
+  "summary": "REPLAN：22離線核准維持PASS；23五首次FAIL/PASS/FAIL/FAIL/FAIL包含真語意遺漏，24測試與provenance仍FAIL且候選frozen replay/fresh review未完。已獨立核1233筆輪證據hash、五原raw最終33列與真closed/duplicate/24FAIL守門。依最新指示改為有限同canonical30題修前後各一次，不續9×3開發面板或無限改善。下一fresh研究必先確立真preloop可重現baseline、合法可評測current候選最小前置及共同完整獨立Oracle/等價規則，固定版本/公平Qwen參數/60首次結果與逐題首錯保存後續跑。不得假造24PASS或22–24CONTINUE、以DeepSeek或round20代baseline、修答重抽或翻歷史分數；原root/38×2Gate與全部計數保持。0POST/SQL/DB/修改舊檔；全部proof程序結束後真FINAL，後續依Main核SHA/check-evidence/controllerreview派fresh研究。"
+}

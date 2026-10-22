@@ -1,0 +1,20 @@
+{
+  "id": "EV-20261020T155100-45614282",
+  "kind": "review",
+  "command": [
+    ".venv/bin/python",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/reports/verify_source_reasons.py"
+  ],
+  "cwd": "/home/willy/code/cpea_terms",
+  "started_at": "2026-10-20T15:51:00+00:00",
+  "finished_at": "2026-10-20T15:51:02+00:00",
+  "exit_code": 0,
+  "revision": "bc09c67fc4078501599c37e4cdfecdee40af2ef8",
+  "diff_fingerprint": "9eb02e4b828633471232023f8f6731b640a33b5145d011b23c49f4c9432e7aad",
+  "post_fingerprint": "9eb02e4b828633471232023f8f6731b640a33b5145d011b23c49f4c9432e7aad",
+  "source_unchanged": true,
+  "output_sha256": "54dce4da52efe4c4ba3e566296d71de0f1059297dbbef1a1382c69344a5e0398",
+  "raw_output": ".local/EV-20261020T155100-45614282.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "780f215d1c487b491ead6262d32b26ab9310ce5ce441b8f10a6accce961627db"
+}

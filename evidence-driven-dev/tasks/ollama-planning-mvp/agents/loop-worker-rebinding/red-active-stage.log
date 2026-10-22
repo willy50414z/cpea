@@ -1,0 +1,20 @@
+F
+=================================== FAILURES ===================================
+_____ test_execute_requires_active_stage_worker_and_completed_audit[none] ______
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-60/test_execute_requires_active_s0')
+mutation = 'none'
+
+    @pytest.mark.parametrize('mutation', ['none', 'node', 'closed', 'round', 'audit', 'status', 'unbound'])
+    def test_execute_requires_active_stage_worker_and_completed_audit(tmp_path, mutation):
+        mod = api()
+>       assert hasattr(mod, '_execution_guard'), 'active-stage execution guard missing'
+E       AssertionError: active-stage execution guard missing
+E       assert False
+E        +  where False = hasattr(<module 'evaluations.diagnostics.managed_node_diagnostics_rebound' from '/home/willy/code/cpea_terms/evaluations/diagnostics/managed_node_diagnostics_rebound.py'>, '_execution_guard')
+
+tests/diagnostics/test_managed_node_diagnostics_rebound.py:192: AssertionError
+=========================== short test summary info ============================
+FAILED tests/diagnostics/test_managed_node_diagnostics_rebound.py::test_execute_requires_active_stage_worker_and_completed_audit[none]
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 68 deselected in 0.96s

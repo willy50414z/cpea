@@ -1,0 +1,320 @@
+{
+  "COV-ISO-v1-01": {
+    "legacy": {
+      "result": "FAIL",
+      "replay_verification": "PASS",
+      "stopped": {
+        "error_type": "ValueError",
+        "error": "fixed diagnostic semantic checks failed"
+      },
+      "inner": {
+        "result": "PASS",
+        "raw_replays": 1,
+        "stopped": {
+          "error_type": "ValueError",
+          "error": "fixed diagnostic semantic checks failed"
+        },
+        "upstream_injected": true,
+        "provider_calls": 0
+      },
+      "outer_receipt_sha256": "8ba9a5aa5efb9f4449f46b6ebdb564114fd995de50f4b6ed030f5e01bc385a5e",
+      "provider_calls": 0,
+      "independent_semantic_approval": "PENDING"
+    },
+    "new": {
+      "status": "FAIL",
+      "legacy_findings": [
+        {
+          "requirement_id": "GRN-001",
+          "aspect": "status/own_gap",
+          "expected": {
+            "status": "partial",
+            "own_gap": true,
+            "mappings": [
+              {
+                "column": "store_id"
+              }
+            ]
+          },
+          "actual": {
+            "status": "unsupported",
+            "own_gap": true,
+            "mappings": []
+          }
+        },
+        {
+          "requirement_id": "GRN-001",
+          "aspect": "necessary mappings/predicates",
+          "expected": [
+            {
+              "column": "store_id"
+            }
+          ],
+          "actual": []
+        },
+        {
+          "requirement_id": "MET-003",
+          "aspect": "status/own_gap",
+          "expected": {
+            "status": "partial",
+            "own_gap": false,
+            "mappings": [
+              {
+                "column": "revenue",
+                "aggregation": "sum",
+                "conditions": []
+              }
+            ],
+            "contract_path": "/columns/revenue/description"
+          },
+          "actual": {
+            "status": "partial",
+            "own_gap": true,
+            "mappings": [
+              {
+                "column": "revenue",
+                "aggregation": "sum",
+                "conditions": []
+              }
+            ],
+            "contract_path": "/columns/revenue/description"
+          }
+        }
+      ],
+      "accepted_scope_AND_equivalences": [],
+      "other_findings": [
+        {
+          "requirement_id": "GRN-001",
+          "aspect": "status/own_gap",
+          "expected": {
+            "status": "partial",
+            "own_gap": true,
+            "mappings": [
+              {
+                "column": "store_id"
+              }
+            ]
+          },
+          "actual": {
+            "status": "unsupported",
+            "own_gap": true,
+            "mappings": []
+          }
+        },
+        {
+          "requirement_id": "GRN-001",
+          "aspect": "necessary mappings/predicates",
+          "expected": [
+            {
+              "column": "store_id"
+            }
+          ],
+          "actual": []
+        },
+        {
+          "requirement_id": "MET-003",
+          "aspect": "status/own_gap",
+          "expected": {
+            "status": "partial",
+            "own_gap": false,
+            "mappings": [
+              {
+                "column": "revenue",
+                "aggregation": "sum",
+                "conditions": []
+              }
+            ],
+            "contract_path": "/columns/revenue/description"
+          },
+          "actual": {
+            "status": "partial",
+            "own_gap": true,
+            "mappings": [
+              {
+                "column": "revenue",
+                "aggregation": "sum",
+                "conditions": []
+              }
+            ],
+            "contract_path": "/columns/revenue/description"
+          }
+        }
+      ],
+      "independent_semantic_approval": "PENDING",
+      "free_text_review": "PENDING"
+    }
+  },
+  "COV-ISO-v1-02": {
+    "legacy": {
+      "result": "PASS",
+      "replay_verification": "PASS",
+      "stopped": null,
+      "inner": {
+        "result": "PASS",
+        "raw_replays": 1,
+        "stopped": null,
+        "upstream_injected": true,
+        "provider_calls": 0
+      },
+      "outer_receipt_sha256": "9f9df874b88cd7361b9bdaeaad3c4f5d9d9f0c0b05345d209aa322a2405c0b97",
+      "provider_calls": 0,
+      "independent_semantic_approval": "PENDING"
+    },
+    "new": {
+      "status": "PASS",
+      "legacy_findings": [],
+      "accepted_scope_AND_equivalences": [],
+      "other_findings": [],
+      "independent_semantic_approval": "PENDING",
+      "free_text_review": "PENDING"
+    }
+  },
+  "COV-ISO-v1-03": {
+    "legacy": {
+      "result": "FAIL",
+      "replay_verification": "PASS",
+      "stopped": {
+        "error_type": "ValueError",
+        "error": "fixed diagnostic semantic checks failed"
+      },
+      "inner": {
+        "result": "PASS",
+        "raw_replays": 1,
+        "stopped": {
+          "error_type": "ValueError",
+          "error": "fixed diagnostic semantic checks failed"
+        },
+        "upstream_injected": true,
+        "provider_calls": 0
+      },
+      "outer_receipt_sha256": "837ee94de9c62fa87a2c9a5058d86fcbced98ab3d3a26cdef1c8f456cc2e483e",
+      "provider_calls": 0,
+      "independent_semantic_approval": "PENDING"
+    },
+    "new": {
+      "status": "FAIL",
+      "legacy_findings": [
+        {
+          "requirement_id": "slot_0/🧾",
+          "aspect": "status/own_gap",
+          "expected": {
+            "status": "partial",
+            "own_gap": true,
+            "mappings": [
+              {
+                "column": "loc_key"
+              }
+            ]
+          },
+          "actual": {
+            "status": "unsupported",
+            "own_gap": true,
+            "mappings": []
+          }
+        },
+        {
+          "requirement_id": "slot_0/🧾",
+          "aspect": "necessary mappings/predicates",
+          "expected": [
+            {
+              "column": "loc_key"
+            }
+          ],
+          "actual": []
+        },
+        {
+          "requirement_id": "amount/net",
+          "aspect": "necessary mappings/predicates",
+          "expected": [
+            {
+              "column": "amount_value",
+              "aggregation": "sum",
+              "conditions": []
+            }
+          ],
+          "actual": [
+            {
+              "column": "amount_value",
+              "aggregation": "sum",
+              "conditions": [
+                {
+                  "column": "day_key",
+                  "operator": ">=",
+                  "value": "2032-02-01"
+                },
+                {
+                  "column": "day_key",
+                  "operator": "<",
+                  "value": "2032-03-01"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "accepted_scope_AND_equivalences": [
+        {
+          "requirement_id": "amount/net",
+          "aspect": "necessary mappings/predicates",
+          "expected": [
+            {
+              "column": "amount_value",
+              "aggregation": "sum",
+              "conditions": []
+            }
+          ],
+          "actual": [
+            {
+              "column": "amount_value",
+              "aggregation": "sum",
+              "conditions": [
+                {
+                  "column": "day_key",
+                  "operator": ">=",
+                  "value": "2032-02-01"
+                },
+                {
+                  "column": "day_key",
+                  "operator": "<",
+                  "value": "2032-03-01"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "other_findings": [
+        {
+          "requirement_id": "slot_0/🧾",
+          "aspect": "status/own_gap",
+          "expected": {
+            "status": "partial",
+            "own_gap": true,
+            "mappings": [
+              {
+                "column": "loc_key"
+              }
+            ]
+          },
+          "actual": {
+            "status": "unsupported",
+            "own_gap": true,
+            "mappings": []
+          }
+        },
+        {
+          "requirement_id": "slot_0/🧾",
+          "aspect": "necessary mappings/predicates",
+          "expected": [
+            {
+              "column": "loc_key"
+            }
+          ],
+          "actual": []
+        }
+      ],
+      "independent_semantic_approval": "PENDING",
+      "free_text_review": "PENDING"
+    }
+  }
+}

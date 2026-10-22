@@ -1,0 +1,24 @@
+{
+  "original": {
+    "coverage_validation": "FAIL",
+    "error_type": "ValueError",
+    "error": "supported requires mappings/evidence and no missing requirements"
+  },
+  "remove_background_from_derived_only": {
+    "coverage_validation": "PASS",
+    "requirements": 8
+  },
+  "purpose_unsupported": {
+    "coverage_validation": "PASS",
+    "requirements": 9
+  },
+  "limitations": [
+    "此為既有 raw 的記憶體反事實定位，並非自然模型通過或正式驗收。",
+    "purpose_unsupported 雖可通過 coverage，但 selection 要求每一需求皆有 supported assignment，故仍無合法 ready。",
+    "未改 raw、Task、產品或評估程式，未呼叫模型、SQL 或 DB。"
+  ],
+  "source_hashes": {
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-coverage-ref-20261021T143956Z-549b86/map-01-parsed.json": "c4a474c5d68e2e94da6e3f33813845181614279c65ceb6b13b57d38d675eaa96",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-indexed-20261021T075802Z-66d3ec/recall-result.json": "6a4ba9f256539c5778efd2fd95347b5af21e4cf7d65f5d3257386ec6b00517d2"
+  }
+}

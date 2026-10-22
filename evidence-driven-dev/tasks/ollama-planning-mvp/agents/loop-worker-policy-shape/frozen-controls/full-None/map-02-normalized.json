@@ -1,0 +1,113 @@
+{
+  "view": "demo_retail.v_daily_sales",
+  "entries": [
+    {
+      "requirement_id": "stock",
+      "status": "unsupported",
+      "mappings": [],
+      "contract_evidence": [
+        {
+          "path": "/grain/description",
+          "quote": "門市×有銷售的日期"
+        }
+      ],
+      "missing_requirements": [
+        "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"self\", \"requirements\": [{\"requirement_id\": \"stock\", \"quote\": \"目前庫存件數\", \"status\": \"unsupported\"}]}",
+        "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"grain\", \"requirements\": [{\"requirement_id\": \"grain\", \"quote\": \"各店各商品\", \"status\": \"unsupported\"}]}"
+      ]
+    },
+    {
+      "requirement_id": "sales",
+      "status": "unsupported",
+      "mappings": [],
+      "contract_evidence": [
+        {
+          "path": "/grain/description",
+          "quote": "門市×有銷售的日期"
+        }
+      ],
+      "missing_requirements": [
+        "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"self\", \"requirements\": [{\"requirement_id\": \"sales\", \"quote\": \"折扣金額及淨銷售額\", \"status\": \"unsupported\"}]}",
+        "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"scope\", \"requirements\": [{\"requirement_id\": \"channel\", \"quote\": \"線上通路\", \"status\": \"unsupported\"}, {\"requirement_id\": \"period\", \"quote\": \"2026年9月\", \"status\": \"unsupported\"}]}",
+        "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"grain\", \"requirements\": [{\"requirement_id\": \"grain\", \"quote\": \"各店各商品\", \"status\": \"unsupported\"}]}"
+      ]
+    },
+    {
+      "requirement_id": "channel",
+      "status": "unsupported",
+      "mappings": [],
+      "contract_evidence": [
+        {
+          "path": "/grain/description",
+          "quote": "門市×有銷售的日期"
+        }
+      ],
+      "missing_requirements": [
+        "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"self\", \"requirements\": [{\"requirement_id\": \"channel\", \"quote\": \"線上通路\", \"status\": \"unsupported\"}]}"
+      ]
+    },
+    {
+      "requirement_id": "period",
+      "status": "unsupported",
+      "mappings": [],
+      "contract_evidence": [
+        {
+          "path": "/grain/description",
+          "quote": "門市×有銷售的日期"
+        }
+      ],
+      "missing_requirements": [
+        "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"self\", \"requirements\": [{\"requirement_id\": \"period\", \"quote\": \"2026年9月\", \"status\": \"unsupported\"}]}"
+      ]
+    },
+    {
+      "requirement_id": "population",
+      "status": "unsupported",
+      "mappings": [],
+      "contract_evidence": [
+        {
+          "path": "/grain/description",
+          "quote": "門市×有銷售的日期"
+        }
+      ],
+      "missing_requirements": [
+        "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"self\", \"requirements\": [{\"requirement_id\": \"population\", \"quote\": \"保留所有庫存商品\", \"status\": \"unsupported\"}]}"
+      ]
+    },
+    {
+      "requirement_id": "grain",
+      "status": "unsupported",
+      "mappings": [],
+      "contract_evidence": [
+        {
+          "path": "/grain/description",
+          "quote": "門市×有銷售的日期"
+        }
+      ],
+      "missing_requirements": [
+        "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"self\", \"requirements\": [{\"requirement_id\": \"grain\", \"quote\": \"各店各商品\", \"status\": \"unsupported\"}]}"
+      ]
+    },
+    {
+      "requirement_id": "R_PURPOSE",
+      "status": "unsupported",
+      "mappings": [],
+      "contract_evidence": [],
+      "missing_requirements": [
+        "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"self\", \"requirements\": [{\"requirement_id\": \"R_PURPOSE\", \"quote\": \"盤點日期\", \"status\": \"unsupported\"}]}"
+      ]
+    }
+  ],
+  "grain": "門市×有銷售的日期",
+  "keys": [
+    "sales_date",
+    "store_id"
+  ],
+  "population": "粒度：門市×有銷售的日期；沒有交易的門市日期不出現。適合每日營收、門市趨勢",
+  "contract_evidence": [
+    {
+      "path": "/summary",
+      "quote": "粒度：門市×有銷售的日期；沒有交易的門市日期不出現。適合每日營收、門市趨勢"
+    }
+  ]
+}

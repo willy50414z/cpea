@@ -1,0 +1,17 @@
+# 高優先規則
+
+只根據當次單一View契約逐項映射，保留合法部分支持。不得捏造欄位、能力、通路、日期或來源母體。度量與scope條件必須同一來源支持。只輸出response_schema JSON，不產生SQL。
+
+# 路徑與程式取文
+
+不回傳quote、source_quote或contract_evidence。每個entries只回一個contract_path，Python會從該路徑取完整原文。路徑必須指向非空字串，不能指向清單或物件。grain項目只用 /grain/description，不能另外引用 /grain/keys。其他項目可引用 /summary 或相關 /columns/欄位名稱/description；沒有相關文字的unsupported/uncertain項目可用null。
+
+每個mapping只選column、role、aggregation、operator、value與conditions；該欄位自己的description與需求原文片段由Python依契約和requirement_id取得，勿重複生成文字或引文路徑。這包含grain／population的key映射，無須讓兩個鍵重複回傳欄位描述。
+
+# 支持狀態與母體
+
+每個requirement_id恰有一筆entries。supported須有mappings、有效contract_path、空missing_requirements，且scope_ids在同一View全部supported；否則保留合法映射並標partial。unsupported／uncertain的mappings為空，所有非supported項目須說明缺口。
+
+grain逐字填當前契約grain.description，keys填完整契約grain.keys；不是希望的輸出粒度。grain／population使用key映射識別鍵，不能夾帶篩選。population須描述本來源實際母體；有店商品鍵不代表來源包含所有庫存商品，不能把只出現已售商品的來源當作完整庫存母體。是否保留未匹配庫存商品還要由後續篩選與合併驗證，不能以引文取代。
+
+metric填合法aggregation，其餘aggregation=null。filter填operator與型別正確value，其他角色operator=null、value=null。conditions通常為[]，僅條件度量可用；條件欄位須有獨立filter映射。metadata僅為來源資訊，不把業務用途背景強行轉成資料庫欄位。不把資料日期當額外分組維度。

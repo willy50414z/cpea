@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "ticket": "8a59062f68c646139853d64a40f68171",
+  "role": "fresh_fail23_research",
+  "result": "PLAN_READY",
+  "plan": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-23/plan.json",
+  "plan_sha256": "effdbeee6d6f0572c83d587950f0b64cc52fa46d108091c02a101a48d909372e",
+  "evidence": [
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-23/advice-evaluation.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-23/research.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-23/raw-and-leaf-probe.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-23/source-index.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-23/old-nodes-snapshot.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-23/verification.json"
+  ],
+  "summary": "已全文讀1178行指定建議並核最新23輪五案原raw/thinking、真View/碼/24nodes。23已完整FAIL；恰四object path可機械限制，但04漏有用累計淨額、05缺母體複合key/相關證據不會自動修正。推薦只A1文字leaf值域的可否證候選，不採用重構：原5加4個直接針對部分能力/無status庫存/縮限母體/毛利精度的固定控制；seed42全9過才續預固定43/44，最多27首次POST，任何語意錯回fresh研究B1，C與Semantic Layer暫緩。新seed transport是如實列明的新delta，不改舊global。新3child掛23未PASS父下，舊24節點逐字保留。0POST研究不能宣稱新自然可行或正式業務認證。",
+  "next_action": "Main核真FINAL/plan-handoff SHA/check-evidence後plan採納；round24僅text_leaf_evidence_contract離線作者，結束必fresh audit22–24，再fresh semantics、自然固定面板。",
+  "return_path": [
+    "natural_capability_projection_coverage自身新candidate整合，原23round仍FAIL",
+    "natural_kind_coverage_isolation自身整合，原20round仍FAIL",
+    "natural_kind_mapping_three_stage全新自然9POST及typed2prepared/回歸",
+    "natural_own_responsibility_three_stage",
+    "natural_evidence_bound_three_stage",
+    "natural_slots_three_stage",
+    "natural_qwen_three_stage",
+    "three_stage_integration",
+    "root",
+    "fresh final ACCEPT"
+  ],
+  "requirements_retained": [
+    "每3輪fresh audit，下一次22–24不得略23FAIL",
+    "全部首次/失敗raw/oldproof保留，不修改source/tests/fixture/Oracle/prompt/manifest/Task/control",
+    "只下一worker可依核准計畫新版本實作；本研究未實作",
+    "原38×2Gate未過、全部祖先/root PENDING，不做SQL/DB/雲端或partial跨來源合成",
+    "業務draft/technical approved及sales_detail唯一鍵矛盾保留；不把研究測試當正式業務認證"
+  ],
+  "research_actions": {
+    "POST": 0,
+    "SQL_DB": 0,
+    "cloud": 0,
+    "source_edits": 0,
+    "commit_push": 0
+  },
+  "verification": {
+    "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-23/verification.json",
+    "sha256": "5265a6f2a0ebd6aa624fdf8ad1d78adbfd5226cc465942b1d441d5d0dabff236"
+  },
+  "proof_complete": true,
+  "final_after_all_writes": true
+}

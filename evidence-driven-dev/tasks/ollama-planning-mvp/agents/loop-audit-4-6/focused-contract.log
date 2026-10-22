@@ -1,0 +1,6 @@
+獨立focused實跑之工具輸出紀錄；本log由已完成的exec/write_stdin輸出轉錄，未重跑整307。
+Command: .venv/bin/python -m pytest tests/unit/test_evidence_bound_managed_contract.py -q -k "every_typed_field or cannot_hide_typed or original_round4_order or fixed_month or two_distinct or renamed_contract or without_status or bound_wire_retains or redundancy"
+Exit code: 0
+32 passed, 28 deselected in 2.31s
+涵蓋parser逐欄必填/ready非null/空typed責任、原order商品grain反例及真order正例、固定月份、不同grain與independent、改名契約、無status合法庫存及原mapping guards。
+模型/SQL/DB呼叫=0。

@@ -1,0 +1,769 @@
+{
+  "COV-ISO-v1-01": {
+    "raw_strings": [
+      {
+        "path": "/entries/FILT-001/contract_path",
+        "text": "/columns/sales_date/description"
+      },
+      {
+        "path": "/entries/FILT-001/mappings/0/column",
+        "text": "sales_date"
+      },
+      {
+        "path": "/entries/FILT-001/mappings/0/operator",
+        "text": ">="
+      },
+      {
+        "path": "/entries/FILT-001/mappings/0/value",
+        "text": "2026-09-01"
+      },
+      {
+        "path": "/entries/FILT-001/mappings/1/column",
+        "text": "sales_date"
+      },
+      {
+        "path": "/entries/FILT-001/mappings/1/operator",
+        "text": "<"
+      },
+      {
+        "path": "/entries/FILT-001/mappings/1/value",
+        "text": "2026-10-01"
+      },
+      {
+        "path": "/entries/FILT-001/status",
+        "text": "supported"
+      },
+      {
+        "path": "/entries/FILT-002/status",
+        "text": "unsupported"
+      },
+      {
+        "path": "/entries/GRN-001/status",
+        "text": "unsupported"
+      },
+      {
+        "path": "/entries/MET-001/status",
+        "text": "unsupported"
+      },
+      {
+        "path": "/entries/MET-002/status",
+        "text": "unsupported"
+      },
+      {
+        "path": "/entries/MET-003/contract_path",
+        "text": "/columns/revenue/description"
+      },
+      {
+        "path": "/entries/MET-003/mappings/0/aggregation",
+        "text": "sum"
+      },
+      {
+        "path": "/entries/MET-003/mappings/0/column",
+        "text": "revenue"
+      },
+      {
+        "path": "/entries/MET-003/status",
+        "text": "partial"
+      },
+      {
+        "path": "/entries/META-001/status",
+        "text": "unsupported"
+      },
+      {
+        "path": "/entries/POP-001/status",
+        "text": "unsupported"
+      }
+    ],
+    "normalized_strings": [
+      {
+        "path": "/view",
+        "text": "demo_retail.v_daily_sales"
+      },
+      {
+        "path": "/entries/0/requirement_id",
+        "text": "GRN-001"
+      },
+      {
+        "path": "/entries/0/status",
+        "text": "unsupported"
+      },
+      {
+        "path": "/entries/0/contract_evidence/0/path",
+        "text": "/grain/description"
+      },
+      {
+        "path": "/entries/0/contract_evidence/0/quote",
+        "text": "門市×有銷售的日期"
+      },
+      {
+        "path": "/entries/0/missing_requirements/0",
+        "text": "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"self\", \"requirements\": [{\"requirement_id\": \"GRN-001\", \"quote\": \"各店各商品\", \"status\": \"unsupported\"}]}"
+      },
+      {
+        "path": "/entries/1/requirement_id",
+        "text": "MET-001"
+      },
+      {
+        "path": "/entries/1/status",
+        "text": "unsupported"
+      },
+      {
+        "path": "/entries/1/missing_requirements/0",
+        "text": "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"self\", \"requirements\": [{\"requirement_id\": \"MET-001\", \"quote\": \"盤點庫存件數\", \"status\": \"unsupported\"}]}"
+      },
+      {
+        "path": "/entries/1/missing_requirements/1",
+        "text": "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"grain\", \"requirements\": [{\"requirement_id\": \"GRN-001\", \"quote\": \"各店各商品\", \"status\": \"unsupported\"}]}"
+      },
+      {
+        "path": "/entries/2/requirement_id",
+        "text": "FILT-001"
+      },
+      {
+        "path": "/entries/2/status",
+        "text": "supported"
+      },
+      {
+        "path": "/entries/2/mappings/0/column",
+        "text": "sales_date"
+      },
+      {
+        "path": "/entries/2/mappings/0/role",
+        "text": "filter"
+      },
+      {
+        "path": "/entries/2/mappings/0/source_quote",
+        "text": "2026 年 9 月"
+      },
+      {
+        "path": "/entries/2/mappings/0/operator",
+        "text": ">="
+      },
+      {
+        "path": "/entries/2/mappings/0/value",
+        "text": "2026-09-01"
+      },
+      {
+        "path": "/entries/2/mappings/0/contract_evidence/0/path",
+        "text": "/columns/sales_date/description"
+      },
+      {
+        "path": "/entries/2/mappings/0/contract_evidence/0/quote",
+        "text": "已完成訂單的銷售日期；無交易的門市日期不會有資料列。"
+      },
+      {
+        "path": "/entries/2/mappings/1/column",
+        "text": "sales_date"
+      },
+      {
+        "path": "/entries/2/mappings/1/role",
+        "text": "filter"
+      },
+      {
+        "path": "/entries/2/mappings/1/source_quote",
+        "text": "2026 年 9 月"
+      },
+      {
+        "path": "/entries/2/mappings/1/operator",
+        "text": "<"
+      },
+      {
+        "path": "/entries/2/mappings/1/value",
+        "text": "2026-10-01"
+      },
+      {
+        "path": "/entries/2/mappings/1/contract_evidence/0/path",
+        "text": "/columns/sales_date/description"
+      },
+      {
+        "path": "/entries/2/mappings/1/contract_evidence/0/quote",
+        "text": "已完成訂單的銷售日期；無交易的門市日期不會有資料列。"
+      },
+      {
+        "path": "/entries/2/contract_evidence/0/path",
+        "text": "/columns/sales_date/description"
+      },
+      {
+        "path": "/entries/2/contract_evidence/0/quote",
+        "text": "已完成訂單的銷售日期；無交易的門市日期不會有資料列。"
+      },
+      {
+        "path": "/entries/3/requirement_id",
+        "text": "FILT-002"
+      },
+      {
+        "path": "/entries/3/status",
+        "text": "unsupported"
+      },
+      {
+        "path": "/entries/3/missing_requirements/0",
+        "text": "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"self\", \"requirements\": [{\"requirement_id\": \"FILT-002\", \"quote\": \"線上通路\", \"status\": \"unsupported\"}]}"
+      },
+      {
+        "path": "/entries/4/requirement_id",
+        "text": "MET-002"
+      },
+      {
+        "path": "/entries/4/status",
+        "text": "unsupported"
+      },
+      {
+        "path": "/entries/4/missing_requirements/0",
+        "text": "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"self\", \"requirements\": [{\"requirement_id\": \"MET-002\", \"quote\": \"折扣金額\", \"status\": \"unsupported\"}]}"
+      },
+      {
+        "path": "/entries/4/missing_requirements/1",
+        "text": "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"scope\", \"requirements\": [{\"requirement_id\": \"FILT-002\", \"quote\": \"線上通路\", \"status\": \"unsupported\"}]}"
+      },
+      {
+        "path": "/entries/4/missing_requirements/2",
+        "text": "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"grain\", \"requirements\": [{\"requirement_id\": \"GRN-001\", \"quote\": \"各店各商品\", \"status\": \"unsupported\"}]}"
+      },
+      {
+        "path": "/entries/5/requirement_id",
+        "text": "MET-003"
+      },
+      {
+        "path": "/entries/5/status",
+        "text": "partial"
+      },
+      {
+        "path": "/entries/5/mappings/0/column",
+        "text": "revenue"
+      },
+      {
+        "path": "/entries/5/mappings/0/role",
+        "text": "metric"
+      },
+      {
+        "path": "/entries/5/mappings/0/source_quote",
+        "text": "淨銷售額"
+      },
+      {
+        "path": "/entries/5/mappings/0/aggregation",
+        "text": "sum"
+      },
+      {
+        "path": "/entries/5/mappings/0/contract_evidence/0/path",
+        "text": "/columns/revenue/description"
+      },
+      {
+        "path": "/entries/5/mappings/0/contract_evidence/0/quote",
+        "text": "門市折扣後的銷售淨額總和，單位 TWD"
+      },
+      {
+        "path": "/entries/5/contract_evidence/0/path",
+        "text": "/columns/revenue/description"
+      },
+      {
+        "path": "/entries/5/contract_evidence/0/quote",
+        "text": "門市折扣後的銷售淨額總和，單位 TWD"
+      },
+      {
+        "path": "/entries/5/missing_requirements/0",
+        "text": "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"self\", \"requirements\": [{\"requirement_id\": \"MET-003\", \"quote\": \"淨銷售額\", \"status\": \"partial\"}]}"
+      },
+      {
+        "path": "/entries/5/missing_requirements/1",
+        "text": "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"scope\", \"requirements\": [{\"requirement_id\": \"FILT-002\", \"quote\": \"線上通路\", \"status\": \"unsupported\"}]}"
+      },
+      {
+        "path": "/entries/5/missing_requirements/2",
+        "text": "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"grain\", \"requirements\": [{\"requirement_id\": \"GRN-001\", \"quote\": \"各店各商品\", \"status\": \"unsupported\"}]}"
+      },
+      {
+        "path": "/entries/6/requirement_id",
+        "text": "META-001"
+      },
+      {
+        "path": "/entries/6/status",
+        "text": "unsupported"
+      },
+      {
+        "path": "/entries/6/missing_requirements/0",
+        "text": "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"self\", \"requirements\": [{\"requirement_id\": \"META-001\", \"quote\": \"庫存盤點日期\", \"status\": \"unsupported\"}]}"
+      },
+      {
+        "path": "/entries/6/missing_requirements/1",
+        "text": "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"grain\", \"requirements\": [{\"requirement_id\": \"GRN-001\", \"quote\": \"各店各商品\", \"status\": \"unsupported\"}]}"
+      },
+      {
+        "path": "/entries/7/requirement_id",
+        "text": "POP-001"
+      },
+      {
+        "path": "/entries/7/status",
+        "text": "unsupported"
+      },
+      {
+        "path": "/entries/7/missing_requirements/0",
+        "text": "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"self\", \"requirements\": [{\"requirement_id\": \"POP-001\", \"quote\": \"保留所有庫存商品\", \"status\": \"unsupported\"}]}"
+      },
+      {
+        "path": "/entries/7/missing_requirements/1",
+        "text": "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"grain\", \"requirements\": [{\"requirement_id\": \"GRN-001\", \"quote\": \"各店各商品\", \"status\": \"unsupported\"}]}"
+      },
+      {
+        "path": "/grain",
+        "text": "門市×有銷售的日期"
+      },
+      {
+        "path": "/keys/0",
+        "text": "sales_date"
+      },
+      {
+        "path": "/keys/1",
+        "text": "store_id"
+      },
+      {
+        "path": "/population",
+        "text": "粒度：門市×有銷售的日期；沒有交易的門市日期不出現。適合每日營收、門市趨勢"
+      },
+      {
+        "path": "/contract_evidence/0/path",
+        "text": "/summary"
+      },
+      {
+        "path": "/contract_evidence/0/quote",
+        "text": "粒度：門市×有銷售的日期；沒有交易的門市日期不出現。適合每日營收、門市趨勢"
+      }
+    ],
+    "provider_thinking_sha256": "07bf929556f87d4343da10c74eab050262864ae27455596c672d34d2f139a791",
+    "provider_thinking_characters": 16114,
+    "all_strings_and_full_thinking_read": true
+  },
+  "COV-ISO-v1-02": {
+    "raw_strings": [
+      {
+        "path": "/entries/unrelated~1識別~0鍵/status",
+        "text": "unsupported"
+      }
+    ],
+    "normalized_strings": [
+      {
+        "path": "/view",
+        "text": "demo_retail.v_customer_value"
+      },
+      {
+        "path": "/entries/0/requirement_id",
+        "text": "unrelated/識別~鍵"
+      },
+      {
+        "path": "/entries/0/status",
+        "text": "unsupported"
+      },
+      {
+        "path": "/entries/0/contract_evidence/0/path",
+        "text": "/grain/description"
+      },
+      {
+        "path": "/entries/0/contract_evidence/0/quote",
+        "text": "每會員一列，包含未下單會員"
+      },
+      {
+        "path": "/entries/0/missing_requirements/0",
+        "text": "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"self\", \"requirements\": [{\"requirement_id\": \"unrelated/識別~鍵\", \"quote\": \"各店各商品\", \"status\": \"unsupported\"}]}"
+      },
+      {
+        "path": "/grain",
+        "text": "每會員一列，包含未下單會員"
+      },
+      {
+        "path": "/keys/0",
+        "text": "customer_id"
+      },
+      {
+        "path": "/population",
+        "text": "粒度：每會員一列，包含未下單會員；"
+      },
+      {
+        "path": "/contract_evidence/0/path",
+        "text": "/summary"
+      },
+      {
+        "path": "/contract_evidence/0/quote",
+        "text": "粒度：每會員一列，包含未下單會員；"
+      }
+    ],
+    "provider_thinking_sha256": "9068822482d43b9ebbdbf017093febbd993e0a96f4f97c822f2ac317819db491",
+    "provider_thinking_characters": 1475,
+    "all_strings_and_full_thinking_read": true
+  },
+  "COV-ISO-v1-03": {
+    "raw_strings": [
+      {
+        "path": "/entries/amount~1net/contract_path",
+        "text": "/columns/amount_value/description"
+      },
+      {
+        "path": "/entries/amount~1net/mappings/0/aggregation",
+        "text": "sum"
+      },
+      {
+        "path": "/entries/amount~1net/mappings/0/column",
+        "text": "amount_value"
+      },
+      {
+        "path": "/entries/amount~1net/mappings/0/conditions/0/column",
+        "text": "day_key"
+      },
+      {
+        "path": "/entries/amount~1net/mappings/0/conditions/0/operator",
+        "text": ">="
+      },
+      {
+        "path": "/entries/amount~1net/mappings/0/conditions/0/value",
+        "text": "2032-02-01"
+      },
+      {
+        "path": "/entries/amount~1net/mappings/0/conditions/1/column",
+        "text": "day_key"
+      },
+      {
+        "path": "/entries/amount~1net/mappings/0/conditions/1/operator",
+        "text": "<"
+      },
+      {
+        "path": "/entries/amount~1net/mappings/0/conditions/1/value",
+        "text": "2032-03-01"
+      },
+      {
+        "path": "/entries/amount~1net/status",
+        "text": "partial"
+      },
+      {
+        "path": "/entries/m_discount/status",
+        "text": "unsupported"
+      },
+      {
+        "path": "/entries/model_dump/status",
+        "text": "unsupported"
+      },
+      {
+        "path": "/entries/scope-channel/status",
+        "text": "unsupported"
+      },
+      {
+        "path": "/entries/slot_0~1🧾/status",
+        "text": "unsupported"
+      },
+      {
+        "path": "/entries/保留~1全部/status",
+        "text": "unsupported"
+      },
+      {
+        "path": "/entries/元資料/status",
+        "text": "unsupported"
+      },
+      {
+        "path": "/entries/月~0邊界/contract_path",
+        "text": "/columns/day_key/description"
+      },
+      {
+        "path": "/entries/月~0邊界/mappings/0/column",
+        "text": "day_key"
+      },
+      {
+        "path": "/entries/月~0邊界/mappings/0/operator",
+        "text": ">="
+      },
+      {
+        "path": "/entries/月~0邊界/mappings/0/value",
+        "text": "2032-02-01"
+      },
+      {
+        "path": "/entries/月~0邊界/mappings/1/column",
+        "text": "day_key"
+      },
+      {
+        "path": "/entries/月~0邊界/mappings/1/operator",
+        "text": "<"
+      },
+      {
+        "path": "/entries/月~0邊界/mappings/1/value",
+        "text": "2032-03-01"
+      },
+      {
+        "path": "/entries/月~0邊界/status",
+        "text": "supported"
+      }
+    ],
+    "normalized_strings": [
+      {
+        "path": "/view",
+        "text": "diagnostic9.observation"
+      },
+      {
+        "path": "/entries/0/requirement_id",
+        "text": "slot_0/🧾"
+      },
+      {
+        "path": "/entries/0/status",
+        "text": "unsupported"
+      },
+      {
+        "path": "/entries/0/contract_evidence/0/path",
+        "text": "/grain/description"
+      },
+      {
+        "path": "/entries/0/contract_evidence/0/quote",
+        "text": "門市×有銷售的日期"
+      },
+      {
+        "path": "/entries/0/missing_requirements/0",
+        "text": "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"self\", \"requirements\": [{\"requirement_id\": \"slot_0/🧾\", \"quote\": \"各店各商品\", \"status\": \"unsupported\"}]}"
+      },
+      {
+        "path": "/entries/1/requirement_id",
+        "text": "model_dump"
+      },
+      {
+        "path": "/entries/1/status",
+        "text": "unsupported"
+      },
+      {
+        "path": "/entries/1/missing_requirements/0",
+        "text": "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"self\", \"requirements\": [{\"requirement_id\": \"model_dump\", \"quote\": \"盤點庫存件數\", \"status\": \"unsupported\"}]}"
+      },
+      {
+        "path": "/entries/1/missing_requirements/1",
+        "text": "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"grain\", \"requirements\": [{\"requirement_id\": \"slot_0/🧾\", \"quote\": \"各店各商品\", \"status\": \"unsupported\"}]}"
+      },
+      {
+        "path": "/entries/2/requirement_id",
+        "text": "月~邊界"
+      },
+      {
+        "path": "/entries/2/status",
+        "text": "supported"
+      },
+      {
+        "path": "/entries/2/mappings/0/column",
+        "text": "day_key"
+      },
+      {
+        "path": "/entries/2/mappings/0/role",
+        "text": "filter"
+      },
+      {
+        "path": "/entries/2/mappings/0/source_quote",
+        "text": "2032 年 2 月"
+      },
+      {
+        "path": "/entries/2/mappings/0/operator",
+        "text": ">="
+      },
+      {
+        "path": "/entries/2/mappings/0/value",
+        "text": "2032-02-01"
+      },
+      {
+        "path": "/entries/2/mappings/0/contract_evidence/0/path",
+        "text": "/columns/day_key/description"
+      },
+      {
+        "path": "/entries/2/mappings/0/contract_evidence/0/quote",
+        "text": "已完成訂單的銷售日期；無交易的門市日期不會有資料列。"
+      },
+      {
+        "path": "/entries/2/mappings/1/column",
+        "text": "day_key"
+      },
+      {
+        "path": "/entries/2/mappings/1/role",
+        "text": "filter"
+      },
+      {
+        "path": "/entries/2/mappings/1/source_quote",
+        "text": "2032 年 2 月"
+      },
+      {
+        "path": "/entries/2/mappings/1/operator",
+        "text": "<"
+      },
+      {
+        "path": "/entries/2/mappings/1/value",
+        "text": "2032-03-01"
+      },
+      {
+        "path": "/entries/2/mappings/1/contract_evidence/0/path",
+        "text": "/columns/day_key/description"
+      },
+      {
+        "path": "/entries/2/mappings/1/contract_evidence/0/quote",
+        "text": "已完成訂單的銷售日期；無交易的門市日期不會有資料列。"
+      },
+      {
+        "path": "/entries/2/contract_evidence/0/path",
+        "text": "/columns/day_key/description"
+      },
+      {
+        "path": "/entries/2/contract_evidence/0/quote",
+        "text": "已完成訂單的銷售日期；無交易的門市日期不會有資料列。"
+      },
+      {
+        "path": "/entries/3/requirement_id",
+        "text": "scope-channel"
+      },
+      {
+        "path": "/entries/3/status",
+        "text": "unsupported"
+      },
+      {
+        "path": "/entries/3/missing_requirements/0",
+        "text": "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"self\", \"requirements\": [{\"requirement_id\": \"scope-channel\", \"quote\": \"線上通路\", \"status\": \"unsupported\"}]}"
+      },
+      {
+        "path": "/entries/4/requirement_id",
+        "text": "m_discount"
+      },
+      {
+        "path": "/entries/4/status",
+        "text": "unsupported"
+      },
+      {
+        "path": "/entries/4/missing_requirements/0",
+        "text": "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"self\", \"requirements\": [{\"requirement_id\": \"m_discount\", \"quote\": \"折扣金額\", \"status\": \"unsupported\"}]}"
+      },
+      {
+        "path": "/entries/4/missing_requirements/1",
+        "text": "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"scope\", \"requirements\": [{\"requirement_id\": \"scope-channel\", \"quote\": \"線上通路\", \"status\": \"unsupported\"}]}"
+      },
+      {
+        "path": "/entries/4/missing_requirements/2",
+        "text": "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"grain\", \"requirements\": [{\"requirement_id\": \"slot_0/🧾\", \"quote\": \"各店各商品\", \"status\": \"unsupported\"}]}"
+      },
+      {
+        "path": "/entries/5/requirement_id",
+        "text": "amount/net"
+      },
+      {
+        "path": "/entries/5/status",
+        "text": "partial"
+      },
+      {
+        "path": "/entries/5/mappings/0/column",
+        "text": "amount_value"
+      },
+      {
+        "path": "/entries/5/mappings/0/role",
+        "text": "metric"
+      },
+      {
+        "path": "/entries/5/mappings/0/source_quote",
+        "text": "淨銷售額"
+      },
+      {
+        "path": "/entries/5/mappings/0/aggregation",
+        "text": "sum"
+      },
+      {
+        "path": "/entries/5/mappings/0/conditions/0/column",
+        "text": "day_key"
+      },
+      {
+        "path": "/entries/5/mappings/0/conditions/0/operator",
+        "text": ">="
+      },
+      {
+        "path": "/entries/5/mappings/0/conditions/0/value",
+        "text": "2032-02-01"
+      },
+      {
+        "path": "/entries/5/mappings/0/conditions/1/column",
+        "text": "day_key"
+      },
+      {
+        "path": "/entries/5/mappings/0/conditions/1/operator",
+        "text": "<"
+      },
+      {
+        "path": "/entries/5/mappings/0/conditions/1/value",
+        "text": "2032-03-01"
+      },
+      {
+        "path": "/entries/5/mappings/0/contract_evidence/0/path",
+        "text": "/columns/amount_value/description"
+      },
+      {
+        "path": "/entries/5/mappings/0/contract_evidence/0/quote",
+        "text": "門市折扣後的銷售淨額總和，單位 TWD"
+      },
+      {
+        "path": "/entries/5/contract_evidence/0/path",
+        "text": "/columns/amount_value/description"
+      },
+      {
+        "path": "/entries/5/contract_evidence/0/quote",
+        "text": "門市折扣後的銷售淨額總和，單位 TWD"
+      },
+      {
+        "path": "/entries/5/missing_requirements/0",
+        "text": "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"scope\", \"requirements\": [{\"requirement_id\": \"scope-channel\", \"quote\": \"線上通路\", \"status\": \"unsupported\"}]}"
+      },
+      {
+        "path": "/entries/5/missing_requirements/1",
+        "text": "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"grain\", \"requirements\": [{\"requirement_id\": \"slot_0/🧾\", \"quote\": \"各店各商品\", \"status\": \"unsupported\"}]}"
+      },
+      {
+        "path": "/entries/6/requirement_id",
+        "text": "元資料"
+      },
+      {
+        "path": "/entries/6/status",
+        "text": "unsupported"
+      },
+      {
+        "path": "/entries/6/missing_requirements/0",
+        "text": "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"self\", \"requirements\": [{\"requirement_id\": \"元資料\", \"quote\": \"庫存盤點日期\", \"status\": \"unsupported\"}]}"
+      },
+      {
+        "path": "/entries/6/missing_requirements/1",
+        "text": "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"grain\", \"requirements\": [{\"requirement_id\": \"slot_0/🧾\", \"quote\": \"各店各商品\", \"status\": \"unsupported\"}]}"
+      },
+      {
+        "path": "/entries/7/requirement_id",
+        "text": "保留/全部"
+      },
+      {
+        "path": "/entries/7/status",
+        "text": "unsupported"
+      },
+      {
+        "path": "/entries/7/missing_requirements/0",
+        "text": "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"self\", \"requirements\": [{\"requirement_id\": \"保留/全部\", \"quote\": \"保留所有庫存商品\", \"status\": \"unsupported\"}]}"
+      },
+      {
+        "path": "/entries/7/missing_requirements/1",
+        "text": "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"grain\", \"requirements\": [{\"requirement_id\": \"slot_0/🧾\", \"quote\": \"各店各商品\", \"status\": \"unsupported\"}]}"
+      },
+      {
+        "path": "/grain",
+        "text": "門市×有銷售的日期"
+      },
+      {
+        "path": "/keys/0",
+        "text": "day_key"
+      },
+      {
+        "path": "/keys/1",
+        "text": "loc_key"
+      },
+      {
+        "path": "/population",
+        "text": "粒度：門市×有銷售的日期；沒有交易的門市日期不出現。適合每日營收、門市趨勢"
+      },
+      {
+        "path": "/contract_evidence/0/path",
+        "text": "/summary"
+      },
+      {
+        "path": "/contract_evidence/0/quote",
+        "text": "粒度：門市×有銷售的日期；沒有交易的門市日期不出現。適合每日營收、門市趨勢"
+      }
+    ],
+    "provider_thinking_sha256": "f503c44a36e21d3d69bd9bf501d681e572b3f1d2c78d5d408bf8f8f51295593a",
+    "provider_thinking_characters": 10392,
+    "all_strings_and_full_thinking_read": true
+  }
+}

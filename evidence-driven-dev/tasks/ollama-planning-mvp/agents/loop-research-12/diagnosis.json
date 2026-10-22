@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "ticket": "fa6dccd9502a42568be302ec4a5fc458",
+  "classification": "EVIDENCE_LINEAGE_REBINDING_ONLY",
+  "result": "REPLAN_READY",
+  "facts": {
+    "recovery": "精確恢復已完成，check-evidence PASS；原兩證據hash/FAIL不變，不重修行政恢復。",
+    "cause": "v2 source硬綁後補hash至舊原路徑；恢復原bytes後live loader正確拒絕。只由mtime/差異不判定寫入者。",
+    "content_probe": {
+      "v1_bindings_match": true,
+      "v2_only_binding_difference": [
+        "lineage"
+      ],
+      "v2_sources": 165,
+      "v2_fixtures_match": true,
+      "v2_content_bindings_match": {
+        "samples": true,
+        "model": true,
+        "runtime": true,
+        "external_sources": true
+      },
+      "selection_tokens": 22011
+    },
+    "business": "customer lifetime_spend sum/partial/own_gap=true與self+scope+grain已有正確版本，唯一v1/v2 row差異為customer MET-003，其餘55列及3coverage未變；本研究不改此語意，最終仍待fresh全體核准。",
+    "engine_probe": "base.record_sample/replay皆可傳explicit package並重用原v2 content，synthetic selection兩prepared與同版replay成功，0POST；engine紀錄163-source且不含lineage，因此絕不可單獨代新完整preflight/outer版本驗證。",
+    "controller": "12 rounds/21local/0retry/0cloud、17nodes；原v2 child passed，原semantic parent verify_parent，所有4diagnostic尚無POST。"
+  },
+  "recommended": "唯一獨立rebind manifest＋nested薄adapter＋原v2 fixture root；重用base runtime，不造業務v3或複製fixture/framework。",
+  "alternatives": [
+    {
+      "option": "直接重寫v2 LINEAGE/manifest或controller expectedhash",
+      "decision": "REJECT",
+      "reason": "改動已封存證據且抹平第11/12輪版本歷史。"
+    },
+    {
+      "option": "另複製整套v3 fixtures及record/replay",
+      "decision": "REJECT",
+      "reason": "業務內容未變，重複框架增加drift與不必要版本。"
+    },
+    {
+      "option": "獨立rebind manifest與完整outer校驗、explicit-package舊runtime",
+      "decision": "RECOMMEND",
+      "reason": "source顯示prepare/evaluate/record/replay可重用；只有固定loader/preflight/freeze需薄協調，新增source/test完整綁定。"
+    }
+  ],
+  "immutable_lineage_bindings": {
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-evidence-recovery-11/controller-check-evidence.log": "6a7dee2df6decc78d70dd3a9fcef13555f24ec05ef34f4d611783f4084b4e866",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-evidence-recovery-11/receipt.json": "205a6e2f4706d373f98dddaf32db0f0ea942ea89ebb6acf99074c25fa8297a3b",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-evidence-recovery-11/recovery-plan.json": "3b895e7a9592786d6621df03e6dc1110ae0a507242b9b8410a1b647f224c6e4d",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-evidence-recovery-11/review.json.late.raw.log": "0200cc20e8aa288580c0a5036d4056a144555a272b6b4afe64da357734118d6b",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-evidence-recovery-11/review.json.original.raw.log": "aaa8b740cc30fbd1b8670fa45ce5b68280dc073b9ee5e662dc43eeb68b903dfa",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-evidence-recovery-11/semantic-review.log.late.raw.log": "3b7c9f3b51626a0634405b8e2c14efbcf730b600138aa60b067e74aceffca4f0",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-evidence-recovery-11/semantic-review.log.original.raw.log": "fa3e4654447f56bef7cffe64220195c4e2817ba20838d2c3b27eaf893a28eaaa",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-evidence-recovery-11/v2-expected-lineage-rejection.log": "6fc6fad47c0566b8004271cfe185c75d9a051175875b0c305c6e65442e0d4642",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-10-12/review.json": "fe3becdeb0bd71518980174f1ba70bb30500822d563f713422b4391d78cd5517",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-10-12/recovery-analysis.json": "b10d3fdfa8765f5e88cddd8796d8abe74ed6c5fd08c09c36200a08fb41126b0f",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-10-12/recovery-plan.json": "3b895e7a9592786d6621df03e6dc1110ae0a507242b9b8410a1b647f224c6e4d",
+    "evaluations/fixtures/kind_diagnostics_v1/manifest.json": "1749d09913e0f5d5a1caab4a4ede1bf4fa80fee260bb4e257f1f705634d934be",
+    "evaluations/fixtures/kind_diagnostics_v2/manifest.json": "33cf44c84c10842adb60bfb7cbfbb269bac6dfa136c124a43159efabd27d543f"
+  },
+  "no_new_mutable_late_lineage": true,
+  "probe_only_no_execution_authorization": true,
+  "all_future_effects": "PENDING",
+  "research_model_POSTs": 0
+}

@@ -1,0 +1,4094 @@
+{
+  "reviewer": "oracle-audit",
+  "reviewed_at": "2026-10-20T13:04:54.015301+00:00",
+  "scope": "MVP0歷史DeepSeek首輪30題原始response，與MVP1 fresh十二筆分開",
+  "verdict": "FAIL_FOR_FULL_QUALITY_GATE",
+  "summary": {
+    "case_count": 30,
+    "classifications": {
+      "安全完整": 18,
+      "真語意錯": 9,
+      "機械錯": 3,
+      "等價待審": 0,
+      "資訊不足": 0
+    },
+    "safe_ready": 18,
+    "unsafe_ready": 4,
+    "wrong_refusal": 1,
+    "original_automated_pass": 18,
+    "automated_pass_but_unsafe_cases": [
+      "cross-view-05",
+      "cross-view-08",
+      "cross-view-25"
+    ],
+    "safe_but_original_automated_fail_cases": [
+      "cross-view-04",
+      "cross-view-06",
+      "cross-view-17"
+    ],
+    "guard_false_rejections_independently_approved": [
+      "cross-view-15",
+      "cross-view-19"
+    ],
+    "all_payload_integrity": true
+  },
+  "source_hashes": {
+    "evidence-driven-dev/tasks/ollama-planning-mvp/reports/mvp0-sidecar.json": "f853b40a1c0247b10f63d4dea3425d7c002ad9da5f1d93ec06a48aee2b422a7f",
+    "projects/retail/evaluations/task_decomposition_cases.jsonl": "352573d18fe640aff2e880a574dc9dc512419ab442b25ec4ef20e9781cb80369",
+    "projects/retail/contract_review.md": "e23fd5d4e830a637c40687a8573b96af64aabe98f1a28ff5a200e94177503073",
+    "projects/retail/views/demo_retail/v_inventory_status.yaml": "ed7c44ef1fca1b55f92454fbbcc2b3145acd6dea0a4ca17f46c2a08d90cb58b3"
+  },
+  "independent_equivalence_limits": [
+    "store_id->store_name僅限contract_review已有stores主鍵與指定View JOIN來源證據，非通用名稱推論。",
+    "registered_on與order_date等date含尾日可在相同曆日軸正規化；sales_month月初欄位的整月區間可等價單月。",
+    "庫存及單月KPI唯一列的SUM/MIN/MAX及完整單元素日期集合不增加列；不允許將store單鍵推成同日庫存。",
+    "原04明示兩個月份各用一request並以標籤附加，核准此次等價多request形狀；不要求task數恰等canonical。",
+    "低影響額外欄位只有已說明展示/背景用途、無新篩選、不改粒度/加性、不重加總背景時核准；不能用此放過原05跨日stock_qty或原26不存在欄位。",
+    "錯誤required-only欄位不得從自然語言request暗補進prepared body；08/25均因此fail。"
+  ],
+  "model_calls_by_reviewer": 0,
+  "sql_db_calls_by_reviewer": 0,
+  "cases": [
+    {
+      "case_id": "cross-view-01",
+      "case_sha256": "9fe0ca5a1e23fb2cb2dbc856e7055707860b17d9e7242367a13a8013753a6d41",
+      "catalog_fingerprint": "e5e5a5a2cc29a1be93dc4d6875aba8c47a35ed48c019c7d6838a45831d0441dc",
+      "original_response_sha256": "e37aee7db0724d16cf0d6914fe0de2b55a26ac6a8cfe8200bb17537ea2cfe3b0",
+      "runtime_status": "ready",
+      "original_automated_pass": true,
+      "primary_classification": "安全完整",
+      "first_error_node": null,
+      "first_pass_semantically_safe_ready": true,
+      "unsafe_ready": false,
+      "incorrect_refusal": false,
+      "evidence_and_roles_assessment": "庫存stock_qty原值與單列日期集合，九月units_sold按店商品彙總，left保庫存；缺值政策正確。",
+      "fields": [
+        {
+          "task_id": "inventory_snapshot",
+          "view": "demo_retail.v_inventory_status",
+          "roles": {
+            "metrics": {},
+            "conditional_metrics": [],
+            "attributes": [
+              "stock_qty"
+            ],
+            "metadata_collections": [
+              "snapshot_date"
+            ],
+            "group_by": [
+              "store_id",
+              "product_id"
+            ],
+            "output_grain": [
+              "store_id",
+              "product_id"
+            ],
+            "filters": []
+          },
+          "extra_used_columns_vs_same_view_oracle": [],
+          "required_but_no_typed_use": [],
+          "typed_used_not_required": []
+        },
+        {
+          "task_id": "september_sales",
+          "view": "demo_retail.v_product_monthly",
+          "roles": {
+            "metrics": {
+              "units_sold": "sum"
+            },
+            "conditional_metrics": [],
+            "attributes": [],
+            "metadata_collections": [],
+            "group_by": [
+              "store_id",
+              "product_id"
+            ],
+            "output_grain": [
+              "store_id",
+              "product_id"
+            ],
+            "filters": [
+              {
+                "column": "sales_month",
+                "operator": "=",
+                "value": "2026-09-01"
+              }
+            ]
+          },
+          "extra_used_columns_vs_same_view_oracle": [],
+          "required_but_no_typed_use": [],
+          "typed_used_not_required": []
+        }
+      ],
+      "major_role_or_extra_column_issue": false,
+      "extra_field_impact": "無重大問題；展示/背景欄位或明示唯一鍵下的冗餘按逐題理由核准；不泛化業務同義",
+      "prepared_payload_integrity": true,
+      "root_and_shape": {
+        "anchor_task": "inventory_snapshot",
+        "output_grain": [
+          "store_id",
+          "product_id"
+        ],
+        "edges": [
+          {
+            "left_task": "inventory_snapshot",
+            "right_task": "september_sales",
+            "left_keys": [
+              "store_id",
+              "product_id"
+            ],
+            "right_keys": [
+              "store_id",
+              "product_id"
+            ],
+            "mode": "left",
+            "cardinality": "one_to_one",
+            "preserve_task": "inventory_snapshot"
+          }
+        ],
+        "preparation": [],
+        "missing_data_policy": "以庫存商品為母體保留所有未匹配的庫存商品；無 2026 年 9 月銷售紀錄時銷售件數記為缺值，契約未保證時不填零。",
+        "notes": [
+          "庫存為快照資料，2026 年 9 月銷量為歷史月度資料，兩者資料時間不同，不合併成同一日期。",
+          "僅準備補貨優先評估資料，不計算採購量。"
+        ]
+      },
+      "validation_errors": [],
+      "sidecar_diagnostic_kept": {
+        "safe": false,
+        "errors": [
+          "missing policy requires independent review"
+        ],
+        "review_required": true
+      },
+      "new_equivalence_status": "已於本次獨立審核核准，僅限本response/case/catalog hashes；原分與原JSONL不回寫"
+    },
+    {
+      "case_id": "cross-view-02",
+      "case_sha256": "a6784308e111b1d31ed052cf6f6dd37fdc4b373a9256078e2db94983f3892dc3",
+      "catalog_fingerprint": "e5e5a5a2cc29a1be93dc4d6875aba8c47a35ed48c019c7d6838a45831d0441dc",
+      "original_response_sha256": "e20740d8df77e88be70e46b8cc91cdbf6cdec0e04378dc3d37b88c2abd124ff1",
+      "runtime_status": "ready",
+      "original_automated_pass": true,
+      "primary_classification": "安全完整",
+      "first_error_node": null,
+      "first_pass_semantically_safe_ready": true,
+      "unsafe_ready": false,
+      "incorrect_refusal": false,
+      "evidence_and_roles_assessment": "店商品唯一列SUM stock_qty等價原值，九月net_sales、鍵、日期及缺值皆完整，無跨日聚合。",
+      "fields": [
+        {
+          "task_id": "inventory_by_store_product",
+          "view": "demo_retail.v_inventory_status",
+          "roles": {
+            "metrics": {
+              "stock_qty": "sum"
+            },
+            "conditional_metrics": [],
+            "attributes": [],
+            "metadata_collections": [
+              "snapshot_date"
+            ],
+            "group_by": [
+              "store_id",
+              "product_id"
+            ],
+            "output_grain": [
+              "store_id",
+              "product_id"
+            ],
+            "filters": []
+          },
+          "extra_used_columns_vs_same_view_oracle": [],
+          "required_but_no_typed_use": [],
+          "typed_used_not_required": []
+        },
+        {
+          "task_id": "sept_2026_net_sales_by_store_product",
+          "view": "demo_retail.v_product_monthly",
+          "roles": {
+            "metrics": {
+              "net_sales": "sum"
+            },
+            "conditional_metrics": [],
+            "attributes": [],
+            "metadata_collections": [],
+            "group_by": [
+              "store_id",
+              "product_id"
+            ],
+            "output_grain": [
+              "store_id",
+              "product_id"
+            ],
+            "filters": [
+              {
+                "column": "sales_month",
+                "operator": "=",
+                "value": "2026-09-01"
+              }
+            ]
+          },
+          "extra_used_columns_vs_same_view_oracle": [],
+          "required_but_no_typed_use": [],
+          "typed_used_not_required": []
+        }
+      ],
+      "major_role_or_extra_column_issue": false,
+      "extra_field_impact": "無重大問題；展示/背景欄位或明示唯一鍵下的冗餘按逐題理由核准；不泛化業務同義",
+      "prepared_payload_integrity": true,
+      "root_and_shape": {
+        "anchor_task": "inventory_by_store_product",
+        "output_grain": [
+          "store_id",
+          "product_id"
+        ],
+        "edges": [
+          {
+            "left_task": "inventory_by_store_product",
+            "right_task": "sept_2026_net_sales_by_store_product",
+            "left_keys": [
+              "store_id",
+              "product_id"
+            ],
+            "right_keys": [
+              "store_id",
+              "product_id"
+            ],
+            "mode": "left",
+            "cardinality": "one_to_one",
+            "preserve_task": "inventory_by_store_product"
+          }
+        ],
+        "preparation": [
+          {
+            "task_id": "sept_2026_net_sales_by_store_product",
+            "kind": "aggregate",
+            "keys": [
+              "store_id",
+              "product_id"
+            ],
+            "description": "將 2026 年 9 月門市×月份×商品彙總為門市×商品之折扣後銷售額，作為左結合的右側輸入。"
+          }
+        ],
+        "missing_data_policy": "以庫存商品為母體採左結合；2026 年 9 月無銷售紀錄的庫存商品，其銷售額保留為缺值，契約未保證時不視為零。",
+        "notes": [
+          "庫存件數僅能呈現來源快照日的門市×商品庫存，來源快照日期集合須隨結果揭露；不可跨不同快照日期將庫存件數直接加總。",
+          "目前庫存為快照時點，2026 年 9 月折扣後銷售額為月度銷售；兩者資料時間不同，不宜將目前庫存解釋為歷史庫存。",
+          "最終輸出粒度為門市×商品，僅保留庫存商品。"
+        ]
+      },
+      "validation_errors": [],
+      "sidecar_diagnostic_kept": {
+        "safe": false,
+        "errors": [
+          "missing policy requires independent review"
+        ],
+        "review_required": true
+      },
+      "new_equivalence_status": "已於本次獨立審核核准，僅限本response/case/catalog hashes；原分與原JSONL不回寫"
+    },
+    {
+      "case_id": "cross-view-03",
+      "case_sha256": "72d52092a0c8656dfbf8d8c0b8c6b40c02653c39a2478c276a65da1585adda32",
+      "catalog_fingerprint": "e5e5a5a2cc29a1be93dc4d6875aba8c47a35ed48c019c7d6838a45831d0441dc",
+      "original_response_sha256": "ed88805695463f95b95e002eb226a0aaf9ab7353b812e2672995e84bd879b958",
+      "runtime_status": "ready",
+      "original_automated_pass": true,
+      "primary_classification": "安全完整",
+      "first_error_node": null,
+      "first_pass_semantically_safe_ready": true,
+      "unsafe_ready": false,
+      "incorrect_refusal": false,
+      "evidence_and_roles_assessment": "店商品唯一列SUM成本等價原值，九月SUM毛利非毛利率；日期及庫存母體完整。",
+      "fields": [
+        {
+          "task_id": "inventory",
+          "view": "demo_retail.v_inventory_status",
+          "roles": {
+            "metrics": {
+              "inventory_cost_value": "sum"
+            },
+            "conditional_metrics": [],
+            "attributes": [],
+            "metadata_collections": [
+              "snapshot_date"
+            ],
+            "group_by": [
+              "store_id",
+              "product_id"
+            ],
+            "output_grain": [
+              "store_id",
+              "product_id"
+            ],
+            "filters": []
+          },
+          "extra_used_columns_vs_same_view_oracle": [],
+          "required_but_no_typed_use": [],
+          "typed_used_not_required": []
+        },
+        {
+          "task_id": "sept_profit",
+          "view": "demo_retail.v_product_monthly",
+          "roles": {
+            "metrics": {
+              "gross_profit": "sum"
+            },
+            "conditional_metrics": [],
+            "attributes": [],
+            "metadata_collections": [],
+            "group_by": [
+              "store_id",
+              "product_id"
+            ],
+            "output_grain": [
+              "store_id",
+              "product_id"
+            ],
+            "filters": [
+              {
+                "column": "sales_month",
+                "operator": "=",
+                "value": "2026-09-01"
+              }
+            ]
+          },
+          "extra_used_columns_vs_same_view_oracle": [],
+          "required_but_no_typed_use": [],
+          "typed_used_not_required": []
+        }
+      ],
+      "major_role_or_extra_column_issue": false,
+      "extra_field_impact": "無重大問題；展示/背景欄位或明示唯一鍵下的冗餘按逐題理由核准；不泛化業務同義",
+      "prepared_payload_integrity": true,
+      "root_and_shape": {
+        "anchor_task": "inventory",
+        "output_grain": [
+          "store_id",
+          "product_id"
+        ],
+        "edges": [
+          {
+            "left_task": "inventory",
+            "right_task": "sept_profit",
+            "left_keys": [
+              "store_id",
+              "product_id"
+            ],
+            "right_keys": [
+              "store_id",
+              "product_id"
+            ],
+            "mode": "left",
+            "cardinality": "one_to_one",
+            "preserve_task": "inventory"
+          }
+        ],
+        "preparation": [
+          {
+            "task_id": "inventory",
+            "kind": "aggregate",
+            "keys": [
+              "store_id",
+              "product_id"
+            ],
+            "description": "將庫存來源彙總至 store_id、product_id 粒度，加總 inventory_cost_value，並以 metadata_collections 收集每個門市商品的完整 DISTINCT snapshot_date 集合。"
+          },
+          {
+            "task_id": "sept_profit",
+            "kind": "aggregate",
+            "keys": [
+              "store_id",
+              "product_id"
+            ],
+            "description": "將 2026 年 9 月商品月毛利彙總至 store_id、product_id 粒度。"
+          }
+        ],
+        "missing_data_policy": "以庫存來源為錨，left join 後保留所有庫存商品門市組合；若某庫存商品在 2026 年 9 月無銷售且無毛利資料，該筆毛利記為缺值，不補零。",
+        "notes": [
+          "目前庫存成本估值與 2026 年 9 月毛利為不同資料時間，不可將兩者視為同一日或同一期間之完整總額。",
+          "因契約限制庫存件數不可跨不同快照日期直接加總，若需更嚴謹的單日快照比較，須先確認 snapshop_date 的統一日期政策。",
+          "採購資金配置評估僅呈現庫存成本估值與月毛利並列，不擅自計算比率或配置建議。"
+        ]
+      },
+      "validation_errors": [],
+      "sidecar_diagnostic_kept": {
+        "safe": false,
+        "errors": [
+          "missing policy requires independent review"
+        ],
+        "review_required": true
+      },
+      "new_equivalence_status": "已於本次獨立審核核准，僅限本response/case/catalog hashes；原分與原JSONL不回寫"
+    },
+    {
+      "case_id": "cross-view-04",
+      "case_sha256": "14a8c021c332caffa5b95c752a70b8f6cb830fdfdd4996b958d353072e6fef9d",
+      "catalog_fingerprint": "e5e5a5a2cc29a1be93dc4d6875aba8c47a35ed48c019c7d6838a45831d0441dc",
+      "original_response_sha256": "8e8c0aeb9f0caed5cb5cbecdb22e261dff16792b6e9a87d77890c585f52b66ee",
+      "runtime_status": "ready",
+      "original_automated_pass": false,
+      "primary_classification": "安全完整",
+      "first_error_node": null,
+      "first_pass_semantically_safe_ready": true,
+      "unsafe_ready": false,
+      "incorrect_refusal": false,
+      "evidence_and_roles_assessment": "獨立核准等價：八月與九月拆兩個固定月份request，各以店商品對齊並明示不同月份欄位，保存缺月缺值，無加總庫存。三tasks不能被機械長度比較誤判。",
+      "fields": [
+        {
+          "task_id": "inventory_snapshot",
+          "view": "demo_retail.v_inventory_status",
+          "roles": {
+            "metrics": {},
+            "conditional_metrics": [],
+            "attributes": [
+              "stock_qty",
+              "reorder_point",
+              "stock_status",
+              "sold_qty_30d",
+              "estimated_days_of_supply"
+            ],
+            "metadata_collections": [
+              "snapshot_date"
+            ],
+            "group_by": [
+              "store_id",
+              "product_id"
+            ],
+            "output_grain": [
+              "store_id",
+              "product_id"
+            ],
+            "filters": []
+          },
+          "extra_used_columns_vs_same_view_oracle": [
+            "estimated_days_of_supply",
+            "reorder_point",
+            "sold_qty_30d",
+            "stock_status"
+          ],
+          "required_but_no_typed_use": [],
+          "typed_used_not_required": []
+        },
+        {
+          "task_id": "aug_sales",
+          "view": "demo_retail.v_product_monthly",
+          "roles": {
+            "metrics": {
+              "units_sold": "sum"
+            },
+            "conditional_metrics": [],
+            "attributes": [],
+            "metadata_collections": [],
+            "group_by": [
+              "store_id",
+              "product_id"
+            ],
+            "output_grain": [
+              "store_id",
+              "product_id"
+            ],
+            "filters": [
+              {
+                "column": "sales_month",
+                "operator": "=",
+                "value": "2026-08-01"
+              }
+            ]
+          },
+          "extra_used_columns_vs_same_view_oracle": [],
+          "required_but_no_typed_use": [],
+          "typed_used_not_required": []
+        },
+        {
+          "task_id": "sep_sales",
+          "view": "demo_retail.v_product_monthly",
+          "roles": {
+            "metrics": {
+              "units_sold": "sum"
+            },
+            "conditional_metrics": [],
+            "attributes": [],
+            "metadata_collections": [],
+            "group_by": [
+              "store_id",
+              "product_id"
+            ],
+            "output_grain": [
+              "store_id",
+              "product_id"
+            ],
+            "filters": [
+              {
+                "column": "sales_month",
+                "operator": "=",
+                "value": "2026-09-01"
+              }
+            ]
+          },
+          "extra_used_columns_vs_same_view_oracle": [],
+          "required_but_no_typed_use": [],
+          "typed_used_not_required": []
+        }
+      ],
+      "major_role_or_extra_column_issue": false,
+      "extra_field_impact": "無重大問題；展示/背景欄位或明示唯一鍵下的冗餘按逐題理由核准；不泛化業務同義",
+      "prepared_payload_integrity": true,
+      "root_and_shape": {
+        "anchor_task": "inventory_snapshot",
+        "output_grain": [
+          "store_id",
+          "product_id"
+        ],
+        "edges": [
+          {
+            "left_task": "inventory_snapshot",
+            "right_task": "aug_sales",
+            "left_keys": [
+              "store_id",
+              "product_id"
+            ],
+            "right_keys": [
+              "store_id",
+              "product_id"
+            ],
+            "mode": "left",
+            "cardinality": "one_to_one",
+            "preserve_task": "inventory_snapshot"
+          },
+          {
+            "left_task": "inventory_snapshot",
+            "right_task": "sep_sales",
+            "left_keys": [
+              "store_id",
+              "product_id"
+            ],
+            "right_keys": [
+              "store_id",
+              "product_id"
+            ],
+            "mode": "left",
+            "cardinality": "one_to_one",
+            "preserve_task": "inventory_snapshot"
+          }
+        ],
+        "preparation": [
+          {
+            "task_id": "aug_sales",
+            "kind": "pivot",
+            "keys": [
+              "store_id",
+              "product_id"
+            ],
+            "description": "將 2026 年 8 月各店各商品銷售件數橫向展開為 8 月銷售件數欄位。"
+          },
+          {
+            "task_id": "sep_sales",
+            "kind": "pivot",
+            "keys": [
+              "store_id",
+              "product_id"
+            ],
+            "description": "將 2026 年 9 月各店各商品銷售件數橫向展開為 9 月銷售件數欄位。"
+          }
+        ],
+        "missing_data_policy": "以庫存快照為錨，保留所有庫存商品列；未匹配到 2026 年 8 月或 9 月銷售資料時，該月銷售件數標記為缺值，不補零，因契約未保證無銷售等於零銷售。",
+        "notes": [
+          "庫存為快照資料，逐店逐商品保留 snapshot_date 於 metadata_collections，供後續揭露盤點日期範圍；不同快照日期不可直接加總庫存件數。",
+          "目前庫存與歷史銷量屬不同資料時間，不將目前庫存解釋為歷史庫存。",
+          "依需求保留所有庫存商品母體，不以銷售資料預先過濾母體。"
+        ]
+      },
+      "validation_errors": [],
+      "sidecar_diagnostic_kept": {
+        "safe": false,
+        "errors": [
+          "task count/equivalence review"
+        ],
+        "review_required": true
+      },
+      "new_equivalence_status": "已於本次獨立審核核准，僅限本response/case/catalog hashes；原分與原JSONL不回寫"
+    },
+    {
+      "case_id": "cross-view-05",
+      "case_sha256": "ef6961bea811bb3c60f6f6dd1c20a05337e3c811a79669a9ca74e70acd67e5d7",
+      "catalog_fingerprint": "e5e5a5a2cc29a1be93dc4d6875aba8c47a35ed48c019c7d6838a45831d0441dc",
+      "original_response_sha256": "f1562f8c65c8b320c7aae080b3d48f9ba5797c9071459f0cae00d4acfc9cfc48",
+      "runtime_status": "ready",
+      "original_automated_pass": true,
+      "primary_classification": "真語意錯",
+      "first_error_node": "庫存度量/快照加性",
+      "first_pass_semantically_safe_ready": false,
+      "unsafe_ready": true,
+      "incorrect_refusal": false,
+      "evidence_and_roles_assessment": "額外SUM(stock_qty)按store/category聚合且未固定或分組snapshot_date，契約可能混不同商品盤點日；日期metadata不能解除跨日限制。成本與淨額本身正確。",
+      "fields": [
+        {
+          "task_id": "inventory_by_store_category",
+          "view": "demo_retail.v_inventory_status",
+          "roles": {
+            "metrics": {
+              "inventory_cost_value": "sum",
+              "stock_qty": "sum"
+            },
+            "conditional_metrics": [],
+            "attributes": [],
+            "metadata_collections": [
+              "snapshot_date"
+            ],
+            "group_by": [
+              "store_id",
+              "category"
+            ],
+            "output_grain": [
+              "store_id",
+              "category"
+            ],
+            "filters": []
+          },
+          "extra_used_columns_vs_same_view_oracle": [
+            "stock_qty"
+          ],
+          "required_but_no_typed_use": [
+            "product_id"
+          ],
+          "typed_used_not_required": []
+        },
+        {
+          "task_id": "category_net_sales_2026_09",
+          "view": "demo_retail.v_product_monthly",
+          "roles": {
+            "metrics": {
+              "net_sales": "sum",
+              "units_sold": "sum"
+            },
+            "conditional_metrics": [],
+            "attributes": [],
+            "metadata_collections": [],
+            "group_by": [
+              "store_id",
+              "category"
+            ],
+            "output_grain": [
+              "store_id",
+              "category"
+            ],
+            "filters": [
+              {
+                "column": "sales_month",
+                "operator": "=",
+                "value": "2026-09-01"
+              }
+            ]
+          },
+          "extra_used_columns_vs_same_view_oracle": [
+            "units_sold"
+          ],
+          "required_but_no_typed_use": [
+            "product_id"
+          ],
+          "typed_used_not_required": []
+        }
+      ],
+      "major_role_or_extra_column_issue": true,
+      "extra_field_impact": "重大，詳逐題原因",
+      "prepared_payload_integrity": true,
+      "root_and_shape": {
+        "anchor_task": "inventory_by_store_category",
+        "output_grain": [
+          "store_id",
+          "category"
+        ],
+        "edges": [
+          {
+            "left_task": "inventory_by_store_category",
+            "right_task": "category_net_sales_2026_09",
+            "left_keys": [
+              "store_id",
+              "category"
+            ],
+            "right_keys": [
+              "store_id",
+              "category"
+            ],
+            "mode": "left",
+            "cardinality": "one_to_one",
+            "preserve_task": "inventory_by_store_category"
+          }
+        ],
+        "preparation": [],
+        "missing_data_policy": "保留庫存來源中的所有門市與分類；若 2026 年 9 月無銷售資料則標記為缺值，不補零、不刪除。",
+        "notes": [
+          "庫存成本估值為盤點快照的庫存成本，不是銷售額；與 2026 年 9 月淨銷售額是不同資料時間，不可相互替代或直接加總。",
+          "庫存資料以 store_id、category 彙總；如有跨門市或跨盤點日期限制，仍需以各快照時間揭露，不把不同日期加總成單日總額。",
+          "2026 年 9 月淨銷售額以 sales_month = 2026-09-01 篩選，且來源僅有有銷售的月份資料。",
+          "未匹配的銷售資料記為缺值，契約未保證時不填零。"
+        ]
+      },
+      "validation_errors": [],
+      "sidecar_diagnostic_kept": {
+        "safe": false,
+        "errors": [
+          "status",
+          "inventory_by_store_category: extra metric roles",
+          "category_net_sales_2026_09: extra metric roles",
+          "inventory_by_store_category: cross-snapshot stock sum",
+          "missing policy requires independent review",
+          "payload integrity"
+        ],
+        "review_required": true
+      },
+      "new_equivalence_status": "不以等價掩蓋所列錯誤"
+    },
+    {
+      "case_id": "cross-view-06",
+      "case_sha256": "9b60da66237b16aa4c56427e9a8b57f77c8db8cb55778b3e7bc4c1d808e977a2",
+      "catalog_fingerprint": "e5e5a5a2cc29a1be93dc4d6875aba8c47a35ed48c019c7d6838a45831d0441dc",
+      "original_response_sha256": "0c037beb50d8ac6ce04c7b72a240d419076d3964c4708820af07ed3877d69e62",
+      "runtime_status": "ready",
+      "original_automated_pass": false,
+      "primary_classification": "安全完整",
+      "first_error_node": null,
+      "first_pass_semantically_safe_ready": true,
+      "unsafe_ready": false,
+      "incorrect_refusal": false,
+      "evidence_and_roles_assessment": "獨立核准sales_month[09-01,10-01)等價=09-01，因契約保證月份第一天；兩側region成本/毛利、日期揭露與母體正確。",
+      "fields": [
+        {
+          "task_id": "task_inventory_region",
+          "view": "demo_retail.v_inventory_status",
+          "roles": {
+            "metrics": {
+              "inventory_cost_value": "sum"
+            },
+            "conditional_metrics": [],
+            "attributes": [],
+            "metadata_collections": [
+              "snapshot_date"
+            ],
+            "group_by": [
+              "region"
+            ],
+            "output_grain": [
+              "region"
+            ],
+            "filters": []
+          },
+          "extra_used_columns_vs_same_view_oracle": [],
+          "required_but_no_typed_use": [],
+          "typed_used_not_required": []
+        },
+        {
+          "task_id": "task_gross_profit_region",
+          "view": "demo_retail.v_product_monthly",
+          "roles": {
+            "metrics": {
+              "gross_profit": "sum"
+            },
+            "conditional_metrics": [],
+            "attributes": [],
+            "metadata_collections": [],
+            "group_by": [
+              "region"
+            ],
+            "output_grain": [
+              "region"
+            ],
+            "filters": [
+              {
+                "column": "sales_month",
+                "operator": ">=",
+                "value": "2026-09-01"
+              },
+              {
+                "column": "sales_month",
+                "operator": "<",
+                "value": "2026-10-01"
+              }
+            ]
+          },
+          "extra_used_columns_vs_same_view_oracle": [],
+          "required_but_no_typed_use": [],
+          "typed_used_not_required": []
+        }
+      ],
+      "major_role_or_extra_column_issue": false,
+      "extra_field_impact": "無重大問題；展示/背景欄位或明示唯一鍵下的冗餘按逐題理由核准；不泛化業務同義",
+      "prepared_payload_integrity": true,
+      "root_and_shape": {
+        "anchor_task": "task_inventory_region",
+        "output_grain": [
+          "region"
+        ],
+        "edges": [
+          {
+            "left_task": "task_inventory_region",
+            "right_task": "task_gross_profit_region",
+            "left_keys": [
+              "region"
+            ],
+            "right_keys": [
+              "region"
+            ],
+            "mode": "left",
+            "cardinality": "one_to_one",
+            "preserve_task": "task_inventory_region"
+          }
+        ],
+        "preparation": [
+          {
+            "task_id": "task_inventory_region",
+            "kind": "aggregate",
+            "keys": [
+              "region"
+            ],
+            "description": "將 demo_retail.v_inventory_status 依 region 彙總 inventory_cost_value 總和，並收集每組 snapshot_date 的 DISTINCT 集合，保留有庫存資料的區域作為母體。"
+          },
+          {
+            "task_id": "task_gross_profit_region",
+            "kind": "aggregate",
+            "keys": [
+              "region"
+            ],
+            "description": "將 demo_retail.v_product_monthly 於 2026 年 9 月依 region 彙總 gross_profit 總和。"
+          }
+        ],
+        "missing_data_policy": "以有庫存資料的區域為錨，保留未匹配的區域並將毛利欄位標記為缺值；契約沒有保證時不填零。",
+        "notes": [
+          "最終輸出 grain 為 region，僅涵蓋有庫存資料的區域。",
+          "兩來源資料時間不同：庫存為快照盤點日期，毛利為 2026 年 9 月月度彙總，不可將目前庫存解釋為歷史庫存或單日完整總額。",
+          "inventory_cost_value 為各區域跨門市、跨商品的庫存成本估值加總，並以 snapshot_date 集合揭露盤點日期範圍；因契約限制不可跨不同快照日期直接加總庫存件數，故此估值僅為區域採購配置評估之近似，非單日完整總額。",
+          "通路未指定篩選，保留來源所有通路；不將範例列舉值視為封閉全集。"
+        ]
+      },
+      "validation_errors": [],
+      "sidecar_diagnostic_kept": {
+        "safe": false,
+        "errors": [
+          "task_gross_profit_region: conditions/period",
+          "missing policy requires independent review"
+        ],
+        "review_required": true
+      },
+      "new_equivalence_status": "已於本次獨立審核核准，僅限本response/case/catalog hashes；原分與原JSONL不回寫"
+    },
+    {
+      "case_id": "cross-view-07",
+      "case_sha256": "9e3ecb923bed296f3f91327bb6bb740b743e1d02ecdeb2aad8cadefe6211132b",
+      "catalog_fingerprint": "e5e5a5a2cc29a1be93dc4d6875aba8c47a35ed48c019c7d6838a45831d0441dc",
+      "original_response_sha256": "a24cbf6c25452897794f757e712362042bdfc2b7d74e84ebb72a36b4cb893567",
+      "runtime_status": "ready",
+      "original_automated_pass": true,
+      "primary_classification": "安全完整",
+      "first_error_node": null,
+      "first_pass_semantically_safe_ready": true,
+      "unsafe_ready": false,
+      "incorrect_refusal": false,
+      "evidence_and_roles_assessment": "online與九月order_month、SUM quantity、庫存店商品母體完整；SKU/名稱/分類/警戒/狀態是同列補貨展示背景，未改條件或度量口徑。",
+      "fields": [
+        {
+          "task_id": "inventory_by_store_product",
+          "view": "demo_retail.v_inventory_status",
+          "roles": {
+            "metrics": {},
+            "conditional_metrics": [],
+            "attributes": [
+              "sku",
+              "product_name",
+              "category",
+              "stock_qty",
+              "reorder_point",
+              "stock_status"
+            ],
+            "metadata_collections": [
+              "snapshot_date"
+            ],
+            "group_by": [
+              "store_id",
+              "product_id"
+            ],
+            "output_grain": [
+              "store_id",
+              "product_id"
+            ],
+            "filters": []
+          },
+          "extra_used_columns_vs_same_view_oracle": [
+            "category",
+            "product_name",
+            "reorder_point",
+            "sku",
+            "stock_status"
+          ],
+          "required_but_no_typed_use": [],
+          "typed_used_not_required": []
+        },
+        {
+          "task_id": "online_sales_sep_2026_by_store_product",
+          "view": "demo_retail.v_sales_detail",
+          "roles": {
+            "metrics": {
+              "quantity": "sum"
+            },
+            "conditional_metrics": [],
+            "attributes": [],
+            "metadata_collections": [],
+            "group_by": [
+              "store_id",
+              "product_id"
+            ],
+            "output_grain": [
+              "store_id",
+              "product_id"
+            ],
+            "filters": [
+              {
+                "column": "sales_channel",
+                "operator": "=",
+                "value": "online"
+              },
+              {
+                "column": "order_month",
+                "operator": "=",
+                "value": "2026-09-01"
+              }
+            ]
+          },
+          "extra_used_columns_vs_same_view_oracle": [
+            "order_month"
+          ],
+          "required_but_no_typed_use": [],
+          "typed_used_not_required": []
+        }
+      ],
+      "major_role_or_extra_column_issue": false,
+      "extra_field_impact": "無重大問題；展示/背景欄位或明示唯一鍵下的冗餘按逐題理由核准；不泛化業務同義",
+      "prepared_payload_integrity": true,
+      "root_and_shape": {
+        "anchor_task": "inventory_by_store_product",
+        "output_grain": [
+          "store_id",
+          "product_id"
+        ],
+        "edges": [
+          {
+            "left_task": "inventory_by_store_product",
+            "right_task": "online_sales_sep_2026_by_store_product",
+            "left_keys": [
+              "store_id",
+              "product_id"
+            ],
+            "right_keys": [
+              "store_id",
+              "product_id"
+            ],
+            "mode": "left",
+            "cardinality": "one_to_one",
+            "preserve_task": "inventory_by_store_product"
+          }
+        ],
+        "preparation": [],
+        "missing_data_policy": "以庫存商品清單為主體，保留所有未匹配的庫存商品；若 2026 年 9 月線上通路銷售件數無對應資料，則銷售件數標記為缺值，不自行補零。",
+        "notes": [
+          "庫存資料為快照，snapshot_date 已收集為來源時間資訊，不用於跨日加總。",
+          "線上銷售件數僅使用 2026 年 9 月 online 通路資料。"
+        ]
+      },
+      "validation_errors": [],
+      "sidecar_diagnostic_kept": {
+        "safe": false,
+        "errors": [
+          "missing policy requires independent review"
+        ],
+        "review_required": true
+      },
+      "new_equivalence_status": "已於本次獨立審核核准，僅限本response/case/catalog hashes；原分與原JSONL不回寫"
+    },
+    {
+      "case_id": "cross-view-08",
+      "case_sha256": "97ecea089d8346be9cd33f6ca282c961da42d3f4e1ca1c15d5d3864c75585c4b",
+      "catalog_fingerprint": "e5e5a5a2cc29a1be93dc4d6875aba8c47a35ed48c019c7d6838a45831d0441dc",
+      "original_response_sha256": "a5498e2d606880f4f3a1d04d02359c04e3836c84bc6137b2502e4f7c52257846",
+      "runtime_status": "ready",
+      "original_automated_pass": true,
+      "primary_classification": "真語意錯",
+      "first_error_node": "庫存輸出欄位角色",
+      "first_pass_semantically_safe_ready": false,
+      "unsafe_ready": true,
+      "incorrect_refusal": false,
+      "evidence_and_roles_assessment": "stock_qty只在required_columns而沒有attributes/metrics輸出，實際prepared body只要求stock_status，缺目前庫存件數。",
+      "fields": [
+        {
+          "task_id": "inventory_snapshot",
+          "view": "demo_retail.v_inventory_status",
+          "roles": {
+            "metrics": {},
+            "conditional_metrics": [],
+            "attributes": [
+              "stock_status"
+            ],
+            "metadata_collections": [
+              "snapshot_date"
+            ],
+            "group_by": [
+              "store_id",
+              "product_id"
+            ],
+            "output_grain": [
+              "store_id",
+              "product_id"
+            ],
+            "filters": []
+          },
+          "extra_used_columns_vs_same_view_oracle": [
+            "stock_status"
+          ],
+          "required_but_no_typed_use": [
+            "reorder_point",
+            "stock_qty"
+          ],
+          "typed_used_not_required": []
+        },
+        {
+          "task_id": "instore_units_2026_09",
+          "view": "demo_retail.v_sales_detail",
+          "roles": {
+            "metrics": {
+              "quantity": "sum"
+            },
+            "conditional_metrics": [],
+            "attributes": [],
+            "metadata_collections": [],
+            "group_by": [
+              "store_id",
+              "product_id"
+            ],
+            "output_grain": [
+              "store_id",
+              "product_id"
+            ],
+            "filters": [
+              {
+                "column": "sales_channel",
+                "operator": "=",
+                "value": "in_store"
+              },
+              {
+                "column": "order_month",
+                "operator": "=",
+                "value": "2026-09-01"
+              }
+            ]
+          },
+          "extra_used_columns_vs_same_view_oracle": [
+            "order_month"
+          ],
+          "required_but_no_typed_use": [],
+          "typed_used_not_required": []
+        }
+      ],
+      "major_role_or_extra_column_issue": true,
+      "extra_field_impact": "重大，詳逐題原因",
+      "prepared_payload_integrity": true,
+      "root_and_shape": {
+        "anchor_task": "inventory_snapshot",
+        "output_grain": [
+          "store_id",
+          "product_id"
+        ],
+        "edges": [
+          {
+            "left_task": "inventory_snapshot",
+            "right_task": "instore_units_2026_09",
+            "left_keys": [
+              "store_id",
+              "product_id"
+            ],
+            "right_keys": [
+              "store_id",
+              "product_id"
+            ],
+            "mode": "left",
+            "cardinality": "one_to_one",
+            "preserve_task": "inventory_snapshot"
+          }
+        ],
+        "preparation": [],
+        "missing_data_policy": "保留所有庫存商品（以庫存來源為母體）；2026 年 9 月無實體門市銷售紀錄的門市商品，其銷售件數標記為缺值，不自行補零。",
+        "notes": [
+          "最終輸出粒度為門市×商品，與兩來源的合併鍵一致，無須額外彙總或巢狀整理。",
+          "庫存為快照資料，僅收集快照日期作為來源時間揭露，不可跨不同快照日期加總庫存件數。",
+          "銷售件數限 2026 年 9 月且 sales_channel=in_store；不自行補齊無成交日期為零銷量。",
+          "保留所有庫存商品，未匹配銷售資料者記為缺值。"
+        ]
+      },
+      "validation_errors": [],
+      "sidecar_diagnostic_kept": {
+        "safe": false,
+        "errors": [
+          "inventory_snapshot: output attribute:stock_qty",
+          "missing policy requires independent review"
+        ],
+        "review_required": true
+      },
+      "new_equivalence_status": "不以等價掩蓋所列錯誤"
+    },
+    {
+      "case_id": "cross-view-09",
+      "case_sha256": "16ea5421bd5f1ca1fcdf0621a273847b5581a413fcbdf5425205e92e23d9ef8a",
+      "catalog_fingerprint": "e5e5a5a2cc29a1be93dc4d6875aba8c47a35ed48c019c7d6838a45831d0441dc",
+      "original_response_sha256": "aa7d06db324fb2c3d64e28bc2765f39772189bc4633c5b487fbaf85f3060839b",
+      "runtime_status": "ready",
+      "original_automated_pass": true,
+      "primary_classification": "安全完整",
+      "first_error_node": null,
+      "first_pass_semantically_safe_ready": true,
+      "unsafe_ready": false,
+      "incorrect_refusal": false,
+      "evidence_and_roles_assessment": "銷售order_date逐日與含09-14條件完整，nest保每日與件數對應、庫存只一次。額外inventory_cost_value是店商品單列估值背景，不跨日或擴大母體；屬可核准低影響冗餘。",
+      "fields": [
+        {
+          "task_id": "inventory_by_store_product",
+          "view": "demo_retail.v_inventory_status",
+          "roles": {
+            "metrics": {
+              "stock_qty": "sum",
+              "inventory_cost_value": "sum"
+            },
+            "conditional_metrics": [],
+            "attributes": [
+              "stock_status"
+            ],
+            "metadata_collections": [
+              "snapshot_date"
+            ],
+            "group_by": [
+              "store_id",
+              "product_id"
+            ],
+            "output_grain": [
+              "store_id",
+              "product_id"
+            ],
+            "filters": []
+          },
+          "extra_used_columns_vs_same_view_oracle": [
+            "inventory_cost_value",
+            "stock_status"
+          ],
+          "required_but_no_typed_use": [],
+          "typed_used_not_required": []
+        },
+        {
+          "task_id": "sales_daily_by_store_product",
+          "view": "demo_retail.v_sales_detail",
+          "roles": {
+            "metrics": {
+              "quantity": "sum"
+            },
+            "conditional_metrics": [],
+            "attributes": [],
+            "metadata_collections": [],
+            "group_by": [
+              "order_date",
+              "store_id",
+              "product_id"
+            ],
+            "output_grain": [
+              "order_date",
+              "store_id",
+              "product_id"
+            ],
+            "filters": [
+              {
+                "column": "order_date",
+                "operator": ">=",
+                "value": "2026-09-01"
+              },
+              {
+                "column": "order_date",
+                "operator": "<=",
+                "value": "2026-09-14"
+              }
+            ]
+          },
+          "extra_used_columns_vs_same_view_oracle": [],
+          "required_but_no_typed_use": [],
+          "typed_used_not_required": []
+        }
+      ],
+      "major_role_or_extra_column_issue": false,
+      "extra_field_impact": "無重大問題；展示/背景欄位或明示唯一鍵下的冗餘按逐題理由核准；不泛化業務同義",
+      "prepared_payload_integrity": true,
+      "root_and_shape": {
+        "anchor_task": "inventory_by_store_product",
+        "output_grain": [
+          "store_id",
+          "product_id"
+        ],
+        "edges": [
+          {
+            "left_task": "inventory_by_store_product",
+            "right_task": "sales_daily_by_store_product",
+            "left_keys": [
+              "store_id",
+              "product_id"
+            ],
+            "right_keys": [
+              "store_id",
+              "product_id"
+            ],
+            "mode": "left",
+            "cardinality": "one_to_many",
+            "preserve_task": "inventory_by_store_product"
+          }
+        ],
+        "preparation": [
+          {
+            "task_id": "sales_daily_by_store_product",
+            "kind": "nest",
+            "keys": [
+              "store_id",
+              "product_id"
+            ],
+            "description": "將銷售日期與單日銷售件數彙整為各門市各商品下的日期清單及件數清單，避免逐日明細展開造成庫存母體重複。"
+          },
+          {
+            "task_id": "inventory_by_store_product",
+            "kind": "attach_context",
+            "keys": [
+              "store_id",
+              "product_id"
+            ],
+            "description": "以庫存門市與商品為母體，將彙總後的銷售日期與銷售件數掛回庫存資料列，未匹配者保留為缺值。"
+          }
+        ],
+        "missing_data_policy": "保留所有庫存商品；無銷售日期的門市商品不補零，銷售日期與件數標記為缺值。",
+        "notes": [
+          "庫存為快照粒度，同日同門市同商品僅一列，不跨盤點日期加總解讀為目前總量或單日歷史庫存。",
+          "銷售資料僅涵蓋 2026-09-01 至 2026-09-14 且有交易的日期，不能用來證明無交易日期為零銷量。",
+          "目前庫存與歷史銷售為不同資料時間，須分別揭露。"
+        ]
+      },
+      "validation_errors": [],
+      "sidecar_diagnostic_kept": {
+        "safe": false,
+        "errors": [
+          "inventory_by_store_product: extra metric roles",
+          "missing policy requires independent review"
+        ],
+        "review_required": true
+      },
+      "new_equivalence_status": "已於本次獨立審核核准，僅限本response/case/catalog hashes；原分與原JSONL不回寫"
+    },
+    {
+      "case_id": "cross-view-10",
+      "case_sha256": "6734f39c92871b1ed6efdad99ce895c7d24cf1dd3bdd4690c848b79673daa211",
+      "catalog_fingerprint": "e5e5a5a2cc29a1be93dc4d6875aba8c47a35ed48c019c7d6838a45831d0441dc",
+      "original_response_sha256": "825e81049d3b827bb5b05d6ad15abe9c6e98b4d479e876626268b777f96ed350",
+      "runtime_status": "error",
+      "original_automated_pass": false,
+      "primary_classification": "機械錯",
+      "first_error_node": "metadata/group_by一致性",
+      "first_pass_semantically_safe_ready": false,
+      "unsafe_ready": false,
+      "incorrect_refusal": false,
+      "evidence_and_roles_assessment": "inventory metadata集合存在但group_by空、output_grain店商品，validator報聚合粒度不一致；VIP/九月/店商品、根及角色已表達，無新增商業決策缺口。",
+      "fields": [
+        {
+          "task_id": "inventory_base",
+          "view": "demo_retail.v_inventory_status",
+          "roles": {
+            "metrics": {},
+            "conditional_metrics": [],
+            "attributes": [
+              "sku",
+              "product_name",
+              "category",
+              "stock_qty",
+              "reorder_point",
+              "stock_status",
+              "sold_qty_30d",
+              "estimated_days_of_supply"
+            ],
+            "metadata_collections": [
+              "snapshot_date"
+            ],
+            "group_by": [],
+            "output_grain": [
+              "store_id",
+              "product_id"
+            ],
+            "filters": []
+          },
+          "extra_used_columns_vs_same_view_oracle": [
+            "category",
+            "estimated_days_of_supply",
+            "product_name",
+            "reorder_point",
+            "sku",
+            "sold_qty_30d",
+            "stock_status"
+          ],
+          "required_but_no_typed_use": [],
+          "typed_used_not_required": []
+        },
+        {
+          "task_id": "vip_product_units",
+          "view": "demo_retail.v_sales_detail",
+          "roles": {
+            "metrics": {
+              "quantity": "sum"
+            },
+            "conditional_metrics": [],
+            "attributes": [],
+            "metadata_collections": [],
+            "group_by": [
+              "store_id",
+              "product_id"
+            ],
+            "output_grain": [
+              "store_id",
+              "product_id"
+            ],
+            "filters": [
+              {
+                "column": "order_month",
+                "operator": "=",
+                "value": "2026-09-01"
+              },
+              {
+                "column": "membership_tier",
+                "operator": "=",
+                "value": "VIP"
+              }
+            ]
+          },
+          "extra_used_columns_vs_same_view_oracle": [
+            "order_month"
+          ],
+          "required_but_no_typed_use": [],
+          "typed_used_not_required": []
+        }
+      ],
+      "major_role_or_extra_column_issue": false,
+      "extra_field_impact": "無重大問題；展示/背景欄位或明示唯一鍵下的冗餘按逐題理由核准；不泛化業務同義",
+      "prepared_payload_integrity": true,
+      "root_and_shape": {
+        "anchor_task": "inventory_base",
+        "output_grain": [
+          "store_id",
+          "product_id"
+        ],
+        "edges": [
+          {
+            "left_task": "inventory_base",
+            "right_task": "vip_product_units",
+            "left_keys": [
+              "store_id",
+              "product_id"
+            ],
+            "right_keys": [
+              "store_id",
+              "product_id"
+            ],
+            "mode": "left",
+            "cardinality": "one_to_one",
+            "preserve_task": "inventory_base"
+          }
+        ],
+        "preparation": [],
+        "missing_data_policy": "以庫存商品（門市×商品）為母體保留所有列；2026 年 9 月無 VIP 購買紀錄的門市×商品，VIP 購買件數標記為缺值，不補零，因契約未保證無紀錄等同零銷量。",
+        "notes": [
+          "庫存為快照資料，各商品列的庫存件數與估值對應之盤點日期可能不同，須以 snapshot_date 揭露日期範圍，不可跨日加總或視為單日完整總額。",
+          "VIP 購買件數僅涵蓋 2026 年 9 月已完成訂單之銷售明細，與庫存快照為不同資料時間，不可將目前庫存解釋為歷史庫存。",
+          "最終輸出為每門市每商品一列，同時呈現目前庫存狀態與 2026 年 9 月 VIP 購買件數，供 VIP 商品補貨評估。"
+        ]
+      },
+      "validation_errors": [
+        "inventory_base: aggregate grain differs from group_by"
+      ],
+      "sidecar_diagnostic_kept": {
+        "safe": false,
+        "errors": [
+          "status",
+          "inventory_base: aggregate grain differs from group_by",
+          "missing policy requires independent review",
+          "payload unavailable"
+        ],
+        "review_required": true
+      },
+      "new_equivalence_status": "不以等價掩蓋所列錯誤"
+    },
+    {
+      "case_id": "cross-view-11",
+      "case_sha256": "6c489281a07896c5bbe1f173f8384827af593cd15bab48836b0464bc8ca7dfbc",
+      "catalog_fingerprint": "e5e5a5a2cc29a1be93dc4d6875aba8c47a35ed48c019c7d6838a45831d0441dc",
+      "original_response_sha256": "e83f09f2fbda19062e64c5abe334f7d3851819c7ffdfceff2941c7184133a013",
+      "runtime_status": "error",
+      "original_automated_pass": false,
+      "primary_classification": "真語意錯",
+      "first_error_node": "來源能力",
+      "first_pass_semantically_safe_ready": false,
+      "unsafe_ready": false,
+      "incorrect_refusal": false,
+      "evidence_and_roles_assessment": "選product_monthly卻要求online，來源無sales_channel；向使用者提議接受全通路不符已支援需求。ready又有clarification是額外結構矛盾，應選sales_detail。",
+      "fields": [
+        {
+          "task_id": "inventory_by_store_product",
+          "view": "demo_retail.v_inventory_status",
+          "roles": {
+            "metrics": {},
+            "conditional_metrics": [],
+            "attributes": [
+              "stock_qty"
+            ],
+            "metadata_collections": [
+              "snapshot_date"
+            ],
+            "group_by": [
+              "store_id",
+              "product_id"
+            ],
+            "output_grain": [
+              "store_id",
+              "product_id"
+            ],
+            "filters": []
+          },
+          "extra_used_columns_vs_same_view_oracle": [],
+          "required_but_no_typed_use": [],
+          "typed_used_not_required": []
+        },
+        {
+          "task_id": "online_discount_net_sales_by_store_product",
+          "view": "demo_retail.v_product_monthly",
+          "roles": {
+            "metrics": {
+              "discount_amount": "sum",
+              "net_sales": "sum"
+            },
+            "conditional_metrics": [],
+            "attributes": [],
+            "metadata_collections": [],
+            "group_by": [
+              "store_id",
+              "product_id"
+            ],
+            "output_grain": [
+              "store_id",
+              "product_id"
+            ],
+            "filters": [
+              {
+                "column": "sales_month",
+                "operator": ">=",
+                "value": "2026-09-01"
+              },
+              {
+                "column": "sales_month",
+                "operator": "<=",
+                "value": "2026-09-01"
+              }
+            ]
+          },
+          "extra_used_columns_vs_same_view_oracle": [
+            "discount_amount",
+            "net_sales",
+            "product_id",
+            "sales_month",
+            "store_id"
+          ],
+          "required_but_no_typed_use": [],
+          "typed_used_not_required": []
+        }
+      ],
+      "major_role_or_extra_column_issue": true,
+      "extra_field_impact": "重大，詳逐題原因",
+      "prepared_payload_integrity": true,
+      "root_and_shape": {
+        "anchor_task": "inventory_by_store_product",
+        "output_grain": [
+          "store_id",
+          "product_id"
+        ],
+        "edges": [
+          {
+            "left_task": "inventory_by_store_product",
+            "right_task": "online_discount_net_sales_by_store_product",
+            "left_keys": [
+              "store_id",
+              "product_id"
+            ],
+            "right_keys": [
+              "store_id",
+              "product_id"
+            ],
+            "mode": "left",
+            "cardinality": "one_to_one",
+            "preserve_task": "inventory_by_store_product"
+          }
+        ],
+        "preparation": [
+          {
+            "task_id": "inventory_by_store_product",
+            "kind": "attach_context",
+            "keys": [
+              "store_id",
+              "product_id"
+            ],
+            "description": "以門市×商品為母體，保留所有庫存商品，並附上其快照日期集合。"
+          },
+          {
+            "task_id": "online_discount_net_sales_by_store_product",
+            "kind": "aggregate",
+            "keys": [
+              "store_id",
+              "product_id"
+            ],
+            "description": "將 2026 年 9 月線上通路（若可辨識）各店各商品之折扣金額與淨銷售額彙總至門市×商品粒度。"
+          }
+        ],
+        "missing_data_policy": "保留所有庫存商品（左表），若 2026 年 9 月無對應線上折扣或淨銷售資料則標記為缺值，不補零。",
+        "notes": [
+          "v_product_monthly 無 sales_channel 欄位，無法確認是否僅含線上通路，此為已知契約限制，將於 clarifications 說明。",
+          "庫存為快照資料，不同 snapshot_date 不可跨日加總；已以 metadata_collections 收集日期集合。",
+          "折扣金額與淨銷售額為 2026 年 9 月月彙總，與庫存快照日期屬不同資料時間。"
+        ]
+      },
+      "validation_errors": [
+        "ready cannot have unresolved requirements"
+      ],
+      "sidecar_diagnostic_kept": {
+        "safe": false,
+        "errors": [
+          "status",
+          "online_discount_net_sales_by_store_product: source",
+          "ready cannot have unresolved requirements",
+          "missing policy requires independent review",
+          "payload unavailable"
+        ],
+        "review_required": true
+      },
+      "new_equivalence_status": "不以等價掩蓋所列錯誤"
+    },
+    {
+      "case_id": "cross-view-12",
+      "case_sha256": "cff16ad6ab9393966ee646018e46e86d34fe71bbdc8274fc4e4c437f14670110",
+      "catalog_fingerprint": "e5e5a5a2cc29a1be93dc4d6875aba8c47a35ed48c019c7d6838a45831d0441dc",
+      "original_response_sha256": "857d41f6c3c7f4f2f88be1025b946ff94e0e561677aacb6c9996dfb406475b15",
+      "runtime_status": "ready",
+      "original_automated_pass": true,
+      "primary_classification": "安全完整",
+      "first_error_node": null,
+      "first_pass_semantically_safe_ready": true,
+      "unsafe_ready": false,
+      "incorrect_refusal": false,
+      "evidence_and_roles_assessment": "庫存成本按店SUM及日期集合；九月單店KPI唯一列SUM revenue/target還原原值，母體與缺值正確。",
+      "fields": [
+        {
+          "task_id": "inventory_cost_by_store",
+          "view": "demo_retail.v_inventory_status",
+          "roles": {
+            "metrics": {
+              "inventory_cost_value": "sum"
+            },
+            "conditional_metrics": [],
+            "attributes": [],
+            "metadata_collections": [
+              "snapshot_date"
+            ],
+            "group_by": [
+              "store_id"
+            ],
+            "output_grain": [
+              "store_id"
+            ],
+            "filters": []
+          },
+          "extra_used_columns_vs_same_view_oracle": [],
+          "required_but_no_typed_use": [],
+          "typed_used_not_required": []
+        },
+        {
+          "task_id": "revenue_target_store_month",
+          "view": "demo_retail.v_store_monthly_kpi",
+          "roles": {
+            "metrics": {
+              "revenue": "sum",
+              "target_amount": "sum"
+            },
+            "conditional_metrics": [],
+            "attributes": [],
+            "metadata_collections": [],
+            "group_by": [
+              "store_id"
+            ],
+            "output_grain": [
+              "store_id"
+            ],
+            "filters": [
+              {
+                "column": "sales_month",
+                "operator": "=",
+                "value": "2026-09-01"
+              }
+            ]
+          },
+          "extra_used_columns_vs_same_view_oracle": [],
+          "required_but_no_typed_use": [],
+          "typed_used_not_required": []
+        }
+      ],
+      "major_role_or_extra_column_issue": false,
+      "extra_field_impact": "無重大問題；展示/背景欄位或明示唯一鍵下的冗餘按逐題理由核准；不泛化業務同義",
+      "prepared_payload_integrity": true,
+      "root_and_shape": {
+        "anchor_task": "inventory_cost_by_store",
+        "output_grain": [
+          "store_id"
+        ],
+        "edges": [
+          {
+            "left_task": "inventory_cost_by_store",
+            "right_task": "revenue_target_store_month",
+            "left_keys": [
+              "store_id"
+            ],
+            "right_keys": [
+              "store_id"
+            ],
+            "mode": "left",
+            "cardinality": "one_to_one",
+            "preserve_task": "inventory_cost_by_store"
+          }
+        ],
+        "preparation": [],
+        "missing_data_policy": "以有庫存資料的門市為錨，保留未匹配 2026-09 營收或月目標的門市並標記為缺值；契約未保證無資料代表零，不可自行補零。",
+        "notes": [
+          "庫存成本估值來自庫存盤點快照，合計須揭露各門市 DISTINCT snapshot_date 範圍，不得視為單一日期完整總額。",
+          "目前庫存與 2026-09 歷史營收為不同資料時間；月目標為該月設定值。"
+        ]
+      },
+      "validation_errors": [],
+      "sidecar_diagnostic_kept": {
+        "safe": false,
+        "errors": [
+          "missing policy requires independent review"
+        ],
+        "review_required": true
+      },
+      "new_equivalence_status": "已於本次獨立審核核准，僅限本response/case/catalog hashes；原分與原JSONL不回寫"
+    },
+    {
+      "case_id": "cross-view-13",
+      "case_sha256": "c282a31716f0f5f14fe717073b11348c5cd0513441dc9255696b8e20feb85ef0",
+      "catalog_fingerprint": "e5e5a5a2cc29a1be93dc4d6875aba8c47a35ed48c019c7d6838a45831d0441dc",
+      "original_response_sha256": "50153d5927e96fbc13b5b2efbe27b8c3d644f1829f990c90bdf7c9b54d61f051",
+      "runtime_status": "ready",
+      "original_automated_pass": true,
+      "primary_classification": "安全完整",
+      "first_error_node": null,
+      "first_pass_semantically_safe_ready": true,
+      "unsafe_ready": false,
+      "incorrect_refusal": false,
+      "evidence_and_roles_assessment": "庫存成本總額與單店九月達標率attribute正確，不SUM/AVG百分比，零目標NULL未改。",
+      "fields": [
+        {
+          "task_id": "store_inventory_cost",
+          "view": "demo_retail.v_inventory_status",
+          "roles": {
+            "metrics": {
+              "inventory_cost_value": "sum"
+            },
+            "conditional_metrics": [],
+            "attributes": [],
+            "metadata_collections": [
+              "snapshot_date"
+            ],
+            "group_by": [
+              "store_id"
+            ],
+            "output_grain": [
+              "store_id"
+            ],
+            "filters": []
+          },
+          "extra_used_columns_vs_same_view_oracle": [],
+          "required_but_no_typed_use": [],
+          "typed_used_not_required": []
+        },
+        {
+          "task_id": "store_sep2026_target_achievement",
+          "view": "demo_retail.v_store_monthly_kpi",
+          "roles": {
+            "metrics": {},
+            "conditional_metrics": [],
+            "attributes": [
+              "target_achievement_pct"
+            ],
+            "metadata_collections": [],
+            "group_by": [
+              "store_id"
+            ],
+            "output_grain": [
+              "store_id"
+            ],
+            "filters": [
+              {
+                "column": "sales_month",
+                "operator": "=",
+                "value": "2026-09-01"
+              }
+            ]
+          },
+          "extra_used_columns_vs_same_view_oracle": [],
+          "required_but_no_typed_use": [],
+          "typed_used_not_required": []
+        }
+      ],
+      "major_role_or_extra_column_issue": false,
+      "extra_field_impact": "無重大問題；展示/背景欄位或明示唯一鍵下的冗餘按逐題理由核准；不泛化業務同義",
+      "prepared_payload_integrity": true,
+      "root_and_shape": {
+        "anchor_task": "store_inventory_cost",
+        "output_grain": [
+          "store_id"
+        ],
+        "edges": [
+          {
+            "left_task": "store_inventory_cost",
+            "right_task": "store_sep2026_target_achievement",
+            "left_keys": [
+              "store_id"
+            ],
+            "right_keys": [
+              "store_id"
+            ],
+            "mode": "left",
+            "cardinality": "one_to_one",
+            "preserve_task": "store_inventory_cost"
+          }
+        ],
+        "preparation": [
+          {
+            "task_id": "store_sep2026_target_achievement",
+            "kind": "attach_context",
+            "keys": [
+              "store_id"
+            ],
+            "description": "將各門市 2026 年 9 月營收達標率以 store_id 對齊附掛至庫存成本估值結果；未在 v_store_monthly_kpi 對應到 2026-09 資料的門市，達標率標記為缺值。"
+          }
+        ],
+        "missing_data_policy": "以有庫存資料的門市為母體保留所有列；未匹配到 2026 年 9 月營收達標率的門市記為缺值，不填零。",
+        "notes": [
+          "庫存成本估值來自 v_inventory_status，為盤點快照日期之成本估值合計，僅代表各門市快照日期集合的合計，非單一日的完整總額，不可跨不同快照日期視為同一時點庫存。",
+          "營收達標率來自 v_store_monthly_kpi，契約禁止對其做 sum/avg；本規劃僅在門市層級輸出既有數值。",
+          "最終結果僅含分析所需的門市識別鍵，未加入門市名稱等展示用屬性。"
+        ]
+      },
+      "validation_errors": [],
+      "sidecar_diagnostic_kept": {
+        "safe": false,
+        "errors": [
+          "missing policy requires independent review"
+        ],
+        "review_required": true
+      },
+      "new_equivalence_status": "已於本次獨立審核核准，僅限本response/case/catalog hashes；原分與原JSONL不回寫"
+    },
+    {
+      "case_id": "cross-view-14",
+      "case_sha256": "aaec4fcccc3251c5706a3d3502e16a545cd172e5c40cbbeb932eafde9d025943",
+      "catalog_fingerprint": "e5e5a5a2cc29a1be93dc4d6875aba8c47a35ed48c019c7d6838a45831d0441dc",
+      "original_response_sha256": "783f6b96d8124e3d214374a3db52096480163cbc13e9e78e5760edb962a042bc",
+      "runtime_status": "ready",
+      "original_automated_pass": false,
+      "primary_classification": "真語意錯",
+      "first_error_node": "母體條件作用範圍",
+      "first_pass_semantically_safe_ready": false,
+      "unsafe_ready": true,
+      "incorrect_refusal": false,
+      "evidence_and_roles_assessment": "庫存全域filters已stock_qty=0，零缺貨門市被查詢排除；即使conditional_metrics再次同條件且notes承諾保全部門市也無法恢復。count與distinct在inventory店商品唯一列可等價，錯不在count命名。",
+      "fields": [
+        {
+          "task_id": "t_inventory_out_of_stock",
+          "view": "demo_retail.v_inventory_status",
+          "roles": {
+            "metrics": {},
+            "conditional_metrics": [
+              {
+                "column": "product_id",
+                "aggregation": "count",
+                "conditions": [
+                  {
+                    "column": "stock_qty",
+                    "operator": "=",
+                    "value": 0
+                  }
+                ]
+              }
+            ],
+            "attributes": [],
+            "metadata_collections": [
+              "snapshot_date"
+            ],
+            "group_by": [
+              "store_id"
+            ],
+            "output_grain": [
+              "store_id"
+            ],
+            "filters": [
+              {
+                "column": "stock_qty",
+                "operator": "=",
+                "value": 0
+              }
+            ]
+          },
+          "extra_used_columns_vs_same_view_oracle": [],
+          "required_but_no_typed_use": [
+            "stock_status"
+          ],
+          "typed_used_not_required": []
+        },
+        {
+          "task_id": "t_revenue_target_2026_09",
+          "view": "demo_retail.v_store_monthly_kpi",
+          "roles": {
+            "metrics": {
+              "target_amount": "sum"
+            },
+            "conditional_metrics": [],
+            "attributes": [],
+            "metadata_collections": [],
+            "group_by": [
+              "store_id"
+            ],
+            "output_grain": [
+              "store_id"
+            ],
+            "filters": [
+              {
+                "column": "sales_month",
+                "operator": "=",
+                "value": "2026-09-01"
+              }
+            ]
+          },
+          "extra_used_columns_vs_same_view_oracle": [],
+          "required_but_no_typed_use": [],
+          "typed_used_not_required": []
+        }
+      ],
+      "major_role_or_extra_column_issue": true,
+      "extra_field_impact": "重大，詳逐題原因",
+      "prepared_payload_integrity": true,
+      "root_and_shape": {
+        "anchor_task": "t_inventory_out_of_stock",
+        "output_grain": [
+          "store_id"
+        ],
+        "edges": [
+          {
+            "left_task": "t_inventory_out_of_stock",
+            "right_task": "t_revenue_target_2026_09",
+            "left_keys": [
+              "store_id"
+            ],
+            "right_keys": [
+              "store_id"
+            ],
+            "mode": "left",
+            "cardinality": "one_to_one",
+            "preserve_task": "t_inventory_out_of_stock"
+          }
+        ],
+        "preparation": [],
+        "missing_data_policy": "保留有庫存資料的所有門市；無對應 2026-09 營收目標的門市，target_amount 記為缺值，不填零。",
+        "notes": [
+          "缺貨商品數為 stock_qty = 0 的條件計數，母體為有庫存資料的所有門市，不因無缺貨商品而排除門市。",
+          "snapshot_date 僅作為來源時間揭露，不作為分組或跨日加總依據。",
+          "target_amount 為 2026 年 9 月門市月目標，不按商品加總。"
+        ]
+      },
+      "validation_errors": [],
+      "sidecar_diagnostic_kept": {
+        "safe": false,
+        "errors": [
+          "t_inventory_out_of_stock: conditions/period",
+          "t_inventory_out_of_stock: conditional metrics",
+          "missing policy requires independent review"
+        ],
+        "review_required": true
+      },
+      "new_equivalence_status": "不以等價掩蓋所列錯誤"
+    },
+    {
+      "case_id": "cross-view-15",
+      "case_sha256": "fe2d199ede323886afec8cd5bcf6d21819412a56edf397c34e39a1be8f3ca0bc",
+      "catalog_fingerprint": "e5e5a5a2cc29a1be93dc4d6875aba8c47a35ed48c019c7d6838a45831d0441dc",
+      "original_response_sha256": "79aea8af21034f6486eea3cf5abc9d158f8d6cddcec77872a002bc405545a1ce",
+      "runtime_status": "ready",
+      "original_automated_pass": true,
+      "primary_classification": "安全完整",
+      "first_error_node": null,
+      "first_pass_semantically_safe_ready": true,
+      "unsafe_ready": false,
+      "incorrect_refusal": false,
+      "evidence_and_roles_assessment": "庫存成本按店SUM，毛利率/客單價取單店九月原值；額外store_name可由stores.store_id主鍵及inventory主鍵JOIN證據確立FD，非猜同名，guard此處屬保守FP。",
+      "fields": [
+        {
+          "task_id": "inventory_store_snapshot",
+          "view": "demo_retail.v_inventory_status",
+          "roles": {
+            "metrics": {
+              "inventory_cost_value": "sum"
+            },
+            "conditional_metrics": [],
+            "attributes": [
+              "store_name"
+            ],
+            "metadata_collections": [
+              "snapshot_date"
+            ],
+            "group_by": [
+              "store_id"
+            ],
+            "output_grain": [
+              "store_id"
+            ],
+            "filters": []
+          },
+          "extra_used_columns_vs_same_view_oracle": [
+            "store_name"
+          ],
+          "required_but_no_typed_use": [],
+          "typed_used_not_required": []
+        },
+        {
+          "task_id": "store_monthly_kpi_sep2026",
+          "view": "demo_retail.v_store_monthly_kpi",
+          "roles": {
+            "metrics": {},
+            "conditional_metrics": [],
+            "attributes": [
+              "store_name",
+              "gross_margin_pct",
+              "avg_order_value"
+            ],
+            "metadata_collections": [],
+            "group_by": [
+              "store_id"
+            ],
+            "output_grain": [
+              "store_id"
+            ],
+            "filters": [
+              {
+                "column": "sales_month",
+                "operator": "=",
+                "value": "2026-09-01"
+              }
+            ]
+          },
+          "extra_used_columns_vs_same_view_oracle": [
+            "store_name"
+          ],
+          "required_but_no_typed_use": [
+            "gross_profit",
+            "order_count",
+            "revenue"
+          ],
+          "typed_used_not_required": []
+        }
+      ],
+      "major_role_or_extra_column_issue": false,
+      "extra_field_impact": "無重大問題；展示/背景欄位或明示唯一鍵下的冗餘按逐題理由核准；不泛化業務同義",
+      "prepared_payload_integrity": true,
+      "root_and_shape": {
+        "anchor_task": "inventory_store_snapshot",
+        "output_grain": [
+          "store_id"
+        ],
+        "edges": [
+          {
+            "left_task": "inventory_store_snapshot",
+            "right_task": "store_monthly_kpi_sep2026",
+            "left_keys": [
+              "store_id"
+            ],
+            "right_keys": [
+              "store_id"
+            ],
+            "mode": "left",
+            "cardinality": "one_to_one",
+            "preserve_task": "inventory_store_snapshot"
+          }
+        ],
+        "preparation": [
+          {
+            "task_id": "store_monthly_kpi_sep2026",
+            "kind": "attach_context",
+            "keys": [
+              "store_id"
+            ],
+            "description": "將 2026 年 9 月門市毛利率與客單價以門市為鍵，從右側任務附加到以 left join 保留的庫存門市列；毛利率與客單價為比率，不可跨門市加總或平均。"
+          }
+        ],
+        "missing_data_policy": "以有庫存資料的門市為母體左保留；若某門市在 2026 年 9 月 KPI 無資料，毛利率與客單價記為缺值，不填零。",
+        "notes": [
+          "庫存成本估值來自快照，可能涵蓋不同 snapshot_date；僅合計各商品列之 inventory_cost_value，並以 snapshot_date 集合揭露資料時間範圍，不得視為單日完整總額，亦不可跨日加總庫存件數。",
+          "毛利率與客單價為比率型欄位（disallowed_aggregations 含 sum/avg），跨店若要合併須以總毛利／總營收及總營收／總訂單數重算，不可直接加總或平均。",
+          "母體限制為有庫存資料的門市，未匹配之 9 月 KPI 記為缺值。"
+        ]
+      },
+      "validation_errors": [],
+      "sidecar_diagnostic_kept": {
+        "safe": false,
+        "errors": [
+          "status",
+          "inventory_store_snapshot: attributes lack uniqueness proof",
+          "missing policy requires independent review",
+          "payload integrity"
+        ],
+        "review_required": true
+      },
+      "new_equivalence_status": "已於本次獨立審核核准，僅限本response/case/catalog hashes；原分與原JSONL不回寫"
+    },
+    {
+      "case_id": "cross-view-16",
+      "case_sha256": "89e0e13106053bc8185b81a1614547ff604e525a043f8fdfc90ed73ee8c5d765",
+      "catalog_fingerprint": "e5e5a5a2cc29a1be93dc4d6875aba8c47a35ed48c019c7d6838a45831d0441dc",
+      "original_response_sha256": "dd43e668ed18fbab4e43116dcd68bb009d0acebc49431f26adec83af43de2e21",
+      "runtime_status": "error",
+      "original_automated_pass": false,
+      "primary_classification": "機械錯",
+      "first_error_node": "group_by/output_grain表達不一致",
+      "first_pass_semantically_safe_ready": false,
+      "unsafe_ready": false,
+      "incorrect_refusal": false,
+      "evidence_and_roles_assessment": "會員group_by=[customer_id,city]而output=[customer_id]，city由customer_id唯一決定，MAX lifetime_spend單列等價原值；子通路pivot明示保所有來源通路、不預設封閉域，核心語意保留，但型別驗證error。",
+      "fields": [
+        {
+          "task_id": "customer_base",
+          "view": "demo_retail.v_customer_value",
+          "roles": {
+            "metrics": {
+              "lifetime_spend": "max"
+            },
+            "conditional_metrics": [],
+            "attributes": [
+              "customer_id",
+              "city"
+            ],
+            "metadata_collections": [],
+            "group_by": [
+              "customer_id",
+              "city"
+            ],
+            "output_grain": [
+              "customer_id"
+            ],
+            "filters": []
+          },
+          "extra_used_columns_vs_same_view_oracle": [],
+          "required_but_no_typed_use": [],
+          "typed_used_not_required": []
+        },
+        {
+          "task_id": "sept_channel_orders",
+          "view": "demo_retail.v_order_summary",
+          "roles": {
+            "metrics": {
+              "order_id": "count",
+              "order_amount": "sum"
+            },
+            "conditional_metrics": [],
+            "attributes": [],
+            "metadata_collections": [],
+            "group_by": [
+              "customer_id",
+              "sales_channel"
+            ],
+            "output_grain": [
+              "customer_id",
+              "sales_channel"
+            ],
+            "filters": [
+              {
+                "column": "order_month",
+                "operator": "=",
+                "value": "2026-09-01"
+              }
+            ]
+          },
+          "extra_used_columns_vs_same_view_oracle": [
+            "order_month"
+          ],
+          "required_but_no_typed_use": [],
+          "typed_used_not_required": []
+        }
+      ],
+      "major_role_or_extra_column_issue": false,
+      "extra_field_impact": "無重大問題；展示/背景欄位或明示唯一鍵下的冗餘按逐題理由核准；不泛化業務同義",
+      "prepared_payload_integrity": true,
+      "root_and_shape": {
+        "anchor_task": "customer_base",
+        "output_grain": [
+          "customer_id"
+        ],
+        "edges": [
+          {
+            "left_task": "customer_base",
+            "right_task": "sept_channel_orders",
+            "left_keys": [
+              "customer_id"
+            ],
+            "right_keys": [
+              "customer_id"
+            ],
+            "mode": "left",
+            "cardinality": "one_to_many",
+            "preserve_task": "customer_base"
+          }
+        ],
+        "preparation": [
+          {
+            "task_id": "sept_channel_orders",
+            "kind": "pivot",
+            "keys": [
+              "customer_id"
+            ],
+            "description": "將 2026 年 9 月各會員的逐通路訂單數與消費金額，以銷售通路為欄位橫向展開為每個會員一列，使未下單會員在左接後得到缺值而非零。"
+          }
+        ],
+        "missing_data_policy": "保留未下單會員（左側會員母體），其 2026 年 9 月各通路訂單數及消費金額標記為缺值；不可因契約未保證而填零。",
+        "notes": [
+          "以 v_customer_value 的會員為錨點，確保未下單會員仍出現在結果中。",
+          "v_order_summary 每筆訂單一列，對會員為一對多；先彙總再進行樞紐，避免加入會員層級累計消費時重複。",
+          "各通路只按 sales_channel 分組，不自行限縮通路集合。"
+        ]
+      },
+      "validation_errors": [
+        "customer_base: aggregate grain differs from group_by"
+      ],
+      "sidecar_diagnostic_kept": {
+        "safe": false,
+        "errors": [
+          "status",
+          "customer_base: aggregate grain differs from group_by",
+          "missing policy requires independent review",
+          "payload unavailable"
+        ],
+        "review_required": true
+      },
+      "new_equivalence_status": "不以等價掩蓋所列錯誤"
+    },
+    {
+      "case_id": "cross-view-17",
+      "case_sha256": "9b463474553657fef86d03f89d7027a88872a877a1c2c962684647823582d681",
+      "catalog_fingerprint": "e5e5a5a2cc29a1be93dc4d6875aba8c47a35ed48c019c7d6838a45831d0441dc",
+      "original_response_sha256": "6a2f2b460a81e516501cf38ed89e4623dfb8500df11e2b3c5379b03876262e68",
+      "runtime_status": "ready",
+      "original_automated_pass": false,
+      "primary_classification": "安全完整",
+      "first_error_node": null,
+      "first_pass_semantically_safe_ready": true,
+      "unsafe_ready": false,
+      "incorrect_refusal": false,
+      "evidence_and_roles_assessment": "registered_on為date，<=08-31等價<09-01；九月online及訂單級COUNT order_id等價DISTINCT有真order_id主鍵，保八月註冊無線上訂單會員。",
+      "fields": [
+        {
+          "task_id": "cohort_customers",
+          "view": "demo_retail.v_customer_value",
+          "roles": {
+            "metrics": {},
+            "conditional_metrics": [],
+            "attributes": [
+              "registered_on",
+              "city"
+            ],
+            "metadata_collections": [],
+            "group_by": [],
+            "output_grain": [
+              "customer_id"
+            ],
+            "filters": [
+              {
+                "column": "registered_on",
+                "operator": ">=",
+                "value": "2026-08-01"
+              },
+              {
+                "column": "registered_on",
+                "operator": "<=",
+                "value": "2026-08-31"
+              }
+            ]
+          },
+          "extra_used_columns_vs_same_view_oracle": [],
+          "required_but_no_typed_use": [],
+          "typed_used_not_required": []
+        },
+        {
+          "task_id": "online_orders_2026_09",
+          "view": "demo_retail.v_order_summary",
+          "roles": {
+            "metrics": {
+              "order_id": "count",
+              "order_amount": "sum"
+            },
+            "conditional_metrics": [],
+            "attributes": [],
+            "metadata_collections": [],
+            "group_by": [
+              "customer_id"
+            ],
+            "output_grain": [
+              "customer_id"
+            ],
+            "filters": [
+              {
+                "column": "order_month",
+                "operator": "=",
+                "value": "2026-09-01"
+              },
+              {
+                "column": "sales_channel",
+                "operator": "=",
+                "value": "online"
+              }
+            ]
+          },
+          "extra_used_columns_vs_same_view_oracle": [
+            "order_month"
+          ],
+          "required_but_no_typed_use": [],
+          "typed_used_not_required": []
+        }
+      ],
+      "major_role_or_extra_column_issue": false,
+      "extra_field_impact": "無重大問題；展示/背景欄位或明示唯一鍵下的冗餘按逐題理由核准；不泛化業務同義",
+      "prepared_payload_integrity": true,
+      "root_and_shape": {
+        "anchor_task": "cohort_customers",
+        "output_grain": [
+          "customer_id"
+        ],
+        "edges": [
+          {
+            "left_task": "cohort_customers",
+            "right_task": "online_orders_2026_09",
+            "left_keys": [
+              "customer_id"
+            ],
+            "right_keys": [
+              "customer_id"
+            ],
+            "mode": "left",
+            "cardinality": "one_to_one",
+            "preserve_task": "cohort_customers"
+          }
+        ],
+        "preparation": [
+          {
+            "task_id": "cohort_customers",
+            "kind": "attach_context",
+            "keys": [
+              "customer_id"
+            ],
+            "description": "以 2026 年 8 月註冊會員母體為主，左接 2026 年 9 月線上訂單彙總。"
+          }
+        ],
+        "missing_data_policy": "保留母體中沒有 2026 年 9 月線上訂單的會員；未匹配的線上訂單數與金額標記為缺值，不填零（契約未保證無訂單即為零）。",
+        "notes": [
+          "線上訂單數為每筆已完成訂單一列的 count，非 COUNT(*)。",
+          "線上訂單金額為 order_amount 折扣後總銷售金額。",
+          "註冊日期取自 v_customer_value.registered_on；註冊城市取自 v_customer_value.city，不與門市城市混淆。"
+        ]
+      },
+      "validation_errors": [],
+      "sidecar_diagnostic_kept": {
+        "safe": false,
+        "errors": [
+          "cohort_customers: conditions/period",
+          "missing policy requires independent review"
+        ],
+        "review_required": true
+      },
+      "new_equivalence_status": "已於本次獨立審核核准，僅限本response/case/catalog hashes；原分與原JSONL不回寫"
+    },
+    {
+      "case_id": "cross-view-18",
+      "case_sha256": "b1b3742360acc8a96fbaf4ca023ac2f1788969642f38ae7c98b2628dd15b23fa",
+      "catalog_fingerprint": "e5e5a5a2cc29a1be93dc4d6875aba8c47a35ed48c019c7d6838a45831d0441dc",
+      "original_response_sha256": "414be2bcd0b039a1f711a23141322119bd3c6b989608e98cafaa8ef58381a107",
+      "runtime_status": "ready",
+      "original_automated_pass": true,
+      "primary_classification": "安全完整",
+      "first_error_node": null,
+      "first_pass_semantically_safe_ready": true,
+      "unsafe_ready": false,
+      "incorrect_refusal": false,
+      "evidence_and_roles_assessment": "會員city/active旗標原值，九月in_store訂單級COUNT合法；<=09-30等價<10-01，包含未下單會員。",
+      "fields": [
+        {
+          "task_id": "customer_profile",
+          "view": "demo_retail.v_customer_value",
+          "roles": {
+            "metrics": {},
+            "conditional_metrics": [],
+            "attributes": [
+              "city",
+              "active_in_last_90d"
+            ],
+            "metadata_collections": [],
+            "group_by": [],
+            "output_grain": [
+              "customer_id"
+            ],
+            "filters": []
+          },
+          "extra_used_columns_vs_same_view_oracle": [],
+          "required_but_no_typed_use": [],
+          "typed_used_not_required": []
+        },
+        {
+          "task_id": "instore_orders_sep2026",
+          "view": "demo_retail.v_order_summary",
+          "roles": {
+            "metrics": {
+              "order_id": "count"
+            },
+            "conditional_metrics": [],
+            "attributes": [],
+            "metadata_collections": [],
+            "group_by": [
+              "customer_id"
+            ],
+            "output_grain": [
+              "customer_id"
+            ],
+            "filters": [
+              {
+                "column": "sales_channel",
+                "operator": "=",
+                "value": "in_store"
+              },
+              {
+                "column": "order_date",
+                "operator": ">=",
+                "value": "2026-09-01"
+              },
+              {
+                "column": "order_date",
+                "operator": "<=",
+                "value": "2026-09-30"
+              }
+            ]
+          },
+          "extra_used_columns_vs_same_view_oracle": [],
+          "required_but_no_typed_use": [],
+          "typed_used_not_required": []
+        }
+      ],
+      "major_role_or_extra_column_issue": false,
+      "extra_field_impact": "無重大問題；展示/背景欄位或明示唯一鍵下的冗餘按逐題理由核准；不泛化業務同義",
+      "prepared_payload_integrity": true,
+      "root_and_shape": {
+        "anchor_task": "customer_profile",
+        "output_grain": [
+          "customer_id"
+        ],
+        "edges": [
+          {
+            "left_task": "customer_profile",
+            "right_task": "instore_orders_sep2026",
+            "left_keys": [
+              "customer_id"
+            ],
+            "right_keys": [
+              "customer_id"
+            ],
+            "mode": "left",
+            "cardinality": "one_to_one",
+            "preserve_task": "customer_profile"
+          }
+        ],
+        "preparation": [],
+        "missing_data_policy": "保留所有會員；未在 2026 年 9 月有實體通路訂單的會員，其訂單數記為缺值，不自行填零。",
+        "notes": [
+          "註冊城市 city 來自會員資料，非交易門市城市。",
+          "active_in_last_90d 為來源 View 已計算好的布林維度，不另行聚合。",
+          "實體通路訂單數以 v_order_summary 的 order_id 計數，未下單會員不會出現在右側任務結果中。"
+        ]
+      },
+      "validation_errors": [],
+      "sidecar_diagnostic_kept": {
+        "safe": false,
+        "errors": [
+          "missing policy requires independent review"
+        ],
+        "review_required": true
+      },
+      "new_equivalence_status": "已於本次獨立審核核准，僅限本response/case/catalog hashes；原分與原JSONL不回寫"
+    },
+    {
+      "case_id": "cross-view-19",
+      "case_sha256": "39b9fa62ac2c17b0b8c97203381d3c7b72a9db62b39abb1723cb7198cd27c430",
+      "catalog_fingerprint": "e5e5a5a2cc29a1be93dc4d6875aba8c47a35ed48c019c7d6838a45831d0441dc",
+      "original_response_sha256": "7aca08b5ae274a44fea40133dd76bf1360ab2cdd21c2149462491d8c5c11b24f",
+      "runtime_status": "ready",
+      "original_automated_pass": true,
+      "primary_classification": "安全完整",
+      "first_error_node": null,
+      "first_pass_semantically_safe_ready": true,
+      "unsafe_ready": false,
+      "incorrect_refusal": false,
+      "evidence_and_roles_assessment": "會員city/累計消費與按會員×交易店金額nest完整；額外store_name由stores.store_id主鍵且order_summary store_id來自該門市表可證FD，合法展示標籤，guard為保守FP。",
+      "fields": [
+        {
+          "task_id": "member_lifetime",
+          "view": "demo_retail.v_customer_value",
+          "roles": {
+            "metrics": {},
+            "conditional_metrics": [],
+            "attributes": [
+              "city",
+              "lifetime_spend"
+            ],
+            "metadata_collections": [],
+            "group_by": [],
+            "output_grain": [
+              "customer_id"
+            ],
+            "filters": []
+          },
+          "extra_used_columns_vs_same_view_oracle": [],
+          "required_but_no_typed_use": [],
+          "typed_used_not_required": []
+        },
+        {
+          "task_id": "member_order_store_month",
+          "view": "demo_retail.v_order_summary",
+          "roles": {
+            "metrics": {
+              "order_amount": "sum"
+            },
+            "conditional_metrics": [],
+            "attributes": [
+              "store_name"
+            ],
+            "metadata_collections": [],
+            "group_by": [
+              "customer_id",
+              "store_id"
+            ],
+            "output_grain": [
+              "customer_id",
+              "store_id"
+            ],
+            "filters": [
+              {
+                "column": "order_month",
+                "operator": "=",
+                "value": "2026-09-01"
+              }
+            ]
+          },
+          "extra_used_columns_vs_same_view_oracle": [
+            "order_month",
+            "store_name"
+          ],
+          "required_but_no_typed_use": [],
+          "typed_used_not_required": []
+        }
+      ],
+      "major_role_or_extra_column_issue": false,
+      "extra_field_impact": "無重大問題；展示/背景欄位或明示唯一鍵下的冗餘按逐題理由核准；不泛化業務同義",
+      "prepared_payload_integrity": true,
+      "root_and_shape": {
+        "anchor_task": "member_lifetime",
+        "output_grain": [
+          "customer_id"
+        ],
+        "edges": [
+          {
+            "left_task": "member_lifetime",
+            "right_task": "member_order_store_month",
+            "left_keys": [
+              "customer_id"
+            ],
+            "right_keys": [
+              "customer_id"
+            ],
+            "mode": "left",
+            "cardinality": "one_to_many",
+            "preserve_task": "member_lifetime"
+          }
+        ],
+        "preparation": [
+          {
+            "task_id": "member_order_store_month",
+            "kind": "aggregate",
+            "keys": [
+              "customer_id",
+              "store_id"
+            ],
+            "description": "右側任務輸出為 customer_id × store_id 的 2026 年 9 月訂單金額，屬會員層級的明細子集合；已先於右側任務以 sum(order_amount) 彙總，避免多筆訂單展開造成重複。"
+          },
+          {
+            "task_id": "member_order_store_month",
+            "kind": "nest",
+            "keys": [
+              "customer_id"
+            ],
+            "description": "依 customer_id 將該會員 2026 年 9 月各交易門市的 {store_id, store_name, 訂單金額} 收集為巢狀集合，掛在每位會員一列之下，使最終粒度維持 customer_id 且不重複會員累計消費。"
+          }
+        ],
+        "missing_data_policy": "保留未下單會員（left join 保留 anchor 全部會員）；未匹配到 2026 年 9 月交易門市者，巢狀交易門市集合為空，不以零筆訂單或零金額假造資料。",
+        "notes": [
+          "最終輸出每會員一列，保留 customer_id、city、lifetime_spend 及該會員 2026 年 9 月各交易門市的訂單金額巢狀集合。",
+          "city 為會員註冊城市，與交易門市所在城市語意不同，不得互換或用以推導門市。",
+          "lifetime_spend 之期間為會員累計、非 2026 年 9 月；兩者資料時間不同，不互相加總或比較為同一期間金額。",
+          "2026 年 9 月僅包含該月有已完成訂單的門市，沒有成交的門市不會出現，亦不補零。"
+        ]
+      },
+      "validation_errors": [],
+      "sidecar_diagnostic_kept": {
+        "safe": false,
+        "errors": [
+          "status",
+          "member_order_store_month: attributes lack uniqueness proof",
+          "missing policy requires independent review",
+          "payload integrity"
+        ],
+        "review_required": true
+      },
+      "new_equivalence_status": "已於本次獨立審核核准，僅限本response/case/catalog hashes；原分與原JSONL不回寫"
+    },
+    {
+      "case_id": "cross-view-20",
+      "case_sha256": "f796a8327217d97291d25dfbdacc365954e3012179d58453b0f9e048e5566abe",
+      "catalog_fingerprint": "e5e5a5a2cc29a1be93dc4d6875aba8c47a35ed48c019c7d6838a45831d0441dc",
+      "original_response_sha256": "01283682a0176d6f86f60770ec10466d8dd3766f7f0c8b7a1fcd6661d37c84bd",
+      "runtime_status": "ready",
+      "original_automated_pass": true,
+      "primary_classification": "安全完整",
+      "first_error_node": null,
+      "first_pass_semantically_safe_ready": true,
+      "unsafe_ready": false,
+      "incorrect_refusal": false,
+      "evidence_and_roles_assessment": "九月按會員商品SUM quantity後nest至會員，會員city/累計消費只一次，含未下單會員，無零值臆填。",
+      "fields": [
+        {
+          "task_id": "task_customer_value",
+          "view": "demo_retail.v_customer_value",
+          "roles": {
+            "metrics": {},
+            "conditional_metrics": [],
+            "attributes": [
+              "city",
+              "lifetime_spend"
+            ],
+            "metadata_collections": [],
+            "group_by": [],
+            "output_grain": [
+              "customer_id"
+            ],
+            "filters": []
+          },
+          "extra_used_columns_vs_same_view_oracle": [],
+          "required_but_no_typed_use": [],
+          "typed_used_not_required": []
+        },
+        {
+          "task_id": "task_customer_product_units_2026_09",
+          "view": "demo_retail.v_sales_detail",
+          "roles": {
+            "metrics": {
+              "quantity": "sum"
+            },
+            "conditional_metrics": [],
+            "attributes": [],
+            "metadata_collections": [],
+            "group_by": [
+              "customer_id",
+              "product_id"
+            ],
+            "output_grain": [
+              "customer_id",
+              "product_id"
+            ],
+            "filters": [
+              {
+                "column": "order_month",
+                "operator": "=",
+                "value": "2026-09-01"
+              }
+            ]
+          },
+          "extra_used_columns_vs_same_view_oracle": [
+            "order_month"
+          ],
+          "required_but_no_typed_use": [],
+          "typed_used_not_required": []
+        }
+      ],
+      "major_role_or_extra_column_issue": false,
+      "extra_field_impact": "無重大問題；展示/背景欄位或明示唯一鍵下的冗餘按逐題理由核准；不泛化業務同義",
+      "prepared_payload_integrity": true,
+      "root_and_shape": {
+        "anchor_task": "task_customer_value",
+        "output_grain": [
+          "customer_id"
+        ],
+        "edges": [
+          {
+            "left_task": "task_customer_value",
+            "right_task": "task_customer_product_units_2026_09",
+            "left_keys": [
+              "customer_id"
+            ],
+            "right_keys": [
+              "customer_id"
+            ],
+            "mode": "left",
+            "cardinality": "one_to_many",
+            "preserve_task": "task_customer_value"
+          }
+        ],
+        "preparation": [
+          {
+            "task_id": "task_customer_product_units_2026_09",
+            "kind": "nest",
+            "keys": [
+              "customer_id"
+            ],
+            "description": "將 2026 年 9 月各會員各商品購買件數彙整為每會員一組商品與件數的子集合，避免與每會員一列的累計消費重複。"
+          }
+        ],
+        "missing_data_policy": "保留未下單會員（其在 2026 年 9 月無商品購買明細）；未匹配資料標記為缺值，不補零。",
+        "notes": [
+          "會員註冊城市取自 v_customer_value.city（會員登記城市），不得與交易門市城市互換。",
+          "累計消費為 v_customer_value.lifetime_spend 之單值，不跨會員加總。",
+          "2026 年 9 月各商品購買件數以 order_month = 2026-09-01 篩選後對 quantity 加總；未購買商品不代表銷量為零。"
+        ]
+      },
+      "validation_errors": [],
+      "sidecar_diagnostic_kept": {
+        "safe": false,
+        "errors": [
+          "missing policy requires independent review"
+        ],
+        "review_required": true
+      },
+      "new_equivalence_status": "已於本次獨立審核核准，僅限本response/case/catalog hashes；原分與原JSONL不回寫"
+    },
+    {
+      "case_id": "cross-view-21",
+      "case_sha256": "46784dd02792b7fb8631a4fd36a4f7083b72437d066e60553834a43d713357a0",
+      "catalog_fingerprint": "e5e5a5a2cc29a1be93dc4d6875aba8c47a35ed48c019c7d6838a45831d0441dc",
+      "original_response_sha256": "ea9fb209c7af7ec981b5b1c199631cc4d0c796a85e16b1970eee336ee9ffc8ae",
+      "runtime_status": "needs_clarification",
+      "original_automated_pass": false,
+      "primary_classification": "真語意錯",
+      "first_error_node": "需求理解/錯誤澄清",
+      "first_pass_semantically_safe_ready": false,
+      "unsafe_ready": false,
+      "incorrect_refusal": true,
+      "evidence_and_roles_assessment": "錯誤要求使用者重定義View既有active_in_last_90d基準、訂單/付款月份；需求只取既有旗標及九月分類淨額，有足夠契約可規劃。needs_clarification不算正確拒絕。",
+      "fields": [
+        {
+          "task_id": "customer_profile",
+          "view": "demo_retail.v_customer_value",
+          "roles": {
+            "metrics": {},
+            "conditional_metrics": [],
+            "attributes": [
+              "registered_on",
+              "active_in_last_90d"
+            ],
+            "metadata_collections": [],
+            "group_by": [
+              "customer_id"
+            ],
+            "output_grain": [
+              "customer_id"
+            ],
+            "filters": []
+          },
+          "extra_used_columns_vs_same_view_oracle": [],
+          "required_but_no_typed_use": [],
+          "typed_used_not_required": []
+        },
+        {
+          "task_id": "customer_category_net_sales",
+          "view": "demo_retail.v_sales_detail",
+          "roles": {
+            "metrics": {
+              "net_sales": "sum"
+            },
+            "conditional_metrics": [],
+            "attributes": [],
+            "metadata_collections": [],
+            "group_by": [
+              "customer_id",
+              "category"
+            ],
+            "output_grain": [
+              "customer_id",
+              "category"
+            ],
+            "filters": [
+              {
+                "column": "order_month",
+                "operator": "=",
+                "value": "2026-09-01"
+              }
+            ]
+          },
+          "extra_used_columns_vs_same_view_oracle": [
+            "order_month"
+          ],
+          "required_but_no_typed_use": [],
+          "typed_used_not_required": []
+        }
+      ],
+      "major_role_or_extra_column_issue": false,
+      "extra_field_impact": "無重大問題；展示/背景欄位或明示唯一鍵下的冗餘按逐題理由核准；不泛化業務同義",
+      "prepared_payload_integrity": true,
+      "root_and_shape": null,
+      "validation_errors": [],
+      "sidecar_diagnostic_kept": {
+        "safe": false,
+        "errors": [
+          "status",
+          "integration"
+        ],
+        "review_required": true
+      },
+      "new_equivalence_status": "不以等價掩蓋所列錯誤"
+    },
+    {
+      "case_id": "cross-view-22",
+      "case_sha256": "f32d5d29ad587755d45ccb592772905a1dd0e769c6464971c6de3bf506587f3e",
+      "catalog_fingerprint": "e5e5a5a2cc29a1be93dc4d6875aba8c47a35ed48c019c7d6838a45831d0441dc",
+      "original_response_sha256": "849a5365b79ea03071b26b9732ae7ef844bcc108b4a6fb69dab574c3515fbada",
+      "runtime_status": "error",
+      "original_automated_pass": false,
+      "primary_classification": "機械錯",
+      "first_error_node": "child nest收集鍵",
+      "first_pass_semantically_safe_ready": false,
+      "unsafe_ready": false,
+      "incorrect_refusal": false,
+      "evidence_and_roles_assessment": "會員/台北市city/九月online/product度量及會員root均正確，但nest.keys填customer+product而edge收集到customer，描述卻已明示會員下商品集合，局部結構不一致，沒有prepared payload。",
+      "fields": [
+        {
+          "task_id": "customer_base",
+          "view": "demo_retail.v_customer_value",
+          "roles": {
+            "metrics": {},
+            "conditional_metrics": [],
+            "attributes": [
+              "customer_name",
+              "lifetime_spend"
+            ],
+            "metadata_collections": [],
+            "group_by": [
+              "customer_id"
+            ],
+            "output_grain": [
+              "customer_id"
+            ],
+            "filters": [
+              {
+                "column": "city",
+                "operator": "=",
+                "value": "台北市"
+              }
+            ]
+          },
+          "extra_used_columns_vs_same_view_oracle": [
+            "customer_name"
+          ],
+          "required_but_no_typed_use": [],
+          "typed_used_not_required": []
+        },
+        {
+          "task_id": "sep_online_product_units",
+          "view": "demo_retail.v_sales_detail",
+          "roles": {
+            "metrics": {
+              "quantity": "sum"
+            },
+            "conditional_metrics": [],
+            "attributes": [],
+            "metadata_collections": [],
+            "group_by": [
+              "customer_id",
+              "product_id"
+            ],
+            "output_grain": [
+              "customer_id",
+              "product_id"
+            ],
+            "filters": [
+              {
+                "column": "order_month",
+                "operator": "=",
+                "value": "2026-09-01"
+              },
+              {
+                "column": "sales_channel",
+                "operator": "=",
+                "value": "online"
+              }
+            ]
+          },
+          "extra_used_columns_vs_same_view_oracle": [
+            "order_month"
+          ],
+          "required_but_no_typed_use": [],
+          "typed_used_not_required": []
+        }
+      ],
+      "major_role_or_extra_column_issue": false,
+      "extra_field_impact": "無重大問題；展示/背景欄位或明示唯一鍵下的冗餘按逐題理由核准；不泛化業務同義",
+      "prepared_payload_integrity": true,
+      "root_and_shape": {
+        "anchor_task": "customer_base",
+        "output_grain": [
+          "customer_id"
+        ],
+        "edges": [
+          {
+            "left_task": "customer_base",
+            "right_task": "sep_online_product_units",
+            "left_keys": [
+              "customer_id"
+            ],
+            "right_keys": [
+              "customer_id"
+            ],
+            "mode": "left",
+            "cardinality": "one_to_many",
+            "preserve_task": "customer_base"
+          }
+        ],
+        "preparation": [
+          {
+            "task_id": "sep_online_product_units",
+            "kind": "nest",
+            "keys": [
+              "customer_id",
+              "product_id"
+            ],
+            "description": "依會員將 2026 年 9 月線上通路各商品購買件數收集為巢狀子集合，掛在每位台北市會員之下；商品彙總先用 customer_id、product_id 為鍵，避免明細重複膨脹會員累計消費。"
+          }
+        ],
+        "missing_data_policy": "保留沒有購買的台北市會員，其 2026 年 9 月線上通路商品子集合標記為缺值；契約未保證時不補零。",
+        "notes": [
+          "會員註冊城市取自 v_customer_value.city，與交易門市城市不同，不可互換。",
+          "v_customer_value 為每會員一列，lifetime_spend 為單值欄位，不隨子集合加總。",
+          "v_sales_detail 的 quantity 彙總僅限 2026 年 9 月且 sales_channel=online。"
+        ]
+      },
+      "validation_errors": [
+        "finer output grain requires an explicit preparation"
+      ],
+      "sidecar_diagnostic_kept": {
+        "safe": false,
+        "errors": [
+          "status",
+          "finer output grain requires an explicit preparation",
+          "child collection shape",
+          "missing policy requires independent review",
+          "payload unavailable"
+        ],
+        "review_required": true
+      },
+      "new_equivalence_status": "不以等價掩蓋所列錯誤"
+    },
+    {
+      "case_id": "cross-view-23",
+      "case_sha256": "f59bc10c8963a291a77b00a8bad4478763a3188f0b5153c278f26374c5dd32e1",
+      "catalog_fingerprint": "e5e5a5a2cc29a1be93dc4d6875aba8c47a35ed48c019c7d6838a45831d0441dc",
+      "original_response_sha256": "766f67104196a249c07101b41acb37dd915fdc92daba371909d86a01cf7dd63f",
+      "runtime_status": "ready",
+      "original_automated_pass": true,
+      "primary_classification": "安全完整",
+      "first_error_node": null,
+      "first_pass_semantically_safe_ready": true,
+      "unsafe_ready": false,
+      "incorrect_refusal": false,
+      "evidence_and_roles_assessment": "九月KPI店母體，商品units/netSales子集合依store nest，目標單值只一次；店名/商品ID展示合法。",
+      "fields": [
+        {
+          "task_id": "task_store_target",
+          "view": "demo_retail.v_store_monthly_kpi",
+          "roles": {
+            "metrics": {},
+            "conditional_metrics": [],
+            "attributes": [
+              "store_name",
+              "target_amount"
+            ],
+            "metadata_collections": [],
+            "group_by": [],
+            "output_grain": [
+              "store_id"
+            ],
+            "filters": [
+              {
+                "column": "sales_month",
+                "operator": "=",
+                "value": "2026-09-01"
+              }
+            ]
+          },
+          "extra_used_columns_vs_same_view_oracle": [
+            "store_name"
+          ],
+          "required_but_no_typed_use": [],
+          "typed_used_not_required": []
+        },
+        {
+          "task_id": "task_store_product_monthly",
+          "view": "demo_retail.v_product_monthly",
+          "roles": {
+            "metrics": {
+              "units_sold": "sum",
+              "net_sales": "sum"
+            },
+            "conditional_metrics": [],
+            "attributes": [
+              "product_id"
+            ],
+            "metadata_collections": [],
+            "group_by": [
+              "store_id",
+              "product_id"
+            ],
+            "output_grain": [
+              "store_id",
+              "product_id"
+            ],
+            "filters": [
+              {
+                "column": "sales_month",
+                "operator": "=",
+                "value": "2026-09-01"
+              }
+            ]
+          },
+          "extra_used_columns_vs_same_view_oracle": [],
+          "required_but_no_typed_use": [],
+          "typed_used_not_required": []
+        }
+      ],
+      "major_role_or_extra_column_issue": false,
+      "extra_field_impact": "無重大問題；展示/背景欄位或明示唯一鍵下的冗餘按逐題理由核准；不泛化業務同義",
+      "prepared_payload_integrity": true,
+      "root_and_shape": {
+        "anchor_task": "task_store_target",
+        "output_grain": [
+          "store_id"
+        ],
+        "edges": [
+          {
+            "left_task": "task_store_target",
+            "right_task": "task_store_product_monthly",
+            "left_keys": [
+              "store_id"
+            ],
+            "right_keys": [
+              "store_id"
+            ],
+            "mode": "left",
+            "cardinality": "one_to_many",
+            "preserve_task": "task_store_target"
+          }
+        ],
+        "preparation": [
+          {
+            "task_id": "task_store_product_monthly",
+            "kind": "nest",
+            "keys": [
+              "store_id"
+            ],
+            "description": "將每店的商品層級銷量與淨銷售額彙總結果收斂為該店的商品子集合，掛在門市 KPI 母體下，避免一對多展開重複門市目標。"
+          }
+        ],
+        "missing_data_policy": "保留所有有 2026 年 9 月 KPI 的門市；若某門市在 v_product_monthly 無對應商品資料，其商品子集合為空並標記缺值，不將商品銷量或淨銷售額補零。",
+        "notes": [
+          "門市營收目標來自 v_store_monthly_kpi，商品銷量與淨銷售額來自 v_product_monthly，兩者以 store_id 對齊。",
+          "最終以每店一列呈現，商品明細以巢狀子集合收集，避免按商品重複加總店目標。",
+          "商品層級資料僅代表 2026 年 9 月有銷售紀錄的門市×商品，無銷售的商品不會出現，不自行補零。"
+        ]
+      },
+      "validation_errors": [],
+      "sidecar_diagnostic_kept": {
+        "safe": false,
+        "errors": [
+          "missing policy requires independent review"
+        ],
+        "review_required": true
+      },
+      "new_equivalence_status": "已於本次獨立審核核准，僅限本response/case/catalog hashes；原分與原JSONL不回寫"
+    },
+    {
+      "case_id": "cross-view-24",
+      "case_sha256": "0a74a80d6cc99476c10aaf2e3c082420d81fdef182880cda544e743aa7b81952",
+      "catalog_fingerprint": "e5e5a5a2cc29a1be93dc4d6875aba8c47a35ed48c019c7d6838a45831d0441dc",
+      "original_response_sha256": "77597c548b289b36a14701de863ea5df1eb2732fd169e5ddded04a0d7991a46d",
+      "runtime_status": "error",
+      "original_automated_pass": false,
+      "primary_classification": "真語意錯",
+      "first_error_node": "根粒度/child集合整合",
+      "first_pass_semantically_safe_ready": false,
+      "unsafe_ready": false,
+      "incorrect_refusal": false,
+      "evidence_and_roles_assessment": "需要KPI門市為根附分類子集合，實際final grain=store/category且nest keys=store/category，與門市母體及notes矛盾；不是已正確表達的root，validator擋下。",
+      "fields": [
+        {
+          "task_id": "store_targets",
+          "view": "demo_retail.v_store_monthly_kpi",
+          "roles": {
+            "metrics": {},
+            "conditional_metrics": [],
+            "attributes": [
+              "target_amount"
+            ],
+            "metadata_collections": [],
+            "group_by": [
+              "store_id"
+            ],
+            "output_grain": [
+              "store_id"
+            ],
+            "filters": [
+              {
+                "column": "sales_month",
+                "operator": "=",
+                "value": "2026-09-01"
+              },
+              {
+                "column": "is_complete_month",
+                "operator": "=",
+                "value": true
+              }
+            ]
+          },
+          "extra_used_columns_vs_same_view_oracle": [],
+          "required_but_no_typed_use": [],
+          "typed_used_not_required": []
+        },
+        {
+          "task_id": "category_gross_profit",
+          "view": "demo_retail.v_product_monthly",
+          "roles": {
+            "metrics": {
+              "gross_profit": "sum"
+            },
+            "conditional_metrics": [],
+            "attributes": [],
+            "metadata_collections": [],
+            "group_by": [
+              "store_id",
+              "category"
+            ],
+            "output_grain": [
+              "store_id",
+              "category"
+            ],
+            "filters": [
+              {
+                "column": "sales_month",
+                "operator": "=",
+                "value": "2026-09-01"
+              }
+            ]
+          },
+          "extra_used_columns_vs_same_view_oracle": [],
+          "required_but_no_typed_use": [],
+          "typed_used_not_required": []
+        }
+      ],
+      "major_role_or_extra_column_issue": true,
+      "extra_field_impact": "重大，詳逐題原因",
+      "prepared_payload_integrity": true,
+      "root_and_shape": {
+        "anchor_task": "store_targets",
+        "output_grain": [
+          "store_id",
+          "category"
+        ],
+        "edges": [
+          {
+            "left_task": "store_targets",
+            "right_task": "category_gross_profit",
+            "left_keys": [
+              "store_id"
+            ],
+            "right_keys": [
+              "store_id"
+            ],
+            "mode": "left",
+            "cardinality": "one_to_many",
+            "preserve_task": "store_targets"
+          }
+        ],
+        "preparation": [
+          {
+            "task_id": "category_gross_profit",
+            "kind": "nest",
+            "keys": [
+              "store_id",
+              "category"
+            ],
+            "description": "將每個門市的多個商品分類毛利彙整為該門市的分類毛利子集合，避免與門市月目標合併時因一對多關係重複月目標。"
+          },
+          {
+            "task_id": "store_targets",
+            "kind": "attach_context",
+            "keys": [
+              "store_id"
+            ],
+            "description": "以符合 2026 年 9 月且 is_complete_month=true 的門市為母體，將各門市月目標附掛至該門市的分類毛利結果；未匹配分類記為缺值，不補零。"
+          }
+        ],
+        "missing_data_policy": "保留所有符合 2026 年 9 月且被標記為完整月份的門市；該門市若無任何商品分類毛利資料，分類維持缺值，不填零。",
+        "notes": [
+          "門市月目標為每門市每月一列，不能依商品分類加總或重複計入。",
+          "各門市保留其分類毛利子集合，最終呈現為門市層級及其商品分類毛利。"
+        ]
+      },
+      "validation_errors": [
+        "final output grain must come from the anchor grain",
+        "finer output grain requires an explicit preparation"
+      ],
+      "sidecar_diagnostic_kept": {
+        "safe": false,
+        "errors": [
+          "status",
+          "final output grain must come from the anchor grain",
+          "finer output grain requires an explicit preparation",
+          "root grain",
+          "child collection shape",
+          "missing policy requires independent review",
+          "payload unavailable"
+        ],
+        "review_required": true
+      },
+      "new_equivalence_status": "不以等價掩蓋所列錯誤"
+    },
+    {
+      "case_id": "cross-view-25",
+      "case_sha256": "58b6e22f95ea1da09c80eb7ce98ca1ce2b368a2ca0a28e1c549d0d03dbd650c5",
+      "catalog_fingerprint": "e5e5a5a2cc29a1be93dc4d6875aba8c47a35ed48c019c7d6838a45831d0441dc",
+      "original_response_sha256": "690fa881fc574e7e7cca37e7f25695e78b9f0f4b42c44c54270c11d1b89826ae",
+      "runtime_status": "ready",
+      "original_automated_pass": true,
+      "primary_classification": "真語意錯",
+      "first_error_node": "KPI輸出欄位角色",
+      "first_pass_semantically_safe_ready": false,
+      "unsafe_ready": true,
+      "incorrect_refusal": false,
+      "evidence_and_roles_assessment": "target_amount只required未置attributes/metrics，prepared request只選store_name；核心月目標缺失，雖原grader過仍不安全ready。",
+      "fields": [
+        {
+          "task_id": "task_kpi_target",
+          "view": "demo_retail.v_store_monthly_kpi",
+          "roles": {
+            "metrics": {},
+            "conditional_metrics": [],
+            "attributes": [
+              "store_name"
+            ],
+            "metadata_collections": [],
+            "group_by": [
+              "store_id"
+            ],
+            "output_grain": [
+              "store_id"
+            ],
+            "filters": [
+              {
+                "column": "sales_month",
+                "operator": "=",
+                "value": "2026-09-01"
+              }
+            ]
+          },
+          "extra_used_columns_vs_same_view_oracle": [
+            "store_name"
+          ],
+          "required_but_no_typed_use": [
+            "target_amount"
+          ],
+          "typed_used_not_required": []
+        },
+        {
+          "task_id": "task_store_category_month",
+          "view": "demo_retail.v_product_monthly",
+          "roles": {
+            "metrics": {
+              "discount_amount": "sum",
+              "net_sales": "sum"
+            },
+            "conditional_metrics": [],
+            "attributes": [],
+            "metadata_collections": [],
+            "group_by": [
+              "store_id",
+              "category"
+            ],
+            "output_grain": [
+              "store_id",
+              "category"
+            ],
+            "filters": [
+              {
+                "column": "sales_month",
+                "operator": "=",
+                "value": "2026-09-01"
+              }
+            ]
+          },
+          "extra_used_columns_vs_same_view_oracle": [],
+          "required_but_no_typed_use": [],
+          "typed_used_not_required": []
+        }
+      ],
+      "major_role_or_extra_column_issue": true,
+      "extra_field_impact": "重大，詳逐題原因",
+      "prepared_payload_integrity": true,
+      "root_and_shape": {
+        "anchor_task": "task_kpi_target",
+        "output_grain": [
+          "store_id"
+        ],
+        "edges": [
+          {
+            "left_task": "task_kpi_target",
+            "right_task": "task_store_category_month",
+            "left_keys": [
+              "store_id"
+            ],
+            "right_keys": [
+              "store_id"
+            ],
+            "mode": "left",
+            "cardinality": "one_to_many",
+            "preserve_task": "task_kpi_target"
+          }
+        ],
+        "preparation": [
+          {
+            "task_id": "task_store_category_month",
+            "kind": "nest",
+            "keys": [
+              "store_id"
+            ],
+            "description": "將各門市各商品分類的折扣金額與淨銷售額彙總結果，依 store_id 收集成該門市的商品分類子集合，避免多個分類列造成目標列重複。"
+          }
+        ],
+        "missing_data_policy": "保留有當月 KPI 的所有門市；若某門市在 2026 年 9 月無商品分類銷售資料，則該門市的商品分類子集合為空，不以零補值。",
+        "notes": [
+          "最終以門市為單位，錨定有 2026 年 9 月 KPI 的門市母體。",
+          "商品分類的折扣金額與淨銷售額為巢狀於各門市的子集合，不與目標金額進行數值加總。",
+          "v_product_monthly 的 net_sales 為折扣後銷售額，discount_amount 為折扣金額，兩者皆以 category 彙總。"
+        ]
+      },
+      "validation_errors": [],
+      "sidecar_diagnostic_kept": {
+        "safe": false,
+        "errors": [
+          "task_kpi_target: output attribute:target_amount",
+          "missing policy requires independent review"
+        ],
+        "review_required": true
+      },
+      "new_equivalence_status": "不以等價掩蓋所列錯誤"
+    },
+    {
+      "case_id": "cross-view-26",
+      "case_sha256": "8fcdcdca1c557a5a2764b69d98de7fc7a69cb366991d3717656744394422ccaa",
+      "catalog_fingerprint": "e5e5a5a2cc29a1be93dc4d6875aba8c47a35ed48c019c7d6838a45831d0441dc",
+      "original_response_sha256": "66934b0a2e566d25fa50aaa799692bcd6b57973eaf29e4a5d64f3f03e4541126",
+      "runtime_status": "error",
+      "original_automated_pass": false,
+      "primary_classification": "真語意錯",
+      "first_error_node": "訂單欄位/條件選擇",
+      "first_pass_semantically_safe_ready": false,
+      "unsafe_ready": false,
+      "incorrect_refusal": false,
+      "evidence_and_roles_assessment": "自創不存在order_count作count度量，不能閉包補欄或猜改名；另未限制online/in_store且聲稱保所有來源通路，域非封閉不能當等價。",
+      "fields": [
+        {
+          "task_id": "task_kpi_targets",
+          "view": "demo_retail.v_store_monthly_kpi",
+          "roles": {
+            "metrics": {},
+            "conditional_metrics": [],
+            "attributes": [
+              "target_amount"
+            ],
+            "metadata_collections": [],
+            "group_by": [
+              "store_id"
+            ],
+            "output_grain": [
+              "store_id"
+            ],
+            "filters": [
+              {
+                "column": "sales_month",
+                "operator": "=",
+                "value": "2026-09-01"
+              }
+            ]
+          },
+          "extra_used_columns_vs_same_view_oracle": [],
+          "required_but_no_typed_use": [],
+          "typed_used_not_required": []
+        },
+        {
+          "task_id": "task_channel_orders",
+          "view": "demo_retail.v_order_summary",
+          "roles": {
+            "metrics": {
+              "order_count": "count",
+              "order_amount": "sum"
+            },
+            "conditional_metrics": [],
+            "attributes": [],
+            "metadata_collections": [],
+            "group_by": [
+              "store_id",
+              "sales_channel"
+            ],
+            "output_grain": [
+              "store_id",
+              "sales_channel"
+            ],
+            "filters": [
+              {
+                "column": "order_month",
+                "operator": "=",
+                "value": "2026-09-01"
+              }
+            ]
+          },
+          "extra_used_columns_vs_same_view_oracle": [
+            "order_count",
+            "order_month"
+          ],
+          "required_but_no_typed_use": [
+            "order_id"
+          ],
+          "typed_used_not_required": [
+            "order_count"
+          ]
+        }
+      ],
+      "major_role_or_extra_column_issue": true,
+      "extra_field_impact": "重大，詳逐題原因",
+      "prepared_payload_integrity": true,
+      "root_and_shape": {
+        "anchor_task": "task_kpi_targets",
+        "output_grain": [
+          "store_id"
+        ],
+        "edges": [
+          {
+            "left_task": "task_kpi_targets",
+            "right_task": "task_channel_orders",
+            "left_keys": [
+              "store_id"
+            ],
+            "right_keys": [
+              "store_id"
+            ],
+            "mode": "left",
+            "cardinality": "one_to_many",
+            "preserve_task": "task_kpi_targets"
+          }
+        ],
+        "preparation": [
+          {
+            "task_id": "task_channel_orders",
+            "kind": "pivot",
+            "keys": [
+              "store_id"
+            ],
+            "description": "將各通路的訂單筆數與訂單金額，以 sales_channel 為欄位橫向展開（online、in_store 各一組訂單數與金額欄）。"
+          },
+          {
+            "task_id": "task_kpi_targets",
+            "kind": "attach_context",
+            "keys": [
+              "store_id"
+            ],
+            "description": "以 task_kpi_targets 的 target_amount 為錨，將樞紐後的各通路訂單數與金額依附於各門市列。"
+          }
+        ],
+        "missing_data_policy": "保留有當月 KPI 的所有門市；若某門市無任何符合條件的訂單，該通路之訂單數與金額標記為缺值，不自行補零。",
+        "notes": [
+          "最終輸出為每門市一列，包含 2026 年 9 月營收目標與線上、實體各通路的訂單數及訂單金額。",
+          "task_channel_orders 的輸出粒度（store_id, sales_channel）比整合鍵 store_id 細，已以 pivot 彙整為每門市一列。",
+          "通路分組保留來源所有通路，未自行限縮通路集合。"
+        ]
+      },
+      "validation_errors": [
+        "task_channel_orders: used column absent from required_columns"
+      ],
+      "sidecar_diagnostic_kept": {
+        "safe": false,
+        "errors": [
+          "status",
+          "task_channel_orders: source",
+          "task_channel_orders: used column absent from required_columns",
+          "missing policy requires independent review",
+          "payload unavailable"
+        ],
+        "review_required": true
+      },
+      "new_equivalence_status": "不以等價掩蓋所列錯誤"
+    },
+    {
+      "case_id": "cross-view-27",
+      "case_sha256": "6807d5e147928cf677fe478d72698dd43b8c6aa3f56109ddb76c669a1aca2a52",
+      "catalog_fingerprint": "e5e5a5a2cc29a1be93dc4d6875aba8c47a35ed48c019c7d6838a45831d0441dc",
+      "original_response_sha256": "286042a472a7f0181075ec066a39f129ef3f162a554ad6e5632c706e355d96b6",
+      "runtime_status": "ready",
+      "original_automated_pass": true,
+      "primary_classification": "安全完整",
+      "first_error_node": null,
+      "first_pass_semantically_safe_ready": true,
+      "unsafe_ready": false,
+      "incorrect_refusal": false,
+      "evidence_and_roles_assessment": "KPI九月店母體、VIP及online同時只篩訂單；SUM order_amount按店，缺值及背景語意完整。",
+      "fields": [
+        {
+          "task_id": "store_kpi_target",
+          "view": "demo_retail.v_store_monthly_kpi",
+          "roles": {
+            "metrics": {},
+            "conditional_metrics": [],
+            "attributes": [
+              "target_amount"
+            ],
+            "metadata_collections": [],
+            "group_by": [
+              "store_id"
+            ],
+            "output_grain": [
+              "store_id"
+            ],
+            "filters": [
+              {
+                "column": "sales_month",
+                "operator": "=",
+                "value": "2026-09-01"
+              }
+            ]
+          },
+          "extra_used_columns_vs_same_view_oracle": [],
+          "required_but_no_typed_use": [],
+          "typed_used_not_required": []
+        },
+        {
+          "task_id": "store_online_vip_revenue",
+          "view": "demo_retail.v_order_summary",
+          "roles": {
+            "metrics": {
+              "order_amount": "sum"
+            },
+            "conditional_metrics": [],
+            "attributes": [],
+            "metadata_collections": [],
+            "group_by": [
+              "store_id"
+            ],
+            "output_grain": [
+              "store_id"
+            ],
+            "filters": [
+              {
+                "column": "order_month",
+                "operator": "=",
+                "value": "2026-09-01"
+              },
+              {
+                "column": "membership_tier",
+                "operator": "=",
+                "value": "VIP"
+              },
+              {
+                "column": "sales_channel",
+                "operator": "=",
+                "value": "online"
+              }
+            ]
+          },
+          "extra_used_columns_vs_same_view_oracle": [
+            "order_month"
+          ],
+          "required_but_no_typed_use": [],
+          "typed_used_not_required": []
+        }
+      ],
+      "major_role_or_extra_column_issue": false,
+      "extra_field_impact": "無重大問題；展示/背景欄位或明示唯一鍵下的冗餘按逐題理由核准；不泛化業務同義",
+      "prepared_payload_integrity": true,
+      "root_and_shape": {
+        "anchor_task": "store_kpi_target",
+        "output_grain": [
+          "store_id"
+        ],
+        "edges": [
+          {
+            "left_task": "store_kpi_target",
+            "right_task": "store_online_vip_revenue",
+            "left_keys": [
+              "store_id"
+            ],
+            "right_keys": [
+              "store_id"
+            ],
+            "mode": "left",
+            "cardinality": "one_to_one",
+            "preserve_task": "store_kpi_target"
+          }
+        ],
+        "preparation": [],
+        "missing_data_policy": "保留所有有 2026 年 9 月 KPI 的門市；若該門市無 VIP 線上訂單資料，線上訂單金額保留為缺值，不補零。",
+        "notes": [
+          "以有 2026 年 9 月 KPI 的門市為母體，左接各門市 VIP 線上訂單金額。",
+          "兩來源皆以 store_id 作為對齊鍵，最終粒度為每門市一列。"
+        ]
+      },
+      "validation_errors": [],
+      "sidecar_diagnostic_kept": {
+        "safe": false,
+        "errors": [
+          "missing policy requires independent review"
+        ],
+        "review_required": true
+      },
+      "new_equivalence_status": "已於本次獨立審核核准，僅限本response/case/catalog hashes；原分與原JSONL不回寫"
+    },
+    {
+      "case_id": "cross-view-28",
+      "case_sha256": "9f63a99e51dce8ff918bcf22a9d163614a3e89e79839a23094c53c5f90db0bf6",
+      "catalog_fingerprint": "e5e5a5a2cc29a1be93dc4d6875aba8c47a35ed48c019c7d6838a45831d0441dc",
+      "original_response_sha256": "29dc5a090c787b64cbb3420b3bab0cf496885e4648d738a55298c5bd60f06caa",
+      "runtime_status": "ready",
+      "original_automated_pass": true,
+      "primary_classification": "安全完整",
+      "first_error_node": null,
+      "first_pass_semantically_safe_ready": true,
+      "unsafe_ready": false,
+      "incorrect_refusal": false,
+      "evidence_and_roles_assessment": "三來源商品事實店商品鍵，KPI僅store背景且明示不按商品加總；額外stock_qty在唯一店商品上SUM不跨日，revenue是同月店背景且有明示用途，均低影響冗餘。",
+      "fields": [
+        {
+          "task_id": "inventory_cost",
+          "view": "demo_retail.v_inventory_status",
+          "roles": {
+            "metrics": {
+              "inventory_cost_value": "sum",
+              "stock_qty": "sum"
+            },
+            "conditional_metrics": [],
+            "attributes": [],
+            "metadata_collections": [
+              "snapshot_date"
+            ],
+            "group_by": [
+              "store_id",
+              "product_id"
+            ],
+            "output_grain": [
+              "store_id",
+              "product_id"
+            ],
+            "filters": []
+          },
+          "extra_used_columns_vs_same_view_oracle": [
+            "stock_qty"
+          ],
+          "required_but_no_typed_use": [],
+          "typed_used_not_required": []
+        },
+        {
+          "task_id": "product_gross_profit_202609",
+          "view": "demo_retail.v_product_monthly",
+          "roles": {
+            "metrics": {
+              "gross_profit": "sum"
+            },
+            "conditional_metrics": [],
+            "attributes": [],
+            "metadata_collections": [],
+            "group_by": [
+              "store_id",
+              "product_id"
+            ],
+            "output_grain": [
+              "store_id",
+              "product_id"
+            ],
+            "filters": [
+              {
+                "column": "sales_month",
+                "operator": "=",
+                "value": "2026-09-01"
+              }
+            ]
+          },
+          "extra_used_columns_vs_same_view_oracle": [],
+          "required_but_no_typed_use": [],
+          "typed_used_not_required": []
+        },
+        {
+          "task_id": "store_revenue_target_202609",
+          "view": "demo_retail.v_store_monthly_kpi",
+          "roles": {
+            "metrics": {
+              "revenue": "sum",
+              "target_amount": "sum"
+            },
+            "conditional_metrics": [],
+            "attributes": [],
+            "metadata_collections": [],
+            "group_by": [
+              "store_id"
+            ],
+            "output_grain": [
+              "store_id"
+            ],
+            "filters": [
+              {
+                "column": "sales_month",
+                "operator": "=",
+                "value": "2026-09-01"
+              }
+            ]
+          },
+          "extra_used_columns_vs_same_view_oracle": [
+            "revenue"
+          ],
+          "required_but_no_typed_use": [],
+          "typed_used_not_required": []
+        }
+      ],
+      "major_role_or_extra_column_issue": false,
+      "extra_field_impact": "無重大問題；展示/背景欄位或明示唯一鍵下的冗餘按逐題理由核准；不泛化業務同義",
+      "prepared_payload_integrity": true,
+      "root_and_shape": {
+        "anchor_task": "inventory_cost",
+        "output_grain": [
+          "store_id",
+          "product_id"
+        ],
+        "edges": [
+          {
+            "left_task": "inventory_cost",
+            "right_task": "product_gross_profit_202609",
+            "left_keys": [
+              "store_id",
+              "product_id"
+            ],
+            "right_keys": [
+              "store_id",
+              "product_id"
+            ],
+            "mode": "left",
+            "cardinality": "one_to_one",
+            "preserve_task": "inventory_cost"
+          },
+          {
+            "left_task": "inventory_cost",
+            "right_task": "store_revenue_target_202609",
+            "left_keys": [
+              "store_id"
+            ],
+            "right_keys": [
+              "store_id"
+            ],
+            "mode": "left",
+            "cardinality": "many_to_one",
+            "preserve_task": "inventory_cost"
+          }
+        ],
+        "preparation": [
+          {
+            "task_id": "inventory_cost",
+            "kind": "aggregate",
+            "keys": [
+              "store_id",
+              "product_id"
+            ],
+            "description": "依門市與商品彙總庫存成本估值與庫存件數，並收集各組庫存盤點日期集合。"
+          },
+          {
+            "task_id": "product_gross_profit_202609",
+            "kind": "aggregate",
+            "keys": [
+              "store_id",
+              "product_id"
+            ],
+            "description": "依門市與商品彙總 2026 年 9 月毛利。"
+          },
+          {
+            "task_id": "store_revenue_target_202609",
+            "kind": "attach_context",
+            "keys": [
+              "store_id"
+            ],
+            "description": "將 2026 年 9 月門市營收與營收目標作為門市背景附加至各商品列，不按商品加總門市背景值。"
+          }
+        ],
+        "missing_data_policy": "保留所有庫存商品母體；商品毛利或門市目標未匹配時標記為缺值，契約未保證時不填零。",
+        "notes": [
+          "庫存成本估值為快照資料，需揭露庫存盤點日期集合，不得跨不同快照日期直接加總庫存件數。",
+          "目前庫存與歷史銷量為不同資料時間，不得將目前庫存解釋為歷史庫存。",
+          "門市營收目標為門市背景資料，不得依商品加總或拆解至商品層級。"
+        ]
+      },
+      "validation_errors": [],
+      "sidecar_diagnostic_kept": {
+        "safe": false,
+        "errors": [
+          "inventory_cost: extra metric roles",
+          "store_revenue_target_202609: extra metric roles",
+          "missing policy requires independent review"
+        ],
+        "review_required": true
+      },
+      "new_equivalence_status": "已於本次獨立審核核准，僅限本response/case/catalog hashes；原分與原JSONL不回寫"
+    },
+    {
+      "case_id": "cross-view-29",
+      "case_sha256": "1dacdb755eaee3e32b09366e7f5269597844e78ea3d8a5726cecab31a37681fe",
+      "catalog_fingerprint": "e5e5a5a2cc29a1be93dc4d6875aba8c47a35ed48c019c7d6838a45831d0441dc",
+      "original_response_sha256": "f3cafdd69a5d412b75785238c6a4884054009bde54f87b72c48400448b564b35",
+      "runtime_status": "error",
+      "original_automated_pass": false,
+      "primary_classification": "真語意錯",
+      "first_error_node": "來源能力",
+      "first_pass_semantically_safe_ready": false,
+      "unsafe_ready": false,
+      "incorrect_refusal": false,
+      "evidence_and_roles_assessment": "online銷量選product_monthly但沒有通路條件能力，notes宣稱online無法取代真正filter；另庫存metadata無group_by屬機械問題，即使修此仍語意錯。",
+      "fields": [
+        {
+          "task_id": "inventory_base",
+          "view": "demo_retail.v_inventory_status",
+          "roles": {
+            "metrics": {},
+            "conditional_metrics": [],
+            "attributes": [
+              "stock_qty",
+              "reorder_point",
+              "stock_status",
+              "sold_qty_30d",
+              "estimated_days_of_supply"
+            ],
+            "metadata_collections": [
+              "snapshot_date"
+            ],
+            "group_by": [],
+            "output_grain": [
+              "store_id",
+              "product_id"
+            ],
+            "filters": []
+          },
+          "extra_used_columns_vs_same_view_oracle": [
+            "estimated_days_of_supply",
+            "reorder_point",
+            "sold_qty_30d",
+            "stock_status"
+          ],
+          "required_but_no_typed_use": [],
+          "typed_used_not_required": []
+        },
+        {
+          "task_id": "online_september_units",
+          "view": "demo_retail.v_product_monthly",
+          "roles": {
+            "metrics": {
+              "units_sold": "sum"
+            },
+            "conditional_metrics": [],
+            "attributes": [],
+            "metadata_collections": [],
+            "group_by": [
+              "store_id",
+              "product_id"
+            ],
+            "output_grain": [
+              "store_id",
+              "product_id"
+            ],
+            "filters": [
+              {
+                "column": "sales_month",
+                "operator": "=",
+                "value": "2026-09-01"
+              }
+            ]
+          },
+          "extra_used_columns_vs_same_view_oracle": [
+            "product_id",
+            "sales_month",
+            "store_id",
+            "units_sold"
+          ],
+          "required_but_no_typed_use": [],
+          "typed_used_not_required": []
+        },
+        {
+          "task_id": "store_target_context",
+          "view": "demo_retail.v_store_monthly_kpi",
+          "roles": {
+            "metrics": {},
+            "conditional_metrics": [],
+            "attributes": [
+              "target_amount"
+            ],
+            "metadata_collections": [],
+            "group_by": [
+              "store_id"
+            ],
+            "output_grain": [
+              "store_id"
+            ],
+            "filters": [
+              {
+                "column": "sales_month",
+                "operator": "=",
+                "value": "2026-09-01"
+              }
+            ]
+          },
+          "extra_used_columns_vs_same_view_oracle": [],
+          "required_but_no_typed_use": [],
+          "typed_used_not_required": []
+        }
+      ],
+      "major_role_or_extra_column_issue": true,
+      "extra_field_impact": "重大，詳逐題原因",
+      "prepared_payload_integrity": true,
+      "root_and_shape": {
+        "anchor_task": "inventory_base",
+        "output_grain": [
+          "store_id",
+          "product_id"
+        ],
+        "edges": [
+          {
+            "left_task": "inventory_base",
+            "right_task": "online_september_units",
+            "left_keys": [
+              "store_id",
+              "product_id"
+            ],
+            "right_keys": [
+              "store_id",
+              "product_id"
+            ],
+            "mode": "left",
+            "cardinality": "one_to_one",
+            "preserve_task": "inventory_base"
+          },
+          {
+            "left_task": "inventory_base",
+            "right_task": "store_target_context",
+            "left_keys": [
+              "store_id"
+            ],
+            "right_keys": [
+              "store_id"
+            ],
+            "mode": "left",
+            "cardinality": "many_to_one",
+            "preserve_task": "inventory_base"
+          }
+        ],
+        "preparation": [
+          {
+            "task_id": "online_september_units",
+            "kind": "attach_context",
+            "keys": [
+              "store_id",
+              "product_id"
+            ],
+            "description": "將 2026 年 9 月線上銷售件數以門市×商品為鍵左接至庫存母體；未匹配者線上銷售件數為缺值，不補零。"
+          },
+          {
+            "task_id": "store_target_context",
+            "kind": "attach_context",
+            "keys": [
+              "store_id"
+            ],
+            "description": "將 2026 年 9 月門市營收目標以門市為鍵左接為背景欄位；同一門市所有商品列共享相同目標值，不可按商品加總。"
+          }
+        ],
+        "missing_data_policy": "保留所有庫存商品母體；線上銷售未匹配或門市目標未匹配時標記為缺值，契約未保證時不填零。",
+        "notes": [
+          "庫存為快照資料，snapshot_date 代表盤點日期；不將庫存件數跨不同快照日期加總，亦不將目前庫存解釋為歷史庫存。",
+          "線上銷售件數僅涵蓋 2026 年 9 月線上通路已完成訂單，與庫存快照時間不同，僅作補貨評估參考。",
+          "門市營收目標僅為門市層級背景，附於商品列時不得按商品拆分或加總。",
+          "庫存母體保留所有庫存商品，不依銷售有無或通路條件過濾。"
+        ]
+      },
+      "validation_errors": [
+        "inventory_base: aggregate grain differs from group_by"
+      ],
+      "sidecar_diagnostic_kept": {
+        "safe": false,
+        "errors": [
+          "status",
+          "online_september_units: source",
+          "inventory_base: aggregate grain differs from group_by",
+          "missing policy requires independent review",
+          "payload unavailable"
+        ],
+        "review_required": true
+      },
+      "new_equivalence_status": "不以等價掩蓋所列錯誤"
+    },
+    {
+      "case_id": "cross-view-30",
+      "case_sha256": "5eb093cb82b03bab1d325c5f9cc7404060cb308968616d4e4b307bd0a78f61ba",
+      "catalog_fingerprint": "e5e5a5a2cc29a1be93dc4d6875aba8c47a35ed48c019c7d6838a45831d0441dc",
+      "original_response_sha256": "3c52be1c2a128264a49feeb7bdff68b72ae7d792b26743d74c5422b94aa15f25",
+      "runtime_status": "ready",
+      "original_automated_pass": true,
+      "primary_classification": "安全完整",
+      "first_error_node": null,
+      "first_pass_semantically_safe_ready": true,
+      "unsafe_ready": false,
+      "incorrect_refusal": false,
+      "evidence_and_roles_assessment": "庫存成本按店合計附完整日期集合，九月daily_sales有銷售日期逐日nest；不補零日期、不重複庫存，<=09-30合法。",
+      "fields": [
+        {
+          "task_id": "inventory_cost_by_store",
+          "view": "demo_retail.v_inventory_status",
+          "roles": {
+            "metrics": {
+              "inventory_cost_value": "sum"
+            },
+            "conditional_metrics": [],
+            "attributes": [],
+            "metadata_collections": [
+              "snapshot_date"
+            ],
+            "group_by": [
+              "store_id"
+            ],
+            "output_grain": [
+              "store_id"
+            ],
+            "filters": []
+          },
+          "extra_used_columns_vs_same_view_oracle": [],
+          "required_but_no_typed_use": [],
+          "typed_used_not_required": []
+        },
+        {
+          "task_id": "daily_revenue_sep_2026",
+          "view": "demo_retail.v_daily_sales",
+          "roles": {
+            "metrics": {
+              "revenue": "sum"
+            },
+            "conditional_metrics": [],
+            "attributes": [],
+            "metadata_collections": [],
+            "group_by": [
+              "store_id",
+              "sales_date"
+            ],
+            "output_grain": [
+              "store_id",
+              "sales_date"
+            ],
+            "filters": [
+              {
+                "column": "sales_date",
+                "operator": ">=",
+                "value": "2026-09-01"
+              },
+              {
+                "column": "sales_date",
+                "operator": "<=",
+                "value": "2026-09-30"
+              }
+            ]
+          },
+          "extra_used_columns_vs_same_view_oracle": [],
+          "required_but_no_typed_use": [],
+          "typed_used_not_required": []
+        }
+      ],
+      "major_role_or_extra_column_issue": false,
+      "extra_field_impact": "無重大問題；展示/背景欄位或明示唯一鍵下的冗餘按逐題理由核准；不泛化業務同義",
+      "prepared_payload_integrity": true,
+      "root_and_shape": {
+        "anchor_task": "inventory_cost_by_store",
+        "output_grain": [
+          "store_id"
+        ],
+        "edges": [
+          {
+            "left_task": "inventory_cost_by_store",
+            "right_task": "daily_revenue_sep_2026",
+            "left_keys": [
+              "store_id"
+            ],
+            "right_keys": [
+              "store_id"
+            ],
+            "mode": "left",
+            "cardinality": "one_to_many",
+            "preserve_task": "inventory_cost_by_store"
+          }
+        ],
+        "preparation": [
+          {
+            "task_id": "daily_revenue_sep_2026",
+            "kind": "nest",
+            "keys": [
+              "store_id"
+            ],
+            "description": "將 2026 年 9 月各銷售日期的每日營收彙整為以 store_id 為鍵的子集合（每日一元素，含 sales_date 與 revenue），供與庫存成本估值合併時不重複庫存總額。"
+          }
+        ],
+        "missing_data_policy": "以有庫存資料的門市為母體保留所有符合門市；若該門市在 2026 年 9 月無任何銷售日期，其每日營收子集合標記為缺值，契約未保證時不補零。",
+        "notes": [
+          "庫存成本估值總額依來源庫存盤點日期計算，metadata_collections 保留每組 snapshot_date 集合以揭露資料時間範圍，不代表單日完整總額；不同 snapshot_date 之庫存不得跨日直接加總，僅在來源契約允許之同日同店跨商品口徑下彙總。",
+          "每日營收僅包含 2026 年 9 月有交易的門市日期，無交易日期不補零。",
+          "最終輸出以 store_id 為粒度，將 2026 年 9 月每日營收以巢狀子集合呈現，避免與庫存成本估值總額重複膨脹。"
+        ]
+      },
+      "validation_errors": [],
+      "sidecar_diagnostic_kept": {
+        "safe": false,
+        "errors": [
+          "missing policy requires independent review"
+        ],
+        "review_required": true
+      },
+      "new_equivalence_status": "已於本次獨立審核核准，僅限本response/case/catalog hashes；原分與原JSONL不回寫"
+    }
+  ]
+}

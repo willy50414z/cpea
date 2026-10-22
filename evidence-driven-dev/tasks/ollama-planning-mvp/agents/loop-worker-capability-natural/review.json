@@ -1,0 +1,131 @@
+{
+  "schema_version": 1,
+  "ticket": "afed9ab55d0f44db8d04242d0f9c99e7",
+  "worker": "/root/loop_worker_capability_natural",
+  "node": "natural_capability_projection_coverage",
+  "round": 23,
+  "result": "FAIL",
+  "upstream_injected": true,
+  "full_natural_pipeline": false,
+  "manifest_sha256": "a2eb2f76c0479b49294245987346e4676db78c86fbefac02dd4e153d8c590f2d",
+  "sample_results": [
+    {
+      "id": "COV-ISO-v1-01",
+      "result": "FAIL",
+      "rows": 8,
+      "semantic_file": "semantic-COV-ISO-v1-01.json"
+    },
+    {
+      "id": "COV-ISO-v1-02",
+      "result": "PASS",
+      "rows": 1,
+      "semantic_file": "semantic-COV-ISO-v1-02.json"
+    },
+    {
+      "id": "COV-ISO-v1-03",
+      "result": "FAIL",
+      "rows": 8,
+      "semantic_file": "semantic-COV-ISO-v1-03.json"
+    },
+    {
+      "id": "COV-CAP-v1-04",
+      "result": "FAIL",
+      "rows": 8,
+      "semantic_file": "semantic-COV-CAP-v1-04.json"
+    },
+    {
+      "id": "COV-CAP-v1-05",
+      "result": "FAIL",
+      "rows": 8,
+      "semantic_file": "semantic-COV-CAP-v1-05.json"
+    }
+  ],
+  "classification": [
+    {
+      "samples": [
+        "COV-ISO-v1-01",
+        "COV-ISO-v1-03"
+      ],
+      "kind": "MODEL_CONTRACT_REFERENCE_FAILURE",
+      "finding": "兩daily原raw均修到有用店鍵與淨額自身/依賴分工，月份完整；但四個非grain contract_path均指column object而非非空文字。01首錯sales_date、另revenue；03首錯day_key、另amount_value。未materialize完整normalized，不能修path後宣稱PASS。"
+    },
+    {
+      "samples": [
+        "COV-ISO-v1-02"
+      ],
+      "kind": "NEGATIVE_CONTROL_PASS",
+      "finding": "無關會員ID未硬湊店商品部分鍵；完整raw/presence/normalized/self gap及所有provider文字通過。"
+    },
+    {
+      "samples": [
+        "COV-CAP-v1-04"
+      ],
+      "kind": "MODEL_USEFUL_PARTIAL_CAPABILITY_OMISSION",
+      "finding": "lifetime_spend是會員累計折扣後TWD淨額，模型仍因month/online/fullgrain不能完成刪sum mapping，八項全unsupported。own=true旗標相同不挽救partial與證據遺漏，也未獨立說清會員自身保證；不推定非會員實際交易。"
+    },
+    {
+      "samples": [
+        "COV-CAP-v1-05"
+      ],
+      "kind": "MODEL_POPULATION_MAPPING_AND_EVIDENCE_FAILURE",
+      "finding": "完整inventory grain雙鍵/stock sum/盤點metadata及不套sales scope都正確；POP只product_id漏store_id，欄位識別description不能證完整店商品庫存母體。thinking以status列舉推出無母體排除單獨不足；不以別row正確或通用summary補raw答案。"
+    }
+  ],
+  "scope_AND": {
+    "accepted_equivalences": 0,
+    "reason": "三原daily metric皆conditions=[]；01/03先因path停止，未進legacy semantic/new predicate；02/04/05有完整舊/新finding但無AND豁免。有限等價不移除任何此次錯誤，舊raw/Oracle/原20FAIL/PASS/FAIL保持。"
+  },
+  "coverage_review": {
+    "raw_rows": 33,
+    "old_rows": 17,
+    "supplement_rows": 16,
+    "required_presence_all": true,
+    "provider_content_and_thinking_all_read": true,
+    "all_available_normalized_strings_read": true,
+    "full_independent_gap_graphs": 33,
+    "formal_normalized_rows": 17,
+    "formal_normalized_unavailable_rows": 16,
+    "normalized_limit": "01/03因原contract首錯未產normalized；只保存獨立原raw圖，不repair/補答/重標正式結果。"
+  },
+  "verification": {
+    "live_replays": 5,
+    "frozen_replays": 5,
+    "replay_concordance": "PASS",
+    "provider_calls_in_replay": 0,
+    "actual_frozen_files": 288,
+    "protected_old_files": 8048,
+    "unchanged_old_files": 8047,
+    "only_expected_old_change": "Task由controller記帳更新",
+    "controller_check_evidence": "PASS",
+    "approved_node_goal_acceptance_all_unchanged": true,
+    "original_history_unchanged": true
+  },
+  "limitations": [
+    "僅上游注入的coverage診斷，不能代自然recall/selection/full9/原coverage父或root。",
+    "原38×2 Gate未過不變；未跑數百無關回歸，本輪未改source/tests。",
+    "任何一案錯均整node FAIL；全部五首次已保留，不挑分。"
+  ],
+  "remaining": [
+    "FAIL回fresh研究；不得沿原成功HTTP原樣重抽、修raw或擴大有限AND等價。",
+    "下一fresh研究必須完整讀入並評估使用者建議docs/next_enhance_advice.md；該新文件未作本輪輸入。",
+    "原coverage父自身整合、所需audit、全新自然9POST、所有祖先各自驗收與fresh final ACCEPT仍未完成。"
+  ],
+  "next_research_user_advice": {
+    "path": "docs/next_enhance_advice.md",
+    "sha256": "91e8dcee858369d84838ec249cc0785515a59c346aa8e0778f804c15fd8f09de",
+    "used_in_current_experiment": false
+  },
+  "POST": 5,
+  "retry": 0,
+  "cloud": 0,
+  "SQL_DB": 0,
+  "source_tests_fixture_oracle_prompt_manifest_Task_control_manual_edits": 0,
+  "commit_push": 0,
+  "global_used": {
+    "agent_dispatches": 40,
+    "cloud_calls": 0,
+    "local_calls": 31,
+    "model_retries": 0
+  },
+  "all_processes_ended": true
+}

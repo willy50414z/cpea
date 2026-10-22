@@ -1,0 +1,32 @@
+{
+  "state_dependent_test": {
+    "name": "tests/diagnostics/test_managed_policy_shape.py::test_live_execution_rejects_open_author_and_missing_review_without_network",
+    "initial_selection": "直接回歸最初以名稱推斷依賴作者open而暫排除；未改任何舊測試或Task。",
+    "true_task": {
+      "34175c2580224eddb7061898d2af61ef": {
+        "id": "34175c2580224eddb7061898d2af61ef",
+        "role": "worker",
+        "node": "kind_policy_shape_contract",
+        "round": 16,
+        "platform_id": "/root/loop_worker_policy_shape",
+        "closed": true,
+        "reserved_at": "2026-10-21T22:47:57.221515+00:00"
+      },
+      "ed5abbeeea324bea8ac64d526e38fb55": {
+        "id": "ed5abbeeea324bea8ac64d526e38fb55",
+        "role": "worker",
+        "node": "kind_policy_shape_semantics",
+        "round": 17,
+        "platform_id": "/root/loop_worker_policy_semantics",
+        "closed": true,
+        "reserved_at": "2026-10-21T23:03:58.698411+00:00"
+      }
+    },
+    "subsequent_execution": "另行實跑1 PASS；synthetic reviewer不在真Task，故provenance仍拒絕，並非依靠作者open。先前排除推斷過度，已更正。",
+    "log": "historical-open-state-test.log",
+    "not_counted_until_actually_run": true
+  },
+  "regression_accounting": "直接回歸227 PASS、1 deselected；該1項另行1 PASS，共228實跑PASS，未將未跑項列通過。",
+  "comparison_notice": "第一版跨目錄比較器漏處理source_hashes中的prompt絕對路徑，原始AssertionError已保存在comparison-initial-error.json；只修記憶體比較，不改raw或預期hash。",
+  "superseded_evidence": "focused-initial/final與frozen、live/frozen-controls為ManagedInvoke邊界收尾前版本，完整保留。正式最後版本以focused-authoritative.log、frozen-final與live/frozen-final-controls為準。"
+}

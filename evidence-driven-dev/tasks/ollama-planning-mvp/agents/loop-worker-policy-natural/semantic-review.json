@@ -1,0 +1,311 @@
+{
+  "schema_version": 1,
+  "verdict": "ACCEPT",
+  "reviewer_platform": "/root/loop_worker_policy_natural",
+  "ticket": "3989747b0a0f45ffa8b33ca5027469c7",
+  "request_id": "52128e22c3864f24a84bef58cb85c369",
+  "raw_sha256": "adb16c725add4720e42ae422d1c47973ccd003adcff62425c6d2711c195d2d7b",
+  "raw_presence": "30objects全部required原raw明填，非defaults/repair",
+  "assignments": [
+    {
+      "requirement_id": "GRN-001",
+      "task_id": "task_inventory",
+      "view": "demo_retail.v_inventory_status",
+      "verdict": "ACCEPT",
+      "rationale": "inventory store_id/product_id確立門市×商品；非會員鍵或訂單鍵。",
+      "normalized_reason_exact_approved_evidence": true
+    },
+    {
+      "requirement_id": "MET-001",
+      "task_id": "task_inventory",
+      "view": "demo_retail.v_inventory_status",
+      "verdict": "ACCEPT",
+      "rationale": "stock_qty=sum與門市×商品group_by同task；inventory契約本身每店商品唯一，不跨盤點日期相加。",
+      "normalized_reason_exact_approved_evidence": true
+    },
+    {
+      "requirement_id": "FILT-001",
+      "task_id": "task_sales",
+      "view": "demo_retail.v_sales_detail",
+      "verdict": "ACCEPT",
+      "rationale": "sales同task order_date>=2026-09-01且<2026-10-01，完整九月；沒有誤以最後訂單日或只取月首。",
+      "normalized_reason_exact_approved_evidence": true
+    },
+    {
+      "requirement_id": "FILT-002",
+      "task_id": "task_sales",
+      "view": "demo_retail.v_sales_detail",
+      "verdict": "ACCEPT",
+      "rationale": "sales同task sales_channel=online；未以缺通路monthly來源替代。",
+      "normalized_reason_exact_approved_evidence": true
+    },
+    {
+      "requirement_id": "MET-002",
+      "task_id": "task_sales",
+      "view": "demo_retail.v_sales_detail",
+      "verdict": "ACCEPT",
+      "rationale": "discount_amount=sum位於帶整月與online條件之sales task。",
+      "normalized_reason_exact_approved_evidence": true
+    },
+    {
+      "requirement_id": "MET-003",
+      "task_id": "task_sales",
+      "view": "demo_retail.v_sales_detail",
+      "verdict": "ACCEPT",
+      "rationale": "net_sales=sum位於相同sales task，明細折扣後淨額，不是gross_sales。",
+      "normalized_reason_exact_approved_evidence": true
+    },
+    {
+      "requirement_id": "META-001",
+      "task_id": "task_inventory",
+      "view": "demo_retail.v_inventory_status",
+      "verdict": "ACCEPT",
+      "rationale": "inventory snapshot_date位於required_columns及metadata_collections；保完整日期集合，不增加group_by、不任取單值。",
+      "normalized_reason_exact_approved_evidence": true
+    },
+    {
+      "requirement_id": "POP-001",
+      "task_id": "task_inventory",
+      "view": "demo_retail.v_inventory_status",
+      "verdict": "ACCEPT",
+      "rationale": "inventory為anchor、filters空且preserve_task等於left_task；LEFT維持所有庫存店商品。",
+      "normalized_reason_exact_approved_evidence": true
+    }
+  ],
+  "exclusions": [
+    {
+      "refs": [
+        {
+          "kind": "gap",
+          "requirement_ids": [
+            "GRN-001",
+            "MET-001",
+            "FILT-001",
+            "FILT-002",
+            "MET-002",
+            "MET-003",
+            "META-001",
+            "POP-001"
+          ],
+          "selected_view": null
+        }
+      ],
+      "view": "demo_retail.v_customer_value",
+      "verdict": "ACCEPT",
+      "rationale": "會員粒度不含店商品、庫存或盤點日；last_order_date不能構成完整九月，無通路與折扣。MET-003仍明留lifetime_spend sum partial及self/scope/grain缺口，並非否認其有用金額分量；會員母體未證不限會員完整性，不假設實際非會員交易。",
+      "normalized_reason_exact_approved_evidence": true
+    },
+    {
+      "refs": [
+        {
+          "kind": "gap",
+          "requirement_ids": [
+            "GRN-001",
+            "MET-001",
+            "FILT-002",
+            "MET-002",
+            "META-001",
+            "POP-001"
+          ],
+          "selected_view": null
+        }
+      ],
+      "view": "demo_retail.v_daily_sales",
+      "verdict": "ACCEPT",
+      "rationale": "daily明留store_id partial，缺商品與庫存母體/盤點日、線上及折扣能力；units_sold不能代庫存。未把其完整月份能力列成gap，也未否定revenue sum的有用分量。",
+      "normalized_reason_exact_approved_evidence": true
+    },
+    {
+      "refs": [
+        {
+          "kind": "gap",
+          "requirement_ids": [
+            "GRN-001",
+            "MET-001",
+            "MET-002",
+            "MET-003",
+            "META-001",
+            "POP-001"
+          ],
+          "selected_view": null
+        }
+      ],
+      "view": "demo_retail.v_order_summary",
+      "verdict": "ACCEPT",
+      "rationale": "order_summary明留store_id及order_amount sum partial；有月/通路能力卻缺商品、明細折扣、庫存及盤點日。MET-003只記grain缺口，未誤判自身淨額不可用。",
+      "normalized_reason_exact_approved_evidence": true
+    },
+    {
+      "refs": [
+        {
+          "kind": "gap",
+          "requirement_ids": [
+            "FILT-002",
+            "MET-002",
+            "MET-003",
+            "MET-001",
+            "META-001",
+            "POP-001"
+          ],
+          "selected_view": null
+        }
+      ],
+      "view": "demo_retail.v_product_monthly",
+      "verdict": "ACCEPT",
+      "rationale": "product_monthly有店商品/月度/discount_amount sum/net_sales sum；引用的兩金額仍partial僅因缺online scope，未清空有用mapping。無庫存件數、盤點日與庫存母體，不宜代選sales_detail。",
+      "normalized_reason_exact_approved_evidence": true
+    },
+    {
+      "refs": [
+        {
+          "kind": "gap",
+          "requirement_ids": [
+            "GRN-001",
+            "MET-001",
+            "FILT-002",
+            "MET-002",
+            "META-001",
+            "POP-001"
+          ],
+          "selected_view": null
+        }
+      ],
+      "view": "demo_retail.v_store_monthly_kpi",
+      "verdict": "ACCEPT",
+      "rationale": "store_monthly明留store_id partial；缺商品、online、折扣、庫存及盤點日，店月業績母體不等庫存母體；未否定月份與revenue的合法部分能力。",
+      "normalized_reason_exact_approved_evidence": true
+    }
+  ],
+  "free_text": [
+    {
+      "path": "/draft/tasks/0/request",
+      "text": "從 v_inventory_status 取門市×商品粒度的盤點庫存件數(stock_qty)加總與庫存盤點日期(snapshot_date)，保留所有庫存商品作為母體。",
+      "verdict": "ACCEPT",
+      "rationale": "與同task全部typed欄位、來源及原題責任相符；無額外期間、通路、母體或metric宣告。"
+    },
+    {
+      "path": "/draft/tasks/1/request",
+      "text": "從 v_sales_detail 篩選 order_date 在 2026-09-01(含)至 2026-10-01(不含) 且 sales_channel=online 的訂單明細，按門市×商品彙總折扣金額(discount_amount)與淨銷售額(net_sales)。",
+      "verdict": "ACCEPT",
+      "rationale": "與同task全部typed欄位、來源及原題責任相符；無額外期間、通路、母體或metric宣告。"
+    },
+    {
+      "path": "/draft/integration/preparation/0/description",
+      "text": "將 v_sales_detail 自訂單明細粒度彙總至門市×商品粒度，以 store_id、product_id 對齊左母體",
+      "verdict": "ACCEPT",
+      "rationale": "sales明細先彙總store_id/product_id再LEFT；aggregate非nested。庫存task自身sum/group_by已明填且來源每店商品唯一，無須額外preparation複述。"
+    },
+    {
+      "path": "/draft/integration/missing_data_policy",
+      "text": "保留未匹配資料並標記缺值；契約沒有保證時不可把缺值當成零。",
+      "verdict": "ACCEPT",
+      "rationale": "第一flat缺值政策，符合無nest的one_to_one LEFT形狀；保留未匹配資料、不補零。"
+    },
+    {
+      "path": "/draft/integration/notes/0",
+      "text": "無線上通路銷售的庫存商品，折扣金額與淨銷售額以缺值呈現，不補零。",
+      "verdict": "ACCEPT",
+      "rationale": "無線上sales匹配時兩指標缺值；符合本題庫存母體與政策，未聲稱零銷售。"
+    }
+  ],
+  "empty_text_fields": {
+    "clarifications": [],
+    "unsupported_reasons": []
+  },
+  "integration_ruling": "inventory店商品anchor+stock sum/date metadata；sales先filter完整2026九月online後店商品雙sum，兩側店商品相容再LEFT一對一、保庫存、缺值不補零。只有sales aggregate preparation；inventory task已有sum/group_by且原契約店商品唯一，不需人工補preparation或nest。",
+  "prepared_requests": [
+    {
+      "task_id": "task_inventory",
+      "verdict": "ACCEPT",
+      "exact_typed_payload": true,
+      "payload": {
+        "view": "demo_retail.v_inventory_status",
+        "required_columns": [
+          "store_id",
+          "product_id",
+          "stock_qty",
+          "snapshot_date"
+        ],
+        "filters": [],
+        "metrics": {
+          "stock_qty": "sum"
+        },
+        "conditional_metrics": [],
+        "metadata_collections": [
+          "snapshot_date"
+        ],
+        "attributes": [],
+        "group_by": [
+          "store_id",
+          "product_id"
+        ],
+        "output_grain": [
+          "store_id",
+          "product_id"
+        ]
+      },
+      "prefix_ruling": "單View查詢指令不改條件或輸出粒度；inventory metadata為完整DISTINCT日期集合、不增分組、不任取日期，禁止把混合日期宣稱同日總額及跨日加總；sales先完整月份及online再兩sum。"
+    },
+    {
+      "task_id": "task_sales",
+      "verdict": "ACCEPT",
+      "exact_typed_payload": true,
+      "payload": {
+        "view": "demo_retail.v_sales_detail",
+        "required_columns": [
+          "store_id",
+          "product_id",
+          "discount_amount",
+          "net_sales",
+          "order_date",
+          "sales_channel"
+        ],
+        "filters": [
+          {
+            "column": "order_date",
+            "operator": ">=",
+            "value": "2026-09-01"
+          },
+          {
+            "column": "order_date",
+            "operator": "<",
+            "value": "2026-10-01"
+          },
+          {
+            "column": "sales_channel",
+            "operator": "=",
+            "value": "online"
+          }
+        ],
+        "metrics": {
+          "discount_amount": "sum",
+          "net_sales": "sum"
+        },
+        "conditional_metrics": [],
+        "metadata_collections": [],
+        "attributes": [],
+        "group_by": [
+          "store_id",
+          "product_id"
+        ],
+        "output_grain": [
+          "store_id",
+          "product_id"
+        ]
+      },
+      "prefix_ruling": "單View查詢指令不改條件或輸出粒度；inventory metadata為完整DISTINCT日期集合、不增分組、不任取日期，禁止把混合日期宣稱同日總額及跨日加總；sales先完整月份及online再兩sum。"
+    }
+  ],
+  "all_normalized_reasons_reviewed": "8assignment及5exclusion全部字串解碼核對，所有引用與已獨立ACCEPT固定上游逐值相等；選擇的引用及其缺口另逐項評估，不把上游語意或機器判定當作本答案自動ACCEPT。",
+  "machine_review_unchanged": true,
+  "upstream_injected": true,
+  "scope": "只本selection節點；非自然recall/coverage/父或root通過",
+  "limitations": [
+    "單一預固定自然樣本不估可靠率。",
+    "原第15輪FAIL不翻案；本child後須fresh16–18audit與原parent自身0POST整合。"
+  ],
+  "SQL_DB": 0,
+  "retry": 0,
+  "cloud": 0,
+  "repair": 0
+}

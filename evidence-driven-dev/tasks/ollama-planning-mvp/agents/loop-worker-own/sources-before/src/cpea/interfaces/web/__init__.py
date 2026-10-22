@@ -1,0 +1,1 @@
+"""Gradio single-question interface."""

@@ -1,0 +1,21 @@
+{
+  "id": "EV-20261021T144915-b017862c",
+  "kind": "review",
+  "command": [
+    ".venv/bin/python",
+    "-c",
+    "import json; from pathlib import Path; from unittest.mock import patch; from evaluations import referenced_view_coverage as ref; from evaluations.coverage_reference_runner import load_source; F=Path(\"evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-coverage-ref-20261021T143956Z-549b86\"); catalog,case,recall,_=load_source(); wire=ref.ReferencedViewCoverage.model_validate_json((F/\"map-01-parsed.json\").read_text(encoding=\"utf-8\")); original=ref.validate_coverage; captured=[]\ndef record_then_validate(result,*args):\n captured.append(result)\n return original(result,*args)\nerror=None\nwith patch.object(ref,\"validate_coverage\",side_effect=record_then_validate):\n try: ref.materialize_coverage(wire,recall,case[\"request\"],catalog)\n except ValueError as exc: error=str(exc)\nassert error==\"supported requires mappings/evidence and no missing requirements\"; entries={e.requirement_id:e for e in captured[0].entries}; assert len(entries[\"R_GRAIN\"].contract_evidence)==1 and entries[\"R_GRAIN\"].contract_evidence[0].path==\"/grain/description\"; assert all(m.contract_evidence[0].path==f\"/columns/{m.column}/description\" for m in entries[\"R_POPULATION\"].mappings); assert all(\"quote\" not in e.model_dump() and all(\"source_quote\" not in m.model_dump() for m in e.mappings) for e in wire.entries); empty=[e.requirement_id for e in captured[0].entries if e.status==\"supported\" and not e.mappings]; assert empty==[\"R_PURPOSE\"]; print(\"[audit] grain: one description reference; population key citations derived by Python; no model quotes\"); print(\"[audit] R_PURPOSE: status=supported, mappings=[], contract_path=/summary\"); print(\"[audit] Native validator still rejects supported without mappings; input unchanged, no guard bypass, no model calls\")"
+  ],
+  "cwd": "/home/willy/code/cpea_terms",
+  "started_at": "2026-10-21T14:49:15+00:00",
+  "finished_at": "2026-10-21T14:49:16+00:00",
+  "exit_code": 0,
+  "revision": "bc09c67fc4078501599c37e4cdfecdee40af2ef8",
+  "diff_fingerprint": "087d463355252072b0c86ff584bcd57c5b8e681ee727069831a69a02eb5b3aea",
+  "post_fingerprint": "087d463355252072b0c86ff584bcd57c5b8e681ee727069831a69a02eb5b3aea",
+  "source_unchanged": true,
+  "output_sha256": "b6bbfc62042db9ce3059e5e7a1e7f86f762c09b5474f4a3a59a04e934e18ec60",
+  "raw_output": ".local/EV-20261021T144915-b017862c.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "8d1820bcd06f4600af7275b130e08137d2f74a760bcfca48d1174cffb2ef09cd"
+}

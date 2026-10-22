@@ -1,0 +1,95 @@
+[
+  {
+    "id": "COV-ISO-v1-01",
+    "base": "COV-ISO-v1-01",
+    "view": "demo_retail.v_daily_sales",
+    "expected_reference": {
+      "manifest": "evaluations/fixtures/kind_diagnostics_capability_projection/manifest.json",
+      "sample": "COV-ISO-v1-01"
+    }
+  },
+  {
+    "id": "COV-ISO-v1-02",
+    "base": "COV-ISO-v1-02",
+    "view": "demo_retail.v_customer_value",
+    "expected_reference": {
+      "manifest": "evaluations/fixtures/kind_diagnostics_capability_projection/manifest.json",
+      "sample": "COV-ISO-v1-02"
+    }
+  },
+  {
+    "id": "COV-ISO-v1-03",
+    "base": "COV-ISO-v1-03",
+    "view": "diagnostic9.observation",
+    "expected_reference": {
+      "manifest": "evaluations/fixtures/kind_diagnostics_capability_projection/manifest.json",
+      "sample": "COV-ISO-v1-03"
+    }
+  },
+  {
+    "id": "COV-CAP-v1-04",
+    "base": "COV-CAP-v1-04",
+    "view": "demo_retail.v_customer_value",
+    "expected_reference": {
+      "manifest": "evaluations/fixtures/kind_diagnostics_capability_projection/manifest.json",
+      "sample": "COV-CAP-v1-04"
+    }
+  },
+  {
+    "id": "COV-CAP-v1-05",
+    "base": "COV-CAP-v1-05",
+    "view": "demo_retail.v_inventory_status",
+    "expected_reference": {
+      "manifest": "evaluations/fixtures/kind_diagnostics_capability_projection/manifest.json",
+      "sample": "COV-CAP-v1-05"
+    }
+  },
+  {
+    "id": "COV-LEAF-v1-06",
+    "base": "COV-CAP-v1-04",
+    "view": "diagnostic_leaf.member_a",
+    "profile": "profiles/COV-LEAF-v1-06",
+    "recall_transformed": "recall-COV-LEAF-v1-06.json",
+    "expected_reference": {
+      "path": "expected-new.json",
+      "sample": "COV-LEAF-v1-06"
+    },
+    "approval": "PENDING_FRESH_REVIEW"
+  },
+  {
+    "id": "COV-LEAF-v1-07",
+    "base": "COV-CAP-v1-05",
+    "view": "diagnostic_leaf.stock_a",
+    "profile": "profiles/COV-LEAF-v1-07",
+    "recall_transformed": "recall-COV-LEAF-v1-07.json",
+    "expected_reference": {
+      "path": "expected-new.json",
+      "sample": "COV-LEAF-v1-07"
+    },
+    "approval": "PENDING_FRESH_REVIEW"
+  },
+  {
+    "id": "COV-LEAF-v1-08",
+    "base": "COV-CAP-v1-05",
+    "view": "diagnostic_leaf.stock_subset",
+    "profile": "profiles/COV-LEAF-v1-08",
+    "recall_transformed": "recall-COV-LEAF-v1-08.json",
+    "expected_reference": {
+      "path": "expected-new.json",
+      "sample": "COV-LEAF-v1-08"
+    },
+    "approval": "PENDING_FRESH_REVIEW"
+  },
+  {
+    "id": "COV-LEAF-v1-09",
+    "base": "COV-CAP-v1-04",
+    "view": "diagnostic_leaf.member_profit",
+    "profile": "profiles/COV-LEAF-v1-09",
+    "recall_transformed": "recall-COV-LEAF-v1-09.json",
+    "expected_reference": {
+      "path": "expected-new.json",
+      "sample": "COV-LEAF-v1-09"
+    },
+    "approval": "PENDING_FRESH_REVIEW"
+  }
+]

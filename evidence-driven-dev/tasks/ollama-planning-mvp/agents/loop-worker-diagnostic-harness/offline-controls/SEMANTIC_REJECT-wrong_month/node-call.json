@@ -1,0 +1,13 @@
+{
+  "response": "{\"entries\": {\"GRN-001\": {\"status\": \"partial\", \"own_gap\": true, \"mappings\": [{\"column\": \"store_id\"}]}, \"MET-001\": {\"status\": \"unsupported\", \"own_gap\": true, \"mappings\": [], \"contract_path\": null}, \"FILT-001\": {\"status\": \"supported\", \"own_gap\": false, \"mappings\": [{\"column\": \"sales_date\", \"operator\": \">=\", \"value\": \"2026-09-01\"}, {\"column\": \"sales_date\", \"operator\": \"<\", \"value\": \"2026-09-30\"}], \"contract_path\": \"/columns/sales_date/description\"}, \"FILT-002\": {\"status\": \"unsupported\", \"own_gap\": true, \"mappings\": [], \"contract_path\": null}, \"MET-002\": {\"status\": \"unsupported\", \"own_gap\": true, \"mappings\": [], \"contract_path\": null}, \"MET-003\": {\"status\": \"partial\", \"own_gap\": false, \"mappings\": [{\"column\": \"revenue\", \"aggregation\": \"sum\", \"conditions\": []}], \"contract_path\": \"/columns/revenue/description\"}, \"META-001\": {\"status\": \"unsupported\", \"own_gap\": true, \"mappings\": [], \"contract_path\": null}, \"POP-001\": {\"status\": \"unsupported\", \"own_gap\": true, \"mappings\": [], \"contract_path\": null}}}",
+  "usage": {
+    "input_tokens": 10,
+    "output_tokens": 20,
+    "total_tokens": 30
+  },
+  "response_metadata": {
+    "origin": "OFFLINE_SYNTHETIC_CONTROL",
+    "model_POSTs": 0
+  },
+  "elapsed_seconds": 5.6240998674184084e-05
+}

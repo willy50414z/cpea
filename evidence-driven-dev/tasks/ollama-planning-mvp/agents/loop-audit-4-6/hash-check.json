@@ -1,0 +1,21 @@
+{
+  "rounds": [
+    4,
+    5,
+    6
+  ],
+  "round_evidence_checked": 42,
+  "round_evidence_mismatches": [],
+  "live_source": {
+    "checked": 138,
+    "mismatches": []
+  },
+  "historical": {
+    "checked": 892,
+    "mismatches": []
+  },
+  "preserved_src": {
+    "src/cpea/application/models/decomposition.py": true,
+    "src/cpea/workflows/task_decomposition/prompt.py": true
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "scope": "原始完整首輪各30筆；僅可觀察最終決策，不是GPT內部推理。",
+  "models": {
+    "gpt-6-sol": {
+      "run": "projects/retail/artifacts/task_decomposition/20261020T054500378064Z-bc09c67f-26fc31",
+      "replayed": 30,
+      "automated_pass": 30,
+      "ready": 30,
+      "views_and_columns": 30,
+      "event_keys": [
+        "case_id",
+        "elapsed_ms",
+        "messages",
+        "response",
+        "run",
+        "usage"
+      ],
+      "reasoning_trace_available": false,
+      "hashes": {
+        "calls.jsonl": "055250c9ce17589fde4edb8d7d6750368b9fb54cf10e403094789919bad194a5",
+        "results.jsonl": "b0099cdd9e776a7723a4ef707fca9b2e1569546ce2ea384aadfe4167cc94bce3"
+      }
+    },
+    "DeepSeek-V4.1-Flash": {
+      "run": "projects/retail/artifacts/task_decomposition/20261020T055210984742Z-bc09c67f-432a10",
+      "replayed": 30,
+      "automated_pass": 18,
+      "ready": 22,
+      "views_and_columns": 26,
+      "event_keys": [
+        "case_id",
+        "elapsed_ms",
+        "messages",
+        "response",
+        "run",
+        "usage"
+      ],
+      "reasoning_trace_available": false,
+      "hashes": {
+        "calls.jsonl": "019028288bec32292c395bd57ca7d9477115402b059960f79ca14baafd28218d",
+        "results.jsonl": "2b73d985a1bac72f36471ef8e538e9e41f6bf96db0c7a39bc5b51d679a226159"
+      }
+    }
+  }
+}

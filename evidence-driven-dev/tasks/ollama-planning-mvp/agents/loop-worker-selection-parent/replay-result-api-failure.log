@@ -1,0 +1,1 @@
+本輪新policy同版replay PASS後，舊rebound replay亦返回FAIL及replay_verification PASS；腳本錯假設舊版結果亦有raw_replays欄位而KeyError。舊版只回provider_calls，不能以新API欄位推定。原API結果/來源/raw不改，依實際結果欄位重新核對並保留失敗log。

@@ -1,0 +1,130 @@
+{
+  "experiment": "EXP-013",
+  "version": "three-stage-view-selection-indexed-1",
+  "same_frozen_source_schema_catalog_case": true,
+  "same_messages": true,
+  "same_model_seed_temperature_top_p": true,
+  "request": "對照各店各商品的盤點庫存件數與 2026 年 9 月線上通路的折扣金額及淨銷售額，並顯示庫存盤點日期，準備促銷後補貨評估；保留所有庫存商品。",
+  "calls": 1,
+  "structural_index_result": "PASS",
+  "python_materialization": "PASS",
+  "raw_quote_fields": 0,
+  "requirements": 7,
+  "complete_term_coverage": 5,
+  "exact_minimal_spans": 4,
+  "rows": [
+    {
+      "id": "req_1",
+      "start": 0,
+      "end": 14,
+      "derived_quote": "對照各店各商品的盤點庫存件數",
+      "kind": "metric",
+      "scope_ids": [],
+      "target_term": "盤點庫存件數",
+      "complete_term_covered": true,
+      "exact_minimal_span": false,
+      "minimal_start": 8,
+      "minimal_end": 14
+    },
+    {
+      "id": "req_2",
+      "start": 44,
+      "end": 49,
+      "derived_quote": "庫存盤點日",
+      "kind": "attribute",
+      "scope_ids": [],
+      "target_term": "庫存盤點日期",
+      "complete_term_covered": false,
+      "exact_minimal_span": false,
+      "minimal_start": 44,
+      "minimal_end": 50
+    },
+    {
+      "id": "req_3",
+      "start": 16,
+      "end": 25,
+      "derived_quote": "2026 年 9 ",
+      "kind": "filter",
+      "scope_ids": [],
+      "target_term": "2026 年 9 月",
+      "complete_term_covered": false,
+      "exact_minimal_span": false,
+      "minimal_start": 16,
+      "minimal_end": 26
+    },
+    {
+      "id": "req_4",
+      "start": 26,
+      "end": 30,
+      "derived_quote": "線上通路",
+      "kind": "filter",
+      "scope_ids": [
+        "req_3"
+      ],
+      "target_term": "線上通路",
+      "complete_term_covered": true,
+      "exact_minimal_span": true,
+      "minimal_start": 26,
+      "minimal_end": 30
+    },
+    {
+      "id": "req_5",
+      "start": 31,
+      "end": 35,
+      "derived_quote": "折扣金額",
+      "kind": "metric",
+      "scope_ids": [
+        "req_3",
+        "req_4"
+      ],
+      "target_term": "折扣金額",
+      "complete_term_covered": true,
+      "exact_minimal_span": true,
+      "minimal_start": 31,
+      "minimal_end": 35
+    },
+    {
+      "id": "req_6",
+      "start": 36,
+      "end": 40,
+      "derived_quote": "淨銷售額",
+      "kind": "metric",
+      "scope_ids": [
+        "req_3",
+        "req_4"
+      ],
+      "target_term": "淨銷售額",
+      "complete_term_covered": true,
+      "exact_minimal_span": true,
+      "minimal_start": 36,
+      "minimal_end": 40
+    },
+    {
+      "id": "req_7",
+      "start": 61,
+      "end": 69,
+      "derived_quote": "保留所有庫存商品",
+      "kind": "population",
+      "scope_ids": [],
+      "target_term": "保留所有庫存商品",
+      "complete_term_covered": true,
+      "exact_minimal_span": true,
+      "minimal_start": 61,
+      "minimal_end": 69
+    }
+  ],
+  "population_kind": "population",
+  "source_mapping": "NOT_EXECUTED",
+  "end_to_end": "NOT_VERIFIED",
+  "full_first_stage_acceptance": "FAIL: inventory date and period incomplete; key/grain requirements not separately declared",
+  "input_tokens": 6707,
+  "output_tokens": 1018,
+  "elapsed_seconds": 14.198732315999223,
+  "cost_usd": null,
+  "prior_experiment": "EXP-012",
+  "prior_complete_term_coverage": 2,
+  "prior_exact_minimal_spans": 2,
+  "prior_population_kind": "filter",
+  "raw_run_sha256": "ec153330742f8fcf7a25249256b2216ae70c4378f118bbcf64a41eabdf90f716",
+  "workflow_warning": "前置核對誤用系統Python，EXP於單次runner啟動後補登；相同既有runner硬預算生效，無額外provider重跑。"
+}

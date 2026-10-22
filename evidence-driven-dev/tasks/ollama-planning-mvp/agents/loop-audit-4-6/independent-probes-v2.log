@@ -1,0 +1,14 @@
+v1 probe assumption was corrected: setting F1 supported also requires removing F1 from dependent scope gaps; v1 failure retained.
+{"case": "original natural raw, no changes", "result": "REJECT", "expected": "REJECT", "detail": "gap aspect contradicts evidence or dependencies: grain"}
+{"case": "offline unsupported grain control: own mapping gap, other raw intact", "result": "ACCEPT", "expected": "ACCEPT", "detail": [["R1", "unsupported"], ["R2", "unsupported"], ["F1", "partial"], ["F2", "unsupported"], ["R3", "unsupported"], ["R4", "partial"], ["R5", "unsupported"], ["R6", "unsupported"]]}
+{"case": "incomplete dependency gap: linked metric omits unsupported grain but retains scope", "result": "ACCEPT", "expected": "ACCEPT", "detail": [["R1", "unsupported"], ["R2", "unsupported"], ["F1", "partial"], ["F2", "unsupported"], ["R3", "unsupported"], ["R4", "partial"], ["R5", "unsupported"], ["R6", "unsupported"]]}
+{"case": "nonmetric explicit grain dependency unsupported but filter supported, scope refs consistent", "result": "ACCEPT", "expected": "ACCEPT", "detail": [["R1", "unsupported"], ["R2", "unsupported"], ["F1", "supported"], ["F2", "unsupported"], ["R3", "unsupported"], ["R4", "partial"], ["R5", "unsupported"], ["R6", "unsupported"]]}
+{"case": "own partial grain / grain", "result": "REJECT", "expected": "REJECT", "detail": "gap aspect contradicts evidence or dependencies: grain"}
+{"case": "own partial grain / mapping", "result": "REJECT", "expected": "REJECT", "detail": "gap aspect contradicts evidence or dependencies: mapping"}
+{"case": "own partial grain / scope", "result": "REJECT", "expected": "REJECT", "detail": "gap aspect contradicts evidence or dependencies: scope"}
+{"case": "own partial grain / population", "result": "REJECT", "expected": "REJECT", "detail": "gap aspect contradicts evidence or dependencies: population"}
+{"case": "own partial grain / evidence", "result": "REJECT", "expected": "REJECT", "detail": "gap aspect contradicts evidence or dependencies: evidence"}
+{"case": "same own partial grain legacy control", "result": "ACCEPT", "mappings": ["store_id"]}
+{"case": "different contract and ID, own partial grain", "result": "REJECT", "expected": "REJECT", "detail": "gap aspect contradicts evidence or dependencies: grain"}
+different contract legacy control ACCEPT
+Audit only: 0 model POST, 0 SQL/DB; no natural artifacts changed; offline controls are NOT repaired natural answers.

@@ -1,0 +1,32 @@
+[
+  {
+    "sample": "COV-ISO-v1-01",
+    "status": "FAIL",
+    "stopped": {
+      "error_type": "ValueError",
+      "error": "fixed diagnostic semantic checks failed"
+    },
+    "folder": "/home/willy/code/cpea_terms/evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261022T000748Z-82acde/COV-ISO-v1-01",
+    "outer_receipt": "COV-ISO-v1-01.outer.json",
+    "outer_receipt_sha256": "8ba9a5aa5efb9f4449f46b6ebdb564114fd995de50f4b6ed030f5e01bc385a5e"
+  },
+  {
+    "sample": "COV-ISO-v1-02",
+    "status": "PASS",
+    "stopped": null,
+    "folder": "/home/willy/code/cpea_terms/evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261022T000748Z-82acde/COV-ISO-v1-02",
+    "outer_receipt": "COV-ISO-v1-02.outer.json",
+    "outer_receipt_sha256": "9f9df874b88cd7361b9bdaeaad3c4f5d9d9f0c0b05345d209aa322a2405c0b97"
+  },
+  {
+    "sample": "COV-ISO-v1-03",
+    "status": "FAIL",
+    "stopped": {
+      "error_type": "ValueError",
+      "error": "fixed diagnostic semantic checks failed"
+    },
+    "folder": "/home/willy/code/cpea_terms/evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261022T000748Z-82acde/COV-ISO-v1-03",
+    "outer_receipt": "COV-ISO-v1-03.outer.json",
+    "outer_receipt_sha256": "837ee94de9c62fa87a2c9a5058d86fcbced98ab3d3a26cdef1c8f456cc2e483e"
+  }
+]

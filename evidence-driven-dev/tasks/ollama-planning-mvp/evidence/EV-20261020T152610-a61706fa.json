@@ -1,0 +1,29 @@
+{
+  "id": "EV-20261020T152610-a61706fa",
+  "kind": "regression",
+  "command": [
+    ".venv/bin/python",
+    "-m",
+    "pytest",
+    "tests/unit/test_task_decomposition_contract.py",
+    "tests/unit/test_task_decomposition_workflow.py",
+    "tests/unit/test_decomposition_evaluation.py",
+    "tests/integration/test_decomposition_runner.py",
+    "tests/unit/test_planning_mvp.py",
+    "tests/unit/test_planning_reasoning_probe.py",
+    "tests/unit/test_decomposition_decision_summary.py",
+    "-q"
+  ],
+  "cwd": "/home/willy/code/cpea_terms",
+  "started_at": "2026-10-20T15:26:10+00:00",
+  "finished_at": "2026-10-20T15:26:17+00:00",
+  "exit_code": 0,
+  "revision": "bc09c67fc4078501599c37e4cdfecdee40af2ef8",
+  "diff_fingerprint": "0ab2a348b7c21de23422cf745e5d59697323f2c45a137fef4c784279ec01a1c8",
+  "post_fingerprint": "0ab2a348b7c21de23422cf745e5d59697323f2c45a137fef4c784279ec01a1c8",
+  "source_unchanged": true,
+  "output_sha256": "1fcd3ac186c568686e598c7074be1e6e91ff0a2c59771f2a08337e986e8eefb6",
+  "raw_output": ".local/EV-20261020T152610-a61706fa.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "161b43302042bf4ec663a3d592b719e2bc639ec2aadaa811be45c371964e421c"
+}

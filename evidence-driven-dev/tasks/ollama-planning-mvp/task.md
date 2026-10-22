@@ -1,0 +1,12931 @@
+---
+{
+  "schema_version": 1,
+  "id": "ollama-planning-mvp",
+  "type": "research",
+  "complexity": "moderate",
+  "status": "PLANNING",
+  "phase": "PLANNING",
+  "owner": "main-agent",
+  "base_git_sha": "bc09c67fc4078501599c37e4cdfecdee40af2ef8",
+  "branch": "feat/cross_view",
+  "worktree": "/home/willy/code/cpea_terms",
+  "openspec_change": null,
+  "updated_at": "2026-10-22T03:52:21+00:00",
+  "goal": "修正目前三階段任務拆分測試的失敗，以本機 Ollama qwen3.8:27b 完成目前診斷案例的自然端到端驗證與必要回歸。",
+  "problem": {
+    "description": "單次規劃有來源、欄位角色、母體、根/子粒度錯誤；以DeepSeek先驗方法後轉Qwen。",
+    "expected": "依提案逐階段：離線定位、六題、十題、DeepSeek原30+封存8兩輪首次38/38，再凍結移轉Ollama同門檻。",
+    "actual": "依使用者要求第二步改為單一contract_path、Python裁原需求及取契約欄位描述；18新增及既有共114pytest通過。無配額Qwen1call452秒stop/JSON完整，先前grain/list引用與母體鍵重複引文問題消除，但R_PURPOSE業務背景被標supported且mappings=[]，現有資料需求契約拒絕。其餘6view未跑；raw replay與原輸出稽核一致，未產測試報告。",
+    "evidence": [
+      "reports/execution-results.md",
+      "reports/mvp0-summary.json",
+      "reports/mvp1-summary.json",
+      "agents/oracle-audit/review-manifest.json",
+      "agents/oracle-audit/mvp1-semantic-review.json",
+      "reports/three-stage-view-selection-results.md",
+      "evidence/EV-20261021T015637-436c6855.json",
+      "evidence/EV-20261021T015828-e8216b14.json",
+      "reports/snapshot-inventory-probe.md",
+      "evidence/EV-20261021T030934-e2fd34ef.json",
+      "evidence/EV-20261021T031036-7617dfc7.json",
+      "reports/indexed-recall-results.md",
+      "evidence/EV-20261021T033818-dd272774.json",
+      "evidence/EV-20261021T033920-61ce56e4.json",
+      "evidence/EV-20261021T034118-e12c74ed.json",
+      "reports/indexed-recall-repeat-results.md",
+      "evidence/EV-20261021T034825-0e02c9b4.json",
+      "evidence/EV-20261021T035012-bc6c0422.json",
+      "reports/qwen-indexed-recall-results.md",
+      "evidence/EV-20261021T035649-bb08cfa3.json",
+      "evidence/EV-20261021T040200-432414fb.json",
+      "evidence/EV-20261021T035728-92bbb829.json",
+      "reports/qwen-indexed-recall-repeat-results.md",
+      "evidence/EV-20261021T041042-c4724be2.json",
+      "evidence/EV-20261021T041812-51640ddf.json",
+      "reports/qwen-indexed-recall-third-results.md",
+      "evidence/EV-20261021T042057-87b8ad21.json",
+      "evidence/EV-20261021T042842-e7ac3938.json",
+      "reports/qwen-indexed-recall-fourth-results.md",
+      "reports/qwen-indexed-recall-wait-results.md",
+      "evidence/EV-20261021T073912-568459f3.json",
+      "evidence/EV-20261021T074905-2b4c73bf.json",
+      "reports/qwen-indexed-recall-uncapped-results.md",
+      "evidence/EV-20261021T075735-f75bf9ac.json",
+      "evidence/EV-20261021T075801-cb351f74.json",
+      "evidence/EV-20261021T080912-146f3d0c.json",
+      "evidence/EV-20261021T081050-aa48bdf2.json",
+      "reports/qwen-stage-two-results.md",
+      "evidence/EV-20261021T100747-34878c00.json",
+      "evidence/EV-20261021T100802-33d75213.json",
+      "evidence/EV-20261021T101943-dfb8648d.json",
+      "evidence/EV-20261021T102130-1fa8fe6e.json",
+      "evidence/EV-20261021T143954-abccd140.json",
+      "evidence/EV-20261021T144804-f9fbd92f.json",
+      "evidence/EV-20261021T144915-b017862c.json"
+    ],
+    "hypotheses": [
+      {
+        "id": "H1",
+        "claim": "純型別欄位閉包可從DeepSeek原30題安全救回至少3題。",
+        "status": "REFUTED",
+        "evidence": [
+          "reports/mvp0-summary.json"
+        ]
+      },
+      {
+        "id": "H2",
+        "claim": "本次固定B1自然抽取與編譯可通過MVP1六題端到端採用門檻。",
+        "status": "REFUTED",
+        "evidence": [
+          "reports/mvp1-summary.json",
+          "agents/oracle-audit/mvp1-semantic-review.json"
+        ]
+      },
+      {
+        "id": "H3",
+        "claim": "更精確的語意骨架責任邊界可能改善完整規劃；本次負結果不否證所有拆分方法。",
+        "status": "UNCONFIRMED"
+      },
+      {
+        "id": "H10",
+        "claim": "逐View部分支持及同來源scope有助第11題完整規劃；本輪因程式誤拒及隨後自然引用契約錯誤停止，尚未驗到端到端效果。",
+        "status": "UNCONFIRMED",
+        "evidence": [
+          "reports/three-stage-view-selection-results.md"
+        ]
+      },
+      {
+        "id": "H11",
+        "claim": "明確盤點庫存及盤點日期的新題可避免不必要目前日期篩選；本次時間分類符合預期但因引文錯誤停止，尚未驗到庫存映射。",
+        "status": "UNCONFIRMED",
+        "evidence": [
+          "reports/snapshot-inventory-probe.md"
+        ]
+      },
+      {
+        "id": "H12",
+        "claim": "此固定index候選能在自然首次輸出提供完整正確片段與分類；實測精確邊界2/7且母體分類錯，未達預先標準，非否證所有索引方案。",
+        "status": "REFUTED",
+        "evidence": [
+          "reports/indexed-recall-results.md",
+          "evidence/EV-20261021T033920-61ce56e4.json"
+        ]
+      },
+      {
+        "id": "H12R",
+        "claim": "固定索引版第二次輸出所有片段完整且分類正確；本次仍有月份/日期尾端不完整，未達預定標準，不否定所有索引方案。",
+        "status": "REFUTED",
+        "evidence": [
+          "reports/indexed-recall-repeat-results.md",
+          "evidence/EV-20261021T034825-0e02c9b4.json"
+        ]
+      },
+      {
+        "id": "H14",
+        "claim": "Qwen同題單次第一步完整正確；因ReadTimeout未取得可評分答案，效果未驗。",
+        "status": "UNCONFIRMED",
+        "evidence": [
+          "reports/qwen-indexed-recall-results.md"
+        ]
+      },
+      {
+        "id": "H15",
+        "claim": "同版第二次Qwen可在預算內完整正確；420秒無完整答案，語意未驗。",
+        "status": "UNCONFIRMED",
+        "evidence": [
+          "reports/qwen-indexed-recall-repeat-results.md"
+        ]
+      },
+      {
+        "id": "H16",
+        "claim": "第三次同設定Qwen可在預算內完整正確；420秒無完整答案，語意未驗，後續需定位耗時。",
+        "status": "UNCONFIRMED",
+        "evidence": [
+          "reports/qwen-indexed-recall-third-results.md"
+        ]
+      },
+      {
+        "id": "H17",
+        "claim": "第四次同設定Qwen於預算內完整；420秒無答案，未驗語意。",
+        "status": "UNCONFIRMED",
+        "evidence": [
+          "reports/qwen-indexed-recall-fourth-results.md"
+        ]
+      },
+      {
+        "id": "H18",
+        "claim": "取消時間截止後固定4096輸出候選可完整正確拆解；實測到length上限JSON截斷，未達完整標準。",
+        "status": "REFUTED",
+        "evidence": [
+          "reports/qwen-indexed-recall-wait-results.md"
+        ]
+      },
+      {
+        "id": "H19",
+        "claim": "本單題取消輸出與時間限制後可完整正常結束，主要7組索引／角色／scope正確，raw可重播；單次結果支持，不代表正式Gate。",
+        "status": "CONFIRMED",
+        "evidence": [
+          "reports/qwen-indexed-recall-uncapped-results.md",
+          "evidence/EV-20261021T075735-f75bf9ac.json",
+          "evidence/EV-20261021T075801-cb351f74.json",
+          "evidence/EV-20261021T080912-146f3d0c.json",
+          "evidence/EV-20261021T081050-aa48bdf2.json"
+        ]
+      },
+      {
+        "id": "H20",
+        "claim": "固定第一步下Qwen自然第二步全7views合法且語意正確；首個庫存view證據契約失敗未達門檻，未驗其餘6views。",
+        "status": "REFUTED",
+        "evidence": [
+          "reports/qwen-stage-two-results.md",
+          "evidence/EV-20261021T100747-34878c00.json",
+          "evidence/EV-20261021T100802-33d75213.json",
+          "evidence/EV-20261021T101943-dfb8648d.json",
+          "evidence/EV-20261021T102130-1fa8fe6e.json"
+        ]
+      },
+      {
+        "id": "H21",
+        "claim": "用途背景被第一步列為metadata資料需求，使第二步空映射supported與資料需求契約衝突；需區分背景與可映射資料需求後再驗，不捏造欄位。",
+        "status": "UNCONFIRMED",
+        "evidence": [
+          "evidence/EV-20261021T143954-abccd140.json",
+          "evidence/EV-20261021T144804-f9fbd92f.json",
+          "evidence/EV-20261021T144915-b017862c.json"
+        ]
+      }
+    ]
+  },
+  "scope": [
+    "evidence-driven-dev/tasks/ollama-planning-mvp",
+    "evaluations",
+    "tests",
+    "src/cpea/workflows/task_decomposition",
+    "src/cpea/application/models/decomposition.py"
+  ],
+  "constraints": [
+    "依使用者2026-10-20最新指示授權實作、離線重播與逐階段DeepSeek測試；取代前輪僅設計限制。",
+    "不產生或執行SQL、不查詢DB；DeepSeek未通過固定版兩輪各38/38首次語意完整驗收前禁止任何Ollama呼叫。",
+    "不得用GPT代答、不修改原始raw與分數；新sidecar與規則需版本化。",
+    "繁體中文Markdown，UTF-8無BOM；原有編碼換行保留。",
+    "各階段依subagent-proposal.md預先門檻與停止條件；rate limit不重跑。",
+    "最新使用者明確授權Azure gpt-6-sol對B1失敗四題各一次作診斷，保留API推理資料；不准作DeepSeek或Ollama產品線代答。",
+    "使用者另授權decision_summary診斷response：第11/14/26題兩模型各一次，摘要為高層決策依據、不得宣稱私有思維鏈。",
+    "使用者再授權decision_chain由模型自填六類公開決策、依據、task引用與前置關係；第11題兩模型各一次，不宣稱私有內部思維鏈。",
+    "使用者授權兩模型對第11題各追加一次來源選擇理由與通路能力自評；屬事後說明，不替換首次結果。",
+    "使用者授權試加完整需求欄位涵蓋為最高優先的prompt；候選版與原版DeepSeek同第11題各一次，未過門檻不切產品預設。",
+    "使用者授權Markdown system且第一區塊為高優先規則；第11題第一DeepSeek規劃、第二獨立DeepSeek審查缺證據決策，各一次，不自動repair或把review視為oracle。",
+    "使用者2026-10-21授權依三階段計畫實作與驗證。EXP-009／010合計9次上限；機械修正後僅重用相同兩raw、未重跑provider；實際4次不同節點呼叫後依門檻停止，不再自動續接。",
+    "使用者最新授權測試契約相容的盤點庫存改寫；EXP011只做需求拆解及inventory對照各一次，實際首call引用錯誤停止，無修正或重跑。新題診斷不取代原oracle或分數。",
+    "使用者授權第一步LLM只輸出原句index、由Python裁切。EXP012僅一次fresh recall-only模型診斷，實際1call後保存索引邊界/語意問題，不自動補end、repair、重跑或續跑。",
+    "使用者明確授權索引版再跑一次；EXP013沿用相同題文/messages/source/設定，只有1次fresh第一步。前置核對誤用系統Python導致EXP補登偏差另記，沒有額外provider重跑。",
+    "使用者2026-10-21明確指定改用qwen3.8:27b跑一次，授權EXP014單題第一步Ollama診斷作先前禁令的狹義例外；只1call、同題/messages/source，thinking沿用本機true，4096輸出上限，不重試、不延伸第二/三步。完整38題採用Gate不變。",
+    "使用者最新要求「再一次」明確授權EXP015再做一次Qwen同題同版第一步；維持thinking=true、timeout300秒、output4096、fresh call上限1，獨立保存，不自動重試或擴第二／三步。",
+    "使用者最新再次要求「再一次」，授權EXP016第三次Qwen同題同版第一步。只新增1call，thinking=true、output4096、read timeout300秒、整體hard timeout420秒維持相同；保存獨立結果，不自動追加呼叫或第二／三步。",
+    "使用者最新再次要求「再一次」，授權EXP017第四次Qwen同題同版第一步。僅新增1call；thinking=true、output4096、read timeout300秒、整體hard timeout420秒維持相同；獨立保存，不自動第五次或第二／三步。",
+    "使用者最新明確要求「等到它結束為止」，撤銷本次等待的時間截止。上一筆EXP017在調整前已420秒終止，因此EXP018另送1次同題Qwen；HTTP timeout=None、EDD Ledger.run timeout=None；保留output4096與1call預算，等模型完成或回傳錯誤，不自動重試。",
+    "使用者最新明確要求解除token/timeout上限再試一次，授權EXP019單次Qwen第一步：Ollama num_predict=-1，取消評估器input/output累計與wall/time配額、HTTP timeout=None、Ledger.run timeout=None；保留模型context32768物理設定、單call及結構/語意驗證，不自動重試或第二／三步。",
+    "使用者明確要求執行第二步，授權EXP020重用EXP019第一步raw／結果，依原順序對7個views各最多1次Qwen映射，序列執行、最多7次新呼叫。沿用num_predict=-1、HTTP／外層timeout=None、無token配額；首個provider／解析／契約錯誤即保存停止，不自動repair或第三步，不重跑第一步。",
+    "使用者最新偏好：不自動產測試報告，只有明確要求才產；本次只印測試log，保留raw/log與必要既有Task/checkpoint更新，不新增reports或experiments Markdown。",
+    "使用者授權修改後再測一次第二步：單一證據路徑、Python從原需求/契約取引文與欄位描述；保留語意/角色/scope/母體合併驗證，舊wire與raw不覆蓋。最多7view各1call，無token/timeout上限、首錯停止、不重跑第一步或第三步。",
+    "2026-10-21 最新使用者 $edd-loop：授權修正目前任務拆分測試並使用本地 Ollama qwen3.8:27b，不限輪次、呼叫/retry 次數、agent 派遣、token 或 timeout；僅本機，雲端呼叫 0。每3輪獨立方向審核；成功HTTP錯答不得原樣重試挑分。取代先前單次/首錯即結束整個任務限制，歷史 Gate 狀態保存在 plan.historical_target_before_qwen_loop，不宣稱其通過。"
+  ],
+  "acceptance": [
+    {
+      "id": "LOOP1",
+      "description": "以既有 raw 重現並定位目前失敗；修正保留必要資料需求、條件、角色、scope 與母體驗證，新增有辨識力的正反例且相關回歸通過。",
+      "status": "PENDING",
+      "evidence": []
+    },
+    {
+      "id": "LOOP2",
+      "description": "本機 qwen3.8:27b 自然完成目前診斷案例的需求拆分、全部候選 View 映射及來源選擇，語意涵蓋與 prepared requests 驗收通過；不執行 SQL 或 DB。",
+      "status": "PENDING",
+      "evidence": []
+    },
+    {
+      "id": "LOOP3",
+      "description": "保存所有首次與失敗 raw/log、版本及模型設定；新結果可離線重播，歷史 raw、分數與完整 38 題 Gate 狀態不變。",
+      "status": "PENDING",
+      "evidence": []
+    },
+    {
+      "id": "LOOP4",
+      "description": "fresh-context 獨立驗證者核對修正、父層整合、自然結果語意與必要回歸並 ACCEPT。",
+      "status": "PENDING",
+      "evidence": []
+    }
+  ],
+  "progress": [
+    {
+      "summary": "使用者授權執行，完成MVP0零模型重播與獨立30題oracle；A安全可救0，12unsafe中runtime只擋7，oracle診斷擋12，明確分離能力。",
+      "evidence": [
+        "reports/mvp0-summary.json",
+        "agents/oracle-audit/review-manifest.json"
+      ]
+    },
+    {
+      "summary": "B1六題注入編譯通過；12次DeepSeek自然成對實測完成，B1與v3語意安全皆2/6；候選節點5/6但端到端未達門檻，不擴十題或38題、不呼叫Ollama。",
+      "evidence": [
+        "reports/mvp1-summary.json",
+        "agents/oracle-audit/mvp1-semantic-review.json"
+      ]
+    },
+    {
+      "summary": "修復兩個sidecar漏判，新增反例與既有相關回歸78pass；已存12模型結果fresh逐字重播PASS；十題與八題由獨立作者建立，尚待新oracle審核且未執行。",
+      "evidence": [
+        "evidence/EV-20261020T130232-537821de.json",
+        "evidence/EV-20261020T130208-4b2bd9a2.json",
+        "agents/sealed-cases/manifest.json"
+      ]
+    },
+    {
+      "summary": "使用者新授權GPT-6 Sol對B1失敗四題各一次；3/4端到端安全，14為已知FD護欄誤拒，四份骨架語意可核准。API可讀摘要0/4，加密reasoning4/4保存；81回歸與四筆離線重播通過；不取代DeepSeekGate。",
+      "evidence": [
+        "reports/gpt-sol-failure-probe.md",
+        "reports/gpt-sol-failure-probe.json"
+      ]
+    },
+    {
+      "summary": "使用者新授權新增decision_summary並比較：獨立診斷model六類摘要、原兩個v3 schema未變；GPT與DeepSeek同三題共六次，GPT3/3ready、DeepSeek1/3ready，六摘要完整。明確定位11來源能力錯、26省略指定通路，14額外計數與摘要缺漏；86回歸與六筆重播通過。",
+      "evidence": [
+        "reports/decision-summary-comparison.md",
+        "reports/decision-summary-comparison.json"
+      ]
+    },
+    {
+      "summary": "新增必填decision_chain六節點診斷型別與模型指令；GPT與DeepSeek第11題各一次均填完。GPT語意安全，DeepSeek明說無通路欄位卻漏online且ready；兩筆重播一致、96回歸通過、四個舊schema不變。",
+      "evidence": [
+        "reports/decision-chain-comparison.md",
+        "reports/decision-chain-comparison.json"
+      ]
+    },
+    {
+      "summary": "依使用者要求兩模型各追加一次說明原來源選擇；GPT強調完整條件能力，DeepSeek強調粒度/直接性並承認缺通路。兩筆解析/重播/hash核對通過，原計畫與分數不變。",
+      "evidence": [
+        "reports/source-selection-reasons.md",
+        "reports/source-selection-reasons.json"
+      ]
+    },
+    {
+      "summary": "使用者要求將低成本模型語意失敗時比較理由加入全域EDD；已更新主入口/調查/驗收及新reference，3技能格式/4檔編碼連結通過並完成前後行為測試；不新增planner供應商呼叫。",
+      "evidence": [
+        "reports/edd-model-decision-flow.md",
+        "evidence/EV-20261020T155936-a055413c.json"
+      ]
+    },
+    {
+      "summary": "新增v3-coverage-first-1，完整欄位/條件涵蓋先於粒度便利；DeepSeek原版/候選同第11題各一次仍皆選錯來源漏online，兩草稿ready但validator均擋下，候選未改善。兩筆重播、96回歸通過；不擴題或自動再調參。",
+      "evidence": [
+        "reports/coverage-priority-comparison.md",
+        "reports/coverage-priority-comparison.json"
+      ]
+    },
+    {
+      "summary": "新增兩份Markdown system第一區塊高優先規則，planner/reviewer兩DeepSeek依序各一次。planner仍捏造月表sales_channel被程式拒絕；reviewer reject並抓核心決策1/3契約矛盾，但有未充分支持的附加疑慮/不精確路徑。99回歸及兩筆離線核對通過，生成未成功。",
+      "evidence": [
+        "reports/markdown-evidence-review.md",
+        "reports/markdown-evidence-review.json"
+      ]
+    },
+    {
+      "summary": "依使用者要求將三階段View召回/部分需求映射/必要來源選擇記錄為執行計畫，含text-to-sql重用邊界、條件與度量不可跨來源挪用、9次/題與新預算、驗證及停止門檻；本輪只寫文件。",
+      "evidence": [
+        "reports/three-stage-view-selection-plan.md"
+      ]
+    },
+    {
+      "summary": "三階段evaluation型別、三份Markdown prompt、序列runner／budget／replay完成；獨立review原4項缺陷已TDD修正。42focused／135相關通過；第11題合計4不同calls後庫存引用契約錯誤而停，無最終request與語意通過，不擴六題、十題、38題或Ollama。",
+      "evidence": [
+        "reports/three-stage-view-selection-results.md",
+        "evidence/EV-20261021T015608-374f69fc.json",
+        "evidence/EV-20261021T015637-436c6855.json",
+        "evidence/EV-20261021T015828-e8216b14.json"
+      ]
+    },
+    {
+      "summary": "釐清原庫存grain未保證最新/目前，原題oracle適用性待重審；新題1次DeepSeek將盤點日期列attribute、無庫存日期filter，但第一步quote自行加入省略號而拒絕，第二節點未執行；已fresh replay保存，INCONCLUSIVE。",
+      "evidence": [
+        "reports/snapshot-inventory-probe.md",
+        "evidence/EV-20261021T030934-e2fd34ef.json",
+        "evidence/EV-20261021T031036-7617dfc7.json"
+      ]
+    },
+    {
+      "summary": "第一步改start/end、Python裁切quote；新21測試、63focused/156相關通過，獨立review無P1/P2。自然單次1call共7索引，結構PASS但完整詞邊界2/7、5組end少1、母體錯列filter，固定候選未達自然標準。原raw/自動結果保留並fresh replay，不擴題。",
+      "evidence": [
+        "reports/indexed-recall-results.md",
+        "evidence/EV-20261021T033818-dd272774.json",
+        "evidence/EV-20261021T033920-61ce56e4.json",
+        "evidence/EV-20261021T034118-e12c74ed.json"
+      ]
+    },
+    {
+      "summary": "同索引版第二次1call，完整詞覆蓋5/7對比前次2/7，母體改為population；月份及盤點日期仍少一字。新結果獨立保存、fresh replay通過，完整標準未過，不重跑第三次。",
+      "evidence": [
+        "reports/indexed-recall-repeat-results.md",
+        "evidence/EV-20261021T034825-0e02c9b4.json",
+        "evidence/EV-20261021T035012-bc6c0422.json"
+      ]
+    },
+    {
+      "summary": "EXP014使用者授權Qwen單次第一步；同題/messages/core核對成功，約300.4秒ReadTimeout，語意NOT_VERIFIED；fresh離線provider錯誤重播一致，未重試。",
+      "evidence": [
+        "reports/qwen-indexed-recall-results.md",
+        "evidence/EV-20261021T035649-bb08cfa3.json",
+        "evidence/EV-20261021T040200-432414fb.json",
+        "evidence/EV-20261021T035728-92bbb829.json"
+      ]
+    },
+    {
+      "summary": "EXP015第二次Qwen同題同設定1call，到420秒整體硬上限，無完整答案；語意INCONCLUSIVE，fresh離線artifact核對PASS，不能raw replay。",
+      "evidence": [
+        "reports/qwen-indexed-recall-repeat-results.md",
+        "evidence/EV-20261021T041042-c4724be2.json",
+        "evidence/EV-20261021T041812-51640ddf.json"
+      ]
+    },
+    {
+      "summary": "EXP016第三次Qwen同題同設定1call仍420秒hard timeout，無完整答案。觀察12.6GB GPU VRAM、fresh離線artifact核對PASS；三次均無答案，應先定位耗時而非自動追加。",
+      "evidence": [
+        "reports/qwen-indexed-recall-third-results.md",
+        "evidence/EV-20261021T042057-87b8ad21.json",
+        "evidence/EV-20261021T042842-e7ac3938.json"
+      ]
+    },
+    {
+      "summary": "EXP017第四次420秒hard timeout，無答案；最新使用者要求等到結束，因原程序已終止另立EXP018無時間deadline單次呼叫。",
+      "evidence": [
+        "reports/qwen-indexed-recall-fourth-results.md",
+        "evidence/EV-20261021T072922-45c135b4.json",
+        "evidence/EV-20261021T073825-cc2b646a.json"
+      ]
+    },
+    {
+      "summary": "EXP018取消HTTP／外層deadline後等到模型結束：555.5秒，輸出4096達length限制，JSON截斷；六個可見目標詞索引完整但整份第一步FAIL。raw replay一致，未修補或重試。",
+      "evidence": [
+        "reports/qwen-indexed-recall-wait-results.md",
+        "evidence/EV-20261021T073912-568459f3.json",
+        "evidence/EV-20261021T074905-2b4c73bf.json"
+      ]
+    },
+    {
+      "summary": "EXP019無token／timeout上限單次Qwen完成：620.1秒stop、4618輸出tokens，JSON完整，主要目標7/7精確索引與角色、scope／母體符合，共9requirements/7views；raw replay與fresh核對PASS，不代表正式Gate。",
+      "evidence": [
+        "reports/qwen-indexed-recall-uncapped-results.md",
+        "evidence/EV-20261021T075735-f75bf9ac.json",
+        "evidence/EV-20261021T075801-cb351f74.json",
+        "evidence/EV-20261021T080912-146f3d0c.json",
+        "evidence/EV-20261021T081050-aa48bdf2.json"
+      ]
+    },
+    {
+      "summary": "EXP020第二步只新增庫存view1call：646.6秒JSON完整，但grain/keys list引文不合法，另兩個population鍵缺各自欄位描述證據。依首錯停止，未執行後6view或第三步；raw replay與原輸出稽核PASS。",
+      "evidence": [
+        "reports/qwen-stage-two-results.md",
+        "evidence/EV-20261021T100747-34878c00.json",
+        "evidence/EV-20261021T100802-33d75213.json",
+        "evidence/EV-20261021T101943-dfb8648d.json",
+        "evidence/EV-20261021T102130-1fa8fe6e.json"
+      ]
+    },
+    {
+      "summary": "Ruling: 將第二步證據輸出改為path-only adapter；Python依欄位產生原契約描述與原需求片段。單一grain證據、母體鍵免模型重複引文；保留舊驗證器及歷史hash，既有母體anchor/left-join驗證仍適用。使用者要求只印log，故不新增報告/EXP Markdown。",
+      "evidence": []
+    },
+    {
+      "summary": "依最新授權第二步改path-only、Python取引文，單一grain證據與母體鍵衍生欄位描述；114pytest通過。Qwen自然1call452秒，舊證據錯誤消除，新卡點R_PURPOSE supported無映射。依首錯停止後6view與第三步，原raw重播一致；僅印log，未新增測試報告或實驗Markdown。",
+      "evidence": [
+        "evidence/EV-20261021T143954-abccd140.json",
+        "evidence/EV-20261021T144804-f9fbd92f.json",
+        "evidence/EV-20261021T144915-b017862c.json"
+      ]
+    },
+    {
+      "kind": "edd-loop-progress",
+      "goal": "修正目前三階段任務拆分測試的失敗，以本機 Ollama qwen3.8:27b 完成目前診斷案例的自然端到端驗證與必要回歸。",
+      "action": {
+        "action": "audit",
+        "reviewed_rounds": [
+          22,
+          23,
+          24
+        ]
+      },
+      "rounds": "24/1000000000000000000000000000000",
+      "used": {
+        "agent_dispatches": 43,
+        "cloud_calls": 0,
+        "local_calls": 31,
+        "model_retries": 0
+      },
+      "nodes": [
+        {
+          "id": "root",
+          "parent": null,
+          "status": "pending"
+        },
+        {
+          "id": "three_stage_integration",
+          "parent": "root",
+          "status": "pending"
+        },
+        {
+          "id": "contract_and_managed_runner",
+          "parent": "three_stage_integration",
+          "status": "passed"
+        },
+        {
+          "id": "natural_qwen_three_stage",
+          "parent": "three_stage_integration",
+          "status": "failed"
+        },
+        {
+          "id": "coverage_slots_contract",
+          "parent": "natural_qwen_three_stage",
+          "status": "passed"
+        },
+        {
+          "id": "natural_slots_three_stage",
+          "parent": "natural_qwen_three_stage",
+          "status": "failed"
+        },
+        {
+          "id": "evidence_bound_managed_contract",
+          "parent": "natural_slots_three_stage",
+          "status": "passed"
+        },
+        {
+          "id": "natural_evidence_bound_three_stage",
+          "parent": "natural_slots_three_stage",
+          "status": "failed"
+        },
+        {
+          "id": "own_responsibility_managed_contract",
+          "parent": "natural_evidence_bound_three_stage",
+          "status": "passed"
+        },
+        {
+          "id": "natural_own_responsibility_three_stage",
+          "parent": "natural_evidence_bound_three_stage",
+          "status": "failed"
+        },
+        {
+          "id": "kind_mapping_managed_contract",
+          "parent": "natural_own_responsibility_three_stage",
+          "status": "passed"
+        },
+        {
+          "id": "natural_kind_mapping_three_stage",
+          "parent": "natural_own_responsibility_three_stage",
+          "status": "pending"
+        },
+        {
+          "id": "kind_diagnostic_fixture_harness",
+          "parent": "natural_kind_mapping_three_stage",
+          "status": "passed"
+        },
+        {
+          "id": "kind_diagnostic_fixture_semantics",
+          "parent": "natural_kind_mapping_three_stage",
+          "status": "passed"
+        },
+        {
+          "id": "natural_kind_selection_isolation",
+          "parent": "natural_kind_mapping_three_stage",
+          "status": "passed"
+        },
+        {
+          "id": "natural_kind_coverage_isolation",
+          "parent": "natural_kind_mapping_three_stage",
+          "status": "failed"
+        },
+        {
+          "id": "kind_diagnostic_fixture_v2_correction",
+          "parent": "kind_diagnostic_fixture_semantics",
+          "status": "passed"
+        },
+        {
+          "id": "kind_diagnostic_evidence_rebinding",
+          "parent": "kind_diagnostic_fixture_semantics",
+          "status": "passed"
+        },
+        {
+          "id": "kind_policy_shape_contract",
+          "parent": "natural_kind_selection_isolation",
+          "status": "passed"
+        },
+        {
+          "id": "kind_policy_shape_semantics",
+          "parent": "natural_kind_selection_isolation",
+          "status": "passed"
+        },
+        {
+          "id": "natural_kind_policy_shape_selection",
+          "parent": "natural_kind_selection_isolation",
+          "status": "passed"
+        },
+        {
+          "id": "capability_projection_contract",
+          "parent": "natural_kind_coverage_isolation",
+          "status": "passed"
+        },
+        {
+          "id": "capability_projection_semantics",
+          "parent": "natural_kind_coverage_isolation",
+          "status": "passed"
+        },
+        {
+          "id": "natural_capability_projection_coverage",
+          "parent": "natural_kind_coverage_isolation",
+          "status": "failed"
+        },
+        {
+          "id": "text_leaf_evidence_contract",
+          "parent": "natural_capability_projection_coverage",
+          "status": "failed"
+        },
+        {
+          "id": "text_leaf_evidence_semantics",
+          "parent": "natural_capability_projection_coverage",
+          "status": "pending"
+        },
+        {
+          "id": "natural_text_leaf_evidence_coverage",
+          "parent": "natural_capability_projection_coverage",
+          "status": "pending"
+        }
+      ]
+    }
+  ],
+  "agents": [
+    {
+      "id": "ollama-mvp-design",
+      "status": "DONE_WITH_CONCERNS",
+      "report": "agents/ollama-mvp-design/task.md",
+      "platform_id": "/root/ollama_mvp_design",
+      "integrated": true,
+      "disposition": "主agent已實讀完整提案與handoff，要求並核對DeepSeek耗時修正及Ollama同等兩輪38/38 Gate；整合為reports/integrated-plan.md。方案僅設計未實測，oracle pending及語意推導界線保留，不執行新模型或SQL。",
+      "integrated_at": "2026-10-20T12:27:43+00:00"
+    },
+    {
+      "id": "oracle-audit",
+      "status": "DONE_WITH_CONCERNS",
+      "report": "agents/oracle-audit/task.md",
+      "platform_id": "/root/oracle_audit",
+      "integrated": true,
+      "disposition": "已實讀canonical30核准、MVP0/B1獨立review、12筆逐題語意與歷史30分類及final證據檢查。採納B1/v3安全2/6淨增0、原18安全9真錯3機械、原4unsafe ready及FD等價邊界；保留原分。Gate失敗不升十題/完整38/Ollama，主任務PLANNING非完成。",
+      "integrated_at": "2026-10-20T13:06:25+00:00"
+    },
+    {
+      "id": "sealed-cases",
+      "status": "DONE_WITH_CONCERNS",
+      "report": "agents/sealed-cases/task.md",
+      "platform_id": "/root/sealed_cases",
+      "integrated": true,
+      "disposition": "已讀manifest、自檢與handoff；確認十題與八題hash，內容尚待獨立審核；Gate題文維持封存，僅版本凍結後揭露。",
+      "integrated_at": "2026-10-20T12:53:11+00:00"
+    },
+    {
+      "id": "three-stage-review",
+      "status": "DONE_WITH_CONCERNS",
+      "report": "agents/three-stage-review/task.md",
+      "platform_id": "/root/three_stage_review",
+      "integrated": true,
+      "disposition": "已實讀獨立review及handoff：原版兩P1兩P2採納並以五RED反例修正，後續42focused/135相關通過；修正版未再獨立review不當核准。第11題4個獨立calls後在inventory引文契約拒絕，完整語意NOT_VERIFIED，不擴題。",
+      "integrated_at": "2026-10-21T02:01:56+00:00"
+    },
+    {
+      "id": "indexed-recall-review",
+      "status": "DONE_WITH_CONCERNS",
+      "report": "agents/indexed-recall-review/task.md",
+      "platform_id": "/root/indexed_recall_review",
+      "integrated": true,
+      "disposition": "已實讀完整handoff；63focused與synthetic審查未見P1/P2，main另有156相關回歸。審查只核對程式，不當自然品質核准；單次自然raw精確邊界2/7且母體分類為filter，另列模型驗收未過。",
+      "integrated_at": "2026-10-21T03:43:45+00:00"
+    }
+  ],
+  "experiments": [
+    {
+      "id": "EXP-001",
+      "hypothesis_id": "H1"
+    },
+    {
+      "id": "EXP-002",
+      "hypothesis_id": "H2"
+    },
+    {
+      "id": "EXP-003",
+      "hypothesis_id": "H4"
+    },
+    {
+      "id": "EXP-004",
+      "hypothesis_id": "H5"
+    },
+    {
+      "id": "EXP-005",
+      "hypothesis_id": "H6"
+    },
+    {
+      "id": "EXP-006",
+      "hypothesis_id": "H7"
+    },
+    {
+      "id": "EXP-007",
+      "hypothesis_id": "H8"
+    },
+    {
+      "id": "EXP-008",
+      "hypothesis_id": "H9"
+    },
+    {
+      "id": "EXP-009",
+      "hypothesis_id": "H10"
+    },
+    {
+      "id": "EXP-010",
+      "hypothesis_id": "H10a"
+    },
+    {
+      "id": "EXP-011",
+      "hypothesis_id": "H11"
+    },
+    {
+      "id": "EXP-012",
+      "hypothesis_id": "H12"
+    },
+    {
+      "id": "EXP-013",
+      "hypothesis_id": "H12R"
+    },
+    {
+      "id": "EXP-014",
+      "hypothesis_id": "H14"
+    },
+    {
+      "id": "EXP-015",
+      "hypothesis_id": "H15"
+    },
+    {
+      "id": "EXP-016",
+      "hypothesis_id": "H16"
+    },
+    {
+      "id": "EXP-017",
+      "hypothesis_id": "H17"
+    },
+    {
+      "id": "EXP-018",
+      "hypothesis_id": "H18"
+    },
+    {
+      "id": "EXP-019",
+      "hypothesis_id": "H19"
+    },
+    {
+      "id": "EXP-020",
+      "hypothesis_id": "H20"
+    }
+  ],
+  "decisions": [
+    {
+      "id": "DEC-001",
+      "status": "ACCEPTED",
+      "source": "main-agent",
+      "summary": "依已核准計畫在既有feat/cross_view與指定Task就地執行，實作限evaluation候選，保留產品v3預設",
+      "alternatives": [
+        "另建工作樹或直接取代產品規劃流程"
+      ],
+      "reason": "Task/證據/未追蹤研究輸出已在使用者指定工作區；本輪是階段研究，候選未通Gate不進產品",
+      "risks": "dirty工作樹僅可作研究，正式Gate需乾淨固定revision；新候選檔需獨立審查",
+      "revisit": "候選通過小樣本並準備完整Gate時",
+      "references": [],
+      "at": "2026-10-20T13:00:48+00:00"
+    },
+    {
+      "id": "DEC-002",
+      "status": "ACCEPTED",
+      "source": "main-agent",
+      "summary": "A僅型別護欄；B1未達MVP1，依停止條件不升級十題或38題或Ollama",
+      "alternatives": [
+        "去重日期後重跑同批題追分，或先測Qwen"
+      ],
+      "reason": "A安全可救0；B1僅2/6 ready，且有店商品對齊與母體根粒度真語意錯，非只缺欄位",
+      "risks": "尚未證明精簡骨架一般無效；僅否證B1本次凍結實作可採用。八題封存未揭露",
+      "revisit": "形成新的可否證節點假設與預先門檻後，先離線驗證再另開版本",
+      "references": [
+        "EXP-002"
+      ],
+      "at": "2026-10-20T13:00:48+00:00"
+    },
+    {
+      "id": "DEC-003",
+      "status": "ACCEPTED",
+      "source": "main-agent",
+      "summary": "使用者新授權以Azure gpt-6-sol對B1失敗四題07/09/14/28各測一次並保存API可取得的推理摘要",
+      "alternatives": [
+        "沿用先前禁止GPT測試限制，或改prompt要求模型補寫逐步思維"
+      ],
+      "reason": "最新使用者明確指定gpt-6-sol；以Responses reasoning.summary=auto保存官方推理摘要，原B1 prompt/schema/compiler凍結，不補寫或假造內部推理",
+      "risks": "Responses與Chat Completions、reasoning設定不同；僅診斷對照，不可取代DeepSeekGate或用GPT在線代答；摘要可能空白或provider不支援",
+      "revisit": "四題一次結果保存後，不重跑挑分",
+      "references": [],
+      "at": "2026-10-20T13:12:25+00:00"
+    },
+    {
+      "id": "DEC-004",
+      "status": "ACCEPTED",
+      "source": "main-agent",
+      "summary": "使用者授權新增模型可見決策依據欄位並比較GPT與DeepSeek；採獨立Explained response型別，原v3 schema與預設流程不變",
+      "alternatives": [
+        "將逐步內部推理混入原v3必填schema，或只保留API不可讀加密reasoning"
+      ],
+      "reason": "用六類簡短決策摘要定位可觀察的語意分歧；只記錄可核對結論與契約依據，摘要不驅動驗證或request組裝。三題11/14/26各模型一次，共六次相同輸入。",
+      "risks": "模型自述可能錯誤或與typed計畫矛盾，不能證明內部推理順序；新增說明會改變模型輸出與行為，非原版同輪對照。",
+      "revisit": "六次首次結果與說明一致性審核後，不重跑挑分",
+      "references": [],
+      "at": "2026-10-20T15:24:30+00:00"
+    },
+    {
+      "id": "DEC-005",
+      "status": "ACCEPTED",
+      "source": "main-agent",
+      "summary": "使用者授權加入必填decision_chain，由模型填寫有序高層決策紀錄；用新診斷response型別保留前版schema",
+      "alternatives": [
+        "要求完整私有思維鏈，或由程式替模型補寫決策過程"
+      ],
+      "reason": "節點記錄簡短選擇、可核對依據、typed task引用與前置節點；只能描述公開決策而非內部思考歷程。第11題兩模型各一次確認，六類完整且摘要不參與SQL payload。",
+      "risks": "自述依據可錯，依賴順序不證明真實內部推理順序；有序log的結構驗證不代表商業語意正確。",
+      "revisit": "兩次首次結果保存後，不自動重跑或擴題",
+      "references": [],
+      "at": "2026-10-20T15:36:15+00:00"
+    },
+    {
+      "id": "DEC-006",
+      "source": "user",
+      "question_id": "Q-001",
+      "summary": "使用者要求恢復指定評測：修正前、後各跑同一套原始30題，各一次；僅必要準備、固定評測與結果分析，不恢復無限改善或原樣重抽。",
+      "evidence": "本輪使用者訊息「那跑一次相同題庫測試」及澄清回答「修正前、後各跑同30題，各一次」。",
+      "at": "2026-10-22T03:51:16+00:00"
+    }
+  ],
+  "questions": [
+    {
+      "question_id": "Q-001",
+      "source_agent": "user",
+      "question": "已依使用者要求於第24輪後暫停，等待明確的恢復指示。",
+      "context": "使用者訊息：「這一輪結束先暫停,統計一下目前的執行結果」。第24輪FAIL已封存；下一動作原為fresh audit22–24，尚未派遣。",
+      "options": [
+        "維持暫停",
+        "恢復執行"
+      ],
+      "recommendation": "維持暫停",
+      "impact": "暫停期間禁止新工作與模型呼叫；使用者明確續行後保留所有計數並先獨立審核22–24，不自動重跑既有請求。",
+      "status": "ANSWERED",
+      "answer": "使用者要求恢復指定評測：修正前、後各跑同一套原始30題，各一次；僅必要準備、固定評測與結果分析，不恢復無限改善或原樣重抽。",
+      "answer_evidence": "本輪使用者訊息「那跑一次相同題庫測試」及澄清回答「修正前、後各跑同30題，各一次」。"
+    }
+  ],
+  "blockers": [],
+  "waiting": null,
+  "paused_from": null,
+  "checkpoint": {
+    "last_completed": "EDD loop 第24輪 text_leaf_evidence_contract：FAIL",
+    "current_action": "EDD loop 24/1000000000000000000000000000000：委派獨立方向審核",
+    "next_action": "委派獨立方向審核",
+    "required_inputs": [],
+    "unresolved_questions": []
+  },
+  "plan": {
+    "report": "reports/integrated-plan.md",
+    "subagent_report": "reports/subagent-proposal.md",
+    "success": "MVP0重播一致、unsafe變異全擋且合法控制不退步；依序6/10題門檻，最終DeepSeek與Qwen均兩輪首次38/38。",
+    "failure": "任何unsafe ready停止升級；DeepSeekGate未通過禁止Ollama；三次實質修正無進展重新審查。",
+    "minimal_experiment": "零呼叫重播DeepSeek30筆：原版／欄位閉包／護欄三欄sidecar；12負變異、6合法控制、合成見證；獨立oracle審核。",
+    "approval_required": false,
+    "solutions": [
+      {
+        "id": "A",
+        "hypothesis": "保留一次v3規劃，確定性欄位閉包及可證明護欄",
+        "root_cause": "重複結構與語意責任混雜，待實驗",
+        "benefit": "減少重複輸出錯誤",
+        "scope": "離線harness與候選，不取代產品預設",
+        "complexity": "S",
+        "cost": "依提案階段預算",
+        "risks": "錯誤母體或條件不得由程式猜測",
+        "verification": "離線重播、六題、十題、兩輪38題",
+        "falsification": "提案各階段明定門檻失敗",
+        "rollback": "保留v3預設與原始證據"
+      },
+      {
+        "id": "B",
+        "hypothesis": "一次精簡語意骨架＋確定性編譯",
+        "root_cause": "重複結構與語意責任混雜，待實驗",
+        "benefit": "減少重複輸出錯誤",
+        "scope": "離線harness與候選，不取代產品預設",
+        "complexity": "M",
+        "cost": "依提案階段預算",
+        "risks": "錯誤母體或條件不得由程式猜測",
+        "verification": "離線重播、六題、十題、兩輪38題",
+        "falsification": "提案各階段明定門檻失敗",
+        "rollback": "保留v3預設與原始證據"
+      },
+      {
+        "id": "C",
+        "hypothesis": "多階段LLM，須先有節點證據",
+        "root_cause": "重複結構與語意責任混雜，待實驗",
+        "benefit": "減少重複輸出錯誤",
+        "scope": "離線harness與候選，不取代產品預設",
+        "complexity": "L",
+        "cost": "依提案階段預算",
+        "risks": "錯誤母體或條件不得由程式猜測",
+        "verification": "離線重播、六題、十題、兩輪38題",
+        "falsification": "提案各階段明定門檻失敗",
+        "rollback": "保留v3預設與原始證據"
+      }
+    ],
+    "three_stage_view_selection": {
+      "report": "reports/three-stage-view-selection-plan.md",
+      "status": "IMPLEMENTED_DIAGNOSTIC_GATE_NOT_MET",
+      "scope": "先候選召回，再逐View部分需求映射，最後依完整需求與整合相容性選必要來源",
+      "execution_this_turn": true,
+      "budget_note": "EXP009/010合計最多9次、實際4不同calls；未啟用六題60次。",
+      "result_report": "reports/three-stage-view-selection-results.md"
+    },
+    "indexed_recall": {
+      "report": "reports/indexed-recall-results.md",
+      "status": "IMPLEMENTED_CODE_PASS_NATURAL_CRITERIA_NOT_MET",
+      "user_design": "第一步模型只輸出原句start/end；Python裁切，不讓模型複寫quote",
+      "index_protocol": "0-based Unicode code points, start inclusive/end exclusive",
+      "budget": "EXP012最多1fresh call；實際1call",
+      "scope": "第一階段原句引用；無第二/三階段自然驗證"
+    },
+    "historical_target_before_qwen_loop": {
+      "goal": "依已核准提案執行DeepSeek-first MVP，通過兩輪38/38首次語意Gate才轉Ollama。",
+      "acceptance": [
+        {
+          "id": "I0",
+          "description": "MVP0原30筆一致、閉包100%typed coverage、12unsafe全擋且6合法控制不退步、oracle審核完成。",
+          "status": "FAIL",
+          "evidence": [
+            "evidence/EV-20261020T125444-1e0000c4.json",
+            "agents/oracle-audit/mvp0-b1-review.json",
+            "reports/mvp0-summary.json"
+          ]
+        },
+        {
+          "id": "I1",
+          "description": "DeepSeek六題與十題逐階段達提案門檻，first pass與repair分列。",
+          "status": "FAIL",
+          "evidence": [
+            "evidence/EV-20261020T125606-8b36efcb.json",
+            "agents/oracle-audit/mvp1-semantic-review.json"
+          ]
+        },
+        {
+          "id": "I2",
+          "description": "固定版本DeepSeek原30＋封存8題，兩輪首次各38/38語意完整正確且無oracle待審。",
+          "status": "PENDING",
+          "evidence": []
+        },
+        {
+          "id": "I3",
+          "description": "通過I2才凍結並轉Qwen，以相同兩輪38/38 Gate驗收。",
+          "status": "PENDING",
+          "evidence": []
+        },
+        {
+          "id": "TS0",
+          "description": "三階段離線契約、合法部分支持、scope綁定、負例／重播／預算守門通過。",
+          "status": "PASS",
+          "evidence": [
+            "evidence/EV-20261021T015608-374f69fc.json",
+            "evidence/EV-20261021T015828-e8216b14.json"
+          ]
+        },
+        {
+          "id": "TS1",
+          "description": "第11題自然完整需求映射、來源選擇、整合與prepared requests通過；本次停在inventory引用契約，門檻未達。",
+          "status": "FAIL",
+          "evidence": [
+            "evidence/EV-20261021T015637-436c6855.json",
+            "reports/three-stage-view-selection-results.md"
+          ]
+        },
+        {
+          "id": "IDX0",
+          "description": "第一步wire無quote、嚴格Unicode索引與Python裁切、既有scope/View guard、raw/parsed/derived保存與重播通過。",
+          "status": "PASS",
+          "evidence": [
+            "evidence/EV-20261021T033818-dd272774.json",
+            "evidence/EV-20261021T034118-e12c74ed.json",
+            "agents/indexed-recall-review/handoff.json"
+          ]
+        },
+        {
+          "id": "IDX1",
+          "description": "本固定候選單次自然index完整對應需求且角色正確；實測5組尾端不完整且母體錯列filter，未達標準。",
+          "status": "FAIL",
+          "evidence": [
+            "evidence/EV-20261021T033920-61ce56e4.json",
+            "reports/indexed-recall-results.md"
+          ]
+        }
+      ]
+    },
+    "loop_authorization": {
+      "source": "使用者本輪明確指示 $edd-loop 修正目前任務拆分測試；ollama qwen3.8:27b 不限次數/token/timeout",
+      "unlimited": true,
+      "controller_representation": "控制器僅支援非負整數；使用10**30作無操作性配額之計數容量，未改動全域控制器。",
+      "review_every": 3,
+      "reports": "只保留必要 raw/log 與 Task/Handoff，不新增測試報告。"
+    },
+    "edd_loop": {
+      "id": "f8ee2e2f8f9d43dbb46dbf7e11594a98",
+      "target": {
+        "goal": "修正目前三階段任務拆分測試的失敗，以本機 Ollama qwen3.8:27b 完成目前診斷案例的自然端到端驗證與必要回歸。",
+        "acceptance": [
+          {
+            "id": "LOOP1",
+            "description": "以既有 raw 重現並定位目前失敗；修正保留必要資料需求、條件、角色、scope 與母體驗證，新增有辨識力的正反例且相關回歸通過。"
+          },
+          {
+            "id": "LOOP2",
+            "description": "本機 qwen3.8:27b 自然完成目前診斷案例的需求拆分、全部候選 View 映射及來源選擇，語意涵蓋與 prepared requests 驗收通過；不執行 SQL 或 DB。"
+          },
+          {
+            "id": "LOOP3",
+            "description": "保存所有首次與失敗 raw/log、版本及模型設定；新結果可離線重播，歷史 raw、分數與完整 38 題 Gate 狀態不變。"
+          },
+          {
+            "id": "LOOP4",
+            "description": "fresh-context 獨立驗證者核對修正、父層整合、自然結果語意與必要回歸並 ACCEPT。"
+          }
+        ]
+      },
+      "config": {
+        "max_rounds": 1000000000000000000000000000000,
+        "max_model_retries_per_case": 1000000000000000000000000000000,
+        "max_cloud_calls": 0,
+        "max_local_calls": 1000000000000000000000000000000,
+        "max_agent_dispatches": 1000000000000000000000000000000,
+        "review_every": 3,
+        "request_timeout_seconds": null,
+        "phase": "feasibility",
+        "endpoint_envs": {
+          "local": [
+            "EDD_LOCAL_ENDPOINT"
+          ]
+        }
+      },
+      "status": "RUNNING",
+      "nodes": {
+        "root": {
+          "id": "root",
+          "parent": null,
+          "goal": "修正目前三階段任務拆分測試的失敗，以本機 Ollama qwen3.8:27b 完成目前診斷案例的自然端到端驗證與必要回歸。",
+          "acceptance": [
+            "以既有 raw 重現並定位目前失敗；修正保留必要資料需求、條件、角色、scope 與母體驗證，新增有辨識力的正反例且相關回歸通過。",
+            "本機 qwen3.8:27b 自然完成目前診斷案例的需求拆分、全部候選 View 映射及來源選擇，語意涵蓋與 prepared requests 驗收通過；不執行 SQL 或 DB。",
+            "保存所有首次與失敗 raw/log、版本及模型設定；新結果可離線重播，歷史 raw、分數與完整 38 題 Gate 狀態不變。",
+            "fresh-context 獨立驗證者核對修正、父層整合、自然結果語意與必要回歸並 ACCEPT。"
+          ],
+          "status": "pending"
+        },
+        "three_stage_integration": {
+          "id": "three_stage_integration",
+          "parent": "root",
+          "goal": "修正候選的三階段父層整合與必要回歸",
+          "acceptance": [
+            "以新自然完整raw離線重播，prepared requests與各階段語意一致且必要回歸通過；歷史raw、分數與38題Gate狀態未變。",
+            "整合證據涵蓋所有子節點，交由fresh最終驗證者核對root驗收。"
+          ],
+          "status": "pending"
+        },
+        "contract_and_managed_runner": {
+          "id": "contract_and_managed_runner",
+          "parent": "three_stage_integration",
+          "goal": "重現背景誤列資料需求並建立最小修正與受控三階段runner",
+          "acceptance": [
+            "既有raw重現精確失敗，背景與真正metadata責任區別有辨識力的正反例通過，所有必要coverage/selection guards保留。",
+            "最小recall prompt修正完成；受控本機runner使用indexed recall與path-only mapping串至selection，所有模型POST走loopctl，dry-run/離線fake全階段/失敗保存與replay測試通過。",
+            "先保存舊版本及歷史工件hash，相關focused測試實跑通過；不以手工刪除背景或放寬supported驗證取得PASS。"
+          ],
+          "status": "passed"
+        },
+        "natural_qwen_three_stage": {
+          "id": "natural_qwen_three_stage",
+          "parent": "three_stage_integration",
+          "goal": "固定修正版以本機Qwen自然完成當前診斷案例三階段",
+          "acceptance": [
+            "全新自然需求拆分完整保留資料責任並將純業務目的留背景，全7候選View各自然映射通過；不重用或修復舊recall當自然結果。",
+            "自然selection為ready且prepared requests正確表達庫存anchor、店商品根粒度、sales同task月份/online篩選與金額sum、left保母體與不補零政策；無SQL/DB。",
+            "保存固定單樣本所有首次/失敗raw、request id、模型設定、來源指紋與語意核對log；錯答FAIL回研究，不重送相同成功HTTP請求挑分。"
+          ],
+          "status": "failed"
+        },
+        "coverage_slots_contract": {
+          "id": "coverage_slots_contract",
+          "parent": "natural_qwen_three_stage",
+          "goal": "將已知需求身分與來源事實交由程式綁定，保留模型的逐項語意判定及全部既有守門",
+          "acceptance": [
+            "既有map05 raw精確重現重複ID失敗，保留原始證據；新wire以輸入requirement IDs為固定必填槽位，缺項、額外項、重複JSON key與非法輸出皆拒絕，不去重、不挑一筆或補答案。",
+            "來源view、grain、keys與population由當次唯讀契約產生；母體文字保留summary原文與證據路徑，不附加退貨等契約未保證的斷言；模型仍須決定status、合法mappings、scope及缺口。",
+            "離線正反例、完整fake三階段prepared requests、首錯保存/停止、replay、受控request及必要193相關回歸實跑通過；舊wire/歷史raw/分數/Gate與兩src既存變更保持。"
+          ],
+          "status": "passed"
+        },
+        "natural_slots_three_stage": {
+          "id": "natural_slots_three_stage",
+          "parent": "natural_qwen_three_stage",
+          "goal": "凍結新槽位契約候選，以本機Qwen全新自然執行需求拆分、七候選映射及來源選擇",
+          "acceptance": [
+            "全新自然recall完整保留本題資料責任與原文背景，七View映射皆通過必要結構及逐項語意驗收；不重用或修正前輪答案作自然結果。",
+            "自然selection ready與prepared requests符合原父層所有庫存母體、根粒度、同源條件、left及不補零責任；所有來源母體及理由斷言均比對契約，記錄無支持文字並依完整語意門檻判定。",
+            "同一固定候選預定單樣本保存所有首次/失敗raw、設定、request id、動態schema與來源指紋，成功或失敗前綴可離線重播；首錯停止FAIL回研究，不原樣重試挑分、不執行SQL/DB。"
+          ],
+          "status": "failed"
+        },
+        "evidence_bound_managed_contract": {
+          "id": "evidence_bound_managed_contract",
+          "parent": "natural_slots_three_stage",
+          "goal": "離線建立有證據依據的managed需求、缺口與完整typed selection契約，定位並阻止第4輪三類失敗",
+          "acceptance": [
+            "以凍結舊版精確重播第4輪全部9 raw與原selection首錯，保留recall能力理由、未選View粒度過度支持、未保證母體與typed欄位遺漏之完整FAIL證據；不得覆寫舊版或修答案。",
+            "新managed recall只生成自然索引需求與明示grain關聯；Python僅列全部admitted候選與契約原文召回依據。模型仍負需求語意、scope、grain依賴、逐View狀態/映射/缺口與來源選擇；缺口及選擇理由以可驗證refs表達，不自由改寫來源母體。",
+            "新增managed專用完整typed selection schema：各typed欄位明確required，ready integration非null；不從task.request推導或補filters/metrics/grain/metadata/integration。新wire正規化後重用全部既有coverage/selection/finish守門，新增同源metric-grain依賴一致性拒絕。",
+            "有辨識力的任意ID/改名契約/不同粒度/不同需求組合正反例、完整fake prepared與首錯保存停止/replay/dry-run/受控request及238既有相關回歸實跑通過；歷史raw/分數/Gate、兩src既存變更與舊wire保持；0模型/SQL/DB。"
+          ],
+          "status": "passed"
+        },
+        "natural_evidence_bound_three_stage": {
+          "id": "natural_evidence_bound_three_stage",
+          "parent": "natural_slots_three_stage",
+          "goal": "凍結新證據式managed候選，以Qwen自然驗證全部需求、七View映射及完整typed選擇",
+          "acceptance": [
+            "以新requirements-only recall格式開始單一預定自然樣本；全部本題必要資料責任、原文背景、scope與grain關聯正確，全部七View逐項語意及缺口驗收通過，包括未選來源；不重用、修復或重送前輪錯答案。",
+            "自然模型明確填出全部typed draft與integration；ready/prepared正確實現inventory anchor、店商品根粒度、stock_qty sum、snapshot_date metadata、sales同task月份/online/兩sum、先彙總再left及不補零；任何理由或其他文字不得新增未保證能力/母體或額外資料義務。",
+            "保存所有首次/失敗raw、模型設定/request ID、refs/schema、來源指紋與完整語意log；同版raw全管線replay一致。首provider/parse/contract錯誤即停FAIL、成功HTTP錯答回fresh研究；不執行SQL/DB。第6輪後先fresh審核完整4–6輪，再返回全部既有父節點各自驗證。"
+          ],
+          "status": "failed"
+        },
+        "own_responsibility_managed_contract": {
+          "id": "own_responsibility_managed_contract",
+          "parent": "natural_evidence_bound_three_stage",
+          "goal": "離線區分自身未完成與明示依賴未完成，建立可完整表達partial的最小managed候選",
+          "acceptance": [
+            "原第6輪3raw以凍結v1精確重現FAIL；保留原unsupported R1可用mapping/self表達及兩來源任意ID的自身partial grain表示缺口證據，不改原wire/guard/raw或溯及翻案。",
+            "新增獨立版本的own_gap必填嚴格布林wire；模型仍決定status、所有合法部分mappings與證據路徑。程式只從既有recall與同View statuses完整導出scope/grain缺口；所有kind的明示硬依賴一致驗證，不自動改狀態、丟mapping或補業務答案。普通月份filter不繼承輸出grain，真正grain相依的非metric仍不得冒稱supported。",
+            "跨daily_sales店×商品及customer_value會員×商品的自身partial、完整grain、合法unsupported、依賴完整性、非metric必要依賴、獨立月份filter、真order grain、不同metric各連不同grain、independent scalar與固定月份縮約等有辨識力正反例通過；完整fake至2prepared、各類首錯保存/停止與replay/dry-run通過。",
+            "既有307相關回歸原樣加新測試實跑通過；舊v1與所有舊wire/guard/測試/歷史raw/分數/38Gate及兩src既存變更hash保持，0模型POST/SQL/DB；新candidate與完整imports/prompts/schema/tests凍結。"
+          ],
+          "status": "passed"
+        },
+        "natural_own_responsibility_three_stage": {
+          "id": "natural_own_responsibility_three_stage",
+          "parent": "natural_evidence_bound_three_stage",
+          "goal": "以固定新自身責任候選自然驗證完整七View、typed選擇及prepared並返回全部既有父節點",
+          "acceptance": [
+            "固定新candidate僅一個預定全新自然樣本：requirements-only recall、全部七View各一次、完整typed selection；全題必要資料責任、背景、scope及實質grain依賴正確；普通月份/通路能力不因無關輸出grain被誤降partial，所有自身與派生缺口逐項語意驗收，包含未選來源。",
+            "模型自行明確填出所有typed draft/integration且ready，prepared正確實現inventory店商品anchor、stock_qty sum、snapshot_date metadata、sales同task月份/online與兩sum、店商品先彙總再left及不補零；不從task.request補答案，不增加未保證母體/能力或status欄位義務。",
+            "保存所有首次/失敗raw、request ID、模型設定/來源freeze/schema/自身及派生缺口與語意log，同版完整或失敗前綴replay一致；首provider/parse/contract錯即停，任一語意錯亦FAIL交fresh研究，0SQL/DB且不原樣重試挑分。",
+            "依controller返回natural_evidence_bound_three_stage再至natural_slots_three_stage、natural_qwen_three_stage、three_stage_integration及root，各父節點須自身整合證據；每3輪fresh audit及根通過後fresh final verifier ACCEPT不可省略，所有未執行父層效果仍PENDING。"
+          ],
+          "status": "failed"
+        },
+        "kind_mapping_managed_contract": {
+          "id": "kind_mapping_managed_contract",
+          "parent": "natural_own_responsibility_three_stage",
+          "goal": "離線以需求kind約束最小mapping形狀，保留部分能力與原全部語意守門",
+          "acceptance": [
+            "以第8輪原raw及凍結版本精確重現filter.conditions首錯，保留GRN店鍵遺漏之語意FAIL；獨立區分部分能力完整性與結構合法性，不修raw、不改原分數或舊wire。",
+            "新獨立版本依recall kind生成各槽位專用mapping schema；程式只導出既有不變量已決定的role、不適用null/空欄及grain固定證據path，模型仍明確決定全部欄位、聚合、predicate/條件、自身缺口、狀態、其他證據path及原typed來源整合。所有舊guard原樣重用，不能搬移或補答舊filter條件。",
+            "正反例涵蓋整月雙predicate、條件metric、所有kind與跨來源/任意ID/改名契約部分grain、無關key不冒充母體、own_gap及全部硬依賴一致性；完整fake至2prepared、各首錯與同版/凍結replay通過。原384相關測試原樣加新focused測試實跑通過，0模型POST/SQL/DB。",
+            "保存新版完整sources/schema/prompts/imports/tests與歷史hash；兩src既存變更及全部舊wire/guards/raw/分數/38Gate保持。第9輪完成後先由fresh audit完整覆蓋7–9，未獲CONTINUE或新研究裁決前不發新自然POST。"
+          ],
+          "status": "passed"
+        },
+        "natural_kind_mapping_three_stage": {
+          "id": "natural_kind_mapping_three_stage",
+          "parent": "natural_own_responsibility_three_stage",
+          "goal": "經7–9輪fresh審核後以固定kind專用mapping候選完成單樣本自然三階段並逐層返回",
+          "acceptance": [
+            "固定新候選單一預定全新自然recall、七View各一次及完整typed selection；全部本題資料責任、scope/grain、每View有用部分能力、自身與派生缺口逐項語意正確，包含未選來源。全程只loopctl受控本機Qwen，首結構錯或任一語意錯均FAIL回fresh研究，不修答或原樣重試挑分。",
+            "模型完整typed ready及prepared正確實現inventory店商品anchor、stock_qty sum、snapshot_date metadata、sales同task月份/online/兩sum、店商品先彙總再left及不補零；不從request補答案、不加未保證能力/母體或status資料義務，0SQL/DB。",
+            "所有首次/失敗raw、原JSON欄位presence、schema/設定/request ID/freeze與完整語意log保存；成功或失敗前綴同版及凍結replay一致，歷史raw/分數/38Gate不改。",
+            "依controller返回natural_own_responsibility_three_stage、natural_evidence_bound_three_stage、natural_slots_three_stage、natural_qwen_three_stage、three_stage_integration及root各自驗收；每3輪fresh audit及根通過後fresh final verifier ACCEPT不可省略。"
+          ],
+          "status": "pending"
+        },
+        "kind_diagnostic_fixture_harness": {
+          "id": "kind_diagnostic_fixture_harness",
+          "parent": "natural_kind_mapping_three_stage",
+          "goal": "離線建立固定注入上游的coverage與selection診斷套件及可重播受控單節點runner",
+          "acceptance": [
+            "固定kind-isolation-v1三個coverage樣本及一個selection樣本、全部輸入/Oracle/版本/樣本角色與數量；完整七View coverage逐責任列真契約依據，不沿用全unsupported fake當Oracle，不把診斷標成自然端到端。",
+            "新獨立runner只重用managed-kind-mapping-1 messages/schema/parse/materialize與原finish守門、ManagedInvoke/loopctl；coverage僅注入已核對recall，selection僅注入已核對recall及完整coverage，絕不注入該階段輸出或從request補答案。dry-run/離線正反例/首錯保存/同版及完整import凍結replay實跑通過，原496相關測試原樣加focused測試通過，0POST/SQL/DB。",
+            "fixture、各request body、獨立Oracle及source/schema/model設定hash全部封存；舊raw/分數/38Gate/兩src/舊module及guards保持。全部新fixture仍待下一個fresh獨立語意節點核准，不能在本節點結束後直接POST。"
+          ],
+          "status": "passed"
+        },
+        "kind_diagnostic_fixture_semantics": {
+          "id": "kind_diagnostic_fixture_semantics",
+          "parent": "natural_kind_mapping_three_stage",
+          "goal": "由不同fresh agent在模型呼叫前獨立核對固定診斷輸入與Oracle",
+          "acceptance": [
+            "核對原題全部八項責任、scope/grain依賴、精確索引/背景及改名/任意ID/日期控制；對selection全部七View共56項逐筆確認status/有用mapping/own_gap/條件/依賴與來源事實，包含未選來源，不能只重跑parser或相信作者自述。",
+            "預先定義正反例與容許等價表達皆合理；特別核對customer無關identifier與累計會員金額、daily店鍵/整月/淨額部分能力、order店鍵/日期/online/訂單淨額、product_monthly商品鍵/固定月/兩sum但缺online、store_monthly店鍵/月/淨額；庫存母體只由inventory證明。逐項引用真契約並判斷，不因上輪結果改Oracle。",
+            "獨立review JSON綁定fixture/Oracle/messages/schema/source/model/manifest全部hash並ACCEPT；任何未決語意或fixture錯誤FAIL交fresh研究，先固定新版本再重驗，0模型POST/SQL/DB。"
+          ],
+          "status": "passed"
+        },
+        "natural_kind_selection_isolation": {
+          "id": "natural_kind_selection_isolation",
+          "parent": "natural_kind_mapping_three_stage",
+          "goal": "固定正確完整coverage上游注入後自然測目前required typed selection可行性",
+          "acceptance": [
+            "前兩離線節點通過、獨立review hash精確匹配後，只執行SEL-ISO-v1-01一個預定首次local POST；輸入原題、固定recall與完整七View normalized coverage，使用現行SelectionWire及selection prompt，不附Oracle/預填draft/typed答案。",
+            "模型原raw自行明填所有required typed及integration，ready並產兩prepared：inventory店商品anchor、stock_qty sum、snapshot_date metadata；sales同task整月/online/discount_amount及net_sales兩sum；兩側先彙總到店商品後left、正確一對一鍵、保庫存且不補零。所有assignment/exclusion/free text及原JSON欄位presence逐項語意驗收，任何錯誤FAIL回fresh研究，不加欄位/repair/原樣重抽。",
+            "保存所有首次/失敗raw/receipt/設定/body/schema/freeze/語意log，原結果不可改判；同版及凍結replay一致。明標上游注入的selection節點診斷，不能替代自然recall/coverage或任何父層。第12輪後先fresh audit完整10–12，0SQL/DB。"
+          ],
+          "status": "passed"
+        },
+        "natural_kind_coverage_isolation": {
+          "id": "natural_kind_coverage_isolation",
+          "parent": "natural_kind_mapping_three_stage",
+          "goal": "固定獨立recall上游注入後自然區分有用部分鍵、依賴缺口與獨立整月predicate",
+          "acceptance": [
+            "離線輸入與Oracle已fresh ACCEPT且hash一致；依manifest固定順序COV-ISO-v1-01/02/03各一次首次local POST，三個獨立單coverage樣本全部保留，不事後增減/換ID/重抽。單樣本provider/parse/contract錯保存即結束該樣本；無控制器停止條件時完成預先固定的其餘獨立樣本，以避免首錯掩蓋對照；整節點任一錯均FAIL。",
+            "daily原題full-eight同時保留store_id合法partial grain且own_gap=true；revenue sum為dependency-only partial且own_gap=false，精確欠online及完整grain；整月雙predicate independently supported/own_gap=false，store key不能證保全部庫存，units_sold不代stock_qty。customer單grain對照不把customer_id當店商品鍵；改名daily/任意ID/2032閏年二月仍正確保留部分鍵、依賴與整月邊界，所有其餘欄位亦語意正確。",
+            "使用現行kind messages/schema/parse/materialize及原guards；只注入recall/單View契約，不附預期status/mapping/own_gap或語意Oracle。原raw、欄位presence、精確derived gaps及每項語意核對/設定/requestID/freeze保存，同版及凍結replay一致；明標上游注入診斷、任何FAIL交fresh研究重判責任切分/可行性，0SQL/DB。"
+          ],
+          "status": "failed"
+        },
+        "kind_diagnostic_fixture_v2_correction": {
+          "id": "kind_diagnostic_fixture_v2_correction",
+          "parent": "kind_diagnostic_fixture_semantics",
+          "goal": "離線修正會員金額部分能力的診斷fixture Oracle並保留v1拒絕證據與真實作者審者守門",
+          "acceptance": [
+            "保留全部16既有nodes與root的id/parent/goal/acceptance逐字及所有歷史計數、原FAIL/raw/分數/38題Gate；新增kind-isolation-v2獨立套件，僅修正customer MET-003為lifetime_spend sum的partial、own_gap=true及真證據/完整self scope grain缺口。會員母體未證涵蓋不限定會員的淨銷售額是自身缺口，不以時間/店商品依賴代替自身理由，不假設實際非會員交易存在；其餘55列不暗改。",
+            "四個既有尚未POST的logical sample IDs SEL-ISO-v1-01與COV-ISO-v1-01/02/03、角色ISOLATION與1+3樣本數不變；新版本physical request cases kind-isolation-v2:ISOLATION:<logical-id>:node預先固定並記lineage，selection body僅由修正後完整coverage重建。v2新manifest/Oracle/inputs/來源/模型/runtime及完整source freeze綁定，v1 module/fixtures/REJECT/evidence與live bindings保持，candidate managed-kind-mapping-1不變。",
+            "新v2 runner維持原全部schema/parse/materialize/finish、來源/body/model/runtime/hash/context及completed semantic-worker provenance守門；author明確綁本修正child真實已完成PASS worker、node/round/producer/platform，reviewer仍須不同platform之kind_diagnostic_fixture_semantics真已完成PASS worker。先focused正反例、synthetic兩prepared與同版/frozen replay及必要既有focused回歸實跑；0模型POST/SQL/DB、不產偽ACCEPT、不修改Task/control，任何新效果未跑皆PENDING。",
+            "完成本child後先fresh方向audit覆蓋第10至12輪及fixture作者/審者分歧；獲允許才返回原kind_diagnostic_fixture_semantics父節點由另一fresh worker重新逐8需求/56列/等變/typed與全部自由文字獨立驗收v2。修正作者不得兼任審者；父節點獨立ACCEPT且Main finish PASS完成真ticket provenance前禁止任何diagnostic POST。"
+          ],
+          "status": "passed"
+        },
+        "kind_diagnostic_evidence_rebinding": {
+          "id": "kind_diagnostic_evidence_rebinding",
+          "parent": "kind_diagnostic_fixture_semantics",
+          "goal": "以獨立manifest重新綁定已封存v2診斷內容與不可變第11輪證據，保留完整作者審者來源及全部歷史",
+          "acceptance": [
+            "保留全部17既有nodes的id/parent/goal/acceptance逐字及原PASS/FAIL與計數；原kind_diagnostic_fixture_v2_correction作者child保持PASS，不在其下加child或重開。v1/v2全部manifest/Oracle/fixtures/source/test/frozen/raw、controller expected hashes、兩src與歷史分數/38題Gate不改；原第11輪REJECT及後補澄清分別完整保留。",
+            "新增唯一獨立kind-isolation-v2-rebind-1 manifest，明確引用hash為33cf44c84c10842adb60bfb7cbfbb269bac6dfa136c124a43159efabd27d543f的原v2 manifest及原v2 fixture root，不複製/改寫業務fixture或Oracle。新lineage使用audit/recovery不可變原版與後補版raw及恢復receipt/差異/裁決，核對原hash與v2歷史lineage對應；不再把後補hash綁到已恢復的mutable舊原路徑，不能改expected hash或讓v2 live loader假PASS。",
+            "新nested薄adapter只處理新manifest完整載入、獨立preflight、三方provenance、完整封存與受控入口；直接重用既有prepare/evaluate/record_sample/replay explicit-package與ManagedInvoke/loopctl及全部kind/typed/finish守門，不以投影或刪hash通過舊preflight，不改globals、不複製record/replay框架。新增source/test與完整imports/prompts/schema/model/runtime/兩版fixtures/新manifest/不可變lineage全部明綁且freeze；inner engine紀錄與outer完整版本/授權receipt分明，任何外層漂移/中斷均FAIL且保留raw，不能以inner PASS代完整PASS。",
+            "四logical IDs SEL-ISO-v1-01、COV-ISO-v1-01/02/03及ISOLATION/count=1/1+3設計不變；physical cases預先固定kind-isolation-v2-rebind-1:ISOLATION:<logical-id>:node，保留從v1/v2的角色與零POST歷史lineage。所有body/messages/schema/upstream逐值與v2 bindings一致，selection四hash及22011tokens不變，三coverage亦不變；任何差異先FAIL定位，不重生成抽分或修customer語意。",
+            "新manifest作者為本新leaf實際bound worker；content作者仍須原v2 child真closed PASS；審者仍須原kind_diagnostic_fixture_semantics真closed PASS，三者各自node/round/producer/platform一致，fresh審者ticket/platform均不同於兩作者。本leaf作者不得兼任semantic reviewer。focused正反例、缺review/偽造或未完成三方provenance/任何hash或context漂移拒絕、四synthetic正例與首錯保存、完整同版及frozen replay與必要既有回歸實跑通過，0模型POST/SQL/DB。",
+            "完成後Main等worker真FINAL再核hash與check-evidence才finish；必返回原kind_diagnostic_fixture_semantics，由另一fresh worker完整重審全8需求/56row/typed及全部自由文字並外部ACCEPT，不把本leaf或機器PASS當語意核准。Main finish原parent形成真PASS provenance後才可selection一次，再依controller/audit允許coverage三次、原父全新自然9POST及全部祖先各自整合與fresh final verifier；每3輪audit不變，所有未執行效果PENDING。"
+          ],
+          "status": "passed"
+        },
+        "kind_policy_shape_contract": {
+          "id": "kind_policy_shape_contract",
+          "parent": "natural_kind_selection_isolation",
+          "goal": "離線修正policy字面值Oracle與typed子集合形狀不一致，建立最小獨立版本",
+          "acceptance": [
+            "第15輪唯一原raw在原同版及frozen仍精確FAIL，原missing-policy finding不等於補零。零POST讀原raw證明無nest且僅sales aggregate；以同份immutable raw獨立重驗新policy契約為shape負例，不修改raw／分數／既有FAIL，也不把改成NULL或加nest的記憶體對照當自然成功。",
+            "新增唯一managed-policy-shape-1候選：同SelectionWire及所有kind recall/coverage/typed/assignment/exclusion/scope/grain/母體/finish守門完整重用；default及NULL兩個既有literal均接受flat保缺值，不再以第一literal代no-zero。EMPTY須有實際typed preparation.kind=nest，task及keys精確對應每個可能未匹配的child edge；aggregate、metadata_collections及無right row不等於nested output。未知或補零literal仍拒絕，母體丟失仍由原guard拒絕。模型仍填全部typed與policy，不canonicalize/backfill/repair答案、不新增schema欄位或自動nest。",
+            "唯一有實質輸入差異是新selection system suffix釐清上述policy/shape適用條件，不注入本題來源選擇／typed答案；recall、coverage、SelectionWire及三missing_policy_options保持。新版本只放evaluations/diagnostics下的單一薄module（內含suffix／policy predicate／必要受控入口）及tests/diagnostics下的一個focused test；不用舊glob涵蓋的evaluations頂層、tests/unit或evaluations/prompts新檔，不改任何舊source/test/prompt/fixture/manifest或check-evidence expected hash。",
+            "新kind-policy-shape-1 selection-only manifest引用rebound manifest及v2 fixture root、原完整fixture review與兩原作者的immutable SHA，不重製／重作者化8需求56列業務fixtures或Oracle。新manifest author為本node真bound worker，綁新module/test、完整舊167-source/import/prompt/schema/model/runtime、原fixtures/lineage/review、唯一新selection messages/body/schema/upstream及tokens；實際body除新system suffix外與核准上游一致，全部freeze。舊rebound live bindings須仍相等，v2 live仍如歷史預期拒絕。",
+            "薄diagnostic adapter直接重用原prepare、parse/materialize/finish、record_sample/_run及ManagedInvoke/loopctl；新版本明留legacy literal finding與新policy finding，不覆寫舊semantic-review或原run。若重用legacy engine，僅唯一已定位literal clause可由新predicate明示替換，任何其他finding/provider/parse/contract錯仍FAIL；不得套用任意FAIL過濾、改globals或複製整個record/replay framework。新outer receipt於HTTP前與raw保存後重核完整版本/授權，漂移／中斷不得PASS；新replay重建新body並同時核對legacy及新判定，不拿舊manifest的body當新版本。自然9POST入口直接用既有managed runner的contract參數，不改舊CLI。",
+            "必要正反例涵蓋flat default、flat NULL、原flat EMPTY拒絕、真nested EMPTY政策正例、aggregate不冒充nest、錯child或keys的nest拒絕、顯式補零及inner丟母體拒絕；一個改名task/keys對照確保不依本題ID。nested正例只證policy形狀，不自動證本題業務完整。新focused加原three_stage_view_selection／kind_mapping_managed_runner／managed_node_diagnostics必要回歸實跑；完整fake9節點2prepared及新shape／原typed首錯同版/frozen重播，另原第15輪FAIL frozen重播與全部舊保護hash保持。0POST/SQL/DB，不重跑無關544測試。完成所有程序／proof後真FINAL才由Main核hash與finish；作者不得核准自己。"
+          ],
+          "status": "passed"
+        },
+        "kind_policy_shape_semantics": {
+          "id": "kind_policy_shape_semantics",
+          "parent": "natural_kind_selection_isolation",
+          "goal": "由fresh不同agent核准新policy/shape契約及綁定，保留已PASS的原fixture語意核准",
+          "acceptance": [
+            "前一child真closed PASS後以全新context/platform的不同worker獨立讀真需求、原raw、policy定義、typed shape、prompt suffix、guard及新checker，裁定default/NULL等價與EMPTY/nest界線，核對最小正反例及所有未決文字；若不認同或仍有未決語意，FAIL回fresh研究，不能因機器通過或作者自述ACCEPT。",
+            "原8需求/56列/三coverage fixtures及Oracle逐bytes與第14輪已獨立ACCEPT版本一致，原fixture核准及content/binding作者真closed PASS lineage保留；本新review只核准新policy/shape及輸入改動，不重開已PASS的kind_diagnostic_fixture_semantics或重作者化舊fixture。確認無來源/typed預填、無新增必要資料義務、原guards完整與舊rebound live綁定保持。",
+            "輸出fresh review JSON精確綁新manifest、全source/import/schema/model/runtime、suffix/messages/body/upstream、全部引用的舊fixture/review/lineage hash。新作者與本reviewer的ticket/node/round/producer/platform須真實distinct且closed PASS；不可把舊fixture reviewer、open ticket或作者ticket包成新review，HTTP入口實查真Task provenance。",
+            "本node只0POST離線核准；核准前執行入口應拒絕，Main等真FINAL後核hash/check-evidence並finish形成真closed PASS，才容許下一child固定一次selection。歷史FAIL及父/root／自然效果均不升級。"
+          ],
+          "status": "passed"
+        },
+        "natural_kind_policy_shape_selection": {
+          "id": "natural_kind_policy_shape_selection",
+          "parent": "natural_kind_selection_isolation",
+          "goal": "以新policy適用條件首次自然驗證完整typed selection並返回原失敗parent",
+          "acceptance": [
+            "新作者及fresh reviewer真closed PASS且全部hash/舊fixture provenance匹配後，只執行預固定kind-policy-shape-1:ISOLATION:SEL-ISO-v1-01:node一次首次local POST。使用相同原題/8需求/完整七View核准coverage及SelectionWire，只新system suffix，不附Oracle/draft/來源答案；body確有實質契約澄清差異，不把原成功HTTP錯答原樣重抽或改case名繞限制。",
+            "原JSON自行填全部typed/integration及policy，raw presence不得靠defaults；原本八assignment／五exclusion／所有prose及兩prepared依原parent全部需求逐項語意驗收。保inventory店商品母體/stock sum/盤點日期metadata，sales同task整月online兩sum、相容店商品先彙總再left/正確鍵與基數、不補零；政策須與真typed shape一致，任何宣告nested均完整核對，不以人工補nest／改literal修答。",
+            "所有首次/失敗raw、request ID/receipt/model/options/新body/schema/source freeze、legacy與新semantic判定及完整語意log保留；同版及完整frozen replay一致。0SQL/DB/雲端/retry；任一provider/parse/contract或語意錯即FAIL回fresh研究，不抽至成功。明標upstream_injected，非自然recall/coverage或root。",
+            "本child完成後原natural_kind_selection_isolation必自身整合核對新raw及歷史FAIL／差異，0額外POST即可，不能孩子綠就直接PASS；依每3輪fresh audit後才返回既有natural_kind_coverage_isolation原固定三樣本，再原natural_kind_mapping_three_stage全新9POST及所有祖先各自整合，fresh final ACCEPT不可省略。"
+          ],
+          "status": "passed"
+        },
+        "capability_projection_contract": {
+          "id": "capability_projection_contract",
+          "parent": "natural_kind_coverage_isolation",
+          "goal": "離線以無損本項責任／依賴cards建立最小coverage候選及嚴格scope AND等價判定",
+          "acceptance": [
+            "保留全部21舊nodes的id/parent/goal/acceptance逐字、全部PASS/FAIL/計數與舊hash；只在未PASS的natural_kind_coverage_isolation加children。原20三raw依舊同版及完整frozen仍FAIL/PASS/FAIL；不得改原fixture/Oracle/review/raw/分數、翻FAIL或重開已PASS selection及fixture核准。",
+            "新增唯一managed-capability-projection-1薄module與focused test/new manifest。依research.json card_transform把當次recall每原欄位無損分放identity/own_target/binding_context，還原逐值完全相等；原request/View/schema/options不變，不注入status/own_gap/mappings/來源答案、不刪會員等自身母體限制。新語意任務依序判有用分量、自身完整與明示同View依賴；原kind wire、parse/compile/materialize及全部guards保留，model仍填status/own_gap/全部映射。",
+            "有限scope AND新checker只取代已定位的metric條件exact-list分歧：非conditions欄完全同原expected，重列條件只能是本metric.scope_ids所指同View且已通原scope驗收的supported獨立filter完整群之聯集，順序／相同重複AND可等價；半月份、錯scope/跨View/錯欄值operator/sum、額外條件/無獨立filter/非supported及expected本已有必要conditions均不得豁免。所有legacy findings明留，僅有證據的此子句另判，其餘錯仍FAIL，不canonicalize或修raw。",
+            "新kind-capability-projection-1 manifest預固定原COV-ISO-v1-01/02/03順序與lineage，再明列COV-CAP-v1-04原題全8項customer、COV-CAP-v1-05原題全8項inventory，共5樣本；兩新expected只引用已核准原完整coverage對應8rows，不重作者化。所有body/新cards/system/schema/upstream/tokens、全舊source/import/model/runtime/fixture/lineage/reviews與新source/test/manifest明綁及freeze。非coverage完全委派已PASS policy-shape版本，完整policy來源與closed作者審者綁定；原rebound live bindings保持且舊v2 live仍預期拒絕。",
+            "research.json所列lossless／有用與無關key／daily dependency-only與customer自身限制／完整inventory／有限scope AND正反例、新focused與必要直接回歸實跑；fake9節點2prepared與新scope/原typed首錯同版及完整frozen replay一致，原15FAIL與18PASS保持。不得複製巨harness／改globals／新增舊glob會涵蓋的頂層source/tests/unit/prompts；只新diagnostics子module、focused test、新fixture目錄及必要evidence。0POST/SQL/DB，不改Task/control或commit/push。",
+            "新manifest author綁本leaf真bound worker/node/round/producer/platform；完成所有程序與proof後真FINAL，Main核hash/check-evidence再finish。下一round21完成後必fresh audit完整19–21，核本20FAIL與cards／Oracle delta方向；未獲允許不得POST。所有自然效果仍PENDING。"
+          ],
+          "status": "passed"
+        },
+        "capability_projection_semantics": {
+          "id": "capability_projection_semantics",
+          "parent": "natural_kind_coverage_isolation",
+          "goal": "fresh獨立核准無損責任分離、有限scope等價與五固定對照的版本綁定",
+          "acceptance": [
+            "前child真closed PASS且19–21 fresh audit允許後，另一fresh worker逐項讀原需求、20原raw／契約、原56rows核准、cards原值還原、system及matcher正反例，判定責任分離不洩漏答案或刪自身母體條件；明確比較daily own=false與customer會員own=true、有用店key與無關customer key、完整inventory，不能只信作者或機器PASS。",
+            "裁定[]與同View已完整驗證scope AND重列的有限等價，以及半月份/額外scope/cross-View等反例；只核准新delta，不改原fixtures/review/原20FAIL或其他歷史。若發現與已PASS業務Oracle語意真衝突，FAIL回fresh研究/方向審核，不偷改expected或重開PASSnode。",
+            "fresh review JSON精確綁新manifest、全部新舊source/import/schema/model/options/runtime、原fixture/lineage/reviews、五個新messages/body/upstream/cards/tokens及policy版本；新author與本reviewer不同ticket/platform，兩者真node/round/producer/platform與closed PASS，原content/binding/fixture及policy closed provenance保留。核准前/open/偽造來源時HTTP入口必拒絕。",
+            "本node 0POST/SQL/DB，全部程序／proof結束後真FINAL，Main核不可變hash/check-evidence與finish形成closed PASS才准natural child。原已PASS selection不重跑、不重開；父/root及全新自然效果仍PENDING。"
+          ],
+          "status": "passed"
+        },
+        "natural_capability_projection_coverage": {
+          "id": "natural_capability_projection_coverage",
+          "parent": "natural_kind_coverage_isolation",
+          "goal": "固定五首次本機coverage對照否證有用部分／自身與依賴混淆並回原parent",
+          "acceptance": [
+            "新author/reviewer及原fixture/policy provenance均真closed PASS、全部hash一致且audit允許後，按新manifest固定COV-ISO-v1-01/02/03、COV-CAP-v1-04/05順序各一次首次local POST；物理case固定kind-capability-projection-1:ISOLATION:<id>:node，0retry/cloud。前三原request/recall/View/IDs不換，只有預先核准cards/system差異；兩補充case明標新對照，不能改舊三case數量或以相同body改名重抽。",
+            "每日原題與改名例皆保留store_id/loc_key合法partial/own=true、淨額sum dependency-only partial/own=false、獨立完整月份及所有其他scope/grain/母體/metadata界線；單grain customer無關鍵仍unsupported。全8項customer保留lifetime_spend sum partial/own=true及完整自身/依賴缺口，全8項inventory完整鍵/stock sum/盤點metadata/全部庫存母體supported，銷售scope不套庫存。所有17原rows加16補充rows、原JSON presence與全部raw/normalized/provider文字逐項核對，不靠checker代替語意。",
+            "僅明示有限AND等價可異於原[]；任何漏部分、錯自身/依賴、錯月份/條件/aggregation/path/母體或prose均整輪FAIL回fresh研究，禁止原樣重抽／修答／擴等價範圍救分。每單樣本provider/parse/contract錯保存即結束該樣本，無controller停止條件時完成其餘獨立預定樣本以保對照。",
+            "保存全部首次/失敗raw/receipt/requestID/模型設定、新body/schema/cards/freeze、legacy與新semantic判定、完整derived gaps與逐列語意log；同版及完整frozen replay一致，所有舊hash與歷史FAIL/Gate保持。HTTP只ManagedInvoke/loopctl，0SQL/DB。所有程序與proof結束後真FINAL才finish，明標upstream_injected，不能當自然recall或root完成。",
+            "成功後原natural_kind_coverage_isolation須自身0POST整合核新五樣本與原20FAIL；按每3輪fresh audit再回natural_kind_mapping_three_stage，新candidate單一全新自然recall→全7View各一次→完整typed selection共9首次POST，全部語意／2prepared／同版與frozen回歸通過。再逐層返回natural_own_responsibility_three_stage、natural_evidence_bound_three_stage、natural_slots_three_stage、natural_qwen_three_stage、three_stage_integration、root各自驗收及fresh final ACCEPT；原38×2 Gate未過不變。"
+          ],
+          "status": "failed"
+        },
+        "text_leaf_evidence_contract": {
+          "id": "text_leaf_evidence_contract",
+          "parent": "natural_capability_projection_coverage",
+          "goal": "離線建立由真契約文字leaf約束pointer的最小A1候選與預固定語意正反面板",
+          "acceptance": [
+            "保留原24nodes的id/parent/goal/acceptance逐字、root exact與所有PASS/FAIL/raw/Gate。只在未PASS natural_capability_projection_coverage下加children，不重開已PASS fixture/selection/capability核准。全文使用docs/next_enhance_advice.md指定SHA的改善建議及本research.json，A/B/C皆非已核准採用。",
+            "唯一新managed-text-leaf-evidence-1只縮contract_path為真實catalog非空文字leaf enum|null；原cards/system/模型status/own_gap/全部mapping/aggregation/條件與所有guards保持，非coverage完全委派已PASS policy-shape。指標及母體相關性仍需語意證明，不補04 lifetime_spend或05複合key、不自動把POP path改summary。只新nested diagnostics module/test、新fixture目錄；不改任何舊source/test/prompt/fixture/manifest/hash/global或複製pipeline。",
+            "處理原coverage_schema(recall)無View介面：以只讀綁catalog contract供原run_pipeline使用，若enum為catalog文字path聯集須明記，materialize仍對當前真View拒絕不存在/非文字path。真正provider format、Human response_schema、parse及freeze須一致；預核全部inputs tokens<32768。JSON pointer escape/Unicode/list/空白/object/null負控制與原status/own/unsupported/typed guards均實跑，0POST/SQL/DB。",
+            "依research.json固定原五案+06會員改名+07庫存無status改名+08明示縮限庫存+09會員毛利誤映，9案×seed42/43/44的27格與續block門檻在首次POST前新manifest明列；所有每案8rows與派生gap期望待fresh review。原五案expected引用既有核准，四新案新版本不寫回正式業務契約，不靠舊38題作未見證明。 多seed直接對應文件三次穩定性建議；現ManagedInvoke固定42，新版須最小明確seed/body managed介面及0POST body捕獲驗證，實際body/receipt/meta完全一致，不能改舊MODEL_OPTIONS/global或冒填43/44；自然9POST仍42。",
+            "全新manifest作者為本leaf真bound worker，綁全新舊source/import/schema/messages/body/upstream/cards/options/digest/runtime、原fixture/lineage/reviews及已PASSpolicy provenance；新各seed與控制樣本明確freeze。focused及必要直接回歸、fake9節點2prepared/首錯同版及完整frozen replay、舊15/18/20/23歷史原結果保持，舊rebound bindings與8047保護檔保持。提供原run_pipeline(contract=新bound物件)自然接線，禁止只讓隔離入口有效。",
+            "本round24純離線，作者不可自審。完成全部程序/proof後真FINAL，Main核hash/check-evidence/finish形成closed PASS；隨即必fresh audit22–24覆蓋22核准/23FAIL/24候選及完整祖先。未得CONTINUE不得自然POST，新候選語意與root仍PENDING。"
+          ],
+          "status": "failed"
+        },
+        "text_leaf_evidence_semantics": {
+          "id": "text_leaf_evidence_semantics",
+          "parent": "natural_capability_projection_coverage",
+          "goal": "由fresh不同agent核准A1責任界線、新正反案例與完整版本來源，拒絕把leaf合法當母體完整",
+          "acceptance": [
+            "author真closed PASS且fresh audit22–24允許後，fresh不同worker獨立全文核對指定版本advice及本評估、真View、23五案raw/thinking與每個新控制，裁定A1只有機械leaf權責，不偷補mapping/own/status或改原system/cards；不把document snapshot或作者機器PASS當最新事實。",
+            "核原五案33rows及四新案所有rows的有用partial、無關key、daily own=false與customer會員自身own=true、庫存完整複合key/無status及restricted母體界線。09毛利不冒淨額，08縮限不得supported；合法alternative證據path可預核理由，不自動豁免真語意錯。任一原已PASS語意真衝突須具體FAIL交fresh研究/方向審核，不改舊expected或重開PASS。",
+            "獨立review精確綁新manifest/27固定cells/完整messages/body/schema/cards/upstream/options/token/runtime/source及原fixture/review/lineage和policy closed provenance；author/reviewer ticket/platform均distinct且真node/round/producer對應，兩者真closed PASS後才准HTTP。缺review/open/fake/hash/source/context漂移於model/network前拒絕，0POST/SQL/DB。",
+            "本review只核新delta及新技術控制，不升業務草稿認證；明保manifest approved與contract_review draft及sales_detail唯一鍵矛盾。proof全結束真FINAL後Main核不可變SHA/check-evidence/finish；自然效果與祖先/root保持PENDING。"
+          ],
+          "status": "pending"
+        },
+        "natural_text_leaf_evidence_coverage": {
+          "id": "natural_text_leaf_evidence_coverage",
+          "parent": "natural_capability_projection_coverage",
+          "goal": "以預固定A1面板檢驗格式約束能否同時改善有用部分能力與母體語意，失敗返回fresh研究",
+          "acceptance": [
+            "新author/reviewer及原fixture/policy真closed PASS且hash精確，先按research.json的9樣本順序seed42各唯一首次ManagedInvoke/loopctl local POST；body有實質新schema差異且不注入Oracle或答案。無controller停止條件時完成其餘預固定獨立案例，0cloud/retry/SQL/DB；每案首provider/parse/contract錯保存停止該案，不repair。",
+            "僅seed42全9原raw/required presence/全部語意PASS後，按首次前已固定seed43及44各9格續穩定性；不是retry、不得事後改seed/ID/數量/挑最好；任何block FAIL候選整體FAIL且不啟動後續block。若A1語意未過，把完整mapping/own/dependency/status/evidence分層結果交fresh研究B1，不能只再加格式提示或繼續抽樣。",
+            "所有必需能力atoms的Recall/Precision、own/gap/status、有效且相關證據、負控制與metamorphic逐項核對，27/27全PASS才通本leaf，安全false accept=0；null空mapping不藉分母取得高分，合法但不充分path不得冒語意PASS。保留原finite date/AND規則與所有母體/typed guards。HTTP200/schema PASS/單daily成功不足驗收，所有provider/content/thinking/normalized文字與各層gap完整審。",
+            "保存全部首次/失敗raw/receipt/requestID/模型設定/body/schema/source/import凍結/legacy與新判定、逐列語意及指標/耗時/token，同版及完整frozen replay一致。原23 FAIL/PASS/FAIL/FAIL/FAIL、20FAIL/PASS/FAIL、15FAIL/18PASS及原38×2Gate未過不變；不把raw sidecar語意觀察回寫歷史裁決，所有proof真FINAL後才finish。",
+            "本leaf只upstream_injected診斷。通過後必natural_capability_projection_coverage自身0POST整合新candidate及原23歷史、natural_kind_coverage_isolation自身整合原20；原natural_kind_mapping_three_stage全新自然recall+7coverage+selection共9首次POST/完整typed2prepared/回歸後，再每一既有祖先自身整合與fresh final ACCEPT。每3輪audit不可省略，沒過root不得停在leaf或宣稱完成。"
+          ],
+          "status": "pending"
+        }
+      },
+      "endpoints": {
+        "EDD_LOCAL_ENDPOINT": {
+          "provider": "local",
+          "url_sha256": "1d0a0c2cf65d77fc9c44511b032d4c429aae3b479fc98184ee38d5c1e4b44bdd"
+        }
+      },
+      "needs_research": true,
+      "active": null,
+      "rounds": [
+        {
+          "round": 1,
+          "node": "contract_and_managed_runner",
+          "started_at": "2026-10-21T16:01:52.555909+00:00",
+          "result": "PASS",
+          "evidence": [
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-contract/before-hashes.json",
+              "sha256": "f62d191df6bd389f0620831d640a3f372aa3cae7ca0c5ac5633fae1e979b8915"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-contract/historical-replay.log",
+              "sha256": "3785f98dbd8152c4c18c12cfd6c814121197f3025a2ee1bacb338ecee5fbf331"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-contract/red.log",
+              "sha256": "1e5d35dad05f1f9e0ff636b03738d0cea4b28d3aa74be0f69cbcfb6976566cdb"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-contract/red-interrupt-input.log",
+              "sha256": "0ff593e895549e8e370a1e33a708ef75058fc9df34dff6dc1b3959973baf47ea"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-contract/regression-final.log",
+              "sha256": "fdb36992756b30cb95ca6c71f3717cd522dd6cff4ef1ea47e6e6b456cee50ec7"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-contract/offline-final.log",
+              "sha256": "a5d53d7f03b84f93f856c857febaad3cc4f98599942d2d9ab72968f2740be707"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-contract/dry-run.log",
+              "sha256": "58134ed09a56e2190b30a59bbacf2ab973a5359b2d0d86aad5f3546a3f51de33"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-contract/hash-verification.json",
+              "sha256": "019b5a84ef546b5d4b5664779f67600f9f0a85c3324cf5ca265fd863f58ff71a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-contract/source-freeze.json",
+              "sha256": "9e39d8c879cf1af97b17c71b55c290e18a175093174f94ad4189b5cf6ad5774f"
+            }
+          ],
+          "summary": "contract_and_managed_runner完成：舊raw精確重現原ValueError；只強化通用indexed recall背景/metadata邊界；新增controller-only三階段runner及22項離線測試。必要相關回歸193 passed；完整9節點與失敗3節點fake raw離線replay PASS。485項基線hash僅授權prompt變更，兩產品既存變更與所有歷史raw/報告/Gate未變。本輪模型/SQL/DB呼叫皆0，尚未驗證自然Qwen效果。",
+          "producer": "/root/loop_worker_contract",
+          "finished_at": "2026-10-21T16:10:56.648542+00:00"
+        },
+        {
+          "round": 2,
+          "node": "natural_qwen_three_stage",
+          "started_at": "2026-10-21T16:11:00.755935+00:00",
+          "result": "FAIL",
+          "evidence": [
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-1/preflight.json",
+              "sha256": "06de38c3378e2dc1fe7bd6e67840cea2b850ed8dfff4d64ae05cafebcc7740b9"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-1/replay.log",
+              "sha256": "6155704523a1808d9d1f8680f4f0839a543c011b86456cec15bf5b43b6321824"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-1/semantic-review.log",
+              "sha256": "cb118f8da616f7a2dae93c2e2273ec0ae28138e38251dea443154aab93a9c020"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T161155Z-cb9cb4/run.json",
+              "sha256": "3537bcce3b2c110c6b989e1d5fc92c334769e315760ee692229a9af57d85d7ab"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T161155Z-cb9cb4/map-05-call.json",
+              "sha256": "01eb97f8f4c157bbb029d500b1ba55e3c50e3f1417fba826aa584a6697782a84"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T161155Z-cb9cb4/map-05-provider-response.json",
+              "sha256": "d42f5108837c18fd4a53188d1758509967eaee76c12d0ad3641fe108cd8e03af"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T161155Z-cb9cb4/map-05-parsed.json",
+              "sha256": "75ddb3a430089d0719e248b98cd43eb6ace4a31ec561d6c8aeb0bee88097bf16"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T161155Z-cb9cb4/map-05-error.json",
+              "sha256": "1c983bd8871b2724bcfce507072f36770654b3e58adf9ec0257ed22479f1a570"
+            }
+          ],
+          "summary": "固定自然單樣本在第5個View daily_sales首錯停止：HTTP 200正常stop，8項requirements卻輸出9項coverage entries，filter_channel_online在entries[1]與[4]重複。共6次本機受控POST、0重試/雲端/SQL/DB。需求拆分與前4View本題責任已核對；sales_detail population額外「不含退貨」缺契約保證，完整差異見semantic-review.log。map-06/07、selection及prepared_requests未執行，不能宣稱端到端通過。失敗前綴6個raw離線replay一致，來源凍結仍匹配；不改來源或答案。交fresh研究，不重送成功HTTP挑分。",
+          "producer": "/root/loop_worker_natural_1",
+          "finished_at": "2026-10-21T16:59:15.923598+00:00"
+        },
+        {
+          "round": 3,
+          "node": "coverage_slots_contract",
+          "started_at": "2026-10-21T17:04:27.931991+00:00",
+          "result": "PASS",
+          "evidence": [
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-slots/historical-replay.log",
+              "sha256": "ebfc961d00f3a19d7e2a3b57f279bdb0d9fdb024ba011ee41c23965179c35578"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-slots/before-hashes.json",
+              "sha256": "efb34e6edc48d82a7fbb7fab32b54d15e09543b735e949c3d24a25ef37ea7ef9"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-slots/red.log",
+              "sha256": "70082b0a66981439643b4196b4e565f821ed8ef26b66f3600f79a8af35db37c7"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-slots/red-runner.log",
+              "sha256": "cd2b45476708274a6b8f195bb7d654d3f48b50eb698e6727ffcfc2a2cdd78844"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-slots/green-first.log",
+              "sha256": "b98060aaa7c9ae9a6e98ca14165df922dff7ab2a560586f13fb522b9cab879a8"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-slots/test-correction.log",
+              "sha256": "7f36f8360b8172250bcc6ddbb89f8253b5fdb286aeb96103491a087eaef3c99b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-slots/focused.log",
+              "sha256": "b33ea7c3b9ec038f54a73f2747815ad06e79e545b81c21878174e4cda2399e20"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-slots/regression.log",
+              "sha256": "fcae06f1c713d0f427ab26be13a16567c1632ba7a353e88d7619701a164da3d0"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-slots/offline-final.log",
+              "sha256": "7b8ed538afbb762a9404a703d80efd80ca59b701c1fca778751ac5a9d08225d7"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-slots/dry-run.log",
+              "sha256": "21dfea63d08a5ce35ea31d559726f081a1e44613803b617f67f16d7c2a722cb0"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-slots/hash-verification.json",
+              "sha256": "9364cc742eab4971a282afb9e4ad3d7f5858e6e7864ccb1c921998b9a3af3e68"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-slots/source-freeze.json",
+              "sha256": "2f1c6c8bba4c39df11227901988b757076a7a42c92bfa999ff737f22ca04dee7"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-slots/encoding.log",
+              "sha256": "29df8231ff5ba3a51ec7bf9e09fa720633f8ae3968abad853a306bb924c0c9bf"
+            }
+          ],
+          "summary": "coverage_slots_contract 純離線完成：原6 raw精確重播重複ID失敗；固定required具名槽位、alias安全、全層duplicate JSON key先拒絕；來源facts依唯讀policy取文並重用原嚴格守門。148 focused及238必要相關回歸通過；12個完整/失敗fake、27 raw replay通過。823基線檔僅runner/test兩項授權變更，兩src/舊wire/歷史raw/Gate未改。0模型/雲端/SQL/DB；需第3輪fresh audit後才可新自然測試。",
+          "producer": "/root/loop_worker_slots",
+          "finished_at": "2026-10-21T17:12:52.243129+00:00"
+        },
+        {
+          "round": 4,
+          "node": "natural_slots_three_stage",
+          "started_at": "2026-10-21T17:16:00.750189+00:00",
+          "result": "FAIL",
+          "evidence": [
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-2/preflight.json",
+              "sha256": "e68abd5470071b530b30015ba15a3ad285b151abff8106ee7d2323d64c57f28b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-2/execute.log",
+              "sha256": "e970c61c407b1c510813f9cfe7408659d60cdb8f01351710a5f423e08098dfe6"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-2/replay.log",
+              "sha256": "8e12cea12928b746c9792f94b340004712c059461f893f43b0c2c20b4634c86e"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-2/semantic-review.log",
+              "sha256": "36147fdd966101eac1c0dc989ad8d70bd8c6257b28eb63b94b7cc22187ee5e77"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-2/hash-verification.json",
+              "sha256": "0c7ef786b8c50a72bb018ccd8f1ce2eff23d90199a2298f1b96e28d5ce4d00c1"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T171721Z-fa4587/run.json",
+              "sha256": "6ec3ebe40901c799f4281a4afbdee2fda9a4c36c01cfabe04a40cb9159f755ff"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T171721Z-fa4587/selection-call.json",
+              "sha256": "39a8c2bf035d2c912a1074ce117b988a1f5e5ff51e8ea8c0f0bac8b396800763"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T171721Z-fa4587/selection-parsed.json",
+              "sha256": "248fa67c0280cf4d907797282ff0e969bbb7eb83d7f1ab5e6502ddfd6f1c5f7f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T171721Z-fa4587/selection-error.json",
+              "sha256": "b9f95f5cee50e2913ec4b4d150c35c53a506c2f760a700e6acffaeeb05b78d56"
+            }
+          ],
+          "summary": "新slots候選完整自然9節點（recall+7View+selection）已收集，9本地POST/累計15，0retry/雲端/SQL/DB。前輪duplicate-ID消除，但recall仍捏造monthly通路能力；未選order_summary過度支持商品級net_sales，monthly缺口/selection理由加未保證母體斷言。selection原JSON未填typed filters/metrics/metadata/group_by與integration，僅task.request文字提條件，既有guard於final grain differs from verified requirement keys停止，未產生prepared。顧客View額外缺口措辭保留歧義交fresh研究。9 raw同版離線replay一致，source-freeze及7View來源facts精確相符；未改sources/tests、未自行修改Task/control（僅loopctl正常請求記帳），未修答案或重送。",
+          "producer": "/root/loop_worker_natural_2",
+          "finished_at": "2026-10-21T18:31:51.447819+00:00"
+        },
+        {
+          "round": 5,
+          "node": "evidence_bound_managed_contract",
+          "started_at": "2026-10-21T18:38:40.917156+00:00",
+          "result": "PASS",
+          "evidence": [
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-bound/old-replay.log",
+              "sha256": "9ae6ab9080c704a23552cd30cb2b2e2515bb406d68b98b9991b7d7f49df773d9"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-bound/old-frozen-replay-verified.log",
+              "sha256": "8e12cea12928b746c9792f94b340004712c059461f893f43b0c2c20b4634c86e"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-bound/regression-final.log",
+              "sha256": "379e1e5678809164713df9c10e2344f67c5163e2162f2c2ce412c5aed6917157"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-bound/fake-record-replay.log",
+              "sha256": "fbd20d24c1dcb8ab8e73eefa740e04f751093a629f866cc38879a7fd277f246a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-bound/fake-manifest.json",
+              "sha256": "f3652b5b0e4cfa20416d59a264fcb5fa11617ac8fd292db6459cbbd4c546159d"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-bound/frozen-replays-final.log",
+              "sha256": "de9f900317d9cb6247aa068edb823b52bf1aa6facd365213f66a59f076b36e9c"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-bound/dry-run.log",
+              "sha256": "9f1a8e963e45fc5d4f69d19b2fc08dc0a839d2a7eb9b89c5223f44e565135d73"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-bound/hash-verification.json",
+              "sha256": "de8b7d9e93893c75a2a06782397b86b18f05e92c50c81c3d1e3253e721464a3d"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-bound/candidate-fingerprint.json",
+              "sha256": "6586fba86282cb53e5e1e22b0b454d53c5cbe945904ce7211e998ca35604bed2"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-bound/sources-before.json",
+              "sha256": "cf3e8ece8305082352724526710b552f640235e92a1d07921ba9ac12e8c5be04"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-bound/sources-after.json",
+              "sha256": "0add9fb512c3511cf271dca254f526fa11be3449a0fd41456e9f6b68053003d0"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-bound/red.log",
+              "sha256": "7e3b40709f23280c3ae7afdad698d5a27d93df9454168852a582b17b31298c5f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-bound/red-runner.log",
+              "sha256": "518ed10a108ed7c5828b1b96cfef7a363d2d71cbf42c086cbc37beca35c98c75"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-bound/red-redundancy.log",
+              "sha256": "97590079b0a820befd124b55dad7bea865024deacbdc1b8802e6af61292e55e6"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-2/semantic-review.log",
+              "sha256": "36147fdd966101eac1c0dc989ad8d70bd8c6257b28eb63b94b7cc22187ee5e77"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T171721Z-fa4587/run.json",
+              "sha256": "6ec3ebe40901c799f4281a4afbdee2fda9a4c36c01cfabe04a40cb9159f755ff"
+            }
+          ],
+          "summary": "第5輪純離線 evidence_bound_managed_contract PASS：requirements-only indexed recall及逐字契約候選理由、精確metric grain依賴、結構化gap/selection refs、真正必填完整typed selection已接共用managed runner；原238相關加69新測試共307通過。原第4輪仍完整FAIL，9raw原版與凍結版精確重現原首錯；新版fake9節點/2prepared與7類首錯同版及凍結版replay一致。0模型POST/SQL/DB。只完成本離線子節點，未宣稱自然或父/root通過。",
+          "producer": "/root/loop_worker_bound",
+          "finished_at": "2026-10-21T18:53:10.220376+00:00"
+        },
+        {
+          "round": 6,
+          "node": "natural_evidence_bound_three_stage",
+          "started_at": "2026-10-21T18:53:10.344084+00:00",
+          "result": "FAIL",
+          "evidence": [
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-3/semantic-review.log",
+              "sha256": "d502757ed9e156d7f6178394a93adeb876ab101b33eaae4010dddbaf2c1d7dfa"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-3/failure-context.json",
+              "sha256": "0f21e9b8f77743cbc012879c131e2a46c71bba31ecc460e5e50da14f7680a785"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-3/execute.log",
+              "sha256": "a8b51963ff25d2c7536bef5cdf311ec8cd5dd97e51dc4b4243b55241e4d708bf"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-3/replay.log",
+              "sha256": "7e0750f27c2796235b76f22d40f6c8b3e90cc7bebbbcb3aa9de48b3816cd3c73"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-3/freeze-before.json",
+              "sha256": "3263d19eb25bbb6fa1b571716fd491a7a2c87783aeeb44f1fa1654ae61c9bc71"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-3/freeze-after.json",
+              "sha256": "f1227592da39b7f478502da8c839adf0d02b6016e4f2385dd8c1cdf75c1dee99"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-3/run-location.json",
+              "sha256": "25a6de28008a0f152eff969a64089fbc4f6d3f585562f78ff690ddf1f565254e"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T185423Z-5d276f/run.json",
+              "sha256": "a9fcda2358212e90d86ccb94278fdfd6fdea496cee84bca0151b9ef59a96f7d7"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T185423Z-5d276f/usage.json",
+              "sha256": "53bf7bfcf3baf4542b22066d62340748ce704647cbfb8d5b66dfdaf1b01557fa"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T185423Z-5d276f/recall-call.json",
+              "sha256": "73adf730bb72fe8b64d9b94d8f8ebfa319961dc11d651d525c4e6a140650c4b3"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T185423Z-5d276f/recall-result.json",
+              "sha256": "b8c0e805b524456cde6e2a26ea3464b6f09526e06faed98918e39fe283d3b554"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T185423Z-5d276f/map-01-call.json",
+              "sha256": "c3d02f82dd72b33dc68c8c44231728d629e6959aaab6a09fb4e35a60c368b1dc"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T185423Z-5d276f/map-01-result.json",
+              "sha256": "2bcaf15da271cade65651491fb0021ad3caccfb4e05405d93d00126634db93a7"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T185423Z-5d276f/map-02-call.json",
+              "sha256": "1a9ab9fe5b4337363c243017a5d4a3615591442b692ccd29a10b67ba12f2fbec"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T185423Z-5d276f/map-02-parsed.json",
+              "sha256": "2a5ec491cd5c7c52ba431f28b9dafc09b3eda9b1daee4f8d47f4b920bade6cc7"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T185423Z-5d276f/map-02-error.json",
+              "sha256": "27158e3389dcc6c210d5f8f5a327b8302ee1d366dba06cd9b2d488b97d653c60"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T185423Z-5d276f/map-02-request.json",
+              "sha256": "e20e2100d40f98266d9cf2911c1439c3462a6bd4e535b3ca7630b7676658095c"
+            }
+          ],
+          "summary": "第6輪固定新candidate自然首次3正常POST後於daily_sales R1 grain gap adapter契約拒絕停止；recall8責任/metric grain links完整、customer_value完成，剩餘5View與selection/prepared未執行。原R1全決策/需求/slot schema/prompt已保存供fresh audit判斷表示能力，不預先歸因模型或設計。同版3raw replay PASS、138檔freeze與兩src不變；0retry/cloud/SQL/DB，不擴測或修法。Main須fresh audit4–6，父/root未驗收。",
+          "producer": "/root/loop_worker_natural_3",
+          "finished_at": "2026-10-21T19:19:23.531413+00:00"
+        },
+        {
+          "round": 7,
+          "node": "own_responsibility_managed_contract",
+          "started_at": "2026-10-21T19:32:40.431691+00:00",
+          "result": "PASS",
+          "evidence": [
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-own/old-replays.log",
+              "sha256": "4e6b63fd1df162b8ee21c7d0ae12be5c8d67e93f49dc06aa617d00ca6542efaa"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-own/v1-representation-controls.log",
+              "sha256": "47865f9edbb81f93f72570a30403279b6abf3f7ebdd01be61cb9cd61aca9c89a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-own/red.log",
+              "sha256": "6c2ca21c2890d787b91e3fad5cf068f03a5ba4b8a66c0f702e9e613045736dce"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-own/green-first.log",
+              "sha256": "a694dc20a1a95c1dbe59b8cd54e7f85e70a81544777ad6f347b6c37186e41a61"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-own/regression-final.log",
+              "sha256": "6ec7382a37c736f0ab0e371a9ff3934ecc01f7e7b83ca9163929b74954f7bf92"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-own/fake-record-replay.log",
+              "sha256": "debd794031bf1801db722df521572fce07a34b7c44fd62e62dbb4e7617c90576"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-own/fake-manifest.json",
+              "sha256": "eeecdb5c1b7c066a18b39a0ea5271ec1b3b083d592d632e5c8a5550e176c6c1f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-own/prepared-verification.log",
+              "sha256": "50f12ff77773178c7185e3764b27d7dfbfd000be212f82cce22bb5e544e276c1"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-own/frozen-replays-final.log",
+              "sha256": "abc33fa1f0b39cdfc4777a9673545d888fdc2d2c50c71c42fa5520404cae8b38"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-own/dry-run.log",
+              "sha256": "6666209181e44d3c3ea6994a273efa736133f08c4a65dbef002d043670e1e84a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-own/hash-verification.json",
+              "sha256": "7ce5682bc1f8b0fb286f5fd74bb7f6eaf2466348c0e9a3f1035b149cc78b0c95"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-own/candidate-fingerprint.json",
+              "sha256": "9bd2979d7657226e2cdf43fe9dd78e24a6630923b0cbccf78216c992a486e39e"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-own/sources-before.json",
+              "sha256": "0add9fb512c3511cf271dca254f526fa11be3449a0fd41456e9f6b68053003d0"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-own/sources-after.json",
+              "sha256": "2c8916db8397215dec50e50c464b8c65e792650e61dd4b0954086f437506855c"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-own/schemas.json",
+              "sha256": "7baa0dea348db873370bc7cc9436f4175251960e6e816c32569eb87cad6a6392"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-own/replay_frozen.py",
+              "sha256": "a504e7ef138de924ace84429d85a775bb33752238d76f889504866f3bdc2835d"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-own/live-source-final.log",
+              "sha256": "5fdf12ef378aaa8c1e4727ccea3a2cdcca713e857051373da55ad7e7b3ece840"
+            }
+          ],
+          "summary": "第7輪純離線 managed-own-responsibility-1 PASS：必填strict own_gap保留自身partial可用key；程式僅依recall與同View statuses完整生成scope/grain缺口，所有kind明示grain refs統一硬依賴，普通月份條件不自動繼承輸出grain。原307相關加新77共384通過；完整fake9節點/2prepared、九種首錯及46raw同版/凍結版重播一致。原第4輪9raw及第6輪3raw保持原FAIL；1164歷史hash與兩src不變。本輪0模型POST/SQL/DB，僅完成離線子節點，未完成自然/父/root驗收。",
+          "producer": "/root/loop_worker_own",
+          "finished_at": "2026-10-21T19:44:14.445340+00:00"
+        },
+        {
+          "round": 8,
+          "node": "natural_own_responsibility_three_stage",
+          "started_at": "2026-10-21T19:44:14.570501+00:00",
+          "result": "FAIL",
+          "evidence": [
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-4/execution.log",
+              "sha256": "55502ddbcc44c3345791bf768fbc629c2abe68a9e90faf3fe71077d1985720b8"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-4/semantic-review.log",
+              "sha256": "3eee4749ad5c0368f70006ac77044f6440328eb72885cc6a68c918edded3047b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-4/failure-context.json",
+              "sha256": "ea66213b7f5fb86667e068517925b85921d1c501eb0014ec6ce2d71113f749be"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-4/freeze-before.json",
+              "sha256": "f83271166464bc412cb6e8e5d5ef61666e0cc909ae03471f793507a35ad8fa36"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-4/freeze-after.json",
+              "sha256": "9b3bec88f572a6578c3f937d767292e3e1fda74060fe2c42794d7d2a1dd954d1"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-4/replay-live.log",
+              "sha256": "f0cdcb3e5a0403a0509d4dd6c1f5298c2d03f767109fdcd0c802b9fe08f5c1b3"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-4/replay-frozen.log",
+              "sha256": "f0cdcb3e5a0403a0509d4dd6c1f5298c2d03f767109fdcd0c802b9fe08f5c1b3"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T194515Z-8cb75b/run.json",
+              "sha256": "9b81637b0cb6dc243ccd9ebbcf96d5af65b68aa1ad6d62da18714170513e8f27"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T194515Z-8cb75b/recall-call.json",
+              "sha256": "4b3cd195d2ea6c54c804c87f00a94e7ee7806219ba1cc0c980d3dd3eb0026f0f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T194515Z-8cb75b/map-01-call.json",
+              "sha256": "595b0581875254c48d590e1a3b65969178a9d33abad45e8d0563e3139386cc00"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T194515Z-8cb75b/map-02-call.json",
+              "sha256": "dbd1d6be23a3415e12aab7c36f79aa7f1291c7126160c21c0f3564ae62d1d283"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T194515Z-8cb75b/map-02-parsed.json",
+              "sha256": "2562ba55389812b0ce8fd4db8e3e19fca558447867e209cfa3e64b777619eb15"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T194515Z-8cb75b/map-02-error.json",
+              "sha256": "0a15d3e4c4af31cd2ccf1a7d83473fe0326f09d44e47ddd9c3fe5afdb921e4e7"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T194515Z-8cb75b/usage.json",
+              "sha256": "dc56e9d2fa63c7f10b3397f8c61aaa28ba6e9622377c6ad7f160fe0eb53329ce"
+            }
+          ],
+          "summary": "固定managed-own-responsibility-1單一新自然樣本FAIL：3次本機首次POST/0retry/0cloud。recall與customer通結構；daily_sales首契約錯only metric mapping may aggregate，原filter mapping用conditions而aggregation/operator/value省略（parse後null）。另GRN-001 unsupported空mapping未保留來源store_id合法部分key，依既定partial自然gate記語意缺失，不推測模型動機；交fresh研究。首錯停止，後5View/selection/prepared未驗。live及155-source frozen各3raw replay均精確重現首錯；155 live/frozen、1164歷史工件、candidate fingerprint與兩src hash未變。累計21 local POST/0retry/0cloud；未SQL/DB、改source/tests/Task/control或commit/push。worker未finish，不宣告父層/根驗收。",
+          "producer": "/root/loop_worker_natural_4",
+          "finished_at": "2026-10-21T20:09:26.270900+00:00"
+        },
+        {
+          "round": 9,
+          "node": "kind_mapping_managed_contract",
+          "started_at": "2026-10-21T20:15:38.604202+00:00",
+          "result": "PASS",
+          "evidence": [
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-kind/original-live-replay.log",
+              "sha256": "f0cdcb3e5a0403a0509d4dd6c1f5298c2d03f767109fdcd0c802b9fe08f5c1b3"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-kind/original-frozen-replay.log",
+              "sha256": "f0cdcb3e5a0403a0509d4dd6c1f5298c2d03f767109fdcd0c802b9fe08f5c1b3"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-kind/red-final.log",
+              "sha256": "e2087ff140e303f90d25b1448064b2e6c3f2e27bffc8fe5ca7bbf172e3990acd"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-kind/green-focused.log",
+              "sha256": "04d73c4a13c0f17076b9ea96b0cef88dad3c501a71d42d59541540a716b5ebd2"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-kind/regression.log",
+              "sha256": "078bf736161c74577d70b3743f0e912214b251d67a431ad78ac74ee534f32163"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-kind/fake-record-replay.log",
+              "sha256": "a8880c40514841dc871b64f32da446e7376158f328357dab39fad2e31296bce7"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-kind/frozen-replays.log",
+              "sha256": "c4b1be97f173e9c3c5ba0a75f9858786db7f730648449521e27c1e3837303cc6"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-kind/dry-run.log",
+              "sha256": "c3a2db0d4f14de8e62998451558143a6ac72d808b1943120af6be3580a811864"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-kind/semantic-review.log",
+              "sha256": "fa7323447a8b0345a32fce7fccca2ba5909e73e2de19e964873ce8dff06e88f5"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-kind/final-verification.log",
+              "sha256": "3adca405db81cc59f3747c33ceeb39e35334d77cee531b909f8aaa987080eaa6"
+            }
+          ],
+          "summary": "第9輪離線managed-kind-mapping-1完成。新kind專用必填/extra-forbid mapping schema及新prompt；僅編譯已驗role、不適用null/[]、grain唯一path，保留所有status/strict own_gap/column/aggregation/predicate/其他path/完整typed決策，原own/evidence/referenced/finish guards原樣重用。共用runner僅新增3行互斥--kind-mapping接線，無舊module/prompts/tests/guards修改。第8輪3raw在未改前live及155-source frozen精確重現原filter.conditions首錯，原遺漏店key語意FAIL維持；不修raw、不展平。RED104預期失敗後首次GREEN104；補schema及guard控制後112新測試，原384原樣加兩檔總496 passed in 55.54s。11份fake（完整9節點2prepared及10類首錯）同版/162-source frozen各51raw一致；原typed庫存anchor、店商品、stock sum/date metadata、sales同task整月online兩sum/先彙總再left/nozero核對。8種預先SEMANTIC_REJECT與2合法無關key/母體unsupported對照明確分開結構接受；parser不冒稱業務完整性oracle。完整source/import/prompts/schema/tests、編譯逐欄比較、fake與snapshots已封存本目錄；1164歷史hash、原第8輪27工件hash、兩src與所有受保護source維持。純離線0POST/SQL/DB，未改Task/controller、未commit/push；同.venv frozen未vendor外部套件。Main下一步finish本handoff後必fresh audit完整7–9，未獲CONTINUE/新研究裁決不可自然POST。自然入口為--kind-mapping --execute --ticket \"$EDD_WORKER_TICKET\"，仍須全新單樣本recall/全7View/完整typed/語意與各父層驗收；本輪不證自然可行、root仍全PENDING。",
+          "producer": "/root/loop_worker_kind",
+          "finished_at": "2026-10-21T20:26:29.359764+00:00"
+        },
+        {
+          "round": 10,
+          "node": "kind_diagnostic_fixture_harness",
+          "started_at": "2026-10-21T20:39:18.891637+00:00",
+          "result": "PASS",
+          "evidence": [
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-harness/red.log",
+              "sha256": "007a042e9abb09543214371292441036b6f30e58b4cb9fa570558f3b515d42e2"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-harness/red-provenance.log",
+              "sha256": "dcf34cf306fc3feeca1f9926f9ba7cd7952a065157a916a444f163c69dc1eb81"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-harness/red-context-drift.log",
+              "sha256": "863735325bc3d4cc788ae5b88c776cca3d99d6c9ad4949b5d4fcd308283eed12"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-harness/red-external-import.log",
+              "sha256": "491dd1fade133b88b78fae90213ae0ef2510c1c302b24423e20dabf255e84986"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-harness/focused-complete.log",
+              "sha256": "76b1e476eda0b4846710f2b85b6c3212db00499b7f3a10e29704943ae836656a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-harness/regression.log",
+              "sha256": "b5cc8aa1441ac22ee14d6fd536aaf477299a9e49f6eaa7bb5caf3bba5d51f0cc"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-harness/offline-controls.log",
+              "sha256": "fa0db7ef28bf6ee29e66b3cefe8c931ad07d9b0b21556f45779ab2d0af424cda"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-harness/offline-controls-index.json",
+              "sha256": "e053737d80d5007625ef90075530ecd35104008f2f845df00845af81f5a0f187"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-harness/frozen-replays.log",
+              "sha256": "668f352abb2784d71bcaa03fe66cfb44f4eef08c8c3f8b05b6fdd39bb59ac8f3"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-harness/frozen/freeze.json",
+              "sha256": "dbf147cbef4d74ae475f8512de5f441ca17688c300825a9999418153c2355ed5"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-harness/preservation-check.json",
+              "sha256": "2e0ee172462e11e9d7bc3fd1a6c0fab222094c34f6d6eea5a2830ab96ddf09ea"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-harness/historical-check.json",
+              "sha256": "14c1a75202e5a9f44ab5e9437784778f70f8117120af69d55949c801cbb5cb32"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-harness/dry-run-selection.log",
+              "sha256": "5112662f1d2c9443a992665e677888df8086d22786d8a5c38f7faad5c7cd5fd2"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-harness/dry-run-coverage.log",
+              "sha256": "c066b08a1c20e628d3fae91ea7328b673e2d8509f83c8fb4c4bf264259e20728"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-harness/execute-without-review.log",
+              "sha256": "7587931c44f5209746a06a664a40f7057191947de9f6882086ce4875e448bcf1"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-harness/final-verification.log",
+              "sha256": "be66cb6eedc0737bb57dccdb21ae7fd66d704589f591a72aae91caeea9f6264a"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_v1/manifest.json",
+              "sha256": "1749d09913e0f5d5a1caab4a4ede1bf4fa80fee260bb4e257f1f705634d934be"
+            }
+          ],
+          "summary": "第10輪離線kind-isolation-v1 harness完成：新單節點runner重用managed-kind-mapping-1與原ManagedInvoke/finish guards，固定8需求、7View/56-row真契約證據、改名真SchemaCatalog與4個預定樣本；候選及全部舊source不變。focused48通過，原496原樣加新檔共544 passed in 91.02s；31組record/同版與163-source frozen replay一致（29synthetic raw，provider/context首錯無raw）。7種coverage反例原guard ACCEPT但固定machine Oracle拒絕，selection typed/scope/anchor/鍵/補零等負例保留原首錯；自由文字反例如實保留machine接受、獨立語意PENDING邊界。1198保護檔與1164歷史工件無變，兩src/舊raw分數/38Gate保持；本輪0POST/SQL/DB/commit/push，未動Task/control。fixtures及Oracle尚未fresh獨立核准；Main finish後必先下一fresh fixture review，不得直接POST。544後live code/tests/fixtures/manifest無變，只新增本worker必要raw/log/handoff。",
+          "producer": "/root/loop_worker_diagnostic_harness",
+          "finished_at": "2026-10-21T20:56:21.962270+00:00"
+        },
+        {
+          "round": 11,
+          "node": "kind_diagnostic_fixture_semantics",
+          "started_at": "2026-10-21T20:56:22.090645+00:00",
+          "result": "FAIL",
+          "evidence": [
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-semantics/review.json",
+              "sha256": "aaa8b740cc30fbd1b8670fa45ce5b68280dc073b9ee5e662dc43eeb68b903dfa"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-semantics/semantic-review.log",
+              "sha256": "fa3e4654447f56bef7cffe64220195c4e2817ba20838d2c3b27eaf893a28eaaa"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-semantics/offline-checks.json",
+              "sha256": "c3afcc84962df861074744a5c935787b2685770728e0e2eeac800c1b180ba891"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-semantics/synthetic-prepared.json",
+              "sha256": "4f910dbd725201f3efe43a422d4160172fc066064f5db659a8b14cbd18945662"
+            }
+          ],
+          "summary": "REJECT：全部8需求與56列真契約逐項核對，customer MET-003漏保留lifetime_spend累計折扣後金額的有用部分能力；以欠交易月份/店商品歸屬作全unsupported理由，違反現prompt先排除scope/grain並保留合法金額分量規則，至少存在未決語意。last_order_date仍無完整月份能力，會員key仍無店商品能力。其餘55列及三樣本等變/輸入邊界/typed synthetic與2prepared已核對；hash精確相符只證版本。整套不得POST，交fresh研究重判固定新版本；不修改Oracle、不代表自然/父層/root通過。0POST/SQL/DB/commit/push，未重跑544。",
+          "producer": "/root/loop_worker_diagnostic_semantics",
+          "finished_at": "2026-10-21T21:01:32.642132+00:00"
+        },
+        {
+          "round": 12,
+          "node": "kind_diagnostic_fixture_v2_correction",
+          "started_at": "2026-10-21T21:09:02.031678+00:00",
+          "result": "PASS",
+          "evidence": [
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-fixture-v2/red.log",
+              "sha256": "578878aa0aaa529454257e33c1bf60d4b84b3d448bf648a0a9a3703d83980ed1"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-fixture-v2/focused-complete.log",
+              "sha256": "71f975993dbb5daa31450c4f7021f29c8f4e23e935a0ebf4b01de0dc8edfeb51"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-fixture-v2/regression.log",
+              "sha256": "05856bd4c64f5755a90b0ca1b20a4dee6132f3791ca4969129a836a2c7afb9be"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-fixture-v2/customer-controls.log",
+              "sha256": "ea3b1b9c1058132c12b3cb8e62b1d18fdf97aeee9c5db418b6344c648eb9db23"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-fixture-v2/fixture-correction-check.json",
+              "sha256": "a2ba8df832a3004f102c49b5affff0b781e175aee1bfaa9b71bbe2cdff213975"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-fixture-v2/offline-controls.log",
+              "sha256": "b16758890326a1eb616ba46ab62870e6d4a2d9501660551f9c9dc6fb3f1209c1"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-fixture-v2/offline-controls-index.json",
+              "sha256": "eb47e47bc2c23330329def6913d85e5d6ca94dff19f27799771639fa3fed70b3"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-fixture-v2/frozen-replays.log",
+              "sha256": "23342865e25e250dc07bce0f409d25ccbf2923880bedb78e8a280df76e4a77ff"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-fixture-v2/frozen/freeze.json",
+              "sha256": "fd5b37977e23978a1172dc7c2e7df49bc3e7e53f02ee48b8350fd76fc48ae269"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-fixture-v2/preservation-check.json",
+              "sha256": "3b5479fb80e7ed647c2d29fb3e91a4ef1c62f02f66d58eff46f030d6ba4372a6"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-fixture-v2/controller-read-only-before.json",
+              "sha256": "2f920cd6e464450057fed1bba4de473b4f71c0019bac5f4c56d29c44602701c4"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-fixture-v2/dry-run-selection.log",
+              "sha256": "d3e7b87bd8524c73e01b74ccf6958591682f3a0309f5cf977a33178f176df8fa"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-fixture-v2/dry-run-coverage.log",
+              "sha256": "9e1183637b0dc9fd8be23cc1e735f197da7f36267c930fe72bfa73e1947582f9"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-fixture-v2/execute-without-review.log",
+              "sha256": "6c5615d7e4e10dea5d007a0c126f6cf867530339febb83e78bea1d611a991ed2"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-fixture-v2/execute-v1-reject.log",
+              "sha256": "6c5615d7e4e10dea5d007a0c126f6cf867530339febb83e78bea1d611a991ed2"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-fixture-v2/final-verification.json",
+              "sha256": "9900f16e02cc294cbdb1c10ca906a3576743762a20ce0daa7536b2568ab54023"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_v2/manifest.json",
+              "sha256": "33cf44c84c10842adb60bfb7cbfbb269bac6dfa136c124a43159efabd27d543f"
+            }
+          ],
+          "summary": "第12輪純離線v2修正完成：customer MET-003唯一能力變更partial/lifetime_spend sum/own_gap=true，會員母體未證完整為self，scope/grain另列，不推論非會員交易存在。其餘55列、3coverage及typed selection不變；selection四hash與22011tokens精確符合研究預固定。薄nested runner直接重用v1 prepare/_body/evaluate/_run、原kind/finish/ManagedInvoke，完整綁新source/test，嚴核真作者child與原semantic parent之不同platform完成PASS provenance。62focused+160指定回歸通過；4正例+11首錯prefix同版/完整165-source frozen replay共15組一致。3754既有保護檔、v1 live bindings/REJECT/兩src無變；本輪0POST/DB/SQL/commit/push且Task/control未改。最後tests後live source/fixtures/manifest未變。fixture語意仍PENDING，Main finish本child後須先fresh audit10–12，再由另一fresh原semantic parent全8需求/56row/typed/free-text重審；本worker不續跑。",
+          "producer": "/root/loop_worker_fixture_v2",
+          "finished_at": "2026-10-21T21:19:20.461451+00:00"
+        },
+        {
+          "round": 13,
+          "node": "kind_diagnostic_evidence_rebinding",
+          "started_at": "2026-10-21T21:34:17.620282+00:00",
+          "result": "PASS",
+          "evidence": [
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/red-focused.log",
+              "sha256": "fe1b6c5205649fc4b70e04b5cdcd78f11ffced076bb00bce90dfcca7afa9735c"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/red-outer-receipt.log",
+              "sha256": "71a5621383e5c5d78d068eac67ceccb7f6d8e7ba3fbb69af95ef9f1f5d9b8c15"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/red-active-stage.log",
+              "sha256": "e2b0b1e8c77f72eaeae927543d9028a205e3aebd613502afef591277fde5e2c1"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/green-focused.log",
+              "sha256": "1f74fa5571dd3384b99c59cf917d8f332976dc886d599e9138ad671cd3fa79c2"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/focused-complete.log",
+              "sha256": "559347971cd971b53afe3ee3c64571f43421a20a2f99d41632eb16439dd18394"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/necessary-regression.log",
+              "sha256": "de181620e645040367857aa26541a9b1a71af4c0b81d2f50697b52388f8fea36"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/historical-v2-focused.log",
+              "sha256": "4b9cd4cd466baf5ec38bced3996940fd34915d23997de5b5d3ead18819cf1f6b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/historical-v2-replays.log",
+              "sha256": "ce02eae4de22eaccf9fb8d758099b66da6ec92a6742bad0dd77a2b2b6f0be94e"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/managed-authorization-controls.log",
+              "sha256": "a06d5236a755797f355f508b65628e0fea9401a39fe53f4d39fbdc606daf462a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/offline-controls.log",
+              "sha256": "7c1dc2fed4de8379814ce8f42ab401b8d1e09ef52abbcd6d432fb2c6062a42f3"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/offline-controls-index.json",
+              "sha256": "eaeef958ed970f24aba7089a5061b61a0d97f7dfe1cce5f1a74e7265aac2e2d6"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/frozen-replays.log",
+              "sha256": "9250e6e3bf1aff92d23b2d0ddfa4aa4b128ed466e7dde6f62798f6d402f52c88"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/frozen/freeze.json",
+              "sha256": "7d52d3c7639e8caf00e2d55cdd2dd4a3aca1b394c3ef90fec0c7e8e3079eeea9"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/outer-controls.log",
+              "sha256": "1afbdeea7fdca679123fa92c8bfb06a4847a924397beb42968201193115ea5de"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/outer-interruption-process.log",
+              "sha256": "50f0949006760c038ee4368d3067e8d3bd50d7dc285a6a740e773695a4e6585f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/outer-probe-frozen/freeze.json",
+              "sha256": "7d52d3c7639e8caf00e2d55cdd2dd4a3aca1b394c3ef90fec0c7e8e3079eeea9"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/preservation-check.json",
+              "sha256": "e881fc1e3018f8c94a45d9eaabb2b178fab9ed855718d8b210294131ac00ee85"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/preservation-check.log",
+              "sha256": "e881fc1e3018f8c94a45d9eaabb2b178fab9ed855718d8b210294131ac00ee85"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/controller-check-evidence.log",
+              "sha256": "6a7dee2df6decc78d70dd3a9fcef13555f24ec05ef34f4d611783f4084b4e866"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/dry-run-selection.log",
+              "sha256": "28fa080165228f204a9b99c383b8835fe4106482aa38801f1938503a3bd93999"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/dry-run-coverage.log",
+              "sha256": "2110a262527a93eb393d4c1377126aea3ae8b22895738009fd8fc74d69baf30e"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/execute-without-review.log",
+              "sha256": "5ed05457f983db9e8684d7a89d562f9f09ae38cce245223bbaa424dd3b5b720c"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_rebound/manifest.json",
+              "sha256": "9efa86b883366ff1ef4edd555f59f08499fa123288c6ca1ffe98998d84156187"
+            },
+            {
+              "path": "evaluations/diagnostics/managed_node_diagnostics_rebound.py",
+              "sha256": "d9cb08e98fdcd9d186cddcf47f48ea466e804d153880546d08324f4d35871200"
+            },
+            {
+              "path": "tests/diagnostics/test_managed_node_diagnostics_rebound.py",
+              "sha256": "2b0766b1646e1f3b0d5a09ed5277f1edcd70adaab2e0afd29e62cad531196739"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/final-verification.json",
+              "sha256": "8fbf6ca4dc4f3a4b4b933ef1b3e58fc209394fcef5ee2bad51d652e7f3dffb16"
+            }
+          ],
+          "summary": "第13輪僅離線證據rebind完成：唯一新manifest引用原v2 33cf44…root；167-source/full-model/runtime/13份immutable lineage完整綁定，直接重用base prepare/evaluate/record/replay與原kind/finish。inner163-source誠實保留v1 engine；獨立outer receipt在HTTP前、raw保存後重核完整版本/authorization/review/receipt，source或receipt漂移即FAIL，真SIGINT於inner PASS後仍INTERRUPTED且raw保留，不以inner PASS冒充完整PASS。75新focused、原3檔160回歸、歷史第12輪frozen v2 62測試/15replay通過；新四正例＋11首錯同版及完整frozen各15組一致。4237既有保護檔、17舊nodes/Task/control、v1 live bindings、原v2 manifest/fixtures/source/test/frozen/全部舊raw/兩src/38Gate保持，check-evidence真PASS；0POST/SQL/DB/commit/push。真preflight仍因本作者未finish及缺fresh原semantic parent closed PASS而拒絕，屬預期；所有自然效果PENDING。所有程序已結束，FINAL後不再補寫proof。",
+          "producer": "/root/loop_worker_rebinding",
+          "finished_at": "2026-10-21T21:48:21.073587+00:00"
+        },
+        {
+          "round": 14,
+          "node": "kind_diagnostic_fixture_semantics",
+          "started_at": "2026-10-21T21:48:28.812703+00:00",
+          "result": "PASS",
+          "evidence": [
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-semantics-rebound/review.json",
+              "sha256": "f986fd1f361948c4ea4ecc24d4c7e779956210488467533411908f440f07c135"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-semantics-rebound/semantic-review.log",
+              "sha256": "639f745e8d1cf8f2a2e19aa539b800fa90645e327781450ca129f78c686c2e02"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-semantics-rebound/offline-checks.log",
+              "sha256": "30238dd1a0044acf77ff4e39a394c75fbbe8638ae0529621a9e66bec5a142b50"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-semantics-rebound/offline-checks.json",
+              "sha256": "60808b0568b668e08e56bfd0a61273289a66ac937fb9daf55d4dde35b99194cc"
+            }
+          ],
+          "summary": "ACCEPT：本fresh原semantic parent直接重讀全部真契約，獨立核對8需求索引/role/scope/grain/背景、7View×8共56列status/mapping/own_gap及完整self/scope/grain缺口，非沿用舊55列。customer lifetime_spend sum保留有用累計會員折扣後金額；扣除明示scope/grain後仍未證未限定會員的全銷售完整性，own_gap=true有據，未推論非會員實際交易；最後訂單日期非完整交易月。部分店鍵及月縮約不證庫存母體。三coverage樣本、2032閏年/改名/UnicodeIDs、四body無Oracle/預填來源答案、synthetic全8assignment/5排除/全部typed與2prepared及所有自由文字均核對。新manifest/full167source/13immutablelineage精確一致僅證來源；機器接受的無據全庫存補零文字反例由人工明確REJECT。真兩作者closed PASS且三平台不同，本人open使preflight預期拒絕，待Main真FINAL後finish。只核准固定fixture語意，不代表自然selection/coverage/父9POST或祖先/root通過。0POST/SQL/DB/commit/push，未重跑544，既有fixture/Oracle/code/manifest/Task/control未改。",
+          "producer": "/root/loop_worker_semantics_rebound",
+          "finished_at": "2026-10-21T21:56:35.497896+00:00"
+        },
+        {
+          "round": 15,
+          "node": "natural_kind_selection_isolation",
+          "started_at": "2026-10-21T21:56:39.642661+00:00",
+          "result": "FAIL",
+          "evidence": [
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-selection-isolation/evidence-index.json",
+              "sha256": "37cc38adc8eb7fd9669e9609e64df9b7e2bfb53ce0316abfeb14b1887c8de419"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-selection-isolation/execute.log",
+              "sha256": "11907a4ca04911f98034459f17c8b13e733e41bd9f37843acd8cfa2fa133f704"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-selection-isolation/execution-receipt.json",
+              "sha256": "5f512b009fbd3808bda0b5645bfc3798cd1a9f1e5a200344a346d6d04a75173e"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-selection-isolation/preflight.json",
+              "sha256": "76ef03097f4cd05cef0f258cbf0e418438677096de59a3205c3f4ed603a8fcb2"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-selection-isolation/replay-current.log",
+              "sha256": "1934ed81ff102804c088d18b5f7630b881d7dea102e8d39fc121fcccd7391f64"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-selection-isolation/replay-frozen.log",
+              "sha256": "1934ed81ff102804c088d18b5f7630b881d7dea102e8d39fc121fcccd7391f64"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-selection-isolation/semantic-worker-review.json",
+              "sha256": "4f8d4d5d93cfd2abe7a06c641638d63d2db4b4227abcafd05b4fa98bf0140de6"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261021T215758Z-5bbdea/SEL-ISO-v1-01/node-body.json",
+              "sha256": "0cc0b7385bcad400127757f00a0b7fce71082f1de3e47fd61261c4fed1f4f546"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261021T215758Z-5bbdea/SEL-ISO-v1-01/node-call.json",
+              "sha256": "4dfa83d97b976786378b3bde405eb68afe1bd7212095fdfe06510413e02067e1"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261021T215758Z-5bbdea/SEL-ISO-v1-01/node-compiled.json",
+              "sha256": "f9ec1fc4a76ea761c59f4f772d06127dcba9200c6c050ba903ec8a196bf45331"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261021T215758Z-5bbdea/SEL-ISO-v1-01/node-error.json",
+              "sha256": "5eeb4c824f637c7d507cd527738ff1d1091b4ffcbe1591f3c4d75bf1805743a5"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261021T215758Z-5bbdea/SEL-ISO-v1-01/node-managed.json",
+              "sha256": "042abae0d01533f901350fe042131fd26d58e3f9c08292ec33a7bc8305f49d2a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261021T215758Z-5bbdea/SEL-ISO-v1-01/node-normalized.json",
+              "sha256": "5cd07ff79cc3fa0c43de023b018e536fef2986dd2fd908aaaee05cf25e13409e"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261021T215758Z-5bbdea/SEL-ISO-v1-01/node-parsed.json",
+              "sha256": "cc348e7cae3fce789985c524b4b4fb00193932b17295f0661807a5c19bacf792"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261021T215758Z-5bbdea/SEL-ISO-v1-01/node-presence.json",
+              "sha256": "1f936bc071cbdc59f0768ba37f6526361ddb99317c5316f7556be4b2beab263e"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261021T215758Z-5bbdea/SEL-ISO-v1-01/node-provider-response.json",
+              "sha256": "7c9bbc84e9f6e434714d831fbc563afd0d523cfc2bd249edf4bbd0567f5b1a69"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261021T215758Z-5bbdea/SEL-ISO-v1-01/node-refs.json",
+              "sha256": "2a1631490583630e92af2facf9075b96b84fa44b2b8339330cda07024306662e"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261021T215758Z-5bbdea/SEL-ISO-v1-01/node-request.json",
+              "sha256": "8d72a391683e991573bf2c85a287442c31b64c52ee5145bcf8b1ae43171b465e"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261021T215758Z-5bbdea/SEL-ISO-v1-01/response.json",
+              "sha256": "6daa672886c825b0cc35fcd8f7c10acdecbb21e92ebdfe8422d127f4695cc3a0"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261021T215758Z-5bbdea/SEL-ISO-v1-01/run.json",
+              "sha256": "e4feda977e21837c47b40abb4a2dc0581a1c4d3dbfdf88eeedd311cc44083c04"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261021T215758Z-5bbdea/SEL-ISO-v1-01/semantic-review.json",
+              "sha256": "7969b48bd5f681e14764d447855c327b3dad226517486557a118d7613f7af65a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261021T215758Z-5bbdea/SEL-ISO-v1-01/upstream.json",
+              "sha256": "cca35f9a6d5ee2e7635d4b73534a22a7fc962538cb088563567757e812d4b6c8"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261021T215758Z-5bbdea/SEL-ISO-v1-01/usage.json",
+              "sha256": "2dfc913231ad5266ce06b241e0de909a0e944c03b8ac481155c34e9790a9eec1"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261021T215758Z-5bbdea/SEL-ISO-v1-01.outer.json",
+              "sha256": "d614136521733536adc94c82d997575492c74417a87d98398ced63ca1f451278"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261021T215758Z-5bbdea/SEL-ISO-v1-01.outer.sha256.json",
+              "sha256": "ca9c4c805f5171b7e6793a6bce6c6e7b64cb07a89e282077195a0a4808634882"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261021T215758Z-5bbdea/outer-receipts.json",
+              "sha256": "a9d7dba34b7fee38d811e92046b621d6930625caeaea0a7bc91bf6d9fa43242b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261021T215758Z-5bbdea/fixture-review.json",
+              "sha256": "f986fd1f361948c4ea4ecc24d4c7e779956210488467533411908f440f07c135"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261021T215758Z-5bbdea/frozen/freeze.json",
+              "sha256": "7d52d3c7639e8caf00e2d55cdd2dd4a3aca1b394c3ef90fec0c7e8e3079eeea9"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/028e83ec169e4780ae1bb11f226185cd.request.json",
+              "sha256": "d717bcd9f07183fa121ffdcbcae9e2de6fb5a3d7c03ba139a17c9e34c6bac936"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/028e83ec169e4780ae1bb11f226185cd.response.txt",
+              "sha256": "451ae7485fe593ef358b12db9ebc324dd8ac2204378da8cf40e8e49573aed393"
+            }
+          ],
+          "summary": "SEL-ISO-v1-01唯一首次managed local POST已完成HTTP200；原節點FAIL保留，唯一machine finding是missing_data_policy非固定literal。模型選的EMPTY_POLICY為prompt允許且明禁補零；其餘全部typed/30物件required presence/8assignment/5exclusion/free text及兩prepared核對ACCEPT，平面一對一未匹配形狀需fresh研究，不能由literal直接斷言補零錯。同版及完整frozen replay均驗證通過並重現原FAIL。upstream_injected=true，不替代自然recall/coverage/父層或完整端到端。22localPOST/0retry/0cloud，無SQL/DB。所有程序已退出，證據已凍結。",
+          "producer": "/root/loop_worker_selection_isolation",
+          "finished_at": "2026-10-21T22:34:45.354003+00:00"
+        },
+        {
+          "round": 16,
+          "node": "kind_policy_shape_contract",
+          "started_at": "2026-10-21T22:47:57.044876+00:00",
+          "result": "PASS",
+          "evidence": [
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-shape/final-verification.json",
+              "sha256": "be9cdf7745caf288c3e640729c58c6576f09d5c9cf64156d57b5672a162bf987"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-shape/focused-final.log",
+              "sha256": "704ea59ff3dcc551fc8a17ece87ed6d56d960aa6d1ced22aec37439d0196c8c1"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-shape/necessary-regression.log",
+              "sha256": "b56a03261ca44d28a04dec9bf120463ad93e314470b4d93188e8539b8a1169c4"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-shape/original-raw-policy-check.json",
+              "sha256": "a879ba19ca1516d9ab9f7b8be59298aa94bf1adc9f7a8528b9e1a9b8352f3881"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-shape/original-frozen-replay.log",
+              "sha256": "1934ed81ff102804c088d18b5f7630b881d7dea102e8d39fc121fcccd7391f64"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-shape/offline-controls.json",
+              "sha256": "ea036fbc744bc939376fa27a26cd69dcd6d2b488bf239da99f4faff6db380ea7"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-shape/frozen-controls.json",
+              "sha256": "18ca54981ddcd5d6be429c817ea02dcb67d8ab31cd71eca5a4c2fa8fa2a2e226"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-shape/cross-source-raw-check.json",
+              "sha256": "afb23d9df123c1bc47b997bd3b149ab589a021a6e7e9e4c9015918061896b8ae"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-shape/preservation-check.json",
+              "sha256": "b53a3e04aa5ee758fc92bb080573fc02d41c77ddc740d80436cebf410f5ed4d9"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-shape/operation-handoff.json",
+              "sha256": "6c4e764591154a56ecae5b73eb401978acb9c1bb2a7a7cd1ad0ef5b37fc6105c"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-shape/frozen/policy-freeze.json",
+              "sha256": "82c7209abe383a2ce9524b7fadc5af1ca234f1d59de254eb2beee896191c813d"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-shape/evidence-index.json",
+              "sha256": "c18e16cc9c40cc8aa9c5003a07b451bf9b51f3cca4ac95874ca78af3bbe48943"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_policy_shape/manifest.json",
+              "sha256": "2ec21c08c50f1772538c61fbbd4d7c5ea00c3fb43527395ffe5fa10e61082992"
+            }
+          ],
+          "summary": "第16輪0POST離線contract完成：單一nested薄candidate/test及selection-only manifest，重用全部原kind/typed/finish與managed engines。default/NULL flat均可過；EMPTY必須逐child同task/keys的typed nest，aggregate不代nest，zero/inner及其他首錯仍拒。唯一prompt差異為通用policy適用條件suffix；schema/三literal/上游8需求56列不變。原第15輪同版及原frozen仍精確FAIL，新predicate以同原raw另判shape FAIL，不翻案。68新focused+103指定原回歸通過；4selection控制同版及live原raw frozen重播，完整fake9正例和shape/typed首錯live/frozen共27raw與162輸出artifact一致；正例2prepared。5203既有檔與舊167source逐bytes不變，rebound bindings保持、v2 live仍歷史拒絕。真作者open/未fresh reviewer時HTTP拒絕，來源/授權漂移及中斷不PASS；完整proof均最後封存、全部程序結束。0SQL/DB/commit/push，未改Task/control或舊expectedhash。僅本node PASS；待Main核FINAL/hash及finish後由真fresh不同worker核新語意，後續自然selection/coverage3/自然9POST/各父層與final仍PENDING。",
+          "producer": "/root/loop_worker_policy_shape",
+          "finished_at": "2026-10-21T23:03:58.349046+00:00"
+        },
+        {
+          "round": 17,
+          "node": "kind_policy_shape_semantics",
+          "started_at": "2026-10-21T23:03:58.524476+00:00",
+          "result": "PASS",
+          "evidence": [
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-semantics/review.json",
+              "sha256": "2d47e702a0a6bb0fb9904ba972fcd6dccaf91645319729011728d3a900a242a4"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-semantics/final-verification.json",
+              "sha256": "5f170f3b217ff330cc335b892e2e7a9d32de48b13cca586b65b5c3c17c8141a6"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-semantics/offline-checks.json",
+              "sha256": "7605db3ef0567be2b1b378a10b3debc7dbfe9484f0cde66ad0cc146ad8d3ca84"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-semantics/focused-checks.log",
+              "sha256": "d79a494d6fa326fe056e24a9e66b18d863ed4234538b1df56012a12e1f2220f6"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-semantics/independent-replays.json",
+              "sha256": "00cef21a4cb8e0916cfeb0f4275ae94ecacb019916d105f99cd691769ad22ffb"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-semantics/independent-frozen-replays.json",
+              "sha256": "4526d7f6dece9d31633d3fcf009f431c2f7574c9897d5b4b7bc1f818e9def3ec"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-semantics/original15-frozen.log",
+              "sha256": "1934ed81ff102804c088d18b5f7630b881d7dea102e8d39fc121fcccd7391f64"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-semantics/null-frozen.log",
+              "sha256": "6d55c02b59aad38961fd07f458239dbb9f56828dc1396a892ff35a0fc7f0d7fd"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-semantics/empty-frozen.log",
+              "sha256": "d38dfe4fabef567497b3bec841bb073f01edd390a07c41b4a52e8c50e12d5b40"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-semantics/real-provenance-gates.json",
+              "sha256": "9ccdd42f433d402920cacdb1b0aa4a01c47f0b6d9d90b699d1425f7ebf16f8d5"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-semantics/real-open-execute.log",
+              "sha256": "42253b3b0b922f74c311fdac958709c57a313f2ca45ab92352675a12971b6760"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-semantics/controller-check-evidence.log",
+              "sha256": "6a7dee2df6decc78d70dd3a9fcef13555f24ec05ef34f4d611783f4084b4e866"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-semantics/offline-attempt.log",
+              "sha256": "1204a734deed0e351ea129c1a6548b3493f6219abeb0d982662cbb49aa7cd411"
+            }
+          ],
+          "summary": "第17輪fresh policy/shape semantics ACCEPT。獨立讀真需求、原15raw、三literal、typed shape／新suffix／原guards與checker，裁定default/NULL flat保缺值等價、EMPTY必每child真nest且task/keys吻合，aggregate或metadata不代表nested；未決語意為空，nested memory正例非原題自然成功。新review精確綁新manifest／完整sources/import/schema/model/runtime/suffix/messages/body/upstream及原fixture/review/lineage。原8需求56列與三coverage bytes及第14輪完整review bindings相同，原fixture真三方closed PASS保持；新author第16輪真closed PASS與本17輪reviewer distinct。本review仍open，實查preflight及真execute在network前拒絕，Main必須等本真FINAL核hash/check-evidence與finish PASS才容後續一次selection。31 focused passed、15獨立memory控制、5 live與3 frozen replay符合預期；5203保護檔、668作者索引及167舊sources保持，舊rebound bindings相等、v2 live仍預期拒絕。原15輪同版/frozen精確FAIL與新shape負例不翻案。一次驗證腳本wrong_keys預期分類過窄已保留失敗log並依原guard先REJECT校正，未改實作。0POST/SQL/DB/retry/cloud，local累計22；未改source/test/fixture/舊證據/Task/control、無commit/push。僅本離線child PASS，父/root及自然效果保持PENDING。",
+          "producer": "/root/loop_worker_policy_semantics",
+          "finished_at": "2026-10-21T23:10:33.993529+00:00"
+        },
+        {
+          "round": 18,
+          "node": "natural_kind_policy_shape_selection",
+          "started_at": "2026-10-21T23:10:34.171195+00:00",
+          "result": "PASS",
+          "evidence": [
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-natural/preflight.json",
+              "sha256": "bd9a31e61ed3d144a36282fe194453b4d055c5037c32399a9b69718fe797b864"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-natural/post-start.json",
+              "sha256": "2b52579d828b525d9f9946dbc8d7f912470aad7261585439dc6d39ccd0574500"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-natural/execute.log",
+              "sha256": "6df3bb4121a04b1bec9862d9decda3486f17126bc4575d2efd18449c17ada345"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-natural/raw-presence-check.json",
+              "sha256": "757c411d672d0083f44fad7cf2a7925b7651e5f8c10fafd940963c66bcb820c2"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-natural/semantic-review.json",
+              "sha256": "484ca78c85e3b195425a620c6651e037c92a0f528ea0c12b00ce2ca98a729d15"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-natural/live-replay.log",
+              "sha256": "d1e42b81d2499627381c943a977e933f6345b43e3b3713d18a4e6e95853cb6b8"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-natural/frozen-replay.log",
+              "sha256": "d1e42b81d2499627381c943a977e933f6345b43e3b3713d18a4e6e95853cb6b8"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-natural/controller-check-evidence.log",
+              "sha256": "6a7dee2df6decc78d70dd3a9fcef13555f24ec05ef34f4d611783f4084b4e866"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-natural/preservation-initial.json",
+              "sha256": "630119fcb367ce7bb5c7399424dff9404b1ce45c88ffc40fa5c3ddcc2246c164"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-natural/final-verification.json",
+              "sha256": "d4e3a0664887c1560bb0961e4ffc36b6a878d7d0cae37487a22119416807be5a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-natural/evidence-index.json",
+              "sha256": "68965b699c82173931cf08965a0709d0e1c403220b3e11e01a922d62bd35d5cd"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-policy-shape-1-20261021T231146Z-570327/SEL-ISO-v1-01.outer.json",
+              "sha256": "16ef5155bf7c808899ccee803d24cba96341585037a0008055c87377bdef09ba"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-policy-shape-1-20261021T231146Z-570327/SEL-ISO-v1-01.outer.sha256.json",
+              "sha256": "2da0fad3cec6f7d1d9284d4a4b83ce6d263925951673983e22d11c280eb080eb"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-policy-shape-1-20261021T231146Z-570327/SEL-ISO-v1-01/node-call.json",
+              "sha256": "adb16c725add4720e42ae422d1c47973ccd003adcff62425c6d2711c195d2d7b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-policy-shape-1-20261021T231146Z-570327/SEL-ISO-v1-01/node-provider-response.json",
+              "sha256": "59b5e0c64b256cab6f1dc650fee754f06348590e02e280f9c633bd36dfca13e6"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-policy-shape-1-20261021T231146Z-570327/SEL-ISO-v1-01/node-managed.json",
+              "sha256": "fbfb88f837f7493753980a19b865f5b1f773130d9c5ab01cfb527d61e3ef7069"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-policy-shape-1-20261021T231146Z-570327/SEL-ISO-v1-01/node-body.json",
+              "sha256": "3e1bd71731101aad268c32363166bac806da1062c1b100bf4c7869d5b5a7e6e6"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-policy-shape-1-20261021T231146Z-570327/SEL-ISO-v1-01/semantic-review.json",
+              "sha256": "83d601d5721c4766cefcf197d4aac01557f976d070d3f87081909f8753803bdc"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-policy-shape-1-20261021T231146Z-570327/SEL-ISO-v1-01/response.json",
+              "sha256": "cafcad06f68631a626ac7d9d73d4457534ac4006e0588e82d0c68b9306af7ca2"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-policy-shape-1-20261021T231146Z-570327/frozen/freeze.json",
+              "sha256": "7d52d3c7639e8caf00e2d55cdd2dd4a3aca1b394c3ef90fec0c7e8e3079eeea9"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-policy-shape-1-20261021T231146Z-570327/frozen/policy-freeze.json",
+              "sha256": "0d8cdba0e6f0be7a9dbcf902e9b08508d2869b52b5194418a54132a3e858dded"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_policy_shape/manifest.json",
+              "sha256": "2ec21c08c50f1772538c61fbbd4d7c5ea00c3fb43527395ffe5fa10e61082992"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-semantics/review.json",
+              "sha256": "2d47e702a0a6bb0fb9904ba972fcd6dccaf91645319729011728d3a900a242a4"
+            }
+          ],
+          "summary": "第18輪唯一預固定kind-policy-shape-1:ISOLATION:SEL-ISO-v1-01:node首次managed local POST HTTP200完成，0retry/0cloud；累計23local。真三方fixture及新作者/審者closed PASS/fullbindings/endpoint/model/runtime先核。原raw30objects全部required、8assignment、5exclusion及全部自由文字獨立ACCEPT：inventory店商品anchor/stock sum/盤點日期metadata；sales同task九月整月online兩sum、先店商品彙總後LEFT一對一/正確雙鍵/保庫存/不補零，第一flat政策與無nest真shape一致；2prepared逐欄一致，無defaults/repair/canonicalize。legacy及新predicate/outer均PASS；新module同版及完整frozen各1raw重播PASS且結果逐值相等，5203舊檔/668作者證據/167source不變，完整bindings及freeze保持。原第15FAIL不翻案。upstream_injected=true，僅selection child可行，非自然recall/coverage/父或root通過。全部程序結束且proof最後封存，未SQL/DB/source/tests/fixture/Task/control/commit/push。Main等真FINAL核hash/check-evidence後finish；必fresh16–18audit及原parent自身0POST整合，再原coverage3/全新自然9POST/全部祖先/final驗收。",
+          "producer": "/root/loop_worker_policy_natural",
+          "finished_at": "2026-10-21T23:51:44.930788+00:00"
+        },
+        {
+          "round": 19,
+          "node": "natural_kind_selection_isolation",
+          "started_at": "2026-10-21T23:56:54.456495+00:00",
+          "result": "PASS",
+          "evidence": [
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-selection-parent/acceptance-mapping.json",
+              "sha256": "85ce3e5c299b1cbe3ccad12ed5858221dba79f1805cbbd587210375a676dabe5"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-selection-parent/independent-checks.json",
+              "sha256": "8239a4f6ca072941a6398ee57d3dfe6a2bfbdfea5c2156c3f6c328c82a3d065b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-selection-parent/raw-presence.json",
+              "sha256": "a5140d2abccc4926e2e324206c9575f62fa2b4d2d76f99e073205d9e53626ddd"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-selection-parent/typed-prepared-checks.json",
+              "sha256": "97b866532f015c3dfdf4a2b87e7b9dc95136e88f2ad4019ee0e451bf35da6e4e"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-selection-parent/reason-text-checks.json",
+              "sha256": "3ed4948e7b9cb0e03033c0942fdca29aa5e1a3308af572c5618178387736117e"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-selection-parent/historical15-check.json",
+              "sha256": "8e195bbd6cd7a4bb1675a66a5ea72916c5e221b8fbc2e43a0fff75056137475d"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-selection-parent/live-replay.json",
+              "sha256": "fe2101c72496dc7b468e553c4d4279d6905ccb4f62ba45f266cf0eb112dfe0c8"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-selection-parent/controller-check-evidence.json",
+              "sha256": "59f06714e9953e88772361735eeebcdf2e0f46d1afba33ff428091a6400753b8"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-selection-parent/final-verification.json",
+              "sha256": "1767d55f29ee2bb7622ebf66196d4e0295565430bba9a064b98d54fb96e54437"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-selection-parent/evidence-index.json",
+              "sha256": "ec9bacc3052619f0901dbcb2359695a7c3af13c72a186a7eec10f9bfef70d0a6"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-selection-parent/independent-verification.log",
+              "sha256": "fc02792db6d3e0175a7a87cd752611a5ac1d101d5ab908bbcd16b291cc280512"
+            }
+          ],
+          "summary": "第19輪原natural_kind_selection_isolation父層自身0POST整合PASS。獨立核原3項acceptance、原raw30objects全部required且raw=parsed=wire、8assignment/5排除/49理由refs/56列引文/5自由文字與2prepared；inventory店商品anchor/stock sum/盤點日metadata，sales同task九月整月online雙sum，先店商品聚合後LEFT一對一雙鍵保全庫存、flat缺值不補零。新舊body僅通用policy suffix有實質差異、無Oracle/typed答案；五方distinct closedPASS及fullbindings精確。新18同版PASS、原15同版及frozen仍FAIL，原flat EMPTY未修答翻案；完整frozen證據hash獨立吻合，5203保護檔/668作者/284自然/29原15證據無漂移，check-evidence PASS。明確只upstream_injected selection可行性，不代表自然recall/coverage/9POST/祖先/root/歷史Gate或可靠率；原coverage3及自然父9POST/祖先/final仍待驗。0SQL/DB/cloud/retry，累計23local不變；不改source/tests/fixture/Task/control、不commit/push。驗證腳本介面誤用已保留失敗log並按原API重核，無未決問題。proof已完成封存，Main待真FINAL核SHA後finish。",
+          "producer": "/root/loop_worker_selection_parent",
+          "finished_at": "2026-10-22T00:06:22.645888+00:00"
+        },
+        {
+          "round": 20,
+          "node": "natural_kind_coverage_isolation",
+          "started_at": "2026-10-22T00:06:22.820313+00:00",
+          "result": "FAIL",
+          "evidence": [
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-coverage-isolation/controller-check-evidence.log",
+              "sha256": "6a7dee2df6decc78d70dd3a9fcef13555f24ec05ef34f4d611783f4084b4e866"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-coverage-isolation/controller-status.json",
+              "sha256": "82c7558df691d09151284ff6023040cffd7e71195660b798dbbfdaa72c354519"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-coverage-isolation/execute.log",
+              "sha256": "004477e61ba48a81065f1ea099026d0fd1e05cca3111e40e76c3d3a8c49265cf"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-coverage-isolation/frozen-startup-error.log",
+              "sha256": "874f5894f4cca32b5ed79add09d71a5dbc2889f9adfd2f5008c16ffbd3499774"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-coverage-isolation/preflight.json",
+              "sha256": "410a26bfc0fae442189cf9f1001532743f65599d9236fdd6dd45a1e2c484eae4"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-coverage-isolation/preservation.json",
+              "sha256": "ba78c64e333b06a4b8d9b0f3ca2c0dd0d326997b7d6ac9a75067f8b2c37d2ead"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-coverage-isolation/proof-inventory.json",
+              "sha256": "c89244f19e42065677703470b598299bec1c40b23ef82086e022bc3aa3de0f06"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-coverage-isolation/protected-before.json",
+              "sha256": "078853d940d9db5d8418982e0ea03061b1346c57dde244907a7fa205201c20af"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-coverage-isolation/replay-first-two.json",
+              "sha256": "90e6245ab9403ddf09bd5720d6c93bd057b24df1b3b4c4258c1f88f02eba8880"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-coverage-isolation/replay-third.json",
+              "sha256": "cd2204e99693832e8e1bf607934c372e1fd2404e0503f1e5be1aff8c6641b1a2"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-coverage-isolation/requests-and-results.json",
+              "sha256": "75cc6ca2071daa708c290d6a213beeae777f6f1264dc5fa0ac2aa2e9dffa4bb2"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-coverage-isolation/reviewed-string-inventory.json",
+              "sha256": "be1adde9c98201296649ae5c8f37b6ebd83bc4ea098db1107595b14d5c6b1264"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-coverage-isolation/semantic-review.log",
+              "sha256": "73fcf5c7b0caf24ef51a3acb1dd1384492addba83b0242184bb0fa24bcfca035"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-coverage-isolation/verification-notes.log",
+              "sha256": "8a05c667689f4892aae71fdc8e8421d4c82ec58032b41ba4688fc16c0d483bcd"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261022T000748Z-82acde/outer-receipts.json",
+              "sha256": "a7e13fd056453821cd45db4158f3108e3a9efeb9f181dc9b8f4dd44ea37e333f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261022T000748Z-82acde/fixture-review.json",
+              "sha256": "f986fd1f361948c4ea4ecc24d4c7e779956210488467533411908f440f07c135"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261022T000748Z-82acde/frozen/freeze.json",
+              "sha256": "7d52d3c7639e8caf00e2d55cdd2dd4a3aca1b394c3ef90fec0c7e8e3079eeea9"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261022T000748Z-82acde/COV-ISO-v1-01/node-body.json",
+              "sha256": "0893f0360c3409c8bbb4523b4fd81623653fa36ed750131516c86858675a39b6"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261022T000748Z-82acde/COV-ISO-v1-01/node-call.json",
+              "sha256": "bf59512af544cb0aefaa55aa52f1eca7a66006b076ef44516017df9443aa206d"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261022T000748Z-82acde/COV-ISO-v1-01/node-compiled.json",
+              "sha256": "d748f8c5d21dcbc9c2b74e56479b0677a37ac35bc69a2cf5d04159b8fea01110"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261022T000748Z-82acde/COV-ISO-v1-01/node-error.json",
+              "sha256": "5eeb4c824f637c7d507cd527738ff1d1091b4ffcbe1591f3c4d75bf1805743a5"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261022T000748Z-82acde/COV-ISO-v1-01/node-managed.json",
+              "sha256": "5ee1237a9c336b3f1ca36b27b13cce0940cc9c53518ef6fcc221471ebb95585f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261022T000748Z-82acde/COV-ISO-v1-01/node-normalized.json",
+              "sha256": "70c4bc75544bc9d2818107890cbada74f13500f74272e4c003909a99ce30b210"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261022T000748Z-82acde/COV-ISO-v1-01/node-parsed.json",
+              "sha256": "b5c9627ad204a9c2ff82dcf6660c4dc383beffabc6be84203fb5781e8dc4ffe6"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261022T000748Z-82acde/COV-ISO-v1-01/node-presence.json",
+              "sha256": "3564e2c91cc3421372b302cdbcd744dcf372ae69cfb294c5b4cc3ec73a57c9c4"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261022T000748Z-82acde/COV-ISO-v1-01/node-provider-response.json",
+              "sha256": "39abcacd05063a3e69a9809002270c90c71b61f4a8efec6a005396715afd4285"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261022T000748Z-82acde/COV-ISO-v1-01/node-refs.json",
+              "sha256": "432b03d6ae8020570102d6c764a790a82a1d098981484b18e75455c4c648948e"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261022T000748Z-82acde/COV-ISO-v1-01/node-request.json",
+              "sha256": "65771fc0e5f6c02695bf8cfd8e565d5d3314310ec68d4bc0278892315c6033fd"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261022T000748Z-82acde/COV-ISO-v1-01/run.json",
+              "sha256": "8a901b7ced269885a2978774047d844b571fcc4eab57bc93cb273d5780c849d4"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261022T000748Z-82acde/COV-ISO-v1-01/semantic-review.json",
+              "sha256": "804d19f32846e855e37b6af86f4e1f706fe3797f5a98d6b7404750e2660cbc34"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261022T000748Z-82acde/COV-ISO-v1-01/upstream.json",
+              "sha256": "036a95a6bfce7584579489eee72802bbaccb8cfd93f3a5392790759e5e21eeec"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261022T000748Z-82acde/COV-ISO-v1-01/usage.json",
+              "sha256": "213e0366e7ac4c35e55ac271d3769b0d72b303b34fa1411b85b3b8732cb6bed9"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261022T000748Z-82acde/COV-ISO-v1-01.outer.json",
+              "sha256": "8ba9a5aa5efb9f4449f46b6ebdb564114fd995de50f4b6ed030f5e01bc385a5e"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261022T000748Z-82acde/COV-ISO-v1-01.outer.sha256.json",
+              "sha256": "ca8f3cc8e7698ae5c483139269d50f6d61bdbc337abedf475ebd1bcd4d107842"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261022T000748Z-82acde/COV-ISO-v1-02/node-body.json",
+              "sha256": "95a6e97be478c823621b2efa2cb4c0ccb60632ae0b4cd60891dd8876400c9630"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261022T000748Z-82acde/COV-ISO-v1-02/node-call.json",
+              "sha256": "611e018408339de013df9d84dde83a25d1d064d1c42e49c8d478da6e229e1978"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261022T000748Z-82acde/COV-ISO-v1-02/node-compiled.json",
+              "sha256": "d00b98e3626ec71447dbfd0961fec74538a1531a29aab77be0da0ad092cbe4a1"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261022T000748Z-82acde/COV-ISO-v1-02/node-managed.json",
+              "sha256": "04f96d8537ab9bc3a304aad24fbb7f0129d9d51a972f966c7005800ef6fa7cda"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261022T000748Z-82acde/COV-ISO-v1-02/node-normalized.json",
+              "sha256": "8a04bdf88e32436e291eed21dec8818c30a2577d3d26404c44753c2c26729db8"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261022T000748Z-82acde/COV-ISO-v1-02/node-parsed.json",
+              "sha256": "4e0dc098ecf11b1b9f5df23f20a669539d08b56a85723229866c18ea388957ec"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261022T000748Z-82acde/COV-ISO-v1-02/node-presence.json",
+              "sha256": "559703e5c604fd963d9d3d314c0138cea3b5b859e7489db45f553977995c6ed6"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261022T000748Z-82acde/COV-ISO-v1-02/node-provider-response.json",
+              "sha256": "9947c1e957974c9e83e2efb0dbfb509f8d7fb073c6a8b8f65c2fce4118007b0d"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261022T000748Z-82acde/COV-ISO-v1-02/node-refs.json",
+              "sha256": "49de5a7fa00b83eb996002dbe390e4fc4346ef84f4487ea37c2fe2c65f771dc0"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261022T000748Z-82acde/COV-ISO-v1-02/node-request.json",
+              "sha256": "ad9852c3212300f19732fd40f11d5663a232e7e9807907077bd51ed3ecd9be3f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261022T000748Z-82acde/COV-ISO-v1-02/run.json",
+              "sha256": "e0ae025754cb89bfb5a8d608bec3859742bab8579e96c07f170c5d1824d4f773"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261022T000748Z-82acde/COV-ISO-v1-02/semantic-review.json",
+              "sha256": "83d601d5721c4766cefcf197d4aac01557f976d070d3f87081909f8753803bdc"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261022T000748Z-82acde/COV-ISO-v1-02/upstream.json",
+              "sha256": "58418ab1cca66e31ecceb6cede8e14b1e0a01640e210e42b7ffe2fe80f899076"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261022T000748Z-82acde/COV-ISO-v1-02/usage.json",
+              "sha256": "187cfd1e8aacfd8b76bdf6e3f1c0d5cc5ef0e0d8d3c578f7fd02f42714401b3f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261022T000748Z-82acde/COV-ISO-v1-02.outer.json",
+              "sha256": "9f9df874b88cd7361b9bdaeaad3c4f5d9d9f0c0b05345d209aa322a2405c0b97"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261022T000748Z-82acde/COV-ISO-v1-02.outer.sha256.json",
+              "sha256": "44d575df523d3bcd86ffb16b576a6793cee2e8c78839ac9ed12083a6fce6fafe"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261022T000748Z-82acde/COV-ISO-v1-03/node-body.json",
+              "sha256": "15e3c061a9c93654f05784d808a29e7ff5cf17a5ed4c474ff343fe9d1b2f234f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261022T000748Z-82acde/COV-ISO-v1-03/node-call.json",
+              "sha256": "0b671a9a7e96b20405f8311e24faf56c085f4cc1550c47268810788c1064a9ca"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261022T000748Z-82acde/COV-ISO-v1-03/node-compiled.json",
+              "sha256": "be133beddf86b412b48bc73b0f274dad22fc37ad3f4667d4f40bc25554bb7866"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261022T000748Z-82acde/COV-ISO-v1-03/node-error.json",
+              "sha256": "5eeb4c824f637c7d507cd527738ff1d1091b4ffcbe1591f3c4d75bf1805743a5"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261022T000748Z-82acde/COV-ISO-v1-03/node-managed.json",
+              "sha256": "720769bdd6f8748024615ecdf29a0183969ed7bec75f08317c7c2321e20f579d"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261022T000748Z-82acde/COV-ISO-v1-03/node-normalized.json",
+              "sha256": "1496dde66cede7e67c1d5354b70b3d1bef8069c1ca0e0dc99eee983b90ef850a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261022T000748Z-82acde/COV-ISO-v1-03/node-parsed.json",
+              "sha256": "8ae006489e79887eb720a9f7bd9a09cd82779e338f170c861449a48cb1565eb0"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261022T000748Z-82acde/COV-ISO-v1-03/node-presence.json",
+              "sha256": "6f2afb0c72251a0318b4df94a394a73718cf663134fe738d88b68ede8b851d26"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261022T000748Z-82acde/COV-ISO-v1-03/node-provider-response.json",
+              "sha256": "51f3f862e82f84b968d1aa80f4912e5db8a11f3a47fb8998d41df32e6e41fb62"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261022T000748Z-82acde/COV-ISO-v1-03/node-refs.json",
+              "sha256": "456911ce0aa60be00cd8030d7f72100dcacc9c5331d03123135bd092c8767729"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261022T000748Z-82acde/COV-ISO-v1-03/node-request.json",
+              "sha256": "cf263f71bdee8b968e98475f34581cb2e2db7ff5b46aed9ae34aea45fe214485"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261022T000748Z-82acde/COV-ISO-v1-03/run.json",
+              "sha256": "a8c5e3190f419dff749e29c3676ca8fde0b80dec926af6e58c985f1dfeff66e1"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261022T000748Z-82acde/COV-ISO-v1-03/semantic-review.json",
+              "sha256": "5e0b14a389bd9300d9ea5cf71079d2994a345a7f202d77ffc3802aaaca520d63"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261022T000748Z-82acde/COV-ISO-v1-03/upstream.json",
+              "sha256": "5afd2ee0ae2fcd93287c0863b68ef0518f89476fb60f157249f32901f3ff27a8"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261022T000748Z-82acde/COV-ISO-v1-03/usage.json",
+              "sha256": "50577e8b6a7eb6d9d6d2de97c5cd923c4855876de708f136b013d1ace88a75d3"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261022T000748Z-82acde/COV-ISO-v1-03.outer.json",
+              "sha256": "837ee94de9c62fa87a2c9a5058d86fcbced98ab3d3a26cdef1c8f456cc2e483e"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261022T000748Z-82acde/COV-ISO-v1-03.outer.sha256.json",
+              "sha256": "e651c52b13ad545556f540a8c169f9882024bc52ffb03217b0e87c6e419f62af"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/832021b283e84ab7889b546e3258c2ad.request.json",
+              "sha256": "d35da43c66eefc81d5dc6c6b9444e6edea79ad40f556b472df60c59698d68384"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/832021b283e84ab7889b546e3258c2ad.response.txt",
+              "sha256": "4dd4df54302a397afb87134529310919f15ddbbc7169b744bc3e012c30434a25"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/8108409018d643cfb61f968dc9f469ee.request.json",
+              "sha256": "e3762a7849cb32adec9b5f8c4cbd24f55fd09fb882b2aeab8604473e558d63db"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/8108409018d643cfb61f968dc9f469ee.response.txt",
+              "sha256": "c923fafd081ca26c313f1a3c85c8e0a917ce61851ed0e27916e632f2bfe8671f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/f4b1153ed3ab48eba9298c9db1fefe40.request.json",
+              "sha256": "49ab06ade91720634d20050c176650629a0485e85aed0bb6fa926103cdcebf5c"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/f4b1153ed3ab48eba9298c9db1fefe40.response.txt",
+              "sha256": "259633fabd6eb98e6b80a5c3bd9132a312f2bba52f8b05b3993dde6133f66ff8"
+            }
+          ],
+          "summary": "固定COV-ISO-v1-01/02/03依原rebound manifest與第14輪fresh ACCEPT依序各一次首次local POST，均HTTP200且正常stop；結果FAIL/PASS/FAIL，任一錯即整節點FAIL。01與03均將有用店鍵store_id/loc_key清空並標unsupported，應partial/own=true；01 revenue/sum雖保留，卻將依賴缺online及完整grain誤列own_gap=true，應false。17列raw required presence/status/own_gap/mappings/path、完整derived gaps與所有raw/normalized字串及完整provider thinking均獨立核對；derived依模型原決策機械正確，但錯誤grain status傳入下游、01多self缺口，並未repair。02會員無關identifier對照正確；兩個獨立月份雙AND均正確，03完整2032閏年二月29日、任意Unicode ID與改名欄來源均保留，未以sales件數代庫存或店鍵證庫存母體。\n03金額partial/own=false正確；其conditions重列與獨立月份filter完全相同的整月雙predicate，原checker因expected []另記machine FAIL。獨立語意裁定為prompt明允且idempotent的冗餘AND，不新增能力或改scope，保留此literal分歧交fresh研究，不改Oracle/checker/raw/舊分數；不影響漏loc_key的實質FAIL。\n三raw同版及完整239檔frozen replay各自忠實重現原FAIL/PASS/FAIL，replay_verification全PASS；5919舊保護檔、完整live rebound bindings/manifest/review與external runtime hashes均保持，loopctl check-evidence實跑exit0。另保留一次/tmp cwd導致凍結相對prompt缺檔的離線啟動錯誤及再次診斷stderr，改frozen cwd後成功；最終檢查誤比格式化body file SHA與controller canonical SHA的assert已釐清，三canonical均吻合，未改任何body/expected hash，皆0POST。\n本輪3 local POST/0retry/0cloud，actual token input9712/output8571；全局26 local/0retry/0cloud，19 closed rounds保持待Main finish第20輪。upstream_injected=true，僅recall/單View隔離；0SQL/DB，未直接改source/tests/fixtures/Oracle/Task/control或commit/push，不新增Markdown。完整自然父9POST、所有祖先整合及fresh final verifier仍PENDING，交fresh研究重判部分能力與自身責任可行性。",
+          "producer": "/root/loop_worker_coverage_isolation",
+          "finished_at": "2026-10-22T00:50:27.976096+00:00"
+        },
+        {
+          "round": 21,
+          "node": "capability_projection_contract",
+          "started_at": "2026-10-22T00:59:36.404890+00:00",
+          "result": "PASS",
+          "evidence": [
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_capability_projection/manifest.json",
+              "sha256": "a2eb2f76c0479b49294245987346e4676db78c86fbefac02dd4e153d8c590f2d"
+            },
+            {
+              "path": "evaluations/diagnostics/managed_capability_projection.py",
+              "sha256": "44fc1a6ec68f2b3c7562e27dcc0cc59e8145692aee8ea8f86e551c033087dd3d"
+            },
+            {
+              "path": "tests/diagnostics/test_managed_capability_projection.py",
+              "sha256": "ddf30e05642a4cc36540cbae20c3a4561a36594fa125871762df16a333dc0bf1"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/final-verification.json",
+              "sha256": "1202e333672ca799ba40887f7fd03eb8c3e71f98b37db810d4aa3211505d9160"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/proof-inventory.json",
+              "sha256": "6613f83242c967e94740f148cbca4d80bb87a627954f33bdbb28e61c4581aa4a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/operation-handoff.json",
+              "sha256": "f69ce068cab3ac578fa108d800b345afa34d2563f057055308b7fa6b5fd84a52"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/preservation-start.json",
+              "sha256": "871686f064753457666582e8c8e515ce83ba835eaf6ff3a5cfae7ab3e0d94289"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/preservation-final.json",
+              "sha256": "9375f34101bc431a4b29162130b919275ea890d1059ef48b36b1c1b5daffaa0a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/focused-authoritative.log",
+              "sha256": "8ea496b36ed3abe4718c77b5c6e8765d8c81afc741c9e5a716550167e5f16b13"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/direct-regression.log",
+              "sha256": "06316d7fe701c13e37a47b577f9ed02cc86bd76438ae4380e2640806c28770ad"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/historical-open-state-test.log",
+              "sha256": "0d5d7300416f92408111e8f284117f7ddff6dcfafdbbca57c5ad8236c6d6f0be"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/validation-notices.json",
+              "sha256": "74ffb82bac8939d9ee7d70b080de387b5555c73e078b4e2f7e98fcba7acfa65f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/red.log",
+              "sha256": "cfe6c4a0aa640c348c1915002b9aa5981bb680b5ba58e56c7a2fcf23ba63b43c"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/old-nodes-exact.json",
+              "sha256": "2208217655900ac1793a45fdc18c2bb52534595a57ecbf3071a59052e1baab74"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/history-live.json",
+              "sha256": "553e98174548c657ad4dcf5005f4d085b0dc67774d909334f6a4ecc5d2f13bc3"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/history-frozen.json",
+              "sha256": "16cdd9dff339c381f0dd05e4cbd8aa4fd036ce5afa7e58197d713aa7f8eeb274"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/history-final-candidate.json",
+              "sha256": "4661b1c93020dcbaf803877102c0ff8b9669e93d2d3fdde5a51fc7baaa4adaf7"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/selection-history.json",
+              "sha256": "ea01088096d3151c61b73f10a731c39e67efc37c96cc678a8ed5867ba85df3ae"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/legacy-v2-rejection.json",
+              "sha256": "33f98b63d90348f45334828c962bf71fc14c8ebf6f2a4568ff7eb85ae8e0e3ae"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/legacy-closed-provenance.json",
+              "sha256": "f5cba879b9ea4999c36f2da2bec76198e1ac82d142efe79e34954f9b8553fa72"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/multi-scope-union-probes.json",
+              "sha256": "907552ca0a199b71591e51dc24b966adb10380fa65250cc1eed270109b9df3e6"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/live-frozen-final-controls.json",
+              "sha256": "c3f7f40b272d7f3983056b4a1ec70cb22c61913e4c282cf6f51b2800cf6c293f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/frozen-final-source-drift.json",
+              "sha256": "0033589eebd64b94dbbed8a84b9fb6d579610a53790b2392789aecd1a30e45df"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/controller-check-evidence-final.log",
+              "sha256": "6a7dee2df6decc78d70dd3a9fcef13555f24ec05ef34f4d611783f4084b4e866"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/dry-run.log",
+              "sha256": "d0f0efb3b5c7997c0de4437202dacaad1cc34a2c76aaf11e994761ff27b9a380"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/frozen-final/freeze.json",
+              "sha256": "7d52d3c7639e8caf00e2d55cdd2dd4a3aca1b394c3ef90fec0c7e8e3079eeea9"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/frozen-final/policy-freeze.json",
+              "sha256": "99a62eef564c97d2ae473e9c06cf3e4397e2a7e9fa7722a235f1e7052c27b5c0"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/frozen-final/capability-freeze.json",
+              "sha256": "fb9d90541d2e259436398a1905d379422eab5b318e229878951b958905c9bd70"
+            }
+          ],
+          "summary": "第21輪純離線能力投影契約完成：無損cards、有限同View scope AND及五固定lineage樣本；原kind全部守門與policy委派保留。81新focused＋228直接回歸實跑PASS，287檔完整finalfreeze及190工件live/frozen一致，fake9兩prepared及scope/typed首錯保持；source/receipt/interrupt/provenance/HTTP身分拒絕通過。6389舊檔不變、Task/control本worker不變，原20 FAIL/PASS/FAIL與15FAIL/18PASS保留。0POST/SQL/DB/commit/push。自然效果PENDING；Main核真FINAL/hash後finish，先fresh audit19–21再fresh delta核准，未准不得POST。",
+          "producer": "/root/loop_worker_capability_contract",
+          "finished_at": "2026-10-22T01:20:27.783958+00:00"
+        },
+        {
+          "round": 22,
+          "node": "capability_projection_semantics",
+          "started_at": "2026-10-22T01:28:19.444910+00:00",
+          "result": "PASS",
+          "evidence": [
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-semantics/review.json",
+              "sha256": "c509270ef90e86b4f6c0ee064ae19b218bb2426f6dc8f88a4171496b819d00d7"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-semantics/final-verification.json",
+              "sha256": "7306d5989ae4bdfd9b034b03a3e5946a4d3daa77aef2e8c42b8f58649881cfdf"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-semantics/input-lineage-controls.json",
+              "sha256": "2b3e0c1c33a77c31e4597ad7de413fc788fab9143872d6b63970cf3b66827e0a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-semantics/independent-semantic-controls.json",
+              "sha256": "2c24fb812665a0aeef35d65b707ffabb10f9df67be3ef26383890381d8fd5918"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-semantics/authorization-controls.json",
+              "sha256": "49aee5d544395790abe6ec152886223929ebbcbdc344fa44bf6233c27d61cabd"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-semantics/verification-notices.json",
+              "sha256": "0d7f613b9177a6637548f0fe24735772c8e21f5ccfa214940cbfc443e48dfe99"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-semantics/input-verification.log",
+              "sha256": "62e73a009e71138ed78adfd2f963dfe76f35111f54d9455644ad682de898f15e"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-semantics/semantic-verification.log",
+              "sha256": "d71be1dc1c747fe77b643e3032694ef15afa372c11bba53b884821bd07f1c217"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-semantics/authorization-verification.log",
+              "sha256": "3d929fee947db418c059cc1af1443a3848e25e83dc637c60bd761bb0eadf45ac"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-semantics/focused-network-guard.log",
+              "sha256": "6912a5fcb3f0b0283de1ae0ed50264c3beb4c5eeadecb38912cedbfd208ae522"
+            }
+          ],
+          "summary": "fresh capability_projection_semantics離線delta ACCEPT。原需求/20原raw/真View與原56rows逐項核對，無損cards不洩漏答案或刪會員自身限制；daily有用店鍵與依賴-only own=false、customer無關鍵與會員自身own=true、inventory完整責任均保持。有限AND只允同View明示已完整驗證supported filter完整群聯集；17真context、16多群子集合、7動態kind、15授權控制與1focused實跑通過。五輸入與16新增引用rows、全部新舊bindings及作者28閉合證據吻合；精確review在真open審者下於settings/model/network前拒絕，未造Task。原20仍FAIL/PASS/FAIL，原15FAIL/18PASS、38×2 Gate未過及root PENDING不變。0POST/SQL/DB，僅新本審核JSON/log；未重跑作者81/228或全frozen，核其正式log及audit。全部程序/proof已結束；Main核真FINAL及hash/check-evidence、finish本輪closed PASS後才准固定五自然coverage。",
+          "producer": "/root/loop_worker_capability_semantics",
+          "finished_at": "2026-10-22T01:38:51.582441+00:00"
+        },
+        {
+          "round": 23,
+          "node": "natural_capability_projection_coverage",
+          "started_at": "2026-10-22T01:38:51.759123+00:00",
+          "result": "FAIL",
+          "evidence": [
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_capability_projection/manifest.json",
+              "sha256": "a2eb2f76c0479b49294245987346e4676db78c86fbefac02dd4e153d8c590f2d"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/3b787d488b6c46919e5577c430a614d1.request.json",
+              "sha256": "fc15e271a10eb9f051d57811a47eb535357f7c2b75a3a5baee6ee4d2426e538e"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/3b787d488b6c46919e5577c430a614d1.response.txt",
+              "sha256": "fa23700b32eb848f83b94071a9b5762c191728964a3f17f356f6bf826573b633"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/6da4b8f97a904821bf8f2221c151e65a.request.json",
+              "sha256": "08074485377a41c32a89922bf0b87d683e1adfac3f2a4fc75a8a905dfefe39c8"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/6da4b8f97a904821bf8f2221c151e65a.response.txt",
+              "sha256": "f150acacbe1f1caf2ff9ea7be1b3867fc1d108cb384f05fb25da02f2f2d2b305"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/92d30768809a449ca1e21a0638e7827e.request.json",
+              "sha256": "5edfa136c69114a8811c0b17be4e887b3f074e0bba42c0cadb231b1740429767"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/92d30768809a449ca1e21a0638e7827e.response.txt",
+              "sha256": "a11df15c322b38359fb19c8736696e7ec22758473b9d622d1db16b550999f190"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/b2bca399f95d43b5a93e901ba5e237ce.request.json",
+              "sha256": "fba057e791f361a27b0d2af93fb3ed9d7f513911f09275df97b9c8059b62b5e0"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/b2bca399f95d43b5a93e901ba5e237ce.response.txt",
+              "sha256": "ffc8df337e934d4a29643967401ae8a0cd4681fec3e1d03b02b869ec666b8a2b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/b5a046baca9c498fbd4502d607f9a98c.request.json",
+              "sha256": "c85ae2c50d898acc40539520e421ed8ba74f5c045f1df26bbf7381eb8a254907"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/b5a046baca9c498fbd4502d607f9a98c.response.txt",
+              "sha256": "ec262e80d1d2ec745ebe4fb19c5cc03d119efd1507221636450b2dc3daebd99f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-CAP-v1-04.outer.json",
+              "sha256": "cf78e58095ff3f38fcc8f15615612d5b355f629b5b6bc6b0b546df2c8f5485ed"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-CAP-v1-04.outer.sha256.json",
+              "sha256": "46c58df70a1fd920af29137850df5ef48c8ba39d9a881c01e65c97b108781253"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-CAP-v1-04/node-body.json",
+              "sha256": "35c0139ef177869d867ec7f964b7c1c24fad912b02e7c3614726de6213d4ae2b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-CAP-v1-04/node-call.json",
+              "sha256": "278e14e64fc5324a8f420188090a93ad2232c23f8a24de39f905437d3ffa6650"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-CAP-v1-04/node-compiled.json",
+              "sha256": "5988d77d199fab3de6ad187d680c6c187e943de50f53d8faebd6718ccfb9d44b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-CAP-v1-04/node-error.json",
+              "sha256": "5eeb4c824f637c7d507cd527738ff1d1091b4ffcbe1591f3c4d75bf1805743a5"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-CAP-v1-04/node-managed.json",
+              "sha256": "57f5aea92d3c07507181bbcb7a93471a248c90bb6081451cb1c62427e2178c51"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-CAP-v1-04/node-normalized.json",
+              "sha256": "d2f975b4202b305ee4d6c561641f624ff9d15e777488863b78edfc298eb12eca"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-CAP-v1-04/node-parsed.json",
+              "sha256": "d6a10cf588549e2c3c8b662787b9deaf1f1d3dc976e28cd1ef08f783d8c669b0"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-CAP-v1-04/node-presence.json",
+              "sha256": "558227713dfb4216fc0f99f22c61cdc0f43c4db8367d1a042417b9a9c60dca38"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-CAP-v1-04/node-provider-response.json",
+              "sha256": "54efb01ab56c444c167ec7f743f208d3d0c0166cd21abc1cb1c9b1806519b081"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-CAP-v1-04/node-refs.json",
+              "sha256": "979c3bb9d57a913ca014c829ce674b731f9e55201b04957a0cc98d5c3cdbebcb"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-CAP-v1-04/node-request.json",
+              "sha256": "c396a49d46d96e0ab17d04fdfb3457f2ba4461268a6cf4af39cb0eb1322771c1"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-CAP-v1-04/run.json",
+              "sha256": "6d4f0b166aaa47c59e1a2f3217324d0b849966edaac8b11985a53f7f42099331"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-CAP-v1-04/semantic-review.json",
+              "sha256": "23529beedbe2d579637c9ba63209d7d9eee93f500de9e6ee3954c87708f795b0"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-CAP-v1-04/upstream.json",
+              "sha256": "036a95a6bfce7584579489eee72802bbaccb8cfd93f3a5392790759e5e21eeec"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-CAP-v1-04/usage.json",
+              "sha256": "8ad50f0770b1b38ae2f12975d21a3e2d08c492fbd3af5916fb2d858bc0c39df9"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-CAP-v1-05.outer.json",
+              "sha256": "43a08510eb91af2b4bf822027391c328f5f7e33d7f01544f63aee433c3651281"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-CAP-v1-05.outer.sha256.json",
+              "sha256": "42ffbd2f158846de3909e05a681aa7c488be2dcdfba4c29d242231e2d6c73780"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-CAP-v1-05/node-body.json",
+              "sha256": "5f3b505770e993469badc4f151e9b98c860952a14a48f2cfbbc14893ecf667b4"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-CAP-v1-05/node-call.json",
+              "sha256": "919b2f2fd0c0edd218b95d0a5e5a56584912c2af26a26ce06b722038d7155ee8"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-CAP-v1-05/node-compiled.json",
+              "sha256": "0187afb220793bd482b80a4f54be3a9725fcdfa89d50303773c6984fea1af3e9"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-CAP-v1-05/node-error.json",
+              "sha256": "5eeb4c824f637c7d507cd527738ff1d1091b4ffcbe1591f3c4d75bf1805743a5"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-CAP-v1-05/node-managed.json",
+              "sha256": "cfc2f6c49681972aa9fe7cc9af9f6b4caab2a9c1bcea6f56e823c0f695c2711b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-CAP-v1-05/node-normalized.json",
+              "sha256": "7300ae3fdf37fdeffbd5d058b3886e97a33709f37938f1b2ea9d86f86848436f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-CAP-v1-05/node-parsed.json",
+              "sha256": "82902350af040488eea8f0ff3c60c727341969a1c3f51ba71f6b09fe709ce52d"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-CAP-v1-05/node-presence.json",
+              "sha256": "977188f780d4f482dc5d2cba789481380b219a6e06c8b558d585f48a1374e07d"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-CAP-v1-05/node-provider-response.json",
+              "sha256": "49950b3802c07b48bfb5e7cb83936a784d6ba95c4dea2de811ef17c76ad0dc6d"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-CAP-v1-05/node-refs.json",
+              "sha256": "8bf4764694545a8ca997b8325dcf87ed7d8f8a722093267c922fce924c4c3a5d"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-CAP-v1-05/node-request.json",
+              "sha256": "b3b29214ec1af131dc6fe4c7fba526fbace75440b3b8013522a5ba93461b86cb"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-CAP-v1-05/run.json",
+              "sha256": "5a19f5336f87813ba9f28f2cde12f2da8ad431e7f6a625f67ec05b1a061dcb6f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-CAP-v1-05/semantic-review.json",
+              "sha256": "4087b4156fb1d16cbcb43592a91b21cb8cc4b442d69eda87f473335610278c3f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-CAP-v1-05/upstream.json",
+              "sha256": "036a95a6bfce7584579489eee72802bbaccb8cfd93f3a5392790759e5e21eeec"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-CAP-v1-05/usage.json",
+              "sha256": "5761a20bf289e8f24bf6e7133ed01858fdf59c05cd0b20983d9447bea96115f3"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-01.outer.json",
+              "sha256": "909c56d704a32b21c7a9c13269e70e9a83c54d7945103d29d4f188241aeb1a72"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-01.outer.sha256.json",
+              "sha256": "1e8bcd8ca9d0c5d727fe6a1f9a12db9111df6b3b939b65c9b8aa30a808d06288"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-01/node-body.json",
+              "sha256": "53f329913f1620f3ede77f860818cda09b05ae62662c7c54bad43ddd0b25701b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-01/node-call.json",
+              "sha256": "85d24113261f489d284967325712e744effde742c2434cda0b547cbad1c41d6a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-01/node-compiled.json",
+              "sha256": "2023d8198c8e0984acf441a32d1622fe2aa6e898dbac459cbda509372af612be"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-01/node-error.json",
+              "sha256": "03813cadea8ff0621dd6a49f624e1871dca3d3dc03ddf56b9f2fdcdb9ae3093a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-01/node-managed.json",
+              "sha256": "d0d35016e5fa89e5842829f62834e0ee2cbfcd2d612829d4cfec275f081d7bb1"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-01/node-parsed.json",
+              "sha256": "0a8322db008c8222da3aecca7b76592e8ac9bae4695af88546619f6318f5cfe9"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-01/node-presence.json",
+              "sha256": "76d50a3595a001b89685c946de0bcb4b50175d7ee2caee4ae5e088b2948d36b5"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-01/node-provider-response.json",
+              "sha256": "a015683e7843110f8454c7642ebdaf7b4dbc0f1a89d57f45ad34534d8f2cac9a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-01/node-refs.json",
+              "sha256": "6fed76c28121b67389641115ff977f5ec20294e4bcadf9da7503c1f2e01c2de4"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-01/node-request.json",
+              "sha256": "655c8367003f6e22b6cf7299509d32da2043e5274fdb39789bb2aedddf6b6289"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-01/run.json",
+              "sha256": "65ce7c0730faac4ee925d963e29416d5c7de663a14d0dda6f1317a8bc31826ee"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-01/upstream.json",
+              "sha256": "036a95a6bfce7584579489eee72802bbaccb8cfd93f3a5392790759e5e21eeec"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-01/usage.json",
+              "sha256": "6ab51c5d1d53c398c9d875fbe99727386962397804be5f3764d085726bded19c"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-02.outer.json",
+              "sha256": "cc74387735bc572d463a8d9ef06db2820a6ff2f5aa2445d6816257c11bc949ea"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-02.outer.sha256.json",
+              "sha256": "8897a7529b6c8884c3bbdb6fed8c57649835ac071ce35d16ff14f42213d58655"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-02/node-body.json",
+              "sha256": "9c7a4b0573f08ea2e3647f3778aaa3bcfc4b7c59313945c7360c37378ac97830"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-02/node-call.json",
+              "sha256": "1f5fb138c02c4599d48d6707ca88b5c47f582562bca1da2c3d4e7405c153497f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-02/node-compiled.json",
+              "sha256": "d00b98e3626ec71447dbfd0961fec74538a1531a29aab77be0da0ad092cbe4a1"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-02/node-managed.json",
+              "sha256": "71b1305c32294b85740940a75604875fc344ffae93e72c2a4a5bbf449eaf28ca"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-02/node-normalized.json",
+              "sha256": "8a04bdf88e32436e291eed21dec8818c30a2577d3d26404c44753c2c26729db8"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-02/node-parsed.json",
+              "sha256": "4e0dc098ecf11b1b9f5df23f20a669539d08b56a85723229866c18ea388957ec"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-02/node-presence.json",
+              "sha256": "559703e5c604fd963d9d3d314c0138cea3b5b859e7489db45f553977995c6ed6"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-02/node-provider-response.json",
+              "sha256": "894d2f4d2d97bcde7ac506ad166a2cdb6573754b0531293222b7e7e06356d409"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-02/node-refs.json",
+              "sha256": "49de5a7fa00b83eb996002dbe390e4fc4346ef84f4487ea37c2fe2c65f771dc0"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-02/node-request.json",
+              "sha256": "a0955f6e9d5f26619cff37784cf280b2515f29c3bd27ab18ceed59c745fee336"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-02/run.json",
+              "sha256": "3400d9a13274528b0dc5f57deec7a6e1d13585720d5496c32c0acb34f6f9edb1"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-02/semantic-review.json",
+              "sha256": "83d601d5721c4766cefcf197d4aac01557f976d070d3f87081909f8753803bdc"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-02/upstream.json",
+              "sha256": "58418ab1cca66e31ecceb6cede8e14b1e0a01640e210e42b7ffe2fe80f899076"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-02/usage.json",
+              "sha256": "f0d5083a8cbdced6f25b6556ee4833e16d348641b72f729713544b9811151e81"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-03.outer.json",
+              "sha256": "c484497914ebe9cd35cfbff26d28a957de38537013eb8f4cd457f3029c461507"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-03.outer.sha256.json",
+              "sha256": "ac8ea255cda2f5f73e3bbdd4b9143f4db1ed7031bdfee57fe49baa3c49faed42"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-03/node-body.json",
+              "sha256": "f37deddc2c23747749bbf1ef74e5b72cf86bf069b6fccc55e684dffcea10e7fb"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-03/node-call.json",
+              "sha256": "5b8cacbb97f33072cf067133b182649243212130a1522ab7093a2fe440c80f5e"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-03/node-compiled.json",
+              "sha256": "1b9b654fd23a147b531ade8c685a3ac345c2a33cb01b2f192c6684e3e93c10dc"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-03/node-error.json",
+              "sha256": "2fd63dbeff0ee95a4717092efac6f464631e99a260ddde4a8da389f0d5d0fefe"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-03/node-managed.json",
+              "sha256": "d7873a14d5727d2f92d06bbaed40f2164257f5034dfd58c62454938595966852"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-03/node-parsed.json",
+              "sha256": "1d03ced13b267292f20afdbb19e5d606fae42199774edcb32709aeaee4cead00"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-03/node-presence.json",
+              "sha256": "28d2747fc5d06bb35c411ba59584cab7618e1be9ffdc01aa31e5aeeb2ffcb840"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-03/node-provider-response.json",
+              "sha256": "9c45e791037e801183d448f9bc04112f9c7332b673c48f518b6c5585697a6cd0"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-03/node-refs.json",
+              "sha256": "272406ed087a4a3c14670d39db7ed162c0564ed85fc98f2100fd86b14feeff17"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-03/node-request.json",
+              "sha256": "4bed1a893551c5246744a9a0139af0458117989ba32f0b23b6a1e654fb4c24e1"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-03/run.json",
+              "sha256": "aa695af6238a6e2a100a4ba613a369200c4402128b8b65908e3b414b616d9af7"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-03/upstream.json",
+              "sha256": "5afd2ee0ae2fcd93287c0863b68ef0518f89476fb60f157249f32901f3ff27a8"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-03/usage.json",
+              "sha256": "5cfd2c2bd171aa92a8eb22e1aa97746abb48438b72cb3744186896ef3247c5cd"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/capability-review.json",
+              "sha256": "c509270ef90e86b4f6c0ee064ae19b218bb2426f6dc8f88a4171496b819d00d7"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/_external/edd/ledger.py",
+              "sha256": "2f9349a5d27301d9364d4fa04c524b3459a2c47e27344a383e7c5714b01900ba"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/_external/loopctl.py",
+              "sha256": "815888ae2dc1e7c142e91e313f990145e14d3de65adaa65f35113a53015388f1"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/capability-freeze.json",
+              "sha256": "f3ff332942b01a877be187ff232d93aaf36fa1a662ccc46fae77b9de39c02921"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/__init__.py",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/call_budget.py",
+              "sha256": "16dbefb7d4e1986336d36d7dbb5553143fbc974c58f568b0f7f3751619a880e0"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/coverage_priority_probe.py",
+              "sha256": "a2ebbc4c5e8e26cdf9e8b236a029b20a572e51d8ca227fb53df4d33a36536a64"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/coverage_reference_runner.py",
+              "sha256": "a51bd607f2077d6af3739d7e54673e4062c1f4d5a007e62f822fddddc3b3fcd2"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/decision_chain_probe.py",
+              "sha256": "37fc49a3816ddbfa558b1660ac7978a039fedc1e0f58cf584dc52bbb697ded05"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/decision_summary_comparison.py",
+              "sha256": "925954e90b0ef9a1f8c5828010621576b196e7c46bd0fddb3395afbd3184b693"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/decomposition_cases.py",
+              "sha256": "3890883fe74adc908d6b03647a20d2b718e15ecd45fe66d6833e4ca82f35cff8"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/decomposition_grading.py",
+              "sha256": "1c70bd7ee47dc76f39bd7ee21205be434c0307d3817e092cd68d1fc1702b1cbd"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/decomposition_reports.py",
+              "sha256": "d930a50c79d7d2ad3606cafcc62c26e17e3b3f2c296a6b80bb17411b9a3a7974"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/decomposition_runner.py",
+              "sha256": "7cd168fbe310a19e68b4418a4b533fea1683e71ce31710e186fe70697529a573"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/diagnostics/managed_capability_projection.py",
+              "sha256": "44fc1a6ec68f2b3c7562e27dcc0cc59e8145692aee8ea8f86e551c033087dd3d"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/diagnostics/managed_node_diagnostics_rebound.py",
+              "sha256": "d9cb08e98fdcd9d186cddcf47f48ea466e804d153880546d08324f4d35871200"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/diagnostics/managed_node_diagnostics_v2.py",
+              "sha256": "83ddfd670aa17a3ca179c0052e3a84297c549f6539e1c08cb3cf3fbe93654ff2"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/diagnostics/managed_policy_shape.py",
+              "sha256": "c3fc6efc4b49af5054972d6a088ad9865c9135b1b9c5c0edb156df148b4747e6"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/evidence_bound_managed_contract.py",
+              "sha256": "6451efd734c17f20c91a737210c156bfb52034b0f804e1d76f5411483a4c75c8"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_capability_projection/inputs/COV-CAP-v1-04-body.json",
+              "sha256": "35c0139ef177869d867ec7f964b7c1c24fad912b02e7c3614726de6213d4ae2b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_capability_projection/inputs/COV-CAP-v1-04-cards.json",
+              "sha256": "e1808680b22eaecee93a60db12178d2afd166a8dd0ccef27c0cd9a61d8319c54"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_capability_projection/inputs/COV-CAP-v1-04-messages.json",
+              "sha256": "11eb0f7b146fafe25d670f790daf9c695428d6aeb034dc5badeb790513d2a2bf"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_capability_projection/inputs/COV-CAP-v1-04-schema.json",
+              "sha256": "09892b4e613b56cc86632c79027b43390e72b3c4aa29444ac2474b7def756d35"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_capability_projection/inputs/COV-CAP-v1-04-upstream.json",
+              "sha256": "036a95a6bfce7584579489eee72802bbaccb8cfd93f3a5392790759e5e21eeec"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_capability_projection/inputs/COV-CAP-v1-05-body.json",
+              "sha256": "5f3b505770e993469badc4f151e9b98c860952a14a48f2cfbbc14893ecf667b4"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_capability_projection/inputs/COV-CAP-v1-05-cards.json",
+              "sha256": "e1808680b22eaecee93a60db12178d2afd166a8dd0ccef27c0cd9a61d8319c54"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_capability_projection/inputs/COV-CAP-v1-05-messages.json",
+              "sha256": "52ea62bca68387a4baf6630063a313eb85a7cff3b054aee01794b5e728a8f0d3"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_capability_projection/inputs/COV-CAP-v1-05-schema.json",
+              "sha256": "09892b4e613b56cc86632c79027b43390e72b3c4aa29444ac2474b7def756d35"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_capability_projection/inputs/COV-CAP-v1-05-upstream.json",
+              "sha256": "036a95a6bfce7584579489eee72802bbaccb8cfd93f3a5392790759e5e21eeec"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_capability_projection/inputs/COV-ISO-v1-01-body.json",
+              "sha256": "53f329913f1620f3ede77f860818cda09b05ae62662c7c54bad43ddd0b25701b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_capability_projection/inputs/COV-ISO-v1-01-cards.json",
+              "sha256": "e1808680b22eaecee93a60db12178d2afd166a8dd0ccef27c0cd9a61d8319c54"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_capability_projection/inputs/COV-ISO-v1-01-messages.json",
+              "sha256": "683e74e0645e074bbaa91bc9be500a992e79152a0d0ddebd9961e4ad46789525"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_capability_projection/inputs/COV-ISO-v1-01-schema.json",
+              "sha256": "09892b4e613b56cc86632c79027b43390e72b3c4aa29444ac2474b7def756d35"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_capability_projection/inputs/COV-ISO-v1-01-upstream.json",
+              "sha256": "036a95a6bfce7584579489eee72802bbaccb8cfd93f3a5392790759e5e21eeec"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_capability_projection/inputs/COV-ISO-v1-02-body.json",
+              "sha256": "9c7a4b0573f08ea2e3647f3778aaa3bcfc4b7c59313945c7360c37378ac97830"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_capability_projection/inputs/COV-ISO-v1-02-cards.json",
+              "sha256": "77c4e9cfb8d99d5e987aecb3b57c41553a249516bb7a9808685e0e789686765c"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_capability_projection/inputs/COV-ISO-v1-02-messages.json",
+              "sha256": "68614784159e585641574ba4648300cbd4387d5a56804432f5a3b6de6454843a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_capability_projection/inputs/COV-ISO-v1-02-schema.json",
+              "sha256": "6e85865250f8c2f01a7412eed39e5ede0223488313f38b8aeb4d01f8f04ad4ed"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_capability_projection/inputs/COV-ISO-v1-02-upstream.json",
+              "sha256": "58418ab1cca66e31ecceb6cede8e14b1e0a01640e210e42b7ffe2fe80f899076"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_capability_projection/inputs/COV-ISO-v1-03-body.json",
+              "sha256": "f37deddc2c23747749bbf1ef74e5b72cf86bf069b6fccc55e684dffcea10e7fb"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_capability_projection/inputs/COV-ISO-v1-03-cards.json",
+              "sha256": "fbf268266134f712ae26a8979725384cb18d8c8d3a150738e0592bc43b73955f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_capability_projection/inputs/COV-ISO-v1-03-messages.json",
+              "sha256": "206a7c7c715e939a62b99320159c8c29c87311b6ca8ab618fd4cfb7ee54c0d3b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_capability_projection/inputs/COV-ISO-v1-03-schema.json",
+              "sha256": "42af762aca74a0e176db25ecde88d720110cc73572711557f5c6b103849dc154"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_capability_projection/inputs/COV-ISO-v1-03-upstream.json",
+              "sha256": "5afd2ee0ae2fcd93287c0863b68ef0518f89476fb60f157249f32901f3ff27a8"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_capability_projection/manifest.json",
+              "sha256": "a2eb2f76c0479b49294245987346e4676db78c86fbefac02dd4e153d8c590f2d"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-body.json",
+              "sha256": "3e1bd71731101aad268c32363166bac806da1062c1b100bf4c7869d5b5a7e6e6"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json",
+              "sha256": "627be2d8b453139deef71e15794ae9d31796fb05875f32f7d9c03b2886aa91e3"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-schema.json",
+              "sha256": "05dd9d11af85ed0f6e8c27eedf2fc81d4bb9663d3f8f00228a221b52d5fdd3ed"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-upstream.json",
+              "sha256": "cca35f9a6d5ee2e7635d4b73534a22a7fc962538cb088563567757e812d4b6c8"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_policy_shape/manifest.json",
+              "sha256": "2ec21c08c50f1772538c61fbbd4d7c5ea00c3fb43527395ffe5fa10e61082992"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_rebound/manifest.json",
+              "sha256": "9efa86b883366ff1ef4edd555f59f08499fa123288c6ca1ffe98998d84156187"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_v1/coverage-selection-normalized.json",
+              "sha256": "26a266ff2218973428af8a8df636527713f6896b25f85bfa8f47dcd525c78e1f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_v1/coverage-selection.json",
+              "sha256": "24cc1439480ca3706e304554e126f2f83750028d2ef2addac5a9942436b21b5a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_v1/inputs/COV-ISO-v1-01-body.json",
+              "sha256": "0893f0360c3409c8bbb4523b4fd81623653fa36ed750131516c86858675a39b6"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_v1/inputs/COV-ISO-v1-01-messages.json",
+              "sha256": "15592e6a652968bc7b359dbbb85b38132c8d6205a8a9a636e3014b8015b240cc"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_v1/inputs/COV-ISO-v1-01-schema.json",
+              "sha256": "09892b4e613b56cc86632c79027b43390e72b3c4aa29444ac2474b7def756d35"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_v1/inputs/COV-ISO-v1-01-upstream.json",
+              "sha256": "036a95a6bfce7584579489eee72802bbaccb8cfd93f3a5392790759e5e21eeec"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_v1/inputs/COV-ISO-v1-02-body.json",
+              "sha256": "95a6e97be478c823621b2efa2cb4c0ccb60632ae0b4cd60891dd8876400c9630"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_v1/inputs/COV-ISO-v1-02-messages.json",
+              "sha256": "d127a855880e909b2e43c58e9a9ef9c48fe34e708bf676875de5d3c7ea166421"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_v1/inputs/COV-ISO-v1-02-schema.json",
+              "sha256": "6e85865250f8c2f01a7412eed39e5ede0223488313f38b8aeb4d01f8f04ad4ed"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_v1/inputs/COV-ISO-v1-02-upstream.json",
+              "sha256": "58418ab1cca66e31ecceb6cede8e14b1e0a01640e210e42b7ffe2fe80f899076"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_v1/inputs/COV-ISO-v1-03-body.json",
+              "sha256": "15e3c061a9c93654f05784d808a29e7ff5cf17a5ed4c474ff343fe9d1b2f234f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_v1/inputs/COV-ISO-v1-03-messages.json",
+              "sha256": "c7ac93dbd4651e7f425121cb986461358880065f88dbd9af231543762ddb7096"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_v1/inputs/COV-ISO-v1-03-schema.json",
+              "sha256": "42af762aca74a0e176db25ecde88d720110cc73572711557f5c6b103849dc154"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_v1/inputs/COV-ISO-v1-03-upstream.json",
+              "sha256": "5afd2ee0ae2fcd93287c0863b68ef0518f89476fb60f157249f32901f3ff27a8"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_v1/inputs/SEL-ISO-v1-01-body.json",
+              "sha256": "5ac6bc8b5878c35de8d1c3914924c5ef3df5fbdb07854eef18ee204d9424169a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_v1/inputs/SEL-ISO-v1-01-messages.json",
+              "sha256": "b0d32d8542f75134e3a23f22a2c6eed511640562a3cea0ebaf3dd52ce3369249"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_v1/inputs/SEL-ISO-v1-01-schema.json",
+              "sha256": "05dd9d11af85ed0f6e8c27eedf2fc81d4bb9663d3f8f00228a221b52d5fdd3ed"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_v1/inputs/SEL-ISO-v1-01-upstream.json",
+              "sha256": "af5f089c217c576c8060cc9961777bd27703984f79b0aaf254ecdb1453f7eca4"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_v1/manifest.json",
+              "sha256": "1749d09913e0f5d5a1caab4a4ede1bf4fa80fee260bb4e257f1f705634d934be"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_v1/oracle.json",
+              "sha256": "bbb7e49216762475df7f809fb7ccae55139af5580d632e0227a60f9126c3063a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_v1/recall-customer.json",
+              "sha256": "83596fd26c19a2149a36cb9401e40cb2e31cc99700f227db56814ca711484f5e"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_v1/recall-original-normalized.json",
+              "sha256": "d84f573c909310293f530faa3c012062b237be667dcc82dae3f6e390b2a7740b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_v1/recall-original.json",
+              "sha256": "76f0143b117701c608c8534501b723aacc4937552ba61fc33cc1ff282eb98dff"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_v1/recall-renamed.json",
+              "sha256": "60b7da5488fb16dacad96e0bf22aca16d28aafaeef6609652cebbb5a55d7fe2a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_v1/renamed-profile/catalog.yaml",
+              "sha256": "9696fb3df18cab2b9bac5a878caa20c1848577b268ecf7d35b10c8b5e487949c"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_v1/renamed-profile/manifest.yaml",
+              "sha256": "bd105e630b3744395a6935fd2d92df43d89c06c82d54d7078b77de7473b79592"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_v1/renamed-profile/views/observation.yaml",
+              "sha256": "5e004895b0b4b9e9003b2539833846cebe99c916efccbfc11204a9a783d67d48"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_v1/request-customer.txt",
+              "sha256": "577008fd49ab7c49584d2854998042c6ab85e0e82dad20f4a006575903a322b6"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_v1/request-original.txt",
+              "sha256": "1cf6e584921c4a47c1a8cbe010aebafec41ed4a0cc83bc2b4e638c0c0165087b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_v1/request-renamed.txt",
+              "sha256": "408ec53e433fec4129a64200dac5d9b6b006789bdbec220316fcfab9c96b006a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_v2/coverage-selection-normalized.json",
+              "sha256": "afd7f45625021dcc2d2844c873b8050328e67cf44f29fd51d9440afec9c50bfa"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_v2/coverage-selection.json",
+              "sha256": "0d7047cc2f1c0a77578f72d13e7c3efde0f75b825b1a9b77fd5d36f360145d57"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_v2/inputs/COV-ISO-v1-01-body.json",
+              "sha256": "0893f0360c3409c8bbb4523b4fd81623653fa36ed750131516c86858675a39b6"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_v2/inputs/COV-ISO-v1-01-messages.json",
+              "sha256": "15592e6a652968bc7b359dbbb85b38132c8d6205a8a9a636e3014b8015b240cc"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_v2/inputs/COV-ISO-v1-01-schema.json",
+              "sha256": "09892b4e613b56cc86632c79027b43390e72b3c4aa29444ac2474b7def756d35"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_v2/inputs/COV-ISO-v1-01-upstream.json",
+              "sha256": "036a95a6bfce7584579489eee72802bbaccb8cfd93f3a5392790759e5e21eeec"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_v2/inputs/COV-ISO-v1-02-body.json",
+              "sha256": "95a6e97be478c823621b2efa2cb4c0ccb60632ae0b4cd60891dd8876400c9630"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_v2/inputs/COV-ISO-v1-02-messages.json",
+              "sha256": "d127a855880e909b2e43c58e9a9ef9c48fe34e708bf676875de5d3c7ea166421"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_v2/inputs/COV-ISO-v1-02-schema.json",
+              "sha256": "6e85865250f8c2f01a7412eed39e5ede0223488313f38b8aeb4d01f8f04ad4ed"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_v2/inputs/COV-ISO-v1-02-upstream.json",
+              "sha256": "58418ab1cca66e31ecceb6cede8e14b1e0a01640e210e42b7ffe2fe80f899076"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_v2/inputs/COV-ISO-v1-03-body.json",
+              "sha256": "15e3c061a9c93654f05784d808a29e7ff5cf17a5ed4c474ff343fe9d1b2f234f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_v2/inputs/COV-ISO-v1-03-messages.json",
+              "sha256": "c7ac93dbd4651e7f425121cb986461358880065f88dbd9af231543762ddb7096"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_v2/inputs/COV-ISO-v1-03-schema.json",
+              "sha256": "42af762aca74a0e176db25ecde88d720110cc73572711557f5c6b103849dc154"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_v2/inputs/COV-ISO-v1-03-upstream.json",
+              "sha256": "5afd2ee0ae2fcd93287c0863b68ef0518f89476fb60f157249f32901f3ff27a8"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_v2/inputs/SEL-ISO-v1-01-body.json",
+              "sha256": "0cc0b7385bcad400127757f00a0b7fce71082f1de3e47fd61261c4fed1f4f546"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_v2/inputs/SEL-ISO-v1-01-messages.json",
+              "sha256": "13483d45390d5ddeeccea0dde6f7db882a38ebbdeb2c57c884e5f9261973b5a8"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_v2/inputs/SEL-ISO-v1-01-schema.json",
+              "sha256": "05dd9d11af85ed0f6e8c27eedf2fc81d4bb9663d3f8f00228a221b52d5fdd3ed"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_v2/inputs/SEL-ISO-v1-01-upstream.json",
+              "sha256": "cca35f9a6d5ee2e7635d4b73534a22a7fc962538cb088563567757e812d4b6c8"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_v2/manifest.json",
+              "sha256": "33cf44c84c10842adb60bfb7cbfbb269bac6dfa136c124a43159efabd27d543f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_v2/oracle.json",
+              "sha256": "9a01fcc5c5d7a7162e7513baf712a7c4145b8c6a1fdbb3d74790f11ffa2ef402"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_v2/recall-customer.json",
+              "sha256": "83596fd26c19a2149a36cb9401e40cb2e31cc99700f227db56814ca711484f5e"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_v2/recall-original-normalized.json",
+              "sha256": "d84f573c909310293f530faa3c012062b237be667dcc82dae3f6e390b2a7740b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_v2/recall-original.json",
+              "sha256": "76f0143b117701c608c8534501b723aacc4937552ba61fc33cc1ff282eb98dff"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_v2/recall-renamed.json",
+              "sha256": "60b7da5488fb16dacad96e0bf22aca16d28aafaeef6609652cebbb5a55d7fe2a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_v2/renamed-profile/catalog.yaml",
+              "sha256": "9696fb3df18cab2b9bac5a878caa20c1848577b268ecf7d35b10c8b5e487949c"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_v2/renamed-profile/manifest.yaml",
+              "sha256": "bd105e630b3744395a6935fd2d92df43d89c06c82d54d7078b77de7473b79592"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_v2/renamed-profile/views/observation.yaml",
+              "sha256": "5e004895b0b4b9e9003b2539833846cebe99c916efccbfc11204a9a783d67d48"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_v2/request-customer.txt",
+              "sha256": "577008fd49ab7c49584d2854998042c6ab85e0e82dad20f4a006575903a322b6"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_v2/request-original.txt",
+              "sha256": "1cf6e584921c4a47c1a8cbe010aebafec41ed4a0cc83bc2b4e638c0c0165087b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/fixtures/kind_diagnostics_v2/request-renamed.txt",
+              "sha256": "408ec53e433fec4129a64200dac5d9b6b006789bdbec220316fcfab9c96b006a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/governance_inputs.py",
+              "sha256": "395da71db83d8ee547182d49c048f4633ca6efe6303a871df6d61b399f7f551f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/governance_reports.py",
+              "sha256": "4092f13911a5443a18c37eaea45bedc05a077e991316a4ef3c5bfcffd2aca48c"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/governance_runner.py",
+              "sha256": "6c0602d729735a2ff72e69dfa4feb700a216852a1bc431bd9b2ae6fb4c08f845"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/governance_trace.py",
+              "sha256": "b18d30327a0dee3c3b6bc11bf9ed76f6c6d523ab22cfbaf812d03936653a222f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/hilp_cases.py",
+              "sha256": "8dcb17f7e40553d45769f841e3bd5f8ac1c6c84c8e98bab735f96e299a74162d"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/indexed_requirement_recall.py",
+              "sha256": "c9ce24ffbaf22257718b61d661470c3bdc2ae1bcb3f45a340bfec1faf7023fc6"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/kind_mapping_managed_contract.py",
+              "sha256": "5e8bcefcbf5a28918944ce4b8b5901e4b8bb0719b8dbac174d6cd36c1a1e0e99"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/managed_node_diagnostics.py",
+              "sha256": "40ea53099e0adc769c1739f604d73ff570d10454083509624aa12ff18b272400"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/managed_three_stage_runner.py",
+              "sha256": "8588648e937eb384d91ecd108d6ea2fc6832ca4374b54830bde741b8f2e58a48"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/markdown_review_probe.py",
+              "sha256": "615551830407dfdcc86abeab92e43cea058694aa88bb62729cd16fbc9027e18c"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/metadata.py",
+              "sha256": "6dfd69565f5c35b5abf10cd3ae26e54395fef389f4a9bf8c793ea13daed60d47"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/own_responsibility_managed_contract.py",
+              "sha256": "1682eb317b21a26b7fa77dd49ac9c8f3f5a827cd1dff1186413f7809c452c78c"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/planning_mvp.py",
+              "sha256": "972d16210114153db1aee4a05db8354312d34591c90dfa58ea2012582290f711"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/planning_mvp_runner.py",
+              "sha256": "33f76a27a31bf87ce2e52bbbb5dbacf789c70e7a4e56fdbd94625e9f01dc47d1"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/planning_reasoning_probe.py",
+              "sha256": "654e8cc467da0cd73eb8ec27ea643a51e455741338bcd85dd453819f6e30239a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/project_runner.py",
+              "sha256": "efe1e134a79d9d31676b63648495e642d1a6f6d4158af94292927c1a0efcf047"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/prompts/coverage_first_planner.md",
+              "sha256": "ed3e5c82a605103d5b570c7cf1edfc162a1525cd25d9c8fd05275691720915f6"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/prompts/coverage_references.md",
+              "sha256": "13e0f45e6b003a460e54106711fc0c45b7ab9c8255b4906be5d775d9df05f628"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/prompts/coverage_slots.md",
+              "sha256": "a5a00595621b5506149ad5fcd5f6f04b122c922322964b0f09f9fe56517f302b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/prompts/evidence_bound/coverage.md",
+              "sha256": "5d6304b253d14c7ac7e4edd1712b3d3fcfe83fd57279c1918e9c5f2036317f4b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/prompts/evidence_bound/recall.md",
+              "sha256": "7b7622b21482a291358132e83870dab514e757fd251e96bc043d9b73b7eee385"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/prompts/evidence_bound/selection.md",
+              "sha256": "347c31f0d425f8b38a010da708da65b76cec939ff3a0d4204acbddf933b2ba92"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/prompts/evidence_reviewer.md",
+              "sha256": "95ce7509d5b956f83049b9ded138ab96576f14d078e4d1f4439a1993b01a65eb"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/prompts/kind_mapping/coverage.md",
+              "sha256": "e548b64a9a41bb446de0b6f6a5071527634ad06d197587174ca239ea14213687"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/prompts/own_responsibility/coverage.md",
+              "sha256": "60a25afa79403166ab3d930f5f384d879fc21f763e9474551b259488820340a4"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/prompts/own_responsibility/recall.md",
+              "sha256": "bc862e4b7d2b3322e4b01aed4b65dbfc91123be7f4f8501d4b937993ee63b979"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/prompts/three_stage/coverage.md",
+              "sha256": "4492c599291fe37702865d4683bd5cd3bdef52175490e5bc1bfbcfe5a3543949"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/prompts/three_stage/recall.md",
+              "sha256": "00fd920092e1478cf826a187650bb7bf9a49f2414b57f5c43d9d5da57246dcde"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/prompts/three_stage/recall_indexed.md",
+              "sha256": "a11ee2f89ad1c68263e0ea758994b5fb6b39c060596a9142ca87e1ab7f3e7382"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/prompts/three_stage/selection.md",
+              "sha256": "cc8a4dc869b80c2c1ddfe724c7c33eecf1669e4a7b6ea705196f25d3636e3776"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/referenced_view_coverage.py",
+              "sha256": "6f3ab1234270ed3d3955149ef22080b21c79d166d992d7c14410e2382277d437"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/retail_view_benchmark.py",
+              "sha256": "0cdec62f34fb3ba066dc9a7c8d8fe82186cf7deadd147b40293ef9a7eb9a470a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/retail_view_retrieval.py",
+              "sha256": "8d8afa2b4ab7b3fd8fe0d4292a7d5526c34af7b57a4e4f0e661d32c34667c079"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/slotted_view_coverage.py",
+              "sha256": "b580113834567e4a41900c2c91840f66186fa6c15ab124b3009bc48cca2be6d2"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/source_selection_followup.py",
+              "sha256": "37364ba335f698189308089fa6f9ff701a3e2c9b1f0f8bc7fb2f2e240353183f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/stability_runner.py",
+              "sha256": "6783a7416c27070339eae4e8184d4cd79221b8b1198e86e5d8cfc569bff5b43f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/three_stage_view_selection.py",
+              "sha256": "3ae39cf501aca0b3a8e2f293314fca9b96250453d18c2251e6f6f3f365725323"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/three_stage_view_selection_runner.py",
+              "sha256": "3f676fc34d1e32b0f5b6ae95beb5d7e067d4a76359fd308d62c182a36ff1c2fc"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/view_matching_cases.py",
+              "sha256": "4b85e11054256c1d155e33ea878e23352e67a3bceed0a13a970bef12e1749d63"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evaluations/view_matching_grading.py",
+              "sha256": "b3572e96c74ed05149ee247baa20a6773afdc5d92d9c7f0b5d9b8d972160451b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-10-12/recovery-analysis.json",
+              "sha256": "b10d3fdfa8765f5e88cddd8796d8abe74ed6c5fd08c09c36200a08fb41126b0f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-10-12/recovery-plan.json",
+              "sha256": "3b895e7a9592786d6621df03e6dc1110ae0a507242b9b8410a1b647f224c6e4d"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-10-12/review.json",
+              "sha256": "fe3becdeb0bd71518980174f1ba70bb30500822d563f713422b4391d78cd5517"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-evidence-recovery-11/controller-check-evidence.log",
+              "sha256": "6a7dee2df6decc78d70dd3a9fcef13555f24ec05ef34f4d611783f4084b4e866"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-evidence-recovery-11/receipt.json",
+              "sha256": "205a6e2f4706d373f98dddaf32db0f0ea942ea89ebb6acf99074c25fa8297a3b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-evidence-recovery-11/recovery-plan.json",
+              "sha256": "3b895e7a9592786d6621df03e6dc1110ae0a507242b9b8410a1b647f224c6e4d"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-evidence-recovery-11/review.json.late.raw.log",
+              "sha256": "0200cc20e8aa288580c0a5036d4056a144555a272b6b4afe64da357734118d6b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-evidence-recovery-11/review.json.original.raw.log",
+              "sha256": "aaa8b740cc30fbd1b8670fa45ce5b68280dc073b9ee5e662dc43eeb68b903dfa"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-evidence-recovery-11/semantic-review.log.late.raw.log",
+              "sha256": "3b7c9f3b51626a0634405b8e2c14efbcf730b600138aa60b067e74aceffca4f0"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-evidence-recovery-11/semantic-review.log.original.raw.log",
+              "sha256": "fa3e4654447f56bef7cffe64220195c4e2817ba20838d2c3b27eaf893a28eaaa"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-evidence-recovery-11/v2-expected-lineage-rejection.log",
+              "sha256": "6fc6fad47c0566b8004271cfe185c75d9a051175875b0c305c6e65442e0d4642"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-20/plan.json",
+              "sha256": "7821ce073885f3796e45ff994de82c1f62e91a156db25b9d6f24f4b96fa2a43e"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-20/research.json",
+              "sha256": "510f95977944aa11f75e3d0888ccd5a119f398af48ae67a3d323cebd4fc65793"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-semantics/review.json",
+              "sha256": "c509270ef90e86b4f6c0ee064ae19b218bb2426f6dc8f88a4171496b819d00d7"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-semantics-rebound/review.json",
+              "sha256": "f986fd1f361948c4ea4ecc24d4c7e779956210488467533411908f440f07c135"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-semantics/review.json",
+              "sha256": "2d47e702a0a6bb0fb9904ba972fcd6dccaf91645319729011728d3a900a242a4"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/freeze.json",
+              "sha256": "7d52d3c7639e8caf00e2d55cdd2dd4a3aca1b394c3ef90fec0c7e8e3079eeea9"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/policy-freeze.json",
+              "sha256": "99a62eef564c97d2ae473e9c06cf3e4397e2a7e9fa7722a235f1e7052c27b5c0"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/projects/retail/catalog.yaml",
+              "sha256": "380d48cf75ee3d0afae72f6b69abf764318badd6051f7080a7bfe9f582608666"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/projects/retail/manifest.yaml",
+              "sha256": "42684d67c86ed0329abd67c59f3c6af9f6a724311c918dbedd125133f17f6b49"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/projects/retail/views/demo_retail/v_customer_value.yaml",
+              "sha256": "d3ef37ced4521ef46a65980f418088683c4aefa9f138802a6829f87fb531f2cc"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/projects/retail/views/demo_retail/v_daily_sales.yaml",
+              "sha256": "e2402ebcebfa7e2bbf46b9e5c4319a32b9a0522883ba7182ba7ccc17ab030fd4"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/projects/retail/views/demo_retail/v_inventory_status.yaml",
+              "sha256": "ed7c44ef1fca1b55f92454fbbcc2b3145acd6dea0a4ca17f46c2a08d90cb58b3"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/projects/retail/views/demo_retail/v_order_summary.yaml",
+              "sha256": "fbe7eecd74125611e506cadec1a8ab975f6f7065c470a2d90b3f5fda88ae062c"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/projects/retail/views/demo_retail/v_product_monthly.yaml",
+              "sha256": "619b4180f877d9628eb458dd3fc0a1348d8849132aea7bbd684ac46e69870079"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/projects/retail/views/demo_retail/v_sales_detail.yaml",
+              "sha256": "c0381bd2ab84330dd24a6e138350065d4cc1a40c4856295f0ecfd9a359d5048f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/projects/retail/views/demo_retail/v_store_monthly_kpi.yaml",
+              "sha256": "ca167e431f2a7faa502378c8dc89cec3e65cf27a8fc375adb512f61dfd84e7eb"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/pyproject.toml",
+              "sha256": "60a87bb27116fca458946baa2708fc71fdf4c21848aff55601043c35bc9855e0"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/__init__.py",
+              "sha256": "e6e004e5daa1273b1f894d5f42fe2fe964642b55b7e8cb6486e5369cef68e7df"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/__main__.py",
+              "sha256": "1c04b716e836359df29ec8138a7e586b844629d08b1fac32d46038bcfa67cded"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/application/__init__.py",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/application/catalog_contract.py",
+              "sha256": "f2c09cf5bf15b28c2d4ea8be32f16bd4c931348990ec71b04faec4bac5e9f0f7"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/application/errors.py",
+              "sha256": "2fce2c4b6ee27bce657f7a8b1a411507a3a2d0ee0c398996bc9d9dfaf1fd1447"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/application/models/__init__.py",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/application/models/confirmation.py",
+              "sha256": "535de8b2720a56e6bb8eb1d67b2bfea0b319a82d8a62f9ffaa3e667646e29e6a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/application/models/decomposition.py",
+              "sha256": "1fe4eb06da88fc67c3e65250a93393ac944dbbba9f2c4ac3349134e044b10558"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/application/models/progress.py",
+              "sha256": "d8011f91bcd0145cbb3865539835ec4df0acf823c0e0bb274c68b25b77120b4f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/application/models/query.py",
+              "sha256": "2771fe2dc871360d24f372c22718459c4fd4c27e13a8d2f571aa9bfa75b662fa"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/application/ports/__init__.py",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/application/ports/catalog.py",
+              "sha256": "4a88ed3065afac7e8c1598989149901700de310d2df05734886147fca3bb577b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/application/ports/sql_executor.py",
+              "sha256": "1da51d6c86c3084cb2953966fff9bd96b81af8ab1cf917dd5ba3e44d78810108"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/application/ports/term_mappings.py",
+              "sha256": "f72839198fd4fd5bbe5736ce2fce742464526cbe16133230293ed4654f99688f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/application/services/__init__.py",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/application/services/answering.py",
+              "sha256": "e2ff0e9bc8a92dace93d85b3a24f27a53352aa2d62783fc1020121905c0304ee"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/application/services/confirmation.py",
+              "sha256": "ce8c239a2b39c31d8a250eb134cddab9453c41b39938c171be9c4ddfb1a9abd0"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/application/services/sql_execution.py",
+              "sha256": "28f8c0e35db1c91d9921df79ddbb585938f41bb8de371b8f668d7349c7f55605"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/application/services/sql_generation.py",
+              "sha256": "d8520ed2d7dbafa4d64b9237682548e240175b0133d15458b95df4b4fbf244a2"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/application/services/staged_query.py",
+              "sha256": "6149dc250e0eeb3bb7e22b2908da3ef4400cb2df5c9df0eeac4fd69f3c472e9b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/application/services/task_decomposition.py",
+              "sha256": "f62bdabb3dd3a900d1f5d62db9a4d67bf62b072b3e9cf4187a1e9af78372b792"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/bootstrap.py",
+              "sha256": "8c798bd33ce1779d84b123da16de85089934ec515bbf524a3ad823165bd6972b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/config/__init__.py",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/config/database.py",
+              "sha256": "83da43d7914d72e6f0a8a5ef4070f0b0509c55caab947f9b3632ade51b9f9516"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/config/deployment.py",
+              "sha256": "08ae4a09e348467eea82170ef001ba967ce9764ca26927943cf54fb316de22c0"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/config/projects.py",
+              "sha256": "6083fccfd7a50dce312fdcc47eb17d8f6359edd3a874da9592c61948fd7264a0"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/config/settings.py",
+              "sha256": "d6d70defd93db5f580884fdb944cea3902663db1443a4483bb822b42a52fb647"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/domain/__init__.py",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/domain/catalog.py",
+              "sha256": "e261104b06424f09df3b581f56045051df0f54fa0f375493018463bdf2a80ccb"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/domain/models.py",
+              "sha256": "86cf40dd7980440c87bb590489227070c43f728b767dc19ae4e87c92d9fb2a05"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/infrastructure/__init__.py",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/infrastructure/catalog/__init__.py",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/infrastructure/catalog/yaml_catalog.py",
+              "sha256": "555c99de0c1a25fbe0172130e816f24f23aaf4b31f4047f362b786f3c7cb374f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/infrastructure/database/__init__.py",
+              "sha256": "0dba5c3d7fd0f814fc75f5a26fda568516f12dac939abd2407b877d2efccbe03"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/infrastructure/database/sql_server.py",
+              "sha256": "01379f0354e367ddf89cd0da528e1b094c33544c51288e7d10ac28ea3b9bf0a9"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/infrastructure/llm/__init__.py",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/infrastructure/llm/context_budget.py",
+              "sha256": "23983b0183b908b902576f393f3ad2938054f05746c804ecbfa3664abf2eb566"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/infrastructure/llm/factory.py",
+              "sha256": "457282cc13bac1398969a81c97db898d8f75f12cc6587be27ad6483a6c40214b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/infrastructure/llm/parsing.py",
+              "sha256": "cbdc89d7d925896d7aea2b938fa4825bbf9a5f9903235847bbc31c0fa259b929"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/infrastructure/retrieval/__init__.py",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/infrastructure/retrieval/documents.py",
+              "sha256": "5a1d0c3fa236f0efc21852e961f4e345d85b6c7e7b4d69d6004c05fc4754fdb0"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/infrastructure/retrieval/schema.py",
+              "sha256": "c1140d74f98c66df9c023a109b1e6913e3872adf00f6e2239cc27c89c30a2ba8"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/infrastructure/sql_compiler.py",
+              "sha256": "3e9b0266aa93b8c70dbf35548ed06eb9002b920c5bab3e123b41ce92b2eb0929"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/infrastructure/sql_policy.py",
+              "sha256": "745d1b9fd206789f34d19d015693c486b04af51d1a9ad91d307b801819b74dad"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/infrastructure/terms_mapping.py",
+              "sha256": "67e1a3ed8a0cc6b268ea7f9a08a9860960743dd1c3b927080192f9e1d2f87db8"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/interfaces/__init__.py",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/interfaces/api/__init__.py",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/interfaces/api/app.py",
+              "sha256": "d4e0c1995aab98366440fd90bc92b6ce83e02d48059326489c272ed97b919972"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/interfaces/api/schemas.py",
+              "sha256": "05741810a52ca584495f06b5d2868d18b3e49e0b41d5d3de4d84ec014df60b66"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/interfaces/api/streaming.py",
+              "sha256": "5c3cbea4f09197d67f55279aadbbcaaaf3bf5aafa7e4a7ddda6d932804bc375a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/interfaces/cli/__init__.py",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/interfaces/cli/main.py",
+              "sha256": "f523e6a78b349ffc41a7e70ba88f6ace4918df3e6b698613462bcd440792586a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/interfaces/web/__init__.py",
+              "sha256": "3f6bb6c95b6d995d32e5977b8e9ddbd5973bd03c46401137a0d6d8ed51c1362b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/interfaces/web/ui.py",
+              "sha256": "0f3ca1c9c6b7d69006f9218cfb016ec63bed1b3c2fa5c8816a0f65872ee24c97"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/resources/__init__.py",
+              "sha256": "492c79bc86f29ecbb21409f38a135e6c34973d8cf147ca1bbe3c5cd2b41c681d"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/workflows/__init__.py",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/workflows/task_decomposition/__init__.py",
+              "sha256": "c67da9df50ee0a871e888af86a6d3b594a165b0f12e2ee9ca929f74effae2016"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/workflows/task_decomposition/prompt.py",
+              "sha256": "4655d352feaaab93bdef78a2ced51da9ae93adf1f907aa99eb8c1a237876349b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/workflows/task_decomposition/validation.py",
+              "sha256": "ea214f4ee199f391546b0b8cc07b848e49905a0ed3bbb4adebe33f348e9fa2e8"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/workflows/task_decomposition/workflow.py",
+              "sha256": "85d8548485516bc6fe075ec9040542e12cdcf5d8a1375bd98974c84e351399a7"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/workflows/text_to_sql/__init__.py",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/workflows/text_to_sql/clarification.py",
+              "sha256": "d3256525dde13e23e9f582c4f823934677d8a4c4ab4ff0c88c9c2dc83e808be9"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/workflows/text_to_sql/prompt_resources.py",
+              "sha256": "6168a9f759b7d2868c335c86d7643d041d54975e41c75b5d7b27cfbd04cb6894"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/workflows/text_to_sql/schemas.py",
+              "sha256": "4a542e16ad9e16a9087980d434e2519c72d7fe07d7ab160073784df850f2bf02"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/workflows/text_to_sql/semantics.py",
+              "sha256": "af992714a6d47d8b717520ed88e4d963f35940443d3e4438e0747353dbc4e851"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/src/cpea/workflows/text_to_sql/sql_generation.py",
+              "sha256": "76afe843c4ee9fd0893c5964a31756c7217a6b97c96f0d3d70f827e90a79d99d"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/tests/diagnostics/test_managed_capability_projection.py",
+              "sha256": "ddf30e05642a4cc36540cbae20c3a4561a36594fa125871762df16a333dc0bf1"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/tests/diagnostics/test_managed_node_diagnostics_rebound.py",
+              "sha256": "2b0766b1646e1f3b0d5a09ed5277f1edcd70adaab2e0afd29e62cad531196739"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/tests/diagnostics/test_managed_node_diagnostics_v2.py",
+              "sha256": "c5b5569cb7f6af7a5858f94e4200672520f46824ee298d89c2aad4e4bd047b4a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/tests/diagnostics/test_managed_policy_shape.py",
+              "sha256": "11ec53fc54178c3da83b711a2aa2a191d2c8ec327c58292769f195ee9dcccfde"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/tests/unit/test_behavior.py",
+              "sha256": "7532442fc63fcac36f1accc5c9a9b3dfa61c63a1137f043be40c807666e4e3f8"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/tests/unit/test_business_clarification.py",
+              "sha256": "efd74e0253280ccd10382b7644facee3337d8db19e4f81b8561740b54a8f9c65"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/tests/unit/test_confirmation_lifecycle.py",
+              "sha256": "f0a25f976fe1f7c83b2be5b83e6727b5e2f0246518ac155035ab9d148a39fe00"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/tests/unit/test_decomposition_decision_chain.py",
+              "sha256": "4dc72424d7f66f8802b525dcdfdabf63109edd3e46a15c57f48dad0a7638a72e"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/tests/unit/test_decomposition_decision_summary.py",
+              "sha256": "31e894d9ae5a4468250b9066b10c26d6d781ee5cc50fefecf4c6caac20a6dbfb"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/tests/unit/test_decomposition_evaluation.py",
+              "sha256": "135b73fc57d30e8476e2d91a2d8d30eda67b5f4b1e8a38674807695c65fc1a70"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/tests/unit/test_evidence_bound_managed_contract.py",
+              "sha256": "04a919a67fdbd35931d0baa52d4e7e37e68168457cb48fe58e763cb2ff1b4a01"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/tests/unit/test_evidence_bound_managed_runner.py",
+              "sha256": "0456040c737e9967a06e64d1d94ced80ad3b484fff0323339ade0ea33ade4960"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/tests/unit/test_evidence_review_probe.py",
+              "sha256": "49154e1846b7cc77b75b58eede8faaa812b7847bd8ff7b1303f0f7d0a74c1819"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/tests/unit/test_gradio_ui.py",
+              "sha256": "f139e8b787c955f9ecb138a6df715c4eb0ffe4bd712de99238df9fed1292ef16"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/tests/unit/test_having.py",
+              "sha256": "45adb58eeb24400e8700af4c722912e0a3ada9cbb7829a1393d1e3c12cab20d9"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/tests/unit/test_hilp_cli.py",
+              "sha256": "11594faaea80a98f61e91d04d4ac81a5028024a39af7c7a48ede8a86cd8a4718"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/tests/unit/test_hilp_ui.py",
+              "sha256": "2c2bd790cf462eb418ffe8901eee13bc5981854113e03e8e35d0581fd3c75a18"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/tests/unit/test_indexed_requirement_recall.py",
+              "sha256": "e0008b87ed14788340de29255670f5e175669e6484db27f27844fa279266ac5c"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/tests/unit/test_kind_mapping_managed_contract.py",
+              "sha256": "f3673af1d4adf40e14918f6a7e6cff37bf8e9d74954be307c13061bd2e3a4ba0"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/tests/unit/test_kind_mapping_managed_runner.py",
+              "sha256": "85565b742e912d983c6dd55299cade9e0a13414647d1d0fe260b1972eeec6d9a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/tests/unit/test_managed_node_diagnostics.py",
+              "sha256": "d8385a2b5ef29327b466895ef20620358eea008e0979fed03a8a469cd3cfd99a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/tests/unit/test_managed_three_stage_runner.py",
+              "sha256": "022434ce8cddffaf7781f99a249ac6d7bb9ef4750a0ae017690f253a876a4ed2"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/tests/unit/test_ollama_schema.py",
+              "sha256": "6d6eaebe008fd7a9c092c6b70cfc7b064fab1c0c4899980fc298cd1a4ca026b6"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/tests/unit/test_own_responsibility_managed_contract.py",
+              "sha256": "5b205479a2ac562b8e28783f00bbef5c98ca388b63e24bae4ecb4282ce6056fb"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/tests/unit/test_own_responsibility_managed_runner.py",
+              "sha256": "75b7921d8378d78a9bf855b34b67bf63dc8a8bc419ab31d7bbe16f057d7f1803"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/tests/unit/test_planning_mvp.py",
+              "sha256": "f51273882b8378009b9e6b0d273d0068d637d2f087514f7f293d97d22c0dc1ac"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/tests/unit/test_planning_reasoning_probe.py",
+              "sha256": "18c4f3102b26549c2926e5f01fdf2a6988dc37fb16ae3e624d80a167620ba948"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/tests/unit/test_referenced_view_coverage.py",
+              "sha256": "e32075679cf8037ec37ae6c8576b4ccbe34dbb59934c6cd5de5d95c53b0b9125"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/tests/unit/test_semantic_confirmation.py",
+              "sha256": "6f057e721d42a1b6efcae1b8569dbf5261eb0f1a124ea03d747166956208fc0d"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/tests/unit/test_semantic_resolution.py",
+              "sha256": "a99e41674c392c9f3517d75602b2e9b53ab66284aa4dea65c43dc1775cd8a790"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/tests/unit/test_slotted_view_coverage.py",
+              "sha256": "22c45d4863a671d67a8c96ee74041abdc4ec7b86604d5325c3977e0159cfe4c3"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/tests/unit/test_sql_server.py",
+              "sha256": "055529e11e3e0865452342550b98c0188651b3c6a8d8c788919ae826723846ec"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/tests/unit/test_stability_runner.py",
+              "sha256": "2ef968ab256bb27c54ec0653adb02ebfe0fa6c0790f524650ad48cc9678aaf60"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/tests/unit/test_task_decomposition_contract.py",
+              "sha256": "29d8ff1d8a247825ebeb0a1c851727db351ea41c3fa4d3ebb2c7205338a8121f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/tests/unit/test_task_decomposition_workflow.py",
+              "sha256": "528040b632d840f37a95fb07c10baf7ac2d69618928ff6631bb53be4d7a976cf"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/tests/unit/test_terms_mapping_repository.py",
+              "sha256": "997d739f350d3bbf7199626cbf97dda21566529c0478b5d553448232aadb7e1a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/tests/unit/test_three_stage_view_selection.py",
+              "sha256": "cc2315f00c4c8eb957d01d1785b9949ecc5ed8b552844225a634b15f6ee959d1"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/tests/unit/test_view_matching_benchmark.py",
+              "sha256": "117ee4bcece8e2028c3dbe60dc4976a0e7db7b442d5374c2a86352458988c048"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/tests/unit/test_web_projects.py",
+              "sha256": "144d23ec1c1b735d7818f36b3fca05e1824038f2390256e0d740294a4061486a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/frozen/uv.lock",
+              "sha256": "043329770a012250f88117794535b36b476bec37ba5bda43c779c7d76cf72e4c"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/outer-receipts.json",
+              "sha256": "7a9af9c8594b093d1c16c7150e3a50d4d9ba62ebeb8ad7d830cb4c9e6dea8017"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-natural/artifact-inventory.json",
+              "sha256": "b83e2a7893b57dc4e908acf0ab55a84df684d1198c2bddeda3f164a4fd748657"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-natural/authorization.json",
+              "sha256": "e52755e7eedfce6f628d62d74a965b39e4d1c39eea15f4104382b96cb88e8763"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-natural/controller-evidence.log",
+              "sha256": "6a7dee2df6decc78d70dd3a9fcef13555f24ec05ef34f4d611783f4084b4e866"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-natural/execution.log",
+              "sha256": "94eab1dd68a45066425d020aa3c7095ec0704b7e691a3c66ab67ecff0da49b09"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-natural/final-verification.json",
+              "sha256": "f8044fcb844b1f9905190d72f91ccd95d4453406d8328aa0654eb61cb79e3a9a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-natural/input-and-freeze-verification.json",
+              "sha256": "0ccd1bd032648b2d88646115d35ab3014163288c7f45226de51167f6e12f63eb"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-natural/preflight.json",
+              "sha256": "33d8b3c06986fd7e1b5e2bd26602df28cce1a990c07ecaeeff025d9337e18512"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-natural/protected-before.json",
+              "sha256": "6c546e8a8283adfc20f13d3e272d8654265103acc2b7a8f31c664abc1833834d"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-natural/replay-fifth.json",
+              "sha256": "7dbc59507b7f731dfd857c31ec57eb679390b04a812c9866a4e0887e153d65b3"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-natural/replay-first-two.json",
+              "sha256": "39281d48c813e77aed206d91cae3f95d5fcc764d5de2d8d6321faeeac80319c6"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-natural/replay-fourth.json",
+              "sha256": "a26d74e0cc323619092cf2825028287dd305aa44bfc93f8e62cd172306a11051"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-natural/replay-frozen-COV-CAP-v1-04.log",
+              "sha256": "e6e4e8ae2230a19db5d5002e2155b5d04a6375c9e04f68f8ccfc4d2196fd8cd5"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-natural/replay-frozen-COV-CAP-v1-05.log",
+              "sha256": "b8e7bdeff57a3f1ae6d92d8425373035a6be0e28ddc602e54080e638318d59b4"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-natural/replay-frozen-COV-ISO-v1-01.log",
+              "sha256": "9175af589eec0f588c49b1d2c1b4ab377cb55a971da0bef2eb1eab450dc92fb9"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-natural/replay-frozen-COV-ISO-v1-02.log",
+              "sha256": "b5cc39973526bb89cd4959041faa00adc308e05763284427901debb65dd030cb"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-natural/replay-frozen-COV-ISO-v1-03.log",
+              "sha256": "1363ab10d1d28133ced5392aeeb67027b5843944b9bb31c82bc6c0dec72a7eb2"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-natural/replay-live-COV-CAP-v1-04.log",
+              "sha256": "e6e4e8ae2230a19db5d5002e2155b5d04a6375c9e04f68f8ccfc4d2196fd8cd5"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-natural/replay-live-COV-CAP-v1-05.log",
+              "sha256": "b8e7bdeff57a3f1ae6d92d8425373035a6be0e28ddc602e54080e638318d59b4"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-natural/replay-live-COV-ISO-v1-01.log",
+              "sha256": "9175af589eec0f588c49b1d2c1b4ab377cb55a971da0bef2eb1eab450dc92fb9"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-natural/replay-live-COV-ISO-v1-02.log",
+              "sha256": "b5cc39973526bb89cd4959041faa00adc308e05763284427901debb65dd030cb"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-natural/replay-live-COV-ISO-v1-03.log",
+              "sha256": "1363ab10d1d28133ced5392aeeb67027b5843944b9bb31c82bc6c0dec72a7eb2"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-natural/replay-third.json",
+              "sha256": "0d737509e470c0d1e001f311b38e2de2a1c875e86c7e31230bd604d24712cf64"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-natural/review.json",
+              "sha256": "970be4bb6f83f17ea09c9139de4817cff96ecfbbeecb54b9e194d72741a09596"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-natural/semantic-COV-CAP-v1-04.json",
+              "sha256": "eb0be721c944b9c050b80a1afba98def65ddf266f098170e78b7dd53f894cfa9"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-natural/semantic-COV-CAP-v1-05.json",
+              "sha256": "9d2fd9453769585ca483e117e5e9a71d98301b1082ca4af026722f0af452707f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-natural/semantic-COV-ISO-v1-01.json",
+              "sha256": "958fe928da3d062357013069e9e2369df593ed81358afee7f4c5ee640add8b3f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-natural/semantic-COV-ISO-v1-02.json",
+              "sha256": "74f893e97954182e6a42ab800cafc44ef0b59a1011c53d6e9416868a5f50c100"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-natural/semantic-COV-ISO-v1-03.json",
+              "sha256": "95f246cc7d1cd4fd6727b67b5cb62671dab0812e471dc19835ec6fe18e6e65cc"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-natural/semantic-review.log",
+              "sha256": "81aa8f8ae594d48b62dd2574a2379ac28666672324217e62fbebe2a9b8ce232a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-semantics/review.json",
+              "sha256": "c509270ef90e86b4f6c0ee064ae19b218bb2426f6dc8f88a4171496b819d00d7"
+            }
+          ],
+          "summary": "第23輪固定5首次上游注入coverage整node FAIL（FAIL/PASS/FAIL/FAIL/FAIL）。01/03有用店鍵及淨額自身/依賴已正確但共4個contract_path指object；04漏lifetime_spend sum部分能力；05完整庫存母體只映product_id漏store_id且欄位識別引文不足，status值域不證全母體。完整33row/raw presence/provider與可用normalized/全gaps已獨立審，有限AND接受0、不修答不挑分。5live+5完整frozen replay忠實重現，288 frozen files/fullbindings及8047舊非Task檔保持；Task僅controller記帳，check-evidence PASS。5local/0retry/0cloud/0SQL/DB，全局31local/40dispatch，inflight0。下一fresh研究必須全文評估使用者docs/next_enhance_advice.md；非自然recall/full9/coverage父/root完成，原38×2 Gate未過不變。",
+          "producer": "/root/loop_worker_capability_natural",
+          "finished_at": "2026-10-22T02:55:02.729750+00:00"
+        },
+        {
+          "round": 24,
+          "node": "text_leaf_evidence_contract",
+          "started_at": "2026-10-22T03:13:31.029660+00:00",
+          "result": "FAIL",
+          "evidence": [
+            {
+              "path": "evaluations/diagnostics/managed_text_leaf_evidence.py",
+              "sha256": "d745f4ad23cc7e7708c662de829c85da3b9d0d5dc251b4e7d6285e921f7373cf"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/expected-new.json",
+              "sha256": "d864588439bd5cb476f6bdc0128248dda083d0dcb0f852279ebd90e73458af05"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/expected-normalized.json",
+              "sha256": "090e8317c676e8ecb8a0ee9e3d0b36d53cd03473ce26b2f1e1bec4f84325a532"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-CAP-v1-04-seed42-body.json",
+              "sha256": "2bf9dc4594a4a6814dbf4ebba3fcc580c1990633856c03ad8f2df5324b009f98"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-CAP-v1-04-seed42-cards.json",
+              "sha256": "e1808680b22eaecee93a60db12178d2afd166a8dd0ccef27c0cd9a61d8319c54"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-CAP-v1-04-seed42-messages.json",
+              "sha256": "55efc8fb78bf94fc01bcdd206a9e411adacee518180bf52f537a83becdb64783"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-CAP-v1-04-seed42-schema.json",
+              "sha256": "37be97e9b1970d6abc53ddecb86ac50dbaf596bc0e2fbefda6106369f74e9428"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-CAP-v1-04-seed42-upstream.json",
+              "sha256": "036a95a6bfce7584579489eee72802bbaccb8cfd93f3a5392790759e5e21eeec"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-CAP-v1-04-seed43-body.json",
+              "sha256": "78cdb671ce18029b04957fae8cd3638e8625c24cd94aadd818f606db7ed2dc61"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-CAP-v1-04-seed43-cards.json",
+              "sha256": "e1808680b22eaecee93a60db12178d2afd166a8dd0ccef27c0cd9a61d8319c54"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-CAP-v1-04-seed43-messages.json",
+              "sha256": "55efc8fb78bf94fc01bcdd206a9e411adacee518180bf52f537a83becdb64783"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-CAP-v1-04-seed43-schema.json",
+              "sha256": "37be97e9b1970d6abc53ddecb86ac50dbaf596bc0e2fbefda6106369f74e9428"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-CAP-v1-04-seed43-upstream.json",
+              "sha256": "036a95a6bfce7584579489eee72802bbaccb8cfd93f3a5392790759e5e21eeec"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-CAP-v1-04-seed44-body.json",
+              "sha256": "9a0001176435ff2342f24b6d1dc089bd85756f30ca8a023f4fe8fbfaec351cb9"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-CAP-v1-04-seed44-cards.json",
+              "sha256": "e1808680b22eaecee93a60db12178d2afd166a8dd0ccef27c0cd9a61d8319c54"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-CAP-v1-04-seed44-messages.json",
+              "sha256": "55efc8fb78bf94fc01bcdd206a9e411adacee518180bf52f537a83becdb64783"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-CAP-v1-04-seed44-schema.json",
+              "sha256": "37be97e9b1970d6abc53ddecb86ac50dbaf596bc0e2fbefda6106369f74e9428"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-CAP-v1-04-seed44-upstream.json",
+              "sha256": "036a95a6bfce7584579489eee72802bbaccb8cfd93f3a5392790759e5e21eeec"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-CAP-v1-05-seed42-body.json",
+              "sha256": "a9df515fd3cb753b1c56afe01d556cd86ed7db15e2ab8e185d314b267f72d975"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-CAP-v1-05-seed42-cards.json",
+              "sha256": "e1808680b22eaecee93a60db12178d2afd166a8dd0ccef27c0cd9a61d8319c54"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-CAP-v1-05-seed42-messages.json",
+              "sha256": "f74222712df2a312f6d5dbd37700ee4f204ca91eb3df0011165699497678261d"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-CAP-v1-05-seed42-schema.json",
+              "sha256": "37be97e9b1970d6abc53ddecb86ac50dbaf596bc0e2fbefda6106369f74e9428"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-CAP-v1-05-seed42-upstream.json",
+              "sha256": "036a95a6bfce7584579489eee72802bbaccb8cfd93f3a5392790759e5e21eeec"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-CAP-v1-05-seed43-body.json",
+              "sha256": "79a9e0d5c274c373c649e021a9dd98dc48349a36e874e2d5522c098945825905"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-CAP-v1-05-seed43-cards.json",
+              "sha256": "e1808680b22eaecee93a60db12178d2afd166a8dd0ccef27c0cd9a61d8319c54"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-CAP-v1-05-seed43-messages.json",
+              "sha256": "f74222712df2a312f6d5dbd37700ee4f204ca91eb3df0011165699497678261d"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-CAP-v1-05-seed43-schema.json",
+              "sha256": "37be97e9b1970d6abc53ddecb86ac50dbaf596bc0e2fbefda6106369f74e9428"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-CAP-v1-05-seed43-upstream.json",
+              "sha256": "036a95a6bfce7584579489eee72802bbaccb8cfd93f3a5392790759e5e21eeec"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-CAP-v1-05-seed44-body.json",
+              "sha256": "60fa44072c671803c950af727fc1a5e068df921e69ad80638b24074818067d51"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-CAP-v1-05-seed44-cards.json",
+              "sha256": "e1808680b22eaecee93a60db12178d2afd166a8dd0ccef27c0cd9a61d8319c54"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-CAP-v1-05-seed44-messages.json",
+              "sha256": "f74222712df2a312f6d5dbd37700ee4f204ca91eb3df0011165699497678261d"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-CAP-v1-05-seed44-schema.json",
+              "sha256": "37be97e9b1970d6abc53ddecb86ac50dbaf596bc0e2fbefda6106369f74e9428"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-CAP-v1-05-seed44-upstream.json",
+              "sha256": "036a95a6bfce7584579489eee72802bbaccb8cfd93f3a5392790759e5e21eeec"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-01-seed42-body.json",
+              "sha256": "7d9fd6eaf99a5b76ec9209178ce6de8f581267192b82717657f6403f8fc2cb00"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-01-seed42-cards.json",
+              "sha256": "e1808680b22eaecee93a60db12178d2afd166a8dd0ccef27c0cd9a61d8319c54"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-01-seed42-messages.json",
+              "sha256": "25c6c0d74ed81aa6dc16fbabc128cf522d2e818a816a6a8a5f6463bc80619b43"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-01-seed42-schema.json",
+              "sha256": "37be97e9b1970d6abc53ddecb86ac50dbaf596bc0e2fbefda6106369f74e9428"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-01-seed42-upstream.json",
+              "sha256": "036a95a6bfce7584579489eee72802bbaccb8cfd93f3a5392790759e5e21eeec"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-01-seed43-body.json",
+              "sha256": "14a89baa9ca7d11362de885a25ae5eac25cec423943c8891c4b3d23ff3df7355"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-01-seed43-cards.json",
+              "sha256": "e1808680b22eaecee93a60db12178d2afd166a8dd0ccef27c0cd9a61d8319c54"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-01-seed43-messages.json",
+              "sha256": "25c6c0d74ed81aa6dc16fbabc128cf522d2e818a816a6a8a5f6463bc80619b43"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-01-seed43-schema.json",
+              "sha256": "37be97e9b1970d6abc53ddecb86ac50dbaf596bc0e2fbefda6106369f74e9428"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-01-seed43-upstream.json",
+              "sha256": "036a95a6bfce7584579489eee72802bbaccb8cfd93f3a5392790759e5e21eeec"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-01-seed44-body.json",
+              "sha256": "b688fb9525ac9f9a63cde6d5224636996b04c0454b6422651b274f75288ca6e2"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-01-seed44-cards.json",
+              "sha256": "e1808680b22eaecee93a60db12178d2afd166a8dd0ccef27c0cd9a61d8319c54"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-01-seed44-messages.json",
+              "sha256": "25c6c0d74ed81aa6dc16fbabc128cf522d2e818a816a6a8a5f6463bc80619b43"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-01-seed44-schema.json",
+              "sha256": "37be97e9b1970d6abc53ddecb86ac50dbaf596bc0e2fbefda6106369f74e9428"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-01-seed44-upstream.json",
+              "sha256": "036a95a6bfce7584579489eee72802bbaccb8cfd93f3a5392790759e5e21eeec"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-02-seed42-body.json",
+              "sha256": "9c7a4b0573f08ea2e3647f3778aaa3bcfc4b7c59313945c7360c37378ac97830"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-02-seed42-cards.json",
+              "sha256": "77c4e9cfb8d99d5e987aecb3b57c41553a249516bb7a9808685e0e789686765c"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-02-seed42-messages.json",
+              "sha256": "68614784159e585641574ba4648300cbd4387d5a56804432f5a3b6de6454843a"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-02-seed42-schema.json",
+              "sha256": "6e85865250f8c2f01a7412eed39e5ede0223488313f38b8aeb4d01f8f04ad4ed"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-02-seed42-upstream.json",
+              "sha256": "58418ab1cca66e31ecceb6cede8e14b1e0a01640e210e42b7ffe2fe80f899076"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-02-seed43-body.json",
+              "sha256": "39ad2d65c88d7deeafc0b957feb4c24f5f15b14c1cf94fe84f7db08d6537f168"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-02-seed43-cards.json",
+              "sha256": "77c4e9cfb8d99d5e987aecb3b57c41553a249516bb7a9808685e0e789686765c"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-02-seed43-messages.json",
+              "sha256": "68614784159e585641574ba4648300cbd4387d5a56804432f5a3b6de6454843a"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-02-seed43-schema.json",
+              "sha256": "6e85865250f8c2f01a7412eed39e5ede0223488313f38b8aeb4d01f8f04ad4ed"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-02-seed43-upstream.json",
+              "sha256": "58418ab1cca66e31ecceb6cede8e14b1e0a01640e210e42b7ffe2fe80f899076"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-02-seed44-body.json",
+              "sha256": "e3731f7e88ede4dcfd3974f2e821b2019c40505a627ca553884edfe977c9ae2b"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-02-seed44-cards.json",
+              "sha256": "77c4e9cfb8d99d5e987aecb3b57c41553a249516bb7a9808685e0e789686765c"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-02-seed44-messages.json",
+              "sha256": "68614784159e585641574ba4648300cbd4387d5a56804432f5a3b6de6454843a"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-02-seed44-schema.json",
+              "sha256": "6e85865250f8c2f01a7412eed39e5ede0223488313f38b8aeb4d01f8f04ad4ed"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-02-seed44-upstream.json",
+              "sha256": "58418ab1cca66e31ecceb6cede8e14b1e0a01640e210e42b7ffe2fe80f899076"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-03-seed42-body.json",
+              "sha256": "cc536e7183500ac9d46cfba59afdc3cb74ad312ea0e8e2697749abadcf7d6c8f"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-03-seed42-cards.json",
+              "sha256": "fbf268266134f712ae26a8979725384cb18d8c8d3a150738e0592bc43b73955f"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-03-seed42-messages.json",
+              "sha256": "0141d39eb5db36da518dd797810e6a2088449320c64e5b8cf48581b15b875131"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-03-seed42-schema.json",
+              "sha256": "044505c3b470f5f39a4d60a512536cf49e3ad6a927c14ae5b0a4034e7df9a2a6"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-03-seed42-upstream.json",
+              "sha256": "5afd2ee0ae2fcd93287c0863b68ef0518f89476fb60f157249f32901f3ff27a8"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-03-seed43-body.json",
+              "sha256": "01f4318a7c53105b18cfadc8cae54b05aefc820b0ad70699911fa98567b52588"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-03-seed43-cards.json",
+              "sha256": "fbf268266134f712ae26a8979725384cb18d8c8d3a150738e0592bc43b73955f"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-03-seed43-messages.json",
+              "sha256": "0141d39eb5db36da518dd797810e6a2088449320c64e5b8cf48581b15b875131"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-03-seed43-schema.json",
+              "sha256": "044505c3b470f5f39a4d60a512536cf49e3ad6a927c14ae5b0a4034e7df9a2a6"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-03-seed43-upstream.json",
+              "sha256": "5afd2ee0ae2fcd93287c0863b68ef0518f89476fb60f157249f32901f3ff27a8"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-03-seed44-body.json",
+              "sha256": "92c0e0b0c153a2b7e0080acd78eef95d71481fda1d8ea4cfc431aea08ce5d1c0"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-03-seed44-cards.json",
+              "sha256": "fbf268266134f712ae26a8979725384cb18d8c8d3a150738e0592bc43b73955f"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-03-seed44-messages.json",
+              "sha256": "0141d39eb5db36da518dd797810e6a2088449320c64e5b8cf48581b15b875131"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-03-seed44-schema.json",
+              "sha256": "044505c3b470f5f39a4d60a512536cf49e3ad6a927c14ae5b0a4034e7df9a2a6"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-03-seed44-upstream.json",
+              "sha256": "5afd2ee0ae2fcd93287c0863b68ef0518f89476fb60f157249f32901f3ff27a8"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-06-seed42-body.json",
+              "sha256": "31b9413623a2bfff8bbd4f7073f628d84eb8f3e41636b3f35d43c73acc819ff7"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-06-seed42-cards.json",
+              "sha256": "571131bc5ebee4536d36100728a68c7277b49404ab6fa3fae88669c46a62c72d"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-06-seed42-messages.json",
+              "sha256": "ce6416d56dfd76213d37d35edf9a01c12c3f4d6a6d2a2e1e1349a4a3597a5a61"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-06-seed42-schema.json",
+              "sha256": "0a743b12bebecb885da2e9d3569103b82a5ee9aba28fcb1f30adfc5979d8a5b5"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-06-seed42-upstream.json",
+              "sha256": "148f63d64e114c97f038026fd8d4b485f0d77129eded1b739b0af0210cc44c44"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-06-seed43-body.json",
+              "sha256": "deabe66ac549dc0c3f7a8821bd21ae235186db70a3bae03da3370a2d5186b9f1"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-06-seed43-cards.json",
+              "sha256": "571131bc5ebee4536d36100728a68c7277b49404ab6fa3fae88669c46a62c72d"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-06-seed43-messages.json",
+              "sha256": "ce6416d56dfd76213d37d35edf9a01c12c3f4d6a6d2a2e1e1349a4a3597a5a61"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-06-seed43-schema.json",
+              "sha256": "0a743b12bebecb885da2e9d3569103b82a5ee9aba28fcb1f30adfc5979d8a5b5"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-06-seed43-upstream.json",
+              "sha256": "148f63d64e114c97f038026fd8d4b485f0d77129eded1b739b0af0210cc44c44"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-06-seed44-body.json",
+              "sha256": "19a9c2e7b6eb6ae58762f96ef39f7e2269a39ca7645422097c02c58c7743b6dc"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-06-seed44-cards.json",
+              "sha256": "571131bc5ebee4536d36100728a68c7277b49404ab6fa3fae88669c46a62c72d"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-06-seed44-messages.json",
+              "sha256": "ce6416d56dfd76213d37d35edf9a01c12c3f4d6a6d2a2e1e1349a4a3597a5a61"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-06-seed44-schema.json",
+              "sha256": "0a743b12bebecb885da2e9d3569103b82a5ee9aba28fcb1f30adfc5979d8a5b5"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-06-seed44-upstream.json",
+              "sha256": "148f63d64e114c97f038026fd8d4b485f0d77129eded1b739b0af0210cc44c44"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-07-seed42-body.json",
+              "sha256": "a891767a60edd509de8ce1f97de9dd8f2812652d1c723a0dc612b1641d9da399"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-07-seed42-cards.json",
+              "sha256": "e1808680b22eaecee93a60db12178d2afd166a8dd0ccef27c0cd9a61d8319c54"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-07-seed42-messages.json",
+              "sha256": "a8897322a8ab328086e5174bd30bda5634cc4b6e46af8f121106a82b3055f215"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-07-seed42-schema.json",
+              "sha256": "4adb1652532261841b8bbe5b1ff22feb7382393b63081f12ef5494df3e284d0e"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-07-seed42-upstream.json",
+              "sha256": "3359a1bd02fa8ea8a7afc8d99ee0c1bad228815eae35167ac3ce580e5e3dd22b"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-07-seed43-body.json",
+              "sha256": "48b0217349344dfbf7673897c4665243e7089f9898ed0a02abad38d4148d938a"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-07-seed43-cards.json",
+              "sha256": "e1808680b22eaecee93a60db12178d2afd166a8dd0ccef27c0cd9a61d8319c54"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-07-seed43-messages.json",
+              "sha256": "a8897322a8ab328086e5174bd30bda5634cc4b6e46af8f121106a82b3055f215"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-07-seed43-schema.json",
+              "sha256": "4adb1652532261841b8bbe5b1ff22feb7382393b63081f12ef5494df3e284d0e"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-07-seed43-upstream.json",
+              "sha256": "3359a1bd02fa8ea8a7afc8d99ee0c1bad228815eae35167ac3ce580e5e3dd22b"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-07-seed44-body.json",
+              "sha256": "3a9eeeb43875fc071daf7fc0b7b29ac5b879a5380e26cd31200d6c0d9e0dbd4d"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-07-seed44-cards.json",
+              "sha256": "e1808680b22eaecee93a60db12178d2afd166a8dd0ccef27c0cd9a61d8319c54"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-07-seed44-messages.json",
+              "sha256": "a8897322a8ab328086e5174bd30bda5634cc4b6e46af8f121106a82b3055f215"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-07-seed44-schema.json",
+              "sha256": "4adb1652532261841b8bbe5b1ff22feb7382393b63081f12ef5494df3e284d0e"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-07-seed44-upstream.json",
+              "sha256": "3359a1bd02fa8ea8a7afc8d99ee0c1bad228815eae35167ac3ce580e5e3dd22b"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-08-seed42-body.json",
+              "sha256": "318132e0350ee5a8d2fba119d078818d02eb9dea42da3925ea58a7cb647579c9"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-08-seed42-cards.json",
+              "sha256": "e1808680b22eaecee93a60db12178d2afd166a8dd0ccef27c0cd9a61d8319c54"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-08-seed42-messages.json",
+              "sha256": "378cf8dbcc727dbe1488372ad92ef615e8401b8336247043a4abf25cd04b36a1"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-08-seed42-schema.json",
+              "sha256": "4adb1652532261841b8bbe5b1ff22feb7382393b63081f12ef5494df3e284d0e"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-08-seed42-upstream.json",
+              "sha256": "7295b6b374e9c1fdb83964903ac2195d1a676903c901723e1a73c0d9915d99da"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-08-seed43-body.json",
+              "sha256": "ad7095f0e9c8cafc248c8d6463a9756278496f93e72b06adf18a99eb0efb2d87"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-08-seed43-cards.json",
+              "sha256": "e1808680b22eaecee93a60db12178d2afd166a8dd0ccef27c0cd9a61d8319c54"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-08-seed43-messages.json",
+              "sha256": "378cf8dbcc727dbe1488372ad92ef615e8401b8336247043a4abf25cd04b36a1"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-08-seed43-schema.json",
+              "sha256": "4adb1652532261841b8bbe5b1ff22feb7382393b63081f12ef5494df3e284d0e"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-08-seed43-upstream.json",
+              "sha256": "7295b6b374e9c1fdb83964903ac2195d1a676903c901723e1a73c0d9915d99da"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-08-seed44-body.json",
+              "sha256": "5b920b96d85e60d2320258ace377bfc8d14a173bcc6ad5e63aa4663ce30d02e3"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-08-seed44-cards.json",
+              "sha256": "e1808680b22eaecee93a60db12178d2afd166a8dd0ccef27c0cd9a61d8319c54"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-08-seed44-messages.json",
+              "sha256": "378cf8dbcc727dbe1488372ad92ef615e8401b8336247043a4abf25cd04b36a1"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-08-seed44-schema.json",
+              "sha256": "4adb1652532261841b8bbe5b1ff22feb7382393b63081f12ef5494df3e284d0e"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-08-seed44-upstream.json",
+              "sha256": "7295b6b374e9c1fdb83964903ac2195d1a676903c901723e1a73c0d9915d99da"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-09-seed42-body.json",
+              "sha256": "f04b487f9df7fb9a04e3c0bbc1ce6bf1b3d087965e711da021b4f23da6d1ff02"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-09-seed42-cards.json",
+              "sha256": "571131bc5ebee4536d36100728a68c7277b49404ab6fa3fae88669c46a62c72d"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-09-seed42-messages.json",
+              "sha256": "e6c2386677be9241e7b50837f39b026744310451f32cc02acfb163fbb1d51e5e"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-09-seed42-schema.json",
+              "sha256": "0a743b12bebecb885da2e9d3569103b82a5ee9aba28fcb1f30adfc5979d8a5b5"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-09-seed42-upstream.json",
+              "sha256": "505b0af6616e1e5b4712f00f31e08331e8959f021ca38b1788a358a37c0e780b"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-09-seed43-body.json",
+              "sha256": "0f40767cd6e9c207869717ff6759360966845eaaeca76f9d75b10151d99c89e2"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-09-seed43-cards.json",
+              "sha256": "571131bc5ebee4536d36100728a68c7277b49404ab6fa3fae88669c46a62c72d"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-09-seed43-messages.json",
+              "sha256": "e6c2386677be9241e7b50837f39b026744310451f32cc02acfb163fbb1d51e5e"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-09-seed43-schema.json",
+              "sha256": "0a743b12bebecb885da2e9d3569103b82a5ee9aba28fcb1f30adfc5979d8a5b5"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-09-seed43-upstream.json",
+              "sha256": "505b0af6616e1e5b4712f00f31e08331e8959f021ca38b1788a358a37c0e780b"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-09-seed44-body.json",
+              "sha256": "12a5f2569d45cccd3c0e8037e09fa7c700a951193c53132ad73a0ed7be9950bc"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-09-seed44-cards.json",
+              "sha256": "571131bc5ebee4536d36100728a68c7277b49404ab6fa3fae88669c46a62c72d"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-09-seed44-messages.json",
+              "sha256": "e6c2386677be9241e7b50837f39b026744310451f32cc02acfb163fbb1d51e5e"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-09-seed44-schema.json",
+              "sha256": "0a743b12bebecb885da2e9d3569103b82a5ee9aba28fcb1f30adfc5979d8a5b5"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-09-seed44-upstream.json",
+              "sha256": "505b0af6616e1e5b4712f00f31e08331e8959f021ca38b1788a358a37c0e780b"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/manifest.json",
+              "sha256": "624cefc9f2835171ae2debe9bd7a9f3c47c67198099dba832419d456e25160ad"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/panel.json",
+              "sha256": "3b44fbf80d8083ee2a22859667749e8c37034930eaaef3388a7d9e12f69c949b"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/profiles/COV-LEAF-v1-06/catalog.yaml",
+              "sha256": "734497447f5a43d485c2c3e4c298602e2a4dfeb4959df959dd1289811650a2b9"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/profiles/COV-LEAF-v1-06/manifest.yaml",
+              "sha256": "85ed6e39dd5bdf8dd84edfcac19843b36e5c64888229aafc237f215512018229"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/profiles/COV-LEAF-v1-06/view.yaml",
+              "sha256": "02308c3c49252ee449a672e01af44e65e03f628a35fe3df70dbbdc965552771d"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/profiles/COV-LEAF-v1-07/catalog.yaml",
+              "sha256": "3d317aee49cf33e0c2d0d9fed14c1be43e4ca57635da965de759f0cd3bd79d0f"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/profiles/COV-LEAF-v1-07/manifest.yaml",
+              "sha256": "db84e36327d351b496548b634b4f591a0852adb6a492f45f9bc8175c1c5a6a99"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/profiles/COV-LEAF-v1-07/view.yaml",
+              "sha256": "9bd6c9c2bcb5aa5016cf6b64a3c30f09b35b782b8ed60100a97651990255d28d"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/profiles/COV-LEAF-v1-08/catalog.yaml",
+              "sha256": "93ab6879bee3e0b766f75cac3a73ef46849cc1bf89058093f1dc5ab797f649bc"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/profiles/COV-LEAF-v1-08/manifest.yaml",
+              "sha256": "efe1e32066dcbbf037eb3e21286ebd5c88e676bee9a936cf0c1f0266c31dc3b4"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/profiles/COV-LEAF-v1-08/view.yaml",
+              "sha256": "b59e45b16c3dfc6aeba62c5f3663108460ff0f5cb54baf9e8d5cad2b8ccd3fb9"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/profiles/COV-LEAF-v1-09/catalog.yaml",
+              "sha256": "50f70e3f6017599e3b4c0acc34ce00fa21d7e98b1f8ce8e9f2f8660c8d91e95d"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/profiles/COV-LEAF-v1-09/manifest.yaml",
+              "sha256": "48131658cd32442bf7bc57aae57932fdbf667ede7cf81e443e76a52c5dd8fda2"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/profiles/COV-LEAF-v1-09/view.yaml",
+              "sha256": "2610f2c2e0f2f4aaf69541775b71ba3ecefe992c5b5ac25c881de5863b3ac4e6"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/recall-COV-LEAF-v1-06.json",
+              "sha256": "73f189f0ed5477aaafc78d714eac1a07f94ff09bf441b0b947edd972a7424c3f"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/recall-COV-LEAF-v1-07.json",
+              "sha256": "76f0143b117701c608c8534501b723aacc4937552ba61fc33cc1ff282eb98dff"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/recall-COV-LEAF-v1-08.json",
+              "sha256": "76f0143b117701c608c8534501b723aacc4937552ba61fc33cc1ff282eb98dff"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_text_leaf/recall-COV-LEAF-v1-09.json",
+              "sha256": "73f189f0ed5477aaafc78d714eac1a07f94ff09bf441b0b947edd972a7424c3f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/artifact-inventory.json",
+              "sha256": "96acbe760d97b9361f276322b5a5cbb1052b80a3026e7ac80eb8944b48ad3c0f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/build-fixtures.py.log",
+              "sha256": "8096433e9df2454a58e807bf2017738da22f411b1885bc956f75a49b4a1686ca"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls-and-freeze.json",
+              "sha256": "7f8eb7ca5ec83598c178926068d2b18baf8dd0b03adae65f325609ba26368565"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls-and-freeze.log",
+              "sha256": "8516cbdb78f2ea044eeb6438a663bac49ffcf66900df9d13e00502da871334da"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls-and-freeze.py.log",
+              "sha256": "f4342309da3c15544c0fcf3fba727547fe72a13fcba7cee9d4d652f7bf22b183"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-None/map-01-call.json",
+              "sha256": "10adb4345434b9dfc824edb22dbb2b765d42cad7054481c3fcc0c1528ad08140"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-None/map-01-normalized.json",
+              "sha256": "93db0272d372fb2498ca15ba06ae488aba7e17c5c3fc430883dc23985c1fd8bb"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-None/map-01-parsed.json",
+              "sha256": "839985cd402bf4edcf5a3fc0c37970d4fd399f12a13f1df8a8249bea35595fda"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-None/map-01-refs.json",
+              "sha256": "839985cd402bf4edcf5a3fc0c37970d4fd399f12a13f1df8a8249bea35595fda"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-None/map-01-request.json",
+              "sha256": "724d7f8fcb8edd61678d416c34ad4393037baa28a067fbf982a72f3ccb030245"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-None/map-01-result.json",
+              "sha256": "93db0272d372fb2498ca15ba06ae488aba7e17c5c3fc430883dc23985c1fd8bb"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-None/map-02-call.json",
+              "sha256": "203cc0094feeac5b35b636f5a830dd1338ec97f66e70988b5e954a338d5c4dda"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-None/map-02-normalized.json",
+              "sha256": "e54f41a916c28c909ffd2fba18c6a58a2b2355a995e200d262b73be6c97dae72"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-None/map-02-parsed.json",
+              "sha256": "839985cd402bf4edcf5a3fc0c37970d4fd399f12a13f1df8a8249bea35595fda"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-None/map-02-refs.json",
+              "sha256": "839985cd402bf4edcf5a3fc0c37970d4fd399f12a13f1df8a8249bea35595fda"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-None/map-02-request.json",
+              "sha256": "9081e9c388be26c255efb66a6dc053cf502e4a4dd2576abcf9bf71e2dfbb360d"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-None/map-02-result.json",
+              "sha256": "e54f41a916c28c909ffd2fba18c6a58a2b2355a995e200d262b73be6c97dae72"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-None/map-03-call.json",
+              "sha256": "b8ff1933ecae42fe68252270715afa86a42054128238f5e2437bc6d8c45fa45a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-None/map-03-normalized.json",
+              "sha256": "9c90516ee13f91affcfcaa794b08cd6a34a970b81d821d54cbda3bdfa74c423c"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-None/map-03-parsed.json",
+              "sha256": "577405bb5acec37812d439c6c241194175fe9f33bd2b4fd2769d747e1a5487b6"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-None/map-03-refs.json",
+              "sha256": "577405bb5acec37812d439c6c241194175fe9f33bd2b4fd2769d747e1a5487b6"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-None/map-03-request.json",
+              "sha256": "47c875d467f5e716dda61b841913a081f49769d534a936a1926879218b93430a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-None/map-03-result.json",
+              "sha256": "9c90516ee13f91affcfcaa794b08cd6a34a970b81d821d54cbda3bdfa74c423c"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-None/map-04-call.json",
+              "sha256": "5ab9abdd68854c872a56ba8a03b6807af6c47630c9c7bf4e0a3a3272937dcef5"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-None/map-04-normalized.json",
+              "sha256": "8aceaa83c2f2218f389a7ce1e8b5c788ff13eb53c00832a656e2eedd955a4b2b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-None/map-04-parsed.json",
+              "sha256": "839985cd402bf4edcf5a3fc0c37970d4fd399f12a13f1df8a8249bea35595fda"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-None/map-04-refs.json",
+              "sha256": "839985cd402bf4edcf5a3fc0c37970d4fd399f12a13f1df8a8249bea35595fda"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-None/map-04-request.json",
+              "sha256": "a8fe422aa705a5b4c3d6b201b6750fa93d471ea8774e4d8ff68a14368b314c01"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-None/map-04-result.json",
+              "sha256": "8aceaa83c2f2218f389a7ce1e8b5c788ff13eb53c00832a656e2eedd955a4b2b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-None/map-05-call.json",
+              "sha256": "91caad0cdade37aa63dc45850ac54e587795d7176c262af2a10f16546395a269"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-None/map-05-normalized.json",
+              "sha256": "91b9abffb083d5a25795f9b146ebd81246a32ad14d8961406f004e14c7721089"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-None/map-05-parsed.json",
+              "sha256": "5d94fcaaf2c14d24f419a15842f2118b039e62a5410dc27c4c24c7acc8e4659c"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-None/map-05-refs.json",
+              "sha256": "5d94fcaaf2c14d24f419a15842f2118b039e62a5410dc27c4c24c7acc8e4659c"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-None/map-05-request.json",
+              "sha256": "8a708385a689ad9db9463c99d696ed8372ed6f461f5ede23821dc338f508cdb0"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-None/map-05-result.json",
+              "sha256": "91b9abffb083d5a25795f9b146ebd81246a32ad14d8961406f004e14c7721089"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-None/map-06-call.json",
+              "sha256": "b571f1ea66c38d9a1fe6d299620d4db870068e61b736f8306a2a8f0ef51d72bf"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-None/map-06-normalized.json",
+              "sha256": "f70330fe774371bb926f2f68d46dc41a74dff018c2a442ff3ec5c729b9bc4b23"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-None/map-06-parsed.json",
+              "sha256": "d91b61e7cacc92abb578c3fd3de8ea0c669e52e4aa02cfa06d6b1566018b393d"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-None/map-06-refs.json",
+              "sha256": "d91b61e7cacc92abb578c3fd3de8ea0c669e52e4aa02cfa06d6b1566018b393d"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-None/map-06-request.json",
+              "sha256": "a0935ebf39bfff0b7534976ade250c65dac5104e9dcee1b6c6e993dc918c9c2f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-None/map-06-result.json",
+              "sha256": "f70330fe774371bb926f2f68d46dc41a74dff018c2a442ff3ec5c729b9bc4b23"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-None/map-07-call.json",
+              "sha256": "534ecd9ec8aab7cea4986c8c954292a6f65ba97a21e7ed2936f86b3152fb7751"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-None/map-07-normalized.json",
+              "sha256": "2a721ca11fe0feb16d815049d749e4a771ccd5b68ead6b4e900ee4a52ac271ef"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-None/map-07-parsed.json",
+              "sha256": "839985cd402bf4edcf5a3fc0c37970d4fd399f12a13f1df8a8249bea35595fda"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-None/map-07-refs.json",
+              "sha256": "839985cd402bf4edcf5a3fc0c37970d4fd399f12a13f1df8a8249bea35595fda"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-None/map-07-request.json",
+              "sha256": "7b5fafc166c09be6c5b2bbeec7498ed15c02c3c2c30f692c255244da209318db"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-None/map-07-result.json",
+              "sha256": "2a721ca11fe0feb16d815049d749e4a771ccd5b68ead6b4e900ee4a52ac271ef"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-None/recall-call.json",
+              "sha256": "06c71f7535b81e7c4cb6004c93fd8530aa2b936f6b29ec4c9be8f07f4766061e"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-None/recall-normalized.json",
+              "sha256": "4808733aa48cd181db211e129453d4ebd21ff8211190b48e868623aad867008a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-None/recall-parsed.json",
+              "sha256": "de5427bd88bf834384782372b07ebb00f83692f724d43743c67d3e242b9ae884"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-None/recall-refs.json",
+              "sha256": "881b140025fab4f73805d0159d86da397e25e7515c603fb8a63fe544a0818d33"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-None/recall-request.json",
+              "sha256": "786abea49a93292d71cd1ffabe5e2944451b9fceb286432a64d980ce7f87ed1c"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-None/recall-result.json",
+              "sha256": "4808733aa48cd181db211e129453d4ebd21ff8211190b48e868623aad867008a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-None/response.json",
+              "sha256": "d9a29716056dc65dcf9b7dac8796dbc275aea6ada5709b2fcd8849ca4e981d53"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-None/run.json",
+              "sha256": "d1fa6cbb0353d65d36448e3d8f699e1801586020b987ee29773d565f888e1015"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-None/selection-call.json",
+              "sha256": "b157bb4e1e843aad913d0072d4c2e38e56892c27cb91f6d84dc6944bd6731fc3"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-None/selection-normalized.json",
+              "sha256": "d5a73858a8d55e629811dbcf72ba1be10cceaaa5caeabc137bc4c675a74daaa9"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-None/selection-parsed.json",
+              "sha256": "d4db707b2797378b7ab0caf0e6009e5d11855d540b0a53181c2b92bcfc0807e5"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-None/selection-refs.json",
+              "sha256": "d4db707b2797378b7ab0caf0e6009e5d11855d540b0a53181c2b92bcfc0807e5"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-None/selection-request.json",
+              "sha256": "ff22d32abb79fff87de3581196de8e1a4a8bb7402d91f12347147307e4a93de3"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-None/selection-result.json",
+              "sha256": "d5a73858a8d55e629811dbcf72ba1be10cceaaa5caeabc137bc4c675a74daaa9"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-None/usage.json",
+              "sha256": "f1365500b183121d30d89a7e0d1487cce92a273cf2bf1dee38bdb12d68732772"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-scope/map-01-call.json",
+              "sha256": "7c0d1db853b9e0bd64af3bba2b05fc7c9fdae2a6661998f890a8afaa90e20ca2"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-scope/map-01-normalized.json",
+              "sha256": "93db0272d372fb2498ca15ba06ae488aba7e17c5c3fc430883dc23985c1fd8bb"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-scope/map-01-parsed.json",
+              "sha256": "839985cd402bf4edcf5a3fc0c37970d4fd399f12a13f1df8a8249bea35595fda"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-scope/map-01-refs.json",
+              "sha256": "839985cd402bf4edcf5a3fc0c37970d4fd399f12a13f1df8a8249bea35595fda"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-scope/map-01-request.json",
+              "sha256": "724d7f8fcb8edd61678d416c34ad4393037baa28a067fbf982a72f3ccb030245"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-scope/map-01-result.json",
+              "sha256": "93db0272d372fb2498ca15ba06ae488aba7e17c5c3fc430883dc23985c1fd8bb"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-scope/map-02-call.json",
+              "sha256": "5af0df09f2e9c676a1474dcfc28922a33afe9c3365ed16468d4e0b3c83567d9a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-scope/map-02-normalized.json",
+              "sha256": "e54f41a916c28c909ffd2fba18c6a58a2b2355a995e200d262b73be6c97dae72"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-scope/map-02-parsed.json",
+              "sha256": "839985cd402bf4edcf5a3fc0c37970d4fd399f12a13f1df8a8249bea35595fda"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-scope/map-02-refs.json",
+              "sha256": "839985cd402bf4edcf5a3fc0c37970d4fd399f12a13f1df8a8249bea35595fda"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-scope/map-02-request.json",
+              "sha256": "9081e9c388be26c255efb66a6dc053cf502e4a4dd2576abcf9bf71e2dfbb360d"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-scope/map-02-result.json",
+              "sha256": "e54f41a916c28c909ffd2fba18c6a58a2b2355a995e200d262b73be6c97dae72"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-scope/map-03-call.json",
+              "sha256": "7b0d2ceb1665e2f7aab7644640031938be48723213fbc97a46e7ef280181a7e4"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-scope/map-03-normalized.json",
+              "sha256": "9c90516ee13f91affcfcaa794b08cd6a34a970b81d821d54cbda3bdfa74c423c"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-scope/map-03-parsed.json",
+              "sha256": "577405bb5acec37812d439c6c241194175fe9f33bd2b4fd2769d747e1a5487b6"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-scope/map-03-refs.json",
+              "sha256": "577405bb5acec37812d439c6c241194175fe9f33bd2b4fd2769d747e1a5487b6"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-scope/map-03-request.json",
+              "sha256": "47c875d467f5e716dda61b841913a081f49769d534a936a1926879218b93430a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-scope/map-03-result.json",
+              "sha256": "9c90516ee13f91affcfcaa794b08cd6a34a970b81d821d54cbda3bdfa74c423c"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-scope/map-04-call.json",
+              "sha256": "a9f300bda736a2dbc8e86c2822bf59f9f56b089a1c14c7db5adf89cd24e66228"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-scope/map-04-normalized.json",
+              "sha256": "8aceaa83c2f2218f389a7ce1e8b5c788ff13eb53c00832a656e2eedd955a4b2b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-scope/map-04-parsed.json",
+              "sha256": "839985cd402bf4edcf5a3fc0c37970d4fd399f12a13f1df8a8249bea35595fda"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-scope/map-04-refs.json",
+              "sha256": "839985cd402bf4edcf5a3fc0c37970d4fd399f12a13f1df8a8249bea35595fda"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-scope/map-04-request.json",
+              "sha256": "a8fe422aa705a5b4c3d6b201b6750fa93d471ea8774e4d8ff68a14368b314c01"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-scope/map-04-result.json",
+              "sha256": "8aceaa83c2f2218f389a7ce1e8b5c788ff13eb53c00832a656e2eedd955a4b2b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-scope/map-05-call.json",
+              "sha256": "21eea6eb95645e7547a16e04dc315798bd588b3c431de8e32a67fa24bc688ca8"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-scope/map-05-normalized.json",
+              "sha256": "91b9abffb083d5a25795f9b146ebd81246a32ad14d8961406f004e14c7721089"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-scope/map-05-parsed.json",
+              "sha256": "5d94fcaaf2c14d24f419a15842f2118b039e62a5410dc27c4c24c7acc8e4659c"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-scope/map-05-refs.json",
+              "sha256": "5d94fcaaf2c14d24f419a15842f2118b039e62a5410dc27c4c24c7acc8e4659c"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-scope/map-05-request.json",
+              "sha256": "8a708385a689ad9db9463c99d696ed8372ed6f461f5ede23821dc338f508cdb0"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-scope/map-05-result.json",
+              "sha256": "91b9abffb083d5a25795f9b146ebd81246a32ad14d8961406f004e14c7721089"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-scope/map-06-call.json",
+              "sha256": "82592bbcc5e409656eaa9a2b3a52dacc47fd0ee33e7d9ae1146d65459c63885e"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-scope/map-06-error.json",
+              "sha256": "4098ab1333ed0193a17934b4aca691eada5147b2ff719996e16cef7c0524cda3"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-scope/map-06-parsed.json",
+              "sha256": "085531710422e827153a1db647674570072c6b7915fe4af03673738d1d24403f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-scope/map-06-refs.json",
+              "sha256": "085531710422e827153a1db647674570072c6b7915fe4af03673738d1d24403f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-scope/map-06-request.json",
+              "sha256": "a0935ebf39bfff0b7534976ade250c65dac5104e9dcee1b6c6e993dc918c9c2f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-scope/recall-call.json",
+              "sha256": "b949a5252e821065a0a8c76f7c452eca10cf5ee8239264424fef542a00cb0ba4"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-scope/recall-normalized.json",
+              "sha256": "4808733aa48cd181db211e129453d4ebd21ff8211190b48e868623aad867008a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-scope/recall-parsed.json",
+              "sha256": "de5427bd88bf834384782372b07ebb00f83692f724d43743c67d3e242b9ae884"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-scope/recall-refs.json",
+              "sha256": "881b140025fab4f73805d0159d86da397e25e7515c603fb8a63fe544a0818d33"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-scope/recall-request.json",
+              "sha256": "786abea49a93292d71cd1ffabe5e2944451b9fceb286432a64d980ce7f87ed1c"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-scope/recall-result.json",
+              "sha256": "4808733aa48cd181db211e129453d4ebd21ff8211190b48e868623aad867008a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-scope/run.json",
+              "sha256": "24746cfda9ce0f4458135b7bb0dbd168be928ddfe1e1b415c2550b4b558067b8"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-scope/usage.json",
+              "sha256": "61b641779128b2dcd599a5b81bc56c64af4c54d6824760d384a9c9306a759e09"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-typed/map-01-call.json",
+              "sha256": "12f0920ed041f8ba479b1a59c624748e32759934f2a0b1372ba590a3f8001679"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-typed/map-01-normalized.json",
+              "sha256": "93db0272d372fb2498ca15ba06ae488aba7e17c5c3fc430883dc23985c1fd8bb"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-typed/map-01-parsed.json",
+              "sha256": "839985cd402bf4edcf5a3fc0c37970d4fd399f12a13f1df8a8249bea35595fda"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-typed/map-01-refs.json",
+              "sha256": "839985cd402bf4edcf5a3fc0c37970d4fd399f12a13f1df8a8249bea35595fda"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-typed/map-01-request.json",
+              "sha256": "724d7f8fcb8edd61678d416c34ad4393037baa28a067fbf982a72f3ccb030245"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-typed/map-01-result.json",
+              "sha256": "93db0272d372fb2498ca15ba06ae488aba7e17c5c3fc430883dc23985c1fd8bb"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-typed/map-02-call.json",
+              "sha256": "152ca0ee06cecaca28f52b44b60c524be5fad5a60ff600076614d2ed899d1976"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-typed/map-02-normalized.json",
+              "sha256": "e54f41a916c28c909ffd2fba18c6a58a2b2355a995e200d262b73be6c97dae72"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-typed/map-02-parsed.json",
+              "sha256": "839985cd402bf4edcf5a3fc0c37970d4fd399f12a13f1df8a8249bea35595fda"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-typed/map-02-refs.json",
+              "sha256": "839985cd402bf4edcf5a3fc0c37970d4fd399f12a13f1df8a8249bea35595fda"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-typed/map-02-request.json",
+              "sha256": "9081e9c388be26c255efb66a6dc053cf502e4a4dd2576abcf9bf71e2dfbb360d"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-typed/map-02-result.json",
+              "sha256": "e54f41a916c28c909ffd2fba18c6a58a2b2355a995e200d262b73be6c97dae72"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-typed/map-03-call.json",
+              "sha256": "b299d4157e488f878e9775272090904fd0e416e017b2c0c0eaf17a2e4aca4ed7"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-typed/map-03-normalized.json",
+              "sha256": "9c90516ee13f91affcfcaa794b08cd6a34a970b81d821d54cbda3bdfa74c423c"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-typed/map-03-parsed.json",
+              "sha256": "577405bb5acec37812d439c6c241194175fe9f33bd2b4fd2769d747e1a5487b6"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-typed/map-03-refs.json",
+              "sha256": "577405bb5acec37812d439c6c241194175fe9f33bd2b4fd2769d747e1a5487b6"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-typed/map-03-request.json",
+              "sha256": "47c875d467f5e716dda61b841913a081f49769d534a936a1926879218b93430a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-typed/map-03-result.json",
+              "sha256": "9c90516ee13f91affcfcaa794b08cd6a34a970b81d821d54cbda3bdfa74c423c"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-typed/map-04-call.json",
+              "sha256": "8bff7c97fef1191c0bf1685d6afbf1ab8918e194678baa2c3af0137c5d6f49ae"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-typed/map-04-normalized.json",
+              "sha256": "8aceaa83c2f2218f389a7ce1e8b5c788ff13eb53c00832a656e2eedd955a4b2b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-typed/map-04-parsed.json",
+              "sha256": "839985cd402bf4edcf5a3fc0c37970d4fd399f12a13f1df8a8249bea35595fda"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-typed/map-04-refs.json",
+              "sha256": "839985cd402bf4edcf5a3fc0c37970d4fd399f12a13f1df8a8249bea35595fda"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-typed/map-04-request.json",
+              "sha256": "a8fe422aa705a5b4c3d6b201b6750fa93d471ea8774e4d8ff68a14368b314c01"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-typed/map-04-result.json",
+              "sha256": "8aceaa83c2f2218f389a7ce1e8b5c788ff13eb53c00832a656e2eedd955a4b2b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-typed/map-05-call.json",
+              "sha256": "f849894fd6facaaff02e4fcb853121c9f0187609bc0b36a74588ee027bffe605"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-typed/map-05-normalized.json",
+              "sha256": "91b9abffb083d5a25795f9b146ebd81246a32ad14d8961406f004e14c7721089"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-typed/map-05-parsed.json",
+              "sha256": "5d94fcaaf2c14d24f419a15842f2118b039e62a5410dc27c4c24c7acc8e4659c"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-typed/map-05-refs.json",
+              "sha256": "5d94fcaaf2c14d24f419a15842f2118b039e62a5410dc27c4c24c7acc8e4659c"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-typed/map-05-request.json",
+              "sha256": "8a708385a689ad9db9463c99d696ed8372ed6f461f5ede23821dc338f508cdb0"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-typed/map-05-result.json",
+              "sha256": "91b9abffb083d5a25795f9b146ebd81246a32ad14d8961406f004e14c7721089"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-typed/map-06-call.json",
+              "sha256": "6d678abc14f47b13522656d2868ca7830f8cda924f1d6465c70548bcfa2fad71"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-typed/map-06-normalized.json",
+              "sha256": "f70330fe774371bb926f2f68d46dc41a74dff018c2a442ff3ec5c729b9bc4b23"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-typed/map-06-parsed.json",
+              "sha256": "d91b61e7cacc92abb578c3fd3de8ea0c669e52e4aa02cfa06d6b1566018b393d"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-typed/map-06-refs.json",
+              "sha256": "d91b61e7cacc92abb578c3fd3de8ea0c669e52e4aa02cfa06d6b1566018b393d"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-typed/map-06-request.json",
+              "sha256": "a0935ebf39bfff0b7534976ade250c65dac5104e9dcee1b6c6e993dc918c9c2f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-typed/map-06-result.json",
+              "sha256": "f70330fe774371bb926f2f68d46dc41a74dff018c2a442ff3ec5c729b9bc4b23"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-typed/map-07-call.json",
+              "sha256": "7b14baf68ffe583e631d8344bd6c45e29cf5a5a8b2c5e448c1bf93598e5a3e78"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-typed/map-07-normalized.json",
+              "sha256": "2a721ca11fe0feb16d815049d749e4a771ccd5b68ead6b4e900ee4a52ac271ef"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-typed/map-07-parsed.json",
+              "sha256": "839985cd402bf4edcf5a3fc0c37970d4fd399f12a13f1df8a8249bea35595fda"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-typed/map-07-refs.json",
+              "sha256": "839985cd402bf4edcf5a3fc0c37970d4fd399f12a13f1df8a8249bea35595fda"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-typed/map-07-request.json",
+              "sha256": "7b5fafc166c09be6c5b2bbeec7498ed15c02c3c2c30f692c255244da209318db"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-typed/map-07-result.json",
+              "sha256": "2a721ca11fe0feb16d815049d749e4a771ccd5b68ead6b4e900ee4a52ac271ef"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-typed/recall-call.json",
+              "sha256": "68defed8ef24d27e9b6bd8501e067db33ad005d6e7a52f1ca87e15d840358fc6"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-typed/recall-normalized.json",
+              "sha256": "4808733aa48cd181db211e129453d4ebd21ff8211190b48e868623aad867008a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-typed/recall-parsed.json",
+              "sha256": "de5427bd88bf834384782372b07ebb00f83692f724d43743c67d3e242b9ae884"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-typed/recall-refs.json",
+              "sha256": "881b140025fab4f73805d0159d86da397e25e7515c603fb8a63fe544a0818d33"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-typed/recall-request.json",
+              "sha256": "786abea49a93292d71cd1ffabe5e2944451b9fceb286432a64d980ce7f87ed1c"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-typed/recall-result.json",
+              "sha256": "4808733aa48cd181db211e129453d4ebd21ff8211190b48e868623aad867008a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-typed/run.json",
+              "sha256": "fc82ae221b7936ce045089f7188daaf672f1559981960f7291b3a30e025a6e7d"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-typed/selection-call.json",
+              "sha256": "4006b8a073dede6c298465862de79dd216a822478c29097989756c170c2b1b30"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-typed/selection-error.json",
+              "sha256": "67d134e67333acae76ffd3bb677103df681b434e509070bd6dad0cef3fa739ea"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-typed/selection-request.json",
+              "sha256": "ff22d32abb79fff87de3581196de8e1a4a8bb7402d91f12347147307e4a93de3"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-typed/usage.json",
+              "sha256": "f1365500b183121d30d89a7e0d1487cce92a273cf2bf1dee38bdb12d68732772"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/isolation-None.outer.json",
+              "sha256": "d44136929cd54e9874c8e7a63ba2d7303f7d09afa64bc852b1125cfbe115ebd2"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/isolation-None.outer.sha256.json",
+              "sha256": "4cf527839fd350b1cd2c53b5919086131c2474b1d3abcb9889903b1ec2513480"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/isolation-None/node-body.json",
+              "sha256": "14a89baa9ca7d11362de885a25ae5eac25cec423943c8891c4b3d23ff3df7355"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/isolation-None/node-call.json",
+              "sha256": "cfb36bbbea474456e79faaf7cdfd9f15854f21cbdcded39d9f40ab7d74d60954"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/isolation-None/node-compiled.json",
+              "sha256": "42439b725ee2ca5f0471a5dc36f822eced8b3f1d971bde3964088c5aa0483ba4"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/isolation-None/node-normalized.json",
+              "sha256": "bee2e9a3c4105b0a241798788a4e9a8dfbc135580ddd04cbe1e56b43d2906100"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/isolation-None/node-parsed.json",
+              "sha256": "4f40750073601f2aed7517d19fb3d3dab55679c57f8b14afcc8351272d4e74b5"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/isolation-None/node-presence.json",
+              "sha256": "f6a5ab31c3d393901811b13c72b06ffdc9bf7eee88de07a90c58b73b0fb23267"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/isolation-None/node-refs.json",
+              "sha256": "5c66fd8214d5cde888589f54f130af33af4be998e2c0d98d0c96b10f693057a6"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/isolation-None/node-request.json",
+              "sha256": "cbb60eeade69badb68e4f492c08dbdc281679e29639ae5f1d5c1188079422a0f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/isolation-None/run.json",
+              "sha256": "b0e634b8e09aa8624ecedf86602be723ef4bd979ce57053c055bad85309f1dc8"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/isolation-None/semantic-review.json",
+              "sha256": "83d601d5721c4766cefcf197d4aac01557f976d070d3f87081909f8753803bdc"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/isolation-None/upstream.json",
+              "sha256": "036a95a6bfce7584579489eee72802bbaccb8cfd93f3a5392790759e5e21eeec"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/isolation-None/usage.json",
+              "sha256": "d2fa89df63f710a0397c3fe51b40edb0903b1a07fb33d6cefbd653775270ef61"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/isolation-object.outer.json",
+              "sha256": "7f74dfe630cf3e95d654fadcc748c7bcac1bd99f4c09236c788f189ab525170d"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/isolation-object.outer.sha256.json",
+              "sha256": "652e54f72c1a4c17c7e8d31cd250c339d6f8cba6d0c04fee9da27b845dfedc71"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/isolation-object/node-body.json",
+              "sha256": "14a89baa9ca7d11362de885a25ae5eac25cec423943c8891c4b3d23ff3df7355"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/isolation-object/node-call.json",
+              "sha256": "8921a8b4f8f64a40255c6325acada4e6dcb124729c46d3d4723cdef9addb4b53"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/isolation-object/node-error.json",
+              "sha256": "f9230dbd58621d3f8f81c429f1821707fb0f899fc3b53ab53cbdbf4459c7f0ba"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/isolation-object/node-presence.json",
+              "sha256": "f6a5ab31c3d393901811b13c72b06ffdc9bf7eee88de07a90c58b73b0fb23267"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/isolation-object/node-request.json",
+              "sha256": "cbb60eeade69badb68e4f492c08dbdc281679e29639ae5f1d5c1188079422a0f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/isolation-object/run.json",
+              "sha256": "0914a1ecbabaae1cb1dbed71e986029037b8015c1d08e1e2adab7aedd749927a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/isolation-object/upstream.json",
+              "sha256": "036a95a6bfce7584579489eee72802bbaccb8cfd93f3a5392790759e5e21eeec"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/isolation-object/usage.json",
+              "sha256": "d2fa89df63f710a0397c3fe51b40edb0903b1a07fb33d6cefbd653775270ef61"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/final-verification.json",
+              "sha256": "79e621ef3a54c9ac69726b431c691743f9746ccedf961e6f130023eabe2902d4"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/focused.log",
+              "sha256": "c09a9c43089bf8f7bb57f90fa1ae9cbbc0575def7e22c273159a71c7805b56fd"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/_external/edd/ledger.py",
+              "sha256": "2f9349a5d27301d9364d4fa04c524b3459a2c47e27344a383e7c5714b01900ba"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/_external/loopctl.py",
+              "sha256": "815888ae2dc1e7c142e91e313f990145e14d3de65adaa65f35113a53015388f1"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/capability-freeze.json",
+              "sha256": "831bf066db17f7ca4bb4c58e97c84589014b5e0421a806d861662b0fa50efe7e"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/docs/next_enhance_advice.md",
+              "sha256": "91e8dcee858369d84838ec249cc0785515a59c346aa8e0778f804c15fd8f09de"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/__init__.py",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/call_budget.py",
+              "sha256": "16dbefb7d4e1986336d36d7dbb5553143fbc974c58f568b0f7f3751619a880e0"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/coverage_priority_probe.py",
+              "sha256": "a2ebbc4c5e8e26cdf9e8b236a029b20a572e51d8ca227fb53df4d33a36536a64"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/coverage_reference_runner.py",
+              "sha256": "a51bd607f2077d6af3739d7e54673e4062c1f4d5a007e62f822fddddc3b3fcd2"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/decision_chain_probe.py",
+              "sha256": "37fc49a3816ddbfa558b1660ac7978a039fedc1e0f58cf584dc52bbb697ded05"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/decision_summary_comparison.py",
+              "sha256": "925954e90b0ef9a1f8c5828010621576b196e7c46bd0fddb3395afbd3184b693"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/decomposition_cases.py",
+              "sha256": "3890883fe74adc908d6b03647a20d2b718e15ecd45fe66d6833e4ca82f35cff8"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/decomposition_grading.py",
+              "sha256": "1c70bd7ee47dc76f39bd7ee21205be434c0307d3817e092cd68d1fc1702b1cbd"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/decomposition_reports.py",
+              "sha256": "d930a50c79d7d2ad3606cafcc62c26e17e3b3f2c296a6b80bb17411b9a3a7974"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/decomposition_runner.py",
+              "sha256": "7cd168fbe310a19e68b4418a4b533fea1683e71ce31710e186fe70697529a573"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/diagnostics/managed_capability_projection.py",
+              "sha256": "44fc1a6ec68f2b3c7562e27dcc0cc59e8145692aee8ea8f86e551c033087dd3d"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/diagnostics/managed_node_diagnostics_rebound.py",
+              "sha256": "d9cb08e98fdcd9d186cddcf47f48ea466e804d153880546d08324f4d35871200"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/diagnostics/managed_node_diagnostics_v2.py",
+              "sha256": "83ddfd670aa17a3ca179c0052e3a84297c549f6539e1c08cb3cf3fbe93654ff2"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/diagnostics/managed_policy_shape.py",
+              "sha256": "c3fc6efc4b49af5054972d6a088ad9865c9135b1b9c5c0edb156df148b4747e6"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/diagnostics/managed_text_leaf_evidence.py",
+              "sha256": "d745f4ad23cc7e7708c662de829c85da3b9d0d5dc251b4e7d6285e921f7373cf"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/evidence_bound_managed_contract.py",
+              "sha256": "6451efd734c17f20c91a737210c156bfb52034b0f804e1d76f5411483a4c75c8"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_capability_projection/inputs/COV-CAP-v1-04-body.json",
+              "sha256": "35c0139ef177869d867ec7f964b7c1c24fad912b02e7c3614726de6213d4ae2b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_capability_projection/inputs/COV-CAP-v1-04-cards.json",
+              "sha256": "e1808680b22eaecee93a60db12178d2afd166a8dd0ccef27c0cd9a61d8319c54"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_capability_projection/inputs/COV-CAP-v1-04-messages.json",
+              "sha256": "11eb0f7b146fafe25d670f790daf9c695428d6aeb034dc5badeb790513d2a2bf"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_capability_projection/inputs/COV-CAP-v1-04-schema.json",
+              "sha256": "09892b4e613b56cc86632c79027b43390e72b3c4aa29444ac2474b7def756d35"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_capability_projection/inputs/COV-CAP-v1-04-upstream.json",
+              "sha256": "036a95a6bfce7584579489eee72802bbaccb8cfd93f3a5392790759e5e21eeec"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_capability_projection/inputs/COV-CAP-v1-05-body.json",
+              "sha256": "5f3b505770e993469badc4f151e9b98c860952a14a48f2cfbbc14893ecf667b4"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_capability_projection/inputs/COV-CAP-v1-05-cards.json",
+              "sha256": "e1808680b22eaecee93a60db12178d2afd166a8dd0ccef27c0cd9a61d8319c54"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_capability_projection/inputs/COV-CAP-v1-05-messages.json",
+              "sha256": "52ea62bca68387a4baf6630063a313eb85a7cff3b054aee01794b5e728a8f0d3"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_capability_projection/inputs/COV-CAP-v1-05-schema.json",
+              "sha256": "09892b4e613b56cc86632c79027b43390e72b3c4aa29444ac2474b7def756d35"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_capability_projection/inputs/COV-CAP-v1-05-upstream.json",
+              "sha256": "036a95a6bfce7584579489eee72802bbaccb8cfd93f3a5392790759e5e21eeec"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_capability_projection/inputs/COV-ISO-v1-01-body.json",
+              "sha256": "53f329913f1620f3ede77f860818cda09b05ae62662c7c54bad43ddd0b25701b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_capability_projection/inputs/COV-ISO-v1-01-cards.json",
+              "sha256": "e1808680b22eaecee93a60db12178d2afd166a8dd0ccef27c0cd9a61d8319c54"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_capability_projection/inputs/COV-ISO-v1-01-messages.json",
+              "sha256": "683e74e0645e074bbaa91bc9be500a992e79152a0d0ddebd9961e4ad46789525"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_capability_projection/inputs/COV-ISO-v1-01-schema.json",
+              "sha256": "09892b4e613b56cc86632c79027b43390e72b3c4aa29444ac2474b7def756d35"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_capability_projection/inputs/COV-ISO-v1-01-upstream.json",
+              "sha256": "036a95a6bfce7584579489eee72802bbaccb8cfd93f3a5392790759e5e21eeec"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_capability_projection/inputs/COV-ISO-v1-02-body.json",
+              "sha256": "9c7a4b0573f08ea2e3647f3778aaa3bcfc4b7c59313945c7360c37378ac97830"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_capability_projection/inputs/COV-ISO-v1-02-cards.json",
+              "sha256": "77c4e9cfb8d99d5e987aecb3b57c41553a249516bb7a9808685e0e789686765c"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_capability_projection/inputs/COV-ISO-v1-02-messages.json",
+              "sha256": "68614784159e585641574ba4648300cbd4387d5a56804432f5a3b6de6454843a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_capability_projection/inputs/COV-ISO-v1-02-schema.json",
+              "sha256": "6e85865250f8c2f01a7412eed39e5ede0223488313f38b8aeb4d01f8f04ad4ed"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_capability_projection/inputs/COV-ISO-v1-02-upstream.json",
+              "sha256": "58418ab1cca66e31ecceb6cede8e14b1e0a01640e210e42b7ffe2fe80f899076"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_capability_projection/inputs/COV-ISO-v1-03-body.json",
+              "sha256": "f37deddc2c23747749bbf1ef74e5b72cf86bf069b6fccc55e684dffcea10e7fb"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_capability_projection/inputs/COV-ISO-v1-03-cards.json",
+              "sha256": "fbf268266134f712ae26a8979725384cb18d8c8d3a150738e0592bc43b73955f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_capability_projection/inputs/COV-ISO-v1-03-messages.json",
+              "sha256": "206a7c7c715e939a62b99320159c8c29c87311b6ca8ab618fd4cfb7ee54c0d3b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_capability_projection/inputs/COV-ISO-v1-03-schema.json",
+              "sha256": "42af762aca74a0e176db25ecde88d720110cc73572711557f5c6b103849dc154"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_capability_projection/inputs/COV-ISO-v1-03-upstream.json",
+              "sha256": "5afd2ee0ae2fcd93287c0863b68ef0518f89476fb60f157249f32901f3ff27a8"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_capability_projection/manifest.json",
+              "sha256": "a2eb2f76c0479b49294245987346e4676db78c86fbefac02dd4e153d8c590f2d"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-body.json",
+              "sha256": "3e1bd71731101aad268c32363166bac806da1062c1b100bf4c7869d5b5a7e6e6"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json",
+              "sha256": "627be2d8b453139deef71e15794ae9d31796fb05875f32f7d9c03b2886aa91e3"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-schema.json",
+              "sha256": "05dd9d11af85ed0f6e8c27eedf2fc81d4bb9663d3f8f00228a221b52d5fdd3ed"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-upstream.json",
+              "sha256": "cca35f9a6d5ee2e7635d4b73534a22a7fc962538cb088563567757e812d4b6c8"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_policy_shape/manifest.json",
+              "sha256": "2ec21c08c50f1772538c61fbbd4d7c5ea00c3fb43527395ffe5fa10e61082992"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_rebound/manifest.json",
+              "sha256": "9efa86b883366ff1ef4edd555f59f08499fa123288c6ca1ffe98998d84156187"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/expected-new.json",
+              "sha256": "d864588439bd5cb476f6bdc0128248dda083d0dcb0f852279ebd90e73458af05"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/expected-normalized.json",
+              "sha256": "090e8317c676e8ecb8a0ee9e3d0b36d53cd03473ce26b2f1e1bec4f84325a532"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-CAP-v1-04-seed42-body.json",
+              "sha256": "2bf9dc4594a4a6814dbf4ebba3fcc580c1990633856c03ad8f2df5324b009f98"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-CAP-v1-04-seed42-cards.json",
+              "sha256": "e1808680b22eaecee93a60db12178d2afd166a8dd0ccef27c0cd9a61d8319c54"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-CAP-v1-04-seed42-messages.json",
+              "sha256": "55efc8fb78bf94fc01bcdd206a9e411adacee518180bf52f537a83becdb64783"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-CAP-v1-04-seed42-schema.json",
+              "sha256": "37be97e9b1970d6abc53ddecb86ac50dbaf596bc0e2fbefda6106369f74e9428"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-CAP-v1-04-seed42-upstream.json",
+              "sha256": "036a95a6bfce7584579489eee72802bbaccb8cfd93f3a5392790759e5e21eeec"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-CAP-v1-04-seed43-body.json",
+              "sha256": "78cdb671ce18029b04957fae8cd3638e8625c24cd94aadd818f606db7ed2dc61"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-CAP-v1-04-seed43-cards.json",
+              "sha256": "e1808680b22eaecee93a60db12178d2afd166a8dd0ccef27c0cd9a61d8319c54"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-CAP-v1-04-seed43-messages.json",
+              "sha256": "55efc8fb78bf94fc01bcdd206a9e411adacee518180bf52f537a83becdb64783"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-CAP-v1-04-seed43-schema.json",
+              "sha256": "37be97e9b1970d6abc53ddecb86ac50dbaf596bc0e2fbefda6106369f74e9428"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-CAP-v1-04-seed43-upstream.json",
+              "sha256": "036a95a6bfce7584579489eee72802bbaccb8cfd93f3a5392790759e5e21eeec"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-CAP-v1-04-seed44-body.json",
+              "sha256": "9a0001176435ff2342f24b6d1dc089bd85756f30ca8a023f4fe8fbfaec351cb9"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-CAP-v1-04-seed44-cards.json",
+              "sha256": "e1808680b22eaecee93a60db12178d2afd166a8dd0ccef27c0cd9a61d8319c54"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-CAP-v1-04-seed44-messages.json",
+              "sha256": "55efc8fb78bf94fc01bcdd206a9e411adacee518180bf52f537a83becdb64783"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-CAP-v1-04-seed44-schema.json",
+              "sha256": "37be97e9b1970d6abc53ddecb86ac50dbaf596bc0e2fbefda6106369f74e9428"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-CAP-v1-04-seed44-upstream.json",
+              "sha256": "036a95a6bfce7584579489eee72802bbaccb8cfd93f3a5392790759e5e21eeec"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-CAP-v1-05-seed42-body.json",
+              "sha256": "a9df515fd3cb753b1c56afe01d556cd86ed7db15e2ab8e185d314b267f72d975"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-CAP-v1-05-seed42-cards.json",
+              "sha256": "e1808680b22eaecee93a60db12178d2afd166a8dd0ccef27c0cd9a61d8319c54"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-CAP-v1-05-seed42-messages.json",
+              "sha256": "f74222712df2a312f6d5dbd37700ee4f204ca91eb3df0011165699497678261d"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-CAP-v1-05-seed42-schema.json",
+              "sha256": "37be97e9b1970d6abc53ddecb86ac50dbaf596bc0e2fbefda6106369f74e9428"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-CAP-v1-05-seed42-upstream.json",
+              "sha256": "036a95a6bfce7584579489eee72802bbaccb8cfd93f3a5392790759e5e21eeec"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-CAP-v1-05-seed43-body.json",
+              "sha256": "79a9e0d5c274c373c649e021a9dd98dc48349a36e874e2d5522c098945825905"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-CAP-v1-05-seed43-cards.json",
+              "sha256": "e1808680b22eaecee93a60db12178d2afd166a8dd0ccef27c0cd9a61d8319c54"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-CAP-v1-05-seed43-messages.json",
+              "sha256": "f74222712df2a312f6d5dbd37700ee4f204ca91eb3df0011165699497678261d"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-CAP-v1-05-seed43-schema.json",
+              "sha256": "37be97e9b1970d6abc53ddecb86ac50dbaf596bc0e2fbefda6106369f74e9428"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-CAP-v1-05-seed43-upstream.json",
+              "sha256": "036a95a6bfce7584579489eee72802bbaccb8cfd93f3a5392790759e5e21eeec"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-CAP-v1-05-seed44-body.json",
+              "sha256": "60fa44072c671803c950af727fc1a5e068df921e69ad80638b24074818067d51"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-CAP-v1-05-seed44-cards.json",
+              "sha256": "e1808680b22eaecee93a60db12178d2afd166a8dd0ccef27c0cd9a61d8319c54"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-CAP-v1-05-seed44-messages.json",
+              "sha256": "f74222712df2a312f6d5dbd37700ee4f204ca91eb3df0011165699497678261d"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-CAP-v1-05-seed44-schema.json",
+              "sha256": "37be97e9b1970d6abc53ddecb86ac50dbaf596bc0e2fbefda6106369f74e9428"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-CAP-v1-05-seed44-upstream.json",
+              "sha256": "036a95a6bfce7584579489eee72802bbaccb8cfd93f3a5392790759e5e21eeec"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-01-seed42-body.json",
+              "sha256": "7d9fd6eaf99a5b76ec9209178ce6de8f581267192b82717657f6403f8fc2cb00"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-01-seed42-cards.json",
+              "sha256": "e1808680b22eaecee93a60db12178d2afd166a8dd0ccef27c0cd9a61d8319c54"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-01-seed42-messages.json",
+              "sha256": "25c6c0d74ed81aa6dc16fbabc128cf522d2e818a816a6a8a5f6463bc80619b43"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-01-seed42-schema.json",
+              "sha256": "37be97e9b1970d6abc53ddecb86ac50dbaf596bc0e2fbefda6106369f74e9428"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-01-seed42-upstream.json",
+              "sha256": "036a95a6bfce7584579489eee72802bbaccb8cfd93f3a5392790759e5e21eeec"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-01-seed43-body.json",
+              "sha256": "14a89baa9ca7d11362de885a25ae5eac25cec423943c8891c4b3d23ff3df7355"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-01-seed43-cards.json",
+              "sha256": "e1808680b22eaecee93a60db12178d2afd166a8dd0ccef27c0cd9a61d8319c54"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-01-seed43-messages.json",
+              "sha256": "25c6c0d74ed81aa6dc16fbabc128cf522d2e818a816a6a8a5f6463bc80619b43"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-01-seed43-schema.json",
+              "sha256": "37be97e9b1970d6abc53ddecb86ac50dbaf596bc0e2fbefda6106369f74e9428"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-01-seed43-upstream.json",
+              "sha256": "036a95a6bfce7584579489eee72802bbaccb8cfd93f3a5392790759e5e21eeec"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-01-seed44-body.json",
+              "sha256": "b688fb9525ac9f9a63cde6d5224636996b04c0454b6422651b274f75288ca6e2"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-01-seed44-cards.json",
+              "sha256": "e1808680b22eaecee93a60db12178d2afd166a8dd0ccef27c0cd9a61d8319c54"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-01-seed44-messages.json",
+              "sha256": "25c6c0d74ed81aa6dc16fbabc128cf522d2e818a816a6a8a5f6463bc80619b43"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-01-seed44-schema.json",
+              "sha256": "37be97e9b1970d6abc53ddecb86ac50dbaf596bc0e2fbefda6106369f74e9428"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-01-seed44-upstream.json",
+              "sha256": "036a95a6bfce7584579489eee72802bbaccb8cfd93f3a5392790759e5e21eeec"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-02-seed42-body.json",
+              "sha256": "9c7a4b0573f08ea2e3647f3778aaa3bcfc4b7c59313945c7360c37378ac97830"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-02-seed42-cards.json",
+              "sha256": "77c4e9cfb8d99d5e987aecb3b57c41553a249516bb7a9808685e0e789686765c"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-02-seed42-messages.json",
+              "sha256": "68614784159e585641574ba4648300cbd4387d5a56804432f5a3b6de6454843a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-02-seed42-schema.json",
+              "sha256": "6e85865250f8c2f01a7412eed39e5ede0223488313f38b8aeb4d01f8f04ad4ed"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-02-seed42-upstream.json",
+              "sha256": "58418ab1cca66e31ecceb6cede8e14b1e0a01640e210e42b7ffe2fe80f899076"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-02-seed43-body.json",
+              "sha256": "39ad2d65c88d7deeafc0b957feb4c24f5f15b14c1cf94fe84f7db08d6537f168"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-02-seed43-cards.json",
+              "sha256": "77c4e9cfb8d99d5e987aecb3b57c41553a249516bb7a9808685e0e789686765c"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-02-seed43-messages.json",
+              "sha256": "68614784159e585641574ba4648300cbd4387d5a56804432f5a3b6de6454843a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-02-seed43-schema.json",
+              "sha256": "6e85865250f8c2f01a7412eed39e5ede0223488313f38b8aeb4d01f8f04ad4ed"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-02-seed43-upstream.json",
+              "sha256": "58418ab1cca66e31ecceb6cede8e14b1e0a01640e210e42b7ffe2fe80f899076"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-02-seed44-body.json",
+              "sha256": "e3731f7e88ede4dcfd3974f2e821b2019c40505a627ca553884edfe977c9ae2b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-02-seed44-cards.json",
+              "sha256": "77c4e9cfb8d99d5e987aecb3b57c41553a249516bb7a9808685e0e789686765c"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-02-seed44-messages.json",
+              "sha256": "68614784159e585641574ba4648300cbd4387d5a56804432f5a3b6de6454843a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-02-seed44-schema.json",
+              "sha256": "6e85865250f8c2f01a7412eed39e5ede0223488313f38b8aeb4d01f8f04ad4ed"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-02-seed44-upstream.json",
+              "sha256": "58418ab1cca66e31ecceb6cede8e14b1e0a01640e210e42b7ffe2fe80f899076"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-03-seed42-body.json",
+              "sha256": "cc536e7183500ac9d46cfba59afdc3cb74ad312ea0e8e2697749abadcf7d6c8f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-03-seed42-cards.json",
+              "sha256": "fbf268266134f712ae26a8979725384cb18d8c8d3a150738e0592bc43b73955f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-03-seed42-messages.json",
+              "sha256": "0141d39eb5db36da518dd797810e6a2088449320c64e5b8cf48581b15b875131"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-03-seed42-schema.json",
+              "sha256": "044505c3b470f5f39a4d60a512536cf49e3ad6a927c14ae5b0a4034e7df9a2a6"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-03-seed42-upstream.json",
+              "sha256": "5afd2ee0ae2fcd93287c0863b68ef0518f89476fb60f157249f32901f3ff27a8"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-03-seed43-body.json",
+              "sha256": "01f4318a7c53105b18cfadc8cae54b05aefc820b0ad70699911fa98567b52588"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-03-seed43-cards.json",
+              "sha256": "fbf268266134f712ae26a8979725384cb18d8c8d3a150738e0592bc43b73955f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-03-seed43-messages.json",
+              "sha256": "0141d39eb5db36da518dd797810e6a2088449320c64e5b8cf48581b15b875131"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-03-seed43-schema.json",
+              "sha256": "044505c3b470f5f39a4d60a512536cf49e3ad6a927c14ae5b0a4034e7df9a2a6"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-03-seed43-upstream.json",
+              "sha256": "5afd2ee0ae2fcd93287c0863b68ef0518f89476fb60f157249f32901f3ff27a8"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-03-seed44-body.json",
+              "sha256": "92c0e0b0c153a2b7e0080acd78eef95d71481fda1d8ea4cfc431aea08ce5d1c0"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-03-seed44-cards.json",
+              "sha256": "fbf268266134f712ae26a8979725384cb18d8c8d3a150738e0592bc43b73955f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-03-seed44-messages.json",
+              "sha256": "0141d39eb5db36da518dd797810e6a2088449320c64e5b8cf48581b15b875131"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-03-seed44-schema.json",
+              "sha256": "044505c3b470f5f39a4d60a512536cf49e3ad6a927c14ae5b0a4034e7df9a2a6"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-ISO-v1-03-seed44-upstream.json",
+              "sha256": "5afd2ee0ae2fcd93287c0863b68ef0518f89476fb60f157249f32901f3ff27a8"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-06-seed42-body.json",
+              "sha256": "31b9413623a2bfff8bbd4f7073f628d84eb8f3e41636b3f35d43c73acc819ff7"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-06-seed42-cards.json",
+              "sha256": "571131bc5ebee4536d36100728a68c7277b49404ab6fa3fae88669c46a62c72d"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-06-seed42-messages.json",
+              "sha256": "ce6416d56dfd76213d37d35edf9a01c12c3f4d6a6d2a2e1e1349a4a3597a5a61"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-06-seed42-schema.json",
+              "sha256": "0a743b12bebecb885da2e9d3569103b82a5ee9aba28fcb1f30adfc5979d8a5b5"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-06-seed42-upstream.json",
+              "sha256": "148f63d64e114c97f038026fd8d4b485f0d77129eded1b739b0af0210cc44c44"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-06-seed43-body.json",
+              "sha256": "deabe66ac549dc0c3f7a8821bd21ae235186db70a3bae03da3370a2d5186b9f1"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-06-seed43-cards.json",
+              "sha256": "571131bc5ebee4536d36100728a68c7277b49404ab6fa3fae88669c46a62c72d"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-06-seed43-messages.json",
+              "sha256": "ce6416d56dfd76213d37d35edf9a01c12c3f4d6a6d2a2e1e1349a4a3597a5a61"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-06-seed43-schema.json",
+              "sha256": "0a743b12bebecb885da2e9d3569103b82a5ee9aba28fcb1f30adfc5979d8a5b5"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-06-seed43-upstream.json",
+              "sha256": "148f63d64e114c97f038026fd8d4b485f0d77129eded1b739b0af0210cc44c44"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-06-seed44-body.json",
+              "sha256": "19a9c2e7b6eb6ae58762f96ef39f7e2269a39ca7645422097c02c58c7743b6dc"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-06-seed44-cards.json",
+              "sha256": "571131bc5ebee4536d36100728a68c7277b49404ab6fa3fae88669c46a62c72d"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-06-seed44-messages.json",
+              "sha256": "ce6416d56dfd76213d37d35edf9a01c12c3f4d6a6d2a2e1e1349a4a3597a5a61"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-06-seed44-schema.json",
+              "sha256": "0a743b12bebecb885da2e9d3569103b82a5ee9aba28fcb1f30adfc5979d8a5b5"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-06-seed44-upstream.json",
+              "sha256": "148f63d64e114c97f038026fd8d4b485f0d77129eded1b739b0af0210cc44c44"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-07-seed42-body.json",
+              "sha256": "a891767a60edd509de8ce1f97de9dd8f2812652d1c723a0dc612b1641d9da399"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-07-seed42-cards.json",
+              "sha256": "e1808680b22eaecee93a60db12178d2afd166a8dd0ccef27c0cd9a61d8319c54"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-07-seed42-messages.json",
+              "sha256": "a8897322a8ab328086e5174bd30bda5634cc4b6e46af8f121106a82b3055f215"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-07-seed42-schema.json",
+              "sha256": "4adb1652532261841b8bbe5b1ff22feb7382393b63081f12ef5494df3e284d0e"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-07-seed42-upstream.json",
+              "sha256": "3359a1bd02fa8ea8a7afc8d99ee0c1bad228815eae35167ac3ce580e5e3dd22b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-07-seed43-body.json",
+              "sha256": "48b0217349344dfbf7673897c4665243e7089f9898ed0a02abad38d4148d938a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-07-seed43-cards.json",
+              "sha256": "e1808680b22eaecee93a60db12178d2afd166a8dd0ccef27c0cd9a61d8319c54"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-07-seed43-messages.json",
+              "sha256": "a8897322a8ab328086e5174bd30bda5634cc4b6e46af8f121106a82b3055f215"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-07-seed43-schema.json",
+              "sha256": "4adb1652532261841b8bbe5b1ff22feb7382393b63081f12ef5494df3e284d0e"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-07-seed43-upstream.json",
+              "sha256": "3359a1bd02fa8ea8a7afc8d99ee0c1bad228815eae35167ac3ce580e5e3dd22b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-07-seed44-body.json",
+              "sha256": "3a9eeeb43875fc071daf7fc0b7b29ac5b879a5380e26cd31200d6c0d9e0dbd4d"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-07-seed44-cards.json",
+              "sha256": "e1808680b22eaecee93a60db12178d2afd166a8dd0ccef27c0cd9a61d8319c54"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-07-seed44-messages.json",
+              "sha256": "a8897322a8ab328086e5174bd30bda5634cc4b6e46af8f121106a82b3055f215"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-07-seed44-schema.json",
+              "sha256": "4adb1652532261841b8bbe5b1ff22feb7382393b63081f12ef5494df3e284d0e"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-07-seed44-upstream.json",
+              "sha256": "3359a1bd02fa8ea8a7afc8d99ee0c1bad228815eae35167ac3ce580e5e3dd22b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-08-seed42-body.json",
+              "sha256": "318132e0350ee5a8d2fba119d078818d02eb9dea42da3925ea58a7cb647579c9"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-08-seed42-cards.json",
+              "sha256": "e1808680b22eaecee93a60db12178d2afd166a8dd0ccef27c0cd9a61d8319c54"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-08-seed42-messages.json",
+              "sha256": "378cf8dbcc727dbe1488372ad92ef615e8401b8336247043a4abf25cd04b36a1"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-08-seed42-schema.json",
+              "sha256": "4adb1652532261841b8bbe5b1ff22feb7382393b63081f12ef5494df3e284d0e"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-08-seed42-upstream.json",
+              "sha256": "7295b6b374e9c1fdb83964903ac2195d1a676903c901723e1a73c0d9915d99da"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-08-seed43-body.json",
+              "sha256": "ad7095f0e9c8cafc248c8d6463a9756278496f93e72b06adf18a99eb0efb2d87"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-08-seed43-cards.json",
+              "sha256": "e1808680b22eaecee93a60db12178d2afd166a8dd0ccef27c0cd9a61d8319c54"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-08-seed43-messages.json",
+              "sha256": "378cf8dbcc727dbe1488372ad92ef615e8401b8336247043a4abf25cd04b36a1"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-08-seed43-schema.json",
+              "sha256": "4adb1652532261841b8bbe5b1ff22feb7382393b63081f12ef5494df3e284d0e"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-08-seed43-upstream.json",
+              "sha256": "7295b6b374e9c1fdb83964903ac2195d1a676903c901723e1a73c0d9915d99da"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-08-seed44-body.json",
+              "sha256": "5b920b96d85e60d2320258ace377bfc8d14a173bcc6ad5e63aa4663ce30d02e3"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-08-seed44-cards.json",
+              "sha256": "e1808680b22eaecee93a60db12178d2afd166a8dd0ccef27c0cd9a61d8319c54"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-08-seed44-messages.json",
+              "sha256": "378cf8dbcc727dbe1488372ad92ef615e8401b8336247043a4abf25cd04b36a1"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-08-seed44-schema.json",
+              "sha256": "4adb1652532261841b8bbe5b1ff22feb7382393b63081f12ef5494df3e284d0e"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-08-seed44-upstream.json",
+              "sha256": "7295b6b374e9c1fdb83964903ac2195d1a676903c901723e1a73c0d9915d99da"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-09-seed42-body.json",
+              "sha256": "f04b487f9df7fb9a04e3c0bbc1ce6bf1b3d087965e711da021b4f23da6d1ff02"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-09-seed42-cards.json",
+              "sha256": "571131bc5ebee4536d36100728a68c7277b49404ab6fa3fae88669c46a62c72d"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-09-seed42-messages.json",
+              "sha256": "e6c2386677be9241e7b50837f39b026744310451f32cc02acfb163fbb1d51e5e"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-09-seed42-schema.json",
+              "sha256": "0a743b12bebecb885da2e9d3569103b82a5ee9aba28fcb1f30adfc5979d8a5b5"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-09-seed42-upstream.json",
+              "sha256": "505b0af6616e1e5b4712f00f31e08331e8959f021ca38b1788a358a37c0e780b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-09-seed43-body.json",
+              "sha256": "0f40767cd6e9c207869717ff6759360966845eaaeca76f9d75b10151d99c89e2"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-09-seed43-cards.json",
+              "sha256": "571131bc5ebee4536d36100728a68c7277b49404ab6fa3fae88669c46a62c72d"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-09-seed43-messages.json",
+              "sha256": "e6c2386677be9241e7b50837f39b026744310451f32cc02acfb163fbb1d51e5e"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-09-seed43-schema.json",
+              "sha256": "0a743b12bebecb885da2e9d3569103b82a5ee9aba28fcb1f30adfc5979d8a5b5"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-09-seed43-upstream.json",
+              "sha256": "505b0af6616e1e5b4712f00f31e08331e8959f021ca38b1788a358a37c0e780b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-09-seed44-body.json",
+              "sha256": "12a5f2569d45cccd3c0e8037e09fa7c700a951193c53132ad73a0ed7be9950bc"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-09-seed44-cards.json",
+              "sha256": "571131bc5ebee4536d36100728a68c7277b49404ab6fa3fae88669c46a62c72d"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-09-seed44-messages.json",
+              "sha256": "e6c2386677be9241e7b50837f39b026744310451f32cc02acfb163fbb1d51e5e"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-09-seed44-schema.json",
+              "sha256": "0a743b12bebecb885da2e9d3569103b82a5ee9aba28fcb1f30adfc5979d8a5b5"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/inputs/COV-LEAF-v1-09-seed44-upstream.json",
+              "sha256": "505b0af6616e1e5b4712f00f31e08331e8959f021ca38b1788a358a37c0e780b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/manifest.json",
+              "sha256": "624cefc9f2835171ae2debe9bd7a9f3c47c67198099dba832419d456e25160ad"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/panel.json",
+              "sha256": "3b44fbf80d8083ee2a22859667749e8c37034930eaaef3388a7d9e12f69c949b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/profiles/COV-LEAF-v1-06/catalog.yaml",
+              "sha256": "734497447f5a43d485c2c3e4c298602e2a4dfeb4959df959dd1289811650a2b9"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/profiles/COV-LEAF-v1-06/manifest.yaml",
+              "sha256": "85ed6e39dd5bdf8dd84edfcac19843b36e5c64888229aafc237f215512018229"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/profiles/COV-LEAF-v1-06/view.yaml",
+              "sha256": "02308c3c49252ee449a672e01af44e65e03f628a35fe3df70dbbdc965552771d"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/profiles/COV-LEAF-v1-07/catalog.yaml",
+              "sha256": "3d317aee49cf33e0c2d0d9fed14c1be43e4ca57635da965de759f0cd3bd79d0f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/profiles/COV-LEAF-v1-07/manifest.yaml",
+              "sha256": "db84e36327d351b496548b634b4f591a0852adb6a492f45f9bc8175c1c5a6a99"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/profiles/COV-LEAF-v1-07/view.yaml",
+              "sha256": "9bd6c9c2bcb5aa5016cf6b64a3c30f09b35b782b8ed60100a97651990255d28d"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/profiles/COV-LEAF-v1-08/catalog.yaml",
+              "sha256": "93ab6879bee3e0b766f75cac3a73ef46849cc1bf89058093f1dc5ab797f649bc"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/profiles/COV-LEAF-v1-08/manifest.yaml",
+              "sha256": "efe1e32066dcbbf037eb3e21286ebd5c88e676bee9a936cf0c1f0266c31dc3b4"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/profiles/COV-LEAF-v1-08/view.yaml",
+              "sha256": "b59e45b16c3dfc6aeba62c5f3663108460ff0f5cb54baf9e8d5cad2b8ccd3fb9"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/profiles/COV-LEAF-v1-09/catalog.yaml",
+              "sha256": "50f70e3f6017599e3b4c0acc34ce00fa21d7e98b1f8ce8e9f2f8660c8d91e95d"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/profiles/COV-LEAF-v1-09/manifest.yaml",
+              "sha256": "48131658cd32442bf7bc57aae57932fdbf667ede7cf81e443e76a52c5dd8fda2"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/profiles/COV-LEAF-v1-09/view.yaml",
+              "sha256": "2610f2c2e0f2f4aaf69541775b71ba3ecefe992c5b5ac25c881de5863b3ac4e6"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/recall-COV-LEAF-v1-06.json",
+              "sha256": "73f189f0ed5477aaafc78d714eac1a07f94ff09bf441b0b947edd972a7424c3f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/recall-COV-LEAF-v1-07.json",
+              "sha256": "76f0143b117701c608c8534501b723aacc4937552ba61fc33cc1ff282eb98dff"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/recall-COV-LEAF-v1-08.json",
+              "sha256": "76f0143b117701c608c8534501b723aacc4937552ba61fc33cc1ff282eb98dff"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_text_leaf/recall-COV-LEAF-v1-09.json",
+              "sha256": "73f189f0ed5477aaafc78d714eac1a07f94ff09bf441b0b947edd972a7424c3f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_v1/coverage-selection-normalized.json",
+              "sha256": "26a266ff2218973428af8a8df636527713f6896b25f85bfa8f47dcd525c78e1f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_v1/coverage-selection.json",
+              "sha256": "24cc1439480ca3706e304554e126f2f83750028d2ef2addac5a9942436b21b5a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_v1/inputs/COV-ISO-v1-01-body.json",
+              "sha256": "0893f0360c3409c8bbb4523b4fd81623653fa36ed750131516c86858675a39b6"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_v1/inputs/COV-ISO-v1-01-messages.json",
+              "sha256": "15592e6a652968bc7b359dbbb85b38132c8d6205a8a9a636e3014b8015b240cc"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_v1/inputs/COV-ISO-v1-01-schema.json",
+              "sha256": "09892b4e613b56cc86632c79027b43390e72b3c4aa29444ac2474b7def756d35"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_v1/inputs/COV-ISO-v1-01-upstream.json",
+              "sha256": "036a95a6bfce7584579489eee72802bbaccb8cfd93f3a5392790759e5e21eeec"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_v1/inputs/COV-ISO-v1-02-body.json",
+              "sha256": "95a6e97be478c823621b2efa2cb4c0ccb60632ae0b4cd60891dd8876400c9630"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_v1/inputs/COV-ISO-v1-02-messages.json",
+              "sha256": "d127a855880e909b2e43c58e9a9ef9c48fe34e708bf676875de5d3c7ea166421"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_v1/inputs/COV-ISO-v1-02-schema.json",
+              "sha256": "6e85865250f8c2f01a7412eed39e5ede0223488313f38b8aeb4d01f8f04ad4ed"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_v1/inputs/COV-ISO-v1-02-upstream.json",
+              "sha256": "58418ab1cca66e31ecceb6cede8e14b1e0a01640e210e42b7ffe2fe80f899076"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_v1/inputs/COV-ISO-v1-03-body.json",
+              "sha256": "15e3c061a9c93654f05784d808a29e7ff5cf17a5ed4c474ff343fe9d1b2f234f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_v1/inputs/COV-ISO-v1-03-messages.json",
+              "sha256": "c7ac93dbd4651e7f425121cb986461358880065f88dbd9af231543762ddb7096"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_v1/inputs/COV-ISO-v1-03-schema.json",
+              "sha256": "42af762aca74a0e176db25ecde88d720110cc73572711557f5c6b103849dc154"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_v1/inputs/COV-ISO-v1-03-upstream.json",
+              "sha256": "5afd2ee0ae2fcd93287c0863b68ef0518f89476fb60f157249f32901f3ff27a8"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_v1/inputs/SEL-ISO-v1-01-body.json",
+              "sha256": "5ac6bc8b5878c35de8d1c3914924c5ef3df5fbdb07854eef18ee204d9424169a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_v1/inputs/SEL-ISO-v1-01-messages.json",
+              "sha256": "b0d32d8542f75134e3a23f22a2c6eed511640562a3cea0ebaf3dd52ce3369249"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_v1/inputs/SEL-ISO-v1-01-schema.json",
+              "sha256": "05dd9d11af85ed0f6e8c27eedf2fc81d4bb9663d3f8f00228a221b52d5fdd3ed"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_v1/inputs/SEL-ISO-v1-01-upstream.json",
+              "sha256": "af5f089c217c576c8060cc9961777bd27703984f79b0aaf254ecdb1453f7eca4"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_v1/manifest.json",
+              "sha256": "1749d09913e0f5d5a1caab4a4ede1bf4fa80fee260bb4e257f1f705634d934be"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_v1/oracle.json",
+              "sha256": "bbb7e49216762475df7f809fb7ccae55139af5580d632e0227a60f9126c3063a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_v1/recall-customer.json",
+              "sha256": "83596fd26c19a2149a36cb9401e40cb2e31cc99700f227db56814ca711484f5e"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_v1/recall-original-normalized.json",
+              "sha256": "d84f573c909310293f530faa3c012062b237be667dcc82dae3f6e390b2a7740b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_v1/recall-original.json",
+              "sha256": "76f0143b117701c608c8534501b723aacc4937552ba61fc33cc1ff282eb98dff"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_v1/recall-renamed.json",
+              "sha256": "60b7da5488fb16dacad96e0bf22aca16d28aafaeef6609652cebbb5a55d7fe2a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_v1/renamed-profile/catalog.yaml",
+              "sha256": "9696fb3df18cab2b9bac5a878caa20c1848577b268ecf7d35b10c8b5e487949c"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_v1/renamed-profile/manifest.yaml",
+              "sha256": "bd105e630b3744395a6935fd2d92df43d89c06c82d54d7078b77de7473b79592"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_v1/renamed-profile/views/observation.yaml",
+              "sha256": "5e004895b0b4b9e9003b2539833846cebe99c916efccbfc11204a9a783d67d48"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_v1/request-customer.txt",
+              "sha256": "577008fd49ab7c49584d2854998042c6ab85e0e82dad20f4a006575903a322b6"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_v1/request-original.txt",
+              "sha256": "1cf6e584921c4a47c1a8cbe010aebafec41ed4a0cc83bc2b4e638c0c0165087b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_v1/request-renamed.txt",
+              "sha256": "408ec53e433fec4129a64200dac5d9b6b006789bdbec220316fcfab9c96b006a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_v2/coverage-selection-normalized.json",
+              "sha256": "afd7f45625021dcc2d2844c873b8050328e67cf44f29fd51d9440afec9c50bfa"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_v2/coverage-selection.json",
+              "sha256": "0d7047cc2f1c0a77578f72d13e7c3efde0f75b825b1a9b77fd5d36f360145d57"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_v2/inputs/COV-ISO-v1-01-body.json",
+              "sha256": "0893f0360c3409c8bbb4523b4fd81623653fa36ed750131516c86858675a39b6"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_v2/inputs/COV-ISO-v1-01-messages.json",
+              "sha256": "15592e6a652968bc7b359dbbb85b38132c8d6205a8a9a636e3014b8015b240cc"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_v2/inputs/COV-ISO-v1-01-schema.json",
+              "sha256": "09892b4e613b56cc86632c79027b43390e72b3c4aa29444ac2474b7def756d35"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_v2/inputs/COV-ISO-v1-01-upstream.json",
+              "sha256": "036a95a6bfce7584579489eee72802bbaccb8cfd93f3a5392790759e5e21eeec"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_v2/inputs/COV-ISO-v1-02-body.json",
+              "sha256": "95a6e97be478c823621b2efa2cb4c0ccb60632ae0b4cd60891dd8876400c9630"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_v2/inputs/COV-ISO-v1-02-messages.json",
+              "sha256": "d127a855880e909b2e43c58e9a9ef9c48fe34e708bf676875de5d3c7ea166421"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_v2/inputs/COV-ISO-v1-02-schema.json",
+              "sha256": "6e85865250f8c2f01a7412eed39e5ede0223488313f38b8aeb4d01f8f04ad4ed"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_v2/inputs/COV-ISO-v1-02-upstream.json",
+              "sha256": "58418ab1cca66e31ecceb6cede8e14b1e0a01640e210e42b7ffe2fe80f899076"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_v2/inputs/COV-ISO-v1-03-body.json",
+              "sha256": "15e3c061a9c93654f05784d808a29e7ff5cf17a5ed4c474ff343fe9d1b2f234f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_v2/inputs/COV-ISO-v1-03-messages.json",
+              "sha256": "c7ac93dbd4651e7f425121cb986461358880065f88dbd9af231543762ddb7096"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_v2/inputs/COV-ISO-v1-03-schema.json",
+              "sha256": "42af762aca74a0e176db25ecde88d720110cc73572711557f5c6b103849dc154"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_v2/inputs/COV-ISO-v1-03-upstream.json",
+              "sha256": "5afd2ee0ae2fcd93287c0863b68ef0518f89476fb60f157249f32901f3ff27a8"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_v2/inputs/SEL-ISO-v1-01-body.json",
+              "sha256": "0cc0b7385bcad400127757f00a0b7fce71082f1de3e47fd61261c4fed1f4f546"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_v2/inputs/SEL-ISO-v1-01-messages.json",
+              "sha256": "13483d45390d5ddeeccea0dde6f7db882a38ebbdeb2c57c884e5f9261973b5a8"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_v2/inputs/SEL-ISO-v1-01-schema.json",
+              "sha256": "05dd9d11af85ed0f6e8c27eedf2fc81d4bb9663d3f8f00228a221b52d5fdd3ed"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_v2/inputs/SEL-ISO-v1-01-upstream.json",
+              "sha256": "cca35f9a6d5ee2e7635d4b73534a22a7fc962538cb088563567757e812d4b6c8"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_v2/manifest.json",
+              "sha256": "33cf44c84c10842adb60bfb7cbfbb269bac6dfa136c124a43159efabd27d543f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_v2/oracle.json",
+              "sha256": "9a01fcc5c5d7a7162e7513baf712a7c4145b8c6a1fdbb3d74790f11ffa2ef402"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_v2/recall-customer.json",
+              "sha256": "83596fd26c19a2149a36cb9401e40cb2e31cc99700f227db56814ca711484f5e"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_v2/recall-original-normalized.json",
+              "sha256": "d84f573c909310293f530faa3c012062b237be667dcc82dae3f6e390b2a7740b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_v2/recall-original.json",
+              "sha256": "76f0143b117701c608c8534501b723aacc4937552ba61fc33cc1ff282eb98dff"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_v2/recall-renamed.json",
+              "sha256": "60b7da5488fb16dacad96e0bf22aca16d28aafaeef6609652cebbb5a55d7fe2a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_v2/renamed-profile/catalog.yaml",
+              "sha256": "9696fb3df18cab2b9bac5a878caa20c1848577b268ecf7d35b10c8b5e487949c"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_v2/renamed-profile/manifest.yaml",
+              "sha256": "bd105e630b3744395a6935fd2d92df43d89c06c82d54d7078b77de7473b79592"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_v2/renamed-profile/views/observation.yaml",
+              "sha256": "5e004895b0b4b9e9003b2539833846cebe99c916efccbfc11204a9a783d67d48"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_v2/request-customer.txt",
+              "sha256": "577008fd49ab7c49584d2854998042c6ab85e0e82dad20f4a006575903a322b6"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_v2/request-original.txt",
+              "sha256": "1cf6e584921c4a47c1a8cbe010aebafec41ed4a0cc83bc2b4e638c0c0165087b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/fixtures/kind_diagnostics_v2/request-renamed.txt",
+              "sha256": "408ec53e433fec4129a64200dac5d9b6b006789bdbec220316fcfab9c96b006a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/governance_inputs.py",
+              "sha256": "395da71db83d8ee547182d49c048f4633ca6efe6303a871df6d61b399f7f551f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/governance_reports.py",
+              "sha256": "4092f13911a5443a18c37eaea45bedc05a077e991316a4ef3c5bfcffd2aca48c"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/governance_runner.py",
+              "sha256": "6c0602d729735a2ff72e69dfa4feb700a216852a1bc431bd9b2ae6fb4c08f845"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/governance_trace.py",
+              "sha256": "b18d30327a0dee3c3b6bc11bf9ed76f6c6d523ab22cfbaf812d03936653a222f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/hilp_cases.py",
+              "sha256": "8dcb17f7e40553d45769f841e3bd5f8ac1c6c84c8e98bab735f96e299a74162d"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/indexed_requirement_recall.py",
+              "sha256": "c9ce24ffbaf22257718b61d661470c3bdc2ae1bcb3f45a340bfec1faf7023fc6"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/kind_mapping_managed_contract.py",
+              "sha256": "5e8bcefcbf5a28918944ce4b8b5901e4b8bb0719b8dbac174d6cd36c1a1e0e99"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/managed_node_diagnostics.py",
+              "sha256": "40ea53099e0adc769c1739f604d73ff570d10454083509624aa12ff18b272400"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/managed_three_stage_runner.py",
+              "sha256": "8588648e937eb384d91ecd108d6ea2fc6832ca4374b54830bde741b8f2e58a48"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/markdown_review_probe.py",
+              "sha256": "615551830407dfdcc86abeab92e43cea058694aa88bb62729cd16fbc9027e18c"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/metadata.py",
+              "sha256": "6dfd69565f5c35b5abf10cd3ae26e54395fef389f4a9bf8c793ea13daed60d47"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/own_responsibility_managed_contract.py",
+              "sha256": "1682eb317b21a26b7fa77dd49ac9c8f3f5a827cd1dff1186413f7809c452c78c"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/planning_mvp.py",
+              "sha256": "972d16210114153db1aee4a05db8354312d34591c90dfa58ea2012582290f711"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/planning_mvp_runner.py",
+              "sha256": "33f76a27a31bf87ce2e52bbbb5dbacf789c70e7a4e56fdbd94625e9f01dc47d1"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/planning_reasoning_probe.py",
+              "sha256": "654e8cc467da0cd73eb8ec27ea643a51e455741338bcd85dd453819f6e30239a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/project_runner.py",
+              "sha256": "efe1e134a79d9d31676b63648495e642d1a6f6d4158af94292927c1a0efcf047"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/prompts/coverage_first_planner.md",
+              "sha256": "ed3e5c82a605103d5b570c7cf1edfc162a1525cd25d9c8fd05275691720915f6"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/prompts/coverage_references.md",
+              "sha256": "13e0f45e6b003a460e54106711fc0c45b7ab9c8255b4906be5d775d9df05f628"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/prompts/coverage_slots.md",
+              "sha256": "a5a00595621b5506149ad5fcd5f6f04b122c922322964b0f09f9fe56517f302b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/prompts/evidence_bound/coverage.md",
+              "sha256": "5d6304b253d14c7ac7e4edd1712b3d3fcfe83fd57279c1918e9c5f2036317f4b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/prompts/evidence_bound/recall.md",
+              "sha256": "7b7622b21482a291358132e83870dab514e757fd251e96bc043d9b73b7eee385"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/prompts/evidence_bound/selection.md",
+              "sha256": "347c31f0d425f8b38a010da708da65b76cec939ff3a0d4204acbddf933b2ba92"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/prompts/evidence_reviewer.md",
+              "sha256": "95ce7509d5b956f83049b9ded138ab96576f14d078e4d1f4439a1993b01a65eb"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/prompts/kind_mapping/coverage.md",
+              "sha256": "e548b64a9a41bb446de0b6f6a5071527634ad06d197587174ca239ea14213687"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/prompts/own_responsibility/coverage.md",
+              "sha256": "60a25afa79403166ab3d930f5f384d879fc21f763e9474551b259488820340a4"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/prompts/own_responsibility/recall.md",
+              "sha256": "bc862e4b7d2b3322e4b01aed4b65dbfc91123be7f4f8501d4b937993ee63b979"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/prompts/three_stage/coverage.md",
+              "sha256": "4492c599291fe37702865d4683bd5cd3bdef52175490e5bc1bfbcfe5a3543949"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/prompts/three_stage/recall.md",
+              "sha256": "00fd920092e1478cf826a187650bb7bf9a49f2414b57f5c43d9d5da57246dcde"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/prompts/three_stage/recall_indexed.md",
+              "sha256": "a11ee2f89ad1c68263e0ea758994b5fb6b39c060596a9142ca87e1ab7f3e7382"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/prompts/three_stage/selection.md",
+              "sha256": "cc8a4dc869b80c2c1ddfe724c7c33eecf1669e4a7b6ea705196f25d3636e3776"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/referenced_view_coverage.py",
+              "sha256": "6f3ab1234270ed3d3955149ef22080b21c79d166d992d7c14410e2382277d437"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/retail_view_benchmark.py",
+              "sha256": "0cdec62f34fb3ba066dc9a7c8d8fe82186cf7deadd147b40293ef9a7eb9a470a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/retail_view_retrieval.py",
+              "sha256": "8d8afa2b4ab7b3fd8fe0d4292a7d5526c34af7b57a4e4f0e661d32c34667c079"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/slotted_view_coverage.py",
+              "sha256": "b580113834567e4a41900c2c91840f66186fa6c15ab124b3009bc48cca2be6d2"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/source_selection_followup.py",
+              "sha256": "37364ba335f698189308089fa6f9ff701a3e2c9b1f0f8bc7fb2f2e240353183f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/stability_runner.py",
+              "sha256": "6783a7416c27070339eae4e8184d4cd79221b8b1198e86e5d8cfc569bff5b43f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/three_stage_view_selection.py",
+              "sha256": "3ae39cf501aca0b3a8e2f293314fca9b96250453d18c2251e6f6f3f365725323"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/three_stage_view_selection_runner.py",
+              "sha256": "3f676fc34d1e32b0f5b6ae95beb5d7e067d4a76359fd308d62c182a36ff1c2fc"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/view_matching_cases.py",
+              "sha256": "4b85e11054256c1d155e33ea878e23352e67a3bceed0a13a970bef12e1749d63"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evaluations/view_matching_grading.py",
+              "sha256": "b3572e96c74ed05149ee247baa20a6773afdc5d92d9c7f0b5d9b8d972160451b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-10-12/recovery-analysis.json",
+              "sha256": "b10d3fdfa8765f5e88cddd8796d8abe74ed6c5fd08c09c36200a08fb41126b0f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-10-12/recovery-plan.json",
+              "sha256": "3b895e7a9592786d6621df03e6dc1110ae0a507242b9b8410a1b647f224c6e4d"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-10-12/review.json",
+              "sha256": "fe3becdeb0bd71518980174f1ba70bb30500822d563f713422b4391d78cd5517"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-evidence-recovery-11/controller-check-evidence.log",
+              "sha256": "6a7dee2df6decc78d70dd3a9fcef13555f24ec05ef34f4d611783f4084b4e866"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-evidence-recovery-11/receipt.json",
+              "sha256": "205a6e2f4706d373f98dddaf32db0f0ea942ea89ebb6acf99074c25fa8297a3b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-evidence-recovery-11/recovery-plan.json",
+              "sha256": "3b895e7a9592786d6621df03e6dc1110ae0a507242b9b8410a1b647f224c6e4d"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-evidence-recovery-11/review.json.late.raw.log",
+              "sha256": "0200cc20e8aa288580c0a5036d4056a144555a272b6b4afe64da357734118d6b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-evidence-recovery-11/review.json.original.raw.log",
+              "sha256": "aaa8b740cc30fbd1b8670fa45ce5b68280dc073b9ee5e662dc43eeb68b903dfa"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-evidence-recovery-11/semantic-review.log.late.raw.log",
+              "sha256": "3b7c9f3b51626a0634405b8e2c14efbcf730b600138aa60b067e74aceffca4f0"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-evidence-recovery-11/semantic-review.log.original.raw.log",
+              "sha256": "fa3e4654447f56bef7cffe64220195c4e2817ba20838d2c3b27eaf893a28eaaa"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-evidence-recovery-11/v2-expected-lineage-rejection.log",
+              "sha256": "6fc6fad47c0566b8004271cfe185c75d9a051175875b0c305c6e65442e0d4642"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-20/plan.json",
+              "sha256": "7821ce073885f3796e45ff994de82c1f62e91a156db25b9d6f24f4b96fa2a43e"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-20/research.json",
+              "sha256": "510f95977944aa11f75e3d0888ccd5a119f398af48ae67a3d323cebd4fc65793"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-23/advice-evaluation.json",
+              "sha256": "2cd5293fdf3ca90eda44e609b7b73af4e07d69d5955b4428fe8432a194061d26"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-23/plan.json",
+              "sha256": "effdbeee6d6f0572c83d587950f0b64cc52fa46d108091c02a101a48d909372e"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-23/raw-and-leaf-probe.json",
+              "sha256": "a8e22b730407a1f27b8100652768fec442be9f1aab9dd1f4aae66b536836567e"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-23/research.json",
+              "sha256": "5e9587e2a21b075060065ac544af95d26d9c11f2ac1846c4cbaac8c2328b0126"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-semantics/review.json",
+              "sha256": "c509270ef90e86b4f6c0ee064ae19b218bb2426f6dc8f88a4171496b819d00d7"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-semantics-rebound/review.json",
+              "sha256": "f986fd1f361948c4ea4ecc24d4c7e779956210488467533411908f440f07c135"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-semantics/review.json",
+              "sha256": "2d47e702a0a6bb0fb9904ba972fcd6dccaf91645319729011728d3a900a242a4"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/freeze.json",
+              "sha256": "7d52d3c7639e8caf00e2d55cdd2dd4a3aca1b394c3ef90fec0c7e8e3079eeea9"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/policy-freeze.json",
+              "sha256": "99a62eef564c97d2ae473e9c06cf3e4397e2a7e9fa7722a235f1e7052c27b5c0"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/projects/retail/catalog.yaml",
+              "sha256": "380d48cf75ee3d0afae72f6b69abf764318badd6051f7080a7bfe9f582608666"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/projects/retail/manifest.yaml",
+              "sha256": "42684d67c86ed0329abd67c59f3c6af9f6a724311c918dbedd125133f17f6b49"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/projects/retail/views/demo_retail/v_customer_value.yaml",
+              "sha256": "d3ef37ced4521ef46a65980f418088683c4aefa9f138802a6829f87fb531f2cc"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/projects/retail/views/demo_retail/v_daily_sales.yaml",
+              "sha256": "e2402ebcebfa7e2bbf46b9e5c4319a32b9a0522883ba7182ba7ccc17ab030fd4"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/projects/retail/views/demo_retail/v_inventory_status.yaml",
+              "sha256": "ed7c44ef1fca1b55f92454fbbcc2b3145acd6dea0a4ca17f46c2a08d90cb58b3"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/projects/retail/views/demo_retail/v_order_summary.yaml",
+              "sha256": "fbe7eecd74125611e506cadec1a8ab975f6f7065c470a2d90b3f5fda88ae062c"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/projects/retail/views/demo_retail/v_product_monthly.yaml",
+              "sha256": "619b4180f877d9628eb458dd3fc0a1348d8849132aea7bbd684ac46e69870079"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/projects/retail/views/demo_retail/v_sales_detail.yaml",
+              "sha256": "c0381bd2ab84330dd24a6e138350065d4cc1a40c4856295f0ecfd9a359d5048f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/projects/retail/views/demo_retail/v_store_monthly_kpi.yaml",
+              "sha256": "ca167e431f2a7faa502378c8dc89cec3e65cf27a8fc375adb512f61dfd84e7eb"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/pyproject.toml",
+              "sha256": "60a87bb27116fca458946baa2708fc71fdf4c21848aff55601043c35bc9855e0"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/__init__.py",
+              "sha256": "e6e004e5daa1273b1f894d5f42fe2fe964642b55b7e8cb6486e5369cef68e7df"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/__main__.py",
+              "sha256": "1c04b716e836359df29ec8138a7e586b844629d08b1fac32d46038bcfa67cded"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/application/__init__.py",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/application/catalog_contract.py",
+              "sha256": "f2c09cf5bf15b28c2d4ea8be32f16bd4c931348990ec71b04faec4bac5e9f0f7"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/application/errors.py",
+              "sha256": "2fce2c4b6ee27bce657f7a8b1a411507a3a2d0ee0c398996bc9d9dfaf1fd1447"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/application/models/__init__.py",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/application/models/confirmation.py",
+              "sha256": "535de8b2720a56e6bb8eb1d67b2bfea0b319a82d8a62f9ffaa3e667646e29e6a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/application/models/decomposition.py",
+              "sha256": "1fe4eb06da88fc67c3e65250a93393ac944dbbba9f2c4ac3349134e044b10558"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/application/models/progress.py",
+              "sha256": "d8011f91bcd0145cbb3865539835ec4df0acf823c0e0bb274c68b25b77120b4f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/application/models/query.py",
+              "sha256": "2771fe2dc871360d24f372c22718459c4fd4c27e13a8d2f571aa9bfa75b662fa"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/application/ports/__init__.py",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/application/ports/catalog.py",
+              "sha256": "4a88ed3065afac7e8c1598989149901700de310d2df05734886147fca3bb577b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/application/ports/sql_executor.py",
+              "sha256": "1da51d6c86c3084cb2953966fff9bd96b81af8ab1cf917dd5ba3e44d78810108"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/application/ports/term_mappings.py",
+              "sha256": "f72839198fd4fd5bbe5736ce2fce742464526cbe16133230293ed4654f99688f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/application/services/__init__.py",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/application/services/answering.py",
+              "sha256": "e2ff0e9bc8a92dace93d85b3a24f27a53352aa2d62783fc1020121905c0304ee"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/application/services/confirmation.py",
+              "sha256": "ce8c239a2b39c31d8a250eb134cddab9453c41b39938c171be9c4ddfb1a9abd0"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/application/services/sql_execution.py",
+              "sha256": "28f8c0e35db1c91d9921df79ddbb585938f41bb8de371b8f668d7349c7f55605"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/application/services/sql_generation.py",
+              "sha256": "d8520ed2d7dbafa4d64b9237682548e240175b0133d15458b95df4b4fbf244a2"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/application/services/staged_query.py",
+              "sha256": "6149dc250e0eeb3bb7e22b2908da3ef4400cb2df5c9df0eeac4fd69f3c472e9b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/application/services/task_decomposition.py",
+              "sha256": "f62bdabb3dd3a900d1f5d62db9a4d67bf62b072b3e9cf4187a1e9af78372b792"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/bootstrap.py",
+              "sha256": "8c798bd33ce1779d84b123da16de85089934ec515bbf524a3ad823165bd6972b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/config/__init__.py",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/config/database.py",
+              "sha256": "83da43d7914d72e6f0a8a5ef4070f0b0509c55caab947f9b3632ade51b9f9516"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/config/deployment.py",
+              "sha256": "08ae4a09e348467eea82170ef001ba967ce9764ca26927943cf54fb316de22c0"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/config/projects.py",
+              "sha256": "6083fccfd7a50dce312fdcc47eb17d8f6359edd3a874da9592c61948fd7264a0"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/config/settings.py",
+              "sha256": "d6d70defd93db5f580884fdb944cea3902663db1443a4483bb822b42a52fb647"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/domain/__init__.py",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/domain/catalog.py",
+              "sha256": "e261104b06424f09df3b581f56045051df0f54fa0f375493018463bdf2a80ccb"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/domain/models.py",
+              "sha256": "86cf40dd7980440c87bb590489227070c43f728b767dc19ae4e87c92d9fb2a05"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/infrastructure/__init__.py",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/infrastructure/catalog/__init__.py",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/infrastructure/catalog/yaml_catalog.py",
+              "sha256": "555c99de0c1a25fbe0172130e816f24f23aaf4b31f4047f362b786f3c7cb374f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/infrastructure/database/__init__.py",
+              "sha256": "0dba5c3d7fd0f814fc75f5a26fda568516f12dac939abd2407b877d2efccbe03"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/infrastructure/database/sql_server.py",
+              "sha256": "01379f0354e367ddf89cd0da528e1b094c33544c51288e7d10ac28ea3b9bf0a9"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/infrastructure/llm/__init__.py",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/infrastructure/llm/context_budget.py",
+              "sha256": "23983b0183b908b902576f393f3ad2938054f05746c804ecbfa3664abf2eb566"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/infrastructure/llm/factory.py",
+              "sha256": "457282cc13bac1398969a81c97db898d8f75f12cc6587be27ad6483a6c40214b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/infrastructure/llm/parsing.py",
+              "sha256": "cbdc89d7d925896d7aea2b938fa4825bbf9a5f9903235847bbc31c0fa259b929"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/infrastructure/retrieval/__init__.py",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/infrastructure/retrieval/documents.py",
+              "sha256": "5a1d0c3fa236f0efc21852e961f4e345d85b6c7e7b4d69d6004c05fc4754fdb0"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/infrastructure/retrieval/schema.py",
+              "sha256": "c1140d74f98c66df9c023a109b1e6913e3872adf00f6e2239cc27c89c30a2ba8"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/infrastructure/sql_compiler.py",
+              "sha256": "3e9b0266aa93b8c70dbf35548ed06eb9002b920c5bab3e123b41ce92b2eb0929"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/infrastructure/sql_policy.py",
+              "sha256": "745d1b9fd206789f34d19d015693c486b04af51d1a9ad91d307b801819b74dad"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/infrastructure/terms_mapping.py",
+              "sha256": "67e1a3ed8a0cc6b268ea7f9a08a9860960743dd1c3b927080192f9e1d2f87db8"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/interfaces/__init__.py",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/interfaces/api/__init__.py",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/interfaces/api/app.py",
+              "sha256": "d4e0c1995aab98366440fd90bc92b6ce83e02d48059326489c272ed97b919972"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/interfaces/api/schemas.py",
+              "sha256": "05741810a52ca584495f06b5d2868d18b3e49e0b41d5d3de4d84ec014df60b66"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/interfaces/api/streaming.py",
+              "sha256": "5c3cbea4f09197d67f55279aadbbcaaaf3bf5aafa7e4a7ddda6d932804bc375a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/interfaces/cli/__init__.py",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/interfaces/cli/main.py",
+              "sha256": "f523e6a78b349ffc41a7e70ba88f6ace4918df3e6b698613462bcd440792586a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/interfaces/web/__init__.py",
+              "sha256": "3f6bb6c95b6d995d32e5977b8e9ddbd5973bd03c46401137a0d6d8ed51c1362b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/interfaces/web/ui.py",
+              "sha256": "0f3ca1c9c6b7d69006f9218cfb016ec63bed1b3c2fa5c8816a0f65872ee24c97"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/resources/__init__.py",
+              "sha256": "492c79bc86f29ecbb21409f38a135e6c34973d8cf147ca1bbe3c5cd2b41c681d"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/workflows/__init__.py",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/workflows/task_decomposition/__init__.py",
+              "sha256": "c67da9df50ee0a871e888af86a6d3b594a165b0f12e2ee9ca929f74effae2016"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/workflows/task_decomposition/prompt.py",
+              "sha256": "4655d352feaaab93bdef78a2ced51da9ae93adf1f907aa99eb8c1a237876349b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/workflows/task_decomposition/validation.py",
+              "sha256": "ea214f4ee199f391546b0b8cc07b848e49905a0ed3bbb4adebe33f348e9fa2e8"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/workflows/task_decomposition/workflow.py",
+              "sha256": "85d8548485516bc6fe075ec9040542e12cdcf5d8a1375bd98974c84e351399a7"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/workflows/text_to_sql/__init__.py",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/workflows/text_to_sql/clarification.py",
+              "sha256": "d3256525dde13e23e9f582c4f823934677d8a4c4ab4ff0c88c9c2dc83e808be9"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/workflows/text_to_sql/prompt_resources.py",
+              "sha256": "6168a9f759b7d2868c335c86d7643d041d54975e41c75b5d7b27cfbd04cb6894"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/workflows/text_to_sql/schemas.py",
+              "sha256": "4a542e16ad9e16a9087980d434e2519c72d7fe07d7ab160073784df850f2bf02"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/workflows/text_to_sql/semantics.py",
+              "sha256": "af992714a6d47d8b717520ed88e4d963f35940443d3e4438e0747353dbc4e851"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/src/cpea/workflows/text_to_sql/sql_generation.py",
+              "sha256": "76afe843c4ee9fd0893c5964a31756c7217a6b97c96f0d3d70f827e90a79d99d"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/tests/diagnostics/test_managed_capability_projection.py",
+              "sha256": "ddf30e05642a4cc36540cbae20c3a4561a36594fa125871762df16a333dc0bf1"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/tests/diagnostics/test_managed_node_diagnostics_rebound.py",
+              "sha256": "2b0766b1646e1f3b0d5a09ed5277f1edcd70adaab2e0afd29e62cad531196739"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/tests/diagnostics/test_managed_node_diagnostics_v2.py",
+              "sha256": "c5b5569cb7f6af7a5858f94e4200672520f46824ee298d89c2aad4e4bd047b4a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/tests/diagnostics/test_managed_policy_shape.py",
+              "sha256": "11ec53fc54178c3da83b711a2aa2a191d2c8ec327c58292769f195ee9dcccfde"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/tests/diagnostics/test_managed_text_leaf_evidence.py",
+              "sha256": "3383078de87df60ba0a1fa93511f7e2801daa308cb5e1f04bc81bc7037d953d2"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/tests/unit/test_behavior.py",
+              "sha256": "7532442fc63fcac36f1accc5c9a9b3dfa61c63a1137f043be40c807666e4e3f8"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/tests/unit/test_business_clarification.py",
+              "sha256": "efd74e0253280ccd10382b7644facee3337d8db19e4f81b8561740b54a8f9c65"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/tests/unit/test_confirmation_lifecycle.py",
+              "sha256": "f0a25f976fe1f7c83b2be5b83e6727b5e2f0246518ac155035ab9d148a39fe00"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/tests/unit/test_decomposition_decision_chain.py",
+              "sha256": "4dc72424d7f66f8802b525dcdfdabf63109edd3e46a15c57f48dad0a7638a72e"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/tests/unit/test_decomposition_decision_summary.py",
+              "sha256": "31e894d9ae5a4468250b9066b10c26d6d781ee5cc50fefecf4c6caac20a6dbfb"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/tests/unit/test_decomposition_evaluation.py",
+              "sha256": "135b73fc57d30e8476e2d91a2d8d30eda67b5f4b1e8a38674807695c65fc1a70"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/tests/unit/test_evidence_bound_managed_contract.py",
+              "sha256": "04a919a67fdbd35931d0baa52d4e7e37e68168457cb48fe58e763cb2ff1b4a01"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/tests/unit/test_evidence_bound_managed_runner.py",
+              "sha256": "0456040c737e9967a06e64d1d94ced80ad3b484fff0323339ade0ea33ade4960"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/tests/unit/test_evidence_review_probe.py",
+              "sha256": "49154e1846b7cc77b75b58eede8faaa812b7847bd8ff7b1303f0f7d0a74c1819"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/tests/unit/test_gradio_ui.py",
+              "sha256": "f139e8b787c955f9ecb138a6df715c4eb0ffe4bd712de99238df9fed1292ef16"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/tests/unit/test_having.py",
+              "sha256": "45adb58eeb24400e8700af4c722912e0a3ada9cbb7829a1393d1e3c12cab20d9"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/tests/unit/test_hilp_cli.py",
+              "sha256": "11594faaea80a98f61e91d04d4ac81a5028024a39af7c7a48ede8a86cd8a4718"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/tests/unit/test_hilp_ui.py",
+              "sha256": "2c2bd790cf462eb418ffe8901eee13bc5981854113e03e8e35d0581fd3c75a18"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/tests/unit/test_indexed_requirement_recall.py",
+              "sha256": "e0008b87ed14788340de29255670f5e175669e6484db27f27844fa279266ac5c"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/tests/unit/test_kind_mapping_managed_contract.py",
+              "sha256": "f3673af1d4adf40e14918f6a7e6cff37bf8e9d74954be307c13061bd2e3a4ba0"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/tests/unit/test_kind_mapping_managed_runner.py",
+              "sha256": "85565b742e912d983c6dd55299cade9e0a13414647d1d0fe260b1972eeec6d9a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/tests/unit/test_managed_node_diagnostics.py",
+              "sha256": "d8385a2b5ef29327b466895ef20620358eea008e0979fed03a8a469cd3cfd99a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/tests/unit/test_managed_three_stage_runner.py",
+              "sha256": "022434ce8cddffaf7781f99a249ac6d7bb9ef4750a0ae017690f253a876a4ed2"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/tests/unit/test_ollama_schema.py",
+              "sha256": "6d6eaebe008fd7a9c092c6b70cfc7b064fab1c0c4899980fc298cd1a4ca026b6"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/tests/unit/test_own_responsibility_managed_contract.py",
+              "sha256": "5b205479a2ac562b8e28783f00bbef5c98ca388b63e24bae4ecb4282ce6056fb"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/tests/unit/test_own_responsibility_managed_runner.py",
+              "sha256": "75b7921d8378d78a9bf855b34b67bf63dc8a8bc419ab31d7bbe16f057d7f1803"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/tests/unit/test_planning_mvp.py",
+              "sha256": "f51273882b8378009b9e6b0d273d0068d637d2f087514f7f293d97d22c0dc1ac"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/tests/unit/test_planning_reasoning_probe.py",
+              "sha256": "18c4f3102b26549c2926e5f01fdf2a6988dc37fb16ae3e624d80a167620ba948"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/tests/unit/test_referenced_view_coverage.py",
+              "sha256": "e32075679cf8037ec37ae6c8576b4ccbe34dbb59934c6cd5de5d95c53b0b9125"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/tests/unit/test_semantic_confirmation.py",
+              "sha256": "6f057e721d42a1b6efcae1b8569dbf5261eb0f1a124ea03d747166956208fc0d"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/tests/unit/test_semantic_resolution.py",
+              "sha256": "a99e41674c392c9f3517d75602b2e9b53ab66284aa4dea65c43dc1775cd8a790"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/tests/unit/test_slotted_view_coverage.py",
+              "sha256": "22c45d4863a671d67a8c96ee74041abdc4ec7b86604d5325c3977e0159cfe4c3"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/tests/unit/test_sql_server.py",
+              "sha256": "055529e11e3e0865452342550b98c0188651b3c6a8d8c788919ae826723846ec"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/tests/unit/test_stability_runner.py",
+              "sha256": "2ef968ab256bb27c54ec0653adb02ebfe0fa6c0790f524650ad48cc9678aaf60"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/tests/unit/test_task_decomposition_contract.py",
+              "sha256": "29d8ff1d8a247825ebeb0a1c851727db351ea41c3fa4d3ebb2c7205338a8121f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/tests/unit/test_task_decomposition_workflow.py",
+              "sha256": "528040b632d840f37a95fb07c10baf7ac2d69618928ff6631bb53be4d7a976cf"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/tests/unit/test_terms_mapping_repository.py",
+              "sha256": "997d739f350d3bbf7199626cbf97dda21566529c0478b5d553448232aadb7e1a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/tests/unit/test_three_stage_view_selection.py",
+              "sha256": "cc2315f00c4c8eb957d01d1785b9949ecc5ed8b552844225a634b15f6ee959d1"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/tests/unit/test_view_matching_benchmark.py",
+              "sha256": "117ee4bcece8e2028c3dbe60dc4976a0e7db7b442d5374c2a86352458988c048"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/tests/unit/test_web_projects.py",
+              "sha256": "144d23ec1c1b735d7818f36b3fca05e1824038f2390256e0d740294a4061486a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/text-leaf-freeze.json",
+              "sha256": "98dc4fb17a51d445b6a06297999949af00078de1809a3b28bc445ed8e64b9e23"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen/uv.lock",
+              "sha256": "043329770a012250f88117794535b36b476bec37ba5bda43c779c7d76cf72e4c"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/history-kind-capability-projection-1-20261022T014118Z-68828b-COV-CAP-v1-04-frozen.log",
+              "sha256": "e6e4e8ae2230a19db5d5002e2155b5d04a6375c9e04f68f8ccfc4d2196fd8cd5"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/history-kind-capability-projection-1-20261022T014118Z-68828b-COV-CAP-v1-04-live.log",
+              "sha256": "e6e4e8ae2230a19db5d5002e2155b5d04a6375c9e04f68f8ccfc4d2196fd8cd5"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/history-kind-capability-projection-1-20261022T014118Z-68828b-COV-CAP-v1-05-frozen.log",
+              "sha256": "b8e7bdeff57a3f1ae6d92d8425373035a6be0e28ddc602e54080e638318d59b4"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/history-kind-capability-projection-1-20261022T014118Z-68828b-COV-CAP-v1-05-live.log",
+              "sha256": "b8e7bdeff57a3f1ae6d92d8425373035a6be0e28ddc602e54080e638318d59b4"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/history-kind-capability-projection-1-20261022T014118Z-68828b-COV-ISO-v1-01-frozen.log",
+              "sha256": "9175af589eec0f588c49b1d2c1b4ab377cb55a971da0bef2eb1eab450dc92fb9"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/history-kind-capability-projection-1-20261022T014118Z-68828b-COV-ISO-v1-01-live.log",
+              "sha256": "9175af589eec0f588c49b1d2c1b4ab377cb55a971da0bef2eb1eab450dc92fb9"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/history-kind-capability-projection-1-20261022T014118Z-68828b-COV-ISO-v1-02-frozen.log",
+              "sha256": "b5cc39973526bb89cd4959041faa00adc308e05763284427901debb65dd030cb"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/history-kind-capability-projection-1-20261022T014118Z-68828b-COV-ISO-v1-02-live.log",
+              "sha256": "b5cc39973526bb89cd4959041faa00adc308e05763284427901debb65dd030cb"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/history-kind-capability-projection-1-20261022T014118Z-68828b-COV-ISO-v1-03-frozen.log",
+              "sha256": "1363ab10d1d28133ced5392aeeb67027b5843944b9bb31c82bc6c0dec72a7eb2"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/history-kind-capability-projection-1-20261022T014118Z-68828b-COV-ISO-v1-03-live.log",
+              "sha256": "1363ab10d1d28133ced5392aeeb67027b5843944b9bb31c82bc6c0dec72a7eb2"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/history-kind-isolation-v2-rebind-1-20261021T215758Z-5bbdea-SEL-ISO-v1-01-frozen.log",
+              "sha256": "1934ed81ff102804c088d18b5f7630b881d7dea102e8d39fc121fcccd7391f64"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/history-kind-isolation-v2-rebind-1-20261021T215758Z-5bbdea-SEL-ISO-v1-01-live.log",
+              "sha256": "1934ed81ff102804c088d18b5f7630b881d7dea102e8d39fc121fcccd7391f64"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/history-kind-isolation-v2-rebind-1-20261022T000748Z-82acde-COV-ISO-v1-01-frozen.log",
+              "sha256": "616f8149e2a150d7121a3ba4149f0f25eadbb6ac7c7f61fc516dddbd92bf17e2"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/history-kind-isolation-v2-rebind-1-20261022T000748Z-82acde-COV-ISO-v1-01-live.log",
+              "sha256": "616f8149e2a150d7121a3ba4149f0f25eadbb6ac7c7f61fc516dddbd92bf17e2"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/history-kind-isolation-v2-rebind-1-20261022T000748Z-82acde-COV-ISO-v1-02-frozen.log",
+              "sha256": "881772ad636d93a24215c8666ae1300fdab72c1651f110c51909d74391196457"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/history-kind-isolation-v2-rebind-1-20261022T000748Z-82acde-COV-ISO-v1-02-live.log",
+              "sha256": "881772ad636d93a24215c8666ae1300fdab72c1651f110c51909d74391196457"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/history-kind-isolation-v2-rebind-1-20261022T000748Z-82acde-COV-ISO-v1-03-frozen.log",
+              "sha256": "cb5080c6f00f387a9c41437fd1616dc0a45d636e10cdc4072878f42adf86ecff"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/history-kind-isolation-v2-rebind-1-20261022T000748Z-82acde-COV-ISO-v1-03-live.log",
+              "sha256": "cb5080c6f00f387a9c41437fd1616dc0a45d636e10cdc4072878f42adf86ecff"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/history-kind-policy-shape-1-20261021T231146Z-570327-SEL-ISO-v1-01-frozen.log",
+              "sha256": "d1e42b81d2499627381c943a977e933f6345b43e3b3713d18a4e6e95853cb6b8"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/history-kind-policy-shape-1-20261021T231146Z-570327-SEL-ISO-v1-01-live.log",
+              "sha256": "d1e42b81d2499627381c943a977e933f6345b43e3b3713d18a4e6e95853cb6b8"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/history-replay-initial.log",
+              "sha256": "bbc6ba0a5e6b4f857ab26cb263a482b9b7190a32c44bd100ebe62fb81442def6"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/history-replay.log",
+              "sha256": "956f3aacf0a4df7ba24840f22e1790bb7a9bcbb62df392963adb36b27b8b7fe0"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/history-replay.py.log",
+              "sha256": "0d96fc30de5f112f188cea29a2137427e3c86e3a31a73d08da3fd9271c22679a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/history-replays.json",
+              "sha256": "af1cb926ff6ad1d326c2eb4a1b52b077cdc1d76d1c22060e4fae748dec43586d"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/operation-handoff.json",
+              "sha256": "8d6993bfdbfc924cc5f7a5035fa5f70df5f57e8d46c57a463b0cc261f08adad2"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/protected-before.json",
+              "sha256": "6c546e8a8283adfc20f13d3e272d8654265103acc2b7a8f31c664abc1833834d"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/protected-verification.json",
+              "sha256": "2c0edab81af2762aaf73a515952dde5eff2d647d13e16f5759bed67081215823"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/regression.log",
+              "sha256": "4db32684ae64366dea187fc7d2686c5b6ce3357a1826cd64a22a1997ef0d3805"
+            },
+            {
+              "path": "tests/diagnostics/test_managed_text_leaf_evidence.py",
+              "sha256": "3383078de87df60ba0a1fa93511f7e2801daa308cb5e1f04bc81bc7037d953d2"
+            }
+          ],
+          "summary": "第24輪A1離線候選已新增catalog非空文字leaf enum|null、原run_pipeline唯讀bound contract、9案65rows/27預固定seed格與顯式seed controller傳輸；只新nested module/test/fixture與必要JSON/log，原cards/system/業務決策不改。新focused 65PASS/1FAIL（新same_platform測試實際仍distinct卻預期拒絕）；原capability/policy回歸133PASS/16FAIL（已closed真21/22輪再append synthetic同輪造成重複completed，原守門正確拒絕），未修改舊測試/Task或排除測試求PASS，故本node如實FAIL。fake9/2prepared與scope/typed首錯、兩seed43 isolation正反共5controls同版PASS；15/18/20/23共20次live/frozen歷史重播結果保持，8047舊非Task檔0漂移、原24nodes驗收逐字保持。新完整freeze已保存但新candidate frozen replay未執行；新expected尚待fresh獨立review，作者不自審。0POST/SQL/DB/cloud/commit/push；所有父/root與38×2 Gate未過。使用者要求本輪後暫停，故封存交接，不開下一輪audit/review/自然試驗；恢復後先fresh audit22–24裁定阻塞。",
+          "producer": "/root/loop_worker_text_leaf_contract",
+          "finished_at": "2026-10-22T03:37:44.917677+00:00"
+        }
+      ],
+      "reviews": [
+        {
+          "verdict": "CONTINUE",
+          "reviewed_rounds": [
+            1,
+            2,
+            3
+          ],
+          "evidence": [
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-1-3/focused.log",
+              "sha256": "799ae670084cfdb97f637a9f3151d8d1e66aba9a768cbf22131d3c5a6cbec8f9"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-1-3/hash-check.json",
+              "sha256": "39b3c03fa7c6cf114fc108928403c2f078c96d0a41680fcb525154c4bb922698"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-1-3/replay-check.log",
+              "sha256": "d4b2bdf10a510c238e76edfc334f48e2581cefb535ec07bb29a0eda0c1480947"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-1-3/natural-prefix-check.json",
+              "sha256": "feb96ad805e934288346e4032616e4529a21da70c3a130def8018cfaa92b8992"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-0/handoff.json",
+              "sha256": "f81228d974d0fe991b7720d4d9d78bdc8582f03530534e04394f3e62388dc7dc"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-contract/historical-replay.log",
+              "sha256": "3785f98dbd8152c4c18c12cfd6c814121197f3025a2ee1bacb338ecee5fbf331"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-contract/regression-final.log",
+              "sha256": "fdb36992756b30cb95ca6c71f3717cd522dd6cff4ef1ea47e6e6b456cee50ec7"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-1/semantic-review.log",
+              "sha256": "cb118f8da616f7a2dae93c2e2273ec0ae28138e38251dea443154aab93a9c020"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T161155Z-cb9cb4/map-05-parsed.json",
+              "sha256": "75ddb3a430089d0719e248b98cd43eb6ace4a31ec561d6c8aeb0bee88097bf16"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-2/handoff.json",
+              "sha256": "a8d11ba7b259c78444d16db507a6e596bc620328adb4a754a475339fd381ecb3"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-2/diagnosis.json",
+              "sha256": "591fdd8c298b3fd03b2cc71fb05599d5205643ee3d5255a3fefda7c05e791078"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-slots/test-correction.log",
+              "sha256": "7f36f8360b8172250bcc6ddbb89f8253b5fdb286aeb96103491a087eaef3c99b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-slots/regression.log",
+              "sha256": "fcae06f1c713d0f427ab26be13a16567c1632ba7a353e88d7619701a164da3d0"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-slots/offline-final.log",
+              "sha256": "7b8ed538afbb762a9404a703d80efd80ca59b701c1fca778751ac5a9d08225d7"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-slots/source-freeze.json",
+              "sha256": "2f1c6c8bba4c39df11227901988b757076a7a42c92bfa999ff737f22ca04dee7"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-slots/sources-after/evaluations/slotted_view_coverage.py",
+              "sha256": "b580113834567e4a41900c2c91840f66186fa6c15ab124b3009bc48cca2be6d2"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-slots/sources-after/tests/unit/test_slotted_view_coverage.py",
+              "sha256": "22c45d4863a671d67a8c96ee74041abdc4ec7b86604d5325c3977e0159cfe4c3"
+            }
+          ],
+          "summary": "覆蓋第1、2、3輪及全部祖先驗收後判定CONTINUE，允許凍結現有managed-indexed-slots-three-stage-2進入全新自然單樣本，並非自然或根驗收通過。第1輪背景/真正metadata責任切分有原始失敗與正反例支持，原request保留，沒有依R_PURPOSE刪答案或允許空supported；193回歸與fake只證離線節點。第2輪6個本地POST正常完成但map05重複channel ID，原FAIL有效；map06/07、selection、prepared未執行。自行對照原raw確認recall monthly通路理由錯誤及map03 population「不含退貨」無契約保證，兩項不能因後續操作判定正確而算整份自然語意PASS。\n第3輪屬可追蹤實質候選變更：schema以當次任意ID建立全部required且extra=forbid的具名槽位，安全alias避免保留名與位置配對；原JSON在Pydantic前拒絕全層重複key及NaN，沒有first/last、去重、補項或repair。Python只恢復已知ID與精確admitted policy的view/grain/完整keys/summary原文；summary包含其他說明也逐字保留，非另行推導母體。模型仍負status、mapping、scope、缺口及population支持，程式未自動設supported。舊materialize/selection守門未改；來源摘要不能變成未明示退貨排除。\n日期負例界線經審核可接受：合法snapshot_date filter能結構通過屬既有能力，不能據此宣稱它是sales期間。現有完整selection負例實際移動period到inventory並移除sales日期，確由同源scope mapping守門拒絕；它只證這個不一致反例，不證所有日期語意錯誤都被程式攔截。研究要求的inventory套sales日期不可通過，須同時由下一輪逐View語意門檻落實：即使未被selection使用，也不能將inventory任意sales月份標supported；日期正確性必比對原句業務對象及來源契約。這是保留語意驗收責任，非把結構ready當替代。第3輪首次green兩失敗與測試修正皆有保留，未刪舊guard。\n本審核獨立實跑67 focused通過，重播1完整及4失敗fake共18 raw一致；完整fake僅證prepared串接，無自然效力。34項round/plan證據hash均一致；485與823檔基線僅出現各輪授權改動，兩src、舊wire、歷史raw/分數維持，38題Gate仍未通過。來源freeze與現版吻合。確認唯一推論POST經loopctl，6本地/0雲端/0retry，stream=false、num_predict=-1、HTTP/外層無timeout；metadata GET的15秒不是推論限制。本審核0模型/SQL/DB，未改Task/control/實作。\n後續必從新recall開始，七候選各一次mapping後selection/prepared；所有理由、缺口、母體斷言均比對契約，捏造monthly通路或退貨排除仍屬完整語意不通過，不能只記warning後宣稱PASS。首provider/parse/contract錯誤保存停止；成功HTTP錯答FAIL交fresh研究，不改case或原樣重送挑分。若完成，仍須natural_qwen_three_stage父層自身全語意及同版raw重播證據，再three_stage_integration回歸/歷史核對與root逐條驗收，最後fresh verifier ACCEPT；各祖先不得從children自動PASS。現有樹與研究交接已保留此完整路徑，無需需求或額度變更。",
+          "reviewer": "/root/loop_audit_1_3",
+          "at": "2026-10-21T17:16:00.628412+00:00"
+        },
+        {
+          "verdict": "REPLAN",
+          "reviewed_rounds": [
+            4,
+            5,
+            6
+          ],
+          "evidence": [
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-4-6/independent-probes.log",
+              "sha256": "ab834f3dd13e2714df5c4ab021c7be8e05d64ce56e8641fa64a5ee4ddcac12c9"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-4-6/independent-probes-v2.log",
+              "sha256": "15a21e82a236ed02e7d0e43a27b31dc12954b49f2831d4bb15727cecd2f5d537"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-4-6/focused-contract.log",
+              "sha256": "d6cf0225ff86f81bfdbadd46cc815ae45b4b94c9e255e44786fbd77c57e14201"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-4-6/focused-runner.log",
+              "sha256": "ba52135f959b81e8d29603f5cbb42d0d49a308e720388366ee33fa728f6ba769"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-4-6/round4-raw-review.log",
+              "sha256": "6de81c27689402144b324130157de374e9ead9f53ca2f8f2ceafb7b2e4ef7f8f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-4-6/replay-round4.log",
+              "sha256": "8e12cea12928b746c9792f94b340004712c059461f893f43b0c2c20b4634c86e"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-4-6/replay-round6.log",
+              "sha256": "7e0750f27c2796235b76f22d40f6c8b3e90cc7bebbbcb3aa9de48b3816cd3c73"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-4-6/hash-check.json",
+              "sha256": "7d300b3aee55e2fc4f83a113b932137d60cf2df83d72f792ea526328b5255272"
+            }
+          ],
+          "summary": "已獨立覆蓋第4、5、6輪及 natural_evidence_bound_three_stage → natural_slots_three_stage → natural_qwen_three_stage → three_stage_integration → root 全部祖先目標，判定 REPLAN；不需變更使用者需求或增加授權，也不應以同版重送挑成功樣本。\n第4輪完整FAIL維持：自行比對raw與來源契約確認recall把無channel的product_monthly宣稱可按通路篩選、order_summary在商品grain unsupported時把order_amount sum宣supported、monthly缺口/排除理由宣稱契約未保證的only-sales母體，以及原selection response省略typed欄位與integration。須讀call.response原JSON；selection-parsed.json已有Pydantic defaults，不能據其keys否認原始省略。9raw凍結舊版重播精確重現final grain differs from verified requirement keys；不得溯及翻案。\n第5輪方向大致合理：單一managed模組與共用runner保留原guard/舊wire；全部admitted候選與逐字policy理由屬可確定資訊，不代模型選來源；status/mappings/scope/grain適用性、typed draft與整合仍由模型決策，未見依Test ID硬編碼答案。required型別實際清掉parser defaults，ready integration確為非null；獨立32項focused及9項完整typed/fake/replay測試通過，完整fake得到2 prepared且7種失敗prefix停止。307既有證據只證離線，本audit未重跑整307、未把fake當自然成功。\n第6輪直接觸發與設計缺口須分開。原R1=status unsupported/mappings=[]/path=/grain/description/gap grain refs=[R1]；R1自己的grain_requirement_ids=[]且recall禁止self grain refs，所以原輸出確實違反當版明示規則。獨立離線控制僅把R1 gap改為合法mapping/self後，其餘原raw可通過adapter，證明不能聲稱這個unsupported狀態完全無法表示；該控制不是修復自然答案，原FAIL不變。\n但確證另有泛化的表示能力缺口：各店各商品需求在daily_sales能保留store_id而缺product_id，合法partial grain及/grain/description證據在舊adapter可表達，新wire卻對grain/mapping/scope/population/evidence五種自身gap全部拒絕。grain只能指依賴且recall禁止自指；mapping要求空mappings；population限定population需求；evidence要求null而舊guard強制grain path；自身沒有scope。因此有可用部分key映射的自身grain缺口無法誠實表示，不能靠刪掉mapping改unsupported或添假依賴解決。改為會員×商品需求、另一Unicode ID及customer_value會員key後同樣重現，排除本題ID或單一來源特例。第5輪測試只覆蓋metric對grain的依賴缺口，漏了grain責任自己的部分支持。\n下一位fresh研究者應先回答：如何在不增加自由來源事實、不弱化必要guards的前提下，明確區分自身責任未完成與被引用依賴未完成，完整保留partial可用映射？必要正反例包含：上述兩種跨契約自身partial grain、原R1 unsupported的合法表達、合法完整grain、未知/非grain/self依賴及指向supported依賴的拒絕、linked metric在同來源grain未支持時不得supported；並保留真order粒度、不同metric各連不同grain、真正independent scalar及固定月份可縮約的正例。研究後才制定最小候選變更，不由本auditor實作或代選方案。\n同時須釐清gaps完整性與非metric grain refs的契約：獨立控制確認R4 partial只列scope缺口、漏掉未支持R1 grain仍結構接受；F1顯式refs=[R1]但R1 unsupported時，F1 supported且同步移除其他項已完成scope refs仍可結構接受。這只證當前validator檢查所列refs一致性而未證所有依賴缺口完整，也未對非metric refs套用相同support限制。研究必須先定義filter本身的月份能力是否應獨立於輸出商品grain，再設正反例，不能直接把所有filter全域綁grain造成過度拒絕。誤宣independent、漏需求、錯月份/角色、R1較寬population文字與剩餘自由文仍需自然語意審核，refs合法不能免除此責任。R1 all store-product combinations較R6完整庫存母體寬，但尚無selection證明其意指笛卡兒膨脹；不以此單獨判FAIL或要求使用者改題。\n保存性獨立核對：4–6輪42項證據hash、138項現版source freeze、892項歷史工件與兩src既存hash均一致；第6輪3raw凍結新版重播同首錯，未改原raw/分數/38題Gate。audit總0模型POST/SQL/DB、無實作/Task/controller修改、無commit/push；probe v1曾錯估切換F1後的下游scope refs，原失敗log保留，v2同步修正控制條件後驗證，不隱藏中間結果。\n目前recall 8責任及三metric linked R1、customer_value全unsupported可接受，後5View、自然selection/prepared仍NOT_VERIFIED；累計18本機/0retry/0cloud未重置。後續仍需固定新候選全新自然recall+全部7View+selection完整語意及prepared，依序返回各既有祖先獨立整合驗收，再由fresh最終verifier ACCEPT。不得因本audit focused通過、子節點PASS或資源無上限就宣告自然/根驗收完成。",
+          "reviewer": "/root/loop_audit_4_6",
+          "at": "2026-10-21T19:24:48.072919+00:00"
+        },
+        {
+          "verdict": "REPLAN",
+          "reviewed_rounds": [
+            7,
+            8,
+            9
+          ],
+          "evidence": [
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-7-9/focused.log",
+              "sha256": "4f939f80fe68203b5c317fb56466f760ff95d844a6c08efed8e87608f9c87b1f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-7-9/hash-check.json",
+              "sha256": "7cce133a3e82804ca6994c451e51a3d1c1982fd64abe1a1263912145b7f24a58"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-7-9/independent-raw-schema.log",
+              "sha256": "288c11b2d16126f9111ff4aa6fbebd14316e5ddfa2d2196262e8a2264559884e"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-7-9/round8-frozen-replay.log",
+              "sha256": "f0cdcb3e5a0403a0509d4dd6c1f5298c2d03f767109fdcd0c802b9fe08f5c1b3"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-7-9/kind-fake-frozen-replay.log",
+              "sha256": "e82a953225f2ffbe7675a78b2cad92972fffe52fa48b826e2073a36db021e0c1"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-4-6/review.json",
+              "sha256": "7ee2eb3602ad0e93d2fad3476ca113515b0e71ecd99c51ad9ca7eec3d20e3610"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/reports/three-stage-view-selection-plan.md",
+              "sha256": "54e98be9cf23e317360391ebd36f113d69a0cc0eb1229eeef45344c3d7547bc1"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-6/handoff.json",
+              "sha256": "d4d5c96664fb8d9d3c5194edd98a50bdafdb806d06813b796ec0da3690633df1"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-own/regression-final.log",
+              "sha256": "6ec7382a37c736f0ab0e371a9ff3934ecc01f7e7b83ca9163929b74954f7bf92"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-own/prepared-verification.log",
+              "sha256": "50f12ff77773178c7185e3764b27d7dfbfd000be212f82cce22bb5e544e276c1"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-4/semantic-review.log",
+              "sha256": "3eee4749ad5c0368f70006ac77044f6440328eb72885cc6a68c918edded3047b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-4/failure-context.json",
+              "sha256": "ea66213b7f5fb86667e068517925b85921d1c501eb0014ec6ce2d71113f749be"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-8/research-probe.log",
+              "sha256": "4d540c6d5c1a20d3792d8ec8da59b9f8c5227425afed5abf6648ae654ced152b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-kind/semantic-review.log",
+              "sha256": "fa7323447a8b0345a32fce7fccca2ba5909e73e2de19e964873ce8dff06e88f5"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-kind/regression.log",
+              "sha256": "078bf736161c74577d70b3743f0e912214b251d67a431ad78ac74ee534f32163"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-kind/frozen-replays.log",
+              "sha256": "c4b1be97f173e9c3c5ba0a75f9858786db7f730648449521e27c1e3837303cc6"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-kind/final-verification.log",
+              "sha256": "3adca405db81cc59f3747c33ceeb39e35334d77cee531b909f8aaa987080eaa6"
+            }
+          ],
+          "summary": "完整覆蓋第7、8、9輪與 natural_own_responsibility_three_stage → natural_evidence_bound_three_stage → natural_slots_three_stage → natural_qwen_three_stage → three_stage_integration → root，裁決 REPLAN。保留第7/9輪離線成果，不改業務需求或既有驗收，不需使用者追加授權；下一步先交fresh研究制定有辨識力的最小自然可行性節點，不直接再跑整體單樣本。\n第7輪責任切分合理：own_gap是模型對自身責任的嚴格布林決定；Python只依已驗recall與同View原statuses完整導出scope/grain缺口，沒有改status、補mapping、猜依賴或借別View。所有kind的明示grain refs是硬依賴；普通月份predicate可在refs=[]時獨立supported，即使輸出商品grain未完成。partial必須保留有用映射且有自身或依賴缺口，無缺口partial及supported有未完成硬依賴均拒絕。384項既有執行證據只證離線，不能抵自然驗收。\n第8輪FAIL有效。直接讀原call.response確認filter用conditions放>=2026-09-01及<=2026-09-30；aggregation/operator/value三欄原raw皆省略，parse後default null。only metric mapping may aggregate是非metric有conditions觸發，不代表模型實填aggregation=sum；月份範圍業務語意本身可成立。另店×商品grain在daily_sales有明示store_id門市key卻unsupported空mapping，遺漏有用部分能力；此責任原三階段計畫第二步已要求，並非事後加分項。只需獨立必要能力分量，不枚舉等價替代寫法；customer_id不是本題店商品鍵，store_id也不保證完整庫存母體，兩者不得硬湊partial。recall與customer可接受，daily後5View及selection/prepared未驗；原3raw凍結重播仍同首錯，不能修答翻案。\n第9輪改動有明確邊界：依已驗kind生成專用mapping schema，真正必需欄位required、所有object extra forbid、JSON全層duplicate/NaN先拒絕；Python只編譯kind已決定role、不適用null/[]、grain唯一/grain/description。模型仍負column、日期/value、聚合、條件、非grain path、status、own_gap、scope/grain適用性及完整typed選擇/整合。原own/referenced/selection/finish guards保留；未將舊filter.conditions展平或改raw追PASS。496測試與完整2prepared/十類首錯51raw之既有離線證據一致，但不是Qwen自然可行性證明。SEMANTIC_REJECT是預先人工定義對照且runtime接受，測試正確揭露邊界，不能稱parser已攔住漏店鍵、假independent、錯月份或錯母體。\n本audit獨立實跑55項focused通過（109 deselected），涵蓋跨來源partial、全部kind硬依賴、依賴精確導出、普通月份獨立、真scalar/多grain、schema必填與semantic對照；未重跑496。另實跑第8輪155-source frozen的3raw及第9輪162-source完整fake的9raw重播，各與原artifact/停止狀態一致；直接probe根/槽位/mapping/nested condition重複key及nested NaN均拒絕。獨立hash核對41項第7–9輪證據、162份live與frozen source、1164歷史工件無差異，兩src既存hash保持；歷史38Gate仍PENDING/未通，不從本診斷升級。frozen使用同.venv/lockfile，未vendor外部套件。\nREPLAN的理由是實驗方向辨識力不足，不是上述schema修改本身錯誤或已證架構不可行。四個自然候選至今全FAIL：第2/6/8輪都在daily停，只有第4輪到舊selection且漏typed/integration；第5輪建立完整required typed wire後從未自然驗到selection。新kind shape能約束第8輪格式錯，卻未證能修店鍵/own責任等核心語意；離線手工fixture無法回答這點。再次從recall與customer開始整體首錯停止，仍可能遮住下游最重要的typed可行性，累積更多綠測試或無限額度不能替代此證據。\n下一位fresh研究者須先回答兩個問題並預先固定小節點輸入、樣本數及失敗門檻：(1) 在不代填業務答案下，kind候選能否自然同時保留有用partial key、區分自身與依賴缺口、正確輸出獨立整月雙predicate？必要對照含有用key與無關identifier、同店鍵不等於庫存母體、dependency-only partial對own_gap的區分；至少一個改名/任意ID的對照排除只記本題。可用獨立核對的固定recall隔離coverage，明列為注入上游的節點診斷，不能冒稱自然端到端。(2) 在獨立核對且完整正確的固定coverage輸入下，目前required typed selection能否由Qwen自然明填全部typed欄位及integration，正確形成inventory店商品anchor、stock_qty sum/日期metadata、sales同task整月online兩sum、先彙總再left與不補零？不可直接把現fake全部未選View當已驗真實coverage；須先核對其語意。若失敗，研究責任切分/表示能力而非再添欄位、repair或原樣重抽；若小節點可行，才回原完整自然門檻。這些是研究問題與必要反例，不由auditor指定實作方案。\n小節點不能替代最終全新單樣本recall→全7View→完整typed selection/prepared；所有View含未選來源與所有剩餘文字均須語意核對、同版及凍結重播，任何錯誤FAIL交fresh研究。之後依controller返回 natural_kind_mapping_three_stage 的父 natural_own_responsibility_three_stage，再 natural_evidence_bound_three_stage、natural_slots_three_stage、natural_qwen_three_stage、three_stage_integration、root，各自有整合驗收；不得因子節點綠燈自動PASS。每3輪fresh audit及root通過後fresh final verifier ACCEPT仍必要。累計21 local POST/0retry/0cloud未重置；本audit 0POST/SQL/DB、不改實作/Task/control、不commit/push，只寫本目錄log與必要JSON。所有自然未驗及父層效果仍NOT_VERIFIED/root PENDING。",
+          "reviewer": "/root/loop_audit_7_9",
+          "at": "2026-10-21T20:30:54.474462+00:00"
+        },
+        {
+          "verdict": "REPLAN",
+          "reviewed_rounds": [
+            10,
+            11,
+            12
+          ],
+          "evidence": [
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-10-12/focused.log",
+              "sha256": "5da17cb3927d03089d15dc6315050d60c867fabe77adb2672b188573178df093"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-10-12/independent-check.log",
+              "sha256": "42f90abfa4be6e588d2708e6be0d7258d4ee6fae73edc73908a4b2e0ffa2117d"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-10-12/independent-complete.log",
+              "sha256": "682bc74fe538cf85860983fc40f27d8c37ebff23c66c49520a5027b3788fe11e"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-10-12/independent-check.json",
+              "sha256": "c9ae562c9b1428ce939b4f9327b32cfe52c65bc142ded2c68d9232784b7fe8b2"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-10-12/controller-check-evidence.log",
+              "sha256": "7541018b970cbad23251f0b17eb94af1015bd63da39449bbdafa83bb2d0d99f0"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-10-12/recovery-probe.log",
+              "sha256": "5c566616675ee82e708b10eb576d850d7131c1f904950f597a7e6389c34740ca"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-10-12/recovery-analysis.json",
+              "sha256": "b10d3fdfa8765f5e88cddd8796d8abe74ed6c5fd08c09c36200a08fb41126b0f"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-10-12/round11-original-review.json.raw.log",
+              "sha256": "aaa8b740cc30fbd1b8670fa45ce5b68280dc073b9ee5e662dc43eeb68b903dfa"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-10-12/round11-late-review.json.raw.log",
+              "sha256": "0200cc20e8aa288580c0a5036d4056a144555a272b6b4afe64da357734118d6b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-10-12/round11-original-semantic-review.log.raw.log",
+              "sha256": "fa3e4654447f56bef7cffe64220195c4e2817ba20838d2c3b27eaf893a28eaaa"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-10-12/round11-late-semantic-review.log.raw.log",
+              "sha256": "3b7c9f3b51626a0634405b8e2c14efbcf730b600138aa60b067e74aceffca4f0"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-10-12/selected-frozen-replays.log",
+              "sha256": "b390f466e95dcf74bda35292556c628a7090133b1e4f5fc95d23245e77d02459"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-10-12/recovery-plan.json",
+              "sha256": "3b895e7a9592786d6621df03e6dc1110ae0a507242b9b8410a1b647f224c6e4d"
+            }
+          ],
+          "summary": "完整覆蓋第10、11、12輪及 natural_kind_mapping_three_stage → natural_own_responsibility_three_stage → natural_evidence_bound_three_stage → natural_slots_three_stage → natural_qwen_three_stage → three_stage_integration → root，裁決 REPLAN。阻塞是已封存證據在finish後漂移，非把v2離線成果或原第11輪REJECT推翻。當前不得自然POST，亦不得假稱本audit可繞控制器完整性門檻。\n第10輪將現candidate拆成注入上游的1 selection及3 coverage診斷，是對7–9輪REPLAN之辨識力問題的合理回應。固定8需求、7View/56列及未選來源有用能力仍須全驗；harness的544測試/31離線replay只證接線。第11輪REJECT有據：customer lifetime_spend明示累計折扣後TWD金額，是有用分量，缺月份/online/店商品不能成為清空mapping的理由。last_order_date僅最後訂單日、會員鍵不等於店商品、會員母體不等於庫存母體。原REJECT不升級為PASS，也不把structural alternative own=false當業務定案。\n第12輪v2 partial/lifetime_spend sum/own=true方向合理：扣除明示scope/grain後，僅會員累計金額仍未證完整涵蓋未限定會員的淨銷售額；這是未證完整性，不是推論實際存在非會員銷售或退貨稅額。其餘55列不變，固定logical IDs/ISOLATION/count=1及1+3設計未改，v2實體case預先固定非重抽。selection四hash與22011 tokens吻合研究預固定，三coverage的12個inputs檔bytes及bindings精確不變。薄nested wrapper直接重用prepare/evaluate與base._run/原schema/finish，未複製整framework、改globals或偽造manifest；新增source/test明綁165-source/freeze，v1 live bindings保持。真Task作者為closed PASS child；嘗試以原failed語意parent ticket包裝ACCEPT被真preflight拒絕，缺review亦拒絕；fixture/Oracle仍PENDING，作者不能兼任fresh parent。\n獨立實跑47 focused passed、15 deselected；完整v2 frozen抽3組（selection完整、閏年語意首錯、typed缺欄首錯）各與原artifact/停止狀態一致，0POST。獨立3754保護檔及165-source/兩版fixture/lineage核對與第12輪當時基線一致；本audit未重跑544或全15組。機器PASS仍明留自由文字PENDING，不能代替下一位fresh reviewer的全8需求/56列/typed與所有文字核對。\n阻塞證據：全165份控制器round/plan證據中僅第11輪兩檔漂移。review.json封存aaa8b740…，現為0200cc20…；semantic-review.log封存fa3e4654…，現為3b7c9f3b…。真loopctl check-evidence exit2，review()也會先拒絕。兩檔mtime分別晚於round11 finish約6.594/6.592秒，與記帳後追加吻合；單憑檔案證據不認定寫入者或平台事件根因。現版只移除summary末尾173 UTF-8 bytes、log blocking_finding追加own_gap_ruling欄434 bytes，就逐bytes精確命中原封存SHA256；原REJECT與能力遺漏結論不變，新增內容僅澄清own_gap未定案。audit已保存可恢復原版及後補版四份raw log與差異JSON，沒有修改兩原檔/Task/controller。\n恢復條件：本auditor已獨立裁定recovery-plan.json的精確行政恢復，Main可依其順序機械備份及恢復兩原路徑，不需額外使用者授權；先保留兩版/mtime/hash與差異，僅複製精確命中既有hash的原bytes，絕不能改controller expected hash、重置輪數/用量或刪FAIL。恢復後check-evidence須實跑PASS且v2預期lineage拒絕須留證；從今等待worker真FINAL、再核hash才finish。由於第12輪v2 lineage已綁後補版原路徑，恢復會使v2 live load/preflight拒絕；不能靜默改已完成v2/frozen/manifest/Oracle或把本REPLAN當自動放行。fresh研究須決定版本化後補證據與下游新版本的完整綁定/回歸，使原第11輪、後補澄清、第12輪歷史各自可追蹤；必要新增child須合法保留既有nodes/acceptance。若無此合法恢復能力，保持完整性阻塞並明確要求相應授權，不能跳過check-evidence。\n證據鏈修復且下一個fresh方向裁決允許後，仍只先返回原kind_diagnostic_fixture_semantics由不同fresh worker完整重審，不能只審customer一列；獨立ACCEPT且Main finish PASS形成真parent provenance後才可selection一次，之後coverage三次。局部全PASS及應有audit後才回原父完整自然9POST，recall/全部7View/typed selection與prepared全語意驗收、同版及凍結replay；所有祖先各自整合及fresh final verifier ACCEPT不可省。全局仍21 local/0retry/0cloud，第10–12輪及本audit全0POST/SQL/DB，候選schema/prompt/guards與兩既存src變更不動，歷史38Gate及所有未驗父/root保持PENDING。",
+          "reviewer": "/root/loop_audit_10_12",
+          "at": "2026-10-21T21:27:06.631294+00:00"
+        },
+        {
+          "verdict": "REPLAN",
+          "reviewed_rounds": [
+            13,
+            14,
+            15
+          ],
+          "evidence": [
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-13-15/independent-check.json",
+              "sha256": "9161a6101b3fcef023ae6798adcc063a5be277adcf662a11496ae2c43adaab9b"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-13-15/controller-check-evidence.log",
+              "sha256": "6a7dee2df6decc78d70dd3a9fcef13555f24ec05ef34f4d611783f4084b4e866"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-13-15/replay-current.json",
+              "sha256": "e31bf5cadc8b81c2434e5697b70fae59e89f92ca3920ff679ba048a735fff292"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-13-15/selected-round13-replays.json",
+              "sha256": "f66f24f0bbd337b9496da05cb1e71b5bf690b1bbd0c413f5486c0ce215303de3"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-13-15/replay-frozen.log",
+              "sha256": "39bdaf582b358689c7f9a6e153bb76280d34ca9745e7102015dafdea609b99cb"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-13-15/policy-isolation-controls.json",
+              "sha256": "e3be85f561dabe7aa1c5b8a9a9dadf4ed09a57e9af00b4fb1c63c9ee433448cf"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-13-15/direction-analysis.json",
+              "sha256": "18c7b4faaaaf27f916bc6b2e48fc472ae8b685631f6f5c589c463158dab1397a"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-13-15/research-facts.json",
+              "sha256": "a8919cedf635a182122e679b44c90694e01818de462b0411ae431fcacf97c19e"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-13-15/evidence-index.json",
+              "sha256": "ef88d69205bb4466eb09db7e420f9ca7bb2f843edc6807b2646a284c9f37b463"
+            }
+          ],
+          "summary": "完整13–15輪及所有祖先進度獨立審核：REPLAN。13離線重綁與14全8需求/56列固定上游核准有據；本audit真三方closed PASS/preflight及全167-source/13-lineage吻合，4237舊保護檔除Main正常推進Task外均未變，三snapshot各239檔吻合，原v2 live保持預期拒絕。15唯一首次selection HTTP200完整raw/30物件/8 assignments/5排除/2 prepared及全部自由文字已審核，除policy形狀未定之外符合必要scope/店商品grain/庫存母體/stock sum/日期metadata/同task月份online兩sum/先aggregate再left；raw typed完全由模型填，不從文字補答。唯一machine FAIL是checker硬比第一missing-policy literal，但prompt明允許模型所選EMPTY_POLICY且原guard ready。獨立記憶體對照連語意同樣保母體/缺值/不補零的NULL_POLICY也被誤拒，確證Oracle literal不能當補零判據；顯式補零仍被原guard拒絕。EMPTY另有子集合形狀字義，本raw one_to_one left無nest，尚不能直接當flat scalar missing等價，亦不能因此指控補零或翻原FAIL。下一fresh研究先0POST釐清policy/shape的必要業務不變量及prompt/guard/checker一致性，提出可區分flat缺值、nested空集合、補零及丟母體的最小正反例與新版本計畫；不預選修法、不偷改舊Oracle或刪guard。目前無需使用者介入。獨立同版/frozen replay忠實重現FAIL；保留一次錯runtime重播啟動及改用原.venv成功紀錄，無POST。原父自然9POST、coverage3樣本及所有祖先整合/fresh final驗收未過，歷史38×2 Gate不變未過，root不完成。全局22 local/0retry/0cloud，本audit0POST/SQL/DB，未改source/tests/fixtures/Task/control、不commit/push。",
+          "reviewer": "/root/loop_audit_13_15",
+          "at": "2026-10-21T22:40:18.382664+00:00"
+        },
+        {
+          "verdict": "CONTINUE",
+          "reviewed_rounds": [
+            16,
+            17,
+            18
+          ],
+          "evidence": [
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-16-18/independent-checks.json",
+              "sha256": "81361a9b2ec7b606e869a16ec164bc0bb68be0ee1cc005c6bc9259b257f404a5"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-16-18/verification.log",
+              "sha256": "095fe718c5b980edee2e16ce71e91240c314ab4f2a021b54d5295fe15c08d3ba"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-16-18/policy-controls.json",
+              "sha256": "c9a2d9561cec053e99ddbe493e52e5784e437a69ff2e7788692419a7b38bb4ab"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-16-18/policy-controls.log",
+              "sha256": "8d29a575e57883f10cc39d957fe932f1135192d13fa8f74bfa72633f33fe33d4"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-16-18/policy-controls-corrected.log",
+              "sha256": "ec32b67e3168fd9515c250867ee2e3fad70a7eda4636b2c7235df5e4484aaa13"
+            }
+          ],
+          "summary": "完整16–18輪及祖先進度獨立審核：CONTINUE。第16輪確實分開修正第一literal誤拒合法NULL與EMPTY缺真nest兩個問題；新predicate只替換精確舊literal finding，其餘typed/來源/scope/grain/母體/首錯守門完整保留。唯一輸入變更為通用政策形狀system suffix，無來源或typed答案洩漏。第17輪真fresh distinct作者/審者及原fixture三方均closed PASS、完整bindings符合；已PASS的第14輪8需求56列與三coverage內容逐bytes保留，未重開。第18輪唯一首次受控selection原raw、30物件required、8assignment/5exclusion、全部raw及normalized理由文字與兩prepared已獨立核對，符合inventory店商品anchor/stock sum/盤點日期metadata、sales同task整月online雙sum、先店商品aggregate後LEFT一對一雙鍵、保全部庫存且缺值不補零。新raw為flat第一政策且無nest，無修答或defaults補typed。獨立同版重播18 PASS、15仍FAIL，13記憶體正反控制通過；5203舊保護檔/668作者證據/284自然證據/47本段輪次證據hash保持，舊rebound bindings相等。允許依原樹先selection parent自身0POST整合，再原coverage3首次POST與新自然9POST、全部祖先各自整合及fresh final。只selection上游注入診斷成功，原FAIL與歷史38×2 Gate未過不變，root尚未通過。本audit 0POST/SQL/DB。",
+          "reviewer": "/root/loop_audit_16_18",
+          "at": "2026-10-21T23:56:54.302883+00:00"
+        },
+        {
+          "verdict": "CONTINUE",
+          "reviewed_rounds": [
+            19,
+            20,
+            21
+          ],
+          "evidence": [
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-19-21/hash-checks.json",
+              "sha256": "77282ccd79a185eeb285bc4e619dfdfaf2c7e012e01b053f2864874ed42d7690"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-19-21/semantic-input-checks.json",
+              "sha256": "edb76b62da17241985b3278207969ee450f1ba58eaa2251264843992114a1c51"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-19-21/independent-controls.json",
+              "sha256": "aef08a8c00e7ef75f532af8f0749aff465275835477df28f75f826548d2f8d80"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-19-21/ancestor-checks.json",
+              "sha256": "f4fde4f08e521024430a7afba993dc377fd19c5a617a7cc2c19a2cbf7ea41619"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-19-21/verification.log",
+              "sha256": "0f5b862c78a261d5378fa59aa940e4df1eff410a6683cc40b083aceb0f923222"
+            }
+          ],
+          "summary": "完整第19–21輪及祖先方向獨立審核：CONTINUE，只允下一fresh capability_projection_semantics零POST獨立delta審核。第19輪原selection parent自身0POST整合有完整原raw/typed/兩prepared與五方closed來源證據；第20輪三固定唯一首次自然POST仍FAIL/PASS/FAIL，主要漏有用部分店鍵及自身/依賴誤判，另03重列完整月份AND屬有限表示差異。第21輪無損cards與通用責任指示是可否證的新輸入假設，沒有預填status/own_gap/mappings、刪原自身母體或改schema；新matcher只另判本metric明示同View已完整supported scope群聯集，非conditions欄/其他findings保持。五案例與兩新增expected lineage完整，原8需求56列及舊FAIL/15FAIL/18PASS與歷史38×2 Gate未過保持；非coverage直接委派已PASS政策。112項controller證據、1435作者proof、6389舊非Task檔與完整freeze hash獨立吻合，9個獨立scope控制及真Task缺fresh reviewer/audit拒絕通過。已核不可變81focused與228直接回歸成功log，未重跑數百測試。新作者真closed PASS，本audit不等於fresh語意ACCEPT；該審者真closed PASS後才准原預固定五自然coverage，父coverage自身0POST整合、全新自然9POST、全部祖先自身驗收及fresh final均不得省略。根驗收仍PENDING；本audit 0POST/SQL/DB。",
+          "reviewer": "/root/loop_audit_19_21",
+          "at": "2026-10-22T01:28:19.282889+00:00"
+        }
+      ],
+      "last_review": 21,
+      "failure_streak": 2,
+      "audit_due": true,
+      "tickets": {
+        "65cdf0a99f4b4672b3086e20a97c1103": {
+          "id": "65cdf0a99f4b4672b3086e20a97c1103",
+          "role": "research",
+          "node": null,
+          "round": 0,
+          "platform_id": "/root/loop_research_0",
+          "closed": true,
+          "reserved_at": "2026-10-21T15:57:24.692198+00:00"
+        },
+        "cc0b275166ab43abbc9bc96c9eb303e4": {
+          "id": "cc0b275166ab43abbc9bc96c9eb303e4",
+          "role": "worker",
+          "node": "contract_and_managed_runner",
+          "round": 1,
+          "platform_id": "/root/loop_worker_contract",
+          "closed": true,
+          "reserved_at": "2026-10-21T16:01:52.700229+00:00"
+        },
+        "e229c1b487464971b1c8f7f1470dbcd6": {
+          "id": "e229c1b487464971b1c8f7f1470dbcd6",
+          "role": "worker",
+          "node": "natural_qwen_three_stage",
+          "round": 2,
+          "platform_id": "/root/loop_worker_natural_1",
+          "closed": true,
+          "reserved_at": "2026-10-21T16:11:00.877344+00:00"
+        },
+        "343083820be4478aa94373e4dc2e9b0b": {
+          "id": "343083820be4478aa94373e4dc2e9b0b",
+          "role": "research",
+          "node": null,
+          "round": 2,
+          "platform_id": "/root/loop_research_2",
+          "closed": true,
+          "reserved_at": "2026-10-21T16:59:16.044495+00:00"
+        },
+        "1f43bbed2d1b4ddb9cf3bd06ef69811a": {
+          "id": "1f43bbed2d1b4ddb9cf3bd06ef69811a",
+          "role": "worker",
+          "node": "coverage_slots_contract",
+          "round": 3,
+          "platform_id": "/root/loop_worker_slots",
+          "closed": true,
+          "reserved_at": "2026-10-21T17:04:28.052916+00:00"
+        },
+        "b4f64cfcb8da49dc8946e63413fa3147": {
+          "id": "b4f64cfcb8da49dc8946e63413fa3147",
+          "role": "auditor",
+          "node": null,
+          "round": 3,
+          "platform_id": "/root/loop_audit_1_3",
+          "closed": true,
+          "reserved_at": "2026-10-21T17:12:52.364608+00:00"
+        },
+        "35d0dc38e8c64f1d8f60df54e2862009": {
+          "id": "35d0dc38e8c64f1d8f60df54e2862009",
+          "role": "worker",
+          "node": "natural_slots_three_stage",
+          "round": 4,
+          "platform_id": "/root/loop_worker_natural_2",
+          "closed": true,
+          "reserved_at": "2026-10-21T17:16:00.872537+00:00"
+        },
+        "caed3d1a0db849f1aea96f5efaaafc3d": {
+          "id": "caed3d1a0db849f1aea96f5efaaafc3d",
+          "role": "research",
+          "node": null,
+          "round": 4,
+          "platform_id": "/root/loop_research_4",
+          "closed": true,
+          "reserved_at": "2026-10-21T18:31:51.570484+00:00"
+        },
+        "11bcb8bdf3ab49c08a3c3aecb486e61d": {
+          "id": "11bcb8bdf3ab49c08a3c3aecb486e61d",
+          "role": "worker",
+          "node": "evidence_bound_managed_contract",
+          "round": 5,
+          "platform_id": "/root/loop_worker_bound",
+          "closed": true,
+          "reserved_at": "2026-10-21T18:38:41.038466+00:00"
+        },
+        "378cab1f79c6485ab7c4df5b18a7e598": {
+          "id": "378cab1f79c6485ab7c4df5b18a7e598",
+          "role": "worker",
+          "node": "natural_evidence_bound_three_stage",
+          "round": 6,
+          "platform_id": "/root/loop_worker_natural_3",
+          "closed": true,
+          "reserved_at": "2026-10-21T18:53:10.466278+00:00"
+        },
+        "7e041375a95a4a819d060b84b3779905": {
+          "id": "7e041375a95a4a819d060b84b3779905",
+          "role": "auditor",
+          "node": null,
+          "round": 6,
+          "platform_id": "/root/loop_audit_4_6",
+          "closed": true,
+          "reserved_at": "2026-10-21T19:19:23.657589+00:00"
+        },
+        "d30ef2b8093f4facb86da5acd9e98059": {
+          "id": "d30ef2b8093f4facb86da5acd9e98059",
+          "role": "research",
+          "node": null,
+          "round": 6,
+          "platform_id": "/root/loop_research_6",
+          "closed": true,
+          "reserved_at": "2026-10-21T19:24:48.196379+00:00"
+        },
+        "43ff10eb2de14d6298fc1e80733386e9": {
+          "id": "43ff10eb2de14d6298fc1e80733386e9",
+          "role": "worker",
+          "node": "own_responsibility_managed_contract",
+          "round": 7,
+          "platform_id": "/root/loop_worker_own",
+          "closed": true,
+          "reserved_at": "2026-10-21T19:32:40.556491+00:00"
+        },
+        "efb4eb78622b40fe8110e2aac2197280": {
+          "id": "efb4eb78622b40fe8110e2aac2197280",
+          "role": "worker",
+          "node": "natural_own_responsibility_three_stage",
+          "round": 8,
+          "platform_id": "/root/loop_worker_natural_4",
+          "closed": true,
+          "reserved_at": "2026-10-21T19:44:14.695178+00:00"
+        },
+        "b2650013e22947db8ef7dda5e3f80dd7": {
+          "id": "b2650013e22947db8ef7dda5e3f80dd7",
+          "role": "research",
+          "node": null,
+          "round": 8,
+          "platform_id": "/root/loop_research_8",
+          "closed": true,
+          "reserved_at": "2026-10-21T20:09:26.396207+00:00"
+        },
+        "67bea200744549c3881cbe2767dea6a6": {
+          "id": "67bea200744549c3881cbe2767dea6a6",
+          "role": "worker",
+          "node": "kind_mapping_managed_contract",
+          "round": 9,
+          "platform_id": "/root/loop_worker_kind",
+          "closed": true,
+          "reserved_at": "2026-10-21T20:15:38.729583+00:00"
+        },
+        "1389e7c3acfd40afa0b6aaba3cc2532c": {
+          "id": "1389e7c3acfd40afa0b6aaba3cc2532c",
+          "role": "auditor",
+          "node": null,
+          "round": 9,
+          "platform_id": "/root/loop_audit_7_9",
+          "closed": true,
+          "reserved_at": "2026-10-21T20:26:29.484757+00:00"
+        },
+        "8691344a91fe4a049135ef53f652526d": {
+          "id": "8691344a91fe4a049135ef53f652526d",
+          "role": "research",
+          "node": null,
+          "round": 9,
+          "platform_id": "/root/loop_research_9",
+          "closed": true,
+          "reserved_at": "2026-10-21T20:30:54.602233+00:00"
+        },
+        "7892d49c20a748068a073870a4c684f9": {
+          "id": "7892d49c20a748068a073870a4c684f9",
+          "role": "worker",
+          "node": "kind_diagnostic_fixture_harness",
+          "round": 10,
+          "platform_id": "/root/loop_worker_diagnostic_harness",
+          "closed": true,
+          "reserved_at": "2026-10-21T20:39:19.018387+00:00"
+        },
+        "795af67f6fef4bc198642838b818d584": {
+          "id": "795af67f6fef4bc198642838b818d584",
+          "role": "worker",
+          "node": "kind_diagnostic_fixture_semantics",
+          "round": 11,
+          "platform_id": "/root/loop_worker_diagnostic_semantics",
+          "closed": true,
+          "reserved_at": "2026-10-21T20:56:22.217920+00:00"
+        },
+        "9ea07a8befa742fe9bd1fadcd71b58bc": {
+          "id": "9ea07a8befa742fe9bd1fadcd71b58bc",
+          "role": "research",
+          "node": null,
+          "round": 11,
+          "platform_id": "/root/loop_research_11",
+          "closed": true,
+          "reserved_at": "2026-10-21T21:01:32.768764+00:00"
+        },
+        "4810e837bb3e44d5a05d9392d9140e84": {
+          "id": "4810e837bb3e44d5a05d9392d9140e84",
+          "role": "worker",
+          "node": "kind_diagnostic_fixture_v2_correction",
+          "round": 12,
+          "platform_id": "/root/loop_worker_fixture_v2",
+          "closed": true,
+          "reserved_at": "2026-10-21T21:09:02.160531+00:00"
+        },
+        "5dba3c040bf549e9b60ac427131e01e6": {
+          "id": "5dba3c040bf549e9b60ac427131e01e6",
+          "role": "auditor",
+          "node": null,
+          "round": 12,
+          "platform_id": "/root/loop_audit_10_12",
+          "closed": true,
+          "reserved_at": "2026-10-21T21:19:20.587382+00:00"
+        },
+        "fa6dccd9502a42568be302ec4a5fc458": {
+          "id": "fa6dccd9502a42568be302ec4a5fc458",
+          "role": "research",
+          "node": null,
+          "round": 12,
+          "platform_id": "/root/loop_research_12",
+          "closed": true,
+          "reserved_at": "2026-10-21T21:27:16.457343+00:00"
+        },
+        "098d0ce2e31f4254905064d4fd34c97b": {
+          "id": "098d0ce2e31f4254905064d4fd34c97b",
+          "role": "worker",
+          "node": "kind_diagnostic_evidence_rebinding",
+          "round": 13,
+          "platform_id": "/root/loop_worker_rebinding",
+          "closed": true,
+          "reserved_at": "2026-10-21T21:34:17.749163+00:00"
+        },
+        "d6de6a4fd21f4e7e862b06ceb27b86f7": {
+          "id": "d6de6a4fd21f4e7e862b06ceb27b86f7",
+          "role": "worker",
+          "node": "kind_diagnostic_fixture_semantics",
+          "round": 14,
+          "platform_id": "/root/loop_worker_semantics_rebound",
+          "closed": true,
+          "reserved_at": "2026-10-21T21:48:28.940018+00:00"
+        },
+        "1333a1a753e349c399099b022d3ff0ca": {
+          "id": "1333a1a753e349c399099b022d3ff0ca",
+          "role": "worker",
+          "node": "natural_kind_selection_isolation",
+          "round": 15,
+          "platform_id": "/root/loop_worker_selection_isolation",
+          "closed": true,
+          "reserved_at": "2026-10-21T21:56:39.816472+00:00"
+        },
+        "53c4b924fde9402aa540b459bc6aa47a": {
+          "id": "53c4b924fde9402aa540b459bc6aa47a",
+          "role": "auditor",
+          "node": null,
+          "round": 15,
+          "platform_id": "/root/loop_audit_13_15",
+          "closed": true,
+          "reserved_at": "2026-10-21T22:34:45.525582+00:00"
+        },
+        "d51bf89a0fb6427d9d3c5409d56eab12": {
+          "id": "d51bf89a0fb6427d9d3c5409d56eab12",
+          "role": "research",
+          "node": null,
+          "round": 15,
+          "platform_id": "/root/loop_research_15",
+          "closed": true,
+          "reserved_at": "2026-10-21T22:40:18.534542+00:00"
+        },
+        "34175c2580224eddb7061898d2af61ef": {
+          "id": "34175c2580224eddb7061898d2af61ef",
+          "role": "worker",
+          "node": "kind_policy_shape_contract",
+          "round": 16,
+          "platform_id": "/root/loop_worker_policy_shape",
+          "closed": true,
+          "reserved_at": "2026-10-21T22:47:57.221515+00:00"
+        },
+        "ed5abbeeea324bea8ac64d526e38fb55": {
+          "id": "ed5abbeeea324bea8ac64d526e38fb55",
+          "role": "worker",
+          "node": "kind_policy_shape_semantics",
+          "round": 17,
+          "platform_id": "/root/loop_worker_policy_semantics",
+          "closed": true,
+          "reserved_at": "2026-10-21T23:03:58.698411+00:00"
+        },
+        "3989747b0a0f45ffa8b33ca5027469c7": {
+          "id": "3989747b0a0f45ffa8b33ca5027469c7",
+          "role": "worker",
+          "node": "natural_kind_policy_shape_selection",
+          "round": 18,
+          "platform_id": "/root/loop_worker_policy_natural",
+          "closed": true,
+          "reserved_at": "2026-10-21T23:10:34.346790+00:00"
+        },
+        "6e0689f64d854bbe879f5179eb32d7d6": {
+          "id": "6e0689f64d854bbe879f5179eb32d7d6",
+          "role": "auditor",
+          "node": null,
+          "round": 18,
+          "platform_id": "/root/loop_audit_16_18",
+          "closed": true,
+          "reserved_at": "2026-10-21T23:51:45.105308+00:00"
+        },
+        "315d9203195d4080b655f6d8afe659dd": {
+          "id": "315d9203195d4080b655f6d8afe659dd",
+          "role": "worker",
+          "node": "natural_kind_selection_isolation",
+          "round": 19,
+          "platform_id": "/root/loop_worker_selection_parent",
+          "closed": true,
+          "reserved_at": "2026-10-21T23:56:54.629955+00:00"
+        },
+        "2f5da4941f9c46ed902d310981e37f7d": {
+          "id": "2f5da4941f9c46ed902d310981e37f7d",
+          "role": "worker",
+          "node": "natural_kind_coverage_isolation",
+          "round": 20,
+          "platform_id": "/root/loop_worker_coverage_isolation",
+          "closed": true,
+          "reserved_at": "2026-10-22T00:06:22.996655+00:00"
+        },
+        "27f5146885b04962accfbf8a58df97fd": {
+          "id": "27f5146885b04962accfbf8a58df97fd",
+          "role": "research",
+          "node": null,
+          "round": 20,
+          "platform_id": "/root/loop_research_20",
+          "closed": true,
+          "reserved_at": "2026-10-22T00:50:28.132331+00:00"
+        },
+        "c3b66ba5cf4c4d549e846203bb29b5e7": {
+          "id": "c3b66ba5cf4c4d549e846203bb29b5e7",
+          "role": "worker",
+          "node": "capability_projection_contract",
+          "round": 21,
+          "platform_id": "/root/loop_worker_capability_contract",
+          "closed": true,
+          "reserved_at": "2026-10-22T00:59:36.587979+00:00"
+        },
+        "675280568cb542ddbb654ae489bf9304": {
+          "id": "675280568cb542ddbb654ae489bf9304",
+          "role": "auditor",
+          "node": null,
+          "round": 21,
+          "platform_id": "/root/loop_audit_19_21",
+          "closed": true,
+          "reserved_at": "2026-10-22T01:20:27.961148+00:00"
+        },
+        "1c6e2a219fc049658752332c271cc48d": {
+          "id": "1c6e2a219fc049658752332c271cc48d",
+          "role": "worker",
+          "node": "capability_projection_semantics",
+          "round": 22,
+          "platform_id": "/root/loop_worker_capability_semantics",
+          "closed": true,
+          "reserved_at": "2026-10-22T01:28:19.623688+00:00"
+        },
+        "afed9ab55d0f44db8d04242d0f9c99e7": {
+          "id": "afed9ab55d0f44db8d04242d0f9c99e7",
+          "role": "worker",
+          "node": "natural_capability_projection_coverage",
+          "round": 23,
+          "platform_id": "/root/loop_worker_capability_natural",
+          "closed": true,
+          "reserved_at": "2026-10-22T01:38:51.934608+00:00"
+        },
+        "8a59062f68c646139853d64a40f68171": {
+          "id": "8a59062f68c646139853d64a40f68171",
+          "role": "research",
+          "node": null,
+          "round": 23,
+          "platform_id": "/root/loop_research_23",
+          "closed": true,
+          "reserved_at": "2026-10-22T02:55:02.899393+00:00"
+        },
+        "8ef15624ec38441da20ff256197a6af6": {
+          "id": "8ef15624ec38441da20ff256197a6af6",
+          "role": "worker",
+          "node": "text_leaf_evidence_contract",
+          "round": 24,
+          "platform_id": "/root/loop_worker_text_leaf_contract",
+          "closed": true,
+          "reserved_at": "2026-10-22T03:13:31.197642+00:00"
+        },
+        "52e22eb4e62b4142995079d89efb29c2": {
+          "id": "52e22eb4e62b4142995079d89efb29c2",
+          "role": "auditor",
+          "node": null,
+          "round": 24,
+          "platform_id": "/root/loop_audit_22_24",
+          "closed": false,
+          "reserved_at": "2026-10-22T03:51:17.239289+00:00"
+        }
+      },
+      "requests": {
+        "436132c5fc81426ba2d2988fbc336844": {
+          "id": "436132c5fc81426ba2d2988fbc336844",
+          "ticket_id": "e229c1b487464971b1c8f7f1470dbcd6",
+          "provider": "local",
+          "case_key": "diagnostic-request-1cf6e584921c:managed-indexed-path-three-stage-1:recall",
+          "request_sha": "3184811ed70d27994635d212472cc72edca35e33db21a4d484e1bbc3dd3a5c36",
+          "retry_number": 0,
+          "retry_of": null,
+          "status": "ok",
+          "round": 2,
+          "reserved_at": "2026-10-21T16:11:56.184950+00:00",
+          "finished_at": "2026-10-21T16:20:42.561356+00:00",
+          "details": {
+            "http_status": 200,
+            "response_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/436132c5fc81426ba2d2988fbc336844.response.txt",
+            "response_sha256": "5cca299ea32c9061fa20e882572aa4f7ddbd3a56105a0f35d152a9bb93f2dd17"
+          }
+        },
+        "cd42974eb8894d0283b362ab938b8bbf": {
+          "id": "cd42974eb8894d0283b362ab938b8bbf",
+          "ticket_id": "e229c1b487464971b1c8f7f1470dbcd6",
+          "provider": "local",
+          "case_key": "diagnostic-request-1cf6e584921c:managed-indexed-path-three-stage-1:map-01",
+          "request_sha": "c16c4738ec9c02201be03fa9f34846599ffb863ef9441db25bf481f1b8cb1973",
+          "retry_number": 0,
+          "retry_of": null,
+          "status": "ok",
+          "round": 2,
+          "reserved_at": "2026-10-21T16:20:42.801537+00:00",
+          "finished_at": "2026-10-21T16:25:46.377906+00:00",
+          "details": {
+            "http_status": 200,
+            "response_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/cd42974eb8894d0283b362ab938b8bbf.response.txt",
+            "response_sha256": "8b19e1902cef9df6c446820446249f137465c319e5cab04f9f9614d189defcc0"
+          }
+        },
+        "026ee1b04a924d59b1cb8c5eb79e8b5a": {
+          "id": "026ee1b04a924d59b1cb8c5eb79e8b5a",
+          "ticket_id": "e229c1b487464971b1c8f7f1470dbcd6",
+          "provider": "local",
+          "case_key": "diagnostic-request-1cf6e584921c:managed-indexed-path-three-stage-1:map-02",
+          "request_sha": "41c1208c45aac4daa1c49b6b8e34698a3507ddc41b76847e366ef9cf0fba06ce",
+          "retry_number": 0,
+          "retry_of": null,
+          "status": "ok",
+          "round": 2,
+          "reserved_at": "2026-10-21T16:25:46.588199+00:00",
+          "finished_at": "2026-10-21T16:35:33.227814+00:00",
+          "details": {
+            "http_status": 200,
+            "response_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/026ee1b04a924d59b1cb8c5eb79e8b5a.response.txt",
+            "response_sha256": "e1028971cc4a1a9c3d01700050ebb5a9c4325c10c0a99e6854a6089e863bf3a0"
+          }
+        },
+        "6a9eb995d6ef4c708e3b30bc8bf5e55e": {
+          "id": "6a9eb995d6ef4c708e3b30bc8bf5e55e",
+          "ticket_id": "e229c1b487464971b1c8f7f1470dbcd6",
+          "provider": "local",
+          "case_key": "diagnostic-request-1cf6e584921c:managed-indexed-path-three-stage-1:map-03",
+          "request_sha": "725f5903516d2b48773fe13ce3d48d32a6c405f2ccaf3d7c70532bc022961435",
+          "retry_number": 0,
+          "retry_of": null,
+          "status": "ok",
+          "round": 2,
+          "reserved_at": "2026-10-21T16:35:33.440363+00:00",
+          "finished_at": "2026-10-21T16:45:42.352261+00:00",
+          "details": {
+            "http_status": 200,
+            "response_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/6a9eb995d6ef4c708e3b30bc8bf5e55e.response.txt",
+            "response_sha256": "02fc088de753bc47d601f2edc4e0c52971371dffde3dff2d8edb5c83bb48e8ae"
+          }
+        },
+        "2c03ff55d59745849b3e0f9524942571": {
+          "id": "2c03ff55d59745849b3e0f9524942571",
+          "ticket_id": "e229c1b487464971b1c8f7f1470dbcd6",
+          "provider": "local",
+          "case_key": "diagnostic-request-1cf6e584921c:managed-indexed-path-three-stage-1:map-04",
+          "request_sha": "51d60bdc20d350a81bb2913e8bd16805d4be3750ef663fef3c436725ec0f24dc",
+          "retry_number": 0,
+          "retry_of": null,
+          "status": "ok",
+          "round": 2,
+          "reserved_at": "2026-10-21T16:45:42.567524+00:00",
+          "finished_at": "2026-10-21T16:52:15.957081+00:00",
+          "details": {
+            "http_status": 200,
+            "response_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/2c03ff55d59745849b3e0f9524942571.response.txt",
+            "response_sha256": "8a5bc955ef497d533a94adb83050b9ad56c173b3aa95ec0a37122483c6d8fe44"
+          }
+        },
+        "7a725bd28f414097ba31bd4c4cd0be0c": {
+          "id": "7a725bd28f414097ba31bd4c4cd0be0c",
+          "ticket_id": "e229c1b487464971b1c8f7f1470dbcd6",
+          "provider": "local",
+          "case_key": "diagnostic-request-1cf6e584921c:managed-indexed-path-three-stage-1:map-05",
+          "request_sha": "29e580bd10a558f71e7f75a36b81fcdf7967e0dc90c420ccc198b0c737d1a719",
+          "retry_number": 0,
+          "retry_of": null,
+          "status": "ok",
+          "round": 2,
+          "reserved_at": "2026-10-21T16:52:16.167794+00:00",
+          "finished_at": "2026-10-21T16:57:41.079271+00:00",
+          "details": {
+            "http_status": 200,
+            "response_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/7a725bd28f414097ba31bd4c4cd0be0c.response.txt",
+            "response_sha256": "e59e537129dbd20a8265e986ed573991fb8fb2262f347f758c83ba5d9404c4dd"
+          }
+        },
+        "df5631459c074270a9a1ec82825f1c17": {
+          "id": "df5631459c074270a9a1ec82825f1c17",
+          "ticket_id": "35d0dc38e8c64f1d8f60df54e2862009",
+          "provider": "local",
+          "case_key": "diagnostic-request-1cf6e584921c:managed-indexed-slots-three-stage-2:recall",
+          "request_sha": "3184811ed70d27994635d212472cc72edca35e33db21a4d484e1bbc3dd3a5c36",
+          "retry_number": 0,
+          "retry_of": null,
+          "status": "ok",
+          "round": 4,
+          "reserved_at": "2026-10-21T17:17:22.251905+00:00",
+          "finished_at": "2026-10-21T17:25:46.054357+00:00",
+          "details": {
+            "http_status": 200,
+            "response_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/df5631459c074270a9a1ec82825f1c17.response.txt",
+            "response_sha256": "fda9fb5f96e135920282065af190372e7fe48da56f219ec29508e54d30ac609b"
+          }
+        },
+        "a7d3b31b5a30475ab9e035cd9d16e28e": {
+          "id": "a7d3b31b5a30475ab9e035cd9d16e28e",
+          "ticket_id": "35d0dc38e8c64f1d8f60df54e2862009",
+          "provider": "local",
+          "case_key": "diagnostic-request-1cf6e584921c:managed-indexed-slots-three-stage-2:map-01",
+          "request_sha": "c9ba3e6421e0c6f00f732778cb7ba8026e41d2d4311ecd41fdc64e11827947b0",
+          "retry_number": 0,
+          "retry_of": null,
+          "status": "ok",
+          "round": 4,
+          "reserved_at": "2026-10-21T17:25:46.308676+00:00",
+          "finished_at": "2026-10-21T17:31:32.021070+00:00",
+          "details": {
+            "http_status": 200,
+            "response_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/a7d3b31b5a30475ab9e035cd9d16e28e.response.txt",
+            "response_sha256": "f1f90d34f72a69a54bcd38d8e23233cf474286fe6ac9dfa983cc3343bbc4bd15"
+          }
+        },
+        "b90af932503c41698e38cdca7491cb26": {
+          "id": "b90af932503c41698e38cdca7491cb26",
+          "ticket_id": "35d0dc38e8c64f1d8f60df54e2862009",
+          "provider": "local",
+          "case_key": "diagnostic-request-1cf6e584921c:managed-indexed-slots-three-stage-2:map-02",
+          "request_sha": "fdfa4c26e975a7a2a23241571b29a1b9a29c63b403fe6062511ad59caab747b1",
+          "retry_number": 0,
+          "retry_of": null,
+          "status": "ok",
+          "round": 4,
+          "reserved_at": "2026-10-21T17:31:32.257893+00:00",
+          "finished_at": "2026-10-21T17:39:20.655414+00:00",
+          "details": {
+            "http_status": 200,
+            "response_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/b90af932503c41698e38cdca7491cb26.response.txt",
+            "response_sha256": "04ad82e1cb63d1787d5129bc5d4acee6fdb601b421f0bb9755e1d2f6076938c9"
+          }
+        },
+        "b12b822d99fb44f3b7acdaca225916b1": {
+          "id": "b12b822d99fb44f3b7acdaca225916b1",
+          "ticket_id": "35d0dc38e8c64f1d8f60df54e2862009",
+          "provider": "local",
+          "case_key": "diagnostic-request-1cf6e584921c:managed-indexed-slots-three-stage-2:map-03",
+          "request_sha": "c3e08801e1e6174d9f214b0539d4203d45ec8de8270a96eb3963f1de847b8e67",
+          "retry_number": 0,
+          "retry_of": null,
+          "status": "ok",
+          "round": 4,
+          "reserved_at": "2026-10-21T17:39:20.877156+00:00",
+          "finished_at": "2026-10-21T17:46:18.809484+00:00",
+          "details": {
+            "http_status": 200,
+            "response_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/b12b822d99fb44f3b7acdaca225916b1.response.txt",
+            "response_sha256": "5ebc6ea2cfb48e170bcc70e3b47a6e45c679be4ed5f83a62058c534286307116"
+          }
+        },
+        "bed783eebcab4f5ca557d1b11fb795ff": {
+          "id": "bed783eebcab4f5ca557d1b11fb795ff",
+          "ticket_id": "35d0dc38e8c64f1d8f60df54e2862009",
+          "provider": "local",
+          "case_key": "diagnostic-request-1cf6e584921c:managed-indexed-slots-three-stage-2:map-04",
+          "request_sha": "60bf42e288b15de32e5a235f0da681e03b2156e2bc89db2b8e1a828b089ae85c",
+          "retry_number": 0,
+          "retry_of": null,
+          "status": "ok",
+          "round": 4,
+          "reserved_at": "2026-10-21T17:46:19.028206+00:00",
+          "finished_at": "2026-10-21T17:52:31.284172+00:00",
+          "details": {
+            "http_status": 200,
+            "response_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/bed783eebcab4f5ca557d1b11fb795ff.response.txt",
+            "response_sha256": "072e91e80743cb446a9ebf5024bb14404281581f166bbc36886aeced5701b452"
+          }
+        },
+        "536b3f8ea3584ca6989db87f47532e1e": {
+          "id": "536b3f8ea3584ca6989db87f47532e1e",
+          "ticket_id": "35d0dc38e8c64f1d8f60df54e2862009",
+          "provider": "local",
+          "case_key": "diagnostic-request-1cf6e584921c:managed-indexed-slots-three-stage-2:map-05",
+          "request_sha": "0bbe030c4c1afc9ae5222309c5dc2df1d33b73be304b51c84ff0eeb1f6e99d6b",
+          "retry_number": 0,
+          "retry_of": null,
+          "status": "ok",
+          "round": 4,
+          "reserved_at": "2026-10-21T17:52:31.502123+00:00",
+          "finished_at": "2026-10-21T18:03:15.729493+00:00",
+          "details": {
+            "http_status": 200,
+            "response_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/536b3f8ea3584ca6989db87f47532e1e.response.txt",
+            "response_sha256": "6544a96932db05b92da6ebb9aee5f0032c227d10f6602d56aebe99de88d2fa3c"
+          }
+        },
+        "da1ff903ad37462d860aac3644fa96d5": {
+          "id": "da1ff903ad37462d860aac3644fa96d5",
+          "ticket_id": "35d0dc38e8c64f1d8f60df54e2862009",
+          "provider": "local",
+          "case_key": "diagnostic-request-1cf6e584921c:managed-indexed-slots-three-stage-2:map-06",
+          "request_sha": "ca079579bd5c49fe193a32501b877fa9e6129ef714617f8143e45126dbef0de9",
+          "retry_number": 0,
+          "retry_of": null,
+          "status": "ok",
+          "round": 4,
+          "reserved_at": "2026-10-21T18:03:15.949158+00:00",
+          "finished_at": "2026-10-21T18:10:25.818240+00:00",
+          "details": {
+            "http_status": 200,
+            "response_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/da1ff903ad37462d860aac3644fa96d5.response.txt",
+            "response_sha256": "aee22c304bd80673d758e828fab656e46a7d5ae69e7055c9ff244b4376d3b9f8"
+          }
+        },
+        "7775675acbd54532aee0a7da3bd419fa": {
+          "id": "7775675acbd54532aee0a7da3bd419fa",
+          "ticket_id": "35d0dc38e8c64f1d8f60df54e2862009",
+          "provider": "local",
+          "case_key": "diagnostic-request-1cf6e584921c:managed-indexed-slots-three-stage-2:map-07",
+          "request_sha": "0e94a289abd181d920308ae6f2325184c394a107ae71b706d546a6deddb91ea4",
+          "retry_number": 0,
+          "retry_of": null,
+          "status": "ok",
+          "round": 4,
+          "reserved_at": "2026-10-21T18:10:26.036785+00:00",
+          "finished_at": "2026-10-21T18:13:36.898782+00:00",
+          "details": {
+            "http_status": 200,
+            "response_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/7775675acbd54532aee0a7da3bd419fa.response.txt",
+            "response_sha256": "b05f1e2ad4d0ed94ceb01e77bc1ba171e70cf1a1b0286f92a59675d239cb27fa"
+          }
+        },
+        "2cae2f57ac5143599a6e09ecce5f65af": {
+          "id": "2cae2f57ac5143599a6e09ecce5f65af",
+          "ticket_id": "35d0dc38e8c64f1d8f60df54e2862009",
+          "provider": "local",
+          "case_key": "diagnostic-request-1cf6e584921c:managed-indexed-slots-three-stage-2:selection",
+          "request_sha": "41b37b0d2b1a0581c52a8299897d708566e89e0da70baafe2e37f59fae1f3f7a",
+          "retry_number": 0,
+          "retry_of": null,
+          "status": "ok",
+          "round": 4,
+          "reserved_at": "2026-10-21T18:13:37.138077+00:00",
+          "finished_at": "2026-10-21T18:29:19.943545+00:00",
+          "details": {
+            "http_status": 200,
+            "response_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/2cae2f57ac5143599a6e09ecce5f65af.response.txt",
+            "response_sha256": "ab558065ee0eea6c2349e2f05c19a014a6a1c74f67454f18e4ee410bb12ee2ca"
+          }
+        },
+        "377ff38423074cddac989cc4e4f4895e": {
+          "id": "377ff38423074cddac989cc4e4f4895e",
+          "ticket_id": "378cab1f79c6485ab7c4df5b18a7e598",
+          "provider": "local",
+          "case_key": "diagnostic-request-1cf6e584921c:managed-evidence-bound-1:recall",
+          "request_sha": "c332b7ac449ce31ae7c9ccb971ae331b7c2a0e1e0f7215c4962fc122ce8e33f1",
+          "retry_number": 0,
+          "retry_of": null,
+          "status": "ok",
+          "round": 6,
+          "reserved_at": "2026-10-21T18:54:23.620983+00:00",
+          "finished_at": "2026-10-21T19:00:57.830128+00:00",
+          "details": {
+            "http_status": 200,
+            "response_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/377ff38423074cddac989cc4e4f4895e.response.txt",
+            "response_sha256": "d14dfafe4bb95911651bcb5f4203c6e4f371d8457aab645025101964b4e13cd0"
+          }
+        },
+        "aef43469408a47e9bbc3ffc30068bd32": {
+          "id": "aef43469408a47e9bbc3ffc30068bd32",
+          "ticket_id": "378cab1f79c6485ab7c4df5b18a7e598",
+          "provider": "local",
+          "case_key": "diagnostic-request-1cf6e584921c:managed-evidence-bound-1:map-01",
+          "request_sha": "6c7a939783e0f20b6e93ee8c46802f32a55a815e74af0b8f529f78986e5a92c9",
+          "retry_number": 0,
+          "retry_of": null,
+          "status": "ok",
+          "round": 6,
+          "reserved_at": "2026-10-21T19:00:58.065139+00:00",
+          "finished_at": "2026-10-21T19:05:12.074155+00:00",
+          "details": {
+            "http_status": 200,
+            "response_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/aef43469408a47e9bbc3ffc30068bd32.response.txt",
+            "response_sha256": "d64e1e7ab1d210b812c6ee8e876f63b97608e225e5bf8f3fa3d1d085c1a200df"
+          }
+        },
+        "418b473a92214f108bd17228c4de1786": {
+          "id": "418b473a92214f108bd17228c4de1786",
+          "ticket_id": "378cab1f79c6485ab7c4df5b18a7e598",
+          "provider": "local",
+          "case_key": "diagnostic-request-1cf6e584921c:managed-evidence-bound-1:map-02",
+          "request_sha": "8659e964bd9a899c12e0ac4eb8a7330036841970d83446598897f359b06028e3",
+          "retry_number": 0,
+          "retry_of": null,
+          "status": "ok",
+          "round": 6,
+          "reserved_at": "2026-10-21T19:05:12.307558+00:00",
+          "finished_at": "2026-10-21T19:16:05.914580+00:00",
+          "details": {
+            "http_status": 200,
+            "response_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/418b473a92214f108bd17228c4de1786.response.txt",
+            "response_sha256": "32b79e76a32f5a8979c7583108d034cbd419c2f07d92c6416f54dd5bbe120375"
+          }
+        },
+        "b11f0629e8224e9b9f6f99d3603169c8": {
+          "id": "b11f0629e8224e9b9f6f99d3603169c8",
+          "ticket_id": "efb4eb78622b40fe8110e2aac2197280",
+          "provider": "local",
+          "case_key": "diagnostic-request-1cf6e584921c:managed-own-responsibility-1:recall",
+          "request_sha": "6b67d996389b1ad5f62afcbda45f51480fe09c4744ce600f32c4d376860d67aa",
+          "retry_number": 0,
+          "retry_of": null,
+          "status": "ok",
+          "round": 8,
+          "reserved_at": "2026-10-21T19:45:16.282263+00:00",
+          "finished_at": "2026-10-21T19:58:42.494533+00:00",
+          "details": {
+            "http_status": 200,
+            "response_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/b11f0629e8224e9b9f6f99d3603169c8.response.txt",
+            "response_sha256": "29e75488fe84e02e4365321c11e3b37f872769e79b1c53623a54cea7aadd9c79"
+          }
+        },
+        "55272c8e63f84d9fa04f9c87a7c979bb": {
+          "id": "55272c8e63f84d9fa04f9c87a7c979bb",
+          "ticket_id": "efb4eb78622b40fe8110e2aac2197280",
+          "provider": "local",
+          "case_key": "diagnostic-request-1cf6e584921c:managed-own-responsibility-1:map-01",
+          "request_sha": "6728ed5ba19975074ebd9d2bb94c18e9dd2079a54ce9e1593ba3d661caa7d07f",
+          "retry_number": 0,
+          "retry_of": null,
+          "status": "ok",
+          "round": 8,
+          "reserved_at": "2026-10-21T19:58:42.729102+00:00",
+          "finished_at": "2026-10-21T20:01:24.347567+00:00",
+          "details": {
+            "http_status": 200,
+            "response_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/55272c8e63f84d9fa04f9c87a7c979bb.response.txt",
+            "response_sha256": "dd1f6a05d737230598d68555527fdc0d8710cb9ee636d895cf0cc35fc5dad5ce"
+          }
+        },
+        "67ce668444f348b1886ffa9dd9247db1": {
+          "id": "67ce668444f348b1886ffa9dd9247db1",
+          "ticket_id": "efb4eb78622b40fe8110e2aac2197280",
+          "provider": "local",
+          "case_key": "diagnostic-request-1cf6e584921c:managed-own-responsibility-1:map-02",
+          "request_sha": "07c8fffbfdad5c894f6a370108126a92719dbb6925754ab9bde345a19a603dde",
+          "retry_number": 0,
+          "retry_of": null,
+          "status": "ok",
+          "round": 8,
+          "reserved_at": "2026-10-21T20:01:24.583349+00:00",
+          "finished_at": "2026-10-21T20:07:34.201060+00:00",
+          "details": {
+            "http_status": 200,
+            "response_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/67ce668444f348b1886ffa9dd9247db1.response.txt",
+            "response_sha256": "6e4b991d03a5dc3681fe1d708f64ec70fb23c0460203f6e6731250d7d06ed1e9"
+          }
+        },
+        "028e83ec169e4780ae1bb11f226185cd": {
+          "id": "028e83ec169e4780ae1bb11f226185cd",
+          "ticket_id": "1333a1a753e349c399099b022d3ff0ca",
+          "provider": "local",
+          "case_key": "kind-isolation-v2-rebind-1:ISOLATION:SEL-ISO-v1-01:node",
+          "request_sha": "88375722f50907d5d7747abd145da654fb083dfdfe2d8225ad8132b6e40a67fb",
+          "retry_number": 0,
+          "retry_of": null,
+          "status": "ok",
+          "round": 15,
+          "reserved_at": "2026-10-21T21:58:03.573874+00:00",
+          "finished_at": "2026-10-21T22:30:45.466162+00:00",
+          "details": {
+            "http_status": 200,
+            "response_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/028e83ec169e4780ae1bb11f226185cd.response.txt",
+            "response_sha256": "451ae7485fe593ef358b12db9ebc324dd8ac2204378da8cf40e8e49573aed393"
+          }
+        },
+        "52128e22c3864f24a84bef58cb85c369": {
+          "id": "52128e22c3864f24a84bef58cb85c369",
+          "ticket_id": "3989747b0a0f45ffa8b33ca5027469c7",
+          "provider": "local",
+          "case_key": "kind-policy-shape-1:ISOLATION:SEL-ISO-v1-01:node",
+          "request_sha": "0557a32c19c3a52d0ca136394fb54c52b3da7da9042e93a955d5478f1f70ed5a",
+          "retry_number": 0,
+          "retry_of": null,
+          "status": "ok",
+          "round": 18,
+          "reserved_at": "2026-10-21T23:12:01.642051+00:00",
+          "finished_at": "2026-10-21T23:47:53.560280+00:00",
+          "details": {
+            "http_status": 200,
+            "response_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/52128e22c3864f24a84bef58cb85c369.response.txt",
+            "response_sha256": "7617b9526368d4bd7c365a99de025b2bcf53f9a6a25c98132cfd13902a392a4f"
+          }
+        },
+        "832021b283e84ab7889b546e3258c2ad": {
+          "id": "832021b283e84ab7889b546e3258c2ad",
+          "ticket_id": "2f5da4941f9c46ed902d310981e37f7d",
+          "provider": "local",
+          "case_key": "kind-isolation-v2-rebind-1:ISOLATION:COV-ISO-v1-01:node",
+          "request_sha": "fe3689e8a4a0e67fc800c7973140260269e88be98e21ab1b195389b79f2372e5",
+          "retry_number": 0,
+          "retry_of": null,
+          "status": "ok",
+          "round": 20,
+          "reserved_at": "2026-10-22T00:07:52.934646+00:00",
+          "finished_at": "2026-10-22T00:19:43.462734+00:00",
+          "details": {
+            "http_status": 200,
+            "response_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/832021b283e84ab7889b546e3258c2ad.response.txt",
+            "response_sha256": "4dd4df54302a397afb87134529310919f15ddbbc7169b744bc3e012c30434a25"
+          }
+        },
+        "8108409018d643cfb61f968dc9f469ee": {
+          "id": "8108409018d643cfb61f968dc9f469ee",
+          "ticket_id": "2f5da4941f9c46ed902d310981e37f7d",
+          "provider": "local",
+          "case_key": "kind-isolation-v2-rebind-1:ISOLATION:COV-ISO-v1-02:node",
+          "request_sha": "1ecb344a76ac06b25363f9bc0492eee574f9d93636a876dfd48c859ed5c16e74",
+          "retry_number": 0,
+          "retry_of": null,
+          "status": "ok",
+          "round": 20,
+          "reserved_at": "2026-10-22T00:19:48.369139+00:00",
+          "finished_at": "2026-10-22T00:23:09.047807+00:00",
+          "details": {
+            "http_status": 200,
+            "response_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/8108409018d643cfb61f968dc9f469ee.response.txt",
+            "response_sha256": "c923fafd081ca26c313f1a3c85c8e0a917ce61851ed0e27916e632f2bfe8671f"
+          }
+        },
+        "f4b1153ed3ab48eba9298c9db1fefe40": {
+          "id": "f4b1153ed3ab48eba9298c9db1fefe40",
+          "ticket_id": "2f5da4941f9c46ed902d310981e37f7d",
+          "provider": "local",
+          "case_key": "kind-isolation-v2-rebind-1:ISOLATION:COV-ISO-v1-03:node",
+          "request_sha": "c3dc9ae4a7be02903d6b38cc47d43a98950f3f7409c001664dbd3bfb7586a709",
+          "retry_number": 0,
+          "retry_of": null,
+          "status": "ok",
+          "round": 20,
+          "reserved_at": "2026-10-22T00:23:14.145871+00:00",
+          "finished_at": "2026-10-22T00:44:34.243950+00:00",
+          "details": {
+            "http_status": 200,
+            "response_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/f4b1153ed3ab48eba9298c9db1fefe40.response.txt",
+            "response_sha256": "259633fabd6eb98e6b80a5c3bd9132a312f2bba52f8b05b3993dde6133f66ff8"
+          }
+        },
+        "b2bca399f95d43b5a93e901ba5e237ce": {
+          "id": "b2bca399f95d43b5a93e901ba5e237ce",
+          "ticket_id": "afed9ab55d0f44db8d04242d0f9c99e7",
+          "provider": "local",
+          "case_key": "kind-capability-projection-1:ISOLATION:COV-ISO-v1-01:node",
+          "request_sha": "c238adb591fa9f18aa2b1f792ff1cda6cf4680ad68a6131a0c58f1943e039cfb",
+          "retry_number": 0,
+          "retry_of": null,
+          "status": "ok",
+          "round": 23,
+          "reserved_at": "2026-10-22T01:42:00.363250+00:00",
+          "finished_at": "2026-10-22T01:47:41.333526+00:00",
+          "details": {
+            "http_status": 200,
+            "response_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/b2bca399f95d43b5a93e901ba5e237ce.response.txt",
+            "response_sha256": "ffc8df337e934d4a29643967401ae8a0cd4681fec3e1d03b02b869ec666b8a2b"
+          }
+        },
+        "b5a046baca9c498fbd4502d607f9a98c": {
+          "id": "b5a046baca9c498fbd4502d607f9a98c",
+          "ticket_id": "afed9ab55d0f44db8d04242d0f9c99e7",
+          "provider": "local",
+          "case_key": "kind-capability-projection-1:ISOLATION:COV-ISO-v1-02:node",
+          "request_sha": "9f1e4c266fd30b2bfcba6ef8aa43988b37add1bd831ca58a421a41e0b19e2b48",
+          "retry_number": 0,
+          "retry_of": null,
+          "status": "ok",
+          "round": 23,
+          "reserved_at": "2026-10-22T01:48:17.040901+00:00",
+          "finished_at": "2026-10-22T01:52:22.766064+00:00",
+          "details": {
+            "http_status": 200,
+            "response_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/b5a046baca9c498fbd4502d607f9a98c.response.txt",
+            "response_sha256": "ec262e80d1d2ec745ebe4fb19c5cc03d119efd1507221636450b2dc3daebd99f"
+          }
+        },
+        "92d30768809a449ca1e21a0638e7827e": {
+          "id": "92d30768809a449ca1e21a0638e7827e",
+          "ticket_id": "afed9ab55d0f44db8d04242d0f9c99e7",
+          "provider": "local",
+          "case_key": "kind-capability-projection-1:ISOLATION:COV-ISO-v1-03:node",
+          "request_sha": "5687d786112604f45c85aa4ce089c0051ac45a6b11f2450b86aad0c79bed1d0d",
+          "retry_number": 0,
+          "retry_of": null,
+          "status": "ok",
+          "round": 23,
+          "reserved_at": "2026-10-22T01:52:58.638271+00:00",
+          "finished_at": "2026-10-22T02:08:14.369998+00:00",
+          "details": {
+            "http_status": 200,
+            "response_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/92d30768809a449ca1e21a0638e7827e.response.txt",
+            "response_sha256": "a11df15c322b38359fb19c8736696e7ec22758473b9d622d1db16b550999f190"
+          }
+        },
+        "6da4b8f97a904821bf8f2221c151e65a": {
+          "id": "6da4b8f97a904821bf8f2221c151e65a",
+          "ticket_id": "afed9ab55d0f44db8d04242d0f9c99e7",
+          "provider": "local",
+          "case_key": "kind-capability-projection-1:ISOLATION:COV-CAP-v1-04:node",
+          "request_sha": "fd0c1c5d81315b4e898ec60f7bd25bdd7e01f3053da6ded9f76849f4a3154912",
+          "retry_number": 0,
+          "retry_of": null,
+          "status": "ok",
+          "round": 23,
+          "reserved_at": "2026-10-22T02:08:50.110560+00:00",
+          "finished_at": "2026-10-22T02:22:22.015278+00:00",
+          "details": {
+            "http_status": 200,
+            "response_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/6da4b8f97a904821bf8f2221c151e65a.response.txt",
+            "response_sha256": "f150acacbe1f1caf2ff9ea7be1b3867fc1d108cb384f05fb25da02f2f2d2b305"
+          }
+        },
+        "3b787d488b6c46919e5577c430a614d1": {
+          "id": "3b787d488b6c46919e5577c430a614d1",
+          "ticket_id": "afed9ab55d0f44db8d04242d0f9c99e7",
+          "provider": "local",
+          "case_key": "kind-capability-projection-1:ISOLATION:COV-CAP-v1-05:node",
+          "request_sha": "f0c66dfc86392ffd0bf8db2d11eb04ad535ce2f68482e70c6ebd587907e615a9",
+          "retry_number": 0,
+          "retry_of": null,
+          "status": "ok",
+          "round": 23,
+          "reserved_at": "2026-10-22T02:22:57.859239+00:00",
+          "finished_at": "2026-10-22T02:49:20.377792+00:00",
+          "details": {
+            "http_status": 200,
+            "response_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/3b787d488b6c46919e5577c430a614d1.response.txt",
+            "response_sha256": "fa23700b32eb848f83b94071a9b5762c191728964a3f17f356f6bf826573b633"
+          }
+        }
+      },
+      "plan_evidence": [
+        {
+          "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-0/handoff.json",
+          "sha256": "f81228d974d0fe991b7720d4d9d78bdc8582f03530534e04394f3e62388dc7dc"
+        },
+        {
+          "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-0/diagnosis.json",
+          "sha256": "c65898bfceeb907a108b4f6e04be56470f40638b2d6923cd9486fb6f9dc8a464"
+        },
+        {
+          "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-2/handoff.json",
+          "sha256": "a8d11ba7b259c78444d16db507a6e596bc620328adb4a754a475339fd381ecb3"
+        },
+        {
+          "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-2/diagnosis.json",
+          "sha256": "591fdd8c298b3fd03b2cc71fb05599d5205643ee3d5255a3fefda7c05e791078"
+        },
+        {
+          "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-4/handoff.json",
+          "sha256": "37aed4be6ffc3b9fae5fd6d1608489a66fcd8b6942362a4e2dede876a53dabf2"
+        },
+        {
+          "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-4/diagnosis.json",
+          "sha256": "9d34ed87bc54ef840051b898c2d5a380e978404f37c0c7f17aec1be10aebd8b9"
+        },
+        {
+          "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-6/handoff.json",
+          "sha256": "d4d5c96664fb8d9d3c5194edd98a50bdafdb806d06813b796ec0da3690633df1"
+        },
+        {
+          "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-6/research-probe.log",
+          "sha256": "85995b2616ca32f20c9d76a91809e89998e27e636e4f09268772fc767a788c97"
+        },
+        {
+          "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-8/handoff.json",
+          "sha256": "23163e4d1095bb0b2e6d22bb026a4c7fa500e0cfb0e4180a21d53e37ecc72ee8"
+        },
+        {
+          "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-9/handoff.json",
+          "sha256": "0bcdba82dbc0c2b4fec1f991ef727c3d7636665272d050ac0181f58d7eba5cf6"
+        },
+        {
+          "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-9/diagnosis.json",
+          "sha256": "30d03beda322ed19fecb85732d9ee08993b207378bbfc1b56ea5456070d2329c"
+        },
+        {
+          "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-9/research-probe.log",
+          "sha256": "4d62c4005852020e6796168eac4e2b859d3e202073125ecd3f82090044fc99ad"
+        },
+        {
+          "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-11/handoff.json",
+          "sha256": "8068981b894e956a2537cfa78279b461a4c94fe85a15b8179541500ab29b6ac5"
+        },
+        {
+          "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-11/diagnosis.json",
+          "sha256": "1806782da66bf68c8f5367b647d182805814684637022bb81a66dc734d32d225"
+        },
+        {
+          "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-12/handoff.json",
+          "sha256": "1de9312ff859682554826b05ca931ce04e9904d81c432094825db26196cd478b"
+        },
+        {
+          "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-12/diagnosis.json",
+          "sha256": "6529601deba3916ecef880cf8faf7d0db7262ed41257ae7ea290da178bcdbf8b"
+        },
+        {
+          "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-12/read-only-probe.log",
+          "sha256": "1a6e4ddaa1b8514457e69d8632b6e0aee37bc526d947da39b541cefdc69f88fe"
+        },
+        {
+          "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-12/engine-reuse-probe.log",
+          "sha256": "c7d134e796d755b2685a3debc48d8e16abace05900f9be4c9b7a9deea137a97e"
+        },
+        {
+          "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-15/research-facts.json",
+          "sha256": "dc8912c8607e8fc5f41ecae2e4daaefb0f39f0062f6ac82d2c8bbc1b5a55a136"
+        },
+        {
+          "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-15/policy-shape-controls.json",
+          "sha256": "bda827162418eacccf54e186f3063ab3ed4de8d28d36f9138e97bb7c1e69762b"
+        },
+        {
+          "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-15/handoff.json",
+          "sha256": "1564b381d718bdac2413db3155061e6a9fb4b947ae7645ccc105e1e2bd6be573"
+        },
+        {
+          "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-15/evidence-index.json",
+          "sha256": "d5e1f72a23e59e38ea1a169725052064386de4d840e0953e6736fd7f959e1920"
+        },
+        {
+          "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-20/research.json",
+          "sha256": "510f95977944aa11f75e3d0888ccd5a119f398af48ae67a3d323cebd4fc65793"
+        },
+        {
+          "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-20/old-nodes-snapshot.json",
+          "sha256": "7ffe1b788a5fe3240ad1524700fe868fc2bff1a2b2cf5b6f431c15dd838dbb8e"
+        },
+        {
+          "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-20/verification.json",
+          "sha256": "950425198e472b592d32482c3504b91f46d48a3e04c3c26170bc7e05ddcd215e"
+        },
+        {
+          "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-20/handoff.json",
+          "sha256": "00adab58bd3a6f1450d3bf5416ec6eb83a1cb7162d0800f30116fc72b2c78865"
+        },
+        {
+          "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-23/source-index.json",
+          "sha256": "56acaf620e84a6b7c812f092c28dc58427f56ed15294642373e679ae10142a4a"
+        },
+        {
+          "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-23/old-nodes-snapshot.json",
+          "sha256": "22de3d0781a6438ce912597538b3f7b392045cf53e4d5df6af6a60442f2d5a9e"
+        },
+        {
+          "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-23/raw-and-leaf-probe.json",
+          "sha256": "a8e22b730407a1f27b8100652768fec442be9f1aab9dd1f4aae66b536836567e"
+        },
+        {
+          "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-23/advice-evaluation.json",
+          "sha256": "2cd5293fdf3ca90eda44e609b7b73af4e07d69d5955b4428fe8432a194061d26"
+        },
+        {
+          "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-23/research.json",
+          "sha256": "5e9587e2a21b075060065ac544af95d26d9c11f2ac1846c4cbaac8c2328b0126"
+        },
+        {
+          "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-23/verification.json",
+          "sha256": "5265a6f2a0ebd6aa624fdf8ad1d78adbfd5226cc465942b1d441d5d0dabff236"
+        },
+        {
+          "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-23/handoff.json",
+          "sha256": "eb1ed74426427d1738eb93125eb70de18cb9b11af4f5fe77a4913f530a9479b9"
+        }
+      ],
+      "used": {
+        "agent_dispatches": 43,
+        "cloud_calls": 0,
+        "local_calls": 31,
+        "model_retries": 0
+      },
+      "started_at": "2026-10-21T15:57:24.677383+00:00"
+    },
+    "edd_loop_user_pause": {
+      "requested_by": "user",
+      "requested_action": "本輪結束後暫停並統計",
+      "paused_at": "2026-10-22T03:39:03.470583+00:00",
+      "after_round": 24,
+      "question_id": "Q-001",
+      "statistics_path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-pause-24/statistics.json",
+      "statistics_sha256": "2520052afc0c5da447871d80753576041524c0bd42c8fe75ca8e1dd9a5ff1a5a",
+      "resume_condition": "使用者明確要求繼續；先記錄恢復指示並轉回PLANNING，保留原計數，先fresh audit22–24。",
+      "next_action_without_pause": {
+        "action": "audit",
+        "reviewed_rounds": [
+          22,
+          23,
+          24
+        ]
+      },
+      "resumed_for": "canonical30_before_after_evaluation_only",
+      "resumed_at": "2026-10-22T03:51:16.889478+00:00"
+    },
+    "canonical30_comparison_request": {
+      "source": "user",
+      "request": "修正前、後各跑同30題，各一次",
+      "cases_path": "projects/retail/evaluations/task_decomposition_cases.jsonl",
+      "cases_sha256": "352573d18fe640aff2e880a574dc9dc512419ab442b25ec4ef20e9781cb80369",
+      "case_count": 30,
+      "model": "qwen3.8:27b",
+      "arms": [
+        "可重現的loop修正前版本",
+        "目前修正後版本"
+      ],
+      "samples_per_case_per_arm": 1,
+      "retry_wrong_answer": false,
+      "scope": "僅必要準備、同題自然評測、獨立語意評分與比較報告；不自動改善或重抽，不執行SQL/DB，不用雲端。",
+      "pending": "先獨立審核22–24，再核前後版本重現性與完整30題評分，保留既有計數。"
+    }
+  },
+  "changes": {
+    "product_source": "新增獨立PlanningDecisionSummary／Explained及PlanningDecisionRecord／DecisionChain診斷型別；四個既有schema SHA256與產品v3預設流程不變。",
+    "evaluation_source": [
+      "evaluations/planning_mvp.py",
+      "evaluations/planning_mvp_runner.py",
+      "evaluations/planning_reasoning_probe.py",
+      "evaluations/decision_summary_comparison.py",
+      "evaluations/decision_chain_probe.py",
+      "evaluations/source_selection_followup.py",
+      "evaluations/coverage_priority_probe.py",
+      "evaluations/markdown_review_probe.py",
+      "evaluations/prompts/coverage_first_planner.md",
+      "evaluations/prompts/evidence_reviewer.md",
+      "evaluations/three_stage_view_selection.py",
+      "evaluations/three_stage_view_selection_runner.py",
+      "evaluations/prompts/three_stage/recall.md",
+      "evaluations/prompts/three_stage/coverage.md",
+      "evaluations/prompts/three_stage/selection.md",
+      "evaluations/indexed_requirement_recall.py",
+      "evaluations/prompts/three_stage/recall_indexed.md",
+      "evaluations/referenced_view_coverage.py",
+      "evaluations/coverage_reference_runner.py",
+      "evaluations/prompts/coverage_references.md"
+    ],
+    "tests": [
+      "tests/unit/test_planning_mvp.py",
+      "tests/unit/test_planning_reasoning_probe.py",
+      "tests/unit/test_decomposition_decision_summary.py",
+      "tests/unit/test_decomposition_decision_chain.py",
+      "tests/unit/test_evidence_review_probe.py",
+      "tests/unit/test_three_stage_view_selection.py",
+      "tests/unit/test_indexed_requirement_recall.py",
+      "tests/unit/test_referenced_view_coverage.py"
+    ],
+    "raw_ignore": "evidence-driven-dev/.gitignore",
+    "artifacts": [
+      "reports/execution-results.md",
+      "reports/mvp0-summary.json",
+      "reports/mvp0-sidecar.json",
+      "reports/mvp1-summary.json",
+      "reports/mvp1-artifact-verification.json",
+      "reports/relational-witnesses.json",
+      "agents/oracle-audit",
+      "agents/sealed-cases",
+      "reports/decision-summary-comparison.md",
+      "reports/decision-summary-comparison.json",
+      "reports/decision-chain-comparison.md",
+      "reports/decision-chain-comparison.json",
+      "reports/verify_decision_chain.py",
+      "reports/source-selection-reasons.md",
+      "reports/source-selection-reasons.json",
+      "reports/verify_source_reasons.py",
+      "reports/edd-model-decision-flow.md",
+      "reports/edd-model-decision-flow.json",
+      "reports/verify_edd_decision_flow.py",
+      "reports/coverage-priority-comparison.md",
+      "reports/coverage-priority-comparison.json",
+      "reports/verify_coverage_priority.py",
+      "reports/markdown-evidence-review.md",
+      "reports/markdown-evidence-review.json",
+      "reports/verify_markdown_review.py",
+      "reports/three-stage-view-selection-plan.md",
+      "reports/three-stage-view-selection-results.md",
+      "reports/three-stage-view-selection-results.json",
+      "reports/three-stage-independent-review.md",
+      "reports/snapshot-inventory-probe.md",
+      "reports/snapshot-inventory-probe.json",
+      "reports/run_snapshot_inventory_probe.py",
+      "reports/indexed-recall-results.md",
+      "reports/indexed-recall-results.json",
+      "reports/indexed-recall-repeat-results.md",
+      "reports/indexed-recall-repeat-results.json",
+      "reports/run_qwen_indexed_probe.py",
+      "reports/qwen-indexed-recall-results.md",
+      "reports/qwen-indexed-recall-results.json",
+      "reports/qwen-indexed-recall-repeat-results.md",
+      "reports/qwen-indexed-recall-repeat-results.json",
+      "reports/verify_qwen_indexed_repeat.py",
+      "reports/qwen-indexed-recall-third-results.md",
+      "reports/qwen-indexed-recall-third-results.json",
+      "reports/qwen-indexed-recall-fourth-results.md",
+      "reports/qwen-indexed-recall-fourth-results.json",
+      "reports/run_qwen_indexed_wait_probe.py",
+      "reports/qwen-indexed-recall-wait-results.md",
+      "reports/qwen-indexed-recall-wait-results.json",
+      "reports/run_qwen_indexed_uncapped_probe.py",
+      "reports/qwen-indexed-recall-uncapped-results.md",
+      "reports/qwen-indexed-recall-uncapped-results.json",
+      "reports/run_qwen_coverage_uncapped_probe.py",
+      "reports/verify_qwen_coverage_controls.py",
+      "reports/verify_qwen_coverage_findings.py",
+      "reports/qwen-stage-two-results.md",
+      "reports/qwen-stage-two-results.json"
+    ],
+    "diagnostic_models": [
+      "src/cpea/application/models/decomposition.py"
+    ],
+    "global_skills": [
+      "/home/willy/.codex/skills/edd/SKILL.md",
+      "/home/willy/.codex/skills/edd-investigate/SKILL.md",
+      "/home/willy/.codex/skills/edd-investigate/references/model-decision-comparison.md",
+      "/home/willy/.codex/skills/edd-verify/SKILL.md"
+    ],
+    "candidate_prompt": "src/cpea/workflows/task_decomposition/prompt.py：新增COVERAGE_FIRST_PROMPT，原v3常數與預設不變"
+  },
+  "verification": {
+    "artifact_result": "PASS_WITH_WARNINGS",
+    "model_result": "FAIL",
+    "mvp0_candidate_A": "FAIL：安全可救0，runtime只擋7/12；未採用",
+    "mvp1_candidate_B1": "FAIL：safe2/6，net0；未採用",
+    "tests": [
+      "evidence/EV-20261020T130232-537821de.json",
+      "evidence/EV-20261020T130208-4b2bd9a2.json",
+      "evidence/EV-20261021T015608-374f69fc.json",
+      "evidence/EV-20261021T033818-dd272774.json"
+    ],
+    "regression": [
+      "evidence/EV-20261020T130232-537821de.json",
+      "evidence/EV-20261021T015608-374f69fc.json",
+      "evidence/EV-20261021T033818-dd272774.json"
+    ],
+    "evidence": [
+      "reports/execution-results.md",
+      "agents/oracle-audit/mvp1-semantic-review.json",
+      "reports/three-stage-view-selection-results.md",
+      "evidence/EV-20261021T015637-436c6855.json",
+      "evidence/EV-20261021T015828-e8216b14.json",
+      "reports/snapshot-inventory-probe.md",
+      "evidence/EV-20261021T030934-e2fd34ef.json",
+      "evidence/EV-20261021T031036-7617dfc7.json",
+      "reports/indexed-recall-results.md",
+      "evidence/EV-20261021T033818-dd272774.json",
+      "evidence/EV-20261021T033920-61ce56e4.json",
+      "evidence/EV-20261021T034118-e12c74ed.json",
+      "reports/indexed-recall-repeat-results.md",
+      "evidence/EV-20261021T034825-0e02c9b4.json",
+      "evidence/EV-20261021T035012-bc6c0422.json",
+      "reports/qwen-indexed-recall-results.md",
+      "evidence/EV-20261021T035649-bb08cfa3.json",
+      "evidence/EV-20261021T040200-432414fb.json",
+      "evidence/EV-20261021T035728-92bbb829.json",
+      "reports/qwen-indexed-recall-repeat-results.md",
+      "evidence/EV-20261021T041042-c4724be2.json",
+      "evidence/EV-20261021T041812-51640ddf.json",
+      "reports/qwen-indexed-recall-third-results.md",
+      "evidence/EV-20261021T042057-87b8ad21.json",
+      "evidence/EV-20261021T042842-e7ac3938.json",
+      "reports/qwen-indexed-recall-fourth-results.md",
+      "evidence/EV-20261021T072922-45c135b4.json",
+      "evidence/EV-20261021T073825-cc2b646a.json",
+      "reports/qwen-indexed-recall-wait-results.md",
+      "evidence/EV-20261021T073912-568459f3.json",
+      "evidence/EV-20261021T074905-2b4c73bf.json",
+      "reports/qwen-indexed-recall-uncapped-results.md",
+      "evidence/EV-20261021T075735-f75bf9ac.json",
+      "evidence/EV-20261021T075801-cb351f74.json",
+      "evidence/EV-20261021T080912-146f3d0c.json",
+      "evidence/EV-20261021T081050-aa48bdf2.json",
+      "reports/qwen-stage-two-results.md",
+      "evidence/EV-20261021T100747-34878c00.json",
+      "evidence/EV-20261021T100802-33d75213.json",
+      "evidence/EV-20261021T101943-dfb8648d.json",
+      "evidence/EV-20261021T102130-1fa8fe6e.json",
+      "evidence/EV-20261021T143954-abccd140.json",
+      "evidence/EV-20261021T144804-f9fbd92f.json",
+      "evidence/EV-20261021T144915-b017862c.json"
+    ],
+    "new_model_calls": 38,
+    "new_sql_db_calls": 0,
+    "ollama_calls": 8,
+    "retry_calls": 0,
+    "limitation": "固定dirty工作樹指紋開發研究，不是正式Gate。原30review overlay核准有限；新18題仍待獨立審核，8題未揭露。來源FD/側錄等價仍有保守FP；runner在正式Gate前須改即時重算case內容hash。",
+    "gpt_sol_diagnostic": {
+      "calls": 4,
+      "runtime_safe_ready": "3/4",
+      "semantic_plans_correct": "4/4（主agent依既有獨立oracle與FD證據核對）",
+      "readable_reasoning_summary": "0/4，API未回傳",
+      "encrypted_reasoning_preserved": "4/4",
+      "evidence": [
+        "evidence/EV-20261020T131348-0144f2c0.json",
+        "evidence/EV-20261020T131636-0594c38e.json",
+        "evidence/EV-20261020T131406-a2a6f2ba.json"
+      ],
+      "report": "reports/gpt-sol-failure-probe.md"
+    },
+    "new_deepseek_calls": 21,
+    "new_gpt_calls": 9,
+    "decision_summary_comparison": {
+      "calls": 6,
+      "summary_complete": "6/6",
+      "gpt_ready": "3/3",
+      "deepseek_ready": "1/3（14有未核准額外計數與摘要缺漏）",
+      "same_inputs": true,
+      "old_v3_schemas_unchanged": true,
+      "tests": "86 passed",
+      "review_scope": "主agent依既有獨立oracle與契約審核；模型自述不當作內部推理",
+      "evidence": [
+        "evidence/EV-20261020T152549-ff7bb3f4.json",
+        "evidence/EV-20261020T152944-23533861.json",
+        "evidence/EV-20261020T152610-a61706fa.json"
+      ],
+      "report": "reports/decision-summary-comparison.md"
+    },
+    "decision_chain_comparison": {
+      "calls": 2,
+      "valid_chains": "2/2",
+      "runtime_ready": "2/2",
+      "semantic_review": {
+        "gpt-6-sol": "SAFE",
+        "DeepSeek-V4.1-Flash": "UNSAFE"
+      },
+      "same_inputs": true,
+      "old_four_schemas_unchanged": true,
+      "tests": "96 passed",
+      "raw_replays": 2,
+      "review_scope": "主agent依既有獨立oracle與契約核對；非新增跨agent審查；公開決策紀錄不是私有思維鏈",
+      "evidence": [
+        "evidence/EV-20261020T153802-db30f6ef.json",
+        "evidence/EV-20261020T153811-53898903.json",
+        "evidence/EV-20261020T154143-4f2a9ac3.json"
+      ],
+      "report": "reports/decision-chain-comparison.md"
+    },
+    "source_selection_followup": {
+      "calls": 2,
+      "parsed_replays": 2,
+      "kind": "事後簡短決策理由，不重做或替換原計畫",
+      "gpt_reason": "具月份、通路與金額欄位，可表達完整需求",
+      "deepseek_reason": "月表粒度貼近且較直接，但承認不滿足指定通路",
+      "evidence": [
+        "evidence/EV-20261020T155000-a6256aea.json",
+        "evidence/EV-20261020T155100-45614282.json"
+      ],
+      "report": "reports/source-selection-reasons.md"
+    },
+    "global_edd_skill_update": {
+      "result": "PASS_WITH_WARNINGS",
+      "format": "3/3",
+      "encoding_links": "4/4",
+      "behavioral_tests": "一個前測agent；一個後測agent含兩情境，非統計驗證",
+      "new_planner_provider_calls": 0,
+      "evidence": [
+        "evidence/EV-20261020T155936-a055413c.json"
+      ],
+      "report": "reports/edd-model-decision-flow.md",
+      "external_fingerprints": "reports/edd-model-decision-flow.json"
+    },
+    "coverage_priority_probe": {
+      "prompt_version": "v3-coverage-first-1",
+      "calls": 2,
+      "model": "DeepSeek-V4.1-Flash",
+      "case_id": "cross-view-11",
+      "raw_draft_ready": "2/2",
+      "runtime_ready": "0/2",
+      "semantic_safe": "0/2",
+      "candidate_result": "FAIL：仍選v_product_monthly且缺online，有未解輸入仍自稱ready，被validator擋下",
+      "v3_default_unchanged": true,
+      "old_four_schemas_unchanged": true,
+      "tests": "96 passed",
+      "raw_replays": 2,
+      "evidence": [
+        "evidence/EV-20261020T160323-a2b40349.json",
+        "evidence/EV-20261020T160325-0a5cf230.json",
+        "evidence/EV-20261020T160435-ace4e1e0.json"
+      ],
+      "report": "reports/coverage-priority-comparison.md",
+      "limitation": "單題各一次，不是統計或因果驗證；不取代主Gate"
+    },
+    "markdown_evidence_review": {
+      "prompt_version": "v3-md-priority-review-1",
+      "calls": 2,
+      "planner_result": "FAIL：月表捏造sales_channel契約欄位，程式拒絕且無payload",
+      "reviewer_result": "PASS_WITH_WARNINGS：reject並指出決策1/3缺契約證據；額外門市語意阻擋與路徑有問題，不全盤採用",
+      "checks": 7,
+      "findings": 3,
+      "tests": "99 passed",
+      "raw_replays": 2,
+      "reviewer_context": "fresh client，只含原需求/完整契約/原計畫/可用prepared requests，沒有GPT/oracle/分數/驗證錯誤",
+      "evidence": [
+        "evidence/EV-20261020T161153-53f899de.json",
+        "evidence/EV-20261020T161155-3fdffc81.json",
+        "evidence/EV-20261020T161353-5cba5ea8.json"
+      ],
+      "report": "reports/markdown-evidence-review.md"
+    },
+    "three_stage_view_selection": {
+      "code_result": "PASS_WITH_WARNINGS",
+      "focused_tests": 42,
+      "related_regression_tests": 135,
+      "new_provider_calls": 4,
+      "cached_calls_reused": 2,
+      "input_tokens_actual": 13419,
+      "output_tokens_actual": 5550,
+      "elapsed_seconds": 47.7248109810007,
+      "cost_usd": null,
+      "stage_one_requirements": 10,
+      "candidate_views": 7,
+      "mapping_views_validated": 2,
+      "mapping_views_attempted": 3,
+      "first_stopped": "EXP009檢查器誤拒合法/grain/keys/0，已修正但原結果不變",
+      "continued_stopped": "EXP010 inventory證據引用/grain/keys陣列而非具體字串",
+      "stage_three": "NOT_EXECUTED",
+      "end_to_end_semantics": "NOT_VERIFIED",
+      "gate": "NOT_MET",
+      "unsafe_ready_emitted": 0,
+      "v3_default_unchanged": true,
+      "fixed_version_first_pass": false,
+      "sql_db_calls": 0,
+      "ollama_calls": 0,
+      "independent_review": "原版FAIL兩P1兩P2；修正後由main執行測試，未二次獨立核准",
+      "evidence": [
+        "evidence/EV-20261021T015608-374f69fc.json",
+        "evidence/EV-20261021T015637-436c6855.json",
+        "evidence/EV-20261021T015828-e8216b14.json"
+      ],
+      "report": "reports/three-stage-view-selection-results.md"
+    },
+    "snapshot_inventory_probe": {
+      "result": "INCONCLUSIVE",
+      "new_model_calls": 1,
+      "recall_requirements": 11,
+      "candidate_views": 7,
+      "date_role": "attribute",
+      "inventory_time_filter_requirements": 0,
+      "quote_validation": "FAIL: ellipsis not present in original request",
+      "inventory_mapping": "NOT_EXECUTED",
+      "end_to_end": "NOT_VERIFIED",
+      "raw_replays": 1,
+      "same_agent_verification": true,
+      "independent_oracle_approved": false,
+      "source_catalog_prompt_schema_unchanged": true,
+      "sql_db_ollama_calls": 0,
+      "input_tokens": 5611,
+      "output_tokens": 1482,
+      "elapsed_seconds": 14.028542469000968,
+      "cost_usd": null,
+      "report": "reports/snapshot-inventory-probe.md",
+      "evidence": [
+        "evidence/EV-20261021T030934-e2fd34ef.json",
+        "evidence/EV-20261021T031036-7617dfc7.json"
+      ]
+    },
+    "oracle_time_semantics_review": {
+      "case_id": "cross-view-11",
+      "status": "REASSESSMENT_REQUIRED",
+      "reason": "grain只保證店商品唯一，不保證最新或目前；原題必須ready的前提超出現有契約。原oracle及分數不修改。",
+      "evidence": [
+        "projects/retail/views/demo_retail/v_inventory_status.yaml",
+        "projects/retail/contract_review.md",
+        "reports/snapshot-inventory-probe.md"
+      ]
+    },
+    "indexed_recall": {
+      "code_result": "PASS_WITH_WARNINGS",
+      "new_tests": 21,
+      "focused_tests": 63,
+      "related_tests": 156,
+      "independent_code_review": "無P1/P2；不含自然品質核准",
+      "new_model_calls": 1,
+      "raw_quote_fields": 0,
+      "structural_index_validation": "PASS",
+      "python_slicing": "PASS",
+      "requirements": 7,
+      "exact_full_term_boundaries": 2,
+      "end_minus_one": 5,
+      "semantic_issues": [
+        "保留庫存母體分類為filter並約束庫存度量及日期屬性",
+        "未明列key/grain類需求"
+      ],
+      "natural_fixed_candidate_result": "FAIL",
+      "source_mapping": "NOT_EXECUTED",
+      "end_to_end": "NOT_VERIFIED",
+      "input_tokens": 6707,
+      "output_tokens": 982,
+      "elapsed_seconds": 8.170141804001105,
+      "cost_usd": null,
+      "v3_product_unchanged": true,
+      "historical_raw_scores_unchanged": true,
+      "legacy_source_snapshot": ".local/index-recall-prechange/",
+      "old_schema_replay": "version mismatch expected;不能將新schema混入舊實驗",
+      "sql_db_ollama_calls": 0,
+      "report": "reports/indexed-recall-results.md",
+      "evidence": [
+        "evidence/EV-20261021T033818-dd272774.json",
+        "evidence/EV-20261021T033920-61ce56e4.json",
+        "evidence/EV-20261021T034118-e12c74ed.json"
+      ]
+    },
+    "indexed_recall_repeat": {
+      "same_source_schema_catalog_case_messages": true,
+      "same_model_settings": true,
+      "new_model_calls": 1,
+      "structural_result": "PASS",
+      "complete_target_terms": 5,
+      "requirements": 7,
+      "exact_minimal_spans": 4,
+      "prior_complete_terms": 2,
+      "population_kind": "population",
+      "truncated_terms": [
+        "庫存盤點日期",
+        "2026 年 9 月"
+      ],
+      "full_first_stage_criteria": "NOT_MET",
+      "source_mapping": "NOT_EXECUTED",
+      "end_to_end": "NOT_VERIFIED",
+      "fresh_raw_replays": 1,
+      "input_tokens": 6707,
+      "output_tokens": 1018,
+      "elapsed_seconds": 14.198732315999223,
+      "cost_usd": null,
+      "workflow_warning": "前置核對用錯Python，runner先啟動後才補登EXP；已完成相同輸入/版本/設定補核對，無額外呼叫",
+      "report": "reports/indexed-recall-repeat-results.md",
+      "evidence": [
+        "evidence/EV-20261021T034825-0e02c9b4.json",
+        "evidence/EV-20261021T035012-bc6c0422.json"
+      ]
+    },
+    "qwen_indexed_recall": {
+      "experiment": "EXP-014",
+      "provider": "ollama",
+      "model": "qwen3.8:27b",
+      "model_digest": "aaee06c39dcf2437cde036998d960e1fc1494b8191be7cc9657d01e509097813",
+      "quantization": "Q4_K_M",
+      "request": "對照各店各商品的盤點庫存件數與 2026 年 9 月線上通路的折扣金額及淨銷售額，並顯示庫存盤點日期，準備促銷後補貨評估；保留所有庫存商品。",
+      "same_source_schema_catalog_case_messages": true,
+      "calls": 1,
+      "retries": 0,
+      "reasoning": true,
+      "temperature": 1,
+      "top_p": 1,
+      "seed": 42,
+      "context_window": 32768,
+      "output_limit": 4096,
+      "timeout_seconds": 300,
+      "elapsed_seconds": 300.413323933999,
+      "input_tokens_estimated": 8352,
+      "actual_input_tokens": null,
+      "actual_output_tokens": null,
+      "cost_usd": null,
+      "provider_result": {
+        "error_type": "ReadTimeout",
+        "error": "timed out"
+      },
+      "model_answer_received": false,
+      "semantic_result": "NOT_VERIFIED",
+      "complete_target_terms": null,
+      "requirements": null,
+      "source_mapping": "NOT_EXECUTED",
+      "end_to_end": "NOT_VERIFIED",
+      "artifact_replay": "PASS",
+      "raw_answer_replays": 0,
+      "provider_error_replays": 1,
+      "reviewer": "主Agent與fresh subprocess，沒有新增跨Agent審查",
+      "raw_run_sha256": "0598f5563e4e8f1da72b069916c69cd0b8e3d3b4c188c758f47bce4c603c8f42",
+      "report": "reports/qwen-indexed-recall-results.md",
+      "evidence": [
+        "evidence/EV-20261021T035649-bb08cfa3.json",
+        "evidence/EV-20261021T040200-432414fb.json",
+        "evidence/EV-20261021T035728-92bbb829.json"
+      ]
+    },
+    "qwen_indexed_recall_repeat": {
+      "experiment": "EXP-015",
+      "repeat_of": "EXP-014",
+      "provider": "ollama",
+      "model": "qwen3.8:27b",
+      "model_digest": "aaee06c39dcf2437cde036998d960e1fc1494b8191be7cc9657d01e509097813",
+      "same_source_schema_catalog_case_messages_settings_harness": true,
+      "request": "對照各店各商品的盤點庫存件數與 2026 年 9 月線上通路的折扣金額及淨銷售額，並顯示庫存盤點日期，準備促銷後補貨評估；保留所有庫存商品。",
+      "calls": 1,
+      "retries": 0,
+      "reasoning": true,
+      "temperature": 1,
+      "top_p": 1,
+      "seed": 42,
+      "context_window": 32768,
+      "output_limit": 4096,
+      "network_read_timeout_seconds": 300,
+      "outer_hard_timeout_seconds": 420,
+      "elapsed_seconds": 420.0,
+      "termination": "EDD subprocess timeout, exit 124",
+      "model_answer_saved": false,
+      "semantic_result": "NOT_VERIFIED",
+      "complete_target_terms": null,
+      "actual_input_tokens": null,
+      "actual_output_tokens": null,
+      "cost_usd": null,
+      "source_mapping": "NOT_EXECUTED",
+      "end_to_end": "NOT_VERIFIED",
+      "raw_replay": "NOT_AVAILABLE: no completed model response or provider error",
+      "run_metadata_finalized": false,
+      "artifact_folder": ".local/qwen-indexed-20261021T041043Z-b0cbd4",
+      "artifact_hashes": {
+        "run.json": "902fa75a62004ce08890e67d66b9315fff908e42e3111ae978532696c44ce9e7",
+        "recall-request.json": "ab71c215d48bd96cdf97177b6459760703cabbe6c1c1bbf567bed29678994e43",
+        "budget.json": "2e73a07b862ddadd14c8ac98e353ab40127a76bd0833f0cf50856c244c2fefbb"
+      },
+      "evidence": [
+        "evidence/EV-20261021T041042-c4724be2.json",
+        "evidence/EV-20261021T041812-51640ddf.json"
+      ],
+      "reviewer": "主Agent及fresh subprocess，非跨Agent獨立驗證",
+      "offline_artifact_verification": "PASS"
+    },
+    "qwen_indexed_recall_third": {
+      "experiment": "EXP-016",
+      "repeat_of": [
+        "EXP-014",
+        "EXP-015"
+      ],
+      "provider": "ollama",
+      "model": "qwen3.8:27b",
+      "model_digest": "aaee06c39dcf2437cde036998d960e1fc1494b8191be7cc9657d01e509097813",
+      "same_source_schema_catalog_case_messages_settings_harness": true,
+      "request": "對照各店各商品的盤點庫存件數與 2026 年 9 月線上通路的折扣金額及淨銷售額，並顯示庫存盤點日期，準備促銷後補貨評估；保留所有庫存商品。",
+      "calls": 1,
+      "retries": 0,
+      "reasoning": true,
+      "temperature": 1,
+      "top_p": 1,
+      "seed": 42,
+      "context_window": 32768,
+      "output_limit": 4096,
+      "network_read_timeout_seconds": 300,
+      "outer_hard_timeout_seconds": 420,
+      "elapsed_seconds": 420.0,
+      "termination": "EDD subprocess timeout, exit 124",
+      "model_answer_saved": false,
+      "semantic_result": "NOT_VERIFIED",
+      "complete_target_terms": null,
+      "actual_input_tokens": null,
+      "actual_output_tokens": null,
+      "cost_usd": null,
+      "source_mapping": "NOT_EXECUTED",
+      "end_to_end": "NOT_VERIFIED",
+      "raw_replay": "NOT_AVAILABLE: no completed response or provider error",
+      "run_metadata_finalized": false,
+      "artifact_folder": ".local/qwen-indexed-20261021T042058Z-e7e449",
+      "artifact_hashes": {
+        "run.json": "1d6697555bb3cce7dd12106747d3f27352a038ce57aa95bed9ef19c253adf603",
+        "recall-request.json": "ab71c215d48bd96cdf97177b6459760703cabbe6c1c1bbf567bed29678994e43",
+        "budget.json": "3777acffc88daea3002bc319381ac2ec048c57a79194c6080918bcd7c8bd243e"
+      },
+      "runtime_observation": {
+        "timestamp": "2026-10-21T04:21:35.785905+00:00",
+        "models": [
+          {
+            "name": "qwen3.8:27b",
+            "size_vram": 12603401173,
+            "context_length": 32768
+          }
+        ]
+      },
+      "runtime_observation_path": ".local/qwen-third-runtime-observation.json",
+      "runtime_observation_sha256": "bbd0f5ebd611953c363b4de38568206b0e4ffb9e0643a4391465de1b630d3eaa",
+      "evidence": [
+        "evidence/EV-20261021T042057-87b8ad21.json",
+        "evidence/EV-20261021T042842-e7ac3938.json"
+      ],
+      "reviewer": "主Agent及fresh subprocess，非跨Agent獨立驗證",
+      "offline_artifact_verification": "PASS"
+    },
+    "qwen_indexed_recall_fourth": {
+      "experiment": "EXP-017",
+      "repeat_of": [
+        "EXP-014",
+        "EXP-015",
+        "EXP-016"
+      ],
+      "provider": "ollama",
+      "model": "qwen3.8:27b",
+      "model_digest": "aaee06c39dcf2437cde036998d960e1fc1494b8191be7cc9657d01e509097813",
+      "same_source_schema_catalog_case_messages_settings_harness": true,
+      "request": "對照各店各商品的盤點庫存件數與 2026 年 9 月線上通路的折扣金額及淨銷售額，並顯示庫存盤點日期，準備促銷後補貨評估；保留所有庫存商品。",
+      "calls": 1,
+      "retries": 0,
+      "reasoning": true,
+      "temperature": 1,
+      "top_p": 1,
+      "seed": 42,
+      "context_window": 32768,
+      "output_limit": 4096,
+      "network_read_timeout_seconds": 300,
+      "outer_hard_timeout_seconds": 420,
+      "elapsed_seconds": 420.0,
+      "termination": "EDD subprocess timeout, exit 124",
+      "model_answer_saved": false,
+      "semantic_result": "NOT_VERIFIED",
+      "complete_target_terms": null,
+      "actual_input_tokens": null,
+      "actual_output_tokens": null,
+      "cost_usd": null,
+      "source_mapping": "NOT_EXECUTED",
+      "end_to_end": "NOT_VERIFIED",
+      "raw_replay": "NOT_AVAILABLE: no completed response or provider error",
+      "run_metadata_finalized": false,
+      "artifact_folder": ".local/qwen-indexed-20261021T072923Z-ef68e6",
+      "artifact_hashes": {
+        "run.json": "fc758e5132454f0a0247fb177e4acfe5540415070e064f52115a952752ee4395",
+        "recall-request.json": "ab71c215d48bd96cdf97177b6459760703cabbe6c1c1bbf567bed29678994e43",
+        "budget.json": "99aafe4f8bb47ee90fa6dfa42833c03af533abcfa32cb781f543a96156e42ab8"
+      },
+      "runtime_observation": {
+        "timestamp": "2026-10-21T07:29:59.458877+00:00",
+        "models": [
+          {
+            "name": "qwen3.8:27b",
+            "size_vram": 12603401173,
+            "context_length": 32768
+          }
+        ]
+      },
+      "runtime_observation_path": ".local/qwen-fourth-runtime-observation.json",
+      "runtime_observation_sha256": "bc2bb0d355dbc1069e0839bc1de9e086277581428cd852404a23da2939c15473",
+      "evidence": [
+        "evidence/EV-20261021T072922-45c135b4.json",
+        "evidence/EV-20261021T073825-cc2b646a.json"
+      ],
+      "reviewer": "主Agent及fresh subprocess，非跨Agent獨立驗證",
+      "offline_artifact_verification": "PASS"
+    },
+    "qwen_indexed_recall_wait": {
+      "experiment": "EXP-018",
+      "provider": "ollama",
+      "model": "qwen3.8:27b",
+      "model_digest": "aaee06c39dcf2437cde036998d960e1fc1494b8191be7cc9657d01e509097813",
+      "request": "對照各店各商品的盤點庫存件數與 2026 年 9 月線上通路的折扣金額及淨銷售額，並顯示庫存盤點日期，準備促銷後補貨評估；保留所有庫存商品。",
+      "new_provider_calls": 1,
+      "retry_calls": 0,
+      "network_timeout_seconds": null,
+      "outer_timeout_seconds": null,
+      "thinking": true,
+      "output_limit": 4096,
+      "context_window": 32768,
+      "temperature": 1,
+      "top_p": 1,
+      "seed": 42,
+      "same_core_source_schema_catalog_case_messages": true,
+      "harness_difference": "only timeouts removed and metadata added; original frozen harness preserved",
+      "elapsed_seconds": 555.5377970709997,
+      "stop_reason": "length",
+      "provider_done": true,
+      "usage": {
+        "input_tokens": 6444,
+        "output_tokens": 4096,
+        "total_tokens": 10540
+      },
+      "load_seconds": 13.122272769,
+      "prompt_eval_seconds": 30.28982,
+      "generation_seconds": 511.774708,
+      "generation_tokens_per_second": 8.003521737146885,
+      "response_characters": 1865,
+      "full_JSON_result": "FAIL: EOF while parsing a value",
+      "model_completion_vs_complete_answer": "provider finished due to token limit; answer JSON incomplete",
+      "semantic_result": "NOT_VERIFIED as a complete recall; partial prefix inspected only",
+      "complete_objects_in_prefix": 8,
+      "partial_prefix_rows": [
+        {
+          "requirement_id": "R_GRAIN",
+          "start": 2,
+          "end": 8,
+          "derived_quote": "各店各商品的",
+          "kind": "grain",
+          "scope_ids": [],
+          "population": "所有庫存商品與對應銷售"
+        },
+        {
+          "requirement_id": "R_STOCK_QTY",
+          "start": 8,
+          "end": 14,
+          "derived_quote": "盤點庫存件數",
+          "kind": "metric",
+          "scope_ids": [],
+          "population": "所有庫存商品"
+        },
+        {
+          "requirement_id": "F_TIME",
+          "start": 16,
+          "end": 26,
+          "derived_quote": "2026 年 9 月",
+          "kind": "filter",
+          "scope_ids": [],
+          "population": "2026年9月已完成訂單"
+        },
+        {
+          "requirement_id": "F_CHANNEL",
+          "start": 26,
+          "end": 30,
+          "derived_quote": "線上通路",
+          "kind": "filter",
+          "scope_ids": [],
+          "population": "線上通路訂單"
+        },
+        {
+          "requirement_id": "R_DISCOUNT",
+          "start": 31,
+          "end": 35,
+          "derived_quote": "折扣金額",
+          "kind": "metric",
+          "scope_ids": [
+            "F_TIME",
+            "F_CHANNEL"
+          ],
+          "population": "線上通路、2026年9月已完成訂單"
+        },
+        {
+          "requirement_id": "R_NET_SALES",
+          "start": 36,
+          "end": 40,
+          "derived_quote": "淨銷售額",
+          "kind": "metric",
+          "scope_ids": [
+            "F_TIME",
+            "F_CHANNEL"
+          ],
+          "population": "線上通路、2026年9月已完成訂單"
+        },
+        {
+          "requirement_id": "R_SNAPSHOT_DATE",
+          "start": 44,
+          "end": 50,
+          "derived_quote": "庫存盤點日期",
+          "kind": "attribute",
+          "scope_ids": [],
+          "population": "所有庫存商品"
+        },
+        {
+          "requirement_id": "R_PURPOSE",
+          "start": 51,
+          "end": 60,
+          "derived_quote": "準備促銷後補貨評估",
+          "kind": "metadata",
+          "scope_ids": [],
+          "population": "N/A"
+        }
+      ],
+      "partial_target_term_visibility": [
+        {
+          "target_term": "盤點庫存件數",
+          "visible_in_complete_prefix_object": true
+        },
+        {
+          "target_term": "2026 年 9 月",
+          "visible_in_complete_prefix_object": true
+        },
+        {
+          "target_term": "線上通路",
+          "visible_in_complete_prefix_object": true
+        },
+        {
+          "target_term": "折扣金額",
+          "visible_in_complete_prefix_object": true
+        },
+        {
+          "target_term": "淨銷售額",
+          "visible_in_complete_prefix_object": true
+        },
+        {
+          "target_term": "庫存盤點日期",
+          "visible_in_complete_prefix_object": true
+        },
+        {
+          "target_term": "保留所有庫存商品",
+          "visible_in_complete_prefix_object": false
+        }
+      ],
+      "visible_complete_target_terms": 6,
+      "expected_target_terms": 7,
+      "candidate_views_completed": false,
+      "population_requirement_completed": false,
+      "source_mapping": "NOT_EXECUTED",
+      "end_to_end": "NOT_VERIFIED",
+      "raw_replay": "PASS: same saved truncated response produces same ValidationError",
+      "repair_or_runtime_salvage": false,
+      "reviewer": "主Agent與fresh subprocess，非跨Agent獨立語意審查",
+      "artifact_folder": ".local/qwen-indexed-20261021T073913Z-2c9172",
+      "raw_run_sha256": "b861f6d3090df6c0326cf9bd12940fe4b6eed55fe53e1dc683418ee4fea80260",
+      "wait_harness_sha256": "7630d84d54721ad9b6438472f48720fb84e76b072657e6177bb385ef822be4dd",
+      "cost_usd": null,
+      "evidence": [
+        "evidence/EV-20261021T073912-568459f3.json",
+        "evidence/EV-20261021T074905-2b4c73bf.json"
+      ]
+    },
+    "qwen_indexed_recall_uncapped": {
+      "experiment": "EXP-019",
+      "provider": "ollama",
+      "model": "qwen3.8:27b",
+      "model_digest": "aaee06c39dcf2437cde036998d960e1fc1494b8191be7cc9657d01e509097813",
+      "request": "對照各店各商品的盤點庫存件數與 2026 年 9 月線上通路的折扣金額及淨銷售額，並顯示庫存盤點日期，準備促銷後補貨評估；保留所有庫存商品。",
+      "calls": 1,
+      "retries": 0,
+      "num_predict": -1,
+      "input_token_quota": null,
+      "output_token_quota": null,
+      "network_timeout_seconds": null,
+      "outer_timeout_seconds": null,
+      "thinking": true,
+      "context_window": 32768,
+      "temperature": 1,
+      "top_p": 1,
+      "seed": 42,
+      "same_core_source_schema_catalog_case_messages": true,
+      "elapsed_seconds": 620.0630313259971,
+      "done": true,
+      "done_reason": "stop",
+      "usage": {
+        "input_tokens": 6444,
+        "output_tokens": 4618,
+        "total_tokens": 11062
+      },
+      "load_seconds": 13.130494327,
+      "prompt_eval_seconds": 30.290361,
+      "generation_seconds": 576.289206,
+      "generation_tokens_per_second": 8.0133376643532,
+      "response_characters": 3096,
+      "structural_result": "PASS",
+      "Python_slicing": "PASS",
+      "requirements": 9,
+      "candidate_views": 7,
+      "complete_target_terms": 7,
+      "exact_minimal_target_spans": 7,
+      "target_roles_correct": true,
+      "rows": [
+        {
+          "requirement_id": "R_STOCK_QTY",
+          "start": 8,
+          "end": 14,
+          "derived_quote": "盤點庫存件數",
+          "kind": "metric",
+          "expected_kind": "metric",
+          "scope_ids": [],
+          "exact_minimal_span": true
+        },
+        {
+          "requirement_id": "F_TIME",
+          "start": 16,
+          "end": 26,
+          "derived_quote": "2026 年 9 月",
+          "kind": "filter",
+          "expected_kind": "filter",
+          "scope_ids": [],
+          "exact_minimal_span": true
+        },
+        {
+          "requirement_id": "F_CHANNEL",
+          "start": 26,
+          "end": 30,
+          "derived_quote": "線上通路",
+          "kind": "filter",
+          "expected_kind": "filter",
+          "scope_ids": [],
+          "exact_minimal_span": true
+        },
+        {
+          "requirement_id": "R_DISCOUNT",
+          "start": 31,
+          "end": 35,
+          "derived_quote": "折扣金額",
+          "kind": "metric",
+          "expected_kind": "metric",
+          "scope_ids": [
+            "F_TIME",
+            "F_CHANNEL"
+          ],
+          "exact_minimal_span": true
+        },
+        {
+          "requirement_id": "R_NET_SALES",
+          "start": 36,
+          "end": 40,
+          "derived_quote": "淨銷售額",
+          "kind": "metric",
+          "expected_kind": "metric",
+          "scope_ids": [
+            "F_TIME",
+            "F_CHANNEL"
+          ],
+          "exact_minimal_span": true
+        },
+        {
+          "requirement_id": "R_SNAPSHOT_DATE",
+          "start": 44,
+          "end": 50,
+          "derived_quote": "庫存盤點日期",
+          "kind": "attribute",
+          "expected_kind": "attribute",
+          "scope_ids": [],
+          "exact_minimal_span": true
+        },
+        {
+          "requirement_id": "R_POPULATION",
+          "start": 61,
+          "end": 69,
+          "derived_quote": "保留所有庫存商品",
+          "kind": "population",
+          "expected_kind": "population",
+          "scope_ids": [],
+          "exact_minimal_span": true
+        }
+      ],
+      "sales_scope_result": "PASS: both sales metrics reference time/channel filters",
+      "inventory_scope_result": "PASS: stock/date unaffected by sales time/channel",
+      "population_result": "PASS: explicit population, no status exclusion",
+      "grain_result": "門市×商品已列grain；沒有獨立key項目，不據類別是否出現自行判失敗",
+      "completed_order_semantics": "v_sales_detail summary及grain明定僅已完成訂單，可作契約相容性說明，非另外新增使用者篩選",
+      "source_recall": "7/7 admitted views retained; no final source selection",
+      "diagnostic_semantic_review": "本題主要需求索引/角色/scope/母體/粒度符合；主Agent按固定目標與契約核對",
+      "formal_independent_oracle": "NOT_VERIFIED: new diagnostic question, no new cross-agent oracle approval",
+      "source_mapping": "NOT_EXECUTED",
+      "end_to_end": "NOT_VERIFIED",
+      "raw_replay": "PASS: same parsed offsets and Python-derived quotations, no errors",
+      "raw_run_sha256": "039832c8497af176cc18228b0ce421333a22a8713796f2e61ec5c7da8ecb4cb1",
+      "harness_sha256": "6ad976fbda2da25e32ca93e1e5c34dfe72596a3cd0e14d7198e88b3bd57eb2fc",
+      "artifact_folder": ".local/qwen-indexed-20261021T075802Z-66d3ec",
+      "cost_usd": null,
+      "evidence": [
+        "evidence/EV-20261021T075735-f75bf9ac.json",
+        "evidence/EV-20261021T075801-cb351f74.json",
+        "evidence/EV-20261021T080912-146f3d0c.json",
+        "evidence/EV-20261021T081050-aa48bdf2.json"
+      ]
+    },
+    "qwen_stage_two": {
+      "experiment": "EXP-020",
+      "stage": 2,
+      "provider": "ollama",
+      "model": "qwen3.8:27b",
+      "model_digest": "aaee06c39dcf2437cde036998d960e1fc1494b8191be7cc9657d01e509097813",
+      "source_recall_run": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-indexed-20261021T075802Z-66d3ec",
+      "source_recall_run_sha256": "039832c8497af176cc18228b0ce421333a22a8713796f2e61ec5c7da8ecb4cb1",
+      "source_recall_provider_calls": 0,
+      "new_provider_calls": 1,
+      "new_calls_max": 7,
+      "retry_calls": 0,
+      "selection_provider_calls": 0,
+      "num_predict": -1,
+      "input_token_quota": null,
+      "output_token_quota": null,
+      "HTTP_timeout_seconds": null,
+      "outer_timeout_seconds": null,
+      "thinking": true,
+      "context_window": 32768,
+      "elapsed_seconds": 646.6148816009954,
+      "usage": {
+        "input_tokens": 2706,
+        "output_tokens": 5220,
+        "total_tokens": 7926
+      },
+      "provider_done_reason": "stop",
+      "JSON_parsing": "PASS",
+      "ViewCoverage_contract_validation": "FAIL",
+      "attempted_views": 1,
+      "valid_attempted_views": 0,
+      "total_candidate_views": 7,
+      "unattempted_views": 6,
+      "stopped": {
+        "node": "map-01",
+        "view": "demo_retail.v_inventory_status",
+        "error_type": "ValueError",
+        "error": "invalid contract evidence quote /grain/keys"
+      },
+      "inventory_model_claims": [
+        {
+          "requirement_id": "R_GRAIN",
+          "model_status": "supported",
+          "columns": [
+            "store_id",
+            "product_id"
+          ],
+          "missing_requirements": []
+        },
+        {
+          "requirement_id": "R_STOCK_QTY",
+          "model_status": "supported",
+          "columns": [
+            "stock_qty"
+          ],
+          "missing_requirements": []
+        },
+        {
+          "requirement_id": "F_TIME",
+          "model_status": "unsupported",
+          "columns": [],
+          "missing_requirements": [
+            "本 View 無可按特定月份（2026-09）篩選的銷售日期欄位；sold_qty_30d 為固定 30 日滾動窗口，無法指定任意月份，snapshot_date 為庫存盤點日期而非銷售日期"
+          ]
+        },
+        {
+          "requirement_id": "F_CHANNEL",
+          "model_status": "unsupported",
+          "columns": [],
+          "missing_requirements": [
+            "本 View 無通路（channel）欄位，所有欄位均為庫存維度，無法區分線上或實體通路"
+          ]
+        },
+        {
+          "requirement_id": "R_DISCOUNT",
+          "model_status": "unsupported",
+          "columns": [],
+          "missing_requirements": [
+            "本 View 無折扣金額欄位；inventory_cost_value 為庫存成本非折扣；亦無通路與特定月份篩選能力以限定 scope"
+          ]
+        },
+        {
+          "requirement_id": "R_NET_SALES",
+          "model_status": "unsupported",
+          "columns": [],
+          "missing_requirements": [
+            "本 View 無淨銷售額（金額）欄位；sold_qty_30d 為销售件數非金額；亦無通路與特定月份篩選能力以限定 scope"
+          ]
+        },
+        {
+          "requirement_id": "R_SNAPSHOT_DATE",
+          "model_status": "supported",
+          "columns": [
+            "snapshot_date"
+          ],
+          "missing_requirements": []
+        },
+        {
+          "requirement_id": "R_PURPOSE",
+          "model_status": "unsupported",
+          "columns": [],
+          "missing_requirements": [
+            "「準備促銷後補貨評估」為業務背景說明，非本 View 任何可映射的資料欄位或屬性；本 View 可透過 stock_status、reorder_point、estimated_days_of_supply 支持補貨評估，但無欄位承載此業務目的標註"
+          ]
+        },
+        {
+          "requirement_id": "R_POPULATION",
+          "model_status": "supported",
+          "columns": [
+            "store_id",
+            "product_id"
+          ],
+          "missing_requirements": []
+        }
+      ],
+      "findings": [
+        {
+          "requirement_id": "R_GRAIN",
+          "path": "/grain/keys",
+          "error": "invalid contract evidence quote /grain/keys"
+        },
+        {
+          "requirement_id": "R_POPULATION",
+          "column": "store_id",
+          "required_path": "/columns/store_id/description",
+          "error": "missing own column description evidence"
+        },
+        {
+          "requirement_id": "R_POPULATION",
+          "column": "product_id",
+          "required_path": "/columns/product_id/description",
+          "error": "missing own column description evidence"
+        }
+      ],
+      "inventory_semantic_observations": {
+        "stock_qty": "stock_qty/sum matches inventory quantity requirement",
+        "snapshot_date": "snapshot_date/attribute matches displayed inventory date",
+        "sales_scope": "no invented month/channel mapping on inventory; unsupported as expected",
+        "purpose": "recognized as business background, not a database output column",
+        "population": "preserves all statuses in prose, but mapping evidence incomplete",
+        "unproven_text": "依快照日期存檔 is not guaranteed by contract; does not establish historical snapshot grain"
+      },
+      "views": [
+        {
+          "view": "demo_retail.v_inventory_status",
+          "status": "FAIL: evidence contract"
+        },
+        {
+          "view": "demo_retail.v_product_monthly",
+          "status": "NOT_EXECUTED"
+        },
+        {
+          "view": "demo_retail.v_sales_detail",
+          "status": "NOT_EXECUTED"
+        },
+        {
+          "view": "demo_retail.v_order_summary",
+          "status": "NOT_EXECUTED"
+        },
+        {
+          "view": "demo_retail.v_daily_sales",
+          "status": "NOT_EXECUTED"
+        },
+        {
+          "view": "demo_retail.v_store_monthly_kpi",
+          "status": "NOT_EXECUTED"
+        },
+        {
+          "view": "demo_retail.v_customer_value",
+          "status": "NOT_EXECUTED"
+        }
+      ],
+      "raw_replay": "PASS: 1 raw produces identical parsed coverage and validation error",
+      "raw_modified_or_repaired": false,
+      "source_mapping_overall": "FAIL for attempted inventory coverage; remaining views NOT_EXECUTED",
+      "stage_two_semantic_acceptance": "NOT_VERIFIED for complete seven-view stage",
+      "end_to_end": "NOT_VERIFIED",
+      "reviewer": "主Agent與fresh subprocess，非新增跨Agent獨立oracle",
+      "raw_run_sha256": "662bd063d465bee74ab1f2affd0ec7c8a85a7ce4d91123340716a061d1b5ee5e",
+      "harness_sha256": "e430416700aebf5940b4d24f62bd8f7dba96bf21eb01875889a93c284084d184",
+      "cost_usd": null,
+      "evidence": [
+        "evidence/EV-20261021T100747-34878c00.json",
+        "evidence/EV-20261021T100802-33d75213.json",
+        "evidence/EV-20261021T101943-dfb8648d.json",
+        "evidence/EV-20261021T102130-1fa8fe6e.json"
+      ]
+    },
+    "coverage_reference_trial": {
+      "version": "coverage-references-1",
+      "status": "FAIL: background marked supported with no mappings",
+      "max_new_model_calls": 7,
+      "per_view_fresh_calls": 1,
+      "source_recall_provider_calls": 0,
+      "selection_provider_calls": 0,
+      "num_predict": -1,
+      "HTTP_timeout_seconds": null,
+      "outer_timeout_seconds": null,
+      "token_quotas": null,
+      "execution": "sequential, first validation/provider error stops",
+      "reports": "使用者要求只印log，不新增測試報告或實驗Markdown。",
+      "source_recall": ".local/qwen-indexed-20261021T075802Z-66d3ec",
+      "tests": "114 passed in 7.35s; direct pytest tool output",
+      "new_reference_tests": 18,
+      "dry_run": "PASS: unchanged source recall, same model digest/reasoning, seven views",
+      "files": [
+        "evaluations/referenced_view_coverage.py",
+        "evaluations/coverage_reference_runner.py",
+        "evaluations/prompts/coverage_references.md",
+        "tests/unit/test_referenced_view_coverage.py"
+      ],
+      "new_provider_calls": 1,
+      "valid_views": 0,
+      "unattempted_views": 6,
+      "elapsed_seconds": 452.005134428,
+      "input_tokens": 2559,
+      "output_tokens": 3004,
+      "stop": {
+        "node": "map-01",
+        "view": "demo_retail.v_inventory_status",
+        "error_type": "ValueError",
+        "error": "supported requires mappings/evidence and no missing requirements"
+      },
+      "old_evidence_issues": "RESOLVED: one grain path; population descriptions derived by Python; no model quotes",
+      "new_failure": "R_PURPOSE metadata/business purpose marked supported but mappings empty",
+      "raw_replay": "PASS: identical raw/parsed/error, no provider calls",
+      "raw_folder": ".local/qwen-coverage-ref-20261021T143956Z-549b86",
+      "reports_generated": false,
+      "verification_independence": "same agent, fresh subprocess; no independent semantic oracle",
+      "evidence": [
+        "evidence/EV-20261021T143954-abccd140.json",
+        "evidence/EV-20261021T144804-f9fbd92f.json",
+        "evidence/EV-20261021T144915-b017862c.json"
+      ]
+    }
+  },
+  "completion_summary": "本輪依指示同題同版再測1次：完整詞覆蓋5/7（前次2/7），保留母體改為population；月份及盤點日期仍各缺一字，未達全數完整標準。新raw已fresh replay，前次結果保留，未修改程式或擴題；Task回PLANNING。",
+  "history": [
+    {
+      "from": null,
+      "to": "CREATED",
+      "at": "2026-10-20T12:19:40+00:00",
+      "reason": "初始化"
+    },
+    {
+      "from": "CREATED",
+      "to": "INVESTIGATING",
+      "at": "2026-10-20T12:20:59+00:00",
+      "reason": "背景已整理、已實際派遣subagent研究；僅閱讀與設計工作",
+      "paused_from": null
+    },
+    {
+      "from": "INVESTIGATING",
+      "to": "PLANNING",
+      "at": "2026-10-20T12:28:24+00:00",
+      "reason": "1000字內背景與真實subagent方案已完成整合及文件驗證；後續依DeepSeek-first MVP執行，本輪無新模型實驗。",
+      "paused_from": null
+    },
+    {
+      "from": "PLANNING",
+      "to": "EXPERIMENTING",
+      "at": "2026-10-20T12:48:36+00:00",
+      "reason": "使用者已授權執行；先MVP0離線與獨立oracle審核",
+      "paused_from": null
+    },
+    {
+      "from": "EXPERIMENTING",
+      "to": "PLANNING",
+      "at": "2026-10-20T13:05:15+00:00",
+      "reason": "MVP0否證A可救至少3題，MVP1 B1首次2/6且淨增0不達門檻；依計畫停止升級，回離線假設與責任邊界研究，不自動重跑或轉Ollama",
+      "paused_from": null
+    },
+    {
+      "from": "PLANNING",
+      "to": "EXPERIMENTING",
+      "at": "2026-10-20T13:13:48+00:00",
+      "reason": "使用者新授權：GPT-6 Sol對B1失敗四題各一次，保存Responses官方推理摘要；不修改DeepSeekGate或原版本",
+      "paused_from": null
+    },
+    {
+      "from": "EXPERIMENTING",
+      "to": "PLANNING",
+      "at": "2026-10-20T13:17:52+00:00",
+      "reason": "GPT四題一次診斷已保存，3/4端到端與加密reasoning4/4；可讀摘要未回傳，DeepSeek主Gate仍未過，不增加模型重跑",
+      "paused_from": null
+    },
+    {
+      "from": "PLANNING",
+      "to": "EXPERIMENTING",
+      "at": "2026-10-20T15:25:49+00:00",
+      "reason": "使用者授權新增response診斷摘要並比較GPT與DeepSeek；獨立型別保留v3 schema，三題各一次共六calls",
+      "paused_from": null
+    },
+    {
+      "from": "EXPERIMENTING",
+      "to": "PLANNING",
+      "at": "2026-10-20T15:30:37+00:00",
+      "reason": "決策摘要欄位與六次比較交付完成，明確觀察語意分歧；原DeepSeekGate仍未通過，保留v3預設，不新增重跑",
+      "paused_from": null
+    },
+    {
+      "from": "PLANNING",
+      "to": "EXPERIMENTING",
+      "at": "2026-10-20T15:38:02+00:00",
+      "reason": "使用者授權模型填寫decision_chain，新診斷型別及10測試通過；兩模型同第11題各一次驗證填寫",
+      "paused_from": null
+    },
+    {
+      "from": "EXPERIMENTING",
+      "to": "PLANNING",
+      "at": "2026-10-20T15:42:21+00:00",
+      "reason": "本輪decision_chain實作與兩次診斷完成；兩筆raw重播、96回歸、四個既有schema一致。DeepSeek仍unsafe ready，主Gate未通過，不增加呼叫或轉Ollama。",
+      "paused_from": null
+    },
+    {
+      "from": "PLANNING",
+      "to": "EXPERIMENTING",
+      "at": "2026-10-20T15:50:00+00:00",
+      "reason": "使用者明確要求兩模型說明為何選擇銷售來源；同第11題各追加一次事後簡短理由，不重做或替換原計畫",
+      "paused_from": null
+    },
+    {
+      "from": "EXPERIMENTING",
+      "to": "PLANNING",
+      "at": "2026-10-20T15:51:24+00:00",
+      "reason": "來源理由兩次追加已保存與離線核對，DeepSeek原語意問題未改善，不自動重跑或移轉Ollama",
+      "paused_from": null
+    },
+    {
+      "from": "PLANNING",
+      "to": "EXPERIMENTING",
+      "at": "2026-10-20T16:03:23+00:00",
+      "reason": "使用者授權試加完整需求涵蓋優先序；候選v3-coverage-first-1保留v3預設，同第11題DeepSeek原版/候選各一次",
+      "paused_from": null
+    },
+    {
+      "from": "EXPERIMENTING",
+      "to": "PLANNING",
+      "at": "2026-10-20T16:05:51+00:00",
+      "reason": "完整需求優先候選的單題成對測試未改善，按停止條件保存負結果；不切產品預設、不擴題或自動追加模型呼叫",
+      "paused_from": null
+    },
+    {
+      "from": "PLANNING",
+      "to": "EXPERIMENTING",
+      "at": "2026-10-20T16:11:53+00:00",
+      "reason": "使用者要求Markdown system第一區塊高優先規則與第二DeepSeek證據審查；三個新引用/審查結構測試通過，同第11題planner/reviewer各一次",
+      "paused_from": null
+    },
+    {
+      "from": "EXPERIMENTING",
+      "to": "PLANNING",
+      "at": "2026-10-20T16:14:39+00:00",
+      "reason": "本輪Markdown system與第二DeepSeek證據審查交付；規劃仍錯、審查抓核心但有限制，不當主Gate通過，不自動repair或擴題",
+      "paused_from": null
+    },
+    {
+      "from": "PLANNING",
+      "to": "EXPERIMENTING",
+      "at": "2026-10-21T01:40:05+00:00",
+      "reason": "使用者授權依三階段計畫實作驗證；先離線反例及第11題，模型預算另列EXP-009",
+      "paused_from": null
+    },
+    {
+      "from": "EXPERIMENTING",
+      "to": "PLANNING",
+      "at": "2026-10-21T02:02:43+00:00",
+      "reason": "三階段候選離線通過但第11題inventory引用契約錯誤停止，最終選擇未執行；效果INCONCLUSIVE，不擴六題、完整Gate或Ollama",
+      "paused_from": null
+    },
+    {
+      "from": "PLANNING",
+      "to": "EXPERIMENTING",
+      "at": "2026-10-21T03:07:35+00:00",
+      "reason": "使用者授權測試改寫題：盤點庫存並顯示盤點日期，先需求拆解及inventory映射各一次，不改舊題或契約",
+      "paused_from": null
+    },
+    {
+      "from": "EXPERIMENTING",
+      "to": "PLANNING",
+      "at": "2026-10-21T03:12:40+00:00",
+      "reason": "EXP011新題時間角色較合理但引用省略號被拒，inventory未測，效果INCONCLUSIVE；停止不重跑，原題oracle時間前提待重審",
+      "paused_from": null
+    },
+    {
+      "from": "PLANNING",
+      "to": "EXPERIMENTING",
+      "at": "2026-10-21T03:33:16+00:00",
+      "reason": "使用者指定第一步不生成引文、改輸出原句index由Python裁切；bounded變更沿用現有語意契約與v3預設，先離線反例後單節點模型驗證",
+      "paused_from": null
+    },
+    {
+      "from": "EXPERIMENTING",
+      "to": "PLANNING",
+      "at": "2026-10-21T03:44:38+00:00",
+      "reason": "索引版程式與156回歸通過，但單次模型5組尾端不完整且母體分類錯；固定候選自然標準未達，依預算停止，不重跑或擴題",
+      "paused_from": null
+    },
+    {
+      "from": "PLANNING",
+      "to": "EXPERIMENTING",
+      "at": "2026-10-21T03:49:09+00:00",
+      "reason": "使用者明確要求再跑一次；同索引版/題目/messages/模型設定，只有一次fresh第一步，EXP補登流程偏差另記",
+      "paused_from": null
+    },
+    {
+      "from": "EXPERIMENTING",
+      "to": "PLANNING",
+      "at": "2026-10-21T03:51:32+00:00",
+      "reason": "同版重測已保存；完整詞5/7仍未達全數標準，1raw重播通過，停止不自動第三次或擴題",
+      "paused_from": null
+    },
+    {
+      "from": "PLANNING",
+      "to": "EXPERIMENTING",
+      "at": "2026-10-21T03:56:04+00:00",
+      "reason": "使用者明確授權Qwen單次第一步比較；模型已存在，預先凍結同題/source/messages與1call預算。",
+      "paused_from": null
+    },
+    {
+      "from": "EXPERIMENTING",
+      "to": "PLANNING",
+      "at": "2026-10-21T04:03:03+00:00",
+      "reason": "單次Qwen第一步已測；ReadTimeout無法評分，保存INCONCLUSIVE與錯誤重播證據，停止不重試。",
+      "paused_from": null
+    },
+    {
+      "from": "PLANNING",
+      "to": "EXPERIMENTING",
+      "at": "2026-10-21T04:10:39+00:00",
+      "reason": "使用者明確授權再一次；相同Qwen digest、harness、題文/messages及reasoning已核對，限1次fresh第一步。",
+      "paused_from": null
+    },
+    {
+      "from": "EXPERIMENTING",
+      "to": "PLANNING",
+      "at": "2026-10-21T04:18:55+00:00",
+      "reason": "使用者授權的第二次Qwen已跑，420秒硬上限無完整答案，INCONCLUSIVE；保存報告並停止不自動續跑。",
+      "paused_from": null
+    },
+    {
+      "from": "PLANNING",
+      "to": "EXPERIMENTING",
+      "at": "2026-10-21T04:20:54+00:00",
+      "reason": "使用者明確授權第三次同設定Qwen單次第一步；先核對相同模型digest/harness/題文/messages/source/reasoning後執行。",
+      "paused_from": null
+    },
+    {
+      "from": "EXPERIMENTING",
+      "to": "PLANNING",
+      "at": "2026-10-21T04:29:23+00:00",
+      "reason": "使用者授權第三次已執行，420秒無完整答案；INCONCLUSIVE，保存證據並重新評估後續耗時診斷，不自動重試。",
+      "paused_from": null
+    },
+    {
+      "from": "PLANNING",
+      "to": "EXPERIMENTING",
+      "at": "2026-10-21T07:29:17+00:00",
+      "reason": "依最新使用者明確授權第四次同設定Qwen單次第一步；已核對相同模型digest/harness/source/messages/reasoning，先登記預算。",
+      "paused_from": null
+    },
+    {
+      "from": "EXPERIMENTING",
+      "to": "PLANNING",
+      "at": "2026-10-21T07:51:30+00:00",
+      "reason": "已依指示無時間截止等到Qwen結束，固定輸出4096上限使JSON截斷；保存REFUTED與raw replay證據，不自動追加呼叫。",
+      "paused_from": null
+    },
+    {
+      "from": "PLANNING",
+      "to": "EXPERIMENTING",
+      "at": "2026-10-21T07:57:35+00:00",
+      "reason": "使用者授權移除token與timeout上限再一次；僅新增1call、同模型/messages/core，先驗證num_predict=-1及HTTP None並預先登記。",
+      "paused_from": null
+    },
+    {
+      "from": "EXPERIMENTING",
+      "to": "PLANNING",
+      "at": "2026-10-21T08:12:48+00:00",
+      "reason": "本單題無配額Qwen測試完成並raw replay一致；H19SUPPORTED只限主要第一步診斷，後續階段與完整Gate未驗，不自動續跑。",
+      "paused_from": null
+    },
+    {
+      "from": "PLANNING",
+      "to": "EXPERIMENTING",
+      "at": "2026-10-21T10:06:07+00:00",
+      "reason": "依使用者要求第二步；重用Qwen EXP019第一步，最多7個序列單view新呼叫，無token／timeout配額，不進第三步。",
+      "paused_from": null
+    },
+    {
+      "from": "EXPERIMENTING",
+      "to": "PLANNING",
+      "at": "2026-10-21T10:22:55+00:00",
+      "reason": "第二步首個庫存View證據契約失敗，固定自然門檻未達；已保存raw replay與問題稽核，後6view未執行，不自動重試或第三步。",
+      "paused_from": null
+    },
+    {
+      "from": "PLANNING",
+      "to": "EXPERIMENTING",
+      "at": "2026-10-21T14:35:52+00:00",
+      "reason": "使用者授權第二步path-only修改後測試，先反例與回歸後自然測試；只印log、不新增測試報告。",
+      "paused_from": null
+    },
+    {
+      "from": "EXPERIMENTING",
+      "to": "PLANNING",
+      "at": "2026-10-21T14:50:26+00:00",
+      "reason": "要求的證據路徑修改完成且測試一次；舊引文問題已解，新R_PURPOSE空映射supported失敗保留。未繼續後6views，直接印log不產報告。",
+      "paused_from": null
+    },
+    {
+      "from": "PLANNING",
+      "to": "WAITING_USER",
+      "at": "2026-10-22T03:39:03+00:00",
+      "reason": "Q-001",
+      "paused_from": "PLANNING"
+    },
+    {
+      "from": "WAITING_USER",
+      "to": "PLANNING",
+      "at": "2026-10-22T03:51:16+00:00",
+      "reason": "使用者已回答 Q-001",
+      "paused_from": "PLANNING"
+    }
+  ]
+}
+---
+# 任務：ollama-planning-mvp
+
+## 目標
+
+修正目前三階段任務拆分測試的失敗，以本機 Ollama qwen3.8:27b 完成目前診斷案例的自然端到端驗證與必要回歸。
+
+## 問題定義（預期／實際／證據／未確認假設）
+
+{
+  "description": "單次規劃有來源、欄位角色、母體、根/子粒度錯誤；以DeepSeek先驗方法後轉Qwen。",
+  "expected": "依提案逐階段：離線定位、六題、十題、DeepSeek原30+封存8兩輪首次38/38，再凍結移轉Ollama同門檻。",
+  "actual": "依使用者要求第二步改為單一contract_path、Python裁原需求及取契約欄位描述；18新增及既有共114pytest通過。無配額Qwen1call452秒stop/JSON完整，先前grain/list引用與母體鍵重複引文問題消除，但R_PURPOSE業務背景被標supported且mappings=[]，現有資料需求契約拒絕。其餘6view未跑；raw replay與原輸出稽核一致，未產測試報告。",
+  "evidence": [
+    "reports/execution-results.md",
+    "reports/mvp0-summary.json",
+    "reports/mvp1-summary.json",
+    "agents/oracle-audit/review-manifest.json",
+    "agents/oracle-audit/mvp1-semantic-review.json",
+    "reports/three-stage-view-selection-results.md",
+    "evidence/EV-20261021T015637-436c6855.json",
+    "evidence/EV-20261021T015828-e8216b14.json",
+    "reports/snapshot-inventory-probe.md",
+    "evidence/EV-20261021T030934-e2fd34ef.json",
+    "evidence/EV-20261021T031036-7617dfc7.json",
+    "reports/indexed-recall-results.md",
+    "evidence/EV-20261021T033818-dd272774.json",
+    "evidence/EV-20261021T033920-61ce56e4.json",
+    "evidence/EV-20261021T034118-e12c74ed.json",
+    "reports/indexed-recall-repeat-results.md",
+    "evidence/EV-20261021T034825-0e02c9b4.json",
+    "evidence/EV-20261021T035012-bc6c0422.json",
+    "reports/qwen-indexed-recall-results.md",
+    "evidence/EV-20261021T035649-bb08cfa3.json",
+    "evidence/EV-20261021T040200-432414fb.json",
+    "evidence/EV-20261021T035728-92bbb829.json",
+    "reports/qwen-indexed-recall-repeat-results.md",
+    "evidence/EV-20261021T041042-c4724be2.json",
+    "evidence/EV-20261021T041812-51640ddf.json",
+    "reports/qwen-indexed-recall-third-results.md",
+    "evidence/EV-20261021T042057-87b8ad21.json",
+    "evidence/EV-20261021T042842-e7ac3938.json",
+    "reports/qwen-indexed-recall-fourth-results.md",
+    "reports/qwen-indexed-recall-wait-results.md",
+    "evidence/EV-20261021T073912-568459f3.json",
+    "evidence/EV-20261021T074905-2b4c73bf.json",
+    "reports/qwen-indexed-recall-uncapped-results.md",
+    "evidence/EV-20261021T075735-f75bf9ac.json",
+    "evidence/EV-20261021T075801-cb351f74.json",
+    "evidence/EV-20261021T080912-146f3d0c.json",
+    "evidence/EV-20261021T081050-aa48bdf2.json",
+    "reports/qwen-stage-two-results.md",
+    "evidence/EV-20261021T100747-34878c00.json",
+    "evidence/EV-20261021T100802-33d75213.json",
+    "evidence/EV-20261021T101943-dfb8648d.json",
+    "evidence/EV-20261021T102130-1fa8fe6e.json",
+    "evidence/EV-20261021T143954-abccd140.json",
+    "evidence/EV-20261021T144804-f9fbd92f.json",
+    "evidence/EV-20261021T144915-b017862c.json"
+  ],
+  "hypotheses": [
+    {
+      "id": "H1",
+      "claim": "純型別欄位閉包可從DeepSeek原30題安全救回至少3題。",
+      "status": "REFUTED",
+      "evidence": [
+        "reports/mvp0-summary.json"
+      ]
+    },
+    {
+      "id": "H2",
+      "claim": "本次固定B1自然抽取與編譯可通過MVP1六題端到端採用門檻。",
+      "status": "REFUTED",
+      "evidence": [
+        "reports/mvp1-summary.json",
+        "agents/oracle-audit/mvp1-semantic-review.json"
+      ]
+    },
+    {
+      "id": "H3",
+      "claim": "更精確的語意骨架責任邊界可能改善完整規劃；本次負結果不否證所有拆分方法。",
+      "status": "UNCONFIRMED"
+    },
+    {
+      "id": "H10",
+      "claim": "逐View部分支持及同來源scope有助第11題完整規劃；本輪因程式誤拒及隨後自然引用契約錯誤停止，尚未驗到端到端效果。",
+      "status": "UNCONFIRMED",
+      "evidence": [
+        "reports/three-stage-view-selection-results.md"
+      ]
+    },
+    {
+      "id": "H11",
+      "claim": "明確盤點庫存及盤點日期的新題可避免不必要目前日期篩選；本次時間分類符合預期但因引文錯誤停止，尚未驗到庫存映射。",
+      "status": "UNCONFIRMED",
+      "evidence": [
+        "reports/snapshot-inventory-probe.md"
+      ]
+    },
+    {
+      "id": "H12",
+      "claim": "此固定index候選能在自然首次輸出提供完整正確片段與分類；實測精確邊界2/7且母體分類錯，未達預先標準，非否證所有索引方案。",
+      "status": "REFUTED",
+      "evidence": [
+        "reports/indexed-recall-results.md",
+        "evidence/EV-20261021T033920-61ce56e4.json"
+      ]
+    },
+    {
+      "id": "H12R",
+      "claim": "固定索引版第二次輸出所有片段完整且分類正確；本次仍有月份/日期尾端不完整，未達預定標準，不否定所有索引方案。",
+      "status": "REFUTED",
+      "evidence": [
+        "reports/indexed-recall-repeat-results.md",
+        "evidence/EV-20261021T034825-0e02c9b4.json"
+      ]
+    },
+    {
+      "id": "H14",
+      "claim": "Qwen同題單次第一步完整正確；因ReadTimeout未取得可評分答案，效果未驗。",
+      "status": "UNCONFIRMED",
+      "evidence": [
+        "reports/qwen-indexed-recall-results.md"
+      ]
+    },
+    {
+      "id": "H15",
+      "claim": "同版第二次Qwen可在預算內完整正確；420秒無完整答案，語意未驗。",
+      "status": "UNCONFIRMED",
+      "evidence": [
+        "reports/qwen-indexed-recall-repeat-results.md"
+      ]
+    },
+    {
+      "id": "H16",
+      "claim": "第三次同設定Qwen可在預算內完整正確；420秒無完整答案，語意未驗，後續需定位耗時。",
+      "status": "UNCONFIRMED",
+      "evidence": [
+        "reports/qwen-indexed-recall-third-results.md"
+      ]
+    },
+    {
+      "id": "H17",
+      "claim": "第四次同設定Qwen於預算內完整；420秒無答案，未驗語意。",
+      "status": "UNCONFIRMED",
+      "evidence": [
+        "reports/qwen-indexed-recall-fourth-results.md"
+      ]
+    },
+    {
+      "id": "H18",
+      "claim": "取消時間截止後固定4096輸出候選可完整正確拆解；實測到length上限JSON截斷，未達完整標準。",
+      "status": "REFUTED",
+      "evidence": [
+        "reports/qwen-indexed-recall-wait-results.md"
+      ]
+    },
+    {
+      "id": "H19",
+      "claim": "本單題取消輸出與時間限制後可完整正常結束，主要7組索引／角色／scope正確，raw可重播；單次結果支持，不代表正式Gate。",
+      "status": "CONFIRMED",
+      "evidence": [
+        "reports/qwen-indexed-recall-uncapped-results.md",
+        "evidence/EV-20261021T075735-f75bf9ac.json",
+        "evidence/EV-20261021T075801-cb351f74.json",
+        "evidence/EV-20261021T080912-146f3d0c.json",
+        "evidence/EV-20261021T081050-aa48bdf2.json"
+      ]
+    },
+    {
+      "id": "H20",
+      "claim": "固定第一步下Qwen自然第二步全7views合法且語意正確；首個庫存view證據契約失敗未達門檻，未驗其餘6views。",
+      "status": "REFUTED",
+      "evidence": [
+        "reports/qwen-stage-two-results.md",
+        "evidence/EV-20261021T100747-34878c00.json",
+        "evidence/EV-20261021T100802-33d75213.json",
+        "evidence/EV-20261021T101943-dfb8648d.json",
+        "evidence/EV-20261021T102130-1fa8fe6e.json"
+      ]
+    },
+    {
+      "id": "H21",
+      "claim": "用途背景被第一步列為metadata資料需求，使第二步空映射supported與資料需求契約衝突；需區分背景與可映射資料需求後再驗，不捏造欄位。",
+      "status": "UNCONFIRMED",
+      "evidence": [
+        "evidence/EV-20261021T143954-abccd140.json",
+        "evidence/EV-20261021T144804-f9fbd92f.json",
+        "evidence/EV-20261021T144915-b017862c.json"
+      ]
+    }
+  ]
+}
+
+## 範圍
+
+- evidence-driven-dev/tasks/ollama-planning-mvp
+- evaluations
+- tests
+- src/cpea/workflows/task_decomposition
+- src/cpea/application/models/decomposition.py
+
+## 限制
+
+[
+  "依使用者2026-10-20最新指示授權實作、離線重播與逐階段DeepSeek測試；取代前輪僅設計限制。",
+  "不產生或執行SQL、不查詢DB；DeepSeek未通過固定版兩輪各38/38首次語意完整驗收前禁止任何Ollama呼叫。",
+  "不得用GPT代答、不修改原始raw與分數；新sidecar與規則需版本化。",
+  "繁體中文Markdown，UTF-8無BOM；原有編碼換行保留。",
+  "各階段依subagent-proposal.md預先門檻與停止條件；rate limit不重跑。",
+  "最新使用者明確授權Azure gpt-6-sol對B1失敗四題各一次作診斷，保留API推理資料；不准作DeepSeek或Ollama產品線代答。",
+  "使用者另授權decision_summary診斷response：第11/14/26題兩模型各一次，摘要為高層決策依據、不得宣稱私有思維鏈。",
+  "使用者再授權decision_chain由模型自填六類公開決策、依據、task引用與前置關係；第11題兩模型各一次，不宣稱私有內部思維鏈。",
+  "使用者授權兩模型對第11題各追加一次來源選擇理由與通路能力自評；屬事後說明，不替換首次結果。",
+  "使用者授權試加完整需求欄位涵蓋為最高優先的prompt；候選版與原版DeepSeek同第11題各一次，未過門檻不切產品預設。",
+  "使用者授權Markdown system且第一區塊為高優先規則；第11題第一DeepSeek規劃、第二獨立DeepSeek審查缺證據決策，各一次，不自動repair或把review視為oracle。",
+  "使用者2026-10-21授權依三階段計畫實作與驗證。EXP-009／010合計9次上限；機械修正後僅重用相同兩raw、未重跑provider；實際4次不同節點呼叫後依門檻停止，不再自動續接。",
+  "使用者最新授權測試契約相容的盤點庫存改寫；EXP011只做需求拆解及inventory對照各一次，實際首call引用錯誤停止，無修正或重跑。新題診斷不取代原oracle或分數。",
+  "使用者授權第一步LLM只輸出原句index、由Python裁切。EXP012僅一次fresh recall-only模型診斷，實際1call後保存索引邊界/語意問題，不自動補end、repair、重跑或續跑。",
+  "使用者明確授權索引版再跑一次；EXP013沿用相同題文/messages/source/設定，只有1次fresh第一步。前置核對誤用系統Python導致EXP補登偏差另記，沒有額外provider重跑。",
+  "使用者2026-10-21明確指定改用qwen3.8:27b跑一次，授權EXP014單題第一步Ollama診斷作先前禁令的狹義例外；只1call、同題/messages/source，thinking沿用本機true，4096輸出上限，不重試、不延伸第二/三步。完整38題採用Gate不變。",
+  "使用者最新要求「再一次」明確授權EXP015再做一次Qwen同題同版第一步；維持thinking=true、timeout300秒、output4096、fresh call上限1，獨立保存，不自動重試或擴第二／三步。",
+  "使用者最新再次要求「再一次」，授權EXP016第三次Qwen同題同版第一步。只新增1call，thinking=true、output4096、read timeout300秒、整體hard timeout420秒維持相同；保存獨立結果，不自動追加呼叫或第二／三步。",
+  "使用者最新再次要求「再一次」，授權EXP017第四次Qwen同題同版第一步。僅新增1call；thinking=true、output4096、read timeout300秒、整體hard timeout420秒維持相同；獨立保存，不自動第五次或第二／三步。",
+  "使用者最新明確要求「等到它結束為止」，撤銷本次等待的時間截止。上一筆EXP017在調整前已420秒終止，因此EXP018另送1次同題Qwen；HTTP timeout=None、EDD Ledger.run timeout=None；保留output4096與1call預算，等模型完成或回傳錯誤，不自動重試。",
+  "使用者最新明確要求解除token/timeout上限再試一次，授權EXP019單次Qwen第一步：Ollama num_predict=-1，取消評估器input/output累計與wall/time配額、HTTP timeout=None、Ledger.run timeout=None；保留模型context32768物理設定、單call及結構/語意驗證，不自動重試或第二／三步。",
+  "使用者明確要求執行第二步，授權EXP020重用EXP019第一步raw／結果，依原順序對7個views各最多1次Qwen映射，序列執行、最多7次新呼叫。沿用num_predict=-1、HTTP／外層timeout=None、無token配額；首個provider／解析／契約錯誤即保存停止，不自動repair或第三步，不重跑第一步。",
+  "使用者最新偏好：不自動產測試報告，只有明確要求才產；本次只印測試log，保留raw/log與必要既有Task/checkpoint更新，不新增reports或experiments Markdown。",
+  "使用者授權修改後再測一次第二步：單一證據路徑、Python從原需求/契約取引文與欄位描述；保留語意/角色/scope/母體合併驗證，舊wire與raw不覆蓋。最多7view各1call，無token/timeout上限、首錯停止、不重跑第一步或第三步。",
+  "2026-10-21 最新使用者 $edd-loop：授權修正目前任務拆分測試並使用本地 Ollama qwen3.8:27b，不限輪次、呼叫/retry 次數、agent 派遣、token 或 timeout；僅本機，雲端呼叫 0。每3輪獨立方向審核；成功HTTP錯答不得原樣重試挑分。取代先前單次/首錯即結束整個任務限制，歷史 Gate 狀態保存在 plan.historical_target_before_qwen_loop，不宣稱其通過。"
+]
+
+## 驗收標準
+
+[
+  {
+    "id": "LOOP1",
+    "description": "以既有 raw 重現並定位目前失敗；修正保留必要資料需求、條件、角色、scope 與母體驗證，新增有辨識力的正反例且相關回歸通過。",
+    "status": "PENDING",
+    "evidence": []
+  },
+  {
+    "id": "LOOP2",
+    "description": "本機 qwen3.8:27b 自然完成目前診斷案例的需求拆分、全部候選 View 映射及來源選擇，語意涵蓋與 prepared requests 驗收通過；不執行 SQL 或 DB。",
+    "status": "PENDING",
+    "evidence": []
+  },
+  {
+    "id": "LOOP3",
+    "description": "保存所有首次與失敗 raw/log、版本及模型設定；新結果可離線重播，歷史 raw、分數與完整 38 題 Gate 狀態不變。",
+    "status": "PENDING",
+    "evidence": []
+  },
+  {
+    "id": "LOOP4",
+    "description": "fresh-context 獨立驗證者核對修正、父層整合、自然結果語意與必要回歸並 ACCEPT。",
+    "status": "PENDING",
+    "evidence": []
+  }
+]
+
+## 工作進度
+
+[
+  {
+    "summary": "使用者授權執行，完成MVP0零模型重播與獨立30題oracle；A安全可救0，12unsafe中runtime只擋7，oracle診斷擋12，明確分離能力。",
+    "evidence": [
+      "reports/mvp0-summary.json",
+      "agents/oracle-audit/review-manifest.json"
+    ]
+  },
+  {
+    "summary": "B1六題注入編譯通過；12次DeepSeek自然成對實測完成，B1與v3語意安全皆2/6；候選節點5/6但端到端未達門檻，不擴十題或38題、不呼叫Ollama。",
+    "evidence": [
+      "reports/mvp1-summary.json",
+      "agents/oracle-audit/mvp1-semantic-review.json"
+    ]
+  },
+  {
+    "summary": "修復兩個sidecar漏判，新增反例與既有相關回歸78pass；已存12模型結果fresh逐字重播PASS；十題與八題由獨立作者建立，尚待新oracle審核且未執行。",
+    "evidence": [
+      "evidence/EV-20261020T130232-537821de.json",
+      "evidence/EV-20261020T130208-4b2bd9a2.json",
+      "agents/sealed-cases/manifest.json"
+    ]
+  },
+  {
+    "summary": "使用者新授權GPT-6 Sol對B1失敗四題各一次；3/4端到端安全，14為已知FD護欄誤拒，四份骨架語意可核准。API可讀摘要0/4，加密reasoning4/4保存；81回歸與四筆離線重播通過；不取代DeepSeekGate。",
+    "evidence": [
+      "reports/gpt-sol-failure-probe.md",
+      "reports/gpt-sol-failure-probe.json"
+    ]
+  },
+  {
+    "summary": "使用者新授權新增decision_summary並比較：獨立診斷model六類摘要、原兩個v3 schema未變；GPT與DeepSeek同三題共六次，GPT3/3ready、DeepSeek1/3ready，六摘要完整。明確定位11來源能力錯、26省略指定通路，14額外計數與摘要缺漏；86回歸與六筆重播通過。",
+    "evidence": [
+      "reports/decision-summary-comparison.md",
+      "reports/decision-summary-comparison.json"
+    ]
+  },
+  {
+    "summary": "新增必填decision_chain六節點診斷型別與模型指令；GPT與DeepSeek第11題各一次均填完。GPT語意安全，DeepSeek明說無通路欄位卻漏online且ready；兩筆重播一致、96回歸通過、四個舊schema不變。",
+    "evidence": [
+      "reports/decision-chain-comparison.md",
+      "reports/decision-chain-comparison.json"
+    ]
+  },
+  {
+    "summary": "依使用者要求兩模型各追加一次說明原來源選擇；GPT強調完整條件能力，DeepSeek強調粒度/直接性並承認缺通路。兩筆解析/重播/hash核對通過，原計畫與分數不變。",
+    "evidence": [
+      "reports/source-selection-reasons.md",
+      "reports/source-selection-reasons.json"
+    ]
+  },
+  {
+    "summary": "使用者要求將低成本模型語意失敗時比較理由加入全域EDD；已更新主入口/調查/驗收及新reference，3技能格式/4檔編碼連結通過並完成前後行為測試；不新增planner供應商呼叫。",
+    "evidence": [
+      "reports/edd-model-decision-flow.md",
+      "evidence/EV-20261020T155936-a055413c.json"
+    ]
+  },
+  {
+    "summary": "新增v3-coverage-first-1，完整欄位/條件涵蓋先於粒度便利；DeepSeek原版/候選同第11題各一次仍皆選錯來源漏online，兩草稿ready但validator均擋下，候選未改善。兩筆重播、96回歸通過；不擴題或自動再調參。",
+    "evidence": [
+      "reports/coverage-priority-comparison.md",
+      "reports/coverage-priority-comparison.json"
+    ]
+  },
+  {
+    "summary": "新增兩份Markdown system第一區塊高優先規則，planner/reviewer兩DeepSeek依序各一次。planner仍捏造月表sales_channel被程式拒絕；reviewer reject並抓核心決策1/3契約矛盾，但有未充分支持的附加疑慮/不精確路徑。99回歸及兩筆離線核對通過，生成未成功。",
+    "evidence": [
+      "reports/markdown-evidence-review.md",
+      "reports/markdown-evidence-review.json"
+    ]
+  },
+  {
+    "summary": "依使用者要求將三階段View召回/部分需求映射/必要來源選擇記錄為執行計畫，含text-to-sql重用邊界、條件與度量不可跨來源挪用、9次/題與新預算、驗證及停止門檻；本輪只寫文件。",
+    "evidence": [
+      "reports/three-stage-view-selection-plan.md"
+    ]
+  },
+  {
+    "summary": "三階段evaluation型別、三份Markdown prompt、序列runner／budget／replay完成；獨立review原4項缺陷已TDD修正。42focused／135相關通過；第11題合計4不同calls後庫存引用契約錯誤而停，無最終request與語意通過，不擴六題、十題、38題或Ollama。",
+    "evidence": [
+      "reports/three-stage-view-selection-results.md",
+      "evidence/EV-20261021T015608-374f69fc.json",
+      "evidence/EV-20261021T015637-436c6855.json",
+      "evidence/EV-20261021T015828-e8216b14.json"
+    ]
+  },
+  {
+    "summary": "釐清原庫存grain未保證最新/目前，原題oracle適用性待重審；新題1次DeepSeek將盤點日期列attribute、無庫存日期filter，但第一步quote自行加入省略號而拒絕，第二節點未執行；已fresh replay保存，INCONCLUSIVE。",
+    "evidence": [
+      "reports/snapshot-inventory-probe.md",
+      "evidence/EV-20261021T030934-e2fd34ef.json",
+      "evidence/EV-20261021T031036-7617dfc7.json"
+    ]
+  },
+  {
+    "summary": "第一步改start/end、Python裁切quote；新21測試、63focused/156相關通過，獨立review無P1/P2。自然單次1call共7索引，結構PASS但完整詞邊界2/7、5組end少1、母體錯列filter，固定候選未達自然標準。原raw/自動結果保留並fresh replay，不擴題。",
+    "evidence": [
+      "reports/indexed-recall-results.md",
+      "evidence/EV-20261021T033818-dd272774.json",
+      "evidence/EV-20261021T033920-61ce56e4.json",
+      "evidence/EV-20261021T034118-e12c74ed.json"
+    ]
+  },
+  {
+    "summary": "同索引版第二次1call，完整詞覆蓋5/7對比前次2/7，母體改為population；月份及盤點日期仍少一字。新結果獨立保存、fresh replay通過，完整標準未過，不重跑第三次。",
+    "evidence": [
+      "reports/indexed-recall-repeat-results.md",
+      "evidence/EV-20261021T034825-0e02c9b4.json",
+      "evidence/EV-20261021T035012-bc6c0422.json"
+    ]
+  },
+  {
+    "summary": "EXP014使用者授權Qwen單次第一步；同題/messages/core核對成功，約300.4秒ReadTimeout，語意NOT_VERIFIED；fresh離線provider錯誤重播一致，未重試。",
+    "evidence": [
+      "reports/qwen-indexed-recall-results.md",
+      "evidence/EV-20261021T035649-bb08cfa3.json",
+      "evidence/EV-20261021T040200-432414fb.json",
+      "evidence/EV-20261021T035728-92bbb829.json"
+    ]
+  },
+  {
+    "summary": "EXP015第二次Qwen同題同設定1call，到420秒整體硬上限，無完整答案；語意INCONCLUSIVE，fresh離線artifact核對PASS，不能raw replay。",
+    "evidence": [
+      "reports/qwen-indexed-recall-repeat-results.md",
+      "evidence/EV-20261021T041042-c4724be2.json",
+      "evidence/EV-20261021T041812-51640ddf.json"
+    ]
+  },
+  {
+    "summary": "EXP016第三次Qwen同題同設定1call仍420秒hard timeout，無完整答案。觀察12.6GB GPU VRAM、fresh離線artifact核對PASS；三次均無答案，應先定位耗時而非自動追加。",
+    "evidence": [
+      "reports/qwen-indexed-recall-third-results.md",
+      "evidence/EV-20261021T042057-87b8ad21.json",
+      "evidence/EV-20261021T042842-e7ac3938.json"
+    ]
+  },
+  {
+    "summary": "EXP017第四次420秒hard timeout，無答案；最新使用者要求等到結束，因原程序已終止另立EXP018無時間deadline單次呼叫。",
+    "evidence": [
+      "reports/qwen-indexed-recall-fourth-results.md",
+      "evidence/EV-20261021T072922-45c135b4.json",
+      "evidence/EV-20261021T073825-cc2b646a.json"
+    ]
+  },
+  {
+    "summary": "EXP018取消HTTP／外層deadline後等到模型結束：555.5秒，輸出4096達length限制，JSON截斷；六個可見目標詞索引完整但整份第一步FAIL。raw replay一致，未修補或重試。",
+    "evidence": [
+      "reports/qwen-indexed-recall-wait-results.md",
+      "evidence/EV-20261021T073912-568459f3.json",
+      "evidence/EV-20261021T074905-2b4c73bf.json"
+    ]
+  },
+  {
+    "summary": "EXP019無token／timeout上限單次Qwen完成：620.1秒stop、4618輸出tokens，JSON完整，主要目標7/7精確索引與角色、scope／母體符合，共9requirements/7views；raw replay與fresh核對PASS，不代表正式Gate。",
+    "evidence": [
+      "reports/qwen-indexed-recall-uncapped-results.md",
+      "evidence/EV-20261021T075735-f75bf9ac.json",
+      "evidence/EV-20261021T075801-cb351f74.json",
+      "evidence/EV-20261021T080912-146f3d0c.json",
+      "evidence/EV-20261021T081050-aa48bdf2.json"
+    ]
+  },
+  {
+    "summary": "EXP020第二步只新增庫存view1call：646.6秒JSON完整，但grain/keys list引文不合法，另兩個population鍵缺各自欄位描述證據。依首錯停止，未執行後6view或第三步；raw replay與原輸出稽核PASS。",
+    "evidence": [
+      "reports/qwen-stage-two-results.md",
+      "evidence/EV-20261021T100747-34878c00.json",
+      "evidence/EV-20261021T100802-33d75213.json",
+      "evidence/EV-20261021T101943-dfb8648d.json",
+      "evidence/EV-20261021T102130-1fa8fe6e.json"
+    ]
+  },
+  {
+    "summary": "Ruling: 將第二步證據輸出改為path-only adapter；Python依欄位產生原契約描述與原需求片段。單一grain證據、母體鍵免模型重複引文；保留舊驗證器及歷史hash，既有母體anchor/left-join驗證仍適用。使用者要求只印log，故不新增報告/EXP Markdown。",
+    "evidence": []
+  },
+  {
+    "summary": "依最新授權第二步改path-only、Python取引文，單一grain證據與母體鍵衍生欄位描述；114pytest通過。Qwen自然1call452秒，舊證據錯誤消除，新卡點R_PURPOSE supported無映射。依首錯停止後6view與第三步，原raw重播一致；僅印log，未新增測試報告或實驗Markdown。",
+    "evidence": [
+      "evidence/EV-20261021T143954-abccd140.json",
+      "evidence/EV-20261021T144804-f9fbd92f.json",
+      "evidence/EV-20261021T144915-b017862c.json"
+    ]
+  },
+  {
+    "kind": "edd-loop-progress",
+    "goal": "修正目前三階段任務拆分測試的失敗，以本機 Ollama qwen3.8:27b 完成目前診斷案例的自然端到端驗證與必要回歸。",
+    "action": {
+      "action": "audit",
+      "reviewed_rounds": [
+        22,
+        23,
+        24
+      ]
+    },
+    "rounds": "24/1000000000000000000000000000000",
+    "used": {
+      "agent_dispatches": 43,
+      "cloud_calls": 0,
+      "local_calls": 31,
+      "model_retries": 0
+    },
+    "nodes": [
+      {
+        "id": "root",
+        "parent": null,
+        "status": "pending"
+      },
+      {
+        "id": "three_stage_integration",
+        "parent": "root",
+        "status": "pending"
+      },
+      {
+        "id": "contract_and_managed_runner",
+        "parent": "three_stage_integration",
+        "status": "passed"
+      },
+      {
+        "id": "natural_qwen_three_stage",
+        "parent": "three_stage_integration",
+        "status": "failed"
+      },
+      {
+        "id": "coverage_slots_contract",
+        "parent": "natural_qwen_three_stage",
+        "status": "passed"
+      },
+      {
+        "id": "natural_slots_three_stage",
+        "parent": "natural_qwen_three_stage",
+        "status": "failed"
+      },
+      {
+        "id": "evidence_bound_managed_contract",
+        "parent": "natural_slots_three_stage",
+        "status": "passed"
+      },
+      {
+        "id": "natural_evidence_bound_three_stage",
+        "parent": "natural_slots_three_stage",
+        "status": "failed"
+      },
+      {
+        "id": "own_responsibility_managed_contract",
+        "parent": "natural_evidence_bound_three_stage",
+        "status": "passed"
+      },
+      {
+        "id": "natural_own_responsibility_three_stage",
+        "parent": "natural_evidence_bound_three_stage",
+        "status": "failed"
+      },
+      {
+        "id": "kind_mapping_managed_contract",
+        "parent": "natural_own_responsibility_three_stage",
+        "status": "passed"
+      },
+      {
+        "id": "natural_kind_mapping_three_stage",
+        "parent": "natural_own_responsibility_three_stage",
+        "status": "pending"
+      },
+      {
+        "id": "kind_diagnostic_fixture_harness",
+        "parent": "natural_kind_mapping_three_stage",
+        "status": "passed"
+      },
+      {
+        "id": "kind_diagnostic_fixture_semantics",
+        "parent": "natural_kind_mapping_three_stage",
+        "status": "passed"
+      },
+      {
+        "id": "natural_kind_selection_isolation",
+        "parent": "natural_kind_mapping_three_stage",
+        "status": "passed"
+      },
+      {
+        "id": "natural_kind_coverage_isolation",
+        "parent": "natural_kind_mapping_three_stage",
+        "status": "failed"
+      },
+      {
+        "id": "kind_diagnostic_fixture_v2_correction",
+        "parent": "kind_diagnostic_fixture_semantics",
+        "status": "passed"
+      },
+      {
+        "id": "kind_diagnostic_evidence_rebinding",
+        "parent": "kind_diagnostic_fixture_semantics",
+        "status": "passed"
+      },
+      {
+        "id": "kind_policy_shape_contract",
+        "parent": "natural_kind_selection_isolation",
+        "status": "passed"
+      },
+      {
+        "id": "kind_policy_shape_semantics",
+        "parent": "natural_kind_selection_isolation",
+        "status": "passed"
+      },
+      {
+        "id": "natural_kind_policy_shape_selection",
+        "parent": "natural_kind_selection_isolation",
+        "status": "passed"
+      },
+      {
+        "id": "capability_projection_contract",
+        "parent": "natural_kind_coverage_isolation",
+        "status": "passed"
+      },
+      {
+        "id": "capability_projection_semantics",
+        "parent": "natural_kind_coverage_isolation",
+        "status": "passed"
+      },
+      {
+        "id": "natural_capability_projection_coverage",
+        "parent": "natural_kind_coverage_isolation",
+        "status": "failed"
+      },
+      {
+        "id": "text_leaf_evidence_contract",
+        "parent": "natural_capability_projection_coverage",
+        "status": "failed"
+      },
+      {
+        "id": "text_leaf_evidence_semantics",
+        "parent": "natural_capability_projection_coverage",
+        "status": "pending"
+      },
+      {
+        "id": "natural_text_leaf_evidence_coverage",
+        "parent": "natural_capability_projection_coverage",
+        "status": "pending"
+      }
+    ]
+  }
+]
+
+## Subagent Registry
+
+[
+  {
+    "id": "ollama-mvp-design",
+    "status": "DONE_WITH_CONCERNS",
+    "report": "agents/ollama-mvp-design/task.md",
+    "platform_id": "/root/ollama_mvp_design",
+    "integrated": true,
+    "disposition": "主agent已實讀完整提案與handoff，要求並核對DeepSeek耗時修正及Ollama同等兩輪38/38 Gate；整合為reports/integrated-plan.md。方案僅設計未實測，oracle pending及語意推導界線保留，不執行新模型或SQL。",
+    "integrated_at": "2026-10-20T12:27:43+00:00"
+  },
+  {
+    "id": "oracle-audit",
+    "status": "DONE_WITH_CONCERNS",
+    "report": "agents/oracle-audit/task.md",
+    "platform_id": "/root/oracle_audit",
+    "integrated": true,
+    "disposition": "已實讀canonical30核准、MVP0/B1獨立review、12筆逐題語意與歷史30分類及final證據檢查。採納B1/v3安全2/6淨增0、原18安全9真錯3機械、原4unsafe ready及FD等價邊界；保留原分。Gate失敗不升十題/完整38/Ollama，主任務PLANNING非完成。",
+    "integrated_at": "2026-10-20T13:06:25+00:00"
+  },
+  {
+    "id": "sealed-cases",
+    "status": "DONE_WITH_CONCERNS",
+    "report": "agents/sealed-cases/task.md",
+    "platform_id": "/root/sealed_cases",
+    "integrated": true,
+    "disposition": "已讀manifest、自檢與handoff；確認十題與八題hash，內容尚待獨立審核；Gate題文維持封存，僅版本凍結後揭露。",
+    "integrated_at": "2026-10-20T12:53:11+00:00"
+  },
+  {
+    "id": "three-stage-review",
+    "status": "DONE_WITH_CONCERNS",
+    "report": "agents/three-stage-review/task.md",
+    "platform_id": "/root/three_stage_review",
+    "integrated": true,
+    "disposition": "已實讀獨立review及handoff：原版兩P1兩P2採納並以五RED反例修正，後續42focused/135相關通過；修正版未再獨立review不當核准。第11題4個獨立calls後在inventory引文契約拒絕，完整語意NOT_VERIFIED，不擴題。",
+    "integrated_at": "2026-10-21T02:01:56+00:00"
+  },
+  {
+    "id": "indexed-recall-review",
+    "status": "DONE_WITH_CONCERNS",
+    "report": "agents/indexed-recall-review/task.md",
+    "platform_id": "/root/indexed_recall_review",
+    "integrated": true,
+    "disposition": "已實讀完整handoff；63focused與synthetic審查未見P1/P2，main另有156相關回歸。審查只核對程式，不當自然品質核准；單次自然raw精確邊界2/7且母體分類為filter，另列模型驗收未過。",
+    "integrated_at": "2026-10-21T03:43:45+00:00"
+  }
+]
+
+## 實驗
+
+[
+  {
+    "id": "EXP-001",
+    "hypothesis_id": "H1"
+  },
+  {
+    "id": "EXP-002",
+    "hypothesis_id": "H2"
+  },
+  {
+    "id": "EXP-003",
+    "hypothesis_id": "H4"
+  },
+  {
+    "id": "EXP-004",
+    "hypothesis_id": "H5"
+  },
+  {
+    "id": "EXP-005",
+    "hypothesis_id": "H6"
+  },
+  {
+    "id": "EXP-006",
+    "hypothesis_id": "H7"
+  },
+  {
+    "id": "EXP-007",
+    "hypothesis_id": "H8"
+  },
+  {
+    "id": "EXP-008",
+    "hypothesis_id": "H9"
+  },
+  {
+    "id": "EXP-009",
+    "hypothesis_id": "H10"
+  },
+  {
+    "id": "EXP-010",
+    "hypothesis_id": "H10a"
+  },
+  {
+    "id": "EXP-011",
+    "hypothesis_id": "H11"
+  },
+  {
+    "id": "EXP-012",
+    "hypothesis_id": "H12"
+  },
+  {
+    "id": "EXP-013",
+    "hypothesis_id": "H12R"
+  },
+  {
+    "id": "EXP-014",
+    "hypothesis_id": "H14"
+  },
+  {
+    "id": "EXP-015",
+    "hypothesis_id": "H15"
+  },
+  {
+    "id": "EXP-016",
+    "hypothesis_id": "H16"
+  },
+  {
+    "id": "EXP-017",
+    "hypothesis_id": "H17"
+  },
+  {
+    "id": "EXP-018",
+    "hypothesis_id": "H18"
+  },
+  {
+    "id": "EXP-019",
+    "hypothesis_id": "H19"
+  },
+  {
+    "id": "EXP-020",
+    "hypothesis_id": "H20"
+  }
+]
+
+## 決策
+
+詳見 [decisions.md](decisions.md)。
+[
+  {
+    "id": "DEC-001",
+    "status": "ACCEPTED",
+    "source": "main-agent",
+    "summary": "依已核准計畫在既有feat/cross_view與指定Task就地執行，實作限evaluation候選，保留產品v3預設",
+    "alternatives": [
+      "另建工作樹或直接取代產品規劃流程"
+    ],
+    "reason": "Task/證據/未追蹤研究輸出已在使用者指定工作區；本輪是階段研究，候選未通Gate不進產品",
+    "risks": "dirty工作樹僅可作研究，正式Gate需乾淨固定revision；新候選檔需獨立審查",
+    "revisit": "候選通過小樣本並準備完整Gate時",
+    "references": [],
+    "at": "2026-10-20T13:00:48+00:00"
+  },
+  {
+    "id": "DEC-002",
+    "status": "ACCEPTED",
+    "source": "main-agent",
+    "summary": "A僅型別護欄；B1未達MVP1，依停止條件不升級十題或38題或Ollama",
+    "alternatives": [
+      "去重日期後重跑同批題追分，或先測Qwen"
+    ],
+    "reason": "A安全可救0；B1僅2/6 ready，且有店商品對齊與母體根粒度真語意錯，非只缺欄位",
+    "risks": "尚未證明精簡骨架一般無效；僅否證B1本次凍結實作可採用。八題封存未揭露",
+    "revisit": "形成新的可否證節點假設與預先門檻後，先離線驗證再另開版本",
+    "references": [
+      "EXP-002"
+    ],
+    "at": "2026-10-20T13:00:48+00:00"
+  },
+  {
+    "id": "DEC-003",
+    "status": "ACCEPTED",
+    "source": "main-agent",
+    "summary": "使用者新授權以Azure gpt-6-sol對B1失敗四題07/09/14/28各測一次並保存API可取得的推理摘要",
+    "alternatives": [
+      "沿用先前禁止GPT測試限制，或改prompt要求模型補寫逐步思維"
+    ],
+    "reason": "最新使用者明確指定gpt-6-sol；以Responses reasoning.summary=auto保存官方推理摘要，原B1 prompt/schema/compiler凍結，不補寫或假造內部推理",
+    "risks": "Responses與Chat Completions、reasoning設定不同；僅診斷對照，不可取代DeepSeekGate或用GPT在線代答；摘要可能空白或provider不支援",
+    "revisit": "四題一次結果保存後，不重跑挑分",
+    "references": [],
+    "at": "2026-10-20T13:12:25+00:00"
+  },
+  {
+    "id": "DEC-004",
+    "status": "ACCEPTED",
+    "source": "main-agent",
+    "summary": "使用者授權新增模型可見決策依據欄位並比較GPT與DeepSeek；採獨立Explained response型別，原v3 schema與預設流程不變",
+    "alternatives": [
+      "將逐步內部推理混入原v3必填schema，或只保留API不可讀加密reasoning"
+    ],
+    "reason": "用六類簡短決策摘要定位可觀察的語意分歧；只記錄可核對結論與契約依據，摘要不驅動驗證或request組裝。三題11/14/26各模型一次，共六次相同輸入。",
+    "risks": "模型自述可能錯誤或與typed計畫矛盾，不能證明內部推理順序；新增說明會改變模型輸出與行為，非原版同輪對照。",
+    "revisit": "六次首次結果與說明一致性審核後，不重跑挑分",
+    "references": [],
+    "at": "2026-10-20T15:24:30+00:00"
+  },
+  {
+    "id": "DEC-005",
+    "status": "ACCEPTED",
+    "source": "main-agent",
+    "summary": "使用者授權加入必填decision_chain，由模型填寫有序高層決策紀錄；用新診斷response型別保留前版schema",
+    "alternatives": [
+      "要求完整私有思維鏈，或由程式替模型補寫決策過程"
+    ],
+    "reason": "節點記錄簡短選擇、可核對依據、typed task引用與前置節點；只能描述公開決策而非內部思考歷程。第11題兩模型各一次確認，六類完整且摘要不參與SQL payload。",
+    "risks": "自述依據可錯，依賴順序不證明真實內部推理順序；有序log的結構驗證不代表商業語意正確。",
+    "revisit": "兩次首次結果保存後，不自動重跑或擴題",
+    "references": [],
+    "at": "2026-10-20T15:36:15+00:00"
+  },
+  {
+    "id": "DEC-006",
+    "source": "user",
+    "question_id": "Q-001",
+    "summary": "使用者要求恢復指定評測：修正前、後各跑同一套原始30題，各一次；僅必要準備、固定評測與結果分析，不恢復無限改善或原樣重抽。",
+    "evidence": "本輪使用者訊息「那跑一次相同題庫測試」及澄清回答「修正前、後各跑同30題，各一次」。",
+    "at": "2026-10-22T03:51:16+00:00"
+  }
+]
+
+## 待使用者回答問題
+
+[
+  {
+    "question_id": "Q-001",
+    "source_agent": "user",
+    "question": "已依使用者要求於第24輪後暫停，等待明確的恢復指示。",
+    "context": "使用者訊息：「這一輪結束先暫停,統計一下目前的執行結果」。第24輪FAIL已封存；下一動作原為fresh audit22–24，尚未派遣。",
+    "options": [
+      "維持暫停",
+      "恢復執行"
+    ],
+    "recommendation": "維持暫停",
+    "impact": "暫停期間禁止新工作與模型呼叫；使用者明確續行後保留所有計數並先獨立審核22–24，不自動重跑既有請求。",
+    "status": "ANSWERED",
+    "answer": "使用者要求恢復指定評測：修正前、後各跑同一套原始30題，各一次；僅必要準備、固定評測與結果分析，不恢復無限改善或原樣重抽。",
+    "answer_evidence": "本輪使用者訊息「那跑一次相同題庫測試」及澄清回答「修正前、後各跑同30題，各一次」。"
+  }
+]
+
+## 阻礙
+
+[]
+
+## Recovery Checkpoint
+
+{
+  "last_completed": "EDD loop 第24輪 text_leaf_evidence_contract：FAIL",
+  "current_action": "EDD loop 24/1000000000000000000000000000000：委派獨立方向審核",
+  "next_action": "委派獨立方向審核",
+  "required_inputs": [],
+  "unresolved_questions": []
+}
+
+## 最終驗證
+
+{
+  "artifact_result": "PASS_WITH_WARNINGS",
+  "model_result": "FAIL",
+  "mvp0_candidate_A": "FAIL：安全可救0，runtime只擋7/12；未採用",
+  "mvp1_candidate_B1": "FAIL：safe2/6，net0；未採用",
+  "tests": [
+    "evidence/EV-20261020T130232-537821de.json",
+    "evidence/EV-20261020T130208-4b2bd9a2.json",
+    "evidence/EV-20261021T015608-374f69fc.json",
+    "evidence/EV-20261021T033818-dd272774.json"
+  ],
+  "regression": [
+    "evidence/EV-20261020T130232-537821de.json",
+    "evidence/EV-20261021T015608-374f69fc.json",
+    "evidence/EV-20261021T033818-dd272774.json"
+  ],
+  "evidence": [
+    "reports/execution-results.md",
+    "agents/oracle-audit/mvp1-semantic-review.json",
+    "reports/three-stage-view-selection-results.md",
+    "evidence/EV-20261021T015637-436c6855.json",
+    "evidence/EV-20261021T015828-e8216b14.json",
+    "reports/snapshot-inventory-probe.md",
+    "evidence/EV-20261021T030934-e2fd34ef.json",
+    "evidence/EV-20261021T031036-7617dfc7.json",
+    "reports/indexed-recall-results.md",
+    "evidence/EV-20261021T033818-dd272774.json",
+    "evidence/EV-20261021T033920-61ce56e4.json",
+    "evidence/EV-20261021T034118-e12c74ed.json",
+    "reports/indexed-recall-repeat-results.md",
+    "evidence/EV-20261021T034825-0e02c9b4.json",
+    "evidence/EV-20261021T035012-bc6c0422.json",
+    "reports/qwen-indexed-recall-results.md",
+    "evidence/EV-20261021T035649-bb08cfa3.json",
+    "evidence/EV-20261021T040200-432414fb.json",
+    "evidence/EV-20261021T035728-92bbb829.json",
+    "reports/qwen-indexed-recall-repeat-results.md",
+    "evidence/EV-20261021T041042-c4724be2.json",
+    "evidence/EV-20261021T041812-51640ddf.json",
+    "reports/qwen-indexed-recall-third-results.md",
+    "evidence/EV-20261021T042057-87b8ad21.json",
+    "evidence/EV-20261021T042842-e7ac3938.json",
+    "reports/qwen-indexed-recall-fourth-results.md",
+    "evidence/EV-20261021T072922-45c135b4.json",
+    "evidence/EV-20261021T073825-cc2b646a.json",
+    "reports/qwen-indexed-recall-wait-results.md",
+    "evidence/EV-20261021T073912-568459f3.json",
+    "evidence/EV-20261021T074905-2b4c73bf.json",
+    "reports/qwen-indexed-recall-uncapped-results.md",
+    "evidence/EV-20261021T075735-f75bf9ac.json",
+    "evidence/EV-20261021T075801-cb351f74.json",
+    "evidence/EV-20261021T080912-146f3d0c.json",
+    "evidence/EV-20261021T081050-aa48bdf2.json",
+    "reports/qwen-stage-two-results.md",
+    "evidence/EV-20261021T100747-34878c00.json",
+    "evidence/EV-20261021T100802-33d75213.json",
+    "evidence/EV-20261021T101943-dfb8648d.json",
+    "evidence/EV-20261021T102130-1fa8fe6e.json",
+    "evidence/EV-20261021T143954-abccd140.json",
+    "evidence/EV-20261021T144804-f9fbd92f.json",
+    "evidence/EV-20261021T144915-b017862c.json"
+  ],
+  "new_model_calls": 38,
+  "new_sql_db_calls": 0,
+  "ollama_calls": 8,
+  "retry_calls": 0,
+  "limitation": "固定dirty工作樹指紋開發研究，不是正式Gate。原30review overlay核准有限；新18題仍待獨立審核，8題未揭露。來源FD/側錄等價仍有保守FP；runner在正式Gate前須改即時重算case內容hash。",
+  "gpt_sol_diagnostic": {
+    "calls": 4,
+    "runtime_safe_ready": "3/4",
+    "semantic_plans_correct": "4/4（主agent依既有獨立oracle與FD證據核對）",
+    "readable_reasoning_summary": "0/4，API未回傳",
+    "encrypted_reasoning_preserved": "4/4",
+    "evidence": [
+      "evidence/EV-20261020T131348-0144f2c0.json",
+      "evidence/EV-20261020T131636-0594c38e.json",
+      "evidence/EV-20261020T131406-a2a6f2ba.json"
+    ],
+    "report": "reports/gpt-sol-failure-probe.md"
+  },
+  "new_deepseek_calls": 21,
+  "new_gpt_calls": 9,
+  "decision_summary_comparison": {
+    "calls": 6,
+    "summary_complete": "6/6",
+    "gpt_ready": "3/3",
+    "deepseek_ready": "1/3（14有未核准額外計數與摘要缺漏）",
+    "same_inputs": true,
+    "old_v3_schemas_unchanged": true,
+    "tests": "86 passed",
+    "review_scope": "主agent依既有獨立oracle與契約審核；模型自述不當作內部推理",
+    "evidence": [
+      "evidence/EV-20261020T152549-ff7bb3f4.json",
+      "evidence/EV-20261020T152944-23533861.json",
+      "evidence/EV-20261020T152610-a61706fa.json"
+    ],
+    "report": "reports/decision-summary-comparison.md"
+  },
+  "decision_chain_comparison": {
+    "calls": 2,
+    "valid_chains": "2/2",
+    "runtime_ready": "2/2",
+    "semantic_review": {
+      "gpt-6-sol": "SAFE",
+      "DeepSeek-V4.1-Flash": "UNSAFE"
+    },
+    "same_inputs": true,
+    "old_four_schemas_unchanged": true,
+    "tests": "96 passed",
+    "raw_replays": 2,
+    "review_scope": "主agent依既有獨立oracle與契約核對；非新增跨agent審查；公開決策紀錄不是私有思維鏈",
+    "evidence": [
+      "evidence/EV-20261020T153802-db30f6ef.json",
+      "evidence/EV-20261020T153811-53898903.json",
+      "evidence/EV-20261020T154143-4f2a9ac3.json"
+    ],
+    "report": "reports/decision-chain-comparison.md"
+  },
+  "source_selection_followup": {
+    "calls": 2,
+    "parsed_replays": 2,
+    "kind": "事後簡短決策理由，不重做或替換原計畫",
+    "gpt_reason": "具月份、通路與金額欄位，可表達完整需求",
+    "deepseek_reason": "月表粒度貼近且較直接，但承認不滿足指定通路",
+    "evidence": [
+      "evidence/EV-20261020T155000-a6256aea.json",
+      "evidence/EV-20261020T155100-45614282.json"
+    ],
+    "report": "reports/source-selection-reasons.md"
+  },
+  "global_edd_skill_update": {
+    "result": "PASS_WITH_WARNINGS",
+    "format": "3/3",
+    "encoding_links": "4/4",
+    "behavioral_tests": "一個前測agent；一個後測agent含兩情境，非統計驗證",
+    "new_planner_provider_calls": 0,
+    "evidence": [
+      "evidence/EV-20261020T155936-a055413c.json"
+    ],
+    "report": "reports/edd-model-decision-flow.md",
+    "external_fingerprints": "reports/edd-model-decision-flow.json"
+  },
+  "coverage_priority_probe": {
+    "prompt_version": "v3-coverage-first-1",
+    "calls": 2,
+    "model": "DeepSeek-V4.1-Flash",
+    "case_id": "cross-view-11",
+    "raw_draft_ready": "2/2",
+    "runtime_ready": "0/2",
+    "semantic_safe": "0/2",
+    "candidate_result": "FAIL：仍選v_product_monthly且缺online，有未解輸入仍自稱ready，被validator擋下",
+    "v3_default_unchanged": true,
+    "old_four_schemas_unchanged": true,
+    "tests": "96 passed",
+    "raw_replays": 2,
+    "evidence": [
+      "evidence/EV-20261020T160323-a2b40349.json",
+      "evidence/EV-20261020T160325-0a5cf230.json",
+      "evidence/EV-20261020T160435-ace4e1e0.json"
+    ],
+    "report": "reports/coverage-priority-comparison.md",
+    "limitation": "單題各一次，不是統計或因果驗證；不取代主Gate"
+  },
+  "markdown_evidence_review": {
+    "prompt_version": "v3-md-priority-review-1",
+    "calls": 2,
+    "planner_result": "FAIL：月表捏造sales_channel契約欄位，程式拒絕且無payload",
+    "reviewer_result": "PASS_WITH_WARNINGS：reject並指出決策1/3缺契約證據；額外門市語意阻擋與路徑有問題，不全盤採用",
+    "checks": 7,
+    "findings": 3,
+    "tests": "99 passed",
+    "raw_replays": 2,
+    "reviewer_context": "fresh client，只含原需求/完整契約/原計畫/可用prepared requests，沒有GPT/oracle/分數/驗證錯誤",
+    "evidence": [
+      "evidence/EV-20261020T161153-53f899de.json",
+      "evidence/EV-20261020T161155-3fdffc81.json",
+      "evidence/EV-20261020T161353-5cba5ea8.json"
+    ],
+    "report": "reports/markdown-evidence-review.md"
+  },
+  "three_stage_view_selection": {
+    "code_result": "PASS_WITH_WARNINGS",
+    "focused_tests": 42,
+    "related_regression_tests": 135,
+    "new_provider_calls": 4,
+    "cached_calls_reused": 2,
+    "input_tokens_actual": 13419,
+    "output_tokens_actual": 5550,
+    "elapsed_seconds": 47.7248109810007,
+    "cost_usd": null,
+    "stage_one_requirements": 10,
+    "candidate_views": 7,
+    "mapping_views_validated": 2,
+    "mapping_views_attempted": 3,
+    "first_stopped": "EXP009檢查器誤拒合法/grain/keys/0，已修正但原結果不變",
+    "continued_stopped": "EXP010 inventory證據引用/grain/keys陣列而非具體字串",
+    "stage_three": "NOT_EXECUTED",
+    "end_to_end_semantics": "NOT_VERIFIED",
+    "gate": "NOT_MET",
+    "unsafe_ready_emitted": 0,
+    "v3_default_unchanged": true,
+    "fixed_version_first_pass": false,
+    "sql_db_calls": 0,
+    "ollama_calls": 0,
+    "independent_review": "原版FAIL兩P1兩P2；修正後由main執行測試，未二次獨立核准",
+    "evidence": [
+      "evidence/EV-20261021T015608-374f69fc.json",
+      "evidence/EV-20261021T015637-436c6855.json",
+      "evidence/EV-20261021T015828-e8216b14.json"
+    ],
+    "report": "reports/three-stage-view-selection-results.md"
+  },
+  "snapshot_inventory_probe": {
+    "result": "INCONCLUSIVE",
+    "new_model_calls": 1,
+    "recall_requirements": 11,
+    "candidate_views": 7,
+    "date_role": "attribute",
+    "inventory_time_filter_requirements": 0,
+    "quote_validation": "FAIL: ellipsis not present in original request",
+    "inventory_mapping": "NOT_EXECUTED",
+    "end_to_end": "NOT_VERIFIED",
+    "raw_replays": 1,
+    "same_agent_verification": true,
+    "independent_oracle_approved": false,
+    "source_catalog_prompt_schema_unchanged": true,
+    "sql_db_ollama_calls": 0,
+    "input_tokens": 5611,
+    "output_tokens": 1482,
+    "elapsed_seconds": 14.028542469000968,
+    "cost_usd": null,
+    "report": "reports/snapshot-inventory-probe.md",
+    "evidence": [
+      "evidence/EV-20261021T030934-e2fd34ef.json",
+      "evidence/EV-20261021T031036-7617dfc7.json"
+    ]
+  },
+  "oracle_time_semantics_review": {
+    "case_id": "cross-view-11",
+    "status": "REASSESSMENT_REQUIRED",
+    "reason": "grain只保證店商品唯一，不保證最新或目前；原題必須ready的前提超出現有契約。原oracle及分數不修改。",
+    "evidence": [
+      "projects/retail/views/demo_retail/v_inventory_status.yaml",
+      "projects/retail/contract_review.md",
+      "reports/snapshot-inventory-probe.md"
+    ]
+  },
+  "indexed_recall": {
+    "code_result": "PASS_WITH_WARNINGS",
+    "new_tests": 21,
+    "focused_tests": 63,
+    "related_tests": 156,
+    "independent_code_review": "無P1/P2；不含自然品質核准",
+    "new_model_calls": 1,
+    "raw_quote_fields": 0,
+    "structural_index_validation": "PASS",
+    "python_slicing": "PASS",
+    "requirements": 7,
+    "exact_full_term_boundaries": 2,
+    "end_minus_one": 5,
+    "semantic_issues": [
+      "保留庫存母體分類為filter並約束庫存度量及日期屬性",
+      "未明列key/grain類需求"
+    ],
+    "natural_fixed_candidate_result": "FAIL",
+    "source_mapping": "NOT_EXECUTED",
+    "end_to_end": "NOT_VERIFIED",
+    "input_tokens": 6707,
+    "output_tokens": 982,
+    "elapsed_seconds": 8.170141804001105,
+    "cost_usd": null,
+    "v3_product_unchanged": true,
+    "historical_raw_scores_unchanged": true,
+    "legacy_source_snapshot": ".local/index-recall-prechange/",
+    "old_schema_replay": "version mismatch expected;不能將新schema混入舊實驗",
+    "sql_db_ollama_calls": 0,
+    "report": "reports/indexed-recall-results.md",
+    "evidence": [
+      "evidence/EV-20261021T033818-dd272774.json",
+      "evidence/EV-20261021T033920-61ce56e4.json",
+      "evidence/EV-20261021T034118-e12c74ed.json"
+    ]
+  },
+  "indexed_recall_repeat": {
+    "same_source_schema_catalog_case_messages": true,
+    "same_model_settings": true,
+    "new_model_calls": 1,
+    "structural_result": "PASS",
+    "complete_target_terms": 5,
+    "requirements": 7,
+    "exact_minimal_spans": 4,
+    "prior_complete_terms": 2,
+    "population_kind": "population",
+    "truncated_terms": [
+      "庫存盤點日期",
+      "2026 年 9 月"
+    ],
+    "full_first_stage_criteria": "NOT_MET",
+    "source_mapping": "NOT_EXECUTED",
+    "end_to_end": "NOT_VERIFIED",
+    "fresh_raw_replays": 1,
+    "input_tokens": 6707,
+    "output_tokens": 1018,
+    "elapsed_seconds": 14.198732315999223,
+    "cost_usd": null,
+    "workflow_warning": "前置核對用錯Python，runner先啟動後才補登EXP；已完成相同輸入/版本/設定補核對，無額外呼叫",
+    "report": "reports/indexed-recall-repeat-results.md",
+    "evidence": [
+      "evidence/EV-20261021T034825-0e02c9b4.json",
+      "evidence/EV-20261021T035012-bc6c0422.json"
+    ]
+  },
+  "qwen_indexed_recall": {
+    "experiment": "EXP-014",
+    "provider": "ollama",
+    "model": "qwen3.8:27b",
+    "model_digest": "aaee06c39dcf2437cde036998d960e1fc1494b8191be7cc9657d01e509097813",
+    "quantization": "Q4_K_M",
+    "request": "對照各店各商品的盤點庫存件數與 2026 年 9 月線上通路的折扣金額及淨銷售額，並顯示庫存盤點日期，準備促銷後補貨評估；保留所有庫存商品。",
+    "same_source_schema_catalog_case_messages": true,
+    "calls": 1,
+    "retries": 0,
+    "reasoning": true,
+    "temperature": 1,
+    "top_p": 1,
+    "seed": 42,
+    "context_window": 32768,
+    "output_limit": 4096,
+    "timeout_seconds": 300,
+    "elapsed_seconds": 300.413323933999,
+    "input_tokens_estimated": 8352,
+    "actual_input_tokens": null,
+    "actual_output_tokens": null,
+    "cost_usd": null,
+    "provider_result": {
+      "error_type": "ReadTimeout",
+      "error": "timed out"
+    },
+    "model_answer_received": false,
+    "semantic_result": "NOT_VERIFIED",
+    "complete_target_terms": null,
+    "requirements": null,
+    "source_mapping": "NOT_EXECUTED",
+    "end_to_end": "NOT_VERIFIED",
+    "artifact_replay": "PASS",
+    "raw_answer_replays": 0,
+    "provider_error_replays": 1,
+    "reviewer": "主Agent與fresh subprocess，沒有新增跨Agent審查",
+    "raw_run_sha256": "0598f5563e4e8f1da72b069916c69cd0b8e3d3b4c188c758f47bce4c603c8f42",
+    "report": "reports/qwen-indexed-recall-results.md",
+    "evidence": [
+      "evidence/EV-20261021T035649-bb08cfa3.json",
+      "evidence/EV-20261021T040200-432414fb.json",
+      "evidence/EV-20261021T035728-92bbb829.json"
+    ]
+  },
+  "qwen_indexed_recall_repeat": {
+    "experiment": "EXP-015",
+    "repeat_of": "EXP-014",
+    "provider": "ollama",
+    "model": "qwen3.8:27b",
+    "model_digest": "aaee06c39dcf2437cde036998d960e1fc1494b8191be7cc9657d01e509097813",
+    "same_source_schema_catalog_case_messages_settings_harness": true,
+    "request": "對照各店各商品的盤點庫存件數與 2026 年 9 月線上通路的折扣金額及淨銷售額，並顯示庫存盤點日期，準備促銷後補貨評估；保留所有庫存商品。",
+    "calls": 1,
+    "retries": 0,
+    "reasoning": true,
+    "temperature": 1,
+    "top_p": 1,
+    "seed": 42,
+    "context_window": 32768,
+    "output_limit": 4096,
+    "network_read_timeout_seconds": 300,
+    "outer_hard_timeout_seconds": 420,
+    "elapsed_seconds": 420.0,
+    "termination": "EDD subprocess timeout, exit 124",
+    "model_answer_saved": false,
+    "semantic_result": "NOT_VERIFIED",
+    "complete_target_terms": null,
+    "actual_input_tokens": null,
+    "actual_output_tokens": null,
+    "cost_usd": null,
+    "source_mapping": "NOT_EXECUTED",
+    "end_to_end": "NOT_VERIFIED",
+    "raw_replay": "NOT_AVAILABLE: no completed model response or provider error",
+    "run_metadata_finalized": false,
+    "artifact_folder": ".local/qwen-indexed-20261021T041043Z-b0cbd4",
+    "artifact_hashes": {
+      "run.json": "902fa75a62004ce08890e67d66b9315fff908e42e3111ae978532696c44ce9e7",
+      "recall-request.json": "ab71c215d48bd96cdf97177b6459760703cabbe6c1c1bbf567bed29678994e43",
+      "budget.json": "2e73a07b862ddadd14c8ac98e353ab40127a76bd0833f0cf50856c244c2fefbb"
+    },
+    "evidence": [
+      "evidence/EV-20261021T041042-c4724be2.json",
+      "evidence/EV-20261021T041812-51640ddf.json"
+    ],
+    "reviewer": "主Agent及fresh subprocess，非跨Agent獨立驗證",
+    "offline_artifact_verification": "PASS"
+  },
+  "qwen_indexed_recall_third": {
+    "experiment": "EXP-016",
+    "repeat_of": [
+      "EXP-014",
+      "EXP-015"
+    ],
+    "provider": "ollama",
+    "model": "qwen3.8:27b",
+    "model_digest": "aaee06c39dcf2437cde036998d960e1fc1494b8191be7cc9657d01e509097813",
+    "same_source_schema_catalog_case_messages_settings_harness": true,
+    "request": "對照各店各商品的盤點庫存件數與 2026 年 9 月線上通路的折扣金額及淨銷售額，並顯示庫存盤點日期，準備促銷後補貨評估；保留所有庫存商品。",
+    "calls": 1,
+    "retries": 0,
+    "reasoning": true,
+    "temperature": 1,
+    "top_p": 1,
+    "seed": 42,
+    "context_window": 32768,
+    "output_limit": 4096,
+    "network_read_timeout_seconds": 300,
+    "outer_hard_timeout_seconds": 420,
+    "elapsed_seconds": 420.0,
+    "termination": "EDD subprocess timeout, exit 124",
+    "model_answer_saved": false,
+    "semantic_result": "NOT_VERIFIED",
+    "complete_target_terms": null,
+    "actual_input_tokens": null,
+    "actual_output_tokens": null,
+    "cost_usd": null,
+    "source_mapping": "NOT_EXECUTED",
+    "end_to_end": "NOT_VERIFIED",
+    "raw_replay": "NOT_AVAILABLE: no completed response or provider error",
+    "run_metadata_finalized": false,
+    "artifact_folder": ".local/qwen-indexed-20261021T042058Z-e7e449",
+    "artifact_hashes": {
+      "run.json": "1d6697555bb3cce7dd12106747d3f27352a038ce57aa95bed9ef19c253adf603",
+      "recall-request.json": "ab71c215d48bd96cdf97177b6459760703cabbe6c1c1bbf567bed29678994e43",
+      "budget.json": "3777acffc88daea3002bc319381ac2ec048c57a79194c6080918bcd7c8bd243e"
+    },
+    "runtime_observation": {
+      "timestamp": "2026-10-21T04:21:35.785905+00:00",
+      "models": [
+        {
+          "name": "qwen3.8:27b",
+          "size_vram": 12603401173,
+          "context_length": 32768
+        }
+      ]
+    },
+    "runtime_observation_path": ".local/qwen-third-runtime-observation.json",
+    "runtime_observation_sha256": "bbd0f5ebd611953c363b4de38568206b0e4ffb9e0643a4391465de1b630d3eaa",
+    "evidence": [
+      "evidence/EV-20261021T042057-87b8ad21.json",
+      "evidence/EV-20261021T042842-e7ac3938.json"
+    ],
+    "reviewer": "主Agent及fresh subprocess，非跨Agent獨立驗證",
+    "offline_artifact_verification": "PASS"
+  },
+  "qwen_indexed_recall_fourth": {
+    "experiment": "EXP-017",
+    "repeat_of": [
+      "EXP-014",
+      "EXP-015",
+      "EXP-016"
+    ],
+    "provider": "ollama",
+    "model": "qwen3.8:27b",
+    "model_digest": "aaee06c39dcf2437cde036998d960e1fc1494b8191be7cc9657d01e509097813",
+    "same_source_schema_catalog_case_messages_settings_harness": true,
+    "request": "對照各店各商品的盤點庫存件數與 2026 年 9 月線上通路的折扣金額及淨銷售額，並顯示庫存盤點日期，準備促銷後補貨評估；保留所有庫存商品。",
+    "calls": 1,
+    "retries": 0,
+    "reasoning": true,
+    "temperature": 1,
+    "top_p": 1,
+    "seed": 42,
+    "context_window": 32768,
+    "output_limit": 4096,
+    "network_read_timeout_seconds": 300,
+    "outer_hard_timeout_seconds": 420,
+    "elapsed_seconds": 420.0,
+    "termination": "EDD subprocess timeout, exit 124",
+    "model_answer_saved": false,
+    "semantic_result": "NOT_VERIFIED",
+    "complete_target_terms": null,
+    "actual_input_tokens": null,
+    "actual_output_tokens": null,
+    "cost_usd": null,
+    "source_mapping": "NOT_EXECUTED",
+    "end_to_end": "NOT_VERIFIED",
+    "raw_replay": "NOT_AVAILABLE: no completed response or provider error",
+    "run_metadata_finalized": false,
+    "artifact_folder": ".local/qwen-indexed-20261021T072923Z-ef68e6",
+    "artifact_hashes": {
+      "run.json": "fc758e5132454f0a0247fb177e4acfe5540415070e064f52115a952752ee4395",
+      "recall-request.json": "ab71c215d48bd96cdf97177b6459760703cabbe6c1c1bbf567bed29678994e43",
+      "budget.json": "99aafe4f8bb47ee90fa6dfa42833c03af533abcfa32cb781f543a96156e42ab8"
+    },
+    "runtime_observation": {
+      "timestamp": "2026-10-21T07:29:59.458877+00:00",
+      "models": [
+        {
+          "name": "qwen3.8:27b",
+          "size_vram": 12603401173,
+          "context_length": 32768
+        }
+      ]
+    },
+    "runtime_observation_path": ".local/qwen-fourth-runtime-observation.json",
+    "runtime_observation_sha256": "bc2bb0d355dbc1069e0839bc1de9e086277581428cd852404a23da2939c15473",
+    "evidence": [
+      "evidence/EV-20261021T072922-45c135b4.json",
+      "evidence/EV-20261021T073825-cc2b646a.json"
+    ],
+    "reviewer": "主Agent及fresh subprocess，非跨Agent獨立驗證",
+    "offline_artifact_verification": "PASS"
+  },
+  "qwen_indexed_recall_wait": {
+    "experiment": "EXP-018",
+    "provider": "ollama",
+    "model": "qwen3.8:27b",
+    "model_digest": "aaee06c39dcf2437cde036998d960e1fc1494b8191be7cc9657d01e509097813",
+    "request": "對照各店各商品的盤點庫存件數與 2026 年 9 月線上通路的折扣金額及淨銷售額，並顯示庫存盤點日期，準備促銷後補貨評估；保留所有庫存商品。",
+    "new_provider_calls": 1,
+    "retry_calls": 0,
+    "network_timeout_seconds": null,
+    "outer_timeout_seconds": null,
+    "thinking": true,
+    "output_limit": 4096,
+    "context_window": 32768,
+    "temperature": 1,
+    "top_p": 1,
+    "seed": 42,
+    "same_core_source_schema_catalog_case_messages": true,
+    "harness_difference": "only timeouts removed and metadata added; original frozen harness preserved",
+    "elapsed_seconds": 555.5377970709997,
+    "stop_reason": "length",
+    "provider_done": true,
+    "usage": {
+      "input_tokens": 6444,
+      "output_tokens": 4096,
+      "total_tokens": 10540
+    },
+    "load_seconds": 13.122272769,
+    "prompt_eval_seconds": 30.28982,
+    "generation_seconds": 511.774708,
+    "generation_tokens_per_second": 8.003521737146885,
+    "response_characters": 1865,
+    "full_JSON_result": "FAIL: EOF while parsing a value",
+    "model_completion_vs_complete_answer": "provider finished due to token limit; answer JSON incomplete",
+    "semantic_result": "NOT_VERIFIED as a complete recall; partial prefix inspected only",
+    "complete_objects_in_prefix": 8,
+    "partial_prefix_rows": [
+      {
+        "requirement_id": "R_GRAIN",
+        "start": 2,
+        "end": 8,
+        "derived_quote": "各店各商品的",
+        "kind": "grain",
+        "scope_ids": [],
+        "population": "所有庫存商品與對應銷售"
+      },
+      {
+        "requirement_id": "R_STOCK_QTY",
+        "start": 8,
+        "end": 14,
+        "derived_quote": "盤點庫存件數",
+        "kind": "metric",
+        "scope_ids": [],
+        "population": "所有庫存商品"
+      },
+      {
+        "requirement_id": "F_TIME",
+        "start": 16,
+        "end": 26,
+        "derived_quote": "2026 年 9 月",
+        "kind": "filter",
+        "scope_ids": [],
+        "population": "2026年9月已完成訂單"
+      },
+      {
+        "requirement_id": "F_CHANNEL",
+        "start": 26,
+        "end": 30,
+        "derived_quote": "線上通路",
+        "kind": "filter",
+        "scope_ids": [],
+        "population": "線上通路訂單"
+      },
+      {
+        "requirement_id": "R_DISCOUNT",
+        "start": 31,
+        "end": 35,
+        "derived_quote": "折扣金額",
+        "kind": "metric",
+        "scope_ids": [
+          "F_TIME",
+          "F_CHANNEL"
+        ],
+        "population": "線上通路、2026年9月已完成訂單"
+      },
+      {
+        "requirement_id": "R_NET_SALES",
+        "start": 36,
+        "end": 40,
+        "derived_quote": "淨銷售額",
+        "kind": "metric",
+        "scope_ids": [
+          "F_TIME",
+          "F_CHANNEL"
+        ],
+        "population": "線上通路、2026年9月已完成訂單"
+      },
+      {
+        "requirement_id": "R_SNAPSHOT_DATE",
+        "start": 44,
+        "end": 50,
+        "derived_quote": "庫存盤點日期",
+        "kind": "attribute",
+        "scope_ids": [],
+        "population": "所有庫存商品"
+      },
+      {
+        "requirement_id": "R_PURPOSE",
+        "start": 51,
+        "end": 60,
+        "derived_quote": "準備促銷後補貨評估",
+        "kind": "metadata",
+        "scope_ids": [],
+        "population": "N/A"
+      }
+    ],
+    "partial_target_term_visibility": [
+      {
+        "target_term": "盤點庫存件數",
+        "visible_in_complete_prefix_object": true
+      },
+      {
+        "target_term": "2026 年 9 月",
+        "visible_in_complete_prefix_object": true
+      },
+      {
+        "target_term": "線上通路",
+        "visible_in_complete_prefix_object": true
+      },
+      {
+        "target_term": "折扣金額",
+        "visible_in_complete_prefix_object": true
+      },
+      {
+        "target_term": "淨銷售額",
+        "visible_in_complete_prefix_object": true
+      },
+      {
+        "target_term": "庫存盤點日期",
+        "visible_in_complete_prefix_object": true
+      },
+      {
+        "target_term": "保留所有庫存商品",
+        "visible_in_complete_prefix_object": false
+      }
+    ],
+    "visible_complete_target_terms": 6,
+    "expected_target_terms": 7,
+    "candidate_views_completed": false,
+    "population_requirement_completed": false,
+    "source_mapping": "NOT_EXECUTED",
+    "end_to_end": "NOT_VERIFIED",
+    "raw_replay": "PASS: same saved truncated response produces same ValidationError",
+    "repair_or_runtime_salvage": false,
+    "reviewer": "主Agent與fresh subprocess，非跨Agent獨立語意審查",
+    "artifact_folder": ".local/qwen-indexed-20261021T073913Z-2c9172",
+    "raw_run_sha256": "b861f6d3090df6c0326cf9bd12940fe4b6eed55fe53e1dc683418ee4fea80260",
+    "wait_harness_sha256": "7630d84d54721ad9b6438472f48720fb84e76b072657e6177bb385ef822be4dd",
+    "cost_usd": null,
+    "evidence": [
+      "evidence/EV-20261021T073912-568459f3.json",
+      "evidence/EV-20261021T074905-2b4c73bf.json"
+    ]
+  },
+  "qwen_indexed_recall_uncapped": {
+    "experiment": "EXP-019",
+    "provider": "ollama",
+    "model": "qwen3.8:27b",
+    "model_digest": "aaee06c39dcf2437cde036998d960e1fc1494b8191be7cc9657d01e509097813",
+    "request": "對照各店各商品的盤點庫存件數與 2026 年 9 月線上通路的折扣金額及淨銷售額，並顯示庫存盤點日期，準備促銷後補貨評估；保留所有庫存商品。",
+    "calls": 1,
+    "retries": 0,
+    "num_predict": -1,
+    "input_token_quota": null,
+    "output_token_quota": null,
+    "network_timeout_seconds": null,
+    "outer_timeout_seconds": null,
+    "thinking": true,
+    "context_window": 32768,
+    "temperature": 1,
+    "top_p": 1,
+    "seed": 42,
+    "same_core_source_schema_catalog_case_messages": true,
+    "elapsed_seconds": 620.0630313259971,
+    "done": true,
+    "done_reason": "stop",
+    "usage": {
+      "input_tokens": 6444,
+      "output_tokens": 4618,
+      "total_tokens": 11062
+    },
+    "load_seconds": 13.130494327,
+    "prompt_eval_seconds": 30.290361,
+    "generation_seconds": 576.289206,
+    "generation_tokens_per_second": 8.0133376643532,
+    "response_characters": 3096,
+    "structural_result": "PASS",
+    "Python_slicing": "PASS",
+    "requirements": 9,
+    "candidate_views": 7,
+    "complete_target_terms": 7,
+    "exact_minimal_target_spans": 7,
+    "target_roles_correct": true,
+    "rows": [
+      {
+        "requirement_id": "R_STOCK_QTY",
+        "start": 8,
+        "end": 14,
+        "derived_quote": "盤點庫存件數",
+        "kind": "metric",
+        "expected_kind": "metric",
+        "scope_ids": [],
+        "exact_minimal_span": true
+      },
+      {
+        "requirement_id": "F_TIME",
+        "start": 16,
+        "end": 26,
+        "derived_quote": "2026 年 9 月",
+        "kind": "filter",
+        "expected_kind": "filter",
+        "scope_ids": [],
+        "exact_minimal_span": true
+      },
+      {
+        "requirement_id": "F_CHANNEL",
+        "start": 26,
+        "end": 30,
+        "derived_quote": "線上通路",
+        "kind": "filter",
+        "expected_kind": "filter",
+        "scope_ids": [],
+        "exact_minimal_span": true
+      },
+      {
+        "requirement_id": "R_DISCOUNT",
+        "start": 31,
+        "end": 35,
+        "derived_quote": "折扣金額",
+        "kind": "metric",
+        "expected_kind": "metric",
+        "scope_ids": [
+          "F_TIME",
+          "F_CHANNEL"
+        ],
+        "exact_minimal_span": true
+      },
+      {
+        "requirement_id": "R_NET_SALES",
+        "start": 36,
+        "end": 40,
+        "derived_quote": "淨銷售額",
+        "kind": "metric",
+        "expected_kind": "metric",
+        "scope_ids": [
+          "F_TIME",
+          "F_CHANNEL"
+        ],
+        "exact_minimal_span": true
+      },
+      {
+        "requirement_id": "R_SNAPSHOT_DATE",
+        "start": 44,
+        "end": 50,
+        "derived_quote": "庫存盤點日期",
+        "kind": "attribute",
+        "expected_kind": "attribute",
+        "scope_ids": [],
+        "exact_minimal_span": true
+      },
+      {
+        "requirement_id": "R_POPULATION",
+        "start": 61,
+        "end": 69,
+        "derived_quote": "保留所有庫存商品",
+        "kind": "population",
+        "expected_kind": "population",
+        "scope_ids": [],
+        "exact_minimal_span": true
+      }
+    ],
+    "sales_scope_result": "PASS: both sales metrics reference time/channel filters",
+    "inventory_scope_result": "PASS: stock/date unaffected by sales time/channel",
+    "population_result": "PASS: explicit population, no status exclusion",
+    "grain_result": "門市×商品已列grain；沒有獨立key項目，不據類別是否出現自行判失敗",
+    "completed_order_semantics": "v_sales_detail summary及grain明定僅已完成訂單，可作契約相容性說明，非另外新增使用者篩選",
+    "source_recall": "7/7 admitted views retained; no final source selection",
+    "diagnostic_semantic_review": "本題主要需求索引/角色/scope/母體/粒度符合；主Agent按固定目標與契約核對",
+    "formal_independent_oracle": "NOT_VERIFIED: new diagnostic question, no new cross-agent oracle approval",
+    "source_mapping": "NOT_EXECUTED",
+    "end_to_end": "NOT_VERIFIED",
+    "raw_replay": "PASS: same parsed offsets and Python-derived quotations, no errors",
+    "raw_run_sha256": "039832c8497af176cc18228b0ce421333a22a8713796f2e61ec5c7da8ecb4cb1",
+    "harness_sha256": "6ad976fbda2da25e32ca93e1e5c34dfe72596a3cd0e14d7198e88b3bd57eb2fc",
+    "artifact_folder": ".local/qwen-indexed-20261021T075802Z-66d3ec",
+    "cost_usd": null,
+    "evidence": [
+      "evidence/EV-20261021T075735-f75bf9ac.json",
+      "evidence/EV-20261021T075801-cb351f74.json",
+      "evidence/EV-20261021T080912-146f3d0c.json",
+      "evidence/EV-20261021T081050-aa48bdf2.json"
+    ]
+  },
+  "qwen_stage_two": {
+    "experiment": "EXP-020",
+    "stage": 2,
+    "provider": "ollama",
+    "model": "qwen3.8:27b",
+    "model_digest": "aaee06c39dcf2437cde036998d960e1fc1494b8191be7cc9657d01e509097813",
+    "source_recall_run": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-indexed-20261021T075802Z-66d3ec",
+    "source_recall_run_sha256": "039832c8497af176cc18228b0ce421333a22a8713796f2e61ec5c7da8ecb4cb1",
+    "source_recall_provider_calls": 0,
+    "new_provider_calls": 1,
+    "new_calls_max": 7,
+    "retry_calls": 0,
+    "selection_provider_calls": 0,
+    "num_predict": -1,
+    "input_token_quota": null,
+    "output_token_quota": null,
+    "HTTP_timeout_seconds": null,
+    "outer_timeout_seconds": null,
+    "thinking": true,
+    "context_window": 32768,
+    "elapsed_seconds": 646.6148816009954,
+    "usage": {
+      "input_tokens": 2706,
+      "output_tokens": 5220,
+      "total_tokens": 7926
+    },
+    "provider_done_reason": "stop",
+    "JSON_parsing": "PASS",
+    "ViewCoverage_contract_validation": "FAIL",
+    "attempted_views": 1,
+    "valid_attempted_views": 0,
+    "total_candidate_views": 7,
+    "unattempted_views": 6,
+    "stopped": {
+      "node": "map-01",
+      "view": "demo_retail.v_inventory_status",
+      "error_type": "ValueError",
+      "error": "invalid contract evidence quote /grain/keys"
+    },
+    "inventory_model_claims": [
+      {
+        "requirement_id": "R_GRAIN",
+        "model_status": "supported",
+        "columns": [
+          "store_id",
+          "product_id"
+        ],
+        "missing_requirements": []
+      },
+      {
+        "requirement_id": "R_STOCK_QTY",
+        "model_status": "supported",
+        "columns": [
+          "stock_qty"
+        ],
+        "missing_requirements": []
+      },
+      {
+        "requirement_id": "F_TIME",
+        "model_status": "unsupported",
+        "columns": [],
+        "missing_requirements": [
+          "本 View 無可按特定月份（2026-09）篩選的銷售日期欄位；sold_qty_30d 為固定 30 日滾動窗口，無法指定任意月份，snapshot_date 為庫存盤點日期而非銷售日期"
+        ]
+      },
+      {
+        "requirement_id": "F_CHANNEL",
+        "model_status": "unsupported",
+        "columns": [],
+        "missing_requirements": [
+          "本 View 無通路（channel）欄位，所有欄位均為庫存維度，無法區分線上或實體通路"
+        ]
+      },
+      {
+        "requirement_id": "R_DISCOUNT",
+        "model_status": "unsupported",
+        "columns": [],
+        "missing_requirements": [
+          "本 View 無折扣金額欄位；inventory_cost_value 為庫存成本非折扣；亦無通路與特定月份篩選能力以限定 scope"
+        ]
+      },
+      {
+        "requirement_id": "R_NET_SALES",
+        "model_status": "unsupported",
+        "columns": [],
+        "missing_requirements": [
+          "本 View 無淨銷售額（金額）欄位；sold_qty_30d 為销售件數非金額；亦無通路與特定月份篩選能力以限定 scope"
+        ]
+      },
+      {
+        "requirement_id": "R_SNAPSHOT_DATE",
+        "model_status": "supported",
+        "columns": [
+          "snapshot_date"
+        ],
+        "missing_requirements": []
+      },
+      {
+        "requirement_id": "R_PURPOSE",
+        "model_status": "unsupported",
+        "columns": [],
+        "missing_requirements": [
+          "「準備促銷後補貨評估」為業務背景說明，非本 View 任何可映射的資料欄位或屬性；本 View 可透過 stock_status、reorder_point、estimated_days_of_supply 支持補貨評估，但無欄位承載此業務目的標註"
+        ]
+      },
+      {
+        "requirement_id": "R_POPULATION",
+        "model_status": "supported",
+        "columns": [
+          "store_id",
+          "product_id"
+        ],
+        "missing_requirements": []
+      }
+    ],
+    "findings": [
+      {
+        "requirement_id": "R_GRAIN",
+        "path": "/grain/keys",
+        "error": "invalid contract evidence quote /grain/keys"
+      },
+      {
+        "requirement_id": "R_POPULATION",
+        "column": "store_id",
+        "required_path": "/columns/store_id/description",
+        "error": "missing own column description evidence"
+      },
+      {
+        "requirement_id": "R_POPULATION",
+        "column": "product_id",
+        "required_path": "/columns/product_id/description",
+        "error": "missing own column description evidence"
+      }
+    ],
+    "inventory_semantic_observations": {
+      "stock_qty": "stock_qty/sum matches inventory quantity requirement",
+      "snapshot_date": "snapshot_date/attribute matches displayed inventory date",
+      "sales_scope": "no invented month/channel mapping on inventory; unsupported as expected",
+      "purpose": "recognized as business background, not a database output column",
+      "population": "preserves all statuses in prose, but mapping evidence incomplete",
+      "unproven_text": "依快照日期存檔 is not guaranteed by contract; does not establish historical snapshot grain"
+    },
+    "views": [
+      {
+        "view": "demo_retail.v_inventory_status",
+        "status": "FAIL: evidence contract"
+      },
+      {
+        "view": "demo_retail.v_product_monthly",
+        "status": "NOT_EXECUTED"
+      },
+      {
+        "view": "demo_retail.v_sales_detail",
+        "status": "NOT_EXECUTED"
+      },
+      {
+        "view": "demo_retail.v_order_summary",
+        "status": "NOT_EXECUTED"
+      },
+      {
+        "view": "demo_retail.v_daily_sales",
+        "status": "NOT_EXECUTED"
+      },
+      {
+        "view": "demo_retail.v_store_monthly_kpi",
+        "status": "NOT_EXECUTED"
+      },
+      {
+        "view": "demo_retail.v_customer_value",
+        "status": "NOT_EXECUTED"
+      }
+    ],
+    "raw_replay": "PASS: 1 raw produces identical parsed coverage and validation error",
+    "raw_modified_or_repaired": false,
+    "source_mapping_overall": "FAIL for attempted inventory coverage; remaining views NOT_EXECUTED",
+    "stage_two_semantic_acceptance": "NOT_VERIFIED for complete seven-view stage",
+    "end_to_end": "NOT_VERIFIED",
+    "reviewer": "主Agent與fresh subprocess，非新增跨Agent獨立oracle",
+    "raw_run_sha256": "662bd063d465bee74ab1f2affd0ec7c8a85a7ce4d91123340716a061d1b5ee5e",
+    "harness_sha256": "e430416700aebf5940b4d24f62bd8f7dba96bf21eb01875889a93c284084d184",
+    "cost_usd": null,
+    "evidence": [
+      "evidence/EV-20261021T100747-34878c00.json",
+      "evidence/EV-20261021T100802-33d75213.json",
+      "evidence/EV-20261021T101943-dfb8648d.json",
+      "evidence/EV-20261021T102130-1fa8fe6e.json"
+    ]
+  },
+  "coverage_reference_trial": {
+    "version": "coverage-references-1",
+    "status": "FAIL: background marked supported with no mappings",
+    "max_new_model_calls": 7,
+    "per_view_fresh_calls": 1,
+    "source_recall_provider_calls": 0,
+    "selection_provider_calls": 0,
+    "num_predict": -1,
+    "HTTP_timeout_seconds": null,
+    "outer_timeout_seconds": null,
+    "token_quotas": null,
+    "execution": "sequential, first validation/provider error stops",
+    "reports": "使用者要求只印log，不新增測試報告或實驗Markdown。",
+    "source_recall": ".local/qwen-indexed-20261021T075802Z-66d3ec",
+    "tests": "114 passed in 7.35s; direct pytest tool output",
+    "new_reference_tests": 18,
+    "dry_run": "PASS: unchanged source recall, same model digest/reasoning, seven views",
+    "files": [
+      "evaluations/referenced_view_coverage.py",
+      "evaluations/coverage_reference_runner.py",
+      "evaluations/prompts/coverage_references.md",
+      "tests/unit/test_referenced_view_coverage.py"
+    ],
+    "new_provider_calls": 1,
+    "valid_views": 0,
+    "unattempted_views": 6,
+    "elapsed_seconds": 452.005134428,
+    "input_tokens": 2559,
+    "output_tokens": 3004,
+    "stop": {
+      "node": "map-01",
+      "view": "demo_retail.v_inventory_status",
+      "error_type": "ValueError",
+      "error": "supported requires mappings/evidence and no missing requirements"
+    },
+    "old_evidence_issues": "RESOLVED: one grain path; population descriptions derived by Python; no model quotes",
+    "new_failure": "R_PURPOSE metadata/business purpose marked supported but mappings empty",
+    "raw_replay": "PASS: identical raw/parsed/error, no provider calls",
+    "raw_folder": ".local/qwen-coverage-ref-20261021T143956Z-549b86",
+    "reports_generated": false,
+    "verification_independence": "same agent, fresh subprocess; no independent semantic oracle",
+    "evidence": [
+      "evidence/EV-20261021T143954-abccd140.json",
+      "evidence/EV-20261021T144804-f9fbd92f.json",
+      "evidence/EV-20261021T144915-b017862c.json"
+    ]
+  }
+}
+
+## 完成摘要
+
+本輪依指示同題同版再測1次：完整詞覆蓋5/7（前次2/7），保留母體改為population；月份及盤點日期仍各缺一字，未達全數完整標準。新raw已fresh replay，前次結果保留，未修改程式或擴題；Task回PLANNING。

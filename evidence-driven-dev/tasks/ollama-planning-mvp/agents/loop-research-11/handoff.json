@@ -1,0 +1,246 @@
+{
+  "schema_version": 1,
+  "ticket": "9ea07a8befa742fe9bd1fadcd71b58bc",
+  "result": "REPLAN",
+  "evidence": [
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-11/diagnosis.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-11/plan.json"
+  ],
+  "summary": "同意第11輪REJECT：會員金額有可證有用部分，原全unsupported是fixture Oracle錯誤。推薦新v2只將customer MET-003改partial/lifetime_spend sum/own_gap=true；會員來源未證涵蓋未限定會員的銷售母體是獨立self缺口，月份、通路及店商品另列scope/grain。不改candidate或產品契約；原v1及拒絕保留。0POST研究只證真schema可表達且既有synthetic selection仍產2prepared，不是模型成果。",
+  "next_node": "kind_diagnostic_fixture_v2_correction",
+  "next_round": 12,
+  "implementation_contract": {
+    "fixture_root": "evaluations/fixtures/kind_diagnostics_v2",
+    "version": "kind-isolation-v2",
+    "candidate": "managed-kind-mapping-1",
+    "runner_version": "managed-node-diagnostics-2",
+    "runner": "evaluations/diagnostics/managed_node_diagnostics_v2.py",
+    "test": "tests/diagnostics/test_managed_node_diagnostics_v2.py",
+    "smallest_change": "新增薄的v2版本入口/loader，重用既有managed_node_diagnostics的prepare、_body、evaluate、_run及bindings可共用計算與原kind/finish/ManagedInvoke；不複製整份v1 source、不新增registry/框架、不monkeypatch既有module globals。只為硬編碼v1的package載入、版本化metadata/replay/freeze/main與完整v2 preflight提供必要的小範圍協調；具體最小重用方式由worker依source確認。所有v2新協調code/test必明列bindings與freeze，原v1函式與source不變，語意evaluator不得另抄一套。",
+    "package_edit": "從v1完整複製到新fixture目錄，僅修改customer MET-003 wire與其normalized row、Oracle coverage_evidence那一列status/mapping/evidence/own/self gap/reasoning；全部56列仍完整。更新selection inputs的messages/body/upstream，schema不變。三coverage及其inputs、recall/題目/改名profile、selection_positive和selection_requirements不改能力/typed答案。Oracle.version改v2，approval仍PENDING fresh。",
+    "fixture_author": "manifest.author_ticket必為本child真實已bind worker ticket，不沿用v1作者或本research ticket；source/body/Oracle全部固定後Main finish本child PASS。",
+    "new_manifest": "新增immutable lineage含v1 manifest hash1749d09913e0f5d5a1caab4a4ede1bf4fa80fee260bb4e257f1f705634d934be及原REJECT path/hash；manifest runner_version=managed-node-diagnostics-2，candidate不變，全部bindings精確重算。完整deepcopy model/runtime、四sample bodies/messages/schema/upstream/profile/catalog。所有變更在送POST前完成封存；review不回寫manifest approval。",
+    "author_gate": "v2 preflight要求author ticket role=worker、node=kind_diagnostic_fixture_v2_correction、platform非空、closed=True且同node/round/producer真PASS；reviewer ticket仍恰原kind_diagnostic_fixture_semantics，closed+PASS及不同ticket/platform。測試Task可在pytest tmp_path synthetic，嚴禁把synthetic provenance當真review或改真Task。",
+    "v1_preservation": "舊v1 module/test/fixture/Oracle/manifest/review及歷史hash逐byte維持。nested新增檔不進v1 source_paths但v2 source_paths必明列這兩檔，完整imports closure/lock/external loopctl+ledger仍綁定與freeze。先斷言v1 bindings仍精確相符；不可藉新路徑漏綁v2自己的source/test。",
+    "fixtures_output_policy": "只有新版本fixtures、必要source/test、raw/log/handoff；不新增reports/experiments Markdown，不改Task/control/DB/SQL/commit/push。",
+    "reuse_constraints": [
+      "原prepare對package root及logical IDs可重用；原_run接受check_version callback且evaluate只依context/package，可維持真parse/materialize/finish與首錯行為。",
+      "原load_package硬限v1不可直用；原record/replay/freeze/main有version/path硬編碼，worker只處理必要版本化協調，不能用偽manifest或切換全域常數欺騙v1 gate。",
+      "base.bindings(package)的既有計算可重用後明列v2 adapter/test來源；preflight真實比較的必須是完整v2 bindings，禁止為借用v1 preflight投影/刪除新增來源。",
+      "具體必要小範圍協調與反例交worker決定；不預設行數或要求大改架構，無法安全重用就FAIL回研究。"
+    ]
+  },
+  "fixed_samples": {
+    "identity_decision": "既有16-node驗收逐字固定v1 logical IDs，且4樣本皆未送模型；保留logical IDs與原1+3設計，v2 package namespace中的實體request_case是新版本IDs。不是事後新增或更名成功樣本。若無法保留此邏輯身分，不得擅改既有驗收，先REPLAN。",
+    "samples": [
+      {
+        "id": "SEL-ISO-v1-01",
+        "stage": "selection",
+        "role": "ISOLATION",
+        "count": 1,
+        "request": "request-original.txt",
+        "recall": "recall-original.json",
+        "profile": "projects/retail",
+        "coverage": "coverage-selection.json",
+        "request_case": "kind-isolation-v2:ISOLATION:SEL-ISO-v1-01:node",
+        "body_hash": "eb6a1dd98d63365b76b4f513cbf4794b293d9706489c00344f435b13fe133957",
+        "body_derivation": "customer MET-003修正後由原messages/schema生成"
+      },
+      {
+        "id": "COV-ISO-v1-01",
+        "stage": "coverage",
+        "role": "ISOLATION",
+        "count": 1,
+        "request": "request-original.txt",
+        "recall": "recall-original.json",
+        "profile": "projects/retail",
+        "view": "demo_retail.v_daily_sales",
+        "request_case": "kind-isolation-v2:ISOLATION:COV-ISO-v1-01:node",
+        "body_hash": "30be965cceda1b54a473d77b3f03f8f1d668040b784c615adfdc6e9bb6f1eb35",
+        "body_derivation": "與v1相同bytes；此前0POST，首次執行不屬重抽"
+      },
+      {
+        "id": "COV-ISO-v1-02",
+        "stage": "coverage",
+        "role": "ISOLATION",
+        "count": 1,
+        "request": "request-customer.txt",
+        "recall": "recall-customer.json",
+        "profile": "projects/retail",
+        "view": "demo_retail.v_customer_value",
+        "request_case": "kind-isolation-v2:ISOLATION:COV-ISO-v1-02:node",
+        "body_hash": "a54fe8c06fd3410b3c579ab9000ccf13352a548f3b6496052e3e71721ed1914e",
+        "body_derivation": "與v1相同bytes；此前0POST，首次執行不屬重抽"
+      },
+      {
+        "id": "COV-ISO-v1-03",
+        "stage": "coverage",
+        "role": "ISOLATION",
+        "count": 1,
+        "request": "request-renamed.txt",
+        "recall": "recall-renamed.json",
+        "profile": "renamed-profile",
+        "view": "diagnostic9.observation",
+        "request_case": "kind-isolation-v2:ISOLATION:COV-ISO-v1-03:node",
+        "body_hash": "40eaa96a187ace445ce041c42e4036ef70551d3cb9d30e034f96752d28ad7f2f",
+        "body_derivation": "與v1相同bytes；此前0POST，首次執行不屬重抽"
+      }
+    ],
+    "selection_expected_hashes": {
+      "body": "eb6a1dd98d63365b76b4f513cbf4794b293d9706489c00344f435b13fe133957",
+      "messages": "c6116af069cb945c678d5aea9e64b1c8eae6371e0a9decd7b809325847877ec5",
+      "upstream": "70460cc22c0deccd75d96896c4bd914efc0038a5a3bb300dc8e20be8ad4e43ff",
+      "schema": "0e911df0c74d2f30238d24c9b6c483d47a9778e0d23ab18af34fd99aaf5e8bbe",
+      "input_tokens": 22011
+    },
+    "coverage_order": [
+      "COV-ISO-v1-01",
+      "COV-ISO-v1-02",
+      "COV-ISO-v1-03"
+    ],
+    "stage_order": "review gate後selection只有1POST；獲後續controller/audit允許後coverage3固定對照各1POST，不合併或追加。",
+    "parent": {
+      "id": "E2E-RETURN-v1-01",
+      "role": "PARENT_NATURAL",
+      "count": 1,
+      "recall": 1,
+      "coverage": 7,
+      "selection": 1,
+      "prerequisite": "所有診斷PASS及fresh audit允許；全部上游來自當次全新自然raw",
+      "body_repeat_policy": "同stage同body僅允許預定ISOLATION一次與PARENT_NATURAL一次；父層自然上游產生後送POST前保存共同hash與角色連結，不能以父層重抽診斷失敗；其他同body不可改case重送"
+    },
+    "body_repeats": "所有原局部樣本0POST。預先唯一允許跨角色重複仍為ISOLATION一次與PARENT_NATURAL一次；父自然上游生成後每POST前保存body hash與角色關聯；不能用v2 case前綴重抽任一已成功HTTP的錯答。未來新原父9POST body不能事前預知，必由當次新自然上游生成，不注入本fixture。",
+    "model": {
+      "name": "qwen3.8:27b",
+      "digest": "aaee06c39dcf2437cde036998d960e1fc1494b8191be7cc9657d01e509097813",
+      "think": true,
+      "options": {
+        "num_predict": -1,
+        "num_ctx": 32768,
+        "temperature": 1,
+        "top_p": 1,
+        "seed": 42
+      },
+      "HTTP_timeout_seconds": null,
+      "outer_timeout_seconds": null,
+      "tokenizer": "cl100k_base",
+      "context_window": 32768
+    }
+  },
+  "focused_verification": {
+    "red_first": "先以新fixture期望檢查舊customer U/mappings=[]能力遺漏及partial own=false漏self均應語意FAIL；兩者可structurally accept必如實保留，不改parser宣稱能擋。會員key/月能力仍不得升級。",
+    "positive_controls": [
+      "推薦customer row真schema/materialize後為partial、lifetime_spend metric sum及欄位原文證據；normalized self(partial)+scope(FILT1/FILT2 unsupported)+grain(GRN unsupported)三缺口精確。",
+      "其餘55列status/合法mapping/own_gap/path/完整依賴保持；daily own=false與customer own=true不同原因，不能全量套規則。",
+      "新selection全部8assignment、五排除refs、完整typed/兩prepared與free text；四samples record/replay、完整新source frozen replay、首錯prefix及provider/context 0POST control。"
+    ],
+    "negative_controls": [
+      "customer U或uncertain空mapping；customer partial own=false；last_order_date冒充交易整月；customer_id硬湊店商品或庫存母體；聚合改avg或加入題目未要求會員filter。",
+      "原daily丟store key/only-store supported、月份漏邊/錯閏日、daily net own=true、銷售鍵冒庫存母體等仍拒絕；不重設原controls答案。",
+      "原typed required/ready integration、scope跨來源/庫存套sales filters、request-only、錯anchor/inner/key/erase/補零與free-text未保證來源斷言保留。",
+      "hash漂移/少View/Oracle洩漏/未ACCEPT/原REJECT/missing completed-reviewer、author未bind或research ticket或錯node或未完成或無PASS、同author/reviewer平台、偽round/producer均在建provider與POST前拒絕。"
+    ],
+    "tests_first": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest tests/diagnostics/test_managed_node_diagnostics_v2.py -q",
+    "necessary_regression": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest tests/unit/test_managed_node_diagnostics.py tests/unit/test_kind_mapping_managed_contract.py tests/unit/test_kind_mapping_managed_runner.py -q",
+    "scope": "不無故重跑544或舊31全部replay；新版本focused必測全部影響分支與關鍵gate。同版與新完整source freeze 4正例/必要失敗prefix都實跑。若candidate/shared檔或保護hash意外改變，停止回研究而非擴修。",
+    "review_boundary": "所有機器PASS僅結構與固定Oracle一致，不自動變為fresh語意ACCEPT；全部自然raw自由文字仍要人工逐項核對。"
+  },
+  "review_and_parent_return": [
+    {
+      "round": 12,
+      "node": "kind_diagnostic_fixture_v2_correction",
+      "action": "離線作者work；0POST。child PASS不能代semantic parent。"
+    },
+    {
+      "after_round": 12,
+      "action": "fresh方向auditor覆蓋10–12完整段，含原作者保守U、REJECT、有用金額與own-gap分歧、v2 gate及採用方向；未CONTINUE/被REPLAN前不開始下輪。"
+    },
+    {
+      "round_if_no_extra": 13,
+      "node": "kind_diagnostic_fixture_semantics",
+      "action": "另一fresh worker以原node ticket做verify_parent，全8需求/56列/樣本與等變/typed+自由文字重審v2；不能只看變更1列或沿用舊55ACCEPT當完成。review JSON另寫agents/loop-worker-diagnostic-semantics-v2/review.json，綁新manifest raw hash及完整bindings。"
+    },
+    {
+      "gate": "semantic parent review",
+      "required_json": {
+        "schema_version": 1,
+        "verdict": "ACCEPT或REJECT",
+        "reviewer_role": "fresh_fixture_semantics",
+        "ticket": "<真fresh semantic parent worker>",
+        "author_ticket": "<第12輪v2 author child真worker>",
+        "manifest_sha256": "<v2 manifest raw SHA256>",
+        "bindings": "<v2 manifest.bindings完整深拷>",
+        "evidence": [
+          "<56列/8需求/自由文字/輸入/Oracle獨立log>"
+        ]
+      },
+      "completion": "reviewer寫完review但自己尚未Main finish時preflight必拒絕，這是正確守門；Main需finish這位父node worker PASS關閉ticket並寫同round/producer PASS，之後才會preflight通過。不能為方便把review child node放寬進gate。"
+    },
+    {
+      "round_if_no_extra": 14,
+      "node": "natural_kind_selection_isolation",
+      "entrypoint": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m evaluations.diagnostics.managed_node_diagnostics_v2 --stage selection --manifest evaluations/fixtures/kind_diagnostics_v2/manifest.json --execute --ticket <active selection worker> --review evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-semantics-v2/review.json",
+      "action": "僅固定1POST；任何錯答保存FAIL回fresh研究，不重抽、不自行跳coverage。"
+    },
+    {
+      "round_if_no_extra": 15,
+      "node": "natural_kind_coverage_isolation",
+      "entrypoint": "同v2 runner/manifest/review，--stage coverage，active coverage worker真ticket",
+      "action": "3固定獨立對照各一次；內容錯誤仍保存其餘固定對照，任何一錯整節點FAIL；429/transport/inflight/hash/context/identity等安全有效性問題整批停止。完成後fresh audit13–15。"
+    },
+    {
+      "node": "natural_kind_mapping_three_stage",
+      "action": "所有局部PASS及audit允許後原parent verify_parent，以原managed_three_stage_runner --kind-mapping執行既定E2E-RETURN-v1-01角色的單一全新自然樣本，最多recall1+七View7+selection1共9POST，首結構/語意錯停。全部7View含未選56責任與所有free text獨立核對，不注入fixtures，不把局部當自然端到端。"
+    },
+    {
+      "ancestors": [
+        "natural_own_responsibility_three_stage",
+        "natural_evidence_bound_three_stage",
+        "natural_slots_three_stage",
+        "natural_qwen_three_stage",
+        "three_stage_integration",
+        "root"
+      ],
+      "action": "依controller各自verify_parent取得必要自身整合/完整或prefix與凍結replay/歷史保護與回歸證據，子PASS不自動PASS父；不盲目重跑相同成功HTTP抽分。每3輪audit持續，root最後fresh final verifier ACCEPT才完成。"
+    }
+  ],
+  "stop_or_rejudge": [
+    "fixture exact body與本研究預固定hash不符，先離線定位是否僅編碼/排序或真語意變化；不直接重寫基準吞差異，不POST。",
+    "customer own_gap或會員母體解釋仍有fresh reviewer未解異議，整套REJECT回新research；不把模型當Oracle、不修改產品契約或猜DB來源消除異議。",
+    "v2 gate無法以真author-child及原semantic-parent實際完成記錄通過，先查ticket/node/round/producer，不自行補真Task、不放寬gate。",
+    "任何local錯答保存首次raw，FAIL回fresh research；沒有模型失敗時不得編造token/耗時/準確率或新增題目抽樣。",
+    "局部PASS之後若完整自然仍失敗，分辨Oracle/表示/模型/整合根因；保留13個已預定最大POST及角色，不原版同body反覆跑。"
+  ],
+  "resources": {
+    "rounds_before": 11,
+    "local_POSTs_before": 21,
+    "cloud": 0,
+    "retry_before": 0,
+    "research_POSTs": 0,
+    "read_only_probe_processes": 2,
+    "new_local_diagnostics_planned": 4,
+    "new_parent_full_natural_max": 9,
+    "authorization": "沿用使用者本機qwen3.8:27b不限輪/POST/retry/agent/token/timeout，cloud0，每3輪fresh audit；不限資源不准錯答原樣重抽。"
+  },
+  "pending": [
+    "v2檔案/runner/test/fixture/manifest尚未實作",
+    "v2 focused/必要回歸及record/frozen replay尚未跑",
+    "第12輪後fresh audit10–12尚未跑",
+    "v2 semantic parent獨立review與Main finish provenance尚未完成",
+    "selection1/coverage3局部模型尚未送；任何v2模型效果PENDING",
+    "原parent9POST/祖先整合/root final fresh verifier全PENDING",
+    "v2最小loader/runtime重用細節交worker確認，研究不提供或實作整份源碼複製。"
+  ],
+  "invariants": {
+    "original_nodes": 16,
+    "original_node_fields_preserved": true,
+    "new_nodes": 1,
+    "root_equal_task": true,
+    "history_or_gate_reset": false,
+    "implementation_changed": false,
+    "task_or_control_changed": false,
+    "SQL_DB": 0,
+    "commits": 0,
+    "pushes": 0
+  }
+}

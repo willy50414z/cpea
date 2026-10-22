@@ -1,0 +1,22 @@
+{
+  "id": "EV-20261020T051900-4f8ad1f6",
+  "kind": "focused",
+  "command": [
+    ".venv/bin/python",
+    "evidence-driven-dev/tasks/retail-task-decomposition/reports/audit_live_benchmark.py",
+    "--source-run",
+    "projects/retail/artifacts/task_decomposition/20261020T050127310992Z-bf626def-7b4f2d"
+  ],
+  "cwd": "/home/willy/code/cpea_terms",
+  "started_at": "2026-10-20T05:19:00+00:00",
+  "finished_at": "2026-10-20T05:19:01+00:00",
+  "exit_code": 0,
+  "revision": "b16d117a2a3168a61c3cdbd889fc0e54ab079625",
+  "diff_fingerprint": "01ad2ef166091e486f1467d9bb51bf09fbcfbf2799528b54656e2764f6d274f2",
+  "post_fingerprint": "01ad2ef166091e486f1467d9bb51bf09fbcfbf2799528b54656e2764f6d274f2",
+  "source_unchanged": true,
+  "output_sha256": "f9438f051a33117408cbaa08881cea8a62373c032757a89fc4b17a38932724ce",
+  "raw_output": ".local/EV-20261020T051900-4f8ad1f6.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "48d10e384c43086e4dfbcfb1246ac688cb83297ebab04fb7ccc8656b5e60d0fa"
+}

@@ -1,0 +1,5 @@
+{
+  "error_type": "ValidationError",
+  "error": "1 validation error for KindCoverage_917e5de3fe5e386d\nentries.period.mappings.0.value\n  Field required [type=missing, input_value={'column': 'sales_date', 'operator': '>='}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing",
+  "raw_saved": true
+}

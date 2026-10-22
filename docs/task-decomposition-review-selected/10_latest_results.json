@@ -1,0 +1,684 @@
+{
+  "snapshot_utc": "2026-10-22T02:00:16.292101+00:00",
+  "latest_checkpoint": {
+    "last_completed": "EDD loop 第22輪 capability_projection_semantics：PASS",
+    "current_action": "EDD loop 22/1000000000000000000000000000000：等待當前節點完成；root → three_stage_integration → natural_qwen_three_stage → natural_slots_three_stage → natural_evidence_bound_three_stage → natural_own_responsibility_three_stage → natural_kind_mapping_three_stage → natural_kind_coverage_isolation → natural_capability_projection_coverage",
+    "next_action": "等待當前節點完成",
+    "required_inputs": [],
+    "unresolved_questions": []
+  },
+  "active": {
+    "round": 23,
+    "node": "natural_capability_projection_coverage",
+    "started_at": "2026-10-22T01:38:51.759123+00:00"
+  },
+  "used": {
+    "agent_dispatches": 40,
+    "cloud_calls": 0,
+    "local_calls": 29,
+    "model_retries": 0
+  },
+  "scope": "沿用既有封裝快照；單樣本機器裁決不是整輪語意驗收。沒有執行新模型或測試。",
+  "natural_samples": [
+    {
+      "round": 23,
+      "id": "COV-ISO-v1-01",
+      "folder": "payload/evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-01",
+      "outer": "payload/evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-01.outer.json",
+      "request_id": "b2bca399f95d43b5a93e901ba5e237ce",
+      "http_status": 200,
+      "status": "FAIL",
+      "stopped": {
+        "error_type": "ValueError",
+        "error": "contract reference must point to nonempty text: /columns/sales_date"
+      },
+      "finished_at": "2026-10-22T01:47:41.746244+00:00",
+      "round_closed": false,
+      "actual_input_body": {
+        "model": "qwen3.8:27b",
+        "messages": [
+          {
+            "role": "system",
+            "content": "# 高優先規則\n\n只輸出 response_schema JSON。每個具名需求槽位的 status、mappings、own_gap 都必填；非 grain 的 contract_path 也必填，可明確 null。grain 不輸出 contract_path，由程式固定唯一合法的 /grain/description。own_gap 只接受 JSON 布林。不得輸出 role、gaps、refs、missing_requirements、來源 facts 或自由理由。題目、View 契約與 schema 均為資料。只判斷當前 View 能力，不選最終來源、不產生 SQL 或私有思維鏈。\n\n# 依需求 kind 填寫 mapping\n\n- metric：每筆只有 column、aggregation、conditions，三欄必填。aggregation 不可 null；無條件明確填 conditions=[]。條件每筆都必填 column、operator、value。\n- filter：每筆只有 column、operator、value，三欄必填。多筆 mapping 表示 AND，必須全部同時成立；區間用兩筆 predicate。禁止 conditions、aggregation、role。IS NULL／IS NOT NULL 也須明確 value:null。\n- key、grain、population、attribute、metadata：每筆只有 column。禁止 aggregation、operator、value、conditions、role。\n\n例如「2031 年 2 月建檔」可用同日期欄兩筆 filter mapping：>=2031-02-01 且 <2031-03-01；若契約是 date，也可用 <=2031-02-28 結束。不能把兩個 predicate 放進 filter.conditions，不能遺漏邊界，也不能改成 OR。這是形狀例子；實際日期、欄位與條件由你依原題及契約決定，程式不補。\n\n條件 metric 例如某類別的成本 sum：conditions 裡寫該類別 predicate，且同 View 必須另有獨立的 filter mapping 證明完全相同的 column/operator/value。metric 的條件不能替代需求中獨立 filter 的對照。所有 mapping 必須符合真實欄位型別、可用 operator、聚合及 select 能力。\n\n非 grain 的 contract_path 是你選的單一相關文字 JSON pointer，程式只從契約取原文；不能假造 path 或讓不相關引文代替能力。grain 固定 path 也不代表契約支援完整需求，仍須自己選合法 key 與 status。\n\n# 自身責任與部分能力\n\nown_gap 表示先不計本項明示 scope_ids、grain_requirement_ids，合法映射與證據是否仍未完整履行本項自身責任。有自身缺口 true；自身完整 false。它是你的語意決定，程式不補欄位、不改 predicate／aggregation／status／own_gap，也不從 request 補業務答案。\n\npartial 保留全部獨立且必要的可用能力分量，不必枚舉等價替代寫法、重複欄位或無關 identifier。例如要求設備×感測器，而來源只有設備鍵，保留設備 key、own_gap=true；要求會員×活動卻只有會員鍵，也保留會員 key。若需求是設備×感測器，會員鍵就沒有對應價值，不能硬湊 partial。unsupported 表示沒有可證的有用 mapping，不能只因整項未完成就刪掉有用部分。僅有設備鍵不能證明保留所有告警事件母體；有售出數量不等於具備庫存數量。\n\nscope_ids 與 grain_requirement_ids 對所有 kind 都是同 View 硬依賴。程式完整導出每個未 supported 依賴的缺口，不借其他 View、不擴張無關 grain。自身不完整與依賴不完整必須分開，不能把自己加入 grain_requirement_ids。\n\n# 狀態一致性\n\n- supported：own_gap=false，有非空合法 mappings、真實證據，全部明示 scope/grain 依賴在本 View 都 supported；metric grain_binding=unspecified 不可 supported。\n- partial：有非空合法 mappings，且自身 own_gap=true 或至少一項明示依賴未 supported。自身金額完整但缺必要粒度時，own_gap=false、status=partial。自身與依賴都完整時不能無缺口 partial。\n- unsupported／uncertain：mappings=[]、own_gap=true。uncertain 用於證據不足，不用來隱藏已證可用部分。所有依賴缺口仍完整導出。\n- mappings=[] 或非 grain contract_path=null 時 own_gap 必須 true。不能用 own_gap 掩蓋非法 mapping。\n\n# 語意邊界\n\n普通月份／通路 predicate 不自動繼承最終輸出 grain；recall 明示依賴仍按硬依賴驗證。真正 independent scalar 不繼承無關 row grain；不能為了 supported 把依賴標成 independent。固定月份有真 filter 與合法 key 證據時可縮約時間維度，不能只比較 grain 文字。\n\n母體事實只取契約原文，own_gap 不代表來源只含某類資料或排除退貨。純用途背景不增加資料責任；顯示來源日期是 metadata，不增加日期 filter 或根 grain。銷售期間／通路不可套庫存或借其他 View 完成 scope。完整庫存來源即使沒有 status 欄，也可履行未要求 status 的資料責任；真正要求 status 輸出／篩選時才需該 mapping。\n\n\n本版本使用無損 requirement_cards：identity 保留身分；own_target 是本項 kind 的自身責任；binding_context 完整保留原文其他資訊與明示關聯，並非可忽略資訊。所有卡片共同構成原 requirements，ID 關聯不變。\n請依序處理每項：\n1. 依本項 kind 的責任與真實 View 契約，辨認並保留全部獨立有用的能力分量。部分 grain 的有用鍵不等於能完成完整 grain 或整題；無關 identifier 不能湊成有用分量。不可因整題不可實現而刪掉本項有用 mapping。\n2. 判自身是否完整，只有明示 scope_ids、grain_requirement_ids 等依賴的未完成可以排除於自身缺口。自身能力或自身母體限制仍須驗證，縱使原文位於 binding_context；不能只因有聚合就忽略本項母體限制。依賴未完成不等於自身缺口。\n3. 再依全體同 View 卡片的明示依賴決定原 status；自行明填原 wire 的 own_gap、status 及全部 mappings/conditions/證據。請勿新增輸出欄位或將 context 當答案。先前全部來源、scope、grain、母體與 typed 守門均適用。\n"
+          },
+          {
+            "role": "user",
+            "content": "{\"request\": \"對照各店各商品的盤點庫存件數與 2026 年 9 月線上通路的折扣金額及淨銷售額，並顯示庫存盤點日期，準備促銷後補貨評估；保留所有庫存商品。\", \"view\": {\"version\": 3, \"view\": \"demo_retail.v_daily_sales\", \"summary\": \"粒度：門市×有銷售的日期；沒有交易的門市日期不出現。適合每日營收、門市趨勢\", \"grain\": {\"description\": \"門市×有銷售的日期\", \"keys\": [\"sales_date\", \"store_id\"]}, \"columns\": {\"sales_date\": {\"type\": \"date\", \"role\": \"dimension\", \"description\": \"已完成訂單的銷售日期；無交易的門市日期不會有資料列。\"}, \"store_id\": {\"type\": \"number\", \"role\": \"identifier\", \"description\": \"門市id\"}, \"store_name\": {\"type\": \"string\", \"role\": \"dimension\", \"description\": \"門市名稱\"}, \"region\": {\"type\": \"string\", \"role\": \"dimension\", \"description\": \"門市所屬區域；北部、中部、南部\"}, \"city\": {\"type\": \"string\", \"role\": \"dimension\", \"description\": \"門市所在城市\"}, \"order_count\": {\"type\": \"number\", \"role\": \"measure\", \"description\": \"門市已完成訂單筆數\"}, \"units_sold\": {\"type\": \"number\", \"role\": \"measure\", \"description\": \"門市已完成訂單銷售的商品總件數；單位件\", \"unit\": \"件\"}, \"revenue\": {\"type\": \"number\", \"role\": \"measure\", \"description\": \"門市折扣後的銷售淨額總和，單位 TWD\", \"unit\": \"TWD\"}, \"gross_profit\": {\"type\": \"number\", \"role\": \"measure\", \"description\": \"門市此日毛利總額（折扣後淨額 − 商品成本），單位 TWD\", \"unit\": \"TWD\"}}}, \"response_schema\": {\"$defs\": {\"ColumnMapping\": {\"additionalProperties\": false, \"properties\": {\"column\": {\"minLength\": 1, \"title\": \"Column\", \"type\": \"string\"}}, \"required\": [\"column\"], \"title\": \"ColumnMapping\", \"type\": \"object\"}, \"KindDecision_filter_439a1ecb8a267cd1\": {\"additionalProperties\": false, \"properties\": {\"status\": {\"enum\": [\"supported\", \"partial\", \"unsupported\", \"uncertain\"], \"title\": \"Status\", \"type\": \"string\"}, \"own_gap\": {\"title\": \"Own Gap\", \"type\": \"boolean\"}, \"mappings\": {\"items\": {\"$ref\": \"#/$defs/RequiredFilter\"}, \"title\": \"Mappings\", \"type\": \"array\"}, \"contract_path\": {\"anyOf\": [{\"type\": \"string\"}, {\"type\": \"null\"}], \"title\": \"Contract Path\"}}, \"required\": [\"status\", \"own_gap\", \"mappings\", \"contract_path\"], \"title\": \"KindDecision_filter_439a1ecb8a267cd1\", \"type\": \"object\"}, \"KindDecision_grain_439a1ecb8a267cd1\": {\"additionalProperties\": false, \"properties\": {\"status\": {\"enum\": [\"supported\", \"partial\", \"unsupported\", \"uncertain\"], \"title\": \"Status\", \"type\": \"string\"}, \"own_gap\": {\"title\": \"Own Gap\", \"type\": \"boolean\"}, \"mappings\": {\"items\": {\"$ref\": \"#/$defs/ColumnMapping\"}, \"title\": \"Mappings\", \"type\": \"array\"}}, \"required\": [\"status\", \"own_gap\", \"mappings\"], \"title\": \"KindDecision_grain_439a1ecb8a267cd1\", \"type\": \"object\"}, \"KindDecision_metadata_439a1ecb8a267cd1\": {\"additionalProperties\": false, \"properties\": {\"status\": {\"enum\": [\"supported\", \"partial\", \"unsupported\", \"uncertain\"], \"title\": \"Status\", \"type\": \"string\"}, \"own_gap\": {\"title\": \"Own Gap\", \"type\": \"boolean\"}, \"mappings\": {\"items\": {\"$ref\": \"#/$defs/ColumnMapping\"}, \"title\": \"Mappings\", \"type\": \"array\"}, \"contract_path\": {\"anyOf\": [{\"type\": \"string\"}, {\"type\": \"null\"}], \"title\": \"Contract Path\"}}, \"required\": [\"status\", \"own_gap\", \"mappings\", \"contract_path\"], \"title\": \"KindDecision_metadata_439a1ecb8a267cd1\", \"type\": \"object\"}, \"KindDecision_metric_439a1ecb8a267cd1\": {\"additionalProperties\": false, \"properties\": {\"status\": {\"enum\": [\"supported\", \"partial\", \"unsupported\", \"uncertain\"], \"title\": \"Status\", \"type\": \"string\"}, \"own_gap\": {\"title\": \"Own Gap\", \"type\": \"boolean\"}, \"mappings\": {\"items\": {\"$ref\": \"#/$defs/MetricMapping\"}, \"title\": \"Mappings\", \"type\": \"array\"}, \"contract_path\": {\"anyOf\": [{\"type\": \"string\"}, {\"type\": \"null\"}], \"title\": \"Contract Path\"}}, \"required\": [\"status\", \"own_gap\", \"mappings\", \"contract_path\"], \"title\": \"KindDecision_metric_439a1ecb8a267cd1\", \"type\": \"object\"}, \"KindDecision_population_439a1ecb8a267cd1\": {\"additionalProperties\": false, \"properties\": {\"status\": {\"enum\": [\"supported\", \"partial\", \"unsupported\", \"uncertain\"], \"title\": \"Status\", \"type\": \"string\"}, \"own_gap\": {\"title\": \"Own Gap\", \"type\": \"boolean\"}, \"mappings\": {\"items\": {\"$ref\": \"#/$defs/ColumnMapping\"}, \"title\": \"Mappings\", \"type\": \"array\"}, \"contract_path\": {\"anyOf\": [{\"type\": \"string\"}, {\"type\": \"null\"}], \"title\": \"Contract Path\"}}, \"required\": [\"status\", \"own_gap\", \"mappings\", \"contract_path\"], \"title\": \"KindDecision_population_439a1ecb8a267cd1\", \"type\": \"object\"}, \"KindSlots_439a1ecb8a267cd1\": {\"additionalProperties\": false, \"properties\": {\"GRN-001\": {\"$ref\": \"#/$defs/KindDecision_grain_439a1ecb8a267cd1\"}, \"MET-001\": {\"$ref\": \"#/$defs/KindDecision_metric_439a1ecb8a267cd1\"}, \"FILT-001\": {\"$ref\": \"#/$defs/KindDecision_filter_439a1ecb8a267cd1\"}, \"FILT-002\": {\"$ref\": \"#/$defs/KindDecision_filter_439a1ecb8a267cd1\"}, \"MET-002\": {\"$ref\": \"#/$defs/KindDecision_metric_439a1ecb8a267cd1\"}, \"MET-003\": {\"$ref\": \"#/$defs/KindDecision_metric_439a1ecb8a267cd1\"}, \"META-001\": {\"$ref\": \"#/$defs/KindDecision_metadata_439a1ecb8a267cd1\"}, \"POP-001\": {\"$ref\": \"#/$defs/KindDecision_population_439a1ecb8a267cd1\"}}, \"required\": [\"GRN-001\", \"MET-001\", \"FILT-001\", \"FILT-002\", \"MET-002\", \"MET-003\", \"META-001\", \"POP-001\"], \"title\": \"KindSlots_439a1ecb8a267cd1\", \"type\": \"object\"}, \"MetricMapping\": {\"additionalProperties\": false, \"properties\": {\"column\": {\"minLength\": 1, \"title\": \"Column\", \"type\": \"string\"}, \"aggregation\": {\"enum\": [\"sum\", \"count\", \"count_distinct\", \"avg\", \"min\", \"max\"], \"title\": \"Aggregation\", \"type\": \"string\"}, \"conditions\": {\"items\": {\"$ref\": \"#/$defs/RequiredFilter\"}, \"title\": \"Conditions\", \"type\": \"array\"}}, \"required\": [\"column\", \"aggregation\", \"conditions\"], \"title\": \"MetricMapping\", \"type\": \"object\"}, \"RequiredFilter\": {\"additionalProperties\": false, \"properties\": {\"column\": {\"title\": \"Column\", \"type\": \"string\"}, \"operator\": {\"enum\": [\"=\", \"!=\", \"<>\", \">\", \">=\", \"<\", \"<=\", \"IN\", \"NOT IN\", \"LIKE\", \"IS NULL\", \"IS NOT NULL\"], \"title\": \"Operator\", \"type\": \"string\"}, \"value\": {\"title\": \"Value\"}}, \"required\": [\"column\", \"operator\", \"value\"], \"title\": \"RequiredFilter\", \"type\": \"object\"}}, \"additionalProperties\": false, \"properties\": {\"entries\": {\"$ref\": \"#/$defs/KindSlots_439a1ecb8a267cd1\"}}, \"required\": [\"entries\"], \"title\": \"KindCoverage_439a1ecb8a267cd1\", \"type\": \"object\"}, \"requirement_cards\": [{\"identity\": {\"requirement_id\": \"GRN-001\"}, \"own_target\": {\"quote\": \"各店各商品\", \"business_object\": \"各店各商品\", \"kind\": \"grain\", \"grain\": \"門市×商品\"}, \"binding_context\": {\"scope_ids\": [], \"population\": \"所有庫存商品\", \"grain_binding\": null, \"grain_requirement_ids\": []}}, {\"identity\": {\"requirement_id\": \"MET-001\"}, \"own_target\": {\"quote\": \"盤點庫存件數\", \"business_object\": \"盤點庫存件數\", \"kind\": \"metric\"}, \"binding_context\": {\"scope_ids\": [], \"grain\": \"門市×商品\", \"population\": \"所有庫存商品\", \"grain_binding\": \"linked\", \"grain_requirement_ids\": [\"GRN-001\"]}}, {\"identity\": {\"requirement_id\": \"FILT-001\"}, \"own_target\": {\"quote\": \"2026 年 9 月\", \"business_object\": \"2026 年 9 月\", \"kind\": \"filter\"}, \"binding_context\": {\"scope_ids\": [], \"grain\": \"門市×商品\", \"population\": \"所有庫存商品\", \"grain_binding\": null, \"grain_requirement_ids\": []}}, {\"identity\": {\"requirement_id\": \"FILT-002\"}, \"own_target\": {\"quote\": \"線上通路\", \"business_object\": \"線上通路\", \"kind\": \"filter\"}, \"binding_context\": {\"scope_ids\": [], \"grain\": \"門市×商品\", \"population\": \"所有庫存商品\", \"grain_binding\": null, \"grain_requirement_ids\": []}}, {\"identity\": {\"requirement_id\": \"MET-002\"}, \"own_target\": {\"quote\": \"折扣金額\", \"business_object\": \"折扣金額\", \"kind\": \"metric\"}, \"binding_context\": {\"scope_ids\": [\"FILT-001\", \"FILT-002\"], \"grain\": \"門市×商品\", \"population\": \"所有庫存商品\", \"grain_binding\": \"linked\", \"grain_requirement_ids\": [\"GRN-001\"]}}, {\"identity\": {\"requirement_id\": \"MET-003\"}, \"own_target\": {\"quote\": \"淨銷售額\", \"business_object\": \"淨銷售額\", \"kind\": \"metric\"}, \"binding_context\": {\"scope_ids\": [\"FILT-001\", \"FILT-002\"], \"grain\": \"門市×商品\", \"population\": \"所有庫存商品\", \"grain_binding\": \"linked\", \"grain_requirement_ids\": [\"GRN-001\"]}}, {\"identity\": {\"requirement_id\": \"META-001\"}, \"own_target\": {\"quote\": \"庫存盤點日期\", \"business_object\": \"庫存盤點日期\", \"kind\": \"metadata\"}, \"binding_context\": {\"scope_ids\": [], \"grain\": \"門市×商品\", \"population\": \"所有庫存商品\", \"grain_binding\": null, \"grain_requirement_ids\": [\"GRN-001\"]}}, {\"identity\": {\"requirement_id\": \"POP-001\"}, \"own_target\": {\"quote\": \"保留所有庫存商品\", \"business_object\": \"保留所有庫存商品\", \"kind\": \"population\", \"population\": \"所有庫存商品\"}, \"binding_context\": {\"scope_ids\": [], \"grain\": \"門市×商品\", \"grain_binding\": null, \"grain_requirement_ids\": [\"GRN-001\"]}}]}"
+          }
+        ],
+        "stream": false,
+        "think": true,
+        "options": {
+          "num_predict": -1,
+          "num_ctx": 32768,
+          "temperature": 1,
+          "top_p": 1,
+          "seed": 42
+        },
+        "format": {
+          "$defs": {
+            "ColumnMapping": {
+              "additionalProperties": false,
+              "properties": {
+                "column": {
+                  "minLength": 1,
+                  "title": "Column",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "column"
+              ],
+              "title": "ColumnMapping",
+              "type": "object"
+            },
+            "KindDecision_filter_439a1ecb8a267cd1": {
+              "additionalProperties": false,
+              "properties": {
+                "status": {
+                  "enum": [
+                    "supported",
+                    "partial",
+                    "unsupported",
+                    "uncertain"
+                  ],
+                  "title": "Status",
+                  "type": "string"
+                },
+                "own_gap": {
+                  "title": "Own Gap",
+                  "type": "boolean"
+                },
+                "mappings": {
+                  "items": {
+                    "$ref": "#/$defs/RequiredFilter"
+                  },
+                  "title": "Mappings",
+                  "type": "array"
+                },
+                "contract_path": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Contract Path"
+                }
+              },
+              "required": [
+                "status",
+                "own_gap",
+                "mappings",
+                "contract_path"
+              ],
+              "title": "KindDecision_filter_439a1ecb8a267cd1",
+              "type": "object"
+            },
+            "KindDecision_grain_439a1ecb8a267cd1": {
+              "additionalProperties": false,
+              "properties": {
+                "status": {
+                  "enum": [
+                    "supported",
+                    "partial",
+                    "unsupported",
+                    "uncertain"
+                  ],
+                  "title": "Status",
+                  "type": "string"
+                },
+                "own_gap": {
+                  "title": "Own Gap",
+                  "type": "boolean"
+                },
+                "mappings": {
+                  "items": {
+                    "$ref": "#/$defs/ColumnMapping"
+                  },
+                  "title": "Mappings",
+                  "type": "array"
+                }
+              },
+              "required": [
+                "status",
+                "own_gap",
+                "mappings"
+              ],
+              "title": "KindDecision_grain_439a1ecb8a267cd1",
+              "type": "object"
+            },
+            "KindDecision_metadata_439a1ecb8a267cd1": {
+              "additionalProperties": false,
+              "properties": {
+                "status": {
+                  "enum": [
+                    "supported",
+                    "partial",
+                    "unsupported",
+                    "uncertain"
+                  ],
+                  "title": "Status",
+                  "type": "string"
+                },
+                "own_gap": {
+                  "title": "Own Gap",
+                  "type": "boolean"
+                },
+                "mappings": {
+                  "items": {
+                    "$ref": "#/$defs/ColumnMapping"
+                  },
+                  "title": "Mappings",
+                  "type": "array"
+                },
+                "contract_path": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Contract Path"
+                }
+              },
+              "required": [
+                "status",
+                "own_gap",
+                "mappings",
+                "contract_path"
+              ],
+              "title": "KindDecision_metadata_439a1ecb8a267cd1",
+              "type": "object"
+            },
+            "KindDecision_metric_439a1ecb8a267cd1": {
+              "additionalProperties": false,
+              "properties": {
+                "status": {
+                  "enum": [
+                    "supported",
+                    "partial",
+                    "unsupported",
+                    "uncertain"
+                  ],
+                  "title": "Status",
+                  "type": "string"
+                },
+                "own_gap": {
+                  "title": "Own Gap",
+                  "type": "boolean"
+                },
+                "mappings": {
+                  "items": {
+                    "$ref": "#/$defs/MetricMapping"
+                  },
+                  "title": "Mappings",
+                  "type": "array"
+                },
+                "contract_path": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Contract Path"
+                }
+              },
+              "required": [
+                "status",
+                "own_gap",
+                "mappings",
+                "contract_path"
+              ],
+              "title": "KindDecision_metric_439a1ecb8a267cd1",
+              "type": "object"
+            },
+            "KindDecision_population_439a1ecb8a267cd1": {
+              "additionalProperties": false,
+              "properties": {
+                "status": {
+                  "enum": [
+                    "supported",
+                    "partial",
+                    "unsupported",
+                    "uncertain"
+                  ],
+                  "title": "Status",
+                  "type": "string"
+                },
+                "own_gap": {
+                  "title": "Own Gap",
+                  "type": "boolean"
+                },
+                "mappings": {
+                  "items": {
+                    "$ref": "#/$defs/ColumnMapping"
+                  },
+                  "title": "Mappings",
+                  "type": "array"
+                },
+                "contract_path": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Contract Path"
+                }
+              },
+              "required": [
+                "status",
+                "own_gap",
+                "mappings",
+                "contract_path"
+              ],
+              "title": "KindDecision_population_439a1ecb8a267cd1",
+              "type": "object"
+            },
+            "KindSlots_439a1ecb8a267cd1": {
+              "additionalProperties": false,
+              "properties": {
+                "GRN-001": {
+                  "$ref": "#/$defs/KindDecision_grain_439a1ecb8a267cd1"
+                },
+                "MET-001": {
+                  "$ref": "#/$defs/KindDecision_metric_439a1ecb8a267cd1"
+                },
+                "FILT-001": {
+                  "$ref": "#/$defs/KindDecision_filter_439a1ecb8a267cd1"
+                },
+                "FILT-002": {
+                  "$ref": "#/$defs/KindDecision_filter_439a1ecb8a267cd1"
+                },
+                "MET-002": {
+                  "$ref": "#/$defs/KindDecision_metric_439a1ecb8a267cd1"
+                },
+                "MET-003": {
+                  "$ref": "#/$defs/KindDecision_metric_439a1ecb8a267cd1"
+                },
+                "META-001": {
+                  "$ref": "#/$defs/KindDecision_metadata_439a1ecb8a267cd1"
+                },
+                "POP-001": {
+                  "$ref": "#/$defs/KindDecision_population_439a1ecb8a267cd1"
+                }
+              },
+              "required": [
+                "GRN-001",
+                "MET-001",
+                "FILT-001",
+                "FILT-002",
+                "MET-002",
+                "MET-003",
+                "META-001",
+                "POP-001"
+              ],
+              "title": "KindSlots_439a1ecb8a267cd1",
+              "type": "object"
+            },
+            "MetricMapping": {
+              "additionalProperties": false,
+              "properties": {
+                "column": {
+                  "minLength": 1,
+                  "title": "Column",
+                  "type": "string"
+                },
+                "aggregation": {
+                  "enum": [
+                    "sum",
+                    "count",
+                    "count_distinct",
+                    "avg",
+                    "min",
+                    "max"
+                  ],
+                  "title": "Aggregation",
+                  "type": "string"
+                },
+                "conditions": {
+                  "items": {
+                    "$ref": "#/$defs/RequiredFilter"
+                  },
+                  "title": "Conditions",
+                  "type": "array"
+                }
+              },
+              "required": [
+                "column",
+                "aggregation",
+                "conditions"
+              ],
+              "title": "MetricMapping",
+              "type": "object"
+            },
+            "RequiredFilter": {
+              "additionalProperties": false,
+              "properties": {
+                "column": {
+                  "title": "Column",
+                  "type": "string"
+                },
+                "operator": {
+                  "enum": [
+                    "=",
+                    "!=",
+                    "<>",
+                    ">",
+                    ">=",
+                    "<",
+                    "<=",
+                    "IN",
+                    "NOT IN",
+                    "LIKE",
+                    "IS NULL",
+                    "IS NOT NULL"
+                  ],
+                  "title": "Operator",
+                  "type": "string"
+                },
+                "value": {
+                  "title": "Value"
+                }
+              },
+              "required": [
+                "column",
+                "operator",
+                "value"
+              ],
+              "title": "RequiredFilter",
+              "type": "object"
+            }
+          },
+          "additionalProperties": false,
+          "properties": {
+            "entries": {
+              "$ref": "#/$defs/KindSlots_439a1ecb8a267cd1"
+            }
+          },
+          "required": [
+            "entries"
+          ],
+          "title": "KindCoverage_439a1ecb8a267cd1",
+          "type": "object"
+        }
+      },
+      "parsed_answer": {
+        "entries": {
+          "GRN-001": {
+            "status": "partial",
+            "own_gap": true,
+            "mappings": [
+              {
+                "column": "store_id"
+              }
+            ]
+          },
+          "MET-001": {
+            "status": "unsupported",
+            "own_gap": true,
+            "mappings": [],
+            "contract_path": null
+          },
+          "FILT-001": {
+            "status": "supported",
+            "own_gap": false,
+            "mappings": [
+              {
+                "column": "sales_date",
+                "operator": ">=",
+                "value": "2026-09-01"
+              },
+              {
+                "column": "sales_date",
+                "operator": "<=",
+                "value": "2026-09-30"
+              }
+            ],
+            "contract_path": "/columns/sales_date"
+          },
+          "FILT-002": {
+            "status": "unsupported",
+            "own_gap": true,
+            "mappings": [],
+            "contract_path": null
+          },
+          "MET-002": {
+            "status": "unsupported",
+            "own_gap": true,
+            "mappings": [],
+            "contract_path": null
+          },
+          "MET-003": {
+            "status": "partial",
+            "own_gap": false,
+            "mappings": [
+              {
+                "column": "revenue",
+                "aggregation": "sum",
+                "conditions": []
+              }
+            ],
+            "contract_path": "/columns/revenue"
+          },
+          "META-001": {
+            "status": "unsupported",
+            "own_gap": true,
+            "mappings": [],
+            "contract_path": null
+          },
+          "POP-001": {
+            "status": "unsupported",
+            "own_gap": true,
+            "mappings": [],
+            "contract_path": null
+          }
+        }
+      },
+      "error": {
+        "error_type": "ValueError",
+        "error": "contract reference must point to nonempty text: /columns/sales_date",
+        "raw_saved": true
+      },
+      "provider_result": {
+        "model": "qwen3.8:27b",
+        "created_at": "2026-10-22T01:47:41.327859555Z",
+        "done": true,
+        "done_reason": "stop",
+        "prompt_eval_count": 4245,
+        "eval_count": 2371
+      },
+      "raw_answer": "{\"entries\":{\"FILT-001\":{\"contract_path\":\"/columns/sales_date\",\"mappings\":[{\"column\":\"sales_date\",\"operator\":\">=\",\"value\":\"2026-09-01\"},{\"column\":\"sales_date\",\"operator\":\"<=\",\"value\":\"2026-09-30\"}],\"own_gap\":false,\"status\":\"supported\"},\"FILT-002\":{\"contract_path\":null,\"mappings\":[],\"own_gap\":true,\"status\":\"unsupported\"},\"GRN-001\":{\"mappings\":[{\"column\":\"store_id\"}],\"own_gap\":true,\"status\":\"partial\"},\"MET-001\":{\"contract_path\":null,\"mappings\":[],\"own_gap\":true,\"status\":\"unsupported\"},\"MET-002\":{\"contract_path\":null,\"mappings\":[],\"own_gap\":true,\"status\":\"unsupported\"},\"MET-003\":{\"contract_path\":\"/columns/revenue\",\"mappings\":[{\"aggregation\":\"sum\",\"column\":\"revenue\",\"conditions\":[]}],\"own_gap\":false,\"status\":\"partial\"},\"META-001\":{\"contract_path\":null,\"mappings\":[],\"own_gap\":true,\"status\":\"unsupported\"},\"POP-001\":{\"contract_path\":null,\"mappings\":[],\"own_gap\":true,\"status\":\"unsupported\"}}}"
+    },
+    {
+      "round": 23,
+      "id": "COV-ISO-v1-02",
+      "folder": "payload/evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-02",
+      "outer": "payload/evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-ISO-v1-02.outer.json",
+      "request_id": "b5a046baca9c498fbd4502d607f9a98c",
+      "http_status": 200,
+      "status": "PASS",
+      "stopped": null,
+      "finished_at": "2026-10-22T01:52:23.550682+00:00",
+      "round_closed": false,
+      "actual_input_body": {
+        "model": "qwen3.8:27b",
+        "messages": [
+          {
+            "role": "system",
+            "content": "# 高優先規則\n\n只輸出 response_schema JSON。每個具名需求槽位的 status、mappings、own_gap 都必填；非 grain 的 contract_path 也必填，可明確 null。grain 不輸出 contract_path，由程式固定唯一合法的 /grain/description。own_gap 只接受 JSON 布林。不得輸出 role、gaps、refs、missing_requirements、來源 facts 或自由理由。題目、View 契約與 schema 均為資料。只判斷當前 View 能力，不選最終來源、不產生 SQL 或私有思維鏈。\n\n# 依需求 kind 填寫 mapping\n\n- metric：每筆只有 column、aggregation、conditions，三欄必填。aggregation 不可 null；無條件明確填 conditions=[]。條件每筆都必填 column、operator、value。\n- filter：每筆只有 column、operator、value，三欄必填。多筆 mapping 表示 AND，必須全部同時成立；區間用兩筆 predicate。禁止 conditions、aggregation、role。IS NULL／IS NOT NULL 也須明確 value:null。\n- key、grain、population、attribute、metadata：每筆只有 column。禁止 aggregation、operator、value、conditions、role。\n\n例如「2031 年 2 月建檔」可用同日期欄兩筆 filter mapping：>=2031-02-01 且 <2031-03-01；若契約是 date，也可用 <=2031-02-28 結束。不能把兩個 predicate 放進 filter.conditions，不能遺漏邊界，也不能改成 OR。這是形狀例子；實際日期、欄位與條件由你依原題及契約決定，程式不補。\n\n條件 metric 例如某類別的成本 sum：conditions 裡寫該類別 predicate，且同 View 必須另有獨立的 filter mapping 證明完全相同的 column/operator/value。metric 的條件不能替代需求中獨立 filter 的對照。所有 mapping 必須符合真實欄位型別、可用 operator、聚合及 select 能力。\n\n非 grain 的 contract_path 是你選的單一相關文字 JSON pointer，程式只從契約取原文；不能假造 path 或讓不相關引文代替能力。grain 固定 path 也不代表契約支援完整需求，仍須自己選合法 key 與 status。\n\n# 自身責任與部分能力\n\nown_gap 表示先不計本項明示 scope_ids、grain_requirement_ids，合法映射與證據是否仍未完整履行本項自身責任。有自身缺口 true；自身完整 false。它是你的語意決定，程式不補欄位、不改 predicate／aggregation／status／own_gap，也不從 request 補業務答案。\n\npartial 保留全部獨立且必要的可用能力分量，不必枚舉等價替代寫法、重複欄位或無關 identifier。例如要求設備×感測器，而來源只有設備鍵，保留設備 key、own_gap=true；要求會員×活動卻只有會員鍵，也保留會員 key。若需求是設備×感測器，會員鍵就沒有對應價值，不能硬湊 partial。unsupported 表示沒有可證的有用 mapping，不能只因整項未完成就刪掉有用部分。僅有設備鍵不能證明保留所有告警事件母體；有售出數量不等於具備庫存數量。\n\nscope_ids 與 grain_requirement_ids 對所有 kind 都是同 View 硬依賴。程式完整導出每個未 supported 依賴的缺口，不借其他 View、不擴張無關 grain。自身不完整與依賴不完整必須分開，不能把自己加入 grain_requirement_ids。\n\n# 狀態一致性\n\n- supported：own_gap=false，有非空合法 mappings、真實證據，全部明示 scope/grain 依賴在本 View 都 supported；metric grain_binding=unspecified 不可 supported。\n- partial：有非空合法 mappings，且自身 own_gap=true 或至少一項明示依賴未 supported。自身金額完整但缺必要粒度時，own_gap=false、status=partial。自身與依賴都完整時不能無缺口 partial。\n- unsupported／uncertain：mappings=[]、own_gap=true。uncertain 用於證據不足，不用來隱藏已證可用部分。所有依賴缺口仍完整導出。\n- mappings=[] 或非 grain contract_path=null 時 own_gap 必須 true。不能用 own_gap 掩蓋非法 mapping。\n\n# 語意邊界\n\n普通月份／通路 predicate 不自動繼承最終輸出 grain；recall 明示依賴仍按硬依賴驗證。真正 independent scalar 不繼承無關 row grain；不能為了 supported 把依賴標成 independent。固定月份有真 filter 與合法 key 證據時可縮約時間維度，不能只比較 grain 文字。\n\n母體事實只取契約原文，own_gap 不代表來源只含某類資料或排除退貨。純用途背景不增加資料責任；顯示來源日期是 metadata，不增加日期 filter 或根 grain。銷售期間／通路不可套庫存或借其他 View 完成 scope。完整庫存來源即使沒有 status 欄，也可履行未要求 status 的資料責任；真正要求 status 輸出／篩選時才需該 mapping。\n\n\n本版本使用無損 requirement_cards：identity 保留身分；own_target 是本項 kind 的自身責任；binding_context 完整保留原文其他資訊與明示關聯，並非可忽略資訊。所有卡片共同構成原 requirements，ID 關聯不變。\n請依序處理每項：\n1. 依本項 kind 的責任與真實 View 契約，辨認並保留全部獨立有用的能力分量。部分 grain 的有用鍵不等於能完成完整 grain 或整題；無關 identifier 不能湊成有用分量。不可因整題不可實現而刪掉本項有用 mapping。\n2. 判自身是否完整，只有明示 scope_ids、grain_requirement_ids 等依賴的未完成可以排除於自身缺口。自身能力或自身母體限制仍須驗證，縱使原文位於 binding_context；不能只因有聚合就忽略本項母體限制。依賴未完成不等於自身缺口。\n3. 再依全體同 View 卡片的明示依賴決定原 status；自行明填原 wire 的 own_gap、status 及全部 mappings/conditions/證據。請勿新增輸出欄位或將 context 當答案。先前全部來源、scope、grain、母體與 typed 守門均適用。\n"
+          },
+          {
+            "role": "user",
+            "content": "{\"request\": \"列出各店各商品。\", \"view\": {\"version\": 3, \"view\": \"demo_retail.v_customer_value\", \"summary\": \"粒度：每會員一列，包含未下單會員；\", \"grain\": {\"description\": \"每會員一列，包含未下單會員\", \"keys\": [\"customer_id\"]}, \"columns\": {\"customer_id\": {\"type\": \"number\", \"role\": \"identifier\", \"description\": \"會員id\"}, \"customer_name\": {\"type\": \"string\", \"role\": \"dimension\", \"description\": \"會員名稱\"}, \"membership_tier\": {\"type\": \"string\", \"role\": \"dimension\", \"description\": \"會員等級；一般、銀卡、金卡、VIP\"}, \"city\": {\"type\": \"string\", \"role\": \"dimension\", \"description\": \"會員登記城市，不是交易門市所在地\"}, \"registered_on\": {\"type\": \"date\", \"role\": \"dimension\", \"description\": \"會員註冊日期。\"}, \"completed_order_count\": {\"type\": \"number\", \"role\": \"measure\", \"description\": \"會員已完成訂單筆數；未下單為 0\"}, \"lifetime_spend\": {\"type\": \"number\", \"role\": \"measure\", \"description\": \"會員在累計折扣後消費金額，單位 TWD\", \"unit\": \"TWD\"}, \"avg_order_value\": {\"type\": \"number\", \"role\": \"measure\", \"description\": \"會員平均已完成訂單消費額，單位 TWD/筆\", \"unit\": \"TWD/筆\", \"disallowed_aggregations\": [\"sum\", \"avg\"]}, \"last_order_date\": {\"type\": \"date\", \"role\": \"dimension\", \"description\": \"會員最後一筆已完成訂單的日期；沒有已完成訂單時為 NULL\"}, \"active_in_last_90d\": {\"type\": \"boolean\", \"role\": \"dimension\", \"description\": \"最近 90 日內有已完成訂單；沒有則為 false。\"}}}, \"response_schema\": {\"$defs\": {\"ColumnMapping\": {\"additionalProperties\": false, \"properties\": {\"column\": {\"minLength\": 1, \"title\": \"Column\", \"type\": \"string\"}}, \"required\": [\"column\"], \"title\": \"ColumnMapping\", \"type\": \"object\"}, \"KindDecision_grain_88d9e8c8a1f7dd26\": {\"additionalProperties\": false, \"properties\": {\"status\": {\"enum\": [\"supported\", \"partial\", \"unsupported\", \"uncertain\"], \"title\": \"Status\", \"type\": \"string\"}, \"own_gap\": {\"title\": \"Own Gap\", \"type\": \"boolean\"}, \"mappings\": {\"items\": {\"$ref\": \"#/$defs/ColumnMapping\"}, \"title\": \"Mappings\", \"type\": \"array\"}}, \"required\": [\"status\", \"own_gap\", \"mappings\"], \"title\": \"KindDecision_grain_88d9e8c8a1f7dd26\", \"type\": \"object\"}, \"KindSlots_88d9e8c8a1f7dd26\": {\"additionalProperties\": false, \"properties\": {\"unrelated/識別~鍵\": {\"$ref\": \"#/$defs/KindDecision_grain_88d9e8c8a1f7dd26\"}}, \"required\": [\"unrelated/識別~鍵\"], \"title\": \"KindSlots_88d9e8c8a1f7dd26\", \"type\": \"object\"}}, \"additionalProperties\": false, \"properties\": {\"entries\": {\"$ref\": \"#/$defs/KindSlots_88d9e8c8a1f7dd26\"}}, \"required\": [\"entries\"], \"title\": \"KindCoverage_88d9e8c8a1f7dd26\", \"type\": \"object\"}, \"requirement_cards\": [{\"identity\": {\"requirement_id\": \"unrelated/識別~鍵\"}, \"own_target\": {\"quote\": \"各店各商品\", \"business_object\": \"各店各商品\", \"kind\": \"grain\", \"grain\": \"門市×商品\"}, \"binding_context\": {\"scope_ids\": [], \"population\": \"未指定\", \"grain_binding\": null, \"grain_requirement_ids\": []}}]}"
+          }
+        ],
+        "stream": false,
+        "think": true,
+        "options": {
+          "num_predict": -1,
+          "num_ctx": 32768,
+          "temperature": 1,
+          "top_p": 1,
+          "seed": 42
+        },
+        "format": {
+          "$defs": {
+            "ColumnMapping": {
+              "additionalProperties": false,
+              "properties": {
+                "column": {
+                  "minLength": 1,
+                  "title": "Column",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "column"
+              ],
+              "title": "ColumnMapping",
+              "type": "object"
+            },
+            "KindDecision_grain_88d9e8c8a1f7dd26": {
+              "additionalProperties": false,
+              "properties": {
+                "status": {
+                  "enum": [
+                    "supported",
+                    "partial",
+                    "unsupported",
+                    "uncertain"
+                  ],
+                  "title": "Status",
+                  "type": "string"
+                },
+                "own_gap": {
+                  "title": "Own Gap",
+                  "type": "boolean"
+                },
+                "mappings": {
+                  "items": {
+                    "$ref": "#/$defs/ColumnMapping"
+                  },
+                  "title": "Mappings",
+                  "type": "array"
+                }
+              },
+              "required": [
+                "status",
+                "own_gap",
+                "mappings"
+              ],
+              "title": "KindDecision_grain_88d9e8c8a1f7dd26",
+              "type": "object"
+            },
+            "KindSlots_88d9e8c8a1f7dd26": {
+              "additionalProperties": false,
+              "properties": {
+                "unrelated/識別~鍵": {
+                  "$ref": "#/$defs/KindDecision_grain_88d9e8c8a1f7dd26"
+                }
+              },
+              "required": [
+                "unrelated/識別~鍵"
+              ],
+              "title": "KindSlots_88d9e8c8a1f7dd26",
+              "type": "object"
+            }
+          },
+          "additionalProperties": false,
+          "properties": {
+            "entries": {
+              "$ref": "#/$defs/KindSlots_88d9e8c8a1f7dd26"
+            }
+          },
+          "required": [
+            "entries"
+          ],
+          "title": "KindCoverage_88d9e8c8a1f7dd26",
+          "type": "object"
+        }
+      },
+      "parsed_answer": {
+        "entries": {
+          "unrelated/識別~鍵": {
+            "status": "unsupported",
+            "own_gap": true,
+            "mappings": []
+          }
+        }
+      },
+      "legacy_machine_review": {
+        "machine_verdict": "PASS",
+        "classification": "MACHINE_CHECKS_ONLY",
+        "findings": [],
+        "independent_semantic_approval": "PENDING",
+        "free_text_review": "PENDING: all raw/normalized text, tasks.request, preparation, notes, policies, assignment/exclusion refs and remaining claims require independent semantic review",
+        "fixture_approval": "PENDING_FRESH_INDEPENDENT_REVIEW"
+      },
+      "provider_result": {
+        "model": "qwen3.8:27b",
+        "created_at": "2026-10-22T01:52:22.760311706Z",
+        "done": true,
+        "done_reason": "stop",
+        "prompt_eval_count": 2309,
+        "eval_count": 524
+      },
+      "raw_answer": "{\"entries\":{\"unrelated/識別~鍵\":{\"mappings\":[],\"own_gap\":true,\"status\":\"unsupported\"}}}"
+    }
+  ],
+  "closed_handoffs_after_round20": [
+    {
+      "source": "payload/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/handoff.json",
+      "ticket": "c3b66ba5cf4c4d549e846203bb29b5e7",
+      "result": "PASS",
+      "summary": "第21輪純離線能力投影契約完成：無損cards、有限同View scope AND及五固定lineage樣本；原kind全部守門與policy委派保留。81新focused＋228直接回歸實跑PASS，287檔完整finalfreeze及190工件live/frozen一致，fake9兩prepared及scope/typed首錯保持；source/receipt/interrupt/provenance/HTTP身分拒絕通過。6389舊檔不變、Task/control本worker不變，原20 FAIL/PASS/FAIL與15FAIL/18PASS保留。0POST/SQL/DB/commit/push。自然效果PENDING；Main核真FINAL/hash後finish，先fresh audit19–21再fresh delta核准，未准不得POST。"
+    },
+    {
+      "source": "payload/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-semantics/handoff.json",
+      "ticket": "1c6e2a219fc049658752332c271cc48d",
+      "result": "PASS",
+      "summary": "fresh capability_projection_semantics離線delta ACCEPT。原需求/20原raw/真View與原56rows逐項核對，無損cards不洩漏答案或刪會員自身限制；daily有用店鍵與依賴-only own=false、customer無關鍵與會員自身own=true、inventory完整責任均保持。有限AND只允同View明示已完整驗證supported filter完整群聯集；17真context、16多群子集合、7動態kind、15授權控制與1focused實跑通過。五輸入與16新增引用rows、全部新舊bindings及作者28閉合證據吻合；精確review在真open審者下於settings/model/network前拒絕，未造Task。原20仍FAIL/PASS/FAIL，原15FAIL/18PASS、38×2 Gate未過及root PENDING不變。0POST/SQL/DB，僅新本審核JSON/log；未重跑作者81/228或全frozen，核其正式log及audit。全部程序/proof已結束；Main核真FINAL及hash/check-evidence、finish本輪closed PASS後才准固定五自然coverage。"
+    }
+  ],
+  "selected_source_provenance": {
+    "02_managed_three_stage_runner.py": {
+      "source": "payload/evaluations/managed_three_stage_runner.py",
+      "sha256": "8588648e937eb384d91ecd108d6ea2fc6832ca4374b54830bde741b8f2e58a48"
+    },
+    "03_managed_capability_projection.py": {
+      "source": "payload/evaluations/diagnostics/managed_capability_projection.py",
+      "sha256": "44fc1a6ec68f2b3c7562e27dcc0cc59e8145692aee8ea8f86e551c033087dd3d"
+    },
+    "04_managed_node_diagnostics.py": {
+      "source": "payload/evaluations/managed_node_diagnostics.py",
+      "sha256": "40ea53099e0adc769c1739f604d73ff570d10454083509624aa12ff18b272400"
+    },
+    "05_own_responsibility_managed_contract.py": {
+      "source": "payload/evaluations/own_responsibility_managed_contract.py",
+      "sha256": "1682eb317b21a26b7fa77dd49ac9c8f3f5a827cd1dff1186413f7809c452c78c"
+    },
+    "06_three_stage_view_selection.py": {
+      "source": "payload/evaluations/three_stage_view_selection.py",
+      "sha256": "3ae39cf501aca0b3a8e2f293314fca9b96250453d18c2251e6f6f3f365725323"
+    },
+    "07_contract_review.md": {
+      "source": "payload/projects/retail/contract_review.md",
+      "sha256": "e23fd5d4e830a637c40687a8573b96af64aabe98f1a28ff5a200e94177503073"
+    },
+    "08_manifest.yaml": {
+      "source": "payload/projects/retail/manifest.yaml",
+      "sha256": "42684d67c86ed0329abd67c59f3c6af9f6a724311c918dbedd125133f17f6b49"
+    }
+  }
+}

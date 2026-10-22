@@ -1,0 +1,62 @@
+{
+  "entries": {
+    "stock": {
+      "status": "supported",
+      "own_gap": false,
+      "mappings": [
+        {
+          "column": "stock_qty",
+          "aggregation": "sum",
+          "conditions": []
+        }
+      ],
+      "contract_path": "/grain/description"
+    },
+    "sales": {
+      "status": "unsupported",
+      "own_gap": true,
+      "mappings": [],
+      "contract_path": "/grain/description"
+    },
+    "channel": {
+      "status": "unsupported",
+      "own_gap": true,
+      "mappings": [],
+      "contract_path": "/grain/description"
+    },
+    "period": {
+      "status": "unsupported",
+      "own_gap": true,
+      "mappings": [],
+      "contract_path": "/grain/description"
+    },
+    "population": {
+      "status": "supported",
+      "own_gap": false,
+      "mappings": [
+        {
+          "column": "store_id"
+        },
+        {
+          "column": "product_id"
+        }
+      ],
+      "contract_path": "/grain/description"
+    },
+    "grain": {
+      "status": "unsupported",
+      "own_gap": true,
+      "mappings": []
+    },
+    "R_PURPOSE": {
+      "status": "supported",
+      "own_gap": false,
+      "mappings": [
+        {
+          "column": "snapshot_date"
+        }
+      ],
+      "contract_path": "/columns/snapshot_date/description"
+    }
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "result": "PASS_RESEARCH_CHECKS_ONLY",
+  "old_nodes_exact": 21,
+  "new_children_only_unpassed": 3,
+  "root_goal_and_acceptance_exact": true,
+  "card_data_probes": [
+    {
+      "sample": "COV-ISO-v1-01",
+      "requirements": 8,
+      "roundtrip_equal": true,
+      "input_fields_dropped_or_invented": 0
+    },
+    {
+      "sample": "COV-ISO-v1-02",
+      "requirements": 1,
+      "roundtrip_equal": true,
+      "input_fields_dropped_or_invented": 0
+    },
+    {
+      "sample": "COV-ISO-v1-03",
+      "requirements": 8,
+      "roundtrip_equal": true,
+      "input_fields_dropped_or_invented": 0
+    }
+  ],
+  "scope_idempotent_probe_controls": [
+    {
+      "name": "empty",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "full_same_AND",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "reordered",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "identical_AND_duplicate",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "half_month",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "wrong_value",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "extra_scope",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "not_declared_scope",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "no_independent_filter",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "unsupported_filter",
+      "expected": false,
+      "actual": false
+    }
+  ],
+  "scope_probe_limit": "僅純資料研究條件，不是新production checker或自然模型驗證；cross-View與aggregation等仍由後續focused test及fresh delta reviewer實跑。",
+  "protected_old_files": 6390,
+  "changed_old_files": [],
+  "controller_check_evidence_exit_code": 0,
+  "model_POST": 0,
+  "SQL_DB": 0,
+  "source_test_fixture_or_Task_control_mutation": false,
+  "candidate_implemented": false,
+  "natural_verified": false,
+  "old_rounds": 20,
+  "old_used": {
+    "agent_dispatches": 36,
+    "cloud_calls": 0,
+    "local_calls": 26,
+    "model_retries": 0
+  }
+}

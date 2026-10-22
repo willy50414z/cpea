@@ -1,0 +1,66 @@
+{
+  "machine_verdict": "FAIL",
+  "classification": "SEMANTIC_REJECT",
+  "findings": [
+    {
+      "requirement_id": "slot_0/🧾",
+      "aspect": "status/own_gap",
+      "expected": {
+        "status": "partial",
+        "own_gap": true,
+        "mappings": [
+          {
+            "column": "loc_key"
+          }
+        ]
+      },
+      "actual": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": []
+      }
+    },
+    {
+      "requirement_id": "slot_0/🧾",
+      "aspect": "necessary mappings/predicates",
+      "expected": [
+        {
+          "column": "loc_key"
+        }
+      ],
+      "actual": []
+    },
+    {
+      "requirement_id": "amount/net",
+      "aspect": "necessary mappings/predicates",
+      "expected": [
+        {
+          "column": "amount_value",
+          "aggregation": "sum",
+          "conditions": []
+        }
+      ],
+      "actual": [
+        {
+          "column": "amount_value",
+          "aggregation": "sum",
+          "conditions": [
+            {
+              "column": "day_key",
+              "operator": ">=",
+              "value": "2032-02-01"
+            },
+            {
+              "column": "day_key",
+              "operator": "<",
+              "value": "2032-03-01"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "independent_semantic_approval": "PENDING",
+  "free_text_review": "PENDING: all raw/normalized text, tasks.request, preparation, notes, policies, assignment/exclusion refs and remaining claims require independent semantic review",
+  "fixture_approval": "PENDING_FRESH_INDEPENDENT_REVIEW"
+}

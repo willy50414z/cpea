@@ -1,0 +1,13 @@
+{
+  "machine_verdict": "FAIL",
+  "classification": "SEMANTIC_REJECT",
+  "findings": [
+    {
+      "aspect": "no unproven zero fill",
+      "actual": "保留未匹配母體；未匹配子集合為空集合，不製造零值元素或將數值缺值補零。"
+    }
+  ],
+  "independent_semantic_approval": "PENDING",
+  "free_text_review": "PENDING: all raw/normalized text, tasks.request, preparation, notes, policies, assignment/exclusion refs and remaining claims require independent semantic review",
+  "fixture_approval": "PENDING_FRESH_INDEPENDENT_REVIEW"
+}

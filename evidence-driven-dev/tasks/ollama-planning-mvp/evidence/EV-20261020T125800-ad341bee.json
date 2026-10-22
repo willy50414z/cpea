@@ -1,0 +1,27 @@
+{
+  "id": "EV-20261020T125800-ad341bee",
+  "kind": "regression",
+  "command": [
+    ".venv/bin/python",
+    "-m",
+    "pytest",
+    "tests/unit/test_task_decomposition_contract.py",
+    "tests/unit/test_task_decomposition_workflow.py",
+    "tests/unit/test_decomposition_evaluation.py",
+    "tests/integration/test_decomposition_runner.py",
+    "tests/unit/test_planning_mvp.py",
+    "-q"
+  ],
+  "cwd": "/home/willy/code/cpea_terms",
+  "started_at": "2026-10-20T12:58:00+00:00",
+  "finished_at": "2026-10-20T12:58:08+00:00",
+  "exit_code": 0,
+  "revision": "bc09c67fc4078501599c37e4cdfecdee40af2ef8",
+  "diff_fingerprint": "ed8164d51e1effbe4901f04de42d143c8813eff6e02ee06ee29944f7ecba9729",
+  "post_fingerprint": "ed8164d51e1effbe4901f04de42d143c8813eff6e02ee06ee29944f7ecba9729",
+  "source_unchanged": true,
+  "output_sha256": "0cd680e897f469ec3ef624d82367e624392ec04dab8e4c5cb015af3281b6848c",
+  "raw_output": ".local/EV-20261020T125800-ad341bee.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "acee91323b69292dbcef6741520e791fe89b16db773de5d2ef7f218d67546865"
+}

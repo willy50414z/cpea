@@ -1,0 +1,357 @@
+{
+  "$defs": {
+    "ColumnMapping": {
+      "additionalProperties": false,
+      "properties": {
+        "column": {
+          "minLength": 1,
+          "title": "Column",
+          "type": "string"
+        }
+      },
+      "required": [
+        "column"
+      ],
+      "title": "ColumnMapping",
+      "type": "object"
+    },
+    "KindDecision_filter_439a1ecb8a267cd1": {
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "enum": [
+            "supported",
+            "partial",
+            "unsupported",
+            "uncertain"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "own_gap": {
+          "title": "Own Gap",
+          "type": "boolean"
+        },
+        "mappings": {
+          "items": {
+            "$ref": "#/$defs/RequiredFilter"
+          },
+          "title": "Mappings",
+          "type": "array"
+        },
+        "contract_path": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Contract Path"
+        }
+      },
+      "required": [
+        "status",
+        "own_gap",
+        "mappings",
+        "contract_path"
+      ],
+      "title": "KindDecision_filter_439a1ecb8a267cd1",
+      "type": "object"
+    },
+    "KindDecision_grain_439a1ecb8a267cd1": {
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "enum": [
+            "supported",
+            "partial",
+            "unsupported",
+            "uncertain"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "own_gap": {
+          "title": "Own Gap",
+          "type": "boolean"
+        },
+        "mappings": {
+          "items": {
+            "$ref": "#/$defs/ColumnMapping"
+          },
+          "title": "Mappings",
+          "type": "array"
+        }
+      },
+      "required": [
+        "status",
+        "own_gap",
+        "mappings"
+      ],
+      "title": "KindDecision_grain_439a1ecb8a267cd1",
+      "type": "object"
+    },
+    "KindDecision_metadata_439a1ecb8a267cd1": {
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "enum": [
+            "supported",
+            "partial",
+            "unsupported",
+            "uncertain"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "own_gap": {
+          "title": "Own Gap",
+          "type": "boolean"
+        },
+        "mappings": {
+          "items": {
+            "$ref": "#/$defs/ColumnMapping"
+          },
+          "title": "Mappings",
+          "type": "array"
+        },
+        "contract_path": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Contract Path"
+        }
+      },
+      "required": [
+        "status",
+        "own_gap",
+        "mappings",
+        "contract_path"
+      ],
+      "title": "KindDecision_metadata_439a1ecb8a267cd1",
+      "type": "object"
+    },
+    "KindDecision_metric_439a1ecb8a267cd1": {
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "enum": [
+            "supported",
+            "partial",
+            "unsupported",
+            "uncertain"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "own_gap": {
+          "title": "Own Gap",
+          "type": "boolean"
+        },
+        "mappings": {
+          "items": {
+            "$ref": "#/$defs/MetricMapping"
+          },
+          "title": "Mappings",
+          "type": "array"
+        },
+        "contract_path": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Contract Path"
+        }
+      },
+      "required": [
+        "status",
+        "own_gap",
+        "mappings",
+        "contract_path"
+      ],
+      "title": "KindDecision_metric_439a1ecb8a267cd1",
+      "type": "object"
+    },
+    "KindDecision_population_439a1ecb8a267cd1": {
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "enum": [
+            "supported",
+            "partial",
+            "unsupported",
+            "uncertain"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "own_gap": {
+          "title": "Own Gap",
+          "type": "boolean"
+        },
+        "mappings": {
+          "items": {
+            "$ref": "#/$defs/ColumnMapping"
+          },
+          "title": "Mappings",
+          "type": "array"
+        },
+        "contract_path": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Contract Path"
+        }
+      },
+      "required": [
+        "status",
+        "own_gap",
+        "mappings",
+        "contract_path"
+      ],
+      "title": "KindDecision_population_439a1ecb8a267cd1",
+      "type": "object"
+    },
+    "KindSlots_439a1ecb8a267cd1": {
+      "additionalProperties": false,
+      "properties": {
+        "GRN-001": {
+          "$ref": "#/$defs/KindDecision_grain_439a1ecb8a267cd1"
+        },
+        "MET-001": {
+          "$ref": "#/$defs/KindDecision_metric_439a1ecb8a267cd1"
+        },
+        "FILT-001": {
+          "$ref": "#/$defs/KindDecision_filter_439a1ecb8a267cd1"
+        },
+        "FILT-002": {
+          "$ref": "#/$defs/KindDecision_filter_439a1ecb8a267cd1"
+        },
+        "MET-002": {
+          "$ref": "#/$defs/KindDecision_metric_439a1ecb8a267cd1"
+        },
+        "MET-003": {
+          "$ref": "#/$defs/KindDecision_metric_439a1ecb8a267cd1"
+        },
+        "META-001": {
+          "$ref": "#/$defs/KindDecision_metadata_439a1ecb8a267cd1"
+        },
+        "POP-001": {
+          "$ref": "#/$defs/KindDecision_population_439a1ecb8a267cd1"
+        }
+      },
+      "required": [
+        "GRN-001",
+        "MET-001",
+        "FILT-001",
+        "FILT-002",
+        "MET-002",
+        "MET-003",
+        "META-001",
+        "POP-001"
+      ],
+      "title": "KindSlots_439a1ecb8a267cd1",
+      "type": "object"
+    },
+    "MetricMapping": {
+      "additionalProperties": false,
+      "properties": {
+        "column": {
+          "minLength": 1,
+          "title": "Column",
+          "type": "string"
+        },
+        "aggregation": {
+          "enum": [
+            "sum",
+            "count",
+            "count_distinct",
+            "avg",
+            "min",
+            "max"
+          ],
+          "title": "Aggregation",
+          "type": "string"
+        },
+        "conditions": {
+          "items": {
+            "$ref": "#/$defs/RequiredFilter"
+          },
+          "title": "Conditions",
+          "type": "array"
+        }
+      },
+      "required": [
+        "column",
+        "aggregation",
+        "conditions"
+      ],
+      "title": "MetricMapping",
+      "type": "object"
+    },
+    "RequiredFilter": {
+      "additionalProperties": false,
+      "properties": {
+        "column": {
+          "title": "Column",
+          "type": "string"
+        },
+        "operator": {
+          "enum": [
+            "=",
+            "!=",
+            "<>",
+            ">",
+            ">=",
+            "<",
+            "<=",
+            "IN",
+            "NOT IN",
+            "LIKE",
+            "IS NULL",
+            "IS NOT NULL"
+          ],
+          "title": "Operator",
+          "type": "string"
+        },
+        "value": {
+          "title": "Value"
+        }
+      },
+      "required": [
+        "column",
+        "operator",
+        "value"
+      ],
+      "title": "RequiredFilter",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "entries": {
+      "$ref": "#/$defs/KindSlots_439a1ecb8a267cd1"
+    }
+  },
+  "required": [
+    "entries"
+  ],
+  "title": "KindCoverage_439a1ecb8a267cd1",
+  "type": "object"
+}

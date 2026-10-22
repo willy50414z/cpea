@@ -1,0 +1,14 @@
+{
+  "before_sources": 155,
+  "after_sources": 162,
+  "historical_files": 1164,
+  "historical_changes": [],
+  "permitted_runner_changes": [
+    "/home/willy/code/cpea_terms/evaluations/managed_three_stage_runner.py",
+    "evaluations/managed_three_stage_runner.py"
+  ],
+  "protected_changes": [],
+  "candidate_fingerprint_unchanged": true,
+  "model_POSTs": 0,
+  "SQL_DB": 0
+}

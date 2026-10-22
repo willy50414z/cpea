@@ -1,0 +1,6 @@
+[".venv/bin/python", "/home/willy/code/cpea_terms/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-bound/replay_frozen.py", "--snapshot", "before"]
+{"result": "PASS", "raw_replays": 9, "stopped": {"error_type": "ValueError", "error": "final grain differs from verified requirement keys"}}
+[".venv/bin/python", "-m", "evaluations.managed_three_stage_runner", "--evidence-bound", "--replay", "/home/willy/code/cpea_terms/evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T185423Z-5d276f"]
+{"result": "PASS", "raw_replays": 3, "stopped": {"error_type": "ValueError", "error": "gap aspect contradicts evidence or dependencies: grain"}}
+[".venv/bin/python", "/home/willy/code/cpea_terms/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-bound/replay_frozen.py", "--snapshot", "after", "--evidence-bound", "--run", "/home/willy/code/cpea_terms/evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T185423Z-5d276f"]
+{"result": "PASS", "raw_replays": 3, "stopped": {"error_type": "ValueError", "error": "gap aspect contradicts evidence or dependencies: grain"}}

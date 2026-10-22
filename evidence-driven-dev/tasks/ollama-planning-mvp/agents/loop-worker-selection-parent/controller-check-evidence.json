@@ -1,0 +1,17 @@
+{
+  "command": [
+    "python3",
+    "/home/willy/.codex/skills/edd-loop/scripts/loopctl.py",
+    "--root",
+    "/home/willy/code/cpea_terms",
+    "--id",
+    "ollama-planning-mvp",
+    "check-evidence"
+  ],
+  "exit_code": 0,
+  "stdout": {
+    "result": "PASS",
+    "scope": "file provenance only; not semantic approval"
+  },
+  "stderr": ""
+}

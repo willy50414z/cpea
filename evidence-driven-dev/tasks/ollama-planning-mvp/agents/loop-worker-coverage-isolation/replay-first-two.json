@@ -1,0 +1,86 @@
+[
+  {
+    "sample": "COV-ISO-v1-01",
+    "live": {
+      "result": "FAIL",
+      "replay_verification": "PASS",
+      "stopped": {
+        "error_type": "ValueError",
+        "error": "fixed diagnostic semantic checks failed"
+      },
+      "inner": {
+        "result": "PASS",
+        "raw_replays": 1,
+        "stopped": {
+          "error_type": "ValueError",
+          "error": "fixed diagnostic semantic checks failed"
+        },
+        "upstream_injected": true,
+        "provider_calls": 0
+      },
+      "outer_receipt_sha256": "8ba9a5aa5efb9f4449f46b6ebdb564114fd995de50f4b6ed030f5e01bc385a5e",
+      "provider_calls": 0,
+      "independent_semantic_approval": "PENDING"
+    },
+    "frozen": {
+      "result": "FAIL",
+      "replay_verification": "PASS",
+      "stopped": {
+        "error_type": "ValueError",
+        "error": "fixed diagnostic semantic checks failed"
+      },
+      "inner": {
+        "result": "PASS",
+        "raw_replays": 1,
+        "stopped": {
+          "error_type": "ValueError",
+          "error": "fixed diagnostic semantic checks failed"
+        },
+        "upstream_injected": true,
+        "provider_calls": 0
+      },
+      "outer_receipt_sha256": "8ba9a5aa5efb9f4449f46b6ebdb564114fd995de50f4b6ed030f5e01bc385a5e",
+      "provider_calls": 0,
+      "independent_semantic_approval": "PENDING"
+    },
+    "frozen_exit_code": 1,
+    "frozen_stderr": "",
+    "equal": true
+  },
+  {
+    "sample": "COV-ISO-v1-02",
+    "live": {
+      "result": "PASS",
+      "replay_verification": "PASS",
+      "stopped": null,
+      "inner": {
+        "result": "PASS",
+        "raw_replays": 1,
+        "stopped": null,
+        "upstream_injected": true,
+        "provider_calls": 0
+      },
+      "outer_receipt_sha256": "9f9df874b88cd7361b9bdaeaad3c4f5d9d9f0c0b05345d209aa322a2405c0b97",
+      "provider_calls": 0,
+      "independent_semantic_approval": "PENDING"
+    },
+    "frozen": {
+      "result": "PASS",
+      "replay_verification": "PASS",
+      "stopped": null,
+      "inner": {
+        "result": "PASS",
+        "raw_replays": 1,
+        "stopped": null,
+        "upstream_injected": true,
+        "provider_calls": 0
+      },
+      "outer_receipt_sha256": "9f9df874b88cd7361b9bdaeaad3c4f5d9d9f0c0b05345d209aa322a2405c0b97",
+      "provider_calls": 0,
+      "independent_semantic_approval": "PENDING"
+    },
+    "frozen_exit_code": 0,
+    "frozen_stderr": "",
+    "equal": true
+  }
+]

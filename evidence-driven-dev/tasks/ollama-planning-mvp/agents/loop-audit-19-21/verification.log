@@ -1,0 +1,10 @@
+PASS 第19–21輪112項controller證據與作者1435項proof hashes一致。
+PASS 6390保護檔僅Main授權Task變更，6389舊非Task檔不變；三層完整freeze逐檔一致。
+PASS 五固定case無損cards與原輸入逐值核對；tokens=5147/3239/5077/5194/5568；supplement expected直接引用已核准coverage。
+PASS 原20三raw/parsed一致，新candidate仍FAIL/PASS/FAIL；03只有冪等scope AND另判，其他finding保持。
+PASS 9項獨立scope控制及真Task未核准來源拒絕；不重跑81+228既有測試，已核其不可變成功log。
+PASS 21舊node定義/root驗收逐字一致；新3child只在未PASS coverage下，完整祖先與fresh final仍待驗。
+NOTICE 初始只讀metadata查詢誤將nodes字典當陣列已修正。首個綜合探針未保留session回傳，不列為驗證依據；此後分段JSON為本審核可驗證結果。
+NOTICE ancestor首次探針將typed-prepared-checks.prepared誤認數量而Assert失敗；依真schema改為len(list)==2並逐項exact_raw_typed_payload重核通過，未改原資料。
+LIMIT 正式MANAGED成功與HTTP後撤銷授權自然效果尚未執行，僅核程式前後check位置及既有source/receipt/interrupt負例。
+SCOPE 0POST/SQL/DB/cloud/retry；未改source/tests/fixture/Oracle/manifest/舊證據/Task/control；未commit/push。

@@ -1,0 +1,21 @@
+{
+  "id": "EV-20261021T081050-aa48bdf2",
+  "kind": "review",
+  "command": [
+    ".venv/bin/python",
+    "-c",
+    "import json; from pathlib import Path; from cpea.infrastructure.catalog.yaml_catalog import SchemaCatalog; T=Path(\"evidence-driven-dev/tasks/ollama-planning-mvp\"); r=json.loads((T/\"reports/qwen-indexed-recall-uncapped-results.json\").read_text(encoding=\"utf-8\")); F=T/r[\"artifact_folder\"]; m=json.loads((F/\"run.json\").read_text(encoding=\"utf-8\")); p=json.loads((F/\"recall-parsed.json\").read_text(encoding=\"utf-8\")); d=json.loads((F/\"recall-result.json\").read_text(encoding=\"utf-8\")); assert m[\"stopped\"] is None and m[\"calls\"]==1 and m[\"num_predict\"]==-1; assert r[\"done_reason\"]==\"stop\" and r[\"usage\"][\"output_tokens\"]>4096; assert len(r[\"rows\"])==7 and all(x[\"exact_minimal_span\"] and x[\"kind\"]==x[\"expected_kind\"] for x in r[\"rows\"]); assert all(\"quote\" not in x for x in p[\"requirements\"]); by_id={x[\"requirement_id\"]:x for x in p[\"requirements\"]}; assert all(x[\"quote\"]==m[\"request\"][by_id[x[\"requirement_id\"]][\"start\"]:by_id[x[\"requirement_id\"]][\"end\"]] for x in d[\"requirements\"]); assert set(by_id[\"R_DISCOUNT\"][\"scope_ids\"])==set(by_id[\"R_NET_SALES\"][\"scope_ids\"])=={\"F_TIME\",\"F_CHANNEL\"}; assert by_id[\"R_STOCK_QTY\"][\"scope_ids\"]==by_id[\"R_SNAPSHOT_DATE\"][\"scope_ids\"]==[]; assert by_id[\"R_POPULATION\"][\"kind\"]==\"population\"; catalog=SchemaCatalog(\"projects/retail\"); assert {x[\"view\"] for x in p[\"candidate_views\"]}=={v.policy[\"view\"] for v in catalog.views()}; sales=next(v.policy for v in catalog.views() if v.policy[\"view\"]==\"demo_retail.v_sales_detail\"); assert \"僅含已完成訂單\" in sales[\"summary\"]; print(\"PASS: complete JSON, 7/7 exact target spans and roles, correct sales/inventory scopes, population, all 7 views, Python slicing, output exceeds old cap; independent oracle and stages 2/3 not verified\")"
+  ],
+  "cwd": "/home/willy/code/cpea_terms",
+  "started_at": "2026-10-21T08:10:50+00:00",
+  "finished_at": "2026-10-21T08:10:50+00:00",
+  "exit_code": 0,
+  "revision": "bc09c67fc4078501599c37e4cdfecdee40af2ef8",
+  "diff_fingerprint": "7055794fccfac615aaa94cdd99d6e17a66113c46da353a4d231b958a8476f3a5",
+  "post_fingerprint": "7055794fccfac615aaa94cdd99d6e17a66113c46da353a4d231b958a8476f3a5",
+  "source_unchanged": true,
+  "output_sha256": "e4960bd0a9b462ff62d713d2d2aa16b06f5916b00611641af27811d6724e1a0f",
+  "raw_output": ".local/EV-20261021T081050-aa48bdf2.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "2d70726a56e1685df64b4fa8d7524780f5b0a01e0f46d073595a92b6f43f207b"
+}

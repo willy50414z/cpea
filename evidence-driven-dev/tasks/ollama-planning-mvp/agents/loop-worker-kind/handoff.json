@@ -1,0 +1,17 @@
+{
+  "ticket": "67bea200744549c3881cbe2767dea6a6",
+  "result": "PASS",
+  "evidence": [
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-kind/original-live-replay.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-kind/original-frozen-replay.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-kind/red-final.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-kind/green-focused.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-kind/regression.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-kind/fake-record-replay.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-kind/frozen-replays.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-kind/dry-run.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-kind/semantic-review.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-kind/final-verification.log"
+  ],
+  "summary": "第9輪離線managed-kind-mapping-1完成。新kind專用必填/extra-forbid mapping schema及新prompt；僅編譯已驗role、不適用null/[]、grain唯一path，保留所有status/strict own_gap/column/aggregation/predicate/其他path/完整typed決策，原own/evidence/referenced/finish guards原樣重用。共用runner僅新增3行互斥--kind-mapping接線，無舊module/prompts/tests/guards修改。第8輪3raw在未改前live及155-source frozen精確重現原filter.conditions首錯，原遺漏店key語意FAIL維持；不修raw、不展平。RED104預期失敗後首次GREEN104；補schema及guard控制後112新測試，原384原樣加兩檔總496 passed in 55.54s。11份fake（完整9節點2prepared及10類首錯）同版/162-source frozen各51raw一致；原typed庫存anchor、店商品、stock sum/date metadata、sales同task整月online兩sum/先彙總再left/nozero核對。8種預先SEMANTIC_REJECT與2合法無關key/母體unsupported對照明確分開結構接受；parser不冒稱業務完整性oracle。完整source/import/prompts/schema/tests、編譯逐欄比較、fake與snapshots已封存本目錄；1164歷史hash、原第8輪27工件hash、兩src與所有受保護source維持。純離線0POST/SQL/DB，未改Task/controller、未commit/push；同.venv frozen未vendor外部套件。Main下一步finish本handoff後必fresh audit完整7–9，未獲CONTINUE/新研究裁決不可自然POST。自然入口為--kind-mapping --execute --ticket \"$EDD_WORKER_TICKET\"，仍須全新單樣本recall/全7View/完整typed/語意與各父層驗收；本輪不證自然可行、root仍全PENDING。"
+}

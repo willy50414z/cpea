@@ -1,0 +1,163 @@
+{
+  "result": "PASS",
+  "runs": [
+    {
+      "name": "complete",
+      "folder": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/bound-fake-complete-20261021T184957395949Z",
+      "calls": [
+        "recall",
+        "map-01",
+        "map-02",
+        "map-03",
+        "map-04",
+        "map-05",
+        "map-06",
+        "map-07",
+        "selection"
+      ],
+      "replay": {
+        "result": "PASS",
+        "raw_replays": 9,
+        "stopped": null
+      },
+      "prepared_requests": 2
+    },
+    {
+      "name": "provider",
+      "folder": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/bound-fake-provider-20261021T184957395949Z",
+      "calls": [
+        "recall",
+        "map-01",
+        "map-02"
+      ],
+      "replay": {
+        "result": "PASS",
+        "raw_replays": 2,
+        "stopped": {
+          "error_type": "OSError",
+          "error": "offline provider lost"
+        }
+      },
+      "prepared_requests": 0
+    },
+    {
+      "name": "parse",
+      "folder": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/bound-fake-parse-20261021T184957395949Z",
+      "calls": [
+        "recall",
+        "map-01",
+        "map-02"
+      ],
+      "replay": {
+        "result": "PASS",
+        "raw_replays": 3,
+        "stopped": {
+          "error_type": "JSONDecodeError",
+          "error": "Expecting value: line 1 column 1 (char 0)"
+        }
+      },
+      "prepared_requests": 0
+    },
+    {
+      "name": "gap",
+      "folder": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/bound-fake-gap-20261021T184957395949Z",
+      "calls": [
+        "recall",
+        "map-01",
+        "map-02"
+      ],
+      "replay": {
+        "result": "PASS",
+        "raw_replays": 3,
+        "stopped": {
+          "error_type": "ValueError",
+          "error": "duplicate/unknown gap requirement reference"
+        }
+      },
+      "prepared_requests": 0
+    },
+    {
+      "name": "typed",
+      "folder": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/bound-fake-typed-20261021T184957395949Z",
+      "calls": [
+        "recall",
+        "map-01",
+        "map-02",
+        "map-03",
+        "map-04",
+        "map-05",
+        "map-06",
+        "map-07",
+        "selection"
+      ],
+      "replay": {
+        "result": "PASS",
+        "raw_replays": 9,
+        "stopped": {
+          "error_type": "ValidationError",
+          "error": "1 validation error for SelectionWire\ndraft.ready.tasks.0.filters\n  Field required [type=missing, input_value={'task_id': 'stock', 'vie...店商品庫存件數'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing"
+        }
+      },
+      "prepared_requests": 0
+    },
+    {
+      "name": "null",
+      "folder": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/bound-fake-null-20261021T184957395949Z",
+      "calls": [
+        "recall",
+        "map-01",
+        "map-02",
+        "map-03",
+        "map-04",
+        "map-05",
+        "map-06",
+        "map-07",
+        "selection"
+      ],
+      "replay": {
+        "result": "PASS",
+        "raw_replays": 9,
+        "stopped": {
+          "error_type": "ValidationError",
+          "error": "1 validation error for SelectionWire\ndraft.ready.integration\n  Input should be a valid dictionary or instance of RequiredIntegration [type=model_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.14/v/model_type"
+        }
+      },
+      "prepared_requests": 0
+    },
+    {
+      "name": "old_wire",
+      "folder": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/bound-fake-old_wire-20261021T184957395949Z",
+      "calls": [
+        "recall"
+      ],
+      "replay": {
+        "result": "PASS",
+        "raw_replays": 1,
+        "stopped": {
+          "error_type": "ValidationError",
+          "error": "1 validation error for RecallWire\ncandidate_views\n  Extra inputs are not permitted [type=extra_forbidden, input_value=[], input_type=list]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden"
+        }
+      },
+      "prepared_requests": 0
+    },
+    {
+      "name": "nested_duplicate",
+      "folder": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/bound-fake-nested_duplicate-20261021T184957395949Z",
+      "calls": [
+        "recall",
+        "map-01",
+        "map-02"
+      ],
+      "replay": {
+        "result": "PASS",
+        "raw_replays": 3,
+        "stopped": {
+          "error_type": "ValueError",
+          "error": "duplicate JSON key: status"
+        }
+      },
+      "prepared_requests": 0
+    }
+  ],
+  "model_POSTs": 0
+}

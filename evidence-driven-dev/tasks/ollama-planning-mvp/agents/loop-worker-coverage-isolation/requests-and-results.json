@@ -1,0 +1,198 @@
+{
+  "result": "FAIL",
+  "samples": [
+    {
+      "sample": "COV-ISO-v1-01",
+      "request": {
+        "id": "832021b283e84ab7889b546e3258c2ad",
+        "ticket_id": "2f5da4941f9c46ed902d310981e37f7d",
+        "provider": "local",
+        "case_key": "kind-isolation-v2-rebind-1:ISOLATION:COV-ISO-v1-01:node",
+        "request_sha": "fe3689e8a4a0e67fc800c7973140260269e88be98e21ab1b195389b79f2372e5",
+        "retry_number": 0,
+        "retry_of": null,
+        "status": "ok",
+        "round": 20,
+        "reserved_at": "2026-10-22T00:07:52.934646+00:00",
+        "finished_at": "2026-10-22T00:19:43.462734+00:00",
+        "details": {
+          "http_status": 200,
+          "response_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/832021b283e84ab7889b546e3258c2ad.response.txt",
+          "response_sha256": "4dd4df54302a397afb87134529310919f15ddbbc7169b744bc3e012c30434a25"
+        }
+      },
+      "managed_receipt": {
+        "request_id": "832021b283e84ab7889b546e3258c2ad",
+        "result": "ok",
+        "http_status": 200,
+        "response_path": "/home/willy/code/cpea_terms/evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/832021b283e84ab7889b546e3258c2ad.response.txt",
+        "calls_charged": 1,
+        "automatic_retries": 0
+      },
+      "outer_status": "FAIL",
+      "stopped": {
+        "error_type": "ValueError",
+        "error": "fixed diagnostic semantic checks failed"
+      },
+      "usage": {
+        "input_tokens": 3886,
+        "output_tokens": 4998,
+        "total_tokens": 8884
+      },
+      "elapsed_seconds": 711.6379422309983,
+      "request_body_file_sha256": "0893f0360c3409c8bbb4523b4fd81623653fa36ed750131516c86858675a39b6",
+      "controller_canonical_body_sha256": "fe3689e8a4a0e67fc800c7973140260269e88be98e21ab1b195389b79f2372e5",
+      "response_sha256": "4dd4df54302a397afb87134529310919f15ddbbc7169b744bc3e012c30434a25",
+      "raw_answer_sha256": "6dc958dfc232247e5b4571617a18796fa91f1f1474e04db1f7c5e7f35ef02392",
+      "model": {
+        "name": "qwen3.8:27b",
+        "digest": "aaee06c39dcf2437cde036998d960e1fc1494b8191be7cc9657d01e509097813",
+        "checked_at": "2026-10-22T00:07:48.450679+00:00"
+      },
+      "options": {
+        "num_predict": -1,
+        "num_ctx": 32768,
+        "temperature": 1,
+        "top_p": 1,
+        "seed": 42
+      },
+      "think": true,
+      "HTTP_timeout_seconds": null,
+      "outer_timeout_seconds": null,
+      "upstream_injected": true
+    },
+    {
+      "sample": "COV-ISO-v1-02",
+      "request": {
+        "id": "8108409018d643cfb61f968dc9f469ee",
+        "ticket_id": "2f5da4941f9c46ed902d310981e37f7d",
+        "provider": "local",
+        "case_key": "kind-isolation-v2-rebind-1:ISOLATION:COV-ISO-v1-02:node",
+        "request_sha": "1ecb344a76ac06b25363f9bc0492eee574f9d93636a876dfd48c859ed5c16e74",
+        "retry_number": 0,
+        "retry_of": null,
+        "status": "ok",
+        "round": 20,
+        "reserved_at": "2026-10-22T00:19:48.369139+00:00",
+        "finished_at": "2026-10-22T00:23:09.047807+00:00",
+        "details": {
+          "http_status": 200,
+          "response_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/8108409018d643cfb61f968dc9f469ee.response.txt",
+          "response_sha256": "c923fafd081ca26c313f1a3c85c8e0a917ce61851ed0e27916e632f2bfe8671f"
+        }
+      },
+      "managed_receipt": {
+        "request_id": "8108409018d643cfb61f968dc9f469ee",
+        "result": "ok",
+        "http_status": 200,
+        "response_path": "/home/willy/code/cpea_terms/evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/8108409018d643cfb61f968dc9f469ee.response.txt",
+        "calls_charged": 1,
+        "automatic_retries": 0
+      },
+      "outer_status": "PASS",
+      "stopped": null,
+      "usage": {
+        "input_tokens": 2027,
+        "output_tokens": 410,
+        "total_tokens": 2437
+      },
+      "elapsed_seconds": 201.71768566999526,
+      "request_body_file_sha256": "95a6e97be478c823621b2efa2cb4c0ccb60632ae0b4cd60891dd8876400c9630",
+      "controller_canonical_body_sha256": "1ecb344a76ac06b25363f9bc0492eee574f9d93636a876dfd48c859ed5c16e74",
+      "response_sha256": "c923fafd081ca26c313f1a3c85c8e0a917ce61851ed0e27916e632f2bfe8671f",
+      "raw_answer_sha256": "cf89292134313f50f0f1cc6e3131b3b302f49489b7d2d7eff4ea587634e58250",
+      "model": {
+        "name": "qwen3.8:27b",
+        "digest": "aaee06c39dcf2437cde036998d960e1fc1494b8191be7cc9657d01e509097813",
+        "checked_at": "2026-10-22T00:07:48.450679+00:00"
+      },
+      "options": {
+        "num_predict": -1,
+        "num_ctx": 32768,
+        "temperature": 1,
+        "top_p": 1,
+        "seed": 42
+      },
+      "think": true,
+      "HTTP_timeout_seconds": null,
+      "outer_timeout_seconds": null,
+      "upstream_injected": true
+    },
+    {
+      "sample": "COV-ISO-v1-03",
+      "request": {
+        "id": "f4b1153ed3ab48eba9298c9db1fefe40",
+        "ticket_id": "2f5da4941f9c46ed902d310981e37f7d",
+        "provider": "local",
+        "case_key": "kind-isolation-v2-rebind-1:ISOLATION:COV-ISO-v1-03:node",
+        "request_sha": "c3dc9ae4a7be02903d6b38cc47d43a98950f3f7409c001664dbd3bfb7586a709",
+        "retry_number": 0,
+        "retry_of": null,
+        "status": "ok",
+        "round": 20,
+        "reserved_at": "2026-10-22T00:23:14.145871+00:00",
+        "finished_at": "2026-10-22T00:44:34.243950+00:00",
+        "details": {
+          "http_status": 200,
+          "response_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/f4b1153ed3ab48eba9298c9db1fefe40.response.txt",
+          "response_sha256": "259633fabd6eb98e6b80a5c3bd9132a312f2bba52f8b05b3993dde6133f66ff8"
+        }
+      },
+      "managed_receipt": {
+        "request_id": "f4b1153ed3ab48eba9298c9db1fefe40",
+        "result": "ok",
+        "http_status": 200,
+        "response_path": "/home/willy/code/cpea_terms/evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/f4b1153ed3ab48eba9298c9db1fefe40.response.txt",
+        "calls_charged": 1,
+        "automatic_retries": 0
+      },
+      "outer_status": "FAIL",
+      "stopped": {
+        "error_type": "ValueError",
+        "error": "fixed diagnostic semantic checks failed"
+      },
+      "usage": {
+        "input_tokens": 3799,
+        "output_tokens": 3163,
+        "total_tokens": 6962
+      },
+      "elapsed_seconds": 1281.1161152010027,
+      "request_body_file_sha256": "15e3c061a9c93654f05784d808a29e7ff5cf17a5ed4c474ff343fe9d1b2f234f",
+      "controller_canonical_body_sha256": "c3dc9ae4a7be02903d6b38cc47d43a98950f3f7409c001664dbd3bfb7586a709",
+      "response_sha256": "259633fabd6eb98e6b80a5c3bd9132a312f2bba52f8b05b3993dde6133f66ff8",
+      "raw_answer_sha256": "bc96c8abda7d818867ac15f57fe08ffb90f40fba28a54774a671c00d56702266",
+      "model": {
+        "name": "qwen3.8:27b",
+        "digest": "aaee06c39dcf2437cde036998d960e1fc1494b8191be7cc9657d01e509097813",
+        "checked_at": "2026-10-22T00:07:48.450679+00:00"
+      },
+      "options": {
+        "num_predict": -1,
+        "num_ctx": 32768,
+        "temperature": 1,
+        "top_p": 1,
+        "seed": 42
+      },
+      "think": true,
+      "HTTP_timeout_seconds": null,
+      "outer_timeout_seconds": null,
+      "upstream_injected": true
+    }
+  ],
+  "local_POST_count": 3,
+  "retry_count": 0,
+  "cloud_count": 0,
+  "controller_used": {
+    "agent_dispatches": 35,
+    "cloud_calls": 0,
+    "local_calls": 26,
+    "model_retries": 0
+  },
+  "usage_totals": {
+    "input_tokens": 9712,
+    "output_tokens": 8571,
+    "total_tokens": 18283
+  },
+  "no_inflight_for_ticket": true,
+  "runner_exit_code": 1
+}

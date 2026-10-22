@@ -1,0 +1,62 @@
+[
+  {
+    "control": "positive-SEL-ISO-v1-01",
+    "result": "PASS",
+    "replay_verification": "PASS",
+    "stopped": null,
+    "inner": {
+      "result": "PASS",
+      "raw_replays": 1,
+      "stopped": null,
+      "upstream_injected": true,
+      "provider_calls": 0
+    },
+    "outer_receipt_sha256": "0821098873d1294b9482aa9737c2e754f6b6db020052cd8fa1b2cad35c783d41",
+    "provider_calls": 0,
+    "independent_semantic_approval": "PENDING"
+  },
+  {
+    "control": "failure-typed",
+    "result": "FAIL",
+    "replay_verification": "PASS",
+    "stopped": {
+      "error_type": "ValidationError",
+      "error": "1 validation error for SelectionWire\ndraft.ready.tasks.0.filters\n  Field required [type=missing, input_value={'task_id': 'inventory-ob...留全部庫存商品'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing"
+    },
+    "inner": {
+      "result": "PASS",
+      "raw_replays": 1,
+      "stopped": {
+        "error_type": "ValidationError",
+        "error": "1 validation error for SelectionWire\ndraft.ready.tasks.0.filters\n  Field required [type=missing, input_value={'task_id': 'inventory-ob...留全部庫存商品'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing"
+      },
+      "upstream_injected": true,
+      "provider_calls": 0
+    },
+    "outer_receipt_sha256": "4b82b2efa3c1f5220e6f8d87c6a7b09a20d2c886e3a003dcd705533ba2fbbd96",
+    "provider_calls": 0,
+    "independent_semantic_approval": "PENDING"
+  },
+  {
+    "control": "failure-leap",
+    "result": "FAIL",
+    "replay_verification": "PASS",
+    "stopped": {
+      "error_type": "ValueError",
+      "error": "fixed diagnostic semantic checks failed"
+    },
+    "inner": {
+      "result": "PASS",
+      "raw_replays": 1,
+      "stopped": {
+        "error_type": "ValueError",
+        "error": "fixed diagnostic semantic checks failed"
+      },
+      "upstream_injected": true,
+      "provider_calls": 0
+    },
+    "outer_receipt_sha256": "f665c486b5b23814f38525798b99654dc9781f56f2adc6472f081af4593d763b",
+    "provider_calls": 0,
+    "independent_semantic_approval": "PENDING"
+  }
+]

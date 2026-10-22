@@ -1,0 +1,26 @@
+import json,os,subprocess,sys
+from pathlib import Path
+from evaluations.diagnostics import managed_text_leaf_evidence as m
+root=m.ROOT;out=root/'evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract'
+task=root/'evidence-driven-dev/tasks/ollama-planning-mvp/.local'
+rows=[]
+for batch,module,ids,wants in [
+ ('kind-isolation-v2-rebind-1-20261021T215758Z-5bbdea','managed_node_diagnostics_rebound',['SEL-ISO-v1-01'],['FAIL']),
+ ('kind-policy-shape-1-20261021T231146Z-570327','managed_policy_shape',['SEL-ISO-v1-01'],['PASS']),
+ ('kind-isolation-v2-rebind-1-20261022T000748Z-82acde','managed_node_diagnostics_rebound',['COV-ISO-v1-01','COV-ISO-v1-02','COV-ISO-v1-03'],['FAIL','PASS','FAIL']),
+ ('kind-capability-projection-1-20261022T014118Z-68828b','managed_capability_projection',list(m.capability.SAMPLE_IDS),['FAIL','PASS','FAIL','FAIL','FAIL'])]:
+ for sid,want in zip(ids,wants):
+  folder=task/batch/sid
+  for mode,cwd in [('live',root),('frozen',task/batch/'frozen')]:
+   env=dict(os.environ,PYTHONPATH=str(cwd/'src')+':'+str(cwd),PYTHONDONTWRITEBYTECODE='1')
+   command=[sys.executable,'-m','evaluations.diagnostics.'+module,'--replay',str(folder)]
+   completed=subprocess.run(command,cwd=cwd,env=env,text=True,encoding='utf-8',capture_output=True)
+   log=out/f'history-{batch}-{sid}-{mode}.log';log.write_text(completed.stdout+completed.stderr,encoding='utf-8')
+   result=json.loads(completed.stdout)
+   assert completed.returncode in [0,1] and result.get('replay_verification')=='PASS',(completed.returncode,str(log))
+   if module=='managed_node_diagnostics_rebound':got=result.get('result')
+   else:got=result.get('result')
+   assert got==want,(sid,mode,result,want)
+   rows.append(dict(batch=batch,sample=sid,mode=mode,result=result,log=str(log.relative_to(root)),log_sha256=m.base.digest(log)))
+m.base.write_json(out/'history-replays.json',dict(result='PASS',calls=0,replays=rows))
+print('20 live/frozen historical replays PASS; old results preserved')

@@ -1,0 +1,217 @@
+{
+  "selected_views": [
+    "demo_retail.v_inventory_status",
+    "demo_retail.v_sales_detail"
+  ],
+  "assignments": [
+    {
+      "requirement_id": "stock",
+      "view": "demo_retail.v_inventory_status",
+      "task_id": "stock"
+    },
+    {
+      "requirement_id": "sales",
+      "view": "demo_retail.v_sales_detail",
+      "task_id": "sales"
+    },
+    {
+      "requirement_id": "channel",
+      "view": "demo_retail.v_sales_detail",
+      "task_id": "sales"
+    },
+    {
+      "requirement_id": "period",
+      "view": "demo_retail.v_sales_detail",
+      "task_id": "sales"
+    },
+    {
+      "requirement_id": "population",
+      "view": "demo_retail.v_inventory_status",
+      "task_id": "stock"
+    },
+    {
+      "requirement_id": "grain",
+      "view": "demo_retail.v_inventory_status",
+      "task_id": "stock"
+    },
+    {
+      "requirement_id": "R_PURPOSE",
+      "view": "demo_retail.v_inventory_status",
+      "task_id": "stock"
+    }
+  ],
+  "exclusions": [
+    {
+      "view": "demo_retail.v_customer_value",
+      "refs": [
+        {
+          "kind": "gap",
+          "requirement_ids": [
+            "stock"
+          ],
+          "selected_view": null
+        }
+      ]
+    },
+    {
+      "view": "demo_retail.v_daily_sales",
+      "refs": [
+        {
+          "kind": "gap",
+          "requirement_ids": [
+            "stock"
+          ],
+          "selected_view": null
+        }
+      ]
+    },
+    {
+      "view": "demo_retail.v_order_summary",
+      "refs": [
+        {
+          "kind": "gap",
+          "requirement_ids": [
+            "stock"
+          ],
+          "selected_view": null
+        }
+      ]
+    },
+    {
+      "view": "demo_retail.v_product_monthly",
+      "refs": [
+        {
+          "kind": "gap",
+          "requirement_ids": [
+            "stock"
+          ],
+          "selected_view": null
+        }
+      ]
+    },
+    {
+      "view": "demo_retail.v_store_monthly_kpi",
+      "refs": [
+        {
+          "kind": "gap",
+          "requirement_ids": [
+            "stock"
+          ],
+          "selected_view": null
+        }
+      ]
+    }
+  ],
+  "draft": {
+    "status": "ready",
+    "strategy": "multi_view",
+    "tasks": [
+      {
+        "task_id": "stock",
+        "view": "demo_retail.v_inventory_status",
+        "required_columns": [
+          "store_id",
+          "product_id",
+          "stock_qty",
+          "snapshot_date"
+        ],
+        "filters": [],
+        "metrics": {
+          "stock_qty": "sum"
+        },
+        "conditional_metrics": [],
+        "attributes": [],
+        "metadata_collections": [
+          "snapshot_date"
+        ],
+        "group_by": [
+          "store_id",
+          "product_id"
+        ],
+        "output_grain": [
+          "store_id",
+          "product_id"
+        ],
+        "depends_on": [],
+        "unbound_inputs": [],
+        "request": "取得各店商品庫存件數"
+      },
+      {
+        "task_id": "sales",
+        "view": "demo_retail.v_sales_detail",
+        "required_columns": [
+          "store_id",
+          "product_id",
+          "discount_amount",
+          "net_sales",
+          "sales_channel",
+          "order_date"
+        ],
+        "filters": [
+          {
+            "column": "sales_channel",
+            "operator": "=",
+            "value": "online"
+          },
+          {
+            "column": "order_date",
+            "operator": ">=",
+            "value": "2026-09-01"
+          },
+          {
+            "column": "order_date",
+            "operator": "<",
+            "value": "2026-10-01"
+          }
+        ],
+        "metrics": {
+          "discount_amount": "sum",
+          "net_sales": "sum"
+        },
+        "conditional_metrics": [],
+        "attributes": [],
+        "metadata_collections": [],
+        "group_by": [
+          "store_id",
+          "product_id"
+        ],
+        "output_grain": [
+          "store_id",
+          "product_id"
+        ],
+        "depends_on": [],
+        "unbound_inputs": [],
+        "request": "取得九月線上店商品折扣及淨銷售額"
+      }
+    ],
+    "integration": {
+      "anchor_task": "stock",
+      "output_grain": [
+        "store_id",
+        "product_id"
+      ],
+      "edges": [
+        {
+          "left_task": "stock",
+          "right_task": "sales",
+          "left_keys": [
+            "store_id",
+            "product_id"
+          ],
+          "right_keys": [
+            "store_id",
+            "product_id"
+          ],
+          "mode": "left",
+          "cardinality": "one_to_one",
+          "preserve_task": "stock"
+        }
+      ],
+      "preparation": [],
+      "missing_data_policy": "保留未匹配資料並標記缺值；契約沒有保證時不可把缺值當成零。",
+      "notes": []
+    },
+    "clarifications": [],
+    "unsupported_reasons": []
+  }
+}

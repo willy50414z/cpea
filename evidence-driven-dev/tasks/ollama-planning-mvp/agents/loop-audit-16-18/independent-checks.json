@@ -1,0 +1,77 @@
+{
+  "protected": 5203,
+  "author_evidence": 668,
+  "natural_evidence": 284,
+  "round16to18_evidence": 47,
+  "bindings": "exact",
+  "roles": {
+    "author": {
+      "ticket": "34175c2580224eddb7061898d2af61ef",
+      "closed": true,
+      "platform": "/root/loop_worker_policy_shape"
+    },
+    "reviewer": {
+      "ticket": "ed5abbeeea324bea8ac64d526e38fb55",
+      "closed": true,
+      "platform": "/root/loop_worker_policy_semantics"
+    }
+  },
+  "fixture_roles": {
+    "content_author": {
+      "ticket": "4810e837bb3e44d5a05d9392d9140e84",
+      "closed": true,
+      "platform": "/root/loop_worker_fixture_v2"
+    },
+    "binding_author": {
+      "ticket": "098d0ce2e31f4254905064d4fd34c97b",
+      "closed": true,
+      "platform": "/root/loop_worker_rebinding"
+    },
+    "reviewer": {
+      "ticket": "d6de6a4fd21f4e7e862b06ceb27b86f7",
+      "closed": true,
+      "platform": "/root/loop_worker_semantics_rebound"
+    }
+  },
+  "body_delta": "only generic selection system suffix",
+  "tokens": 22383,
+  "prepared": "2 exact typed payloads",
+  "replay": {
+    "result": "PASS",
+    "replay_verification": "PASS",
+    "raw_replays": 1,
+    "provider_calls": 0
+  },
+  "usage": {
+    "agent_dispatches": 33,
+    "cloud_calls": 0,
+    "local_calls": 23,
+    "model_retries": 0
+  },
+  "parents": {
+    "root": "pending",
+    "three_stage_integration": "pending",
+    "contract_and_managed_runner": "passed",
+    "natural_qwen_three_stage": "failed",
+    "coverage_slots_contract": "passed",
+    "natural_slots_three_stage": "failed",
+    "evidence_bound_managed_contract": "passed",
+    "natural_evidence_bound_three_stage": "failed",
+    "own_responsibility_managed_contract": "passed",
+    "natural_own_responsibility_three_stage": "failed",
+    "kind_mapping_managed_contract": "passed",
+    "natural_kind_mapping_three_stage": "pending",
+    "kind_diagnostic_fixture_harness": "passed",
+    "kind_diagnostic_fixture_semantics": "passed",
+    "natural_kind_selection_isolation": "verify_parent",
+    "natural_kind_coverage_isolation": "pending",
+    "kind_diagnostic_fixture_v2_correction": "passed",
+    "kind_diagnostic_evidence_rebinding": "passed",
+    "kind_policy_shape_contract": "passed",
+    "kind_policy_shape_semantics": "passed",
+    "natural_kind_policy_shape_selection": "passed"
+  },
+  "POST": 0,
+  "SQL_DB": 0,
+  "result": "PASS"
+}

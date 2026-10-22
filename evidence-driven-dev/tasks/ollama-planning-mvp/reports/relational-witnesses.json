@@ -1,0 +1,60 @@
+{
+  "result": "PASS",
+  "witnesses": [
+    {
+      "id": "有庫存無銷售",
+      "expected_rows": 3,
+      "inner_rows": 1,
+      "missing_is_zero": false
+    },
+    {
+      "id": "有會員無訂單",
+      "expected_members": 3,
+      "unmatched_child": [],
+      "fabricated_order": false
+    },
+    {
+      "id": "零缺貨門市",
+      "conditional_count": {
+        "1": 1,
+        "2": 0
+      },
+      "global_filter_loses_store": 2
+    },
+    {
+      "id": "雙月缺一月",
+      "labeled_values": [
+        [
+          "2026-08-01",
+          4
+        ],
+        [
+          "2026-09-01",
+          null
+        ]
+      ],
+      "sum_loses_month_identity": true
+    },
+    {
+      "id": "多商品共享KPI",
+      "background_value": 100,
+      "incorrect_reaggregation": 200
+    },
+    {
+      "id": "不同盤點日",
+      "dates": [
+        "2026-10-18",
+        "2026-10-19"
+      ],
+      "per_date_qty": {
+        "2026-10-18": 8,
+        "2026-10-19": 3
+      },
+      "metadata_proves_same_day": false,
+      "cross_date_stock_sum_allowed": false
+    }
+  ],
+  "new_model_calls": 0,
+  "sql_db_calls": 0,
+  "limitation": "合成參考語意見證；沒有執行candidate preparation，不證明SQL API實際相容。"
+}

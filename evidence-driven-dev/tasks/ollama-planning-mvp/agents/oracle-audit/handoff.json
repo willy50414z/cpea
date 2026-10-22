@@ -1,0 +1,33 @@
+{
+  "status": "DONE_WITH_CONCERNS",
+  "summary": "原30題canonical oracle已限保守profile核准；MVP0歷史輸出另逐題審核為18安全完整/9真語意錯/3機械錯。MVP1十二筆完成後獨立審核B1與fresh v3均安全ready2/6，B1淨增0，未達門檻，不擴十題、不進Ollama。",
+  "evidence": [
+    "agents/oracle-audit/review-manifest.json",
+    "agents/oracle-audit/oracle-audit.md",
+    "agents/oracle-audit/grader-witnesses.json",
+    "agents/oracle-audit/mvp0-b1-review.json",
+    "agents/oracle-audit/mvp0-b1-review.md",
+    "agents/oracle-audit/mvp1-semantic-review.json",
+    "agents/oracle-audit/mvp1-semantic-review.md",
+    "agents/oracle-audit/baseline-semantic-review.json",
+    "agents/oracle-audit/baseline-semantic-review.md",
+    "agents/oracle-audit/final-review-verification.json"
+  ],
+  "risks": [
+    "原grader18/30與獨立安全18/30數字巧合：05/08/25自動過但不安全，04/06/17自動未過但核准等價；原14全域缺貨filter亦為不安全ready。",
+    "MVP0 runtime拒絕7/12不等於oracle拒12/12；原15/19有主鍵JOIN證據的store_name FD被typed guard誤拒。",
+    "MVP1 B1第07有真店粒度/整合鍵錯，14根聚合錯；09主要metadata雙角色機械error；28日期有FD冗餘但metadata角色不合法。不能把四個error都歸為純機械問題。",
+    "MVP1 v3第09丟日維度是不安全ready；第14條件stock_status缺貨有契約等價、第28完整背景缺值政策正確，兩者獨立核准但原分不改。",
+    "B1六個人工注入6/6僅編譯節點成功，不是自然抽取成績。完整Gate未執行、未達成；原oracle pending不回寫。"
+  ],
+  "next_step": "主agent整合本handoff與兩份逐題語意報告後，保留PLANNING/未達Gate。停止本B1升級，回離線研究分開處理語意選擇與結構角色一致性，先預定新版本及控制，不直接擴十題或呼叫Ollama。",
+  "diff_reference": {
+    "base_git_sha": "bc09c67fc4078501599c37e4cdfecdee40af2ef8",
+    "scope": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/oracle-audit",
+    "product_changes_by_reviewer": false,
+    "original_oracle_or_result_changes": false,
+    "model_calls_by_reviewer": 0,
+    "sql_db_calls_by_reviewer": 0
+  },
+  "blockers": []
+}

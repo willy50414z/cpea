@@ -1,0 +1,19 @@
+[
+  {
+    "identity": {
+      "requirement_id": "unrelated/識別~鍵"
+    },
+    "own_target": {
+      "quote": "各店各商品",
+      "business_object": "各店各商品",
+      "kind": "grain",
+      "grain": "門市×商品"
+    },
+    "binding_context": {
+      "scope_ids": [],
+      "population": "未指定",
+      "grain_binding": null,
+      "grain_requirement_ids": []
+    }
+  }
+]

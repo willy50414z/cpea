@@ -1,0 +1,16 @@
+schema: demo_retail
+views:
+  demo_retail.v_customer_value:
+    path: views/demo_retail/v_customer_value.yaml
+  demo_retail.v_daily_sales:
+    path: views/demo_retail/v_daily_sales.yaml
+  demo_retail.v_inventory_status:
+    path: views/demo_retail/v_inventory_status.yaml
+  demo_retail.v_order_summary:
+    path: views/demo_retail/v_order_summary.yaml
+  demo_retail.v_product_monthly:
+    path: views/demo_retail/v_product_monthly.yaml
+  demo_retail.v_sales_detail:
+    path: views/demo_retail/v_sales_detail.yaml
+  demo_retail.v_store_monthly_kpi:
+    path: views/demo_retail/v_store_monthly_kpi.yaml

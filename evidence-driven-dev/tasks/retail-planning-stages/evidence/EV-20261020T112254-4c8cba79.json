@@ -1,0 +1,21 @@
+{
+  "id": "EV-20261020T112254-4c8cba79",
+  "kind": "experiment",
+  "command": [
+    ".venv/bin/python",
+    "evidence-driven-dev/tasks/retail-planning-stages/.local/compare_prompt_v4.py",
+    "--live"
+  ],
+  "cwd": "/home/willy/code/cpea_terms",
+  "started_at": "2026-10-20T11:22:54+00:00",
+  "finished_at": "2026-10-20T11:25:25+00:00",
+  "exit_code": -15,
+  "revision": "bc09c67fc4078501599c37e4cdfecdee40af2ef8",
+  "diff_fingerprint": "ff882390fb7a00223b4a007e270695146e1b351713c33ae90eeeb6c899e38c35",
+  "post_fingerprint": "ff882390fb7a00223b4a007e270695146e1b351713c33ae90eeeb6c899e38c35",
+  "source_unchanged": true,
+  "output_sha256": "c9679c45e363dba972ed3d596437c41b8b580aab10cb2545220b6540a0770943",
+  "raw_output": ".local/EV-20261020T112254-4c8cba79.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "2ee944869898fb2e32cad3a3863e49e2163e5c4b40795dc1dab4cad9037975fa"
+}

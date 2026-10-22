@@ -1,0 +1,100 @@
+{
+  "round_7_9_evidence": {
+    "count": 41,
+    "missing": [],
+    "changed": []
+  },
+  "source_live": {
+    "count": 162,
+    "missing": [],
+    "changed": []
+  },
+  "source_frozen": {
+    "count": 162,
+    "missing": [],
+    "changed": []
+  },
+  "history": {
+    "count": 1164,
+    "missing": [],
+    "changed": []
+  },
+  "existing_src": {
+    "src/cpea/application/models/decomposition.py": "1fe4eb06da88fc67c3e65250a93393ac944dbbba9f2c4ac3349134e044b10558",
+    "src/cpea/workflows/task_decomposition/prompt.py": "4655d352feaaab93bdef78a2ced51da9ae93adf1f907aa99eb8c1a237876349b"
+  },
+  "historical_gate": {
+    "goal": "依已核准提案執行DeepSeek-first MVP，通過兩輪38/38首次語意Gate才轉Ollama。",
+    "acceptance": [
+      {
+        "id": "I0",
+        "description": "MVP0原30筆一致、閉包100%typed coverage、12unsafe全擋且6合法控制不退步、oracle審核完成。",
+        "status": "FAIL",
+        "evidence": [
+          "evidence/EV-20261020T125444-1e0000c4.json",
+          "agents/oracle-audit/mvp0-b1-review.json",
+          "reports/mvp0-summary.json"
+        ]
+      },
+      {
+        "id": "I1",
+        "description": "DeepSeek六題與十題逐階段達提案門檻，first pass與repair分列。",
+        "status": "FAIL",
+        "evidence": [
+          "evidence/EV-20261020T125606-8b36efcb.json",
+          "agents/oracle-audit/mvp1-semantic-review.json"
+        ]
+      },
+      {
+        "id": "I2",
+        "description": "固定版本DeepSeek原30＋封存8題，兩輪首次各38/38語意完整正確且無oracle待審。",
+        "status": "PENDING",
+        "evidence": []
+      },
+      {
+        "id": "I3",
+        "description": "通過I2才凍結並轉Qwen，以相同兩輪38/38 Gate驗收。",
+        "status": "PENDING",
+        "evidence": []
+      },
+      {
+        "id": "TS0",
+        "description": "三階段離線契約、合法部分支持、scope綁定、負例／重播／預算守門通過。",
+        "status": "PASS",
+        "evidence": [
+          "evidence/EV-20261021T015608-374f69fc.json",
+          "evidence/EV-20261021T015828-e8216b14.json"
+        ]
+      },
+      {
+        "id": "TS1",
+        "description": "第11題自然完整需求映射、來源選擇、整合與prepared requests通過；本次停在inventory引用契約，門檻未達。",
+        "status": "FAIL",
+        "evidence": [
+          "evidence/EV-20261021T015637-436c6855.json",
+          "reports/three-stage-view-selection-results.md"
+        ]
+      },
+      {
+        "id": "IDX0",
+        "description": "第一步wire無quote、嚴格Unicode索引與Python裁切、既有scope/View guard、raw/parsed/derived保存與重播通過。",
+        "status": "PASS",
+        "evidence": [
+          "evidence/EV-20261021T033818-dd272774.json",
+          "evidence/EV-20261021T034118-e12c74ed.json",
+          "agents/indexed-recall-review/handoff.json"
+        ]
+      },
+      {
+        "id": "IDX1",
+        "description": "本固定候選單次自然index完整對應需求且角色正確；實測5組尾端不完整且母體錯列filter，未達標準。",
+        "status": "FAIL",
+        "evidence": [
+          "evidence/EV-20261021T033920-61ce56e4.json",
+          "reports/indexed-recall-results.md"
+        ]
+      }
+    ]
+  },
+  "model_POSTs": 0
+}

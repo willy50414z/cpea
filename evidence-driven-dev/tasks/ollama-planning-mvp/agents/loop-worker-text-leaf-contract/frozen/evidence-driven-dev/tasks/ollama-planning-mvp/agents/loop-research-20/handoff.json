@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "ticket": "27f5146885b04962accfbf8a58df97fd",
+  "researcher": "/root/loop_research_20",
+  "result": "RESEARCH_COMPLETE",
+  "plan": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-20/plan.json",
+  "plan_sha256": "7821ce073885f3796e45ff994de82c1f62e91a156db25b9d6f24f4b96fa2a43e",
+  "summary": "第20輪兩daily漏有用部分鍵、01把grain/scope依賴算自身，均為真語意FAIL；03同月份AND重列則是有限可接受等價、原exact Oracle過窄。推薦唯一可否證候選：無損本項責任／依賴cards，保留原kind wire及model語意決策；另版本化嚴格scope AND matcher。新薄module／0POST契約→fresh delta核准→固定五自然對照，再原coverage父整合與新自然9POST、全祖先與fresh final。尚無新候選或自然效果。",
+  "main_actions": [
+    "核本handoff/plan及研究證據hash後，以本research ticket機械採納plan；舊21nodes與root exact，僅未PASS coverage增加3children。",
+    "依controller下一node派fresh worker執行capability_projection_contract，預期第21輪純離線；Main不接手選修法。",
+    "第21輪結束必fresh方向audit完整19–21，涵蓋原20FAIL及新cards／有限Oracle等價與所有父進度；未獲允許不得自然POST。",
+    "再fresh capability_projection_semantics核新delta與完整binding／真closed provenance，保持原fixture與已PASS selection不重開。",
+    "首次自然5case嚴守預先固定與0retry，任一錯FAIL回fresh研究；成功後原coverage父自身整合，再依audit原父全新自然9POST及各祖先各自整合，fresh final ACCEPT不可省。"
+  ],
+  "scope_conditions_boundary": "只允本metric明示scope_ids、同View、已完整通原scope驗收且supported的完整獨立filter群之AND重列；不容半月份、額外／錯scope/cross-View/錯值或aggregation，不泛化成任意WHERE等價。所有legacy findings保存，原03新重驗仍因漏loc_key FAIL。",
+  "case_design": "原三case／原始輸入lineage全部保留；新版本另明列補充customer全8會員自身缺口與inventory全8完整能力，共固定5case。新增expected僅引用原核准56rows中兩View，不重作者化；新suite不是偷偷變更舊三case。",
+  "verification": "研究純資料cards原17需求還原相等，有限AND10正反控制符合預期；舊21nodes/root exact、新child僅未PASS parent；6390既有檔hash保持，controller check-evidence exit0。未跑新候選pytest或自然POST，不宣稱其效果。",
+  "resources": {
+    "local_POST": 0,
+    "cloud": 0,
+    "retry": 0,
+    "SQL_DB": 0,
+    "commit_push": 0,
+    "controller_observed_used": {
+      "agent_dispatches": 36,
+      "cloud_calls": 0,
+      "local_calls": 26,
+      "model_retries": 0
+    },
+    "closed_rounds": 20
+  },
+  "unchanged": "所有舊source/tests/fixtures/Oracle/prompt/manifest/raw/frozen/review/Task/control與歷史38×2 Gate未過保持。原selection、原fixture核准及所有舊PASS不重開。",
+  "files_before_handoff": {
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-20/controller-check-evidence.log": "6a7dee2df6decc78d70dd3a9fcef13555f24ec05ef34f4d611783f4084b4e866",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-20/old-nodes-snapshot.json": "7ffe1b788a5fe3240ad1524700fe868fc2bff1a2b2cf5b6f431c15dd838dbb8e",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-20/plan.json": "7821ce073885f3796e45ff994de82c1f62e91a156db25b9d6f24f4b96fa2a43e",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-20/protected-before.json": "184efd725a6c0c63a2ae83e251109862d60d0987b1555cc86d98f51a94be3be8",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-20/research.json": "510f95977944aa11f75e3d0888ccd5a119f398af48ae67a3d323cebd4fc65793",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-20/verification.json": "950425198e472b592d32482c3504b91f46d48a3e04c3c26170bc7e05ddcd215e"
+  },
+  "finalization": "所有研究程序與必要proof已完成；本交接與final proof封存後真FINAL，不再修改證據。"
+}

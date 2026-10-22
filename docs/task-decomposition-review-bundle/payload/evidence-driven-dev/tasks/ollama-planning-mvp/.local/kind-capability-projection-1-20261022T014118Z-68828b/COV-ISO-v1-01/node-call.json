@@ -1,0 +1,22 @@
+{
+  "response": "{\"entries\":{\"FILT-001\":{\"contract_path\":\"/columns/sales_date\",\"mappings\":[{\"column\":\"sales_date\",\"operator\":\">=\",\"value\":\"2026-09-01\"},{\"column\":\"sales_date\",\"operator\":\"<=\",\"value\":\"2026-09-30\"}],\"own_gap\":false,\"status\":\"supported\"},\"FILT-002\":{\"contract_path\":null,\"mappings\":[],\"own_gap\":true,\"status\":\"unsupported\"},\"GRN-001\":{\"mappings\":[{\"column\":\"store_id\"}],\"own_gap\":true,\"status\":\"partial\"},\"MET-001\":{\"contract_path\":null,\"mappings\":[],\"own_gap\":true,\"status\":\"unsupported\"},\"MET-002\":{\"contract_path\":null,\"mappings\":[],\"own_gap\":true,\"status\":\"unsupported\"},\"MET-003\":{\"contract_path\":\"/columns/revenue\",\"mappings\":[{\"aggregation\":\"sum\",\"column\":\"revenue\",\"conditions\":[]}],\"own_gap\":false,\"status\":\"partial\"},\"META-001\":{\"contract_path\":null,\"mappings\":[],\"own_gap\":true,\"status\":\"unsupported\"},\"POP-001\":{\"contract_path\":null,\"mappings\":[],\"own_gap\":true,\"status\":\"unsupported\"}}}",
+  "usage": {
+    "input_tokens": 4245,
+    "output_tokens": 2371,
+    "total_tokens": 6616
+  },
+  "response_metadata": {
+    "model": "qwen3.8:27b",
+    "created_at": "2026-10-22T01:47:41.327859555Z",
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 340916458558,
+    "load_duration": 15412583938,
+    "prompt_eval_count": 4245,
+    "prompt_eval_cached_count": 0,
+    "prompt_eval_duration": 20526426000,
+    "eval_count": 2371,
+    "eval_duration": 304949887000
+  },
+  "elapsed_seconds": 348.98008726601256
+}

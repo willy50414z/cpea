@@ -1,0 +1,30 @@
+{
+  "id": "EV-20261020T050125-de42b8c9",
+  "kind": "experiment",
+  "command": [
+    ".venv/bin/python",
+    "-m",
+    "evaluations.decomposition_runner",
+    "--project",
+    "retail",
+    "--env-file",
+    ".env",
+    "--model",
+    "gpt-6-sol",
+    "--runs",
+    "3",
+    "--exploratory"
+  ],
+  "cwd": "/home/willy/code/cpea_terms",
+  "started_at": "2026-10-20T05:01:25+00:00",
+  "finished_at": "2026-10-20T05:18:56+00:00",
+  "exit_code": 0,
+  "revision": "bf626def01a2bb9bf5e623b28075222688a9bcfe",
+  "diff_fingerprint": "701e5c34259de4f6145f5a8ca32da92ab9f76c3cd71f85414f95a9ef8b586fe1",
+  "post_fingerprint": "01ad2ef166091e486f1467d9bb51bf09fbcfbf2799528b54656e2764f6d274f2",
+  "source_unchanged": false,
+  "output_sha256": "aa8293e3213a30dd8935ae62770e62d7a9ccd65be5939170d35738e231643eeb",
+  "raw_output": ".local/EV-20261020T050125-de42b8c9.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "994e43024468642c4f99ded5fdb03d848deb30e5fdcc54b2d01682ff78c3be80"
+}

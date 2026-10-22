@@ -1,0 +1,19 @@
+{
+  "result": "PASS",
+  "manifest_sha256": "33cf44c84c10842adb60bfb7cbfbb269bac6dfa136c124a43159efabd27d543f",
+  "focused": "62 passed in 64.34s",
+  "necessary_regression": "160 passed in 51.20s",
+  "live_replays": 15,
+  "frozen_replays": 15,
+  "synthetic_raws": 13,
+  "v1_bindings_match": true,
+  "v2_bindings_match": true,
+  "live_source_and_fixtures_changed_after_final_tests": false,
+  "changes_after_final_tests": "僅新增本worker必要raw/log/JSON與完整frozen副本；live source/test/fixtures/manifest未變",
+  "fixture_approval": "PENDING_FRESH_INDEPENDENT_REVIEW",
+  "fresh_semantic_parent": "PENDING",
+  "model_POSTs": 0,
+  "SQL_DB": 0,
+  "commits": 0,
+  "pushes": 0
+}

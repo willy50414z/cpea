@@ -1,0 +1,19 @@
+candidate=managed-kind-mapping-1；本輪只離線，不宣告自然語意可行。
+原第8輪：原三raw現版未改前及155-source frozen均精確重現only metric mapping may aggregate；原filter.conditions兩個range本身可表正確整月，但operator/value/aggregation原raw均省略。原wire/guard不改、不repair、不展平。
+原GRN-001遺漏合法店鍵依固定三階段partial資訊責任維持SEMANTIC_REJECT，舊自然FAIL不翻案。
+omit_useful_store_key: STRUCTURAL_ACCEPT / SEMANTIC_REJECT；daily_sales契約明示store_id為門市id，店×商品有獨立有用店鍵；空unsupported遺漏部分能力。
+only_store_claims_full_grain: STRUCTURAL_ACCEPT / SEMANTIC_REJECT；店鍵未履行商品鍵；單店鍵不能supported整個店×商品。
+unrelated_customer_key: STRUCTURAL_ACCEPT / SEMANTIC_REJECT；會員id不是店×商品任何必要分量，不能因identifier就湊partial。
+store_key_claims_inventory_population: STRUCTURAL_ACCEPT / SEMANTIC_REJECT；daily_sales門市key不保證保留所有庫存商品母體。
+sold_is_not_stock: STRUCTURAL_ACCEPT / SEMANTIC_REJECT；sold_qty_30d是過去30日已完成訂單售出件數，並非庫存件數；數值可sum不證明語意相等。
+wrong_month: STRUCTURAL_ACCEPT / SEMANTIC_REJECT；需求2031年2月卻選3月起日；typed/schema合法不等於月份正確。
+missing_online: STRUCTURAL_ACCEPT / SEMANTIC_REJECT；需求線上淨額，無sales_channel=online predicate；recall漏scope不能讓它正確。
+false_independent: STRUCTURAL_ACCEPT / SEMANTIC_REJECT；各店各商品銷售額需相同grain，daily_sales只有店×日卻independent且supported。
+unrelated_key_not_forced: STRUCTURAL_ACCEPT / SEMANTIC_ACCEPT；會員id與本題店×商品無關，unsupported合法，不強迫partial。
+store_not_inventory_universe: STRUCTURAL_ACCEPT / SEMANTIC_ACCEPT；店鍵未證庫存商品母體，population空unsupported合法；不藉grain部分能力擴張母體。
+以上語意標籤在新測試實作前以fixture預先指定；通用parser只驗結構、型別與已明示依賴，不猜欄位含義、不發明漏掉的依賴或mapping。
+正例：daily_sales店×商品store_id partial、customer_value會員×商品customer_id partial、Unicode/保留字/斜線ID及改名shop_key均有真契約引文；完整grain與合法unsupported可表。必須保留獨立必要能力，不要求枚舉等價欄位。
+模型仍負所有status/strict own_gap、column、非null aggregation、明確conditions、operator/value及非grain path、原完整typed selection；程式僅已驗kind導role、不適用null/[]、grain唯一/grain/description。
+新filter多mapping一律AND；合法range兩個predicate與conditional metric+獨立filter精確保存。未從request補日期/條件，不把舊filter.conditions轉新答案。
+全部scope/grain硬依賴、own與dependency分離及普通filter獨立性沿原own guards；原384測試原樣保留。
+新fake只證離線/編譯與prepared；原fixture中所有未選View語意不作自然成功主張。第9輪finish後必fresh audit7–9，獲裁決前不自然POST。

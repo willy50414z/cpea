@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "intent": "交fresh研究者的事實包，不預先指定修法或修改nodes。",
+  "question": "如何在維持保inventory母體、不補零、店商品grain與全部必要scope/typed責任下，為missing_data_policy與flat/collection輸出建立一致且可否證的prompt、guard及diagnostic驗收？原literal checker確有誤拒，但本次EMPTY_POLICY是否只屬通用無害敘述或存在形狀矛盾，須由研究者獨立裁定。",
+  "facts": [
+    "原需求未指定NULL/empty collection外部呈現；既有父驗收明定left與不補零。",
+    "原實驗只有一個machine finding；模型完整採用prompt合法EMPTY_POLICY，來源/條件/粒度/兩prepared其餘均已審核。",
+    "同義NULL_POLICY也被oracle拒絕，顯示不是只有EMPTY業務形狀問題。",
+    "flat one_to_one plan沒有nest/pivot；EMPTY字義不得無條件與scalar null合併。",
+    "0新的模型POST即可用原raw及離線正反例研究目前分歧。"
+  ],
+  "required_discrimination": [
+    "保母體的flat scalar missing與真正nested子集合empty應分別有明確語意；不得對任何shape blanket接受所有字串。",
+    "需要能拒絕補零、丟未匹配anchor、錯mode/key/grain/月份/通路/聚合、隱藏typed欄位與無據prose的反例。",
+    "判斷哪些policy屬等價、哪個形狀需要明示；若是契約不足，說明最小改動層與依據，不能只改錯誤標籤或首literal讓分數過。",
+    "避免新推理前就從原FAIL改判PASS；任何候選修正有獨立版本、歷史raw/frozen/oracle/分數/Gate不變、完整source/lineage與原guard守門保存。"
+  ],
+  "next_scope": "先由fresh研究離線建立方向及最小辨識性驗證；形成合法追加child的結構化計畫，再交worker。研究者裁定可行且相應新版本獲獨立語意核准前，不新增自然selection POST。未變更coverage實驗的接續次序亦由fresh研究計畫說明。",
+  "return_path": "selection/coverage隔離全通過與必要audit後，回原父全新自然9POST與完整逐view語意驗收，再逐祖先整合與fresh final verifier；不可只用隔離正例完成root。",
+  "user_gate": "目前毋須例行問使用者；只有研究確證要改既有需求/驗收或外部可觀察shape無法從契約定案，才提出具體衝突及需要的決策。",
+  "source_paths": [
+    "evaluations/managed_node_diagnostics.py:253",
+    "evaluations/three_stage_view_selection.py:11",
+    "evaluations/three_stage_view_selection.py:281",
+    "evaluations/planning_mvp.py:22",
+    "evaluations/planning_mvp.py:173",
+    "evaluations/prompts/evidence_bound/selection.md:11",
+    "src/cpea/application/models/decomposition.py:62"
+  ],
+  "evidence": [
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-13-15/independent-check.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-13-15/direction-analysis.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-13-15/policy-isolation-controls.json"
+  ]
+}

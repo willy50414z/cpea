@@ -1,0 +1,40 @@
+{
+  "result": "PASS",
+  "protected_existing_files": 4237,
+  "changed": [],
+  "task_sha256": "3a61044dff153a7f4dd297d35ed20f2a89d3f26066c7e04e916719443ad5a128",
+  "task_and_control_unchanged": true,
+  "old_nodes_unchanged": 17,
+  "original_rounds": 12,
+  "local_calls": 21,
+  "cloud_calls": 0,
+  "retries": 0,
+  "v1_live_bindings_match": true,
+  "original_v2_manifest_sha256": "33cf44c84c10842adb60bfb7cbfbb269bac6dfa136c124a43159efabd27d543f",
+  "original_v2_old165_source_hashes_unchanged": true,
+  "new167_source_bindings_match": true,
+  "new_sources": [
+    "evaluations/diagnostics/managed_node_diagnostics_rebound.py",
+    "tests/diagnostics/test_managed_node_diagnostics_rebound.py"
+  ],
+  "new_manifest_sha256": "9efa86b883366ff1ef4edd555f59f08499fa123288c6ca1ffe98998d84156187",
+  "all_four_sample_bindings_identical_to_v2": true,
+  "immutable_lineage_files": 13,
+  "snapshots": [
+    {
+      "root": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/frozen",
+      "files": 239,
+      "sources": 167,
+      "external_imports": 2,
+      "all_hashes_match": true
+    },
+    {
+      "root": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/outer-probe-frozen",
+      "files": 239,
+      "sources": 167,
+      "external_imports": 2,
+      "all_hashes_match": true
+    }
+  ],
+  "original_raw_oracle_frozen_two_src_38gate_unchanged": true
+}

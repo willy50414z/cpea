@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "files": {
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-15/research-facts.json": "dc8912c8607e8fc5f41ecae2e4daaefb0f39f0062f6ac82d2c8bbc1b5a55a136",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-15/policy-shape-controls.json": "bda827162418eacccf54e186f3063ab3ed4de8d28d36f9138e97bb7c1e69762b",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-15/plan.json": "ab7e06f413455ff51d81f77dd9ba9779d6829eab2bc836623c7ad8fdcc20df99",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-15/handoff.json": "1564b381d718bdac2413db3155061e6a9fb4b947ae7645ccc105e1e2bd6be573"
+  },
+  "note": "本研究僅0POST記憶體probe與必要JSON；所有proof已寫完，FINAL後不修改。"
+}

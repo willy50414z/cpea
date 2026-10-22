@@ -1,0 +1,32 @@
+{
+  "machine_verdict": "FAIL",
+  "classification": "SEMANTIC_REJECT",
+  "findings": [
+    {
+      "requirement_id": "FILT-001",
+      "aspect": "necessary mappings/predicates",
+      "expected": [
+        {
+          "column": "sales_date",
+          "operator": ">=",
+          "value": "2026-09-01"
+        },
+        {
+          "column": "sales_date",
+          "operator": "<",
+          "value": "2026-10-01"
+        }
+      ],
+      "actual": [
+        {
+          "column": "sales_date",
+          "operator": ">=",
+          "value": "2026-09-01"
+        }
+      ]
+    }
+  ],
+  "independent_semantic_approval": "PENDING",
+  "free_text_review": "PENDING: all raw/normalized text, tasks.request, preparation, notes, policies, assignment/exclusion refs and remaining claims require independent semantic review",
+  "fixture_approval": "PENDING_FRESH_INDEPENDENT_REVIEW"
+}

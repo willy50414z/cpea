@@ -1,0 +1,615 @@
+{
+  "result": "PASS",
+  "manifest_sha256": "a2eb2f76c0479b49294245987346e4676db78c86fbefac02dd4e153d8c590f2d",
+  "bindings_sha256": "3f37acde2ea548253bd9d5ae2a582e6fa78fd6cf002725966b55f2418d482b01",
+  "review_sha256": "d7786d7065f1502fdaca89e2b0c292197608d2d2fe4e3202c312b5ab1a71395b",
+  "roles": {
+    "author": {
+      "ticket": "c3b66ba5cf4c4d549e846203bb29b5e7",
+      "id": "c3b66ba5cf4c4d549e846203bb29b5e7",
+      "role": "worker",
+      "node": "capability_projection_contract",
+      "round": 21,
+      "platform_id": "/root/loop_worker_capability_contract",
+      "closed": true,
+      "reserved_at": "2026-10-22T00:59:36.587979+00:00",
+      "completion": {
+        "round": 21,
+        "node": "capability_projection_contract",
+        "started_at": "2026-10-22T00:59:36.404890+00:00",
+        "result": "PASS",
+        "evidence": [
+          {
+            "path": "evaluations/fixtures/kind_diagnostics_capability_projection/manifest.json",
+            "sha256": "a2eb2f76c0479b49294245987346e4676db78c86fbefac02dd4e153d8c590f2d"
+          },
+          {
+            "path": "evaluations/diagnostics/managed_capability_projection.py",
+            "sha256": "44fc1a6ec68f2b3c7562e27dcc0cc59e8145692aee8ea8f86e551c033087dd3d"
+          },
+          {
+            "path": "tests/diagnostics/test_managed_capability_projection.py",
+            "sha256": "ddf30e05642a4cc36540cbae20c3a4561a36594fa125871762df16a333dc0bf1"
+          },
+          {
+            "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/final-verification.json",
+            "sha256": "1202e333672ca799ba40887f7fd03eb8c3e71f98b37db810d4aa3211505d9160"
+          },
+          {
+            "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/proof-inventory.json",
+            "sha256": "6613f83242c967e94740f148cbca4d80bb87a627954f33bdbb28e61c4581aa4a"
+          },
+          {
+            "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/operation-handoff.json",
+            "sha256": "f69ce068cab3ac578fa108d800b345afa34d2563f057055308b7fa6b5fd84a52"
+          },
+          {
+            "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/preservation-start.json",
+            "sha256": "871686f064753457666582e8c8e515ce83ba835eaf6ff3a5cfae7ab3e0d94289"
+          },
+          {
+            "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/preservation-final.json",
+            "sha256": "9375f34101bc431a4b29162130b919275ea890d1059ef48b36b1c1b5daffaa0a"
+          },
+          {
+            "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/focused-authoritative.log",
+            "sha256": "8ea496b36ed3abe4718c77b5c6e8765d8c81afc741c9e5a716550167e5f16b13"
+          },
+          {
+            "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/direct-regression.log",
+            "sha256": "06316d7fe701c13e37a47b577f9ed02cc86bd76438ae4380e2640806c28770ad"
+          },
+          {
+            "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/historical-open-state-test.log",
+            "sha256": "0d5d7300416f92408111e8f284117f7ddff6dcfafdbbca57c5ad8236c6d6f0be"
+          },
+          {
+            "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/validation-notices.json",
+            "sha256": "74ffb82bac8939d9ee7d70b080de387b5555c73e078b4e2f7e98fcba7acfa65f"
+          },
+          {
+            "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/red.log",
+            "sha256": "cfe6c4a0aa640c348c1915002b9aa5981bb680b5ba58e56c7a2fcf23ba63b43c"
+          },
+          {
+            "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/old-nodes-exact.json",
+            "sha256": "2208217655900ac1793a45fdc18c2bb52534595a57ecbf3071a59052e1baab74"
+          },
+          {
+            "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/history-live.json",
+            "sha256": "553e98174548c657ad4dcf5005f4d085b0dc67774d909334f6a4ecc5d2f13bc3"
+          },
+          {
+            "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/history-frozen.json",
+            "sha256": "16cdd9dff339c381f0dd05e4cbd8aa4fd036ce5afa7e58197d713aa7f8eeb274"
+          },
+          {
+            "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/history-final-candidate.json",
+            "sha256": "4661b1c93020dcbaf803877102c0ff8b9669e93d2d3fdde5a51fc7baaa4adaf7"
+          },
+          {
+            "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/selection-history.json",
+            "sha256": "ea01088096d3151c61b73f10a731c39e67efc37c96cc678a8ed5867ba85df3ae"
+          },
+          {
+            "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/legacy-v2-rejection.json",
+            "sha256": "33f98b63d90348f45334828c962bf71fc14c8ebf6f2a4568ff7eb85ae8e0e3ae"
+          },
+          {
+            "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/legacy-closed-provenance.json",
+            "sha256": "f5cba879b9ea4999c36f2da2bec76198e1ac82d142efe79e34954f9b8553fa72"
+          },
+          {
+            "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/multi-scope-union-probes.json",
+            "sha256": "907552ca0a199b71591e51dc24b966adb10380fa65250cc1eed270109b9df3e6"
+          },
+          {
+            "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/live-frozen-final-controls.json",
+            "sha256": "c3f7f40b272d7f3983056b4a1ec70cb22c61913e4c282cf6f51b2800cf6c293f"
+          },
+          {
+            "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/frozen-final-source-drift.json",
+            "sha256": "0033589eebd64b94dbbed8a84b9fb6d579610a53790b2392789aecd1a30e45df"
+          },
+          {
+            "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/controller-check-evidence-final.log",
+            "sha256": "6a7dee2df6decc78d70dd3a9fcef13555f24ec05ef34f4d611783f4084b4e866"
+          },
+          {
+            "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/dry-run.log",
+            "sha256": "d0f0efb3b5c7997c0de4437202dacaad1cc34a2c76aaf11e994761ff27b9a380"
+          },
+          {
+            "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/frozen-final/freeze.json",
+            "sha256": "7d52d3c7639e8caf00e2d55cdd2dd4a3aca1b394c3ef90fec0c7e8e3079eeea9"
+          },
+          {
+            "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/frozen-final/policy-freeze.json",
+            "sha256": "99a62eef564c97d2ae473e9c06cf3e4397e2a7e9fa7722a235f1e7052c27b5c0"
+          },
+          {
+            "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/frozen-final/capability-freeze.json",
+            "sha256": "fb9d90541d2e259436398a1905d379422eab5b318e229878951b958905c9bd70"
+          }
+        ],
+        "summary": "第21輪純離線能力投影契約完成：無損cards、有限同View scope AND及五固定lineage樣本；原kind全部守門與policy委派保留。81新focused＋228直接回歸實跑PASS，287檔完整finalfreeze及190工件live/frozen一致，fake9兩prepared及scope/typed首錯保持；source/receipt/interrupt/provenance/HTTP身分拒絕通過。6389舊檔不變、Task/control本worker不變，原20 FAIL/PASS/FAIL與15FAIL/18PASS保留。0POST/SQL/DB/commit/push。自然效果PENDING；Main核真FINAL/hash後finish，先fresh audit19–21再fresh delta核准，未准不得POST。",
+        "producer": "/root/loop_worker_capability_contract",
+        "finished_at": "2026-10-22T01:20:27.783958+00:00"
+      }
+    },
+    "reviewer": {
+      "ticket": "1c6e2a219fc049658752332c271cc48d",
+      "id": "1c6e2a219fc049658752332c271cc48d",
+      "role": "worker",
+      "node": "capability_projection_semantics",
+      "round": 22,
+      "platform_id": "/root/loop_worker_capability_semantics",
+      "closed": true,
+      "reserved_at": "2026-10-22T01:28:19.623688+00:00",
+      "completion": {
+        "round": 22,
+        "node": "capability_projection_semantics",
+        "started_at": "2026-10-22T01:28:19.444910+00:00",
+        "result": "PASS",
+        "evidence": [
+          {
+            "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-semantics/review.json",
+            "sha256": "c509270ef90e86b4f6c0ee064ae19b218bb2426f6dc8f88a4171496b819d00d7"
+          },
+          {
+            "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-semantics/final-verification.json",
+            "sha256": "7306d5989ae4bdfd9b034b03a3e5946a4d3daa77aef2e8c42b8f58649881cfdf"
+          },
+          {
+            "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-semantics/input-lineage-controls.json",
+            "sha256": "2b3e0c1c33a77c31e4597ad7de413fc788fab9143872d6b63970cf3b66827e0a"
+          },
+          {
+            "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-semantics/independent-semantic-controls.json",
+            "sha256": "2c24fb812665a0aeef35d65b707ffabb10f9df67be3ef26383890381d8fd5918"
+          },
+          {
+            "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-semantics/authorization-controls.json",
+            "sha256": "49aee5d544395790abe6ec152886223929ebbcbdc344fa44bf6233c27d61cabd"
+          },
+          {
+            "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-semantics/verification-notices.json",
+            "sha256": "0d7f613b9177a6637548f0fe24735772c8e21f5ccfa214940cbfc443e48dfe99"
+          },
+          {
+            "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-semantics/input-verification.log",
+            "sha256": "62e73a009e71138ed78adfd2f963dfe76f35111f54d9455644ad682de898f15e"
+          },
+          {
+            "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-semantics/semantic-verification.log",
+            "sha256": "d71be1dc1c747fe77b643e3032694ef15afa372c11bba53b884821bd07f1c217"
+          },
+          {
+            "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-semantics/authorization-verification.log",
+            "sha256": "3d929fee947db418c059cc1af1443a3848e25e83dc637c60bd761bb0eadf45ac"
+          },
+          {
+            "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-semantics/focused-network-guard.log",
+            "sha256": "6912a5fcb3f0b0283de1ae0ed50264c3beb4c5eeadecb38912cedbfd208ae522"
+          }
+        ],
+        "summary": "fresh capability_projection_semantics離線delta ACCEPT。原需求/20原raw/真View與原56rows逐項核對，無損cards不洩漏答案或刪會員自身限制；daily有用店鍵與依賴-only own=false、customer無關鍵與會員自身own=true、inventory完整責任均保持。有限AND只允同View明示已完整驗證supported filter完整群聯集；17真context、16多群子集合、7動態kind、15授權控制與1focused實跑通過。五輸入與16新增引用rows、全部新舊bindings及作者28閉合證據吻合；精確review在真open審者下於settings/model/network前拒絕，未造Task。原20仍FAIL/PASS/FAIL，原15FAIL/18PASS、38×2 Gate未過及root PENDING不變。0POST/SQL/DB，僅新本審核JSON/log；未重跑作者81/228或全frozen，核其正式log及audit。全部程序/proof已結束；Main核真FINAL及hash/check-evidence、finish本輪closed PASS後才准固定五自然coverage。",
+        "producer": "/root/loop_worker_capability_semantics",
+        "finished_at": "2026-10-22T01:38:51.582441+00:00"
+      }
+    }
+  },
+  "policy_authorization": {
+    "result": "PASS",
+    "manifest_sha256": "2ec21c08c50f1772538c61fbbd4d7c5ea00c3fb43527395ffe5fa10e61082992",
+    "bindings_sha256": "b0768af6a55350b6b5c143dddadee6022acc4209ddcc8aa1df3f81adc08041e5",
+    "review_sha256": "566f7d880b8e8fe6a5a19ffe77ef253fb0df7c9db267246843d04a92baead5e7",
+    "roles": {
+      "author": {
+        "ticket": "34175c2580224eddb7061898d2af61ef",
+        "id": "34175c2580224eddb7061898d2af61ef",
+        "role": "worker",
+        "node": "kind_policy_shape_contract",
+        "round": 16,
+        "platform_id": "/root/loop_worker_policy_shape",
+        "closed": true,
+        "reserved_at": "2026-10-21T22:47:57.221515+00:00",
+        "completion": {
+          "round": 16,
+          "node": "kind_policy_shape_contract",
+          "started_at": "2026-10-21T22:47:57.044876+00:00",
+          "result": "PASS",
+          "evidence": [
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-shape/final-verification.json",
+              "sha256": "be9cdf7745caf288c3e640729c58c6576f09d5c9cf64156d57b5672a162bf987"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-shape/focused-final.log",
+              "sha256": "704ea59ff3dcc551fc8a17ece87ed6d56d960aa6d1ced22aec37439d0196c8c1"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-shape/necessary-regression.log",
+              "sha256": "b56a03261ca44d28a04dec9bf120463ad93e314470b4d93188e8539b8a1169c4"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-shape/original-raw-policy-check.json",
+              "sha256": "a879ba19ca1516d9ab9f7b8be59298aa94bf1adc9f7a8528b9e1a9b8352f3881"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-shape/original-frozen-replay.log",
+              "sha256": "1934ed81ff102804c088d18b5f7630b881d7dea102e8d39fc121fcccd7391f64"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-shape/offline-controls.json",
+              "sha256": "ea036fbc744bc939376fa27a26cd69dcd6d2b488bf239da99f4faff6db380ea7"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-shape/frozen-controls.json",
+              "sha256": "18ca54981ddcd5d6be429c817ea02dcb67d8ab31cd71eca5a4c2fa8fa2a2e226"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-shape/cross-source-raw-check.json",
+              "sha256": "afb23d9df123c1bc47b997bd3b149ab589a021a6e7e9e4c9015918061896b8ae"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-shape/preservation-check.json",
+              "sha256": "b53a3e04aa5ee758fc92bb080573fc02d41c77ddc740d80436cebf410f5ed4d9"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-shape/operation-handoff.json",
+              "sha256": "6c4e764591154a56ecae5b73eb401978acb9c1bb2a7a7cd1ad0ef5b37fc6105c"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-shape/frozen/policy-freeze.json",
+              "sha256": "82c7209abe383a2ce9524b7fadc5af1ca234f1d59de254eb2beee896191c813d"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-shape/evidence-index.json",
+              "sha256": "c18e16cc9c40cc8aa9c5003a07b451bf9b51f3cca4ac95874ca78af3bbe48943"
+            },
+            {
+              "path": "evaluations/fixtures/kind_diagnostics_policy_shape/manifest.json",
+              "sha256": "2ec21c08c50f1772538c61fbbd4d7c5ea00c3fb43527395ffe5fa10e61082992"
+            }
+          ],
+          "summary": "第16輪0POST離線contract完成：單一nested薄candidate/test及selection-only manifest，重用全部原kind/typed/finish與managed engines。default/NULL flat均可過；EMPTY必須逐child同task/keys的typed nest，aggregate不代nest，zero/inner及其他首錯仍拒。唯一prompt差異為通用policy適用條件suffix；schema/三literal/上游8需求56列不變。原第15輪同版及原frozen仍精確FAIL，新predicate以同原raw另判shape FAIL，不翻案。68新focused+103指定原回歸通過；4selection控制同版及live原raw frozen重播，完整fake9正例和shape/typed首錯live/frozen共27raw與162輸出artifact一致；正例2prepared。5203既有檔與舊167source逐bytes不變，rebound bindings保持、v2 live仍歷史拒絕。真作者open/未fresh reviewer時HTTP拒絕，來源/授權漂移及中斷不PASS；完整proof均最後封存、全部程序結束。0SQL/DB/commit/push，未改Task/control或舊expectedhash。僅本node PASS；待Main核FINAL/hash及finish後由真fresh不同worker核新語意，後續自然selection/coverage3/自然9POST/各父層與final仍PENDING。",
+          "producer": "/root/loop_worker_policy_shape",
+          "finished_at": "2026-10-21T23:03:58.349046+00:00"
+        }
+      },
+      "reviewer": {
+        "ticket": "ed5abbeeea324bea8ac64d526e38fb55",
+        "id": "ed5abbeeea324bea8ac64d526e38fb55",
+        "role": "worker",
+        "node": "kind_policy_shape_semantics",
+        "round": 17,
+        "platform_id": "/root/loop_worker_policy_semantics",
+        "closed": true,
+        "reserved_at": "2026-10-21T23:03:58.698411+00:00",
+        "completion": {
+          "round": 17,
+          "node": "kind_policy_shape_semantics",
+          "started_at": "2026-10-21T23:03:58.524476+00:00",
+          "result": "PASS",
+          "evidence": [
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-semantics/review.json",
+              "sha256": "2d47e702a0a6bb0fb9904ba972fcd6dccaf91645319729011728d3a900a242a4"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-semantics/final-verification.json",
+              "sha256": "5f170f3b217ff330cc335b892e2e7a9d32de48b13cca586b65b5c3c17c8141a6"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-semantics/offline-checks.json",
+              "sha256": "7605db3ef0567be2b1b378a10b3debc7dbfe9484f0cde66ad0cc146ad8d3ca84"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-semantics/focused-checks.log",
+              "sha256": "d79a494d6fa326fe056e24a9e66b18d863ed4234538b1df56012a12e1f2220f6"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-semantics/independent-replays.json",
+              "sha256": "00cef21a4cb8e0916cfeb0f4275ae94ecacb019916d105f99cd691769ad22ffb"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-semantics/independent-frozen-replays.json",
+              "sha256": "4526d7f6dece9d31633d3fcf009f431c2f7574c9897d5b4b7bc1f818e9def3ec"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-semantics/original15-frozen.log",
+              "sha256": "1934ed81ff102804c088d18b5f7630b881d7dea102e8d39fc121fcccd7391f64"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-semantics/null-frozen.log",
+              "sha256": "6d55c02b59aad38961fd07f458239dbb9f56828dc1396a892ff35a0fc7f0d7fd"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-semantics/empty-frozen.log",
+              "sha256": "d38dfe4fabef567497b3bec841bb073f01edd390a07c41b4a52e8c50e12d5b40"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-semantics/real-provenance-gates.json",
+              "sha256": "9ccdd42f433d402920cacdb1b0aa4a01c47f0b6d9d90b699d1425f7ebf16f8d5"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-semantics/real-open-execute.log",
+              "sha256": "42253b3b0b922f74c311fdac958709c57a313f2ca45ab92352675a12971b6760"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-semantics/controller-check-evidence.log",
+              "sha256": "6a7dee2df6decc78d70dd3a9fcef13555f24ec05ef34f4d611783f4084b4e866"
+            },
+            {
+              "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-semantics/offline-attempt.log",
+              "sha256": "1204a734deed0e351ea129c1a6548b3493f6219abeb0d982662cbb49aa7cd411"
+            }
+          ],
+          "summary": "第17輪fresh policy/shape semantics ACCEPT。獨立讀真需求、原15raw、三literal、typed shape／新suffix／原guards與checker，裁定default/NULL flat保缺值等價、EMPTY必每child真nest且task/keys吻合，aggregate或metadata不代表nested；未決語意為空，nested memory正例非原題自然成功。新review精確綁新manifest／完整sources/import/schema/model/runtime/suffix/messages/body/upstream及原fixture/review/lineage。原8需求56列與三coverage bytes及第14輪完整review bindings相同，原fixture真三方closed PASS保持；新author第16輪真closed PASS與本17輪reviewer distinct。本review仍open，實查preflight及真execute在network前拒絕，Main必須等本真FINAL核hash/check-evidence與finish PASS才容後續一次selection。31 focused passed、15獨立memory控制、5 live與3 frozen replay符合預期；5203保護檔、668作者索引及167舊sources保持，舊rebound bindings相等、v2 live仍預期拒絕。原15輪同版/frozen精確FAIL與新shape負例不翻案。一次驗證腳本wrong_keys預期分類過窄已保留失敗log並依原guard先REJECT校正，未改實作。0POST/SQL/DB/retry/cloud，local累計22；未改source/test/fixture/舊證據/Task/control、無commit/push。僅本離線child PASS，父/root及自然效果保持PENDING。",
+          "producer": "/root/loop_worker_policy_semantics",
+          "finished_at": "2026-10-21T23:10:33.993529+00:00"
+        }
+      }
+    },
+    "legacy_authorization": {
+      "result": "PASS",
+      "manifest_sha256": "9efa86b883366ff1ef4edd555f59f08499fa123288c6ca1ffe98998d84156187",
+      "bindings_sha256": "086918099c71f0b62785e3330b2ee038a777f1ef88503417af415f6d5c9155b2",
+      "review_sha256": "4bdf807cf715c83e49c4a5d1cbea33c9c279f44afdc6853677e36e23849276a1",
+      "roles": {
+        "content_author": {
+          "ticket": "4810e837bb3e44d5a05d9392d9140e84",
+          "id": "4810e837bb3e44d5a05d9392d9140e84",
+          "role": "worker",
+          "node": "kind_diagnostic_fixture_v2_correction",
+          "round": 12,
+          "platform_id": "/root/loop_worker_fixture_v2",
+          "closed": true,
+          "reserved_at": "2026-10-21T21:09:02.160531+00:00",
+          "completion": {
+            "round": 12,
+            "node": "kind_diagnostic_fixture_v2_correction",
+            "started_at": "2026-10-21T21:09:02.031678+00:00",
+            "result": "PASS",
+            "evidence": [
+              {
+                "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-fixture-v2/red.log",
+                "sha256": "578878aa0aaa529454257e33c1bf60d4b84b3d448bf648a0a9a3703d83980ed1"
+              },
+              {
+                "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-fixture-v2/focused-complete.log",
+                "sha256": "71f975993dbb5daa31450c4f7021f29c8f4e23e935a0ebf4b01de0dc8edfeb51"
+              },
+              {
+                "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-fixture-v2/regression.log",
+                "sha256": "05856bd4c64f5755a90b0ca1b20a4dee6132f3791ca4969129a836a2c7afb9be"
+              },
+              {
+                "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-fixture-v2/customer-controls.log",
+                "sha256": "ea3b1b9c1058132c12b3cb8e62b1d18fdf97aeee9c5db418b6344c648eb9db23"
+              },
+              {
+                "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-fixture-v2/fixture-correction-check.json",
+                "sha256": "a2ba8df832a3004f102c49b5affff0b781e175aee1bfaa9b71bbe2cdff213975"
+              },
+              {
+                "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-fixture-v2/offline-controls.log",
+                "sha256": "b16758890326a1eb616ba46ab62870e6d4a2d9501660551f9c9dc6fb3f1209c1"
+              },
+              {
+                "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-fixture-v2/offline-controls-index.json",
+                "sha256": "eb47e47bc2c23330329def6913d85e5d6ca94dff19f27799771639fa3fed70b3"
+              },
+              {
+                "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-fixture-v2/frozen-replays.log",
+                "sha256": "23342865e25e250dc07bce0f409d25ccbf2923880bedb78e8a280df76e4a77ff"
+              },
+              {
+                "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-fixture-v2/frozen/freeze.json",
+                "sha256": "fd5b37977e23978a1172dc7c2e7df49bc3e7e53f02ee48b8350fd76fc48ae269"
+              },
+              {
+                "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-fixture-v2/preservation-check.json",
+                "sha256": "3b5479fb80e7ed647c2d29fb3e91a4ef1c62f02f66d58eff46f030d6ba4372a6"
+              },
+              {
+                "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-fixture-v2/controller-read-only-before.json",
+                "sha256": "2f920cd6e464450057fed1bba4de473b4f71c0019bac5f4c56d29c44602701c4"
+              },
+              {
+                "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-fixture-v2/dry-run-selection.log",
+                "sha256": "d3e7b87bd8524c73e01b74ccf6958591682f3a0309f5cf977a33178f176df8fa"
+              },
+              {
+                "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-fixture-v2/dry-run-coverage.log",
+                "sha256": "9e1183637b0dc9fd8be23cc1e735f197da7f36267c930fe72bfa73e1947582f9"
+              },
+              {
+                "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-fixture-v2/execute-without-review.log",
+                "sha256": "6c5615d7e4e10dea5d007a0c126f6cf867530339febb83e78bea1d611a991ed2"
+              },
+              {
+                "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-fixture-v2/execute-v1-reject.log",
+                "sha256": "6c5615d7e4e10dea5d007a0c126f6cf867530339febb83e78bea1d611a991ed2"
+              },
+              {
+                "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-fixture-v2/final-verification.json",
+                "sha256": "9900f16e02cc294cbdb1c10ca906a3576743762a20ce0daa7536b2568ab54023"
+              },
+              {
+                "path": "evaluations/fixtures/kind_diagnostics_v2/manifest.json",
+                "sha256": "33cf44c84c10842adb60bfb7cbfbb269bac6dfa136c124a43159efabd27d543f"
+              }
+            ],
+            "summary": "第12輪純離線v2修正完成：customer MET-003唯一能力變更partial/lifetime_spend sum/own_gap=true，會員母體未證完整為self，scope/grain另列，不推論非會員交易存在。其餘55列、3coverage及typed selection不變；selection四hash與22011tokens精確符合研究預固定。薄nested runner直接重用v1 prepare/_body/evaluate/_run、原kind/finish/ManagedInvoke，完整綁新source/test，嚴核真作者child與原semantic parent之不同platform完成PASS provenance。62focused+160指定回歸通過；4正例+11首錯prefix同版/完整165-source frozen replay共15組一致。3754既有保護檔、v1 live bindings/REJECT/兩src無變；本輪0POST/DB/SQL/commit/push且Task/control未改。最後tests後live source/fixtures/manifest未變。fixture語意仍PENDING，Main finish本child後須先fresh audit10–12，再由另一fresh原semantic parent全8需求/56row/typed/free-text重審；本worker不續跑。",
+            "producer": "/root/loop_worker_fixture_v2",
+            "finished_at": "2026-10-21T21:19:20.461451+00:00"
+          }
+        },
+        "binding_author": {
+          "ticket": "098d0ce2e31f4254905064d4fd34c97b",
+          "id": "098d0ce2e31f4254905064d4fd34c97b",
+          "role": "worker",
+          "node": "kind_diagnostic_evidence_rebinding",
+          "round": 13,
+          "platform_id": "/root/loop_worker_rebinding",
+          "closed": true,
+          "reserved_at": "2026-10-21T21:34:17.749163+00:00",
+          "completion": {
+            "round": 13,
+            "node": "kind_diagnostic_evidence_rebinding",
+            "started_at": "2026-10-21T21:34:17.620282+00:00",
+            "result": "PASS",
+            "evidence": [
+              {
+                "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/red-focused.log",
+                "sha256": "fe1b6c5205649fc4b70e04b5cdcd78f11ffced076bb00bce90dfcca7afa9735c"
+              },
+              {
+                "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/red-outer-receipt.log",
+                "sha256": "71a5621383e5c5d78d068eac67ceccb7f6d8e7ba3fbb69af95ef9f1f5d9b8c15"
+              },
+              {
+                "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/red-active-stage.log",
+                "sha256": "e2b0b1e8c77f72eaeae927543d9028a205e3aebd613502afef591277fde5e2c1"
+              },
+              {
+                "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/green-focused.log",
+                "sha256": "1f74fa5571dd3384b99c59cf917d8f332976dc886d599e9138ad671cd3fa79c2"
+              },
+              {
+                "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/focused-complete.log",
+                "sha256": "559347971cd971b53afe3ee3c64571f43421a20a2f99d41632eb16439dd18394"
+              },
+              {
+                "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/necessary-regression.log",
+                "sha256": "de181620e645040367857aa26541a9b1a71af4c0b81d2f50697b52388f8fea36"
+              },
+              {
+                "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/historical-v2-focused.log",
+                "sha256": "4b9cd4cd466baf5ec38bced3996940fd34915d23997de5b5d3ead18819cf1f6b"
+              },
+              {
+                "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/historical-v2-replays.log",
+                "sha256": "ce02eae4de22eaccf9fb8d758099b66da6ec92a6742bad0dd77a2b2b6f0be94e"
+              },
+              {
+                "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/managed-authorization-controls.log",
+                "sha256": "a06d5236a755797f355f508b65628e0fea9401a39fe53f4d39fbdc606daf462a"
+              },
+              {
+                "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/offline-controls.log",
+                "sha256": "7c1dc2fed4de8379814ce8f42ab401b8d1e09ef52abbcd6d432fb2c6062a42f3"
+              },
+              {
+                "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/offline-controls-index.json",
+                "sha256": "eaeef958ed970f24aba7089a5061b61a0d97f7dfe1cce5f1a74e7265aac2e2d6"
+              },
+              {
+                "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/frozen-replays.log",
+                "sha256": "9250e6e3bf1aff92d23b2d0ddfa4aa4b128ed466e7dde6f62798f6d402f52c88"
+              },
+              {
+                "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/frozen/freeze.json",
+                "sha256": "7d52d3c7639e8caf00e2d55cdd2dd4a3aca1b394c3ef90fec0c7e8e3079eeea9"
+              },
+              {
+                "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/outer-controls.log",
+                "sha256": "1afbdeea7fdca679123fa92c8bfb06a4847a924397beb42968201193115ea5de"
+              },
+              {
+                "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/outer-interruption-process.log",
+                "sha256": "50f0949006760c038ee4368d3067e8d3bd50d7dc285a6a740e773695a4e6585f"
+              },
+              {
+                "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/outer-probe-frozen/freeze.json",
+                "sha256": "7d52d3c7639e8caf00e2d55cdd2dd4a3aca1b394c3ef90fec0c7e8e3079eeea9"
+              },
+              {
+                "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/preservation-check.json",
+                "sha256": "e881fc1e3018f8c94a45d9eaabb2b178fab9ed855718d8b210294131ac00ee85"
+              },
+              {
+                "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/preservation-check.log",
+                "sha256": "e881fc1e3018f8c94a45d9eaabb2b178fab9ed855718d8b210294131ac00ee85"
+              },
+              {
+                "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/controller-check-evidence.log",
+                "sha256": "6a7dee2df6decc78d70dd3a9fcef13555f24ec05ef34f4d611783f4084b4e866"
+              },
+              {
+                "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/dry-run-selection.log",
+                "sha256": "28fa080165228f204a9b99c383b8835fe4106482aa38801f1938503a3bd93999"
+              },
+              {
+                "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/dry-run-coverage.log",
+                "sha256": "2110a262527a93eb393d4c1377126aea3ae8b22895738009fd8fc74d69baf30e"
+              },
+              {
+                "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/execute-without-review.log",
+                "sha256": "5ed05457f983db9e8684d7a89d562f9f09ae38cce245223bbaa424dd3b5b720c"
+              },
+              {
+                "path": "evaluations/fixtures/kind_diagnostics_rebound/manifest.json",
+                "sha256": "9efa86b883366ff1ef4edd555f59f08499fa123288c6ca1ffe98998d84156187"
+              },
+              {
+                "path": "evaluations/diagnostics/managed_node_diagnostics_rebound.py",
+                "sha256": "d9cb08e98fdcd9d186cddcf47f48ea466e804d153880546d08324f4d35871200"
+              },
+              {
+                "path": "tests/diagnostics/test_managed_node_diagnostics_rebound.py",
+                "sha256": "2b0766b1646e1f3b0d5a09ed5277f1edcd70adaab2e0afd29e62cad531196739"
+              },
+              {
+                "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/final-verification.json",
+                "sha256": "8fbf6ca4dc4f3a4b4b933ef1b3e58fc209394fcef5ee2bad51d652e7f3dffb16"
+              }
+            ],
+            "summary": "第13輪僅離線證據rebind完成：唯一新manifest引用原v2 33cf44…root；167-source/full-model/runtime/13份immutable lineage完整綁定，直接重用base prepare/evaluate/record/replay與原kind/finish。inner163-source誠實保留v1 engine；獨立outer receipt在HTTP前、raw保存後重核完整版本/authorization/review/receipt，source或receipt漂移即FAIL，真SIGINT於inner PASS後仍INTERRUPTED且raw保留，不以inner PASS冒充完整PASS。75新focused、原3檔160回歸、歷史第12輪frozen v2 62測試/15replay通過；新四正例＋11首錯同版及完整frozen各15組一致。4237既有保護檔、17舊nodes/Task/control、v1 live bindings、原v2 manifest/fixtures/source/test/frozen/全部舊raw/兩src/38Gate保持，check-evidence真PASS；0POST/SQL/DB/commit/push。真preflight仍因本作者未finish及缺fresh原semantic parent closed PASS而拒絕，屬預期；所有自然效果PENDING。所有程序已結束，FINAL後不再補寫proof。",
+            "producer": "/root/loop_worker_rebinding",
+            "finished_at": "2026-10-21T21:48:21.073587+00:00"
+          }
+        },
+        "reviewer": {
+          "ticket": "d6de6a4fd21f4e7e862b06ceb27b86f7",
+          "id": "d6de6a4fd21f4e7e862b06ceb27b86f7",
+          "role": "worker",
+          "node": "kind_diagnostic_fixture_semantics",
+          "round": 14,
+          "platform_id": "/root/loop_worker_semantics_rebound",
+          "closed": true,
+          "reserved_at": "2026-10-21T21:48:28.940018+00:00",
+          "completion": {
+            "round": 14,
+            "node": "kind_diagnostic_fixture_semantics",
+            "started_at": "2026-10-21T21:48:28.812703+00:00",
+            "result": "PASS",
+            "evidence": [
+              {
+                "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-semantics-rebound/review.json",
+                "sha256": "f986fd1f361948c4ea4ecc24d4c7e779956210488467533411908f440f07c135"
+              },
+              {
+                "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-semantics-rebound/semantic-review.log",
+                "sha256": "639f745e8d1cf8f2a2e19aa539b800fa90645e327781450ca129f78c686c2e02"
+              },
+              {
+                "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-semantics-rebound/offline-checks.log",
+                "sha256": "30238dd1a0044acf77ff4e39a394c75fbbe8638ae0529621a9e66bec5a142b50"
+              },
+              {
+                "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-semantics-rebound/offline-checks.json",
+                "sha256": "60808b0568b668e08e56bfd0a61273289a66ac937fb9daf55d4dde35b99194cc"
+              }
+            ],
+            "summary": "ACCEPT：本fresh原semantic parent直接重讀全部真契約，獨立核對8需求索引/role/scope/grain/背景、7View×8共56列status/mapping/own_gap及完整self/scope/grain缺口，非沿用舊55列。customer lifetime_spend sum保留有用累計會員折扣後金額；扣除明示scope/grain後仍未證未限定會員的全銷售完整性，own_gap=true有據，未推論非會員實際交易；最後訂單日期非完整交易月。部分店鍵及月縮約不證庫存母體。三coverage樣本、2032閏年/改名/UnicodeIDs、四body無Oracle/預填來源答案、synthetic全8assignment/5排除/全部typed與2prepared及所有自由文字均核對。新manifest/full167source/13immutablelineage精確一致僅證來源；機器接受的無據全庫存補零文字反例由人工明確REJECT。真兩作者closed PASS且三平台不同，本人open使preflight預期拒絕，待Main真FINAL後finish。只核准固定fixture語意，不代表自然selection/coverage/父9POST或祖先/root通過。0POST/SQL/DB/commit/push，未重跑544，既有fixture/Oracle/code/manifest/Task/control未改。",
+            "producer": "/root/loop_worker_semantics_rebound",
+            "finished_at": "2026-10-21T21:56:35.497896+00:00"
+          }
+        }
+      }
+    }
+  }
+}

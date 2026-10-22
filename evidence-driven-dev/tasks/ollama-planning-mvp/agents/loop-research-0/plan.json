@@ -1,0 +1,48 @@
+{
+  "nodes": [
+    {
+      "id": "root",
+      "parent": null,
+      "goal": "修正目前三階段任務拆分測試的失敗，以本機 Ollama qwen3.8:27b 完成目前診斷案例的自然端到端驗證與必要回歸。",
+      "acceptance": [
+        "以既有 raw 重現並定位目前失敗；修正保留必要資料需求、條件、角色、scope 與母體驗證，新增有辨識力的正反例且相關回歸通過。",
+        "本機 qwen3.8:27b 自然完成目前診斷案例的需求拆分、全部候選 View 映射及來源選擇，語意涵蓋與 prepared requests 驗收通過；不執行 SQL 或 DB。",
+        "保存所有首次與失敗 raw/log、版本及模型設定；新結果可離線重播，歷史 raw、分數與完整 38 題 Gate 狀態不變。",
+        "fresh-context 獨立驗證者核對修正、父層整合、自然結果語意與必要回歸並 ACCEPT。"
+      ]
+    },
+    {
+      "id": "three_stage_integration",
+      "parent": "root",
+      "goal": "修正候選的三階段父層整合與必要回歸",
+      "acceptance": [
+        "以新自然完整raw離線重播，prepared requests與各階段語意一致且必要回歸通過；歷史raw、分數與38題Gate狀態未變。",
+        "整合證據涵蓋所有子節點，交由fresh最終驗證者核對root驗收。"
+      ]
+    },
+    {
+      "id": "contract_and_managed_runner",
+      "parent": "three_stage_integration",
+      "goal": "重現背景誤列資料需求並建立最小修正與受控三階段runner",
+      "acceptance": [
+        "既有raw重現精確失敗，背景與真正metadata責任區別有辨識力的正反例通過，所有必要coverage/selection guards保留。",
+        "最小recall prompt修正完成；受控本機runner使用indexed recall與path-only mapping串至selection，所有模型POST走loopctl，dry-run/離線fake全階段/失敗保存與replay測試通過。",
+        "先保存舊版本及歷史工件hash，相關focused測試實跑通過；不以手工刪除背景或放寬supported驗證取得PASS。"
+      ]
+    },
+    {
+      "id": "natural_qwen_three_stage",
+      "parent": "three_stage_integration",
+      "goal": "固定修正版以本機Qwen自然完成當前診斷案例三階段",
+      "acceptance": [
+        "全新自然需求拆分完整保留資料責任並將純業務目的留背景，全7候選View各自然映射通過；不重用或修復舊recall當自然結果。",
+        "自然selection為ready且prepared requests正確表達庫存anchor、店商品根粒度、sales同task月份/online篩選與金額sum、left保母體與不補零政策；無SQL/DB。",
+        "保存固定單樣本所有首次/失敗raw、request id、模型設定、來源指紋與語意核對log；錯答FAIL回研究，不重送相同成功HTTP請求挑分。"
+      ]
+    }
+  ],
+  "evidence": [
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-0/handoff.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-0/diagnosis.json"
+  ]
+}

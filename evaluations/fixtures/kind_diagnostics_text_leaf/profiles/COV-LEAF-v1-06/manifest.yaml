@@ -1,0 +1,7 @@
+{
+  "profile_id": "leaf_control_6",
+  "contract_version": "leaf-control-1",
+  "status": "approved",
+  "source_kind": "sql",
+  "catalog": "catalog.yaml"
+}

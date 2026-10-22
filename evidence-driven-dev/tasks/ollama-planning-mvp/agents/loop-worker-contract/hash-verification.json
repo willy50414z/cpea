@@ -1,0 +1,13 @@
+{
+  "baseline_entries": 485,
+  "changed": {
+    "evaluations/prompts/three_stage/recall_indexed.md": {
+      "before": "471a41d1e105f3e3af9857d5ff3a306b6e85eef44dff682fc652635b8e68fccd",
+      "after": "a11ee2f89ad1c68263e0ea758994b5fb6b39c060596a9142ca87e1ab7f3e7382"
+    }
+  },
+  "existing_product_files": "UNCHANGED",
+  "historical_raw_reports_and_gate": "UNCHANGED",
+  "new_model_calls": 0,
+  "sql_db_calls": 0
+}

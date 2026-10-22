@@ -1,0 +1,35 @@
+{
+  "result": "PASS",
+  "candidate": "managed-kind-mapping-1",
+  "sources_live_and_snapshot": 162,
+  "test_support_sources": 21,
+  "source_changes": [],
+  "historical_files": 1164,
+  "historical_changes": [],
+  "protected_source_changes": [],
+  "previous_runner_diff": "runner-change.diff：只有3新增行，互斥旗標及import接線",
+  "existing_src_hashes": {
+    "src/cpea/application/models/decomposition.py": "1fe4eb06da88fc67c3e65250a93393ac944dbbba9f2c4ac3349134e044b10558",
+    "src/cpea/workflows/task_decomposition/prompt.py": "4655d352feaaab93bdef78a2ced51da9ae93adf1f907aa99eb8c1a237876349b"
+  },
+  "old_natural_raw_artifacts_verified": 27,
+  "fake_runs": 11,
+  "raw_replays": 51,
+  "frozen_replays": 11,
+  "prepared_requests": 2,
+  "regression": "496 passed in 55.54s",
+  "encoding": "UTF-8 without BOM",
+  "root_acceptance_statuses": [
+    "PENDING",
+    "PENDING",
+    "PENDING",
+    "PENDING"
+  ],
+  "model_POSTs": 0,
+  "retry": 0,
+  "cloud": 0,
+  "SQL_DB": 0,
+  "commits": 0,
+  "pushes": 0,
+  "limitation": "frozen replay使用同.venv及lockfile，不vendor外部套件；離線不證自然語意。"
+}

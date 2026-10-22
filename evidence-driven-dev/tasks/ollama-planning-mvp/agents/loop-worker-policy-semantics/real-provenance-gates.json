@@ -1,0 +1,43 @@
+{
+  "ticket": "ed5abbeeea324bea8ac64d526e38fb55",
+  "review_sha256": "2d47e702a0a6bb0fb9904ba972fcd6dccaf91645319729011728d3a900a242a4",
+  "reviewer_closed": false,
+  "author_closed": true,
+  "preflight_negative_controls": [
+    {
+      "label": "real-open-reviewer",
+      "expected": "REJECT",
+      "actual": "policy review lacks completed provenance"
+    },
+    {
+      "label": "missing-review",
+      "expected": "REJECT",
+      "actual": "execute requires complete fresh policy ACCEPT review"
+    }
+  ],
+  "real_execute": {
+    "command": [
+      "/home/willy/code/cpea_terms/.venv/bin/python",
+      "-m",
+      "evaluations.diagnostics.managed_policy_shape",
+      "--execute",
+      "--review",
+      "/home/willy/code/cpea_terms/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-semantics/review.json",
+      "--ticket",
+      "ed5abbeeea324bea8ac64d526e38fb55"
+    ],
+    "exit_code": 1,
+    "error": "policy review lacks completed provenance",
+    "network_reached": false,
+    "source_order": "main preflight runs before settings/model identity/ManagedInvoke"
+  },
+  "used_after": {
+    "agent_dispatches": 31,
+    "cloud_calls": 0,
+    "local_calls": 22,
+    "model_retries": 0
+  },
+  "POST": 0,
+  "SQL_DB": 0,
+  "pending": "Main必須等真FINAL、核review與handoff hash／check-evidence、finish PASS；現在不得POST。"
+}

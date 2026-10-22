@@ -1,0 +1,40 @@
+{
+  "result": "PASS",
+  "scope": "合成見證，不是完整語意或 SQL 驗證，不回寫原始分數。",
+  "case14": {
+    "observation": "以契約stock_status映射作條件計數，合成資料保留零缺貨門市；原global filter版本刪除該門市。",
+    "expected": {
+      "1": 1,
+      "2": 0,
+      "3": 1
+    },
+    "alternative": {
+      "1": 1,
+      "2": 0,
+      "3": 1
+    },
+    "limited_to": "status映射與非空條件欄位契約成立；不涵蓋所有整合細節。"
+  },
+  "case18": {
+    "observation": "來源filters已與conditional conditions完全相同，且order_id為來源唯一鍵；合成資料count與conditional count_distinct一致。",
+    "expected": {
+      "1": 1,
+      "2": 1
+    },
+    "alternative": {
+      "1": 1,
+      "2": 1
+    },
+    "limited_to": "只檢查這一特定計數表示，不能全面放寬conditional與一般度量的等價。"
+  },
+  "case29": {
+    "observation": "同欄位>=同日且<=同日，在合成日期域與等於該日一致；原grader未正規化此表示。",
+    "expected": [
+      "2026-09-01"
+    ],
+    "alternative": [
+      "2026-09-01"
+    ],
+    "limited_to": "只檢查月份篩選表示，未全面核准其餘欄位角色與基數。"
+  }
+}

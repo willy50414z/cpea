@@ -1,0 +1,8 @@
+{
+  "sources_manifest": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-own/sources-after.json",
+  "sources_count": 155,
+  "all_match": true,
+  "changed": [],
+  "source_manifest_sha256": "2c8916db8397215dec50e50c464b8c65e792650e61dd4b0954086f437506855c",
+  "candidate_fingerprint_sha256": "9bd2979d7657226e2cdf43fe9dd78e24a6630923b0cbccf78216c992a486e39e"
+}

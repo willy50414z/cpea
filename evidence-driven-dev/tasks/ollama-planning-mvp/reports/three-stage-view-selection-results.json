@@ -1,0 +1,47 @@
+{
+  "result": "PASS_WITH_WARNINGS",
+  "original_run_version": "three-stage-view-selection-1",
+  "original_stop": {
+    "error_type": "ValueError",
+    "error": "invalid contract evidence path /grain/keys/0"
+  },
+  "original_result_unchanged": true,
+  "revalidation_version": "three-stage-view-selection-1.1",
+  "raw_revalidated": 2,
+  "new_provider_calls": 0,
+  "changed_sources": [
+    "evaluations/three_stage_view_selection.py",
+    "evaluations/three_stage_view_selection_runner.py",
+    "tests/unit/test_three_stage_view_selection.py"
+  ],
+  "unchanged_prompt_schema_catalog_case": true,
+  "recall_requirement_count": 10,
+  "recall_candidate_count": 7,
+  "mapped_views_revalidated": 1,
+  "mapped_views_remaining": 6,
+  "stage_three": "NOT_EXECUTED",
+  "end_to_end_semantics": "NOT_VERIFIED",
+  "calls": 2,
+  "input_tokens_actual": 8113,
+  "output_tokens_actual": 1934,
+  "elapsed_seconds": 26.90686966000021,
+  "cost_usd": null,
+  "raw_run_sha256": "bc1b8cec4d442d88973ee6a844a80c91d66655f0d639df954b968d7dbd33d415",
+  "continuation_result": {
+    "result": "PASS",
+    "raw_replays": 4,
+    "stopped": {
+      "error_type": "ValueError",
+      "error": "invalid contract evidence quote /grain/keys"
+    }
+  },
+  "continuation_new_calls": 2,
+  "total_distinct_provider_calls": 4,
+  "combined_input_tokens_actual": 13419,
+  "combined_output_tokens_actual": 5550,
+  "combined_elapsed_seconds": 47.7248109810007,
+  "completed_mapping_views": 2,
+  "attempted_mapping_views": 3,
+  "continuation_run_sha256": "13d777f2eda3610b32c4668674ae00bacffe82848ba91feaff2fe817fa5f79d4",
+  "product_sources_unchanged": true
+}

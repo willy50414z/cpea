@@ -1,0 +1,7 @@
+{
+  "views": {
+    "diagnostic_leaf.stock_a": {
+      "path": "view.yaml"
+    }
+  }
+}

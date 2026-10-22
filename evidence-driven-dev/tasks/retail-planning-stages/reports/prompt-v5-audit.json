@@ -1,0 +1,100 @@
+{
+  "result": "PASS",
+  "run": "evidence-driven-dev/tasks/retail-planning-stages/.local/prompt-v5-20261020T112607Z",
+  "replayed_calls": 60,
+  "summary": {
+    "v3_raw": {
+      "completed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "model_calls": 30,
+      "canonical_views": 24,
+      "views_and_columns": 23,
+      "ready": 21,
+      "automated_pass": 16,
+      "elapsed_ms": 230601.97866003,
+      "usage": {
+        "input_tokens": 223950,
+        "output_tokens": 28272
+      },
+      "failures": [
+        "cross-view-02",
+        "cross-view-04",
+        "cross-view-07",
+        "cross-view-11",
+        "cross-view-16",
+        "cross-view-17",
+        "cross-view-19",
+        "cross-view-21",
+        "cross-view-22",
+        "cross-view-24",
+        "cross-view-25",
+        "cross-view-26",
+        "cross-view-27",
+        "cross-view-29"
+      ]
+    },
+    "v5_resolved": {
+      "completed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "model_calls": 30,
+      "canonical_views": 28,
+      "views_and_columns": 27,
+      "ready": 15,
+      "automated_pass": 9,
+      "elapsed_ms": 280383.99791800475,
+      "usage": {
+        "input_tokens": 354960,
+        "output_tokens": 26888
+      },
+      "failures": [
+        "cross-view-01",
+        "cross-view-02",
+        "cross-view-04",
+        "cross-view-07",
+        "cross-view-08",
+        "cross-view-09",
+        "cross-view-10",
+        "cross-view-11",
+        "cross-view-12",
+        "cross-view-13",
+        "cross-view-14",
+        "cross-view-17",
+        "cross-view-19",
+        "cross-view-20",
+        "cross-view-23",
+        "cross-view-24",
+        "cross-view-25",
+        "cross-view-26",
+        "cross-view-27",
+        "cross-view-28",
+        "cross-view-30"
+      ]
+    }
+  },
+  "improved": [
+    "cross-view-16",
+    "cross-view-21",
+    "cross-view-22",
+    "cross-view-29"
+  ],
+  "regressed": [
+    "cross-view-01",
+    "cross-view-08",
+    "cross-view-09",
+    "cross-view-10",
+    "cross-view-12",
+    "cross-view-13",
+    "cross-view-14",
+    "cross-view-20",
+    "cross-view-23",
+    "cross-view-28",
+    "cross-view-30"
+  ],
+  "hashes": {
+    "calls.jsonl": "3f4c893d0860e283f2d8a648a1a2a95df02ff29113da814f1060b2e3e586a53f",
+    "results.jsonl": "aa3e69c1fe6674c2cec67e71b6ebb85bd96a4750d8e73e13358916f41508563b",
+    "run.json": "7e8b26341d2bc50fd023ff9cc7a649e7c3334263c1b0b74c7d8223373d093a4c"
+  }
+}

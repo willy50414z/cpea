@@ -1,0 +1,84 @@
+FF                                                                       [100%]
+=================================== FAILURES ===================================
+_ test_natural_fingerprint_binds_complete_policy_candidate_and_original_imports _
+
+    def test_natural_fingerprint_binds_complete_policy_candidate_and_original_imports():
+        from evaluations import managed_three_stage_runner as runner
+        from cpea.infrastructure.catalog.yaml_catalog import SchemaCatalog
+        mod=api();catalog=SchemaCatalog('projects/retail');case=runner.diagnostic_case(catalog)
+        fingerprint=runner.fingerprint(catalog,case,contract=mod)
+        names={Path(name).resolve() for name in fingerprint['managed_sources']}
+        for name in [*rebound.source_paths(),*mod.ADDITIONAL_SOURCES,*mod.REFERENCES,
+                     mod.DEFAULT_MANIFEST.relative_to(base.ROOT).as_posix()]:
+>           assert (base.ROOT/name).resolve() in names
+E           AssertionError: assert PosixPath('/home/willy/code/cpea_terms/evaluations/__init__.py') in {PosixPath('/home/willy/.codex/skills/edd-loop/scripts/loopctl.py'), PosixPath('/home/willy/code/cpea_terms/evaluation...ics_rebound.py'), PosixPath('/home/willy/code/cpea_terms/evaluations/diagnostics/managed_node_diagnostics_v2.py'), ...}
+E            +  where PosixPath('/home/willy/code/cpea_terms/evaluations/__init__.py') = resolve()
+E            +    where resolve = (PosixPath('/home/willy/code/cpea_terms') / 'evaluations/__init__.py').resolve
+E            +      where PosixPath('/home/willy/code/cpea_terms') = base.ROOT
+
+tests/diagnostics/test_managed_policy_shape.py:297: AssertionError
+_ test_thin_record_keeps_legacy_and_new_first_errors_and_replays[provider_semantic] _
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-68/test_thin_record_keeps_legacy_0')
+failure = 'provider_semantic'
+
+    @pytest.mark.parametrize('failure',[None,'null','shape','typed','semantic','parse','provider','provider_semantic','context'])
+    def test_thin_record_keeps_legacy_and_new_first_errors_and_replays(tmp_path,failure):
+        mod=api(); package=mod.load_package(); context=mod.prepare(package); value=original()
+        value['draft']['integration']['missing_data_policy']=MISSING_POLICIES[1 if failure=='null' else 0]
+        if failure=='shape': value['draft']['integration']['missing_data_policy']=MISSING_POLICIES[2]
+        if failure=='typed': value['draft']['tasks'][0].pop('filters')
+        if failure=='semantic': value['draft']['integration']['edges'][0]['cardinality']='many_to_one'
+        raw='not json' if failure=='parse' else json.dumps(value,ensure_ascii=False)
+        calls=[]
+        def invoke(*args):
+            calls.append(args)
+            if failure=='provider': raise OSError('offline transport lost')
+            if failure=='provider_semantic': raise ValueError('fixed diagnostic semantic checks failed')
+            return AIMessage(content=raw)
+        folder=tmp_path/'sample'
+        receipt=mod.record_sample(folder,context,invoke,context_window=1 if failure=='context' else 32768)
+        assert receipt['status']==('PASS' if failure in [None,'null'] else 'FAIL')
+        assert len(calls)==(0 if failure=='context' else 1)
+        if failure=='null':
+            assert base.read_json(folder/'run.json')['stopped']['error']=='fixed diagnostic semantic checks failed'
+            assert receipt['decision']['legacy_findings'] and not receipt['decision']['policy_findings']
+>       result=mod.replay(folder,package)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/diagnostics/test_managed_policy_shape.py:109: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluations/diagnostics/managed_policy_shape.py:346: in replay
+    outcome=_outcome(folder,context,inner)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluations/diagnostics/managed_policy_shape.py:247: in _outcome
+    result = _decision(context,base.read_json(folder/'node-parsed.json'),
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluations/managed_three_stage_runner.py:43: in read_json
+    return json.loads(path.read_text(encoding='utf-8'))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/tmp/pytest-of-willy/pytest-68/test_thin_record_keeps_legacy_0/sample/node-parsed.json')
+mode = 'r', buffering = -1, encoding = 'utf-8', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/tmp/pytest-of-willy/pytest-68/test_thin_record_keeps_legacy_0/sample/node-parsed.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+=========================== short test summary info ============================
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_natural_fingerprint_binds_complete_policy_candidate_and_original_imports
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_thin_record_keeps_legacy_and_new_first_errors_and_replays[provider_semantic]
+2 failed in 12.18s

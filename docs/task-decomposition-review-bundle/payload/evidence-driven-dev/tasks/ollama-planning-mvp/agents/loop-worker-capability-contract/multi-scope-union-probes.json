@@ -1,0 +1,227 @@
+{
+  "view": "demo_retail.v_sales_detail",
+  "controls": [
+    {
+      "scope_ids": [
+        "FILT-001"
+      ],
+      "result": {
+        "status": "PASS",
+        "legacy_findings": [
+          {
+            "requirement_id": "MET-003",
+            "aspect": "necessary mappings/predicates",
+            "expected": [
+              {
+                "column": "net_sales",
+                "aggregation": "sum",
+                "conditions": []
+              }
+            ],
+            "actual": [
+              {
+                "column": "net_sales",
+                "aggregation": "sum",
+                "conditions": [
+                  {
+                    "column": "order_date",
+                    "operator": ">=",
+                    "value": "2026-09-01"
+                  },
+                  {
+                    "column": "order_date",
+                    "operator": "<",
+                    "value": "2026-10-01"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "accepted_scope_AND_equivalences": [
+          {
+            "requirement_id": "MET-003",
+            "aspect": "necessary mappings/predicates",
+            "expected": [
+              {
+                "column": "net_sales",
+                "aggregation": "sum",
+                "conditions": []
+              }
+            ],
+            "actual": [
+              {
+                "column": "net_sales",
+                "aggregation": "sum",
+                "conditions": [
+                  {
+                    "column": "order_date",
+                    "operator": ">=",
+                    "value": "2026-09-01"
+                  },
+                  {
+                    "column": "order_date",
+                    "operator": "<",
+                    "value": "2026-10-01"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "other_findings": [],
+        "independent_semantic_approval": "PENDING",
+        "free_text_review": "PENDING"
+      }
+    },
+    {
+      "scope_ids": [
+        "FILT-002"
+      ],
+      "result": {
+        "status": "PASS",
+        "legacy_findings": [
+          {
+            "requirement_id": "MET-003",
+            "aspect": "necessary mappings/predicates",
+            "expected": [
+              {
+                "column": "net_sales",
+                "aggregation": "sum",
+                "conditions": []
+              }
+            ],
+            "actual": [
+              {
+                "column": "net_sales",
+                "aggregation": "sum",
+                "conditions": [
+                  {
+                    "column": "sales_channel",
+                    "operator": "=",
+                    "value": "online"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "accepted_scope_AND_equivalences": [
+          {
+            "requirement_id": "MET-003",
+            "aspect": "necessary mappings/predicates",
+            "expected": [
+              {
+                "column": "net_sales",
+                "aggregation": "sum",
+                "conditions": []
+              }
+            ],
+            "actual": [
+              {
+                "column": "net_sales",
+                "aggregation": "sum",
+                "conditions": [
+                  {
+                    "column": "sales_channel",
+                    "operator": "=",
+                    "value": "online"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "other_findings": [],
+        "independent_semantic_approval": "PENDING",
+        "free_text_review": "PENDING"
+      }
+    },
+    {
+      "scope_ids": [
+        "FILT-001",
+        "FILT-002"
+      ],
+      "result": {
+        "status": "PASS",
+        "legacy_findings": [
+          {
+            "requirement_id": "MET-003",
+            "aspect": "necessary mappings/predicates",
+            "expected": [
+              {
+                "column": "net_sales",
+                "aggregation": "sum",
+                "conditions": []
+              }
+            ],
+            "actual": [
+              {
+                "column": "net_sales",
+                "aggregation": "sum",
+                "conditions": [
+                  {
+                    "column": "order_date",
+                    "operator": ">=",
+                    "value": "2026-09-01"
+                  },
+                  {
+                    "column": "order_date",
+                    "operator": "<",
+                    "value": "2026-10-01"
+                  },
+                  {
+                    "column": "sales_channel",
+                    "operator": "=",
+                    "value": "online"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "accepted_scope_AND_equivalences": [
+          {
+            "requirement_id": "MET-003",
+            "aspect": "necessary mappings/predicates",
+            "expected": [
+              {
+                "column": "net_sales",
+                "aggregation": "sum",
+                "conditions": []
+              }
+            ],
+            "actual": [
+              {
+                "column": "net_sales",
+                "aggregation": "sum",
+                "conditions": [
+                  {
+                    "column": "order_date",
+                    "operator": ">=",
+                    "value": "2026-09-01"
+                  },
+                  {
+                    "column": "order_date",
+                    "operator": "<",
+                    "value": "2026-10-01"
+                  },
+                  {
+                    "column": "sales_channel",
+                    "operator": "=",
+                    "value": "online"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "other_findings": [],
+        "independent_semantic_approval": "PENDING",
+        "free_text_review": "PENDING"
+      }
+    }
+  ],
+  "POST": 0,
+  "note": "純離線動態 context 控制，只引用原已核准 sales 正例；未加入 manifest、未更動 Oracle 或任何 raw。"
+}

@@ -1,0 +1,22 @@
+{
+  "id": "EV-20261021T031036-7617dfc7",
+  "kind": "review",
+  "command": [
+    ".venv/bin/python",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/reports/run_snapshot_inventory_probe.py",
+    "--replay",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/snapshot-inventory-20261021T030935Z-3d22d9"
+  ],
+  "cwd": "/home/willy/code/cpea_terms",
+  "started_at": "2026-10-21T03:10:36+00:00",
+  "finished_at": "2026-10-21T03:10:38+00:00",
+  "exit_code": 0,
+  "revision": "bc09c67fc4078501599c37e4cdfecdee40af2ef8",
+  "diff_fingerprint": "f336807c479b07db9a896096b917934a76a31c5e99090a3d921fcee4ee2f2996",
+  "post_fingerprint": "f336807c479b07db9a896096b917934a76a31c5e99090a3d921fcee4ee2f2996",
+  "source_unchanged": true,
+  "output_sha256": "c5f6fdf5d3e3ff6103673999841e9fead46cad0a50ae78228316bf1a27311082",
+  "raw_output": ".local/EV-20261021T031036-7617dfc7.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "855c6009733cbd9f5ddd8fbff6699ccd27c62c48c2e7b995f7334aac0bee1e39"
+}

@@ -1,0 +1,137 @@
+{
+  "schema_version": 1,
+  "ticket": "675280568cb542ddbb654ae489bf9304",
+  "verdict": "CONTINUE",
+  "reviewed_rounds": [
+    19,
+    20,
+    21
+  ],
+  "evidence": [
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-19-21/hash-checks.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-19-21/semantic-input-checks.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-19-21/independent-controls.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-19-21/ancestor-checks.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-19-21/verification.log"
+  ],
+  "summary": "完整第19–21輪及祖先方向獨立審核：CONTINUE，只允下一fresh capability_projection_semantics零POST獨立delta審核。第19輪原selection parent自身0POST整合有完整原raw/typed/兩prepared與五方closed來源證據；第20輪三固定唯一首次自然POST仍FAIL/PASS/FAIL，主要漏有用部分店鍵及自身/依賴誤判，另03重列完整月份AND屬有限表示差異。第21輪無損cards與通用責任指示是可否證的新輸入假設，沒有預填status/own_gap/mappings、刪原自身母體或改schema；新matcher只另判本metric明示同View已完整supported scope群聯集，非conditions欄/其他findings保持。五案例與兩新增expected lineage完整，原8需求56列及舊FAIL/15FAIL/18PASS與歷史38×2 Gate未過保持；非coverage直接委派已PASS政策。112項controller證據、1435作者proof、6389舊非Task檔與完整freeze hash獨立吻合，9個獨立scope控制及真Task缺fresh reviewer/audit拒絕通過。已核不可變81focused與228直接回歸成功log，未重跑數百測試。新作者真closed PASS，本audit不等於fresh語意ACCEPT；該審者真closed PASS後才准原預固定五自然coverage，父coverage自身0POST整合、全新自然9POST、全部祖先自身驗收及fresh final均不得省略。根驗收仍PENDING；本audit 0POST/SQL/DB。",
+  "round_assessment": [
+    {
+      "round": 19,
+      "verdict": "方向與父層邊界正確",
+      "basis": "原parent自身完成原3驗收之證據，30 raw required objects、8assignment/5exclusion/49refs/56quotes/5prose、兩prepared；inventory店商品anchor/stock sum/盤點metadata，sales整月online雙sum及先聚合後LEFT一對一雙鍵保庫存、flat不補零。只是上游注入selection隔離，沒有宣稱自然recall/coverage或root。"
+    },
+    {
+      "round": 20,
+      "verdict": "真語意失敗，保持FAIL",
+      "basis": "controller三request逐值一致、各首次HTTP成功且0retry；17原rows完整JSON。01/03把缺完整grain當無有用鍵，01另把online/fullgrain依賴重算成net自身缺口。02 customer_id無關鍵對照正確。03完整閏年二月AND同獨立scope群冪等，原Oracle literal過窄與主要模型錯誤必分開，不能廣泛放寬。"
+    },
+    {
+      "round": 21,
+      "verdict": "最小候選合理，只有離線契約成立",
+      "basis": "原recall所有欄位逐值還原，View/request/schema/options/upstream保持；customer原population仍在binding_context，View會員自身限制須繼續判定。新matcher以原findings保留其他錯，expected原有必要conditions不可豁免；原raw新判定仍FAIL/PASS/FAIL。五case預固定，補充customer/inventory逐值引用原核准coverage；原selection不重開。"
+    }
+  ],
+  "independent_verification": {
+    "round_evidence_files": 112,
+    "author_proof_files": 1435,
+    "protected_old_nonTask_files": 6389,
+    "frozen_source_manifests": {
+      "freeze": 239,
+      "policy": 12,
+      "capability": 34
+    },
+    "fixed_case_rows": [
+      8,
+      1,
+      8,
+      8,
+      8
+    ],
+    "input_tokens": [
+      5147,
+      3239,
+      5077,
+      5194,
+      5568
+    ],
+    "dynamic_scope_controls": 9,
+    "original20_under_new_candidate": [
+      "FAIL",
+      "PASS",
+      "FAIL"
+    ],
+    "reviewed_existing_test_logs": {
+      "focused": 81,
+      "direct_regression": 228,
+      "accounting": "227 PASS+1 deselected，該1另行真跑PASS；未將排除算PASS。"
+    },
+    "author_closed_PASS": true,
+    "current_counts": {
+      "rounds": 21,
+      "agent_dispatches": 38,
+      "local_calls": 26,
+      "cloud_calls": 0,
+      "model_retries": 0
+    }
+  },
+  "guard_assessment": {
+    "delta": "僅必要映射finding的metric.conditions有限等價，原parse/compile/materialize/typed/來源/scope/grain/母體仍由base執行；legacy findings另存，不改raw。",
+    "authorization": "preflight真Task核新作者/新審者及原policy/fixture distinct closed PASS、fullbindings；執行另需active natural worker與19–21 CONTINUE。ManagedInvoke精確型別/ticket/folder/固定physical case及OFFLINE拒真HTTP有focused反例。",
+    "before_after_raw": "record_sample初始check、guarded HTTP前check；base保存raw後核receipt/check/artifact/auth。漂移／中斷不得PASS。未執行真HTTP後撤銷授權自然情境，保留限制。",
+    "replay": "新outer receipt驗完整版本與來源快照，重建body及原base._run／首錯；live/finalfrozen fake9兩prepared及scope/typed首錯190工件等值已核不可變證據。"
+  },
+  "continuation_contract": [
+    "本CONTINUE僅允fresh不同ticket/platform的capability_projection_semantics零POST核准新delta；本audit不冒充該ACCEPT。",
+    "fresh審者須逐原需求與20raw、原56rows、daily與customer自身限制、完整inventory及有限AND界線核准，精確綁五輸入與全部新舊版本；有真衝突即FAIL回fresh研究。",
+    "新審者真FINAL、不可變review及Main finish成closed PASS，audit/舊policy/fixture來源與全部hash皆吻合後，才依controller執行五預固定首次coverage；0retry/cloud，錯答不原樣重抽。",
+    "五自然case通過後，原natural_kind_coverage_isolation仍須自己的0POST整合驗收；原20FAIL保持。",
+    "按每3輪audit回原natural_kind_mapping_three_stage，以單一新candidate全新自然recall→七View→selection共9POST；不得注入fixture、重用舊成功或省略prose/兩prepared/同版及完整frozen回歸。",
+    "逐層返回natural_own_responsibility_three_stage、natural_evidence_bound_three_stage、natural_slots_three_stage、natural_qwen_three_stage、three_stage_integration、root自身驗收，再fresh final ACCEPT；歷史38×2 Gate未過保持。"
+  ],
+  "ancestor_status": {
+    "root": "pending",
+    "three_stage_integration": "pending",
+    "contract_and_managed_runner": "passed",
+    "natural_qwen_three_stage": "failed",
+    "coverage_slots_contract": "passed",
+    "natural_slots_three_stage": "failed",
+    "evidence_bound_managed_contract": "passed",
+    "natural_evidence_bound_three_stage": "failed",
+    "own_responsibility_managed_contract": "passed",
+    "natural_own_responsibility_three_stage": "failed",
+    "kind_mapping_managed_contract": "passed",
+    "natural_kind_mapping_three_stage": "pending",
+    "kind_diagnostic_fixture_harness": "passed",
+    "kind_diagnostic_fixture_semantics": "passed",
+    "natural_kind_selection_isolation": "passed",
+    "natural_kind_coverage_isolation": "failed",
+    "kind_diagnostic_fixture_v2_correction": "passed",
+    "kind_diagnostic_evidence_rebinding": "passed",
+    "kind_policy_shape_contract": "passed",
+    "kind_policy_shape_semantics": "passed",
+    "natural_kind_policy_shape_selection": "passed",
+    "capability_projection_contract": "passed",
+    "capability_projection_semantics": "pending",
+    "natural_capability_projection_coverage": "pending"
+  },
+  "limitations": [
+    "本審核為方向裁決，不是新delta語意核准或自然效果證明。",
+    "未重跑作者81/228測試與全歷史；核已綁定log/hash，另做必要獨立raw/cards/lineage/9控制。",
+    "正式MANAGED成功及HTTP後授權撤銷自然效果尚未發生；本輪只核前後守門實碼與已有source/receipt/interrupt反例。",
+    "審核工具型別誤用及初始綜合probe回傳未保留已於verification.log明記；正式分段JSON皆PASS，未改原資料或測試。"
+  ],
+  "unresolved": [],
+  "proof_sha256": {
+    "hash-checks.json": "77282ccd79a185eeb285bc4e619dfdfaf2c7e012e01b053f2864874ed42d7690",
+    "semantic-input-checks.json": "edb76b62da17241985b3278207969ee450f1ba58eaa2251264843992114a1c51",
+    "independent-controls.json": "aef08a8c00e7ef75f532af8f0749aff465275835477df28f75f826548d2f8d80",
+    "ancestor-checks.json": "f4fde4f08e521024430a7afba993dc377fd19c5a617a7cc2c19a2cbf7ea41619",
+    "verification.log": "0f5b862c78a261d5378fa59aa940e4df1eff410a6683cc40b083aceb0f923222"
+  },
+  "all_audit_processes_ended": true,
+  "POST": 0,
+  "SQL_DB": 0,
+  "source_tests_fixture_Task_control_edits": 0,
+  "commit_push": 0
+}

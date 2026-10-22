@@ -1,0 +1,84 @@
+---
+{
+  "parent_task": "ollama-planning-mvp",
+  "agent_id": "three-stage-review",
+  "role": "subagent",
+  "status": "DONE_WITH_CONCERNS",
+  "base_git_sha": "bc09c67fc4078501599c37e4cdfecdee40af2ef8",
+  "assignment": "補登已實際完成的獨立唯讀審查：驗證三階段候選與反例，不代表修正版已獨立重審",
+  "allowed_scope": [
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/three-stage-review"
+  ],
+  "worktree": "/home/willy/code/cpea_terms",
+  "platform_id": "/root/three_stage_review",
+  "handoff": {
+    "status": "DONE_WITH_CONCERNS",
+    "summary": "已完成三階段候選原版的獨立唯讀驗收：fresh focused tests 26 passed，但額外反例確認兩個P1（最終粒度可被preparation抹除、任意補零政策仍ready）及兩個P2（provider失敗不能離線重播、額外call檔被重播忽略），原版結論FAIL。主agent回報已修正並完成後續測試與停止診斷；修正版及後續模型結果未由本reviewer重新審查。",
+    "evidence": [
+      "reports/three-stage-independent-review.md",
+      "/tmp/three_stage_review_probe.py",
+      "原版執行命令：.venv/bin/python -m pytest tests/unit/test_three_stage_view_selection.py -q；結果26 passed in 3.18s。",
+      "原版反例：integration.output_grain改為product_id並加入stock aggregate preparation，finish_selection仍ready；missing_data_policy改為未匹配銷售金額一律補零亦ready。",
+      "原版反例：已保存provider RuntimeError重播時直接拋例外；完整九節點封存旁新增injected-call.json，replay仍PASS。刪除manifest已列call檔則拒絕。",
+      "原版已確認欄位及引文拒絕、合法部分支持保留、同來源scope約束、呼叫前預算檢查；產品預設仍為v3。"
+    ],
+    "risks": [
+      "原版FAIL：P1 final grain／preparation、P1 missing_data_policy、P2 provider-error replay、P2 artifact inventory。不得將本handoff視為修正版PASS。",
+      "修正版42個focused／135個相關測試及EXP-010停止結果僅由主agent告知，本reviewer沒有重新執行或獨立核實。",
+      "recall引文存在不代表需求完整或scope語意正確；coverage的自由文字population不能證明母體能力。",
+      "原版母體檢查只接受所有邊直接由anchor出發，可能過度拒絕合法保留策略。",
+      "/tmp診斷腳本為暫存證據；持久審查摘要由主agent保存於reports/three-stage-independent-review.md。"
+    ],
+    "next_step": "由主agent整合原版FAIL及修正處置，明確保留修正版未經此reviewer重審的限制；後續必要時另行安排獨立驗收，不由此handoff推定自然生成語意Gate已通過。",
+    "diff_reference": {
+      "base_git_sha": "bc09c67fc4078501599c37e4cdfecdee40af2ef8",
+      "reviewed_scope": [
+        "evaluations/three_stage_view_selection.py",
+        "evaluations/three_stage_view_selection_runner.py",
+        "evaluations/prompts/three_stage/*.md",
+        "tests/unit/test_three_stage_view_selection.py"
+      ],
+      "original_sha256": {
+        "evaluations/three_stage_view_selection.py": "35f19e0293d7df1763e7678017cb09fb391333e27296b148614c5397b37e5e73",
+        "evaluations/three_stage_view_selection_runner.py": "ff0fe74544d849158d6197a56bd9390badc7f8a3b1d3dc69811f8903dc1285ef"
+      },
+      "product_changes_by_reviewer": false,
+      "model_calls_by_reviewer": 0,
+      "sql_db_calls_by_reviewer": 0,
+      "revised_version_reviewed": false
+    },
+    "blockers": [
+      "本handoff的原版驗收結論為FAIL；修正版未由本reviewer獨立重審，不能據此解除新版驗收限制。"
+    ]
+  },
+  "blockers": [
+    "本handoff的原版驗收結論為FAIL；修正版未由本reviewer獨立重審，不能據此解除新版驗收限制。"
+  ],
+  "question": null
+}
+---
+# Subagent 任務
+
+禁止修改主 task.md、其他 Agent 紀錄、驗收標準或擴大範圍。
+
+## 任務
+
+## 允許範圍
+
+## 禁止事項
+
+## 輸入
+
+## 調查
+
+## 假設
+
+## 實驗
+
+## 發現
+
+## 變更檔案
+
+## 待釐清問題
+
+## Handoff

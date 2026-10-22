@@ -1,0 +1,24 @@
+F
+=================================== FAILURES ===================================
+__________ test_rebound_preserves_content_and_rejects_live_v2_lineage __________
+
+    def test_rebound_preserves_content_and_rejects_live_v2_lineage():
+>       mod = api(); package = mod.load_package()
+              ^^^^^
+
+tests/diagnostics/test_managed_node_diagnostics_rebound.py:43: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.diagnostics.managed_node_diagnostics_rebound'), 'rebound adapter missing'
+E       AssertionError: rebound adapter missing
+E       assert None
+E        +  where None = <function find_spec at 0x702e97f8a0c0>('evaluations.diagnostics.managed_node_diagnostics_rebound')
+E        +    where <function find_spec at 0x702e97f8a0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/diagnostics/test_managed_node_diagnostics_rebound.py:17: AssertionError
+=========================== short test summary info ============================
+FAILED tests/diagnostics/test_managed_node_diagnostics_rebound.py::test_rebound_preserves_content_and_rejects_live_v2_lineage
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed in 0.92s

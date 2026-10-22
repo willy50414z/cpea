@@ -1,0 +1,1665 @@
+...................FFFFFFFFFF...FFFFFFFFFFFFFFFF...FFFFF.F......F        [100%]
+=================================== FAILURES ===================================
+_____________ test_new_input_changes_only_selection_system_suffix ______________
+
+    def test_new_input_changes_only_selection_system_suffix():
+        mod=api(); package=mod.load_package(); context=mod.prepare(package)
+        old=rebound.prepare(rebound.load_package(),'SEL-ISO-v1-01')
+        assert context['body']['messages'][1:]==old['body']['messages'][1:]
+        assert context['body']['messages'][0]['content']==old['body']['messages'][0]['content']+mod.SELECTION_SUFFIX
+        assert {k:v for k,v in context['body'].items() if k!='messages'}=={k:v for k,v in old['body'].items() if k!='messages'}
+        assert context['upstream']==old['upstream']
+        assert rebound.bindings(rebound.load_package())==rebound.load_package()['manifest']['bindings']
+>       assert mod.bindings(package)==package['manifest']['bindings']
+               ^^^^^^^^^^^^^^^^^^^^^
+
+tests/diagnostics/test_managed_policy_shape.py:85: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluations/diagnostics/managed_policy_shape.py:122: in bindings
+    inputs={('inputs/SEL-ISO-v1-01-'+name+'.json'):base.digest(DEFAULT_MANIFEST.parent/'inputs'/('SEL-ISO-v1-01-'+name+'.json')) for name in _inputs(context)},
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluations/managed_node_diagnostics.py:40: in digest
+    return sha256(Path(path).read_bytes()).hexdigest()
+                  ^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_____ test_thin_record_keeps_legacy_and_new_first_errors_and_replays[None] _____
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-66/test_thin_record_keeps_legacy_0')
+failure = None
+
+    @pytest.mark.parametrize('failure',[None,'null','shape','typed','semantic','parse','provider','context'])
+    def test_thin_record_keeps_legacy_and_new_first_errors_and_replays(tmp_path,failure):
+        mod=api(); package=mod.load_package(); context=mod.prepare(package); value=original()
+        value['draft']['integration']['missing_data_policy']=MISSING_POLICIES[1 if failure=='null' else 0]
+        if failure=='shape': value['draft']['integration']['missing_data_policy']=MISSING_POLICIES[2]
+        if failure=='typed': value['draft']['tasks'][0].pop('filters')
+        if failure=='semantic': value['draft']['integration']['edges'][0]['cardinality']='many_to_one'
+        raw='not json' if failure=='parse' else json.dumps(value,ensure_ascii=False)
+        calls=[]
+        def invoke(*args):
+            calls.append(args)
+            if failure=='provider': raise OSError('offline transport lost')
+            return AIMessage(content=raw)
+        folder=tmp_path/'sample'
+>       receipt=mod.record_sample(folder,context,invoke,context_window=1 if failure=='context' else 32768)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/diagnostics/test_managed_policy_shape.py:102: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluations/diagnostics/managed_policy_shape.py:261: in record_sample
+    frozen=bindings(package); manifest_hash=base.digest(package['manifest_path'])
+           ^^^^^^^^^^^^^^^^^
+evaluations/diagnostics/managed_policy_shape.py:122: in bindings
+    inputs={('inputs/SEL-ISO-v1-01-'+name+'.json'):base.digest(DEFAULT_MANIFEST.parent/'inputs'/('SEL-ISO-v1-01-'+name+'.json')) for name in _inputs(context)},
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluations/managed_node_diagnostics.py:40: in digest
+    return sha256(Path(path).read_bytes()).hexdigest()
+                  ^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_____ test_thin_record_keeps_legacy_and_new_first_errors_and_replays[null] _____
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-66/test_thin_record_keeps_legacy_1')
+failure = 'null'
+
+    @pytest.mark.parametrize('failure',[None,'null','shape','typed','semantic','parse','provider','context'])
+    def test_thin_record_keeps_legacy_and_new_first_errors_and_replays(tmp_path,failure):
+        mod=api(); package=mod.load_package(); context=mod.prepare(package); value=original()
+        value['draft']['integration']['missing_data_policy']=MISSING_POLICIES[1 if failure=='null' else 0]
+        if failure=='shape': value['draft']['integration']['missing_data_policy']=MISSING_POLICIES[2]
+        if failure=='typed': value['draft']['tasks'][0].pop('filters')
+        if failure=='semantic': value['draft']['integration']['edges'][0]['cardinality']='many_to_one'
+        raw='not json' if failure=='parse' else json.dumps(value,ensure_ascii=False)
+        calls=[]
+        def invoke(*args):
+            calls.append(args)
+            if failure=='provider': raise OSError('offline transport lost')
+            return AIMessage(content=raw)
+        folder=tmp_path/'sample'
+>       receipt=mod.record_sample(folder,context,invoke,context_window=1 if failure=='context' else 32768)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/diagnostics/test_managed_policy_shape.py:102: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluations/diagnostics/managed_policy_shape.py:261: in record_sample
+    frozen=bindings(package); manifest_hash=base.digest(package['manifest_path'])
+           ^^^^^^^^^^^^^^^^^
+evaluations/diagnostics/managed_policy_shape.py:122: in bindings
+    inputs={('inputs/SEL-ISO-v1-01-'+name+'.json'):base.digest(DEFAULT_MANIFEST.parent/'inputs'/('SEL-ISO-v1-01-'+name+'.json')) for name in _inputs(context)},
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluations/managed_node_diagnostics.py:40: in digest
+    return sha256(Path(path).read_bytes()).hexdigest()
+                  ^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+____ test_thin_record_keeps_legacy_and_new_first_errors_and_replays[shape] _____
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-66/test_thin_record_keeps_legacy_2')
+failure = 'shape'
+
+    @pytest.mark.parametrize('failure',[None,'null','shape','typed','semantic','parse','provider','context'])
+    def test_thin_record_keeps_legacy_and_new_first_errors_and_replays(tmp_path,failure):
+        mod=api(); package=mod.load_package(); context=mod.prepare(package); value=original()
+        value['draft']['integration']['missing_data_policy']=MISSING_POLICIES[1 if failure=='null' else 0]
+        if failure=='shape': value['draft']['integration']['missing_data_policy']=MISSING_POLICIES[2]
+        if failure=='typed': value['draft']['tasks'][0].pop('filters')
+        if failure=='semantic': value['draft']['integration']['edges'][0]['cardinality']='many_to_one'
+        raw='not json' if failure=='parse' else json.dumps(value,ensure_ascii=False)
+        calls=[]
+        def invoke(*args):
+            calls.append(args)
+            if failure=='provider': raise OSError('offline transport lost')
+            return AIMessage(content=raw)
+        folder=tmp_path/'sample'
+>       receipt=mod.record_sample(folder,context,invoke,context_window=1 if failure=='context' else 32768)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/diagnostics/test_managed_policy_shape.py:102: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluations/diagnostics/managed_policy_shape.py:261: in record_sample
+    frozen=bindings(package); manifest_hash=base.digest(package['manifest_path'])
+           ^^^^^^^^^^^^^^^^^
+evaluations/diagnostics/managed_policy_shape.py:122: in bindings
+    inputs={('inputs/SEL-ISO-v1-01-'+name+'.json'):base.digest(DEFAULT_MANIFEST.parent/'inputs'/('SEL-ISO-v1-01-'+name+'.json')) for name in _inputs(context)},
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluations/managed_node_diagnostics.py:40: in digest
+    return sha256(Path(path).read_bytes()).hexdigest()
+                  ^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+____ test_thin_record_keeps_legacy_and_new_first_errors_and_replays[typed] _____
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-66/test_thin_record_keeps_legacy_3')
+failure = 'typed'
+
+    @pytest.mark.parametrize('failure',[None,'null','shape','typed','semantic','parse','provider','context'])
+    def test_thin_record_keeps_legacy_and_new_first_errors_and_replays(tmp_path,failure):
+        mod=api(); package=mod.load_package(); context=mod.prepare(package); value=original()
+        value['draft']['integration']['missing_data_policy']=MISSING_POLICIES[1 if failure=='null' else 0]
+        if failure=='shape': value['draft']['integration']['missing_data_policy']=MISSING_POLICIES[2]
+        if failure=='typed': value['draft']['tasks'][0].pop('filters')
+        if failure=='semantic': value['draft']['integration']['edges'][0]['cardinality']='many_to_one'
+        raw='not json' if failure=='parse' else json.dumps(value,ensure_ascii=False)
+        calls=[]
+        def invoke(*args):
+            calls.append(args)
+            if failure=='provider': raise OSError('offline transport lost')
+            return AIMessage(content=raw)
+        folder=tmp_path/'sample'
+>       receipt=mod.record_sample(folder,context,invoke,context_window=1 if failure=='context' else 32768)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/diagnostics/test_managed_policy_shape.py:102: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluations/diagnostics/managed_policy_shape.py:261: in record_sample
+    frozen=bindings(package); manifest_hash=base.digest(package['manifest_path'])
+           ^^^^^^^^^^^^^^^^^
+evaluations/diagnostics/managed_policy_shape.py:122: in bindings
+    inputs={('inputs/SEL-ISO-v1-01-'+name+'.json'):base.digest(DEFAULT_MANIFEST.parent/'inputs'/('SEL-ISO-v1-01-'+name+'.json')) for name in _inputs(context)},
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluations/managed_node_diagnostics.py:40: in digest
+    return sha256(Path(path).read_bytes()).hexdigest()
+                  ^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+___ test_thin_record_keeps_legacy_and_new_first_errors_and_replays[semantic] ___
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-66/test_thin_record_keeps_legacy_4')
+failure = 'semantic'
+
+    @pytest.mark.parametrize('failure',[None,'null','shape','typed','semantic','parse','provider','context'])
+    def test_thin_record_keeps_legacy_and_new_first_errors_and_replays(tmp_path,failure):
+        mod=api(); package=mod.load_package(); context=mod.prepare(package); value=original()
+        value['draft']['integration']['missing_data_policy']=MISSING_POLICIES[1 if failure=='null' else 0]
+        if failure=='shape': value['draft']['integration']['missing_data_policy']=MISSING_POLICIES[2]
+        if failure=='typed': value['draft']['tasks'][0].pop('filters')
+        if failure=='semantic': value['draft']['integration']['edges'][0]['cardinality']='many_to_one'
+        raw='not json' if failure=='parse' else json.dumps(value,ensure_ascii=False)
+        calls=[]
+        def invoke(*args):
+            calls.append(args)
+            if failure=='provider': raise OSError('offline transport lost')
+            return AIMessage(content=raw)
+        folder=tmp_path/'sample'
+>       receipt=mod.record_sample(folder,context,invoke,context_window=1 if failure=='context' else 32768)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/diagnostics/test_managed_policy_shape.py:102: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluations/diagnostics/managed_policy_shape.py:261: in record_sample
+    frozen=bindings(package); manifest_hash=base.digest(package['manifest_path'])
+           ^^^^^^^^^^^^^^^^^
+evaluations/diagnostics/managed_policy_shape.py:122: in bindings
+    inputs={('inputs/SEL-ISO-v1-01-'+name+'.json'):base.digest(DEFAULT_MANIFEST.parent/'inputs'/('SEL-ISO-v1-01-'+name+'.json')) for name in _inputs(context)},
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluations/managed_node_diagnostics.py:40: in digest
+    return sha256(Path(path).read_bytes()).hexdigest()
+                  ^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+____ test_thin_record_keeps_legacy_and_new_first_errors_and_replays[parse] _____
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-66/test_thin_record_keeps_legacy_5')
+failure = 'parse'
+
+    @pytest.mark.parametrize('failure',[None,'null','shape','typed','semantic','parse','provider','context'])
+    def test_thin_record_keeps_legacy_and_new_first_errors_and_replays(tmp_path,failure):
+        mod=api(); package=mod.load_package(); context=mod.prepare(package); value=original()
+        value['draft']['integration']['missing_data_policy']=MISSING_POLICIES[1 if failure=='null' else 0]
+        if failure=='shape': value['draft']['integration']['missing_data_policy']=MISSING_POLICIES[2]
+        if failure=='typed': value['draft']['tasks'][0].pop('filters')
+        if failure=='semantic': value['draft']['integration']['edges'][0]['cardinality']='many_to_one'
+        raw='not json' if failure=='parse' else json.dumps(value,ensure_ascii=False)
+        calls=[]
+        def invoke(*args):
+            calls.append(args)
+            if failure=='provider': raise OSError('offline transport lost')
+            return AIMessage(content=raw)
+        folder=tmp_path/'sample'
+>       receipt=mod.record_sample(folder,context,invoke,context_window=1 if failure=='context' else 32768)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/diagnostics/test_managed_policy_shape.py:102: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluations/diagnostics/managed_policy_shape.py:261: in record_sample
+    frozen=bindings(package); manifest_hash=base.digest(package['manifest_path'])
+           ^^^^^^^^^^^^^^^^^
+evaluations/diagnostics/managed_policy_shape.py:122: in bindings
+    inputs={('inputs/SEL-ISO-v1-01-'+name+'.json'):base.digest(DEFAULT_MANIFEST.parent/'inputs'/('SEL-ISO-v1-01-'+name+'.json')) for name in _inputs(context)},
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluations/managed_node_diagnostics.py:40: in digest
+    return sha256(Path(path).read_bytes()).hexdigest()
+                  ^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+___ test_thin_record_keeps_legacy_and_new_first_errors_and_replays[provider] ___
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-66/test_thin_record_keeps_legacy_6')
+failure = 'provider'
+
+    @pytest.mark.parametrize('failure',[None,'null','shape','typed','semantic','parse','provider','context'])
+    def test_thin_record_keeps_legacy_and_new_first_errors_and_replays(tmp_path,failure):
+        mod=api(); package=mod.load_package(); context=mod.prepare(package); value=original()
+        value['draft']['integration']['missing_data_policy']=MISSING_POLICIES[1 if failure=='null' else 0]
+        if failure=='shape': value['draft']['integration']['missing_data_policy']=MISSING_POLICIES[2]
+        if failure=='typed': value['draft']['tasks'][0].pop('filters')
+        if failure=='semantic': value['draft']['integration']['edges'][0]['cardinality']='many_to_one'
+        raw='not json' if failure=='parse' else json.dumps(value,ensure_ascii=False)
+        calls=[]
+        def invoke(*args):
+            calls.append(args)
+            if failure=='provider': raise OSError('offline transport lost')
+            return AIMessage(content=raw)
+        folder=tmp_path/'sample'
+>       receipt=mod.record_sample(folder,context,invoke,context_window=1 if failure=='context' else 32768)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/diagnostics/test_managed_policy_shape.py:102: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluations/diagnostics/managed_policy_shape.py:261: in record_sample
+    frozen=bindings(package); manifest_hash=base.digest(package['manifest_path'])
+           ^^^^^^^^^^^^^^^^^
+evaluations/diagnostics/managed_policy_shape.py:122: in bindings
+    inputs={('inputs/SEL-ISO-v1-01-'+name+'.json'):base.digest(DEFAULT_MANIFEST.parent/'inputs'/('SEL-ISO-v1-01-'+name+'.json')) for name in _inputs(context)},
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluations/managed_node_diagnostics.py:40: in digest
+    return sha256(Path(path).read_bytes()).hexdigest()
+                  ^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+___ test_thin_record_keeps_legacy_and_new_first_errors_and_replays[context] ____
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-66/test_thin_record_keeps_legacy_7')
+failure = 'context'
+
+    @pytest.mark.parametrize('failure',[None,'null','shape','typed','semantic','parse','provider','context'])
+    def test_thin_record_keeps_legacy_and_new_first_errors_and_replays(tmp_path,failure):
+        mod=api(); package=mod.load_package(); context=mod.prepare(package); value=original()
+        value['draft']['integration']['missing_data_policy']=MISSING_POLICIES[1 if failure=='null' else 0]
+        if failure=='shape': value['draft']['integration']['missing_data_policy']=MISSING_POLICIES[2]
+        if failure=='typed': value['draft']['tasks'][0].pop('filters')
+        if failure=='semantic': value['draft']['integration']['edges'][0]['cardinality']='many_to_one'
+        raw='not json' if failure=='parse' else json.dumps(value,ensure_ascii=False)
+        calls=[]
+        def invoke(*args):
+            calls.append(args)
+            if failure=='provider': raise OSError('offline transport lost')
+            return AIMessage(content=raw)
+        folder=tmp_path/'sample'
+>       receipt=mod.record_sample(folder,context,invoke,context_window=1 if failure=='context' else 32768)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/diagnostics/test_managed_policy_shape.py:102: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluations/diagnostics/managed_policy_shape.py:261: in record_sample
+    frozen=bindings(package); manifest_hash=base.digest(package['manifest_path'])
+           ^^^^^^^^^^^^^^^^^
+evaluations/diagnostics/managed_policy_shape.py:122: in bindings
+    inputs={('inputs/SEL-ISO-v1-01-'+name+'.json'):base.digest(DEFAULT_MANIFEST.parent/'inputs'/('SEL-ISO-v1-01-'+name+'.json')) for name in _inputs(context)},
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluations/managed_node_diagnostics.py:40: in digest
+    return sha256(Path(path).read_bytes()).hexdigest()
+                  ^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+__________ test_interruption_and_outer_drift_never_promote_inner_pass __________
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-66/test_interruption_and_outer_dr0')
+
+    def test_interruption_and_outer_drift_never_promote_inner_pass(tmp_path):
+        mod=api();package=mod.load_package();context=mod.prepare(package)
+        def interrupt(*args): raise KeyboardInterrupt('offline interruption')
+        folder=tmp_path/'interrupted'
+>       with pytest.raises(KeyboardInterrupt): mod.record_sample(folder,context,interrupt)
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/diagnostics/test_managed_policy_shape.py:118: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluations/diagnostics/managed_policy_shape.py:261: in record_sample
+    frozen=bindings(package); manifest_hash=base.digest(package['manifest_path'])
+           ^^^^^^^^^^^^^^^^^
+evaluations/diagnostics/managed_policy_shape.py:122: in bindings
+    inputs={('inputs/SEL-ISO-v1-01-'+name+'.json'):base.digest(DEFAULT_MANIFEST.parent/'inputs'/('SEL-ISO-v1-01-'+name+'.json')) for name in _inputs(context)},
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluations/managed_node_diagnostics.py:40: in digest
+    return sha256(Path(path).read_bytes()).hexdigest()
+                  ^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_______ test_author_and_fresh_reviewer_must_really_complete[open-author] _______
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-66/test_author_and_fresh_reviewer0')
+who = 'author', mutation = 'open'
+
+    @pytest.mark.parametrize('who',['author','reviewer'])
+    @pytest.mark.parametrize('mutation',['open','missing','node','round','producer','fail','same_platform','evidence'])
+    def test_author_and_fresh_reviewer_must_really_complete(tmp_path,who,mutation):
+        mod=api();package=mod.load_package();context=mod.prepare(package)
+        review,loop,path=synthetic_authorization(mod,package,tmp_path)
+>       assert mod.preflight(package,context,review,task_path=path)['result']=='PASS'
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/diagnostics/test_managed_policy_shape.py:180: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluations/diagnostics/managed_policy_shape.py:210: in preflight
+    _version_guard(package,package['manifest']['bindings'],base.digest(package['manifest_path']))
+evaluations/diagnostics/managed_policy_shape.py:132: in _version_guard
+    or bindings(package) != frozen or frozen != package['manifest']['bindings']):
+       ^^^^^^^^^^^^^^^^^
+evaluations/diagnostics/managed_policy_shape.py:122: in bindings
+    inputs={('inputs/SEL-ISO-v1-01-'+name+'.json'):base.digest(DEFAULT_MANIFEST.parent/'inputs'/('SEL-ISO-v1-01-'+name+'.json')) for name in _inputs(context)},
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluations/managed_node_diagnostics.py:40: in digest
+    return sha256(Path(path).read_bytes()).hexdigest()
+                  ^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+______ test_author_and_fresh_reviewer_must_really_complete[open-reviewer] ______
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-66/test_author_and_fresh_reviewer1')
+who = 'reviewer', mutation = 'open'
+
+    @pytest.mark.parametrize('who',['author','reviewer'])
+    @pytest.mark.parametrize('mutation',['open','missing','node','round','producer','fail','same_platform','evidence'])
+    def test_author_and_fresh_reviewer_must_really_complete(tmp_path,who,mutation):
+        mod=api();package=mod.load_package();context=mod.prepare(package)
+        review,loop,path=synthetic_authorization(mod,package,tmp_path)
+>       assert mod.preflight(package,context,review,task_path=path)['result']=='PASS'
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/diagnostics/test_managed_policy_shape.py:180: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluations/diagnostics/managed_policy_shape.py:210: in preflight
+    _version_guard(package,package['manifest']['bindings'],base.digest(package['manifest_path']))
+evaluations/diagnostics/managed_policy_shape.py:132: in _version_guard
+    or bindings(package) != frozen or frozen != package['manifest']['bindings']):
+       ^^^^^^^^^^^^^^^^^
+evaluations/diagnostics/managed_policy_shape.py:122: in bindings
+    inputs={('inputs/SEL-ISO-v1-01-'+name+'.json'):base.digest(DEFAULT_MANIFEST.parent/'inputs'/('SEL-ISO-v1-01-'+name+'.json')) for name in _inputs(context)},
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluations/managed_node_diagnostics.py:40: in digest
+    return sha256(Path(path).read_bytes()).hexdigest()
+                  ^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_____ test_author_and_fresh_reviewer_must_really_complete[missing-author] ______
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-66/test_author_and_fresh_reviewer2')
+who = 'author', mutation = 'missing'
+
+    @pytest.mark.parametrize('who',['author','reviewer'])
+    @pytest.mark.parametrize('mutation',['open','missing','node','round','producer','fail','same_platform','evidence'])
+    def test_author_and_fresh_reviewer_must_really_complete(tmp_path,who,mutation):
+        mod=api();package=mod.load_package();context=mod.prepare(package)
+        review,loop,path=synthetic_authorization(mod,package,tmp_path)
+>       assert mod.preflight(package,context,review,task_path=path)['result']=='PASS'
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/diagnostics/test_managed_policy_shape.py:180: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluations/diagnostics/managed_policy_shape.py:210: in preflight
+    _version_guard(package,package['manifest']['bindings'],base.digest(package['manifest_path']))
+evaluations/diagnostics/managed_policy_shape.py:132: in _version_guard
+    or bindings(package) != frozen or frozen != package['manifest']['bindings']):
+       ^^^^^^^^^^^^^^^^^
+evaluations/diagnostics/managed_policy_shape.py:122: in bindings
+    inputs={('inputs/SEL-ISO-v1-01-'+name+'.json'):base.digest(DEFAULT_MANIFEST.parent/'inputs'/('SEL-ISO-v1-01-'+name+'.json')) for name in _inputs(context)},
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluations/managed_node_diagnostics.py:40: in digest
+    return sha256(Path(path).read_bytes()).hexdigest()
+                  ^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+____ test_author_and_fresh_reviewer_must_really_complete[missing-reviewer] _____
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-66/test_author_and_fresh_reviewer3')
+who = 'reviewer', mutation = 'missing'
+
+    @pytest.mark.parametrize('who',['author','reviewer'])
+    @pytest.mark.parametrize('mutation',['open','missing','node','round','producer','fail','same_platform','evidence'])
+    def test_author_and_fresh_reviewer_must_really_complete(tmp_path,who,mutation):
+        mod=api();package=mod.load_package();context=mod.prepare(package)
+        review,loop,path=synthetic_authorization(mod,package,tmp_path)
+>       assert mod.preflight(package,context,review,task_path=path)['result']=='PASS'
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/diagnostics/test_managed_policy_shape.py:180: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluations/diagnostics/managed_policy_shape.py:210: in preflight
+    _version_guard(package,package['manifest']['bindings'],base.digest(package['manifest_path']))
+evaluations/diagnostics/managed_policy_shape.py:132: in _version_guard
+    or bindings(package) != frozen or frozen != package['manifest']['bindings']):
+       ^^^^^^^^^^^^^^^^^
+evaluations/diagnostics/managed_policy_shape.py:122: in bindings
+    inputs={('inputs/SEL-ISO-v1-01-'+name+'.json'):base.digest(DEFAULT_MANIFEST.parent/'inputs'/('SEL-ISO-v1-01-'+name+'.json')) for name in _inputs(context)},
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluations/managed_node_diagnostics.py:40: in digest
+    return sha256(Path(path).read_bytes()).hexdigest()
+                  ^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_______ test_author_and_fresh_reviewer_must_really_complete[node-author] _______
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-66/test_author_and_fresh_reviewer4')
+who = 'author', mutation = 'node'
+
+    @pytest.mark.parametrize('who',['author','reviewer'])
+    @pytest.mark.parametrize('mutation',['open','missing','node','round','producer','fail','same_platform','evidence'])
+    def test_author_and_fresh_reviewer_must_really_complete(tmp_path,who,mutation):
+        mod=api();package=mod.load_package();context=mod.prepare(package)
+        review,loop,path=synthetic_authorization(mod,package,tmp_path)
+>       assert mod.preflight(package,context,review,task_path=path)['result']=='PASS'
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/diagnostics/test_managed_policy_shape.py:180: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluations/diagnostics/managed_policy_shape.py:210: in preflight
+    _version_guard(package,package['manifest']['bindings'],base.digest(package['manifest_path']))
+evaluations/diagnostics/managed_policy_shape.py:132: in _version_guard
+    or bindings(package) != frozen or frozen != package['manifest']['bindings']):
+       ^^^^^^^^^^^^^^^^^
+evaluations/diagnostics/managed_policy_shape.py:122: in bindings
+    inputs={('inputs/SEL-ISO-v1-01-'+name+'.json'):base.digest(DEFAULT_MANIFEST.parent/'inputs'/('SEL-ISO-v1-01-'+name+'.json')) for name in _inputs(context)},
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluations/managed_node_diagnostics.py:40: in digest
+    return sha256(Path(path).read_bytes()).hexdigest()
+                  ^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+______ test_author_and_fresh_reviewer_must_really_complete[node-reviewer] ______
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-66/test_author_and_fresh_reviewer5')
+who = 'reviewer', mutation = 'node'
+
+    @pytest.mark.parametrize('who',['author','reviewer'])
+    @pytest.mark.parametrize('mutation',['open','missing','node','round','producer','fail','same_platform','evidence'])
+    def test_author_and_fresh_reviewer_must_really_complete(tmp_path,who,mutation):
+        mod=api();package=mod.load_package();context=mod.prepare(package)
+        review,loop,path=synthetic_authorization(mod,package,tmp_path)
+>       assert mod.preflight(package,context,review,task_path=path)['result']=='PASS'
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/diagnostics/test_managed_policy_shape.py:180: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluations/diagnostics/managed_policy_shape.py:210: in preflight
+    _version_guard(package,package['manifest']['bindings'],base.digest(package['manifest_path']))
+evaluations/diagnostics/managed_policy_shape.py:132: in _version_guard
+    or bindings(package) != frozen or frozen != package['manifest']['bindings']):
+       ^^^^^^^^^^^^^^^^^
+evaluations/diagnostics/managed_policy_shape.py:122: in bindings
+    inputs={('inputs/SEL-ISO-v1-01-'+name+'.json'):base.digest(DEFAULT_MANIFEST.parent/'inputs'/('SEL-ISO-v1-01-'+name+'.json')) for name in _inputs(context)},
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluations/managed_node_diagnostics.py:40: in digest
+    return sha256(Path(path).read_bytes()).hexdigest()
+                  ^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+______ test_author_and_fresh_reviewer_must_really_complete[round-author] _______
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-66/test_author_and_fresh_reviewer6')
+who = 'author', mutation = 'round'
+
+    @pytest.mark.parametrize('who',['author','reviewer'])
+    @pytest.mark.parametrize('mutation',['open','missing','node','round','producer','fail','same_platform','evidence'])
+    def test_author_and_fresh_reviewer_must_really_complete(tmp_path,who,mutation):
+        mod=api();package=mod.load_package();context=mod.prepare(package)
+        review,loop,path=synthetic_authorization(mod,package,tmp_path)
+>       assert mod.preflight(package,context,review,task_path=path)['result']=='PASS'
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/diagnostics/test_managed_policy_shape.py:180: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluations/diagnostics/managed_policy_shape.py:210: in preflight
+    _version_guard(package,package['manifest']['bindings'],base.digest(package['manifest_path']))
+evaluations/diagnostics/managed_policy_shape.py:132: in _version_guard
+    or bindings(package) != frozen or frozen != package['manifest']['bindings']):
+       ^^^^^^^^^^^^^^^^^
+evaluations/diagnostics/managed_policy_shape.py:122: in bindings
+    inputs={('inputs/SEL-ISO-v1-01-'+name+'.json'):base.digest(DEFAULT_MANIFEST.parent/'inputs'/('SEL-ISO-v1-01-'+name+'.json')) for name in _inputs(context)},
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluations/managed_node_diagnostics.py:40: in digest
+    return sha256(Path(path).read_bytes()).hexdigest()
+                  ^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_____ test_author_and_fresh_reviewer_must_really_complete[round-reviewer] ______
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-66/test_author_and_fresh_reviewer7')
+who = 'reviewer', mutation = 'round'
+
+    @pytest.mark.parametrize('who',['author','reviewer'])
+    @pytest.mark.parametrize('mutation',['open','missing','node','round','producer','fail','same_platform','evidence'])
+    def test_author_and_fresh_reviewer_must_really_complete(tmp_path,who,mutation):
+        mod=api();package=mod.load_package();context=mod.prepare(package)
+        review,loop,path=synthetic_authorization(mod,package,tmp_path)
+>       assert mod.preflight(package,context,review,task_path=path)['result']=='PASS'
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/diagnostics/test_managed_policy_shape.py:180: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluations/diagnostics/managed_policy_shape.py:210: in preflight
+    _version_guard(package,package['manifest']['bindings'],base.digest(package['manifest_path']))
+evaluations/diagnostics/managed_policy_shape.py:132: in _version_guard
+    or bindings(package) != frozen or frozen != package['manifest']['bindings']):
+       ^^^^^^^^^^^^^^^^^
+evaluations/diagnostics/managed_policy_shape.py:122: in bindings
+    inputs={('inputs/SEL-ISO-v1-01-'+name+'.json'):base.digest(DEFAULT_MANIFEST.parent/'inputs'/('SEL-ISO-v1-01-'+name+'.json')) for name in _inputs(context)},
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluations/managed_node_diagnostics.py:40: in digest
+    return sha256(Path(path).read_bytes()).hexdigest()
+                  ^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_____ test_author_and_fresh_reviewer_must_really_complete[producer-author] _____
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-66/test_author_and_fresh_reviewer8')
+who = 'author', mutation = 'producer'
+
+    @pytest.mark.parametrize('who',['author','reviewer'])
+    @pytest.mark.parametrize('mutation',['open','missing','node','round','producer','fail','same_platform','evidence'])
+    def test_author_and_fresh_reviewer_must_really_complete(tmp_path,who,mutation):
+        mod=api();package=mod.load_package();context=mod.prepare(package)
+        review,loop,path=synthetic_authorization(mod,package,tmp_path)
+>       assert mod.preflight(package,context,review,task_path=path)['result']=='PASS'
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/diagnostics/test_managed_policy_shape.py:180: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluations/diagnostics/managed_policy_shape.py:210: in preflight
+    _version_guard(package,package['manifest']['bindings'],base.digest(package['manifest_path']))
+evaluations/diagnostics/managed_policy_shape.py:132: in _version_guard
+    or bindings(package) != frozen or frozen != package['manifest']['bindings']):
+       ^^^^^^^^^^^^^^^^^
+evaluations/diagnostics/managed_policy_shape.py:122: in bindings
+    inputs={('inputs/SEL-ISO-v1-01-'+name+'.json'):base.digest(DEFAULT_MANIFEST.parent/'inputs'/('SEL-ISO-v1-01-'+name+'.json')) for name in _inputs(context)},
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluations/managed_node_diagnostics.py:40: in digest
+    return sha256(Path(path).read_bytes()).hexdigest()
+                  ^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+____ test_author_and_fresh_reviewer_must_really_complete[producer-reviewer] ____
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-66/test_author_and_fresh_reviewer9')
+who = 'reviewer', mutation = 'producer'
+
+    @pytest.mark.parametrize('who',['author','reviewer'])
+    @pytest.mark.parametrize('mutation',['open','missing','node','round','producer','fail','same_platform','evidence'])
+    def test_author_and_fresh_reviewer_must_really_complete(tmp_path,who,mutation):
+        mod=api();package=mod.load_package();context=mod.prepare(package)
+        review,loop,path=synthetic_authorization(mod,package,tmp_path)
+>       assert mod.preflight(package,context,review,task_path=path)['result']=='PASS'
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/diagnostics/test_managed_policy_shape.py:180: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluations/diagnostics/managed_policy_shape.py:210: in preflight
+    _version_guard(package,package['manifest']['bindings'],base.digest(package['manifest_path']))
+evaluations/diagnostics/managed_policy_shape.py:132: in _version_guard
+    or bindings(package) != frozen or frozen != package['manifest']['bindings']):
+       ^^^^^^^^^^^^^^^^^
+evaluations/diagnostics/managed_policy_shape.py:122: in bindings
+    inputs={('inputs/SEL-ISO-v1-01-'+name+'.json'):base.digest(DEFAULT_MANIFEST.parent/'inputs'/('SEL-ISO-v1-01-'+name+'.json')) for name in _inputs(context)},
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluations/managed_node_diagnostics.py:40: in digest
+    return sha256(Path(path).read_bytes()).hexdigest()
+                  ^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_______ test_author_and_fresh_reviewer_must_really_complete[fail-author] _______
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-66/test_author_and_fresh_reviewer10')
+who = 'author', mutation = 'fail'
+
+    @pytest.mark.parametrize('who',['author','reviewer'])
+    @pytest.mark.parametrize('mutation',['open','missing','node','round','producer','fail','same_platform','evidence'])
+    def test_author_and_fresh_reviewer_must_really_complete(tmp_path,who,mutation):
+        mod=api();package=mod.load_package();context=mod.prepare(package)
+        review,loop,path=synthetic_authorization(mod,package,tmp_path)
+>       assert mod.preflight(package,context,review,task_path=path)['result']=='PASS'
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/diagnostics/test_managed_policy_shape.py:180: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluations/diagnostics/managed_policy_shape.py:210: in preflight
+    _version_guard(package,package['manifest']['bindings'],base.digest(package['manifest_path']))
+evaluations/diagnostics/managed_policy_shape.py:132: in _version_guard
+    or bindings(package) != frozen or frozen != package['manifest']['bindings']):
+       ^^^^^^^^^^^^^^^^^
+evaluations/diagnostics/managed_policy_shape.py:122: in bindings
+    inputs={('inputs/SEL-ISO-v1-01-'+name+'.json'):base.digest(DEFAULT_MANIFEST.parent/'inputs'/('SEL-ISO-v1-01-'+name+'.json')) for name in _inputs(context)},
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluations/managed_node_diagnostics.py:40: in digest
+    return sha256(Path(path).read_bytes()).hexdigest()
+                  ^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+______ test_author_and_fresh_reviewer_must_really_complete[fail-reviewer] ______
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-66/test_author_and_fresh_reviewer11')
+who = 'reviewer', mutation = 'fail'
+
+    @pytest.mark.parametrize('who',['author','reviewer'])
+    @pytest.mark.parametrize('mutation',['open','missing','node','round','producer','fail','same_platform','evidence'])
+    def test_author_and_fresh_reviewer_must_really_complete(tmp_path,who,mutation):
+        mod=api();package=mod.load_package();context=mod.prepare(package)
+        review,loop,path=synthetic_authorization(mod,package,tmp_path)
+>       assert mod.preflight(package,context,review,task_path=path)['result']=='PASS'
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/diagnostics/test_managed_policy_shape.py:180: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluations/diagnostics/managed_policy_shape.py:210: in preflight
+    _version_guard(package,package['manifest']['bindings'],base.digest(package['manifest_path']))
+evaluations/diagnostics/managed_policy_shape.py:132: in _version_guard
+    or bindings(package) != frozen or frozen != package['manifest']['bindings']):
+       ^^^^^^^^^^^^^^^^^
+evaluations/diagnostics/managed_policy_shape.py:122: in bindings
+    inputs={('inputs/SEL-ISO-v1-01-'+name+'.json'):base.digest(DEFAULT_MANIFEST.parent/'inputs'/('SEL-ISO-v1-01-'+name+'.json')) for name in _inputs(context)},
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluations/managed_node_diagnostics.py:40: in digest
+    return sha256(Path(path).read_bytes()).hexdigest()
+                  ^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+__ test_author_and_fresh_reviewer_must_really_complete[same_platform-author] ___
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-66/test_author_and_fresh_reviewer12')
+who = 'author', mutation = 'same_platform'
+
+    @pytest.mark.parametrize('who',['author','reviewer'])
+    @pytest.mark.parametrize('mutation',['open','missing','node','round','producer','fail','same_platform','evidence'])
+    def test_author_and_fresh_reviewer_must_really_complete(tmp_path,who,mutation):
+        mod=api();package=mod.load_package();context=mod.prepare(package)
+        review,loop,path=synthetic_authorization(mod,package,tmp_path)
+>       assert mod.preflight(package,context,review,task_path=path)['result']=='PASS'
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/diagnostics/test_managed_policy_shape.py:180: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluations/diagnostics/managed_policy_shape.py:210: in preflight
+    _version_guard(package,package['manifest']['bindings'],base.digest(package['manifest_path']))
+evaluations/diagnostics/managed_policy_shape.py:132: in _version_guard
+    or bindings(package) != frozen or frozen != package['manifest']['bindings']):
+       ^^^^^^^^^^^^^^^^^
+evaluations/diagnostics/managed_policy_shape.py:122: in bindings
+    inputs={('inputs/SEL-ISO-v1-01-'+name+'.json'):base.digest(DEFAULT_MANIFEST.parent/'inputs'/('SEL-ISO-v1-01-'+name+'.json')) for name in _inputs(context)},
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluations/managed_node_diagnostics.py:40: in digest
+    return sha256(Path(path).read_bytes()).hexdigest()
+                  ^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_ test_author_and_fresh_reviewer_must_really_complete[same_platform-reviewer] __
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-66/test_author_and_fresh_reviewer13')
+who = 'reviewer', mutation = 'same_platform'
+
+    @pytest.mark.parametrize('who',['author','reviewer'])
+    @pytest.mark.parametrize('mutation',['open','missing','node','round','producer','fail','same_platform','evidence'])
+    def test_author_and_fresh_reviewer_must_really_complete(tmp_path,who,mutation):
+        mod=api();package=mod.load_package();context=mod.prepare(package)
+        review,loop,path=synthetic_authorization(mod,package,tmp_path)
+>       assert mod.preflight(package,context,review,task_path=path)['result']=='PASS'
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/diagnostics/test_managed_policy_shape.py:180: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluations/diagnostics/managed_policy_shape.py:210: in preflight
+    _version_guard(package,package['manifest']['bindings'],base.digest(package['manifest_path']))
+evaluations/diagnostics/managed_policy_shape.py:132: in _version_guard
+    or bindings(package) != frozen or frozen != package['manifest']['bindings']):
+       ^^^^^^^^^^^^^^^^^
+evaluations/diagnostics/managed_policy_shape.py:122: in bindings
+    inputs={('inputs/SEL-ISO-v1-01-'+name+'.json'):base.digest(DEFAULT_MANIFEST.parent/'inputs'/('SEL-ISO-v1-01-'+name+'.json')) for name in _inputs(context)},
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluations/managed_node_diagnostics.py:40: in digest
+    return sha256(Path(path).read_bytes()).hexdigest()
+                  ^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_____ test_author_and_fresh_reviewer_must_really_complete[evidence-author] _____
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-66/test_author_and_fresh_reviewer14')
+who = 'author', mutation = 'evidence'
+
+    @pytest.mark.parametrize('who',['author','reviewer'])
+    @pytest.mark.parametrize('mutation',['open','missing','node','round','producer','fail','same_platform','evidence'])
+    def test_author_and_fresh_reviewer_must_really_complete(tmp_path,who,mutation):
+        mod=api();package=mod.load_package();context=mod.prepare(package)
+        review,loop,path=synthetic_authorization(mod,package,tmp_path)
+>       assert mod.preflight(package,context,review,task_path=path)['result']=='PASS'
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/diagnostics/test_managed_policy_shape.py:180: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluations/diagnostics/managed_policy_shape.py:210: in preflight
+    _version_guard(package,package['manifest']['bindings'],base.digest(package['manifest_path']))
+evaluations/diagnostics/managed_policy_shape.py:132: in _version_guard
+    or bindings(package) != frozen or frozen != package['manifest']['bindings']):
+       ^^^^^^^^^^^^^^^^^
+evaluations/diagnostics/managed_policy_shape.py:122: in bindings
+    inputs={('inputs/SEL-ISO-v1-01-'+name+'.json'):base.digest(DEFAULT_MANIFEST.parent/'inputs'/('SEL-ISO-v1-01-'+name+'.json')) for name in _inputs(context)},
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluations/managed_node_diagnostics.py:40: in digest
+    return sha256(Path(path).read_bytes()).hexdigest()
+                  ^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+____ test_author_and_fresh_reviewer_must_really_complete[evidence-reviewer] ____
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-66/test_author_and_fresh_reviewer15')
+who = 'reviewer', mutation = 'evidence'
+
+    @pytest.mark.parametrize('who',['author','reviewer'])
+    @pytest.mark.parametrize('mutation',['open','missing','node','round','producer','fail','same_platform','evidence'])
+    def test_author_and_fresh_reviewer_must_really_complete(tmp_path,who,mutation):
+        mod=api();package=mod.load_package();context=mod.prepare(package)
+        review,loop,path=synthetic_authorization(mod,package,tmp_path)
+>       assert mod.preflight(package,context,review,task_path=path)['result']=='PASS'
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/diagnostics/test_managed_policy_shape.py:180: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluations/diagnostics/managed_policy_shape.py:210: in preflight
+    _version_guard(package,package['manifest']['bindings'],base.digest(package['manifest_path']))
+evaluations/diagnostics/managed_policy_shape.py:132: in _version_guard
+    or bindings(package) != frozen or frozen != package['manifest']['bindings']):
+       ^^^^^^^^^^^^^^^^^
+evaluations/diagnostics/managed_policy_shape.py:122: in bindings
+    inputs={('inputs/SEL-ISO-v1-01-'+name+'.json'):base.digest(DEFAULT_MANIFEST.parent/'inputs'/('SEL-ISO-v1-01-'+name+'.json')) for name in _inputs(context)},
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluations/managed_node_diagnostics.py:40: in digest
+    return sha256(Path(path).read_bytes()).hexdigest()
+                  ^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_______ test_full_binding_and_context_drift_rejected_before_invoke[body] _______
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-66/test_full_binding_and_context_3')
+mutation = 'body'
+
+    @pytest.mark.parametrize('mutation',['review','manifest','binding','body','schema','messages','upstream','context','oracle'])
+    def test_full_binding_and_context_drift_rejected_before_invoke(tmp_path,mutation):
+        mod=api();package=mod.load_package();context=mod.prepare(package);review,loop,path=synthetic_authorization(mod,package,tmp_path)
+        if mutation=='review':review['verdict']='REJECT'
+        if mutation=='manifest':review['manifest_sha256']='0'*64
+        if mutation=='binding':review['bindings']['sources'].clear()
+        if mutation=='body':context['body']['think']=False
+        if mutation=='schema':context['schema_json']['additionalProperties']=True
+        if mutation=='messages':context['messages'][0]=type(context['messages'][0])(content='Oracle answer')
+        if mutation=='upstream':context['upstream']['coverages'].pop()
+        if mutation=='context':context['input_tokens']=32768
+        if mutation=='oracle':package['oracle']['approval']='forged'
+>       with pytest.raises(ValueError):mod.preflight(package,context,review,task_path=path)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/diagnostics/test_managed_policy_shape.py:212: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluations/diagnostics/managed_policy_shape.py:210: in preflight
+    _version_guard(package,package['manifest']['bindings'],base.digest(package['manifest_path']))
+evaluations/diagnostics/managed_policy_shape.py:132: in _version_guard
+    or bindings(package) != frozen or frozen != package['manifest']['bindings']):
+       ^^^^^^^^^^^^^^^^^
+evaluations/diagnostics/managed_policy_shape.py:122: in bindings
+    inputs={('inputs/SEL-ISO-v1-01-'+name+'.json'):base.digest(DEFAULT_MANIFEST.parent/'inputs'/('SEL-ISO-v1-01-'+name+'.json')) for name in _inputs(context)},
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluations/managed_node_diagnostics.py:40: in digest
+    return sha256(Path(path).read_bytes()).hexdigest()
+                  ^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+______ test_full_binding_and_context_drift_rejected_before_invoke[schema] ______
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-66/test_full_binding_and_context_4')
+mutation = 'schema'
+
+    @pytest.mark.parametrize('mutation',['review','manifest','binding','body','schema','messages','upstream','context','oracle'])
+    def test_full_binding_and_context_drift_rejected_before_invoke(tmp_path,mutation):
+        mod=api();package=mod.load_package();context=mod.prepare(package);review,loop,path=synthetic_authorization(mod,package,tmp_path)
+        if mutation=='review':review['verdict']='REJECT'
+        if mutation=='manifest':review['manifest_sha256']='0'*64
+        if mutation=='binding':review['bindings']['sources'].clear()
+        if mutation=='body':context['body']['think']=False
+        if mutation=='schema':context['schema_json']['additionalProperties']=True
+        if mutation=='messages':context['messages'][0]=type(context['messages'][0])(content='Oracle answer')
+        if mutation=='upstream':context['upstream']['coverages'].pop()
+        if mutation=='context':context['input_tokens']=32768
+        if mutation=='oracle':package['oracle']['approval']='forged'
+>       with pytest.raises(ValueError):mod.preflight(package,context,review,task_path=path)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/diagnostics/test_managed_policy_shape.py:212: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluations/diagnostics/managed_policy_shape.py:210: in preflight
+    _version_guard(package,package['manifest']['bindings'],base.digest(package['manifest_path']))
+evaluations/diagnostics/managed_policy_shape.py:132: in _version_guard
+    or bindings(package) != frozen or frozen != package['manifest']['bindings']):
+       ^^^^^^^^^^^^^^^^^
+evaluations/diagnostics/managed_policy_shape.py:122: in bindings
+    inputs={('inputs/SEL-ISO-v1-01-'+name+'.json'):base.digest(DEFAULT_MANIFEST.parent/'inputs'/('SEL-ISO-v1-01-'+name+'.json')) for name in _inputs(context)},
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluations/managed_node_diagnostics.py:40: in digest
+    return sha256(Path(path).read_bytes()).hexdigest()
+                  ^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_____ test_full_binding_and_context_drift_rejected_before_invoke[messages] _____
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-66/test_full_binding_and_context_5')
+mutation = 'messages'
+
+    @pytest.mark.parametrize('mutation',['review','manifest','binding','body','schema','messages','upstream','context','oracle'])
+    def test_full_binding_and_context_drift_rejected_before_invoke(tmp_path,mutation):
+        mod=api();package=mod.load_package();context=mod.prepare(package);review,loop,path=synthetic_authorization(mod,package,tmp_path)
+        if mutation=='review':review['verdict']='REJECT'
+        if mutation=='manifest':review['manifest_sha256']='0'*64
+        if mutation=='binding':review['bindings']['sources'].clear()
+        if mutation=='body':context['body']['think']=False
+        if mutation=='schema':context['schema_json']['additionalProperties']=True
+        if mutation=='messages':context['messages'][0]=type(context['messages'][0])(content='Oracle answer')
+        if mutation=='upstream':context['upstream']['coverages'].pop()
+        if mutation=='context':context['input_tokens']=32768
+        if mutation=='oracle':package['oracle']['approval']='forged'
+>       with pytest.raises(ValueError):mod.preflight(package,context,review,task_path=path)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/diagnostics/test_managed_policy_shape.py:212: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluations/diagnostics/managed_policy_shape.py:210: in preflight
+    _version_guard(package,package['manifest']['bindings'],base.digest(package['manifest_path']))
+evaluations/diagnostics/managed_policy_shape.py:132: in _version_guard
+    or bindings(package) != frozen or frozen != package['manifest']['bindings']):
+       ^^^^^^^^^^^^^^^^^
+evaluations/diagnostics/managed_policy_shape.py:122: in bindings
+    inputs={('inputs/SEL-ISO-v1-01-'+name+'.json'):base.digest(DEFAULT_MANIFEST.parent/'inputs'/('SEL-ISO-v1-01-'+name+'.json')) for name in _inputs(context)},
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluations/managed_node_diagnostics.py:40: in digest
+    return sha256(Path(path).read_bytes()).hexdigest()
+                  ^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_____ test_full_binding_and_context_drift_rejected_before_invoke[upstream] _____
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-66/test_full_binding_and_context_6')
+mutation = 'upstream'
+
+    @pytest.mark.parametrize('mutation',['review','manifest','binding','body','schema','messages','upstream','context','oracle'])
+    def test_full_binding_and_context_drift_rejected_before_invoke(tmp_path,mutation):
+        mod=api();package=mod.load_package();context=mod.prepare(package);review,loop,path=synthetic_authorization(mod,package,tmp_path)
+        if mutation=='review':review['verdict']='REJECT'
+        if mutation=='manifest':review['manifest_sha256']='0'*64
+        if mutation=='binding':review['bindings']['sources'].clear()
+        if mutation=='body':context['body']['think']=False
+        if mutation=='schema':context['schema_json']['additionalProperties']=True
+        if mutation=='messages':context['messages'][0]=type(context['messages'][0])(content='Oracle answer')
+        if mutation=='upstream':context['upstream']['coverages'].pop()
+        if mutation=='context':context['input_tokens']=32768
+        if mutation=='oracle':package['oracle']['approval']='forged'
+>       with pytest.raises(ValueError):mod.preflight(package,context,review,task_path=path)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/diagnostics/test_managed_policy_shape.py:212: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluations/diagnostics/managed_policy_shape.py:210: in preflight
+    _version_guard(package,package['manifest']['bindings'],base.digest(package['manifest_path']))
+evaluations/diagnostics/managed_policy_shape.py:132: in _version_guard
+    or bindings(package) != frozen or frozen != package['manifest']['bindings']):
+       ^^^^^^^^^^^^^^^^^
+evaluations/diagnostics/managed_policy_shape.py:122: in bindings
+    inputs={('inputs/SEL-ISO-v1-01-'+name+'.json'):base.digest(DEFAULT_MANIFEST.parent/'inputs'/('SEL-ISO-v1-01-'+name+'.json')) for name in _inputs(context)},
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluations/managed_node_diagnostics.py:40: in digest
+    return sha256(Path(path).read_bytes()).hexdigest()
+                  ^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_____ test_full_binding_and_context_drift_rejected_before_invoke[context] ______
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-66/test_full_binding_and_context_7')
+mutation = 'context'
+
+    @pytest.mark.parametrize('mutation',['review','manifest','binding','body','schema','messages','upstream','context','oracle'])
+    def test_full_binding_and_context_drift_rejected_before_invoke(tmp_path,mutation):
+        mod=api();package=mod.load_package();context=mod.prepare(package);review,loop,path=synthetic_authorization(mod,package,tmp_path)
+        if mutation=='review':review['verdict']='REJECT'
+        if mutation=='manifest':review['manifest_sha256']='0'*64
+        if mutation=='binding':review['bindings']['sources'].clear()
+        if mutation=='body':context['body']['think']=False
+        if mutation=='schema':context['schema_json']['additionalProperties']=True
+        if mutation=='messages':context['messages'][0]=type(context['messages'][0])(content='Oracle answer')
+        if mutation=='upstream':context['upstream']['coverages'].pop()
+        if mutation=='context':context['input_tokens']=32768
+        if mutation=='oracle':package['oracle']['approval']='forged'
+>       with pytest.raises(ValueError):mod.preflight(package,context,review,task_path=path)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/diagnostics/test_managed_policy_shape.py:212: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluations/diagnostics/managed_policy_shape.py:210: in preflight
+    _version_guard(package,package['manifest']['bindings'],base.digest(package['manifest_path']))
+evaluations/diagnostics/managed_policy_shape.py:132: in _version_guard
+    or bindings(package) != frozen or frozen != package['manifest']['bindings']):
+       ^^^^^^^^^^^^^^^^^
+evaluations/diagnostics/managed_policy_shape.py:122: in bindings
+    inputs={('inputs/SEL-ISO-v1-01-'+name+'.json'):base.digest(DEFAULT_MANIFEST.parent/'inputs'/('SEL-ISO-v1-01-'+name+'.json')) for name in _inputs(context)},
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluations/managed_node_diagnostics.py:40: in digest
+    return sha256(Path(path).read_bytes()).hexdigest()
+                  ^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+__ test_live_execution_rejects_open_author_and_missing_review_without_network __
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-66/test_live_execution_rejects_op0')
+capsys = <_pytest.capture.CaptureFixture object at 0x79d90e2ad370>
+
+    def test_live_execution_rejects_open_author_and_missing_review_without_network(tmp_path,capsys):
+        mod=api();package=mod.load_package();review,_,_=synthetic_authorization(mod,package,tmp_path)
+>       with pytest.raises(ValueError,match='provenance'):mod.preflight(package,mod.prepare(package),review)
+                                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/diagnostics/test_managed_policy_shape.py:217: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluations/diagnostics/managed_policy_shape.py:210: in preflight
+    _version_guard(package,package['manifest']['bindings'],base.digest(package['manifest_path']))
+evaluations/diagnostics/managed_policy_shape.py:132: in _version_guard
+    or bindings(package) != frozen or frozen != package['manifest']['bindings']):
+       ^^^^^^^^^^^^^^^^^
+evaluations/diagnostics/managed_policy_shape.py:122: in bindings
+    inputs={('inputs/SEL-ISO-v1-01-'+name+'.json'):base.digest(DEFAULT_MANIFEST.parent/'inputs'/('SEL-ISO-v1-01-'+name+'.json')) for name in _inputs(context)},
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluations/managed_node_diagnostics.py:40: in digest
+    return sha256(Path(path).read_bytes()).hexdigest()
+                  ^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+__________ test_full_frozen_sources_rebuild_new_body_and_all_prefixes __________
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-66/test_full_frozen_sources_rebui0')
+
+    def test_full_frozen_sources_rebuild_new_body_and_all_prefixes(tmp_path):
+        import os
+        import subprocess
+>       mod=api();package=mod.load_package();frozen=mod.freeze_sources(tmp_path/'frozen',package)
+                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/diagnostics/test_managed_policy_shape.py:242: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluations/diagnostics/managed_policy_shape.py:355: in freeze_sources
+    package=package or load_package(); _version_guard(package,package['manifest']['bindings'],base.digest(package['manifest_path']))
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluations/diagnostics/managed_policy_shape.py:132: in _version_guard
+    or bindings(package) != frozen or frozen != package['manifest']['bindings']):
+       ^^^^^^^^^^^^^^^^^
+evaluations/diagnostics/managed_policy_shape.py:122: in bindings
+    inputs={('inputs/SEL-ISO-v1-01-'+name+'.json'):base.digest(DEFAULT_MANIFEST.parent/'inputs'/('SEL-ISO-v1-01-'+name+'.json')) for name in _inputs(context)},
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluations/managed_node_diagnostics.py:40: in digest
+    return sha256(Path(path).read_bytes()).hexdigest()
+                  ^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/willy/code/cpea_terms/evaluations/fixtures/kind_diagnostics_policy_shape/inputs/SEL-ISO-v1-01-messages.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+=========================== short test summary info ============================
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_new_input_changes_only_selection_system_suffix
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_thin_record_keeps_legacy_and_new_first_errors_and_replays[None]
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_thin_record_keeps_legacy_and_new_first_errors_and_replays[null]
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_thin_record_keeps_legacy_and_new_first_errors_and_replays[shape]
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_thin_record_keeps_legacy_and_new_first_errors_and_replays[typed]
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_thin_record_keeps_legacy_and_new_first_errors_and_replays[semantic]
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_thin_record_keeps_legacy_and_new_first_errors_and_replays[parse]
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_thin_record_keeps_legacy_and_new_first_errors_and_replays[provider]
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_thin_record_keeps_legacy_and_new_first_errors_and_replays[context]
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_interruption_and_outer_drift_never_promote_inner_pass
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_author_and_fresh_reviewer_must_really_complete[open-author]
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_author_and_fresh_reviewer_must_really_complete[open-reviewer]
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_author_and_fresh_reviewer_must_really_complete[missing-author]
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_author_and_fresh_reviewer_must_really_complete[missing-reviewer]
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_author_and_fresh_reviewer_must_really_complete[node-author]
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_author_and_fresh_reviewer_must_really_complete[node-reviewer]
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_author_and_fresh_reviewer_must_really_complete[round-author]
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_author_and_fresh_reviewer_must_really_complete[round-reviewer]
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_author_and_fresh_reviewer_must_really_complete[producer-author]
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_author_and_fresh_reviewer_must_really_complete[producer-reviewer]
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_author_and_fresh_reviewer_must_really_complete[fail-author]
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_author_and_fresh_reviewer_must_really_complete[fail-reviewer]
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_author_and_fresh_reviewer_must_really_complete[same_platform-author]
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_author_and_fresh_reviewer_must_really_complete[same_platform-reviewer]
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_author_and_fresh_reviewer_must_really_complete[evidence-author]
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_author_and_fresh_reviewer_must_really_complete[evidence-reviewer]
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_full_binding_and_context_drift_rejected_before_invoke[body]
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_full_binding_and_context_drift_rejected_before_invoke[schema]
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_full_binding_and_context_drift_rejected_before_invoke[messages]
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_full_binding_and_context_drift_rejected_before_invoke[upstream]
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_full_binding_and_context_drift_rejected_before_invoke[context]
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_live_execution_rejects_open_author_and_missing_review_without_network
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_full_frozen_sources_rebuild_new_body_and_all_prefixes
+33 failed, 32 passed in 36.84s

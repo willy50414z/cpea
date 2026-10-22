@@ -1,0 +1,1 @@
+"""Optional database adapters."""

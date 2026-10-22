@@ -1,0 +1,8 @@
+{
+  "machine_verdict": "PASS",
+  "classification": "MACHINE_CHECKS_ONLY",
+  "findings": [],
+  "independent_semantic_approval": "PENDING",
+  "free_text_review": "PENDING: all raw/normalized text, tasks.request, preparation, notes, policies, assignment/exclusion refs and remaining claims require independent semantic review",
+  "fixture_approval": "PENDING_FRESH_INDEPENDENT_REVIEW"
+}

@@ -1,0 +1,14 @@
+full source/version/input bindings PASS
+legacy policy/fixture provenance PASS
+Traceback (most recent call last):
+  File "<stdin>", line 16, in <module>
+  File "<stdin>", line 16, in <genexpr>
+KeyError: 'ticket'
+CORRECTION: controller reviews identify reviewer platform, not ticket; prior probe failure is tooling only.
+true author/audit/reviewer and all binding guards PASS
+COV-ISO-v1-01 input/lineage/positive/raw PASS
+COV-ISO-v1-02 input/lineage/positive/raw PASS
+COV-ISO-v1-03 input/lineage/positive/raw PASS
+COV-CAP-v1-04 input/lineage/positive/raw PASS
+COV-CAP-v1-05 input/lineage/positive/raw PASS
+FINAL PASS: 5 lossless cases; 16 new-reference rows unchanged; original20 FAIL/PASS/FAIL; all provenance/bindings; 0POST

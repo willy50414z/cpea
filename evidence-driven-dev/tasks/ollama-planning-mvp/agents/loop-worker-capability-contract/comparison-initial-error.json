@@ -1,0 +1,5 @@
+{
+  "initial_comparison_error": "AssertionError: full-None/run.json",
+  "reason": "比較器僅處理 managed_sources，遺漏既有 source_hashes 內 prompt 絕對路徑；另有 elapsed/時間與衍生檔案 hash。",
+  "remedy": "只在記憶體比較 fingerprint 的來源路徑身分、runtime 時間及其衍生雜湊；所有原檔與同版 replay 完整保留。"
+}

@@ -1,0 +1,281 @@
+{
+  "schema_version": 1,
+  "ticket": "315d9203195d4080b655f6d8afe659dd",
+  "node": "natural_kind_selection_isolation",
+  "round": 19,
+  "result": "PASS",
+  "reviewer_platform": "/root/loop_worker_selection_parent",
+  "goal": "固定正確完整coverage上游注入後自然測目前required typed selection可行性",
+  "original_acceptance_mapping": [
+    {
+      "acceptance": "前兩離線節點通過、獨立review hash精確匹配後，只執行SEL-ISO-v1-01一個預定首次local POST；輸入原題、固定recall與完整七View normalized coverage，使用現行SelectionWire及selection prompt，不附Oracle/預填draft/typed答案。",
+      "result": "PASS",
+      "assessment": "原15首次既有candidate HTTP成功錯答及FAIL完整保留；經16離線policy契約修正、17真fresh distinct核准與16–18方向審核，18為新實質suffix版本的一次預固定首次sample，非原樣重抽。本父層自行重建新舊body並逐值確認僅通用policy suffix；原題、8需求、七View完整coverage、SelectionWire、options/schema均相等，無Oracle/draft/來源答案。五方closed PASS/fullbindings由真Task preflight核對。",
+      "evidence": [
+        "independent-checks.json",
+        "historical15-check.json"
+      ]
+    },
+    {
+      "acceptance": "模型原raw自行明填所有required typed及integration，ready並產兩prepared：inventory店商品anchor、stock_qty sum、snapshot_date metadata；sales同task整月/online/discount_amount及net_sales兩sum；兩側先彙總到店商品後left、正確一對一鍵、保庫存且不補零。所有assignment/exclusion/free text及原JSON欄位presence逐項語意驗收，任何錯誤FAIL回fresh研究，不加欄位/repair/原樣重抽。",
+      "result": "PASS",
+      "assessment": "本父直接讀模型immutable response，完整30objects/union/ref所需欄位均原填且raw=parsed=wire.model_dump；獨立逐8assignment、5exclusion、5自由文字與2prepared核對全部原需求，非因children PASS推定。下列責任／排除／文字裁定及typed比對皆完成；沒有未決語意。",
+      "evidence": [
+        "raw-presence.json",
+        "typed-prepared-checks.json",
+        "reason-text-checks.json"
+      ]
+    },
+    {
+      "acceptance": "保存所有首次/失敗raw/receipt/設定/body/schema/freeze/語意log，原結果不可改判；同版及凍結replay一致。明標上游注入的selection節點診斷，不能替代自然recall/coverage或任何父層。第12輪後先fresh audit完整10–12，0SQL/DB。",
+      "result": "PASS",
+      "assessment": "原10–12與13–15審核/歷史raw/FAIL不可變；新16–18 audit真CONTINUE已記帳。本父已親跑新18及原15同版replay，各完整1raw重播，新PASS、原FAIL保持；freeze251項含重疊hash核對與既有完整frozen結果相等證據可追溯。5203保護檔、668作者、284自然及29原15證據無漂移。此父本輪0POST/SQL/DB，範圍只upstream_injected selection可行性。",
+      "evidence": [
+        "independent-checks.json",
+        "live-replay.json",
+        "historical15-check.json"
+      ]
+    }
+  ],
+  "assignments": [
+    {
+      "requirement_id": "GRN-001",
+      "task_id": "task_inventory",
+      "view": "demo_retail.v_inventory_status",
+      "verdict": "ACCEPT",
+      "parent_rationale": "inventory原契約store_id與product_id組合唯一；task及最終output_grain同為兩鍵，沒有會員／訂單鍵或笛卡兒擴張。"
+    },
+    {
+      "requirement_id": "MET-001",
+      "task_id": "task_inventory",
+      "view": "demo_retail.v_inventory_status",
+      "verdict": "ACCEPT",
+      "parent_rationale": "inventory.metrics.stock_qty=sum且同task以店商品group_by。來源每店商品唯一，未跨snapshot_date任意加總；不以units_sold代庫存。"
+    },
+    {
+      "requirement_id": "FILT-001",
+      "task_id": "task_sales",
+      "view": "demo_retail.v_sales_detail",
+      "verdict": "ACCEPT",
+      "parent_rationale": "sales同task的order_date>=2026-09-01且<2026-10-01精確涵蓋九月；不是月首單日、最後訂單日或其他日期角色。"
+    },
+    {
+      "requirement_id": "FILT-002",
+      "task_id": "task_sales",
+      "view": "demo_retail.v_sales_detail",
+      "verdict": "ACCEPT",
+      "parent_rationale": "sales同task的sales_channel=online；未將庫存母體套上sales scope。"
+    },
+    {
+      "requirement_id": "MET-002",
+      "task_id": "task_sales",
+      "view": "demo_retail.v_sales_detail",
+      "verdict": "ACCEPT",
+      "parent_rationale": "discount_amount=sum與整月online篩選及店商品group_by在同一sales task，沒有借用另一來源補scope。"
+    },
+    {
+      "requirement_id": "MET-003",
+      "task_id": "task_sales",
+      "view": "demo_retail.v_sales_detail",
+      "verdict": "ACCEPT",
+      "parent_rationale": "net_sales=sum是明細折扣後淨額，與折扣同sales task及篩選粒度；未以gross_sales或會員累計替代完整答案。"
+    },
+    {
+      "requirement_id": "META-001",
+      "task_id": "task_inventory",
+      "view": "demo_retail.v_inventory_status",
+      "verdict": "ACCEPT",
+      "parent_rationale": "snapshot_date在inventory.required_columns及metadata_collections，未加入group_by、任取單日或當filter。prepared說明保完整DISTINCT日期集合且禁止跨日不當加總。"
+    },
+    {
+      "requirement_id": "POP-001",
+      "task_id": "task_inventory",
+      "view": "demo_retail.v_inventory_status",
+      "verdict": "ACCEPT",
+      "parent_rationale": "inventory沒有任何filter，為anchor且LEFT edge.preserve_task等於左task。兩側先店商品聚合後一對一雙鍵對齊，無銷售匹配之庫存仍保留。"
+    }
+  ],
+  "exclusions": [
+    {
+      "refs": [
+        {
+          "kind": "gap",
+          "requirement_ids": [
+            "GRN-001",
+            "MET-001",
+            "FILT-001",
+            "FILT-002",
+            "MET-002",
+            "MET-003",
+            "META-001",
+            "POP-001"
+          ],
+          "selected_view": null
+        }
+      ],
+      "view": "demo_retail.v_customer_value",
+      "verdict": "ACCEPT",
+      "parent_rationale": "會員鍵與last_order_date不證店商品或整月scope；無庫存、盤點日、online與折扣完整能力。MET-003仍保留lifetime_spend sum的partial有用金額，self/scope/grain缺口均保留；會員母體未證不限會員的完整淨額，不臆測實際非會員交易。"
+    },
+    {
+      "refs": [
+        {
+          "kind": "gap",
+          "requirement_ids": [
+            "GRN-001",
+            "MET-001",
+            "FILT-002",
+            "MET-002",
+            "META-001",
+            "POP-001"
+          ],
+          "selected_view": null
+        }
+      ],
+      "view": "demo_retail.v_daily_sales",
+      "verdict": "ACCEPT",
+      "parent_rationale": "store_id明留partial，revenue sum有用分量亦在上游partial保留，只欠online及完整店商品依賴，不把月份能力降級。選擇的gap refs有真缺口，並未聲稱全部mapping無用；units_sold不是stock_qty、交易日母體不是庫存母體。"
+    },
+    {
+      "refs": [
+        {
+          "kind": "gap",
+          "requirement_ids": [
+            "GRN-001",
+            "MET-001",
+            "MET-002",
+            "MET-003",
+            "META-001",
+            "POP-001"
+          ],
+          "selected_view": null
+        }
+      ],
+      "view": "demo_retail.v_order_summary",
+      "verdict": "ACCEPT",
+      "parent_rationale": "store_id及order_amount sum有用partial保留，整月與online可supported；淨額僅欠商品grain，沒有誤加自身淨額缺口。所列折扣、庫存、盤點日與母體責任確無完整支持。"
+    },
+    {
+      "refs": [
+        {
+          "kind": "gap",
+          "requirement_ids": [
+            "FILT-002",
+            "MET-002",
+            "MET-003",
+            "MET-001",
+            "META-001",
+            "POP-001"
+          ],
+          "selected_view": null
+        }
+      ],
+      "view": "demo_retail.v_product_monthly",
+      "verdict": "ACCEPT",
+      "parent_rationale": "店商品、固定月份與discount_amount/net_sales兩sum都具能力；兩金額partial僅欠online scope，並未清空或否認mapping。不具庫存件數、盤點日期及完整庫存母體，排除有據。"
+    },
+    {
+      "refs": [
+        {
+          "kind": "gap",
+          "requirement_ids": [
+            "GRN-001",
+            "MET-001",
+            "FILT-002",
+            "MET-002",
+            "META-001",
+            "POP-001"
+          ],
+          "selected_view": null
+        }
+      ],
+      "view": "demo_retail.v_store_monthly_kpi",
+      "verdict": "ACCEPT",
+      "parent_rationale": "store_id及revenue sum保留partial，月份可用；缺商品、online及庫存／盤點日／折扣。店月業績母體不保所有庫存商品；所列gap不否認其有用月淨額。"
+    }
+  ],
+  "free_text": [
+    {
+      "path": "/draft/tasks/0/request",
+      "text": "從 v_inventory_status 取門市×商品粒度的盤點庫存件數(stock_qty)加總與庫存盤點日期(snapshot_date)，保留所有庫存商品作為母體。",
+      "verdict": "ACCEPT",
+      "parent_rationale": "文字要求盤點庫存sum、日期及全庫存母體，與全部inventory typed欄位吻合，未新增月份、通路或庫存狀態限制。"
+    },
+    {
+      "path": "/draft/tasks/1/request",
+      "text": "從 v_sales_detail 篩選 order_date 在 2026-09-01(含)至 2026-10-01(不含) 且 sales_channel=online 的訂單明細，按門市×商品彙總折扣金額(discount_amount)與淨銷售額(net_sales)。",
+      "verdict": "ACCEPT",
+      "parent_rationale": "文字精確為含九月初、不含十月初且online的明細，店商品雙金額sum，與typed三predicate及metrics一致。"
+    },
+    {
+      "path": "/draft/integration/preparation/0/description",
+      "text": "將 v_sales_detail 自訂單明細粒度彙總至門市×商品粒度，以 store_id、product_id 對齊左母體",
+      "verdict": "ACCEPT",
+      "parent_rationale": "明細到店商品先aggregate後對齊，keys正確。aggregate未宣稱nest；庫存本有唯一店商品grain及task sum/group_by，無需添加額外preparation。"
+    },
+    {
+      "path": "/draft/integration/missing_data_policy",
+      "text": "保留未匹配資料並標記缺值；契約沒有保證時不可把缺值當成零。",
+      "verdict": "ACCEPT",
+      "parent_rationale": "原raw選第一flat scalar缺值政策，明禁無契約補零；與真one_to_one LEFT且無nest一致。"
+    },
+    {
+      "path": "/draft/integration/notes/0",
+      "text": "無線上通路銷售的庫存商品，折扣金額與淨銷售額以缺值呈現，不補零。",
+      "verdict": "ACCEPT",
+      "parent_rationale": "無線上匹配庫存的兩金額呈缺值而不補零，與保左母體及缺值政策一致，未臆斷為零銷售。"
+    }
+  ],
+  "empty_prose_fields": {
+    "clarifications": [],
+    "unsupported_reasons": []
+  },
+  "prepared_requests": [
+    {
+      "task_id": "task_inventory",
+      "verdict": "ACCEPT",
+      "rationale": "獨立比對prepared JSON與原raw全部適用typed欄位逐值相等；通用單View執行說明未注入業務答案。庫存另有完整日期集合與跨日限制說明，沒有把metadata_collections當nested sales。"
+    },
+    {
+      "task_id": "task_sales",
+      "verdict": "ACCEPT",
+      "rationale": "獨立比對prepared JSON與原raw全部適用typed欄位逐值相等；通用單View執行說明未注入業務答案。庫存另有完整日期集合與跨日限制說明，沒有把metadata_collections當nested sales。"
+    }
+  ],
+  "integration_ruling": "兩task皆店商品group_by/output_grain；庫存原生雙鍵唯一且stock sum/日期metadata，sales整月online先雙sum至店商品；明示sales aggregate且LEFT雙鍵一對一保全庫存。flat第一政策及notes保缺值、不補零，無nest或額外集合義務。",
+  "historical_round15": {
+    "result": "FAIL unchanged",
+    "request_id": "028e83ec169e4780ae1bb11f226185cd",
+    "reason": "原checker第一literal finding與真正EMPTY無nest形狀問題分別保留；不等同補零，不追溯翻案。",
+    "immutable_raw": true
+  },
+  "current_candidate": {
+    "version": "managed-policy-shape-1",
+    "request_id": "52128e22c3864f24a84bef58cb85c369",
+    "selection_child_round": 18,
+    "first_attempt": true,
+    "retry": 0
+  },
+  "scope": {
+    "upstream_injected": true,
+    "selection_node_feasibility": true,
+    "natural_recall": false,
+    "natural_coverage": false,
+    "natural_end_to_end": false,
+    "parent_natural9": false,
+    "root": false,
+    "reliability_estimate": false
+  },
+  "pending": [
+    "原coverage3預固定首次樣本",
+    "原父全新自然recall+7coverage+selection共9POST及全語意驗收",
+    "各祖先自身整合",
+    "fresh final verifier ACCEPT",
+    "歷史38×2 Gate仍未通過"
+  ],
+  "unresolved": [],
+  "POST": 0,
+  "SQL_DB": 0,
+  "source_tests_fixture_Task_control_edits": 0,
+  "commit_push": 0
+}

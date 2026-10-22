@@ -1,0 +1,1 @@
+{"result": "PASS", "replay_verification": "PASS", "stopped": null, "inner": {"result": "PASS", "raw_replays": 1, "stopped": null, "upstream_injected": true, "provider_calls": 0}, "outer_receipt_sha256": "9f9df874b88cd7361b9bdaeaad3c4f5d9d9f0c0b05345d209aa322a2405c0b97", "provider_calls": 0, "independent_semantic_approval": "PENDING"}

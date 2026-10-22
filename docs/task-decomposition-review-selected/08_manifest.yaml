@@ -1,0 +1,5 @@
+profile_id: demo_retail_draft
+contract_version: 3-draft
+source_kind: sql
+catalog: catalog.yaml
+status: approved

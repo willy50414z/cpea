@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "ticket": "65cdf0a99f4b4672b3086e20a97c1103",
+  "role": "research",
+  "task_id": "ollama-planning-mvp",
+  "result": "PLAN_READY",
+  "classification": {
+    "symptom": "stage2 inventory 首次完整 Qwen 回覆將 R_PURPOSE 標 supported 但 mappings=[]，必要 coverage guard 拒絕。",
+    "confirmed_cause": "上游 recall 將純用途「準備促銷後補貨評估」納入所有必須可執行的 requirements，錯列 kind=metadata；metadata 在產品代表可由契約欄位提供的來源日期/字串集合。stage3 又要求每項有 supported same-source assignment，因此單改 stage2 unsupported 無法完成。",
+    "not_confirmed": [
+      "強化 recall 指示是否足以讓自然 Qwen 正確區分背景與資料需求。",
+      "其餘6候選映射、自然來源選擇、prepared requests 與端到端語意目前皆未驗。",
+      "H21 僅上游類別衝突部分有直接證據，不能當成修正已成功。"
+    ],
+    "oracle_judgment": "supported 需要有效實體映射、欄位證據與同源scope是必要驗證；不能為背景放寬成 supported空映射。原始request完整保留，因此純背景不需成為可執行requirement；顯式要求的來源資訊、輸出欄位、條件與母體仍須列入。"
+  },
+  "evidence": [
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-0/diagnosis.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-indexed-20261021T075802Z-66d3ec/recall-result.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-coverage-ref-20261021T143956Z-549b86/map-01-parsed.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-coverage-ref-20261021T143956Z-549b86/map-01-error.json",
+    "src/cpea/application/models/decomposition.py",
+    "evaluations/three_stage_view_selection.py",
+    "evaluations/prompts/three_stage/recall_indexed.md"
+  ],
+  "hypothesis": {
+    "id": "LR0-H1",
+    "claim": "把 requirements 的責任明確限於須由資料來源履行的需求，metadata 明確限於使用者要求的來源資訊輸出，純用途僅留原始request上下文，可使新自然 recall 不再產生無法合法映射的背景項，保留全部8項資料責任並自然完成三階段。",
+    "falsifier": "新自然 recall 仍將純用途當資料需求，遺漏/錯分任何真資料需求，或後續需要空映射例外才能ready，則此候選未證實，記錄FAIL後交新研究者；不可刪掉當次輸出來修答案。",
+    "minimal_change": "先只強化 indexed recall prompt 的 requirement/metadata 邊界與通用正反例（避免只列本題字串），不改 schema 或必要 guards。不要自動依 R_PURPOSE、business_object、N/A 或關鍵字刪需求。新自然run重做第一步，不續接或改寫舊 recall。"
+  },
+  "alternatives": [
+    {
+      "option": "把 stage2 purpose 改 unsupported",
+      "decision": "否決作完整修法",
+      "reason": "離線反事實coverage可過，但stage3每需求指派supported使ready仍不可達。"
+    },
+    {
+      "option": "metadata免除mappings或只靠summary算supported",
+      "decision": "否決",
+      "reason": "會讓真正要求的來源資訊/日期可以未查欄位就被宣稱滿足，破壞必要驗證。"
+    },
+    {
+      "option": "新增獨立background kind/context欄位及not_applicable責任邊界",
+      "decision": "保留後續研究候選，當前先不實作",
+      "reason": "可保留明確背景分類，但需同步索引wire、coverage、selection及replay，範圍較大；若最小prompt候選自然失敗，再由新研究者以新證據決定。"
+    }
+  ],
+  "worker_scope": {
+    "allowed": [
+      "evaluations/prompts/three_stage/recall_indexed.md",
+      "必要的evaluations受控本機三階段runner與最小注入接點",
+      "tests/unit相關有辨識力測試",
+      "Task .local raw/log與agents Handoff JSON"
+    ],
+    "preserve": [
+      "src/cpea/application/models/decomposition.py 與 src/cpea/workflows/task_decomposition/prompt.py 使用者既存變更",
+      "所有歷史 raw/run/分數、historical_target_before_qwen_loop 與完整38題Gate狀態"
+    ],
+    "forbidden": [
+      "模型直連SDK/HTTP",
+      "SQL或DB",
+      "雲端呼叫",
+      "commit/push",
+      "新增reports或experiments Markdown",
+      "硬編碼本題背景刪除或手工修正模型輸出"
+    ]
+  },
+  "implementation_order": [
+    "worker 在任何修改前保存原始相關來源hash與歷史原run工件hash清單，離線重現原始raw錯誤；原版歷史replay須先跑，避免之後prompt指紋改變誤認歷史遭修改。",
+    "建立真metadata需欄位映射與背景無執行需求的區分測試。保留scope、角色、欄位證據、population/left合併、最終grain及缺值不得補零的負例。強化recall prompt，原始request仍完整傳入各階段。",
+    "建立或最小擴充evaluation runner供一次全新自然indexed recall → 全候選path-only mapping → selection；重用materialize_recall/materialize_coverage/finish_selection，不另造寬鬆validator。既有coverage_reference_runner只做第二步且SDK直連，不能--execute；既有run_pipeline預設舊coverage schema和限額，也不能原樣當完整runner。",
+    "runner唯一模型邊界是loopctl request --ticket worker --provider local --url-env EDD_LOCAL_ENDPOINT；每個節點一次POST，stream:false、num_predict:-1、timeout=None，無外層終止。沿用qwen3.8:27b digest aaee06c39dcf2437cde036998d960e1fc1494b8191be7cc9657d01e509097813、thinking=true、temperature=1、top_p=1、seed=42、context32768；保留物理input context守門與usage紀錄，不以輸出token預留變相限額。",
+    "新runner dry-run不得呼叫模型；managed response讀取controller保存的response並以既有parse_model處理；每次request id與raw/parsed/normalized/error都保存。新增所有runner/prompt/adapter/test來源指紋；replay完全離線、失敗前綴也可重播，不能接受工件hash或輸入改變。",
+    "本輪候選只跑一份預定自然完整樣本（最多1+7+1=9個成功節點，首個provider/parse/contract錯誤保存並FAIL回新研究，不把成功HTTP錯答當retry）。不能同請求反覆重試挑分。傳輸retry按controller明確retry-of紀錄。"
+  ],
+  "verification_gates": {
+    "node_offline": [
+      "原始map-01 raw可重現精確錯誤，反事實僅作診斷，不列自然PASS。",
+      "真metadata合法有mapping可通過；宣稱supported但無mapping依舊拒絕。",
+      "必要資料項缺漏、錯role、假column、不合法contract_path、跨View借scope、monthly無channel卻全支持、inner丟母體/錯鍵/補零仍被拒絕。",
+      "受控runner假invoke端到端能輸出prepared_requests，schema/context/日期與scope正確；任何節點失敗保留原raw且無後續呼叫；managed request參數與離線replay測試通過。"
+    ],
+    "natural_stage1": [
+      "與原始request精確Unicode切片，所有候選7views恰一次。",
+      "店×商品grain、stock_qty、2026年9月sales期間、online、discount_amount、net_sales、snapshot_date顯示、保留inventory母體8項語意責任完整；允許合理拆合，不依requirement_id或項數硬評。",
+      "用途仍在原request背景，不能要求補貨預測、促銷日期、目前日期篩選或資料庫用途欄位；顯示snapshot_date不轉銷售期間或額外group_by。",
+      "sales兩度量同源綁定月份與通路；inventory stock/date不借用sales條件。"
+    ],
+    "natural_stage2": [
+      "全7候選各完成一次自然映射與必要guards，不以首inventory合法代表全stage通過。",
+      "inventory可支持stock/date/最終grain與preserved population，無任意月份或online銷售映射；不得聲稱合約未保證的歷史快照粒度。",
+      "product_monthly無通路欄位，sales metrics即使可映射也只能partial，不能借sales_detail的channel取得supported。",
+      "sales_detail可依order_month=2026-09-01及sales_channel=online（或等價合法日期區間）支持兩度量sum；order summary/daily/store KPI/customer等不得發明商品級、金額、通路能力。"
+    ],
+    "natural_selection_prepared": [
+      "最終ready且有prepared_requests，選必要inventory與sales_detail來源（若不同選擇須有完整契約證據，不接受自述）。",
+      "inventory為anchor，store_id×product_id為最終粒度，sales_detail先按同鍵彙總兩金額並同task篩月份和online，再left對齊保留未成交inventory，缺值不默補零。",
+      "stock_qty盤點件數而非sold_qty_30d、snapshot_date來源正確且不影響根grain；不得把2026-09條件或channel套到inventory。",
+      "每個prepared request欄位、角色、aggregation與filters等於已驗證coverage/draft責任，沒有SQL/DB執行，沒有手工修正模型答案。"
+    ],
+    "parent_integration": [
+      "重新從新raw離線重播全三階段（含final prepared requests）得到相同解析、normalized、validation與response；不呼叫模型。",
+      "focused與必要相關regression實跑通過，保存log；歷史raw/分數/38題Gate hash與狀態未變。",
+      "同版自然完整結果由fresh-context最終驗證者逐條核對root LOOP1–4、stage語意與反例，ACCEPT前不宣告完成。"
+    ]
+  },
+  "tests_start": [
+    ".venv/bin/python -m pytest tests/unit/test_indexed_requirement_recall.py tests/unit/test_referenced_view_coverage.py tests/unit/test_three_stage_view_selection.py -q",
+    "依受控runner新增測試檔納入focused；再跑tests/unit/test_planning_mvp.py與必要decomposition validation相關測試，依實際變更擴至原114相關集。"
+  ],
+  "resources": {
+    "cloud_calls": 0,
+    "natural_fixed_candidate_successful_nodes": 9,
+    "controller_caps": "依既有10**30容量，不新增操作性次數/token/timeout配額。",
+    "audit_every_rounds": 3,
+    "early_review": "三次失敗或無進展提前fresh方向審核，讀完整未審段；失敗不得只換case名稱重送。",
+    "final_verifier": "根通過後另預扣新fresh verifier ticket，核對整棵樹及歷史限制。"
+  },
+  "ambiguities": {
+    "blocking": [],
+    "resolved": "本題「準備…評估」是目的，未要求產生資料庫輸出；不問使用者即可依原句處理。真正資料需求或驗收要改才User Gate。",
+    "remaining": "新自然輸出若對同一原句出現不同可合理解釋的業務語意，先由fresh研究/審核比對原句與契約；不可自動視模型自述為oracle。"
+  },
+  "no_new_model_calls": true,
+  "no_implementation_changes": true
+}

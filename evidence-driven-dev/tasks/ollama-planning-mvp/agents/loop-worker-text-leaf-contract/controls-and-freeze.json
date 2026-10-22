@@ -1,0 +1,67 @@
+{
+  "result": "PASS",
+  "POST": 0,
+  "SQL_DB": 0,
+  "controls": [
+    {
+      "kind": "natural-fake",
+      "failure": null,
+      "folder": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-None",
+      "replay": {
+        "result": "PASS",
+        "raw_replays": 9,
+        "stopped": null
+      }
+    },
+    {
+      "kind": "natural-fake",
+      "failure": "scope",
+      "folder": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-scope",
+      "replay": {
+        "result": "PASS",
+        "raw_replays": 7,
+        "stopped": {
+          "error_type": "ValueError",
+          "error": "supported requires same-source scope support"
+        }
+      }
+    },
+    {
+      "kind": "natural-fake",
+      "failure": "typed",
+      "folder": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/full-typed",
+      "replay": {
+        "result": "PASS",
+        "raw_replays": 9,
+        "stopped": {
+          "error_type": "ValidationError",
+          "error": "1 validation error for SelectionWire\ndraft.ready.tasks.0.filters\n  Field required [type=missing, input_value={'task_id': 'stock', 'vie...店商品庫存件數'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing"
+        }
+      }
+    },
+    {
+      "kind": "isolation-fake",
+      "failure": null,
+      "folder": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/isolation-None",
+      "replay": {
+        "result": "PASS",
+        "replay_verification": "PASS",
+        "raw_replays": 1,
+        "provider_calls": 0
+      }
+    },
+    {
+      "kind": "isolation-fake",
+      "failure": "object",
+      "folder": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/controls/isolation-object",
+      "replay": {
+        "result": "FAIL",
+        "replay_verification": "PASS",
+        "raw_replays": 1,
+        "provider_calls": 0
+      }
+    }
+  ],
+  "freeze": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/frozen",
+  "manifest_sha256": "624cefc9f2835171ae2debe9bd7a9f3c47c67198099dba832419d456e25160ad"
+}

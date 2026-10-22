@@ -1,0 +1,458 @@
+{
+  "objects": [
+    {
+      "path": "",
+      "keys": [
+        "selected_views",
+        "assignments",
+        "exclusions",
+        "draft"
+      ]
+    },
+    {
+      "path": "/assignments/0",
+      "keys": [
+        "requirement_id",
+        "view",
+        "task_id"
+      ]
+    },
+    {
+      "path": "/assignments/1",
+      "keys": [
+        "requirement_id",
+        "view",
+        "task_id"
+      ]
+    },
+    {
+      "path": "/assignments/2",
+      "keys": [
+        "requirement_id",
+        "view",
+        "task_id"
+      ]
+    },
+    {
+      "path": "/assignments/3",
+      "keys": [
+        "requirement_id",
+        "view",
+        "task_id"
+      ]
+    },
+    {
+      "path": "/assignments/4",
+      "keys": [
+        "requirement_id",
+        "view",
+        "task_id"
+      ]
+    },
+    {
+      "path": "/assignments/5",
+      "keys": [
+        "requirement_id",
+        "view",
+        "task_id"
+      ]
+    },
+    {
+      "path": "/assignments/6",
+      "keys": [
+        "requirement_id",
+        "view",
+        "task_id"
+      ]
+    },
+    {
+      "path": "/assignments/7",
+      "keys": [
+        "requirement_id",
+        "view",
+        "task_id"
+      ]
+    },
+    {
+      "path": "/exclusions/0",
+      "keys": [
+        "view",
+        "refs"
+      ]
+    },
+    {
+      "path": "/exclusions/0/refs/0",
+      "keys": [
+        "kind",
+        "requirement_ids",
+        "selected_view"
+      ]
+    },
+    {
+      "path": "/exclusions/1",
+      "keys": [
+        "view",
+        "refs"
+      ]
+    },
+    {
+      "path": "/exclusions/1/refs/0",
+      "keys": [
+        "kind",
+        "requirement_ids",
+        "selected_view"
+      ]
+    },
+    {
+      "path": "/exclusions/2",
+      "keys": [
+        "view",
+        "refs"
+      ]
+    },
+    {
+      "path": "/exclusions/2/refs/0",
+      "keys": [
+        "kind",
+        "requirement_ids",
+        "selected_view"
+      ]
+    },
+    {
+      "path": "/exclusions/3",
+      "keys": [
+        "view",
+        "refs"
+      ]
+    },
+    {
+      "path": "/exclusions/3/refs/0",
+      "keys": [
+        "kind",
+        "requirement_ids",
+        "selected_view"
+      ]
+    },
+    {
+      "path": "/exclusions/4",
+      "keys": [
+        "view",
+        "refs"
+      ]
+    },
+    {
+      "path": "/exclusions/4/refs/0",
+      "keys": [
+        "kind",
+        "requirement_ids",
+        "selected_view"
+      ]
+    },
+    {
+      "path": "/draft",
+      "keys": [
+        "status",
+        "strategy",
+        "tasks",
+        "integration",
+        "clarifications",
+        "unsupported_reasons"
+      ]
+    },
+    {
+      "path": "/draft/tasks/0",
+      "keys": [
+        "task_id",
+        "view",
+        "required_columns",
+        "filters",
+        "metrics",
+        "conditional_metrics",
+        "attributes",
+        "group_by",
+        "output_grain",
+        "depends_on",
+        "unbound_inputs",
+        "request"
+      ]
+    },
+    {
+      "path": "/draft/tasks/0/metrics",
+      "keys": [
+        "stock_qty"
+      ]
+    },
+    {
+      "path": "/draft/tasks/1",
+      "keys": [
+        "task_id",
+        "view",
+        "required_columns",
+        "filters",
+        "metrics",
+        "conditional_metrics",
+        "attributes",
+        "metadata_collections",
+        "group_by",
+        "output_grain",
+        "depends_on",
+        "unbound_inputs",
+        "request"
+      ]
+    },
+    {
+      "path": "/draft/tasks/1/filters/0",
+      "keys": [
+        "column",
+        "operator",
+        "value"
+      ]
+    },
+    {
+      "path": "/draft/tasks/1/filters/1",
+      "keys": [
+        "column",
+        "operator",
+        "value"
+      ]
+    },
+    {
+      "path": "/draft/tasks/1/filters/2",
+      "keys": [
+        "column",
+        "operator",
+        "value"
+      ]
+    },
+    {
+      "path": "/draft/tasks/1/metrics",
+      "keys": [
+        "discount_amount",
+        "net_sales"
+      ]
+    },
+    {
+      "path": "/draft/integration",
+      "keys": [
+        "anchor_task",
+        "output_grain",
+        "edges",
+        "preparation",
+        "missing_data_policy",
+        "notes"
+      ]
+    },
+    {
+      "path": "/draft/integration/edges/0",
+      "keys": [
+        "left_task",
+        "right_task",
+        "left_keys",
+        "right_keys",
+        "mode",
+        "cardinality",
+        "preserve_task"
+      ]
+    },
+    {
+      "path": "/draft/integration/preparation/0",
+      "keys": [
+        "task_id",
+        "kind",
+        "keys",
+        "description"
+      ]
+    },
+    {
+      "path": "/draft/integration/preparation/1",
+      "keys": [
+        "task_id",
+        "kind",
+        "keys",
+        "description"
+      ]
+    }
+  ],
+  "object_key_sequences_in_parse_order": [
+    [
+      "requirement_id",
+      "view",
+      "task_id"
+    ],
+    [
+      "requirement_id",
+      "view",
+      "task_id"
+    ],
+    [
+      "requirement_id",
+      "view",
+      "task_id"
+    ],
+    [
+      "requirement_id",
+      "view",
+      "task_id"
+    ],
+    [
+      "requirement_id",
+      "view",
+      "task_id"
+    ],
+    [
+      "requirement_id",
+      "view",
+      "task_id"
+    ],
+    [
+      "requirement_id",
+      "view",
+      "task_id"
+    ],
+    [
+      "requirement_id",
+      "view",
+      "task_id"
+    ],
+    [
+      "kind",
+      "requirement_ids",
+      "selected_view"
+    ],
+    [
+      "view",
+      "refs"
+    ],
+    [
+      "kind",
+      "requirement_ids",
+      "selected_view"
+    ],
+    [
+      "view",
+      "refs"
+    ],
+    [
+      "kind",
+      "requirement_ids",
+      "selected_view"
+    ],
+    [
+      "view",
+      "refs"
+    ],
+    [
+      "kind",
+      "requirement_ids",
+      "selected_view"
+    ],
+    [
+      "view",
+      "refs"
+    ],
+    [
+      "kind",
+      "requirement_ids",
+      "selected_view"
+    ],
+    [
+      "view",
+      "refs"
+    ],
+    [
+      "stock_qty"
+    ],
+    [
+      "task_id",
+      "view",
+      "required_columns",
+      "filters",
+      "metrics",
+      "conditional_metrics",
+      "attributes",
+      "group_by",
+      "output_grain",
+      "depends_on",
+      "unbound_inputs",
+      "request"
+    ],
+    [
+      "column",
+      "operator",
+      "value"
+    ],
+    [
+      "column",
+      "operator",
+      "value"
+    ],
+    [
+      "column",
+      "operator",
+      "value"
+    ],
+    [
+      "discount_amount",
+      "net_sales"
+    ],
+    [
+      "task_id",
+      "view",
+      "required_columns",
+      "filters",
+      "metrics",
+      "conditional_metrics",
+      "attributes",
+      "metadata_collections",
+      "group_by",
+      "output_grain",
+      "depends_on",
+      "unbound_inputs",
+      "request"
+    ],
+    [
+      "left_task",
+      "right_task",
+      "left_keys",
+      "right_keys",
+      "mode",
+      "cardinality",
+      "preserve_task"
+    ],
+    [
+      "task_id",
+      "kind",
+      "keys",
+      "description"
+    ],
+    [
+      "task_id",
+      "kind",
+      "keys",
+      "description"
+    ],
+    [
+      "anchor_task",
+      "output_grain",
+      "edges",
+      "preparation",
+      "missing_data_policy",
+      "notes"
+    ],
+    [
+      "status",
+      "strategy",
+      "tasks",
+      "integration",
+      "clarifications",
+      "unsupported_reasons"
+    ],
+    [
+      "selected_views",
+      "assignments",
+      "exclusions",
+      "draft"
+    ]
+  ],
+  "note": "raw JSON key sequences include duplicates; strict parser verdict recorded separately"
+}

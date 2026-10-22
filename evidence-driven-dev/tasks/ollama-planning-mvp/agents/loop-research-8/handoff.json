@@ -1,0 +1,171 @@
+{
+  "schema_version": 1,
+  "ticket": "b2650013e22947db8ef7dda5e3f80dd7",
+  "role": "research",
+  "task_id": "ollama-planning-mvp",
+  "result": "PLAN_READY",
+  "summary": "第8輪原FAIL維持。filter以conditions表整月range但無operator/value，原guard正確拒絕；共用ReferencedMapping schema只必填column/role，暴露大量角色不適用欄位。原三階段契約早已要求保留有用部分能力，daily_sales店鍵遺漏仍屬語意FAIL，不能把unsupported改義解套。推薦新managed-kind-mapping-1：依既有requirement kind產生槽位專用mapping shape，程式只編譯確定role/不適用欄與grain固定path，保留status/own_gap及所有真正業務決策和原guards。第9輪僅離線；其後fresh audit7–9通過方向才可下一固定自然全7View/typed/prepared。效果全PENDING。",
+  "evidence": [
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-8/research-probe.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-8/diagnosis.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-8/plan.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-4/handoff.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-4/failure-context.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-4/semantic-review.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T194515Z-8cb75b/map-02-call.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T194515Z-8cb75b/map-02-request.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/reports/three-stage-view-selection-plan.md",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-6/handoff.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-own/handoff.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-4-6/review.json"
+  ],
+  "findings": [
+    "獨立read-only probe直接parse原call.response，再走原materialize得到精確only metric mapping may aggregate；未改raw、未補filter。原aggregation/operator/value未出現，不能稱模型聚合filter。",
+    "同時探測兩來源任意ID的獨立grain fixture：有key partial與空unsupported都結構可接受。故店鍵完整性不能由runtime PASS/FAIL代為Oracle；須回到原介面要求及欄位業務含義。",
+    "原計畫第二步明定不因整題不能答而刪合法部分映射；店×商品中的store_id是可證有用分量。其資訊完整性必要，且不改下游完整來源選擇門檻。這不表示任何共名key都必須partial，亦不要求列所有替代寫法。",
+    "daily_sales store_id不保證所有庫存商品母體，本項population unsupported可合理；customer_value的customer_id不屬本題店商品鍵，所以本題全unsupported合理。不能因本研究保留店grain部分能力就給人口/其他role不成立的mapping。"
+  ],
+  "field_necessity": {
+    "deterministic_remove_from_new_model_output": [
+      "mapping.role：既有guard已強制其等於需求kind，grain/population則必key；由已驗recall直接決定，重複輸出不能驗出錯recall。",
+      "非metric aggregation=null/conditions=[]、非filter operator=null/value=null：角色不適用值由程式固定；不要求模型重述。",
+      "grain contract_path唯一合法/grain/description：新grain槽位省此輸出，編譯常數後仍走原path/evidence guard；不是自動選新的來源證據。"
+    ],
+    "model_preserve": [
+      "recall全部原文責任/indices/kind/scope/grain適用性與真正linked/independent判斷；候選全7由原程式保留。",
+      "每項status、strict own_gap、有用映射column及全部必要能力分量；metric的aggregation與conditions；filter的每個operator/value；非grain單一相關contract_path。",
+      "來源選擇/assignment/exclusion refs、完整required typed draft/integration及全部剩餘自然文字責任；不從request抽補。"
+    ],
+    "own_gap_status": "own_gap仍不能由dependency gaps推得：partial且有未完成grain時，本地金額自己也可能完整或不完整。status與own_gap有部分冗餘，但本次保留作獨立一致性斷言與unsupported/uncertain區分，不同時改狀態協定；程式不改false/true或升降status。",
+    "not_deterministic": [
+      "來源欄位是否語意符合需求、日期邊界與月份的實質正確性、部分能力有無遺漏、母體保全或假獨立，不可由kind/欄位存在性自動作答。",
+      "不可從policy grain.keys全取當需求key：date×store來源的date不是本題根grain；不能以substring/固定ID補store_id或任意mapping。"
+    ]
+  },
+  "hypothesis": {
+    "id": "LR8-H1",
+    "status": "PENDING",
+    "claim": "以需求kind限定最小mapping shape，可消除混合角色schema所容許的不適用欄位/缺必需predicate，而不改任何業務判斷或必要guard；保留部分能力的明確語意例對照可讓下次固定自然樣本檢驗真正完整性，無需增加自由理由或review模型。",
+    "falsifier": "若合法月份range或條件metric不能完整表示、錯角色形狀被parse接受、缺predicate/aggregation被默補、原guard被繞過、部分能力自然仍遺漏、任一View或完整typed/prepared語意錯，即FAIL；不能以新schema成功等同語意成功。"
+  },
+  "chosen_design": {
+    "candidate_version": "managed-kind-mapping-1",
+    "module": "新增evaluations/kind_mapping_managed_contract.py，重用own版recall、materialize依賴/own guards及evidence_bound完整typed selection；不修改任何舊contract/schema/prompt/guard。",
+    "wire": [
+      "以已驗recall各槽位kind生成專用Decision；status/mappings/strict own_gap皆required。非grain仍contract_path:str|null required；grain無path欄位，額外輸出同樣拒絕。動態alias仍slot_i配原ID，不直接用使用者ID作Python屬性。schema名字/hash須反映ID與kind，避免同ID換kind的cache/refs混用。",
+      "metric mappings僅{column,aggregation,conditions}，三欄required；aggregation非null，條件列表可明確[]。條件使用既有RequiredFilter（column/operator/value皆required）；IS NULL/IS NOT NULL也須明確value:null，保留原operator/value守門。",
+      "filter mappings僅{column,operator,value}三欄required；可重用RequiredFilter。兩個區間predicate為兩筆mapping，所有mapping對此需求以AND同時成立；禁止filter.conditions、aggregation、role等額外欄。不得自動展開已收原conditions答案。",
+      "key/grain/population/attribute/metadata的mapping僅{column} required；程式依kind固定role，不能帶aggregation/operator/value/conditions。key/grain/population固為key；其餘等於kind。",
+      "所有型別extra=forbid、原全層duplicate/NaN拒絕，真正必需欄位不得透過Pydantic defaults補答；schema與實際parser必一致。"
+    ],
+    "compilation": "新wire先機械轉成原own coverage schema：原column/aggregation/predicates/conditions/status/own_gap及非grain path逐值保留；只加既知role與不適用null/[]，grain path固定原唯一合法值。再調own.materialize_coverage，完整重用其精確依賴導出、referenced evidence、validate_coverage與finish_selection。不得丟mapping、改值、修role或改狀態；不增自動NL對應器。新raw與編譯normalized都保存並可逐欄比對。",
+    "prompts": "新coverage prompt逐kind說明形狀/月份多predicate/conditional metric與部分能力責任；用與本題無關且互相對照的例子，禁止寫本題ID/店商品答案表。recall沿用own規則，selection沿用v1完整required規則。明示partial保留有用獨立分量，不需枚舉等價寫法或無關欄位；unsupported指無可證有用映射。",
+    "runner": "共用managed_three_stage_runner新增--kind-mapping，與--own-responsibility/--evidence-bound互斥；只接新contract，不複製pipeline或ManagedInvoke。各contract完整SOURCES、schema、prompt、tests/imports均納fingerprint/frozen replay。"
+  },
+  "alternatives": [
+    {
+      "option": "只補回逐role prompt說明",
+      "decision": "不選為主方案",
+      "reason": "改動小但schema仍主動允許不適用欄位及漏必要欄位；本輪重點是不用模型重述已確定角色。可以配合新prompt，不能單靠提醒再全輪抽樣。"
+    },
+    {
+      "option": "接受filter.conditions並自動展平成predicate",
+      "decision": "拒絕",
+      "reason": "會改原guard及舊wire語義，且可能有column衝突或AND/OR含義；原答案維持FAIL。新wire明定兩筆predicate是新自然輸出責任。"
+    },
+    {
+      "option": "把unsupported重新定義成整項未完成，允許丟有用部分mapping",
+      "decision": "拒絕",
+      "reason": "違反原三階段部分能力揭露目的；使未選來源資訊缺失被隱藏，不能靠改分數解除。"
+    },
+    {
+      "option": "新增更多gap種類、自由reason、review/repair或每需求一call",
+      "decision": "本輪不選",
+      "reason": "沒有解決可確定role仍交模型的責任冗餘，會增加新邊界。先驗最小kind schema及原整合正確性。"
+    },
+    {
+      "option": "直接由coverage編譯typed draft或重切原子grain需求",
+      "decision": "暫不採",
+      "reason": "可作未來架構候選但改動來源整合/召回責任更大，目前不能以此跳過父層自然typed驗收。若下一自然持續核心語意FAIL，fresh研究再明確比較。"
+    }
+  ],
+  "offline_gates": {
+    "original_evidence": [
+      "原第8輪3raw在155來源凍結版及現版精確原首錯；原7輪PASS只作離線依據，不把任何舊raw轉新candidate當自然。新candidate明確拒舊mixed-role output。",
+      "保留所有既有首次/失敗raw及1164歷史hash和兩src，舊4/6/8自然FAIL不翻案。"
+    ],
+    "schema_and_mapping": [
+      "逐種kind確認必需/額外欄，filter省operator或value、metric省aggregation或conditions、nested condition省value均schema拒絕；禁止role輸出及非metric conditions，不靠最後guard才報錯。",
+      "date型月份正例兩個filter mapping完整保留>=月初且<次月（另可獨立測<=月底等價date寫法）；不是from request補end。兩predicate不能遺失、改成OR或被壓成一筆。",
+      "條件metric正例保留RequiredFilter列表且同View有獨立filter mapping；沒有獨立對應/不存在條件欄/非法聚合/錯型別/不允許operator仍由原guard拒絕。",
+      "所有kind的機械role及不適用null/[]精確；grain固定path仍取真契約/grain/description及欄位自身引文。錯non-grain path、未知column及不能select欄位仍拒絕。"
+    ],
+    "semantic_discrimination": [
+      "跨daily_sales店×商品/store_id、customer_value會員×商品/customer_id、任意Unicode/保留字/斜線ID、改名欄位的有用部分key都可表partial；合法unsupported及完整grain亦可表。不可寫只識別本題ID或固定店名的規則。",
+      "明確保留語意反例：店×商品卻空unsupported有店鍵，或只store_id卻supported，均不得算正確；現通用guard可能接受，需在離線案例預先標清SEMANTIC_REJECT，不能冒稱parser必拒。",
+      "無關customer_id不能當店×商品partial；store_id不能單獨證明保留所有庫存；sold_qty不是stock_qty；上述不應因有identifier/數值欄就強迫mapping。",
+      "typed合法但月份邊界錯、漏線上、grain假independent仍是語意反例；不得以schema accepts判PASS。將結構拒絕與語意拒絕兩類結果分開記錄。",
+      "原own_gap/status/全部scope+grain硬依賴/普通filter獨立性、真order grain/不同metric各自grain/independent scalar/固定月份縮約原正反例全保留。"
+    ],
+    "integration": [
+      "原384相關測試不改期望原樣，加新contract與runner focused檔；完整9節點fake產2prepared且原inventory/sales/left/nozero責任正確。",
+      "fake首錯至少含省predicate、不適用欄、非法mapping、own矛盾、依賴矛盾、typed省略、ready null及舊wire；前綴保存停止、同版與完整import freeze重播一致，dry-run不建provider。",
+      "不擴可能執行provider/DB的無關suite；測試只證離線/編譯，不證模型自然可行。"
+    ]
+  },
+  "natural_gate": [
+    "先完成第9輪離線PASS及fresh audit7–9，按審核裁決再決定新自然；不可先發POST再補審核。",
+    "固定新candidate預定一個全新自然樣本：新recall→全部7View→一次完整typed selection，正常最多9POST；不重用前輪recall，不轉譯raw或幫補filter/部分key。首provider/parse/contract錯停；若已見語意錯，整樣本FAIL，不以ready掩蓋。",
+    "逐項檢查全部View含未選：原責任/indices/kind、scope與grain適用性、映射所有有用必要分量、真實own_gap與完整依賴缺口、條件及無支持自由斷言。合法不確定與無關key不強判partial；已有明確店鍵的grain不容空unsupported。",
+    "自然typed ready與2prepared必真正實現父層inventory anchor/店商品/stock sum/來源日期metadata/sales同task整月online兩sum/先彙總再left/nozero；所有request/notes等自由文字亦不能新增母體事實。",
+    "保存原JSON欄位presence、編譯對照、全部原raw/normalized/schema/settings/requestID/freeze；同版與凍結完整/失敗prefix replay一致。一次全對也只支持該診斷樣本，完整38Gate狀態不變。"
+  ],
+  "parent_return": [
+    "plan.json完整保留既有10個nodes之id/parent/goal/acceptance，root逐字同Task；只在failed natural_own_responsibility_three_stage增加離線與自然兩children。",
+    "第9輪kind_mapping_managed_contract離線；其後fresh audit完整7–9，不能只審第9輪綠燈。audit依CONTINUE/REPLAN裁決後才可進natural_kind_mapping_three_stage。",
+    "自然PASS後依controller返回natural_own_responsibility_three_stage→natural_evidence_bound_three_stage→natural_slots_three_stage→natural_qwen_three_stage→three_stage_integration→root，每個父節點有自己的整合證據且各計輪。原FAIL不倒填PASS。",
+    "所有每3輪fresh方向審核與根通過後fresh final verifier ACCEPT不可省略；根LOOP1–4仍PENDING，離線不能代替任何自然/父層驗收。"
+  ],
+  "resources": {
+    "research_model_POSTs": 0,
+    "research_offline_probe_processes": 1,
+    "used_before_research": {
+      "rounds": 8,
+      "local_POSTs": 21,
+      "retry": 0,
+      "cloud": 0
+    },
+    "round9_POSTs": 0,
+    "planned_next_natural_samples": 1,
+    "normal_POSTs_max": 9,
+    "cloud": 0,
+    "model_configuration": "qwen3.8:27b digest aaee06c39dcf2437cde036998d960e1fc1494b8191be7cc9657d01e509097813；think=true temperature=1 top_p=1 seed=42 num_ctx=32768 num_predict=-1；HTTP與外層timeout=None；只loopctl request。",
+    "authorization": "使用者授權本機輪次/POST/retry/token/timeout/agents不限，雲端0，每3輪fresh audit；成功HTTP錯答不許同版重送抽分，既有用量不重置。"
+  },
+  "stop_rejudge": [
+    "離線若不能同時表達合法range、conditional metric、partial與所有kind依賴，或必須改舊guard才能過，FAIL保存最小反例交fresh研究，不原地擴欄位。",
+    "若候選需要Python猜月份/欄位含義、補key/own_gap、改status或從task.request補typed，停止；已越過確定性編譯邊界。",
+    "下次自然若仍有partial遺漏、錯own_gap/假獨立/錯來源整合等核心語意錯，保留完整FAIL，由fresh研究/審核重新比較三階段責任切分與可行性；不能把更多欄位/成功重試當自動下一步。",
+    "無需求/額度變更或不可逆風險，無需例行問user。若主張刪部分能力或略過未選View/父層/typed驗收，屬需求漂移，先上呈具體差異，不能自行採。"
+  ],
+  "next": {
+    "offline_node": "kind_mapping_managed_contract",
+    "offline_round": 9,
+    "offline_entry": "新增獨立module、新coverage prompt、兩focused測試並接共用runner旗標；沿loop-worker-own/handoff.verification.command原384集加tests/unit/test_kind_mapping_managed_contract.py與tests/unit/test_kind_mapping_managed_runner.py，全程0POST。",
+    "audit": "第9輪finish後立刻fresh audit覆蓋7–9；完整審查本研究的partial資訊責任與型別編譯邊界，不只最後測試通過。",
+    "natural_node": "natural_kind_mapping_three_stage",
+    "natural_command": ".venv/bin/python -m evaluations.managed_three_stage_runner --kind-mapping --execute --ticket \"$EDD_WORKER_TICKET\"",
+    "precondition": "新入口目前未實作，離線與audit方向均PENDING；不可在可執行及審核前宣稱自然成功。"
+  },
+  "pending": [
+    "新版source/schema/prompt/tests/fake/自然效果皆PENDING；本研究未實作、不跑pytest。",
+    "本研究只核對現版並跑一次只讀離線probe；不測新候選成功。",
+    "所有父層、完整自然、prepared與root驗收仍未完成。"
+  ],
+  "blocking_ambiguities": [],
+  "implementation_changed": false,
+  "task_or_controller_changed": false,
+  "SQL_DB": 0,
+  "commits": 0,
+  "pushes": 0
+}

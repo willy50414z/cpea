@@ -1,0 +1,26 @@
+{
+  "id": "EV-20261020T053748-788b552c",
+  "kind": "focused",
+  "command": [
+    ".venv/bin/python",
+    "-m",
+    "pytest",
+    "tests/unit/test_task_decomposition_contract.py",
+    "tests/unit/test_decomposition_evaluation.py",
+    "tests/unit/test_task_decomposition_workflow.py",
+    "tests/integration/test_decomposition_runner.py",
+    "-q"
+  ],
+  "cwd": "/home/willy/code/cpea_terms",
+  "started_at": "2026-10-20T05:37:48+00:00",
+  "finished_at": "2026-10-20T05:37:58+00:00",
+  "exit_code": 0,
+  "revision": "b16d117a2a3168a61c3cdbd889fc0e54ab079625",
+  "diff_fingerprint": "5a8049e04340e554eb8323922ff3aa831ecf016a58724e5aecd67dada6f11223",
+  "post_fingerprint": "5a8049e04340e554eb8323922ff3aa831ecf016a58724e5aecd67dada6f11223",
+  "source_unchanged": true,
+  "output_sha256": "9a5d8c972683c7f8bae1f29a4b0288d76541c242877992949e52fd1bf377f16b",
+  "raw_output": ".local/EV-20261020T053748-788b552c.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "c5d8e7d619627cf9186ed016a2e2201ac59b4cd95b2f3e704aad49e78d0e4517"
+}

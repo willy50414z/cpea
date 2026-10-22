@@ -1,0 +1,1 @@
+{"folder": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T194515Z-8cb75b", "stopped": {"error_type": "ValueError", "error": "only metric mapping may aggregate"}}

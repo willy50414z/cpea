@@ -1,0 +1,154 @@
+[
+  {
+    "identity": {
+      "requirement_id": "slot_0/🧾"
+    },
+    "own_target": {
+      "quote": "各店各商品",
+      "business_object": "各店各商品",
+      "kind": "grain",
+      "grain": "門市×商品"
+    },
+    "binding_context": {
+      "scope_ids": [],
+      "population": "所有庫存商品",
+      "grain_binding": null,
+      "grain_requirement_ids": []
+    }
+  },
+  {
+    "identity": {
+      "requirement_id": "model_dump"
+    },
+    "own_target": {
+      "quote": "盤點庫存件數",
+      "business_object": "盤點庫存件數",
+      "kind": "metric"
+    },
+    "binding_context": {
+      "scope_ids": [],
+      "grain": "門市×商品",
+      "population": "所有庫存商品",
+      "grain_binding": "linked",
+      "grain_requirement_ids": [
+        "slot_0/🧾"
+      ]
+    }
+  },
+  {
+    "identity": {
+      "requirement_id": "月~邊界"
+    },
+    "own_target": {
+      "quote": "2026 年 9 月",
+      "business_object": "2026 年 9 月",
+      "kind": "filter"
+    },
+    "binding_context": {
+      "scope_ids": [],
+      "grain": "門市×商品",
+      "population": "所有庫存商品",
+      "grain_binding": null,
+      "grain_requirement_ids": []
+    }
+  },
+  {
+    "identity": {
+      "requirement_id": "scope-channel"
+    },
+    "own_target": {
+      "quote": "線上通路",
+      "business_object": "線上通路",
+      "kind": "filter"
+    },
+    "binding_context": {
+      "scope_ids": [],
+      "grain": "門市×商品",
+      "population": "所有庫存商品",
+      "grain_binding": null,
+      "grain_requirement_ids": []
+    }
+  },
+  {
+    "identity": {
+      "requirement_id": "m_discount"
+    },
+    "own_target": {
+      "quote": "折扣金額",
+      "business_object": "折扣金額",
+      "kind": "metric"
+    },
+    "binding_context": {
+      "scope_ids": [
+        "月~邊界",
+        "scope-channel"
+      ],
+      "grain": "門市×商品",
+      "population": "所有庫存商品",
+      "grain_binding": "linked",
+      "grain_requirement_ids": [
+        "slot_0/🧾"
+      ]
+    }
+  },
+  {
+    "identity": {
+      "requirement_id": "amount/net"
+    },
+    "own_target": {
+      "quote": "淨銷售額",
+      "business_object": "淨銷售額",
+      "kind": "metric"
+    },
+    "binding_context": {
+      "scope_ids": [
+        "月~邊界",
+        "scope-channel"
+      ],
+      "grain": "門市×商品",
+      "population": "所有庫存商品",
+      "grain_binding": "linked",
+      "grain_requirement_ids": [
+        "slot_0/🧾"
+      ]
+    }
+  },
+  {
+    "identity": {
+      "requirement_id": "元資料"
+    },
+    "own_target": {
+      "quote": "庫存盤點日期",
+      "business_object": "庫存盤點日期",
+      "kind": "metadata"
+    },
+    "binding_context": {
+      "scope_ids": [],
+      "grain": "門市×商品",
+      "population": "所有庫存商品",
+      "grain_binding": null,
+      "grain_requirement_ids": [
+        "slot_0/🧾"
+      ]
+    }
+  },
+  {
+    "identity": {
+      "requirement_id": "保留/全部"
+    },
+    "own_target": {
+      "quote": "保留所有庫存商品",
+      "business_object": "保留所有庫存商品",
+      "kind": "population",
+      "population": "所有庫存商品"
+    },
+    "binding_context": {
+      "scope_ids": [],
+      "grain": "門市×商品",
+      "grain_binding": null,
+      "grain_requirement_ids": [
+        "slot_0/🧾"
+      ]
+    }
+  }
+]

@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "/home/willy/code/cpea_terms/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-bound/replay_frozen.py", line 31, in <module>
+    print(json.dumps(mod.replay(folder,SchemaCatalog('projects/retail'),meta['case']),ensure_ascii=False))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/willy/code/cpea_terms/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-bound/sources-before/evaluations/managed_three_stage_runner.py", line 215, in replay
+    raise ValueError('replay version/input mismatch')
+ValueError: replay version/input mismatch

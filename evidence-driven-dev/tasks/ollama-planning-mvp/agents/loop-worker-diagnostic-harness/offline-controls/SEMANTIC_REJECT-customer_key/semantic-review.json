@@ -1,0 +1,37 @@
+{
+  "machine_verdict": "FAIL",
+  "classification": "SEMANTIC_REJECT",
+  "findings": [
+    {
+      "requirement_id": "unrelated/識別~鍵",
+      "aspect": "status/own_gap",
+      "expected": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": []
+      },
+      "actual": {
+        "status": "partial",
+        "own_gap": true,
+        "mappings": [
+          {
+            "column": "customer_id"
+          }
+        ]
+      }
+    },
+    {
+      "requirement_id": "unrelated/識別~鍵",
+      "aspect": "necessary mappings/predicates",
+      "expected": [],
+      "actual": [
+        {
+          "column": "customer_id"
+        }
+      ]
+    }
+  ],
+  "independent_semantic_approval": "PENDING",
+  "free_text_review": "PENDING: all raw/normalized text, tasks.request, preparation, notes, policies, assignment/exclusion refs and remaining claims require independent semantic review",
+  "fixture_approval": "PENDING_FRESH_INDEPENDENT_REVIEW"
+}

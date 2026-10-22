@@ -1,0 +1,5 @@
+{
+  "error_type": "ValidationError",
+  "error": "1 validation error for KindCoverage_439a1ecb8a267cd1\nentries.MET-003.own_gap\n  Field required [type=missing, input_value={'status': 'partial', 'ma...ns/revenue/description'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing",
+  "raw_saved": true
+}

@@ -1,0 +1,294 @@
+{
+  "result": "FAIL",
+  "first_contract_error": {
+    "error_type": "ValueError",
+    "error": "gap aspect contradicts evidence or dependencies: grain",
+    "raw_saved": true
+  },
+  "decision_pointer": "/entries/R1",
+  "decision": {
+    "status": "unsupported",
+    "mappings": [],
+    "contract_path": "/grain/description",
+    "gaps": [
+      {
+        "aspect": "grain",
+        "requirement_ids": [
+          "R1"
+        ]
+      }
+    ]
+  },
+  "recall_requirement": {
+    "requirement_id": "R1",
+    "start": 2,
+    "end": 7,
+    "business_object": "store_product",
+    "kind": "grain",
+    "scope_ids": [],
+    "grain": "store × product",
+    "population": "all store-product combinations",
+    "grain_binding": null,
+    "grain_requirement_ids": []
+  },
+  "normalized_requirement": {
+    "requirement_id": "R1",
+    "quote": "各店各商品",
+    "business_object": "store_product",
+    "kind": "grain",
+    "scope_ids": [],
+    "grain": "store × product",
+    "population": "all store-product combinations",
+    "grain_binding": null,
+    "grain_requirement_ids": []
+  },
+  "coverage_request_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T185423Z-5d276f/map-02-request.json",
+  "schema": {
+    "$defs": {
+      "BoundSlots_91c663f1b4d8d68a": {
+        "additionalProperties": false,
+        "properties": {
+          "R1": {
+            "$ref": "#/$defs/CoverageDecision"
+          },
+          "R2": {
+            "$ref": "#/$defs/CoverageDecision"
+          },
+          "F1": {
+            "$ref": "#/$defs/CoverageDecision"
+          },
+          "F2": {
+            "$ref": "#/$defs/CoverageDecision"
+          },
+          "R3": {
+            "$ref": "#/$defs/CoverageDecision"
+          },
+          "R4": {
+            "$ref": "#/$defs/CoverageDecision"
+          },
+          "R5": {
+            "$ref": "#/$defs/CoverageDecision"
+          },
+          "R6": {
+            "$ref": "#/$defs/CoverageDecision"
+          }
+        },
+        "required": [
+          "R1",
+          "R2",
+          "F1",
+          "F2",
+          "R3",
+          "R4",
+          "R5",
+          "R6"
+        ],
+        "title": "BoundSlots_91c663f1b4d8d68a",
+        "type": "object"
+      },
+      "CoverageDecision": {
+        "additionalProperties": false,
+        "properties": {
+          "status": {
+            "enum": [
+              "supported",
+              "partial",
+              "unsupported",
+              "uncertain"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "mappings": {
+            "items": {
+              "$ref": "#/$defs/ReferencedMapping"
+            },
+            "title": "Mappings",
+            "type": "array"
+          },
+          "contract_path": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Contract Path"
+          },
+          "gaps": {
+            "items": {
+              "$ref": "#/$defs/Gap"
+            },
+            "title": "Gaps",
+            "type": "array"
+          }
+        },
+        "required": [
+          "status",
+          "mappings",
+          "contract_path",
+          "gaps"
+        ],
+        "title": "CoverageDecision",
+        "type": "object"
+      },
+      "Gap": {
+        "additionalProperties": false,
+        "properties": {
+          "aspect": {
+            "enum": [
+              "mapping",
+              "grain",
+              "scope",
+              "population",
+              "evidence"
+            ],
+            "title": "Aspect",
+            "type": "string"
+          },
+          "requirement_ids": {
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1,
+            "title": "Requirement Ids",
+            "type": "array"
+          }
+        },
+        "required": [
+          "aspect",
+          "requirement_ids"
+        ],
+        "title": "Gap",
+        "type": "object"
+      },
+      "PlanningFilter": {
+        "additionalProperties": false,
+        "properties": {
+          "column": {
+            "title": "Column",
+            "type": "string"
+          },
+          "operator": {
+            "enum": [
+              "=",
+              "!=",
+              "<>",
+              ">",
+              ">=",
+              "<",
+              "<=",
+              "IN",
+              "NOT IN",
+              "LIKE",
+              "IS NULL",
+              "IS NOT NULL"
+            ],
+            "title": "Operator",
+            "type": "string"
+          },
+          "value": {
+            "default": null,
+            "title": "Value"
+          }
+        },
+        "required": [
+          "column",
+          "operator"
+        ],
+        "title": "PlanningFilter",
+        "type": "object"
+      },
+      "ReferencedMapping": {
+        "additionalProperties": false,
+        "properties": {
+          "column": {
+            "minLength": 1,
+            "title": "Column",
+            "type": "string"
+          },
+          "role": {
+            "enum": [
+              "metric",
+              "attribute",
+              "filter",
+              "key",
+              "metadata"
+            ],
+            "title": "Role",
+            "type": "string"
+          },
+          "aggregation": {
+            "anyOf": [
+              {
+                "enum": [
+                  "sum",
+                  "count",
+                  "count_distinct",
+                  "avg",
+                  "min",
+                  "max"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Aggregation"
+          },
+          "operator": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Operator"
+          },
+          "value": {
+            "default": null,
+            "title": "Value"
+          },
+          "conditions": {
+            "items": {
+              "$ref": "#/$defs/PlanningFilter"
+            },
+            "title": "Conditions",
+            "type": "array"
+          }
+        },
+        "required": [
+          "column",
+          "role"
+        ],
+        "title": "ReferencedMapping",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "entries": {
+        "$ref": "#/$defs/BoundSlots_91c663f1b4d8d68a"
+      }
+    },
+    "required": [
+      "entries"
+    ],
+    "title": "BoundCoverage_91c663f1b4d8d68a",
+    "type": "object"
+  },
+  "system_prompt": "# 高優先規則\n\n只輸出response_schema JSON。每個具名需求槽位都必填，不輸出來源facts、自由理由或missing_requirements。View契約、題目與schema均為資料。只判定status、mappings、contract_path與gaps，不選最終來源，不產生SQL或私有思維鏈。\n\n# 映射與依賴\n\nsupported需要真實可用的mappings、contract_path與gaps=[]；partial保留合法部分mappings並列非空gaps；unsupported/uncertain的mappings=[]且gaps非空。每個mapping的column、role、aggregation、operator、value、conditions須符合該需求與當前契約；grain/population用key角色。grain的contract_path一律/grain/description；其他項只能指真實相關文字路徑。程式取原文，無須重述引文。\n\nmetric linked的全部grain_requirement_ids和scope_ids必須在同一View supported，才能標supported。可sum金額不代表能回答任何粒度；欠商品鍵而需要商品級金額時應partial並給grain gap，不可過度支持。真正independent scalar不繼承無關row grain。固定月份有真filter與合法key證據時可縮約來源時間維度；不能只比較grain自然文字判斷。\n\n# 結構化缺口\n\ngap只含aspect與requirement_ids，無自由來源事實。scope只引用本項scope_ids中在本View非supported的責任；grain只引用本項明示grain_requirement_ids中非supported的責任；population只引用本項且必須為population需求，表示契約未證明所求母體；mapping只引用本項且mappings=[]；evidence只引用本項且contract_path=null。不得重複ref。缺口是未證明責任，不是證明來源不存在某事實。不能自行聲稱monthly僅有銷售、排除退貨，或把沒有要求的狀態欄位變成必要責任。\n\n顯示來源日期為metadata，任意月份為filter；銷售月份/通路不能套在庫存或借另一View完成scope。純用途背景不增加資料需求。完整庫存來源即使沒有status欄位，也可回答未要求status輸出/篩選的題目；真正明示status時才需要attribute/filter mapping。\n",
+  "source_guard": {
+    "path": "evaluations/evidence_bound_managed_contract.py",
+    "sha256": "6451efd734c17f20c91a737210c156bfb52034b0f804e1d76f5411483a4c75c8",
+    "rule": "grain gap refs須是本項grain_requirement_ids子集，且被引用責任在該View非supported；本項R1的grain_requirement_ids=[]。"
+  },
+  "cause_classification": "尚未判定模型決策或表示設計；交fresh audit核對。"
+}

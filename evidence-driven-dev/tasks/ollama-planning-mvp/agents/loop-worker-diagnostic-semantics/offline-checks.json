@@ -1,0 +1,55 @@
+{
+  "bindings_match": true,
+  "manifest_sha256": "1749d09913e0f5d5a1caab4a4ede1bf4fa80fee260bb4e257f1f705634d934be",
+  "checks": [
+    {
+      "check": "SEL-ISO-v1-01",
+      "structural": "ACCEPT",
+      "machine": "PASS",
+      "semantic": "NOT_APPROVAL"
+    },
+    {
+      "check": "COV-ISO-v1-01",
+      "structural": "ACCEPT",
+      "machine": "PASS",
+      "semantic": "NOT_APPROVAL"
+    },
+    {
+      "check": "COV-ISO-v1-02",
+      "structural": "ACCEPT",
+      "machine": "PASS",
+      "semantic": "NOT_APPROVAL"
+    },
+    {
+      "check": "COV-ISO-v1-03",
+      "structural": "ACCEPT",
+      "machine": "PASS",
+      "semantic": "NOT_APPROVAL"
+    },
+    {
+      "check": "arbitrary_task_ids_and_consistent_list_key_order",
+      "structural": "ACCEPT",
+      "machine": "PASS"
+    },
+    {
+      "check": "leap_month_inclusive_end",
+      "correct_29": "MACHINE_PASS",
+      "wrong_28": "STRUCTURAL_ACCEPT_MACHINE_FAIL"
+    },
+    {
+      "check": "invented_sales_population_and_zero_free_text",
+      "structural": "ACCEPT",
+      "machine": "PASS",
+      "independent_semantic": "REJECT"
+    }
+  ],
+  "POSTs": 0,
+  "SQL_DB": 0,
+  "source_changes": 0,
+  "fixture_changes": 0,
+  "regression": "NOT_RERUN",
+  "synthetic_only": true,
+  "schema_answer_leak_scan": "四schema無固定source/metric/taskID輸出答案",
+  "rejected_review_preflight": "execute requires fresh ACCEPT fixture review",
+  "utf8_no_bom": "本worker五份JSON/log已重新讀取驗證"
+}

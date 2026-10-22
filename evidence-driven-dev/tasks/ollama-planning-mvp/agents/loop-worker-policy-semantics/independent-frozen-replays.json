@@ -1,0 +1,51 @@
+{
+  "results": [
+    {
+      "label": "original15-frozen",
+      "result": "FAIL",
+      "replay_verification": "PASS",
+      "exit_code": 1,
+      "provider_calls": 0,
+      "command": [
+        "/home/willy/code/cpea_terms/.venv/bin/python",
+        "-m",
+        "evaluations.diagnostics.managed_node_diagnostics_rebound",
+        "--replay",
+        "/home/willy/code/cpea_terms/evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261021T215758Z-5bbdea/SEL-ISO-v1-01"
+      ],
+      "cwd": "/home/willy/code/cpea_terms/evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261021T215758Z-5bbdea/frozen"
+    },
+    {
+      "label": "null-frozen",
+      "result": "PASS",
+      "replay_verification": "PASS",
+      "exit_code": 0,
+      "provider_calls": 0,
+      "command": [
+        "/home/willy/code/cpea_terms/.venv/bin/python",
+        "-m",
+        "evaluations.diagnostics.managed_policy_shape",
+        "--replay",
+        "/home/willy/code/cpea_terms/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-shape/live-controls/flat-null"
+      ],
+      "cwd": "/home/willy/code/cpea_terms/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-shape/frozen"
+    },
+    {
+      "label": "empty-frozen",
+      "result": "FAIL",
+      "replay_verification": "PASS",
+      "exit_code": 1,
+      "provider_calls": 0,
+      "command": [
+        "/home/willy/code/cpea_terms/.venv/bin/python",
+        "-m",
+        "evaluations.diagnostics.managed_policy_shape",
+        "--replay",
+        "/home/willy/code/cpea_terms/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-shape/live-controls/original-flat-empty"
+      ],
+      "cwd": "/home/willy/code/cpea_terms/evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-shape/frozen"
+    }
+  ],
+  "POST": 0,
+  "SQL_DB": 0
+}

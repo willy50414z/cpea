@@ -1,0 +1,52 @@
+{
+  "ticket": "378cab1f79c6485ab7c4df5b18a7e598",
+  "result": "FAIL",
+  "evidence": [
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-3/semantic-review.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-3/failure-context.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-3/execute.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-3/replay.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-3/freeze-before.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-3/freeze-after.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-3/run-location.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T185423Z-5d276f/run.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T185423Z-5d276f/usage.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T185423Z-5d276f/recall-call.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T185423Z-5d276f/recall-result.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T185423Z-5d276f/map-01-call.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T185423Z-5d276f/map-01-result.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T185423Z-5d276f/map-02-call.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T185423Z-5d276f/map-02-parsed.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T185423Z-5d276f/map-02-error.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T185423Z-5d276f/map-02-request.json"
+  ],
+  "summary": "第6輪固定新candidate自然首次3正常POST後於daily_sales R1 grain gap adapter契約拒絕停止；recall8責任/metric grain links完整、customer_value完成，剩餘5View與selection/prepared未執行。原R1全決策/需求/slot schema/prompt已保存供fresh audit判斷表示能力，不預先歸因模型或設計。同版3raw replay PASS、138檔freeze與兩src不變；0retry/cloud/SQL/DB，不擴測或修法。Main須fresh audit4–6，父/root未驗收。",
+  "node": "natural_evidence_bound_three_stage",
+  "run": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T185423Z-5d276f",
+  "session_id": 89761,
+  "resources": {
+    "local_POSTs": 3,
+    "cumulative_local_POSTs": 18,
+    "retry": 0,
+    "cloud": 0,
+    "input_tokens": 7190,
+    "output_tokens": 10322
+  },
+  "first_error": {
+    "node": "map-02",
+    "view": "demo_retail.v_daily_sales",
+    "pointer": "/entries/R1/gaps/0",
+    "error": "gap aspect contradicts evidence or dependencies: grain"
+  },
+  "replay": {
+    "result": "PASS",
+    "raw_replays": 3,
+    "same_first_error": true
+  },
+  "source_freeze": {
+    "result": "PASS",
+    "checked_files": 138,
+    "changed": []
+  },
+  "next": "Main finish後派fresh audit覆蓋4–6；本worker不自行finish/修法。"
+}

@@ -1,0 +1,6 @@
+{
+  "response": "{\"entries\": {\"stock\": {\"status\": \"unsupported\", \"mappings\": [], \"contract_path\": \"/grain/description\", \"own_gap\": true}, \"sales\": {\"status\": \"unsupported\", \"mappings\": [], \"contract_path\": \"/grain/description\", \"own_gap\": true}, \"channel\": {\"status\": \"unsupported\", \"mappings\": [], \"contract_path\": \"/grain/description\", \"own_gap\": true}, \"period\": {\"status\": \"unsupported\", \"mappings\": [], \"contract_path\": \"/grain/description\", \"own_gap\": true}, \"population\": {\"status\": \"unsupported\", \"mappings\": [], \"contract_path\": \"/grain/description\", \"own_gap\": true}, \"grain\": {\"status\": \"unsupported\", \"mappings\": [], \"own_gap\": true}, \"R_PURPOSE\": {\"status\": \"unsupported\", \"mappings\": [], \"contract_path\": null, \"own_gap\": true}}}",
+  "usage": null,
+  "response_metadata": {},
+  "elapsed_seconds": 5.487100861500949e-05
+}

@@ -20,3 +20,14 @@ edge 指定左右 task、左右各自的鍵、mode、cardinality、preserve_task
 目前庫存與歷史銷量是不同資料時間，不把目前庫存解釋為歷史庫存，不把快照跨日加總。
 保留使用者指定的庫存商品／會員／門市母體。未匹配記為缺值，契約未保證時不要填零。沒有成交的日期不要自行補成零銷量日期。
 所有文字描述使用繁體中文。JSON 的識別碼、enum 及欄位名使用 schema 指定形式。'''
+
+
+# Opt-in candidate until semantic acceptance is complete; the v3 default is unchanged.
+COVERAGE_FIRST_PROMPT_VERSION = 'v3-coverage-first-1'
+COVERAGE_FIRST_PRIORITY = '''規劃優先順序（由高至低）：
+1. 完整涵蓋需求的所有必要欄位與資訊：輸出／度量、條件／期間、粒度、保留母體、整合鍵及子任務 request。條件欄位即使不顯示也必須具備；文字承諾不算完成，須由來源契約支持並在 typed 結構表達。
+2. 只在能完整涵蓋需求的來源組合中，選足夠且必要的來源；粒度接近或已彙總不能抵銷欄位或條件缺漏。有合格來源就選用，不能因需額外彙總而省略必要條件。
+3. 前兩項成立後才比較較少來源、較少彙總或較簡單整合。沒有合法組合可完整支持時列明缺口為 unsupported；需求資訊不足則 needs_clarification，不得回傳 ready。
+'''
+_opening, _, _policy = DECOMPOSITION_PROMPT.partition('\n')
+COVERAGE_FIRST_PROMPT = _opening + '\n' + COVERAGE_FIRST_PRIORITY + _policy

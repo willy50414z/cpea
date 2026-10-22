@@ -1,0 +1,21 @@
+{
+  "id": "EV-20261021T075735-f75bf9ac",
+  "kind": "focused",
+  "command": [
+    ".venv/bin/python",
+    "-c",
+    "import runpy; from pathlib import Path; from dataclasses import replace; from cpea.config.settings import AssistantSettings; from cpea.infrastructure.llm.factory import get_llm_config; from langchain_core.messages import HumanMessage; m=runpy.run_path(\"evidence-driven-dev/tasks/ollama-planning-mvp/reports/run_qwen_indexed_uncapped_probe.py\"); b=m[\"UncappedSingleCallBudget\"](); messages=[HumanMessage(content=\"測試\")]; n=b.begin(messages); b.record_usage({\"input_tokens\":12,\"output_tokens\":5001},n); assert b.output_tokens_actual==5001; assert b.total_output_limit is None and b.total_input_limit is None and b.wall_seconds is None; rejected=False;\ntry: b.begin(messages)\nexcept ValueError: rejected=True\nassert rejected; s=replace(AssistantSettings.from_env(Path(\".env\")),llm_model=\"qwen3.8:27b\",max_output_tokens=-1,request_timeout_seconds=None); llm=get_llm_config(settings=s); assert llm.num_predict==-1; assert all(getattr(llm._client._client.timeout,k) is None for k in (\"connect\",\"read\",\"write\",\"pool\")); print(\"PASS: output>4096 accepted; token/time quotas absent; single-call guard retained; num_predict=-1; HTTP timeout=None; provider invocations=0\")"
+  ],
+  "cwd": "/home/willy/code/cpea_terms",
+  "started_at": "2026-10-21T07:57:35+00:00",
+  "finished_at": "2026-10-21T07:57:37+00:00",
+  "exit_code": 0,
+  "revision": "bc09c67fc4078501599c37e4cdfecdee40af2ef8",
+  "diff_fingerprint": "7055794fccfac615aaa94cdd99d6e17a66113c46da353a4d231b958a8476f3a5",
+  "post_fingerprint": "7055794fccfac615aaa94cdd99d6e17a66113c46da353a4d231b958a8476f3a5",
+  "source_unchanged": true,
+  "output_sha256": "3d9ab84edbc1a31a39e97e5d9bda269131bda49d12877c9fd05506a67b659ff2",
+  "raw_output": ".local/EV-20261021T075735-f75bf9ac.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "4988bf0991b3001ada6e98ae045341064ce4fe3055e0b6d7ef2a506950cdccb3"
+}

@@ -1,0 +1,1270 @@
+FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF                                    [100%]
+=================================== FAILURES ===================================
+_ test_required_named_schema_handles_arbitrary_ids_without_position_or_reserved_name_loss[ids0] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7a7aa1703aa0>
+ids = ['庫存']
+
+    @pytest.mark.parametrize('ids', [['庫存'], ['model_dump', '_private', 'a/b~c', 'quote"\\\n', 'slot_0', '中文🧾']])
+    def test_required_named_schema_handles_arbitrary_ids_without_position_or_reserved_name_loss(catalog, ids):
+        rec = recall(catalog).model_dump()
+        original = rec['requirements'][0]
+        rec['requirements'] = [dict(original, requirement_id=i) for i in ids]
+        rec = RecallResult.model_validate(rec)
+>       schema = api().coverage_schema(rec)
+                 ^^^^^
+
+tests/unit/test_slotted_view_coverage.py:48: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+        name = 'evaluations.slotted_view_coverage'
+>       assert importlib.util.find_spec(name) is not None, 'fixed named coverage slots are not implemented'
+E       AssertionError: fixed named coverage slots are not implemented
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7a7aa4baa0c0>('evaluations.slotted_view_coverage')
+E        +    where <function find_spec at 0x7a7aa4baa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_slotted_view_coverage.py:18: AssertionError
+_ test_required_named_schema_handles_arbitrary_ids_without_position_or_reserved_name_loss[ids1] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7a7aa178d2e0>
+ids = ['model_dump', '_private', 'a/b~c', 'quote"\\\n', 'slot_0', '中文🧾']
+
+    @pytest.mark.parametrize('ids', [['庫存'], ['model_dump', '_private', 'a/b~c', 'quote"\\\n', 'slot_0', '中文🧾']])
+    def test_required_named_schema_handles_arbitrary_ids_without_position_or_reserved_name_loss(catalog, ids):
+        rec = recall(catalog).model_dump()
+        original = rec['requirements'][0]
+        rec['requirements'] = [dict(original, requirement_id=i) for i in ids]
+        rec = RecallResult.model_validate(rec)
+>       schema = api().coverage_schema(rec)
+                 ^^^^^
+
+tests/unit/test_slotted_view_coverage.py:48: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+        name = 'evaluations.slotted_view_coverage'
+>       assert importlib.util.find_spec(name) is not None, 'fixed named coverage slots are not implemented'
+E       AssertionError: fixed named coverage slots are not implemented
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7a7aa4baa0c0>('evaluations.slotted_view_coverage')
+E        +    where <function find_spec at 0x7a7aa4baa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_slotted_view_coverage.py:18: AssertionError
+__ test_trusted_source_facts_come_from_exact_summary_and_partial_is_retained ___
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7a7aa179b860>
+
+    def test_trusted_source_facts_come_from_exact_summary_and_partial_is_retained(catalog):
+>       result = materialize(catalog, slots(catalog, MONTH), MONTH)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_slotted_view_coverage.py:63: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_slotted_view_coverage.py:38: in materialize
+    wire = api().parse_slots(AIMessage(content=json.dumps(data, ensure_ascii=False)), api().coverage_schema(rec))
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+        name = 'evaluations.slotted_view_coverage'
+>       assert importlib.util.find_spec(name) is not None, 'fixed named coverage slots are not implemented'
+E       AssertionError: fixed named coverage slots are not implemented
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7a7aa4baa0c0>('evaluations.slotted_view_coverage')
+E        +    where <function find_spec at 0x7a7aa4baa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_slotted_view_coverage.py:18: AssertionError
+_ test_summary_text_is_preserved_without_inferred_exclusion[\u50c5\u542b\u5df2\u5b8c\u6210\u8a02\u55ae\u3002] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7a7aa176d880>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7a7aa15fd160>
+summary = '僅含已完成訂單。'
+
+    @pytest.mark.parametrize('summary', ['僅含已完成訂單。', '來源明確排除退貨，僅含已完成訂單。'])
+    def test_summary_text_is_preserved_without_inferred_exclusion(catalog, monkeypatch, summary):
+        views = list(catalog.views())
+        source = policy(catalog, SALES)
+        source['summary'] = summary
+        # Catalog policies are the only accepted source, including explicit exclusions.
+        original = catalog.views
+        monkeypatch.setattr(catalog, 'views', lambda: [type('View', (), {'name': v.name,
+            'policy': source if v.name == SALES else v.policy})() for v in original()])
+>       assert materialize(catalog, slots(catalog, SALES), SALES).population == summary
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_slotted_view_coverage.py:85: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_slotted_view_coverage.py:38: in materialize
+    wire = api().parse_slots(AIMessage(content=json.dumps(data, ensure_ascii=False)), api().coverage_schema(rec))
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+        name = 'evaluations.slotted_view_coverage'
+>       assert importlib.util.find_spec(name) is not None, 'fixed named coverage slots are not implemented'
+E       AssertionError: fixed named coverage slots are not implemented
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7a7aa4baa0c0>('evaluations.slotted_view_coverage')
+E        +    where <function find_spec at 0x7a7aa4baa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_slotted_view_coverage.py:18: AssertionError
+_ test_summary_text_is_preserved_without_inferred_exclusion[\u4f86\u6e90\u660e\u78ba\u6392\u9664\u9000\u8ca8\uff0c\u50c5\u542b\u5df2\u5b8c\u6210\u8a02\u55ae\u3002] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7a7aa178e4b0>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7a7aa176f410>
+summary = '來源明確排除退貨，僅含已完成訂單。'
+
+    @pytest.mark.parametrize('summary', ['僅含已完成訂單。', '來源明確排除退貨，僅含已完成訂單。'])
+    def test_summary_text_is_preserved_without_inferred_exclusion(catalog, monkeypatch, summary):
+        views = list(catalog.views())
+        source = policy(catalog, SALES)
+        source['summary'] = summary
+        # Catalog policies are the only accepted source, including explicit exclusions.
+        original = catalog.views
+        monkeypatch.setattr(catalog, 'views', lambda: [type('View', (), {'name': v.name,
+            'policy': source if v.name == SALES else v.policy})() for v in original()])
+>       assert materialize(catalog, slots(catalog, SALES), SALES).population == summary
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_slotted_view_coverage.py:85: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_slotted_view_coverage.py:38: in materialize
+    wire = api().parse_slots(AIMessage(content=json.dumps(data, ensure_ascii=False)), api().coverage_schema(rec))
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+        name = 'evaluations.slotted_view_coverage'
+>       assert importlib.util.find_spec(name) is not None, 'fixed named coverage slots are not implemented'
+E       AssertionError: fixed named coverage slots are not implemented
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7a7aa4baa0c0>('evaluations.slotted_view_coverage')
+E        +    where <function find_spec at 0x7a7aa4baa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_slotted_view_coverage.py:18: AssertionError
+______ test_invalid_slot_shape_and_source_overrides_are_rejected[missing] ______
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7a7aa15d12b0>
+mutation = 'missing'
+
+    @pytest.mark.parametrize('mutation', ['missing', 'extra', 'old_list', 'id', 'population', 'view', 'grain', 'keys'])
+    def test_invalid_slot_shape_and_source_overrides_are_rejected(catalog, mutation):
+        data = slots(catalog)
+        if mutation == 'missing': data['entries'].pop('stock')
+        if mutation == 'extra': data['entries']['extra'] = deepcopy(data['entries']['stock'])
+        if mutation == 'old_list': data['entries'] = list(data['entries'].values())
+        if mutation == 'id': data['entries']['stock']['requirement_id'] = 'stock'
+        if mutation in ('population', 'view', 'grain', 'keys'): data[mutation] = 'invented source fact'
+        with pytest.raises(ValueError):
+>           materialize(catalog, data)
+
+tests/unit/test_slotted_view_coverage.py:97: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_slotted_view_coverage.py:38: in materialize
+    wire = api().parse_slots(AIMessage(content=json.dumps(data, ensure_ascii=False)), api().coverage_schema(rec))
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+        name = 'evaluations.slotted_view_coverage'
+>       assert importlib.util.find_spec(name) is not None, 'fixed named coverage slots are not implemented'
+E       AssertionError: fixed named coverage slots are not implemented
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7a7aa4baa0c0>('evaluations.slotted_view_coverage')
+E        +    where <function find_spec at 0x7a7aa4baa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_slotted_view_coverage.py:18: AssertionError
+_______ test_invalid_slot_shape_and_source_overrides_are_rejected[extra] _______
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7a7aa15d1700>
+mutation = 'extra'
+
+    @pytest.mark.parametrize('mutation', ['missing', 'extra', 'old_list', 'id', 'population', 'view', 'grain', 'keys'])
+    def test_invalid_slot_shape_and_source_overrides_are_rejected(catalog, mutation):
+        data = slots(catalog)
+        if mutation == 'missing': data['entries'].pop('stock')
+        if mutation == 'extra': data['entries']['extra'] = deepcopy(data['entries']['stock'])
+        if mutation == 'old_list': data['entries'] = list(data['entries'].values())
+        if mutation == 'id': data['entries']['stock']['requirement_id'] = 'stock'
+        if mutation in ('population', 'view', 'grain', 'keys'): data[mutation] = 'invented source fact'
+        with pytest.raises(ValueError):
+>           materialize(catalog, data)
+
+tests/unit/test_slotted_view_coverage.py:97: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_slotted_view_coverage.py:38: in materialize
+    wire = api().parse_slots(AIMessage(content=json.dumps(data, ensure_ascii=False)), api().coverage_schema(rec))
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+        name = 'evaluations.slotted_view_coverage'
+>       assert importlib.util.find_spec(name) is not None, 'fixed named coverage slots are not implemented'
+E       AssertionError: fixed named coverage slots are not implemented
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7a7aa4baa0c0>('evaluations.slotted_view_coverage')
+E        +    where <function find_spec at 0x7a7aa4baa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_slotted_view_coverage.py:18: AssertionError
+_____ test_invalid_slot_shape_and_source_overrides_are_rejected[old_list] ______
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7a7aa16080e0>
+mutation = 'old_list'
+
+    @pytest.mark.parametrize('mutation', ['missing', 'extra', 'old_list', 'id', 'population', 'view', 'grain', 'keys'])
+    def test_invalid_slot_shape_and_source_overrides_are_rejected(catalog, mutation):
+        data = slots(catalog)
+        if mutation == 'missing': data['entries'].pop('stock')
+        if mutation == 'extra': data['entries']['extra'] = deepcopy(data['entries']['stock'])
+        if mutation == 'old_list': data['entries'] = list(data['entries'].values())
+        if mutation == 'id': data['entries']['stock']['requirement_id'] = 'stock'
+        if mutation in ('population', 'view', 'grain', 'keys'): data[mutation] = 'invented source fact'
+        with pytest.raises(ValueError):
+>           materialize(catalog, data)
+
+tests/unit/test_slotted_view_coverage.py:97: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_slotted_view_coverage.py:38: in materialize
+    wire = api().parse_slots(AIMessage(content=json.dumps(data, ensure_ascii=False)), api().coverage_schema(rec))
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+        name = 'evaluations.slotted_view_coverage'
+>       assert importlib.util.find_spec(name) is not None, 'fixed named coverage slots are not implemented'
+E       AssertionError: fixed named coverage slots are not implemented
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7a7aa4baa0c0>('evaluations.slotted_view_coverage')
+E        +    where <function find_spec at 0x7a7aa4baa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_slotted_view_coverage.py:18: AssertionError
+________ test_invalid_slot_shape_and_source_overrides_are_rejected[id] _________
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7a7aa1643740>
+mutation = 'id'
+
+    @pytest.mark.parametrize('mutation', ['missing', 'extra', 'old_list', 'id', 'population', 'view', 'grain', 'keys'])
+    def test_invalid_slot_shape_and_source_overrides_are_rejected(catalog, mutation):
+        data = slots(catalog)
+        if mutation == 'missing': data['entries'].pop('stock')
+        if mutation == 'extra': data['entries']['extra'] = deepcopy(data['entries']['stock'])
+        if mutation == 'old_list': data['entries'] = list(data['entries'].values())
+        if mutation == 'id': data['entries']['stock']['requirement_id'] = 'stock'
+        if mutation in ('population', 'view', 'grain', 'keys'): data[mutation] = 'invented source fact'
+        with pytest.raises(ValueError):
+>           materialize(catalog, data)
+
+tests/unit/test_slotted_view_coverage.py:97: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_slotted_view_coverage.py:38: in materialize
+    wire = api().parse_slots(AIMessage(content=json.dumps(data, ensure_ascii=False)), api().coverage_schema(rec))
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+        name = 'evaluations.slotted_view_coverage'
+>       assert importlib.util.find_spec(name) is not None, 'fixed named coverage slots are not implemented'
+E       AssertionError: fixed named coverage slots are not implemented
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7a7aa4baa0c0>('evaluations.slotted_view_coverage')
+E        +    where <function find_spec at 0x7a7aa4baa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_slotted_view_coverage.py:18: AssertionError
+____ test_invalid_slot_shape_and_source_overrides_are_rejected[population] _____
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7a7aa15fc140>
+mutation = 'population'
+
+    @pytest.mark.parametrize('mutation', ['missing', 'extra', 'old_list', 'id', 'population', 'view', 'grain', 'keys'])
+    def test_invalid_slot_shape_and_source_overrides_are_rejected(catalog, mutation):
+        data = slots(catalog)
+        if mutation == 'missing': data['entries'].pop('stock')
+        if mutation == 'extra': data['entries']['extra'] = deepcopy(data['entries']['stock'])
+        if mutation == 'old_list': data['entries'] = list(data['entries'].values())
+        if mutation == 'id': data['entries']['stock']['requirement_id'] = 'stock'
+        if mutation in ('population', 'view', 'grain', 'keys'): data[mutation] = 'invented source fact'
+        with pytest.raises(ValueError):
+>           materialize(catalog, data)
+
+tests/unit/test_slotted_view_coverage.py:97: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_slotted_view_coverage.py:38: in materialize
+    wire = api().parse_slots(AIMessage(content=json.dumps(data, ensure_ascii=False)), api().coverage_schema(rec))
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+        name = 'evaluations.slotted_view_coverage'
+>       assert importlib.util.find_spec(name) is not None, 'fixed named coverage slots are not implemented'
+E       AssertionError: fixed named coverage slots are not implemented
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7a7aa4baa0c0>('evaluations.slotted_view_coverage')
+E        +    where <function find_spec at 0x7a7aa4baa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_slotted_view_coverage.py:18: AssertionError
+_______ test_invalid_slot_shape_and_source_overrides_are_rejected[view] ________
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7a7aa15fe390>
+mutation = 'view'
+
+    @pytest.mark.parametrize('mutation', ['missing', 'extra', 'old_list', 'id', 'population', 'view', 'grain', 'keys'])
+    def test_invalid_slot_shape_and_source_overrides_are_rejected(catalog, mutation):
+        data = slots(catalog)
+        if mutation == 'missing': data['entries'].pop('stock')
+        if mutation == 'extra': data['entries']['extra'] = deepcopy(data['entries']['stock'])
+        if mutation == 'old_list': data['entries'] = list(data['entries'].values())
+        if mutation == 'id': data['entries']['stock']['requirement_id'] = 'stock'
+        if mutation in ('population', 'view', 'grain', 'keys'): data[mutation] = 'invented source fact'
+        with pytest.raises(ValueError):
+>           materialize(catalog, data)
+
+tests/unit/test_slotted_view_coverage.py:97: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_slotted_view_coverage.py:38: in materialize
+    wire = api().parse_slots(AIMessage(content=json.dumps(data, ensure_ascii=False)), api().coverage_schema(rec))
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+        name = 'evaluations.slotted_view_coverage'
+>       assert importlib.util.find_spec(name) is not None, 'fixed named coverage slots are not implemented'
+E       AssertionError: fixed named coverage slots are not implemented
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7a7aa4baa0c0>('evaluations.slotted_view_coverage')
+E        +    where <function find_spec at 0x7a7aa4baa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_slotted_view_coverage.py:18: AssertionError
+_______ test_invalid_slot_shape_and_source_overrides_are_rejected[grain] _______
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7a7aa15ca2a0>
+mutation = 'grain'
+
+    @pytest.mark.parametrize('mutation', ['missing', 'extra', 'old_list', 'id', 'population', 'view', 'grain', 'keys'])
+    def test_invalid_slot_shape_and_source_overrides_are_rejected(catalog, mutation):
+        data = slots(catalog)
+        if mutation == 'missing': data['entries'].pop('stock')
+        if mutation == 'extra': data['entries']['extra'] = deepcopy(data['entries']['stock'])
+        if mutation == 'old_list': data['entries'] = list(data['entries'].values())
+        if mutation == 'id': data['entries']['stock']['requirement_id'] = 'stock'
+        if mutation in ('population', 'view', 'grain', 'keys'): data[mutation] = 'invented source fact'
+        with pytest.raises(ValueError):
+>           materialize(catalog, data)
+
+tests/unit/test_slotted_view_coverage.py:97: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_slotted_view_coverage.py:38: in materialize
+    wire = api().parse_slots(AIMessage(content=json.dumps(data, ensure_ascii=False)), api().coverage_schema(rec))
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+        name = 'evaluations.slotted_view_coverage'
+>       assert importlib.util.find_spec(name) is not None, 'fixed named coverage slots are not implemented'
+E       AssertionError: fixed named coverage slots are not implemented
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7a7aa4baa0c0>('evaluations.slotted_view_coverage')
+E        +    where <function find_spec at 0x7a7aa4baa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_slotted_view_coverage.py:18: AssertionError
+_______ test_invalid_slot_shape_and_source_overrides_are_rejected[keys] ________
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7a7aa1609400>
+mutation = 'keys'
+
+    @pytest.mark.parametrize('mutation', ['missing', 'extra', 'old_list', 'id', 'population', 'view', 'grain', 'keys'])
+    def test_invalid_slot_shape_and_source_overrides_are_rejected(catalog, mutation):
+        data = slots(catalog)
+        if mutation == 'missing': data['entries'].pop('stock')
+        if mutation == 'extra': data['entries']['extra'] = deepcopy(data['entries']['stock'])
+        if mutation == 'old_list': data['entries'] = list(data['entries'].values())
+        if mutation == 'id': data['entries']['stock']['requirement_id'] = 'stock'
+        if mutation in ('population', 'view', 'grain', 'keys'): data[mutation] = 'invented source fact'
+        with pytest.raises(ValueError):
+>           materialize(catalog, data)
+
+tests/unit/test_slotted_view_coverage.py:97: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_slotted_view_coverage.py:38: in materialize
+    wire = api().parse_slots(AIMessage(content=json.dumps(data, ensure_ascii=False)), api().coverage_schema(rec))
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+        name = 'evaluations.slotted_view_coverage'
+>       assert importlib.util.find_spec(name) is not None, 'fixed named coverage slots are not implemented'
+E       AssertionError: fixed named coverage slots are not implemented
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7a7aa4baa0c0>('evaluations.slotted_view_coverage')
+E        +    where <function find_spec at 0x7a7aa4baa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_slotted_view_coverage.py:18: AssertionError
+_ test_duplicate_json_keys_are_rejected_before_schema_or_last_wins[{"entries":{},"entries":{}}] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7a7aa162e180>
+raw = '{"entries":{},"entries":{}}'
+
+    @pytest.mark.parametrize('raw', [
+        '{"entries":{},"entries":{}}',
+        '{"entries":{"stock":{"status":"unsupported"},"stock":{"status":"unsupported"}}}',
+        '{"entries":{"stock":{"status":"supported"},"stock":{"status":"unsupported"}}}',
+        '{"entries":{"stock":{"mappings":[{"column":"stock_qty","column":"net_sales"}]}}}',
+        '{"entries":{"stock":{"mappings":[{"conditions":[{"value":1,"value":2}]}]}}}',
+    ])
+    def test_duplicate_json_keys_are_rejected_before_schema_or_last_wins(catalog, raw):
+        with pytest.raises(ValueError, match='duplicate JSON key'):
+>           api().parse_slots(AIMessage(content=raw), api().coverage_schema(recall(catalog)))
+            ^^^^^
+
+tests/unit/test_slotted_view_coverage.py:109: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+        name = 'evaluations.slotted_view_coverage'
+>       assert importlib.util.find_spec(name) is not None, 'fixed named coverage slots are not implemented'
+E       AssertionError: fixed named coverage slots are not implemented
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7a7aa4baa0c0>('evaluations.slotted_view_coverage')
+E        +    where <function find_spec at 0x7a7aa4baa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_slotted_view_coverage.py:18: AssertionError
+_ test_duplicate_json_keys_are_rejected_before_schema_or_last_wins[{"entries":{"stock":{"status":"unsupported"},"stock":{"status":"unsupported"}}}] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7a7aa1609b50>
+raw = '{"entries":{"stock":{"status":"unsupported"},"stock":{"status":"unsupported"}}}'
+
+    @pytest.mark.parametrize('raw', [
+        '{"entries":{},"entries":{}}',
+        '{"entries":{"stock":{"status":"unsupported"},"stock":{"status":"unsupported"}}}',
+        '{"entries":{"stock":{"status":"supported"},"stock":{"status":"unsupported"}}}',
+        '{"entries":{"stock":{"mappings":[{"column":"stock_qty","column":"net_sales"}]}}}',
+        '{"entries":{"stock":{"mappings":[{"conditions":[{"value":1,"value":2}]}]}}}',
+    ])
+    def test_duplicate_json_keys_are_rejected_before_schema_or_last_wins(catalog, raw):
+        with pytest.raises(ValueError, match='duplicate JSON key'):
+>           api().parse_slots(AIMessage(content=raw), api().coverage_schema(recall(catalog)))
+            ^^^^^
+
+tests/unit/test_slotted_view_coverage.py:109: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+        name = 'evaluations.slotted_view_coverage'
+>       assert importlib.util.find_spec(name) is not None, 'fixed named coverage slots are not implemented'
+E       AssertionError: fixed named coverage slots are not implemented
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7a7aa4baa0c0>('evaluations.slotted_view_coverage')
+E        +    where <function find_spec at 0x7a7aa4baa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_slotted_view_coverage.py:18: AssertionError
+_ test_duplicate_json_keys_are_rejected_before_schema_or_last_wins[{"entries":{"stock":{"status":"supported"},"stock":{"status":"unsupported"}}}] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7a7aa178d3d0>
+raw = '{"entries":{"stock":{"status":"supported"},"stock":{"status":"unsupported"}}}'
+
+    @pytest.mark.parametrize('raw', [
+        '{"entries":{},"entries":{}}',
+        '{"entries":{"stock":{"status":"unsupported"},"stock":{"status":"unsupported"}}}',
+        '{"entries":{"stock":{"status":"supported"},"stock":{"status":"unsupported"}}}',
+        '{"entries":{"stock":{"mappings":[{"column":"stock_qty","column":"net_sales"}]}}}',
+        '{"entries":{"stock":{"mappings":[{"conditions":[{"value":1,"value":2}]}]}}}',
+    ])
+    def test_duplicate_json_keys_are_rejected_before_schema_or_last_wins(catalog, raw):
+        with pytest.raises(ValueError, match='duplicate JSON key'):
+>           api().parse_slots(AIMessage(content=raw), api().coverage_schema(recall(catalog)))
+            ^^^^^
+
+tests/unit/test_slotted_view_coverage.py:109: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+        name = 'evaluations.slotted_view_coverage'
+>       assert importlib.util.find_spec(name) is not None, 'fixed named coverage slots are not implemented'
+E       AssertionError: fixed named coverage slots are not implemented
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7a7aa4baa0c0>('evaluations.slotted_view_coverage')
+E        +    where <function find_spec at 0x7a7aa4baa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_slotted_view_coverage.py:18: AssertionError
+_ test_duplicate_json_keys_are_rejected_before_schema_or_last_wins[{"entries":{"stock":{"mappings":[{"column":"stock_qty","column":"net_sales"}]}}}] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7a7aa1616480>
+raw = '{"entries":{"stock":{"mappings":[{"column":"stock_qty","column":"net_sales"}]}}}'
+
+    @pytest.mark.parametrize('raw', [
+        '{"entries":{},"entries":{}}',
+        '{"entries":{"stock":{"status":"unsupported"},"stock":{"status":"unsupported"}}}',
+        '{"entries":{"stock":{"status":"supported"},"stock":{"status":"unsupported"}}}',
+        '{"entries":{"stock":{"mappings":[{"column":"stock_qty","column":"net_sales"}]}}}',
+        '{"entries":{"stock":{"mappings":[{"conditions":[{"value":1,"value":2}]}]}}}',
+    ])
+    def test_duplicate_json_keys_are_rejected_before_schema_or_last_wins(catalog, raw):
+        with pytest.raises(ValueError, match='duplicate JSON key'):
+>           api().parse_slots(AIMessage(content=raw), api().coverage_schema(recall(catalog)))
+            ^^^^^
+
+tests/unit/test_slotted_view_coverage.py:109: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+        name = 'evaluations.slotted_view_coverage'
+>       assert importlib.util.find_spec(name) is not None, 'fixed named coverage slots are not implemented'
+E       AssertionError: fixed named coverage slots are not implemented
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7a7aa4baa0c0>('evaluations.slotted_view_coverage')
+E        +    where <function find_spec at 0x7a7aa4baa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_slotted_view_coverage.py:18: AssertionError
+_ test_duplicate_json_keys_are_rejected_before_schema_or_last_wins[{"entries":{"stock":{"mappings":[{"conditions":[{"value":1,"value":2}]}]}}}] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7a7aa179bb00>
+raw = '{"entries":{"stock":{"mappings":[{"conditions":[{"value":1,"value":2}]}]}}}'
+
+    @pytest.mark.parametrize('raw', [
+        '{"entries":{},"entries":{}}',
+        '{"entries":{"stock":{"status":"unsupported"},"stock":{"status":"unsupported"}}}',
+        '{"entries":{"stock":{"status":"supported"},"stock":{"status":"unsupported"}}}',
+        '{"entries":{"stock":{"mappings":[{"column":"stock_qty","column":"net_sales"}]}}}',
+        '{"entries":{"stock":{"mappings":[{"conditions":[{"value":1,"value":2}]}]}}}',
+    ])
+    def test_duplicate_json_keys_are_rejected_before_schema_or_last_wins(catalog, raw):
+        with pytest.raises(ValueError, match='duplicate JSON key'):
+>           api().parse_slots(AIMessage(content=raw), api().coverage_schema(recall(catalog)))
+            ^^^^^
+
+tests/unit/test_slotted_view_coverage.py:109: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+        name = 'evaluations.slotted_view_coverage'
+>       assert importlib.util.find_spec(name) is not None, 'fixed named coverage slots are not implemented'
+E       AssertionError: fixed named coverage slots are not implemented
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7a7aa4baa0c0>('evaluations.slotted_view_coverage')
+E        +    where <function find_spec at 0x7a7aa4baa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_slotted_view_coverage.py:18: AssertionError
+_______ test_slot_parser_requires_original_valid_json[```json\n{}\n```] ________
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7a7aa14abec0>
+raw = '```json\n{}\n```'
+
+    @pytest.mark.parametrize('raw', ['```json\n{}\n```', '{"entries": NaN}', '{"entries":{}} trailing'])
+    def test_slot_parser_requires_original_valid_json(catalog, raw):
+        with pytest.raises(ValueError):
+>           api().parse_slots(AIMessage(content=raw), api().coverage_schema(recall(catalog)))
+            ^^^^^
+
+tests/unit/test_slotted_view_coverage.py:115: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+        name = 'evaluations.slotted_view_coverage'
+>       assert importlib.util.find_spec(name) is not None, 'fixed named coverage slots are not implemented'
+E       AssertionError: fixed named coverage slots are not implemented
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7a7aa4baa0c0>('evaluations.slotted_view_coverage')
+E        +    where <function find_spec at 0x7a7aa4baa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_slotted_view_coverage.py:18: AssertionError
+_______ test_slot_parser_requires_original_valid_json[{"entries": NaN}] ________
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7a7aa1642360>
+raw = '{"entries": NaN}'
+
+    @pytest.mark.parametrize('raw', ['```json\n{}\n```', '{"entries": NaN}', '{"entries":{}} trailing'])
+    def test_slot_parser_requires_original_valid_json(catalog, raw):
+        with pytest.raises(ValueError):
+>           api().parse_slots(AIMessage(content=raw), api().coverage_schema(recall(catalog)))
+            ^^^^^
+
+tests/unit/test_slotted_view_coverage.py:115: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+        name = 'evaluations.slotted_view_coverage'
+>       assert importlib.util.find_spec(name) is not None, 'fixed named coverage slots are not implemented'
+E       AssertionError: fixed named coverage slots are not implemented
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7a7aa4baa0c0>('evaluations.slotted_view_coverage')
+E        +    where <function find_spec at 0x7a7aa4baa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_slotted_view_coverage.py:18: AssertionError
+____ test_slot_parser_requires_original_valid_json[{"entries":{}} trailing] ____
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7a7aa1604260>
+raw = '{"entries":{}} trailing'
+
+    @pytest.mark.parametrize('raw', ['```json\n{}\n```', '{"entries": NaN}', '{"entries":{}} trailing'])
+    def test_slot_parser_requires_original_valid_json(catalog, raw):
+        with pytest.raises(ValueError):
+>           api().parse_slots(AIMessage(content=raw), api().coverage_schema(recall(catalog)))
+            ^^^^^
+
+tests/unit/test_slotted_view_coverage.py:115: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+        name = 'evaluations.slotted_view_coverage'
+>       assert importlib.util.find_spec(name) is not None, 'fixed named coverage slots are not implemented'
+E       AssertionError: fixed named coverage slots are not implemented
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7a7aa4baa0c0>('evaluations.slotted_view_coverage')
+E        +    where <function find_spec at 0x7a7aa4baa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_slotted_view_coverage.py:18: AssertionError
+_ test_slot_adapter_keeps_all_field_role_scope_and_evidence_guards[wrong_role] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7a7aa18c9070>
+mutation = 'wrong_role'
+
+    @pytest.mark.parametrize('mutation', ['wrong_role', 'fake_column', 'bad_path', 'empty_supported',
+                                          'monthly_scope', 'monthly_channel', 'inventory_date', 'metadata_empty'])
+    def test_slot_adapter_keeps_all_field_role_scope_and_evidence_guards(catalog, mutation):
+        view = MONTH if mutation.startswith('monthly') else INV
+        data = slots(catalog, view)
+        if mutation == 'wrong_role': data['entries']['stock']['mappings'][0]['role'] = 'attribute'
+        if mutation == 'fake_column': data['entries']['stock']['mappings'][0]['column'] = 'invented'
+        if mutation == 'bad_path': data['entries']['stock']['contract_path'] = '/not-real'
+        if mutation == 'empty_supported': data['entries']['stock']['mappings'] = []
+        if mutation == 'monthly_scope': data['entries']['sales'].update(status='supported', missing_requirements=[])
+        if mutation == 'monthly_channel':
+            data['entries']['channel'].update(status='supported', mappings=[dict(column='sales_channel',role='filter',operator='=',value='online')],missing_requirements=[])
+        if mutation == 'inventory_date':
+            data['entries']['period'].update(status='supported', mappings=[dict(column='snapshot_date',role='filter',operator='>=',value='2026-09-01')],missing_requirements=[])
+        if mutation == 'metadata_empty':
+            rec = recall(catalog).model_dump()
+            rec['requirements'][0]['kind'] = 'metadata'
+            data['entries']['stock']['mappings'] = []
+            with pytest.raises(ValueError): materialize(catalog, data, rec=RecallResult.model_validate(rec))
+            return
+>       with pytest.raises(ValueError): materialize(catalog, data, view)
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_slotted_view_coverage.py:138: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_slotted_view_coverage.py:38: in materialize
+    wire = api().parse_slots(AIMessage(content=json.dumps(data, ensure_ascii=False)), api().coverage_schema(rec))
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+        name = 'evaluations.slotted_view_coverage'
+>       assert importlib.util.find_spec(name) is not None, 'fixed named coverage slots are not implemented'
+E       AssertionError: fixed named coverage slots are not implemented
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7a7aa4baa0c0>('evaluations.slotted_view_coverage')
+E        +    where <function find_spec at 0x7a7aa4baa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_slotted_view_coverage.py:18: AssertionError
+_ test_slot_adapter_keeps_all_field_role_scope_and_evidence_guards[fake_column] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7a7aa1640da0>
+mutation = 'fake_column'
+
+    @pytest.mark.parametrize('mutation', ['wrong_role', 'fake_column', 'bad_path', 'empty_supported',
+                                          'monthly_scope', 'monthly_channel', 'inventory_date', 'metadata_empty'])
+    def test_slot_adapter_keeps_all_field_role_scope_and_evidence_guards(catalog, mutation):
+        view = MONTH if mutation.startswith('monthly') else INV
+        data = slots(catalog, view)
+        if mutation == 'wrong_role': data['entries']['stock']['mappings'][0]['role'] = 'attribute'
+        if mutation == 'fake_column': data['entries']['stock']['mappings'][0]['column'] = 'invented'
+        if mutation == 'bad_path': data['entries']['stock']['contract_path'] = '/not-real'
+        if mutation == 'empty_supported': data['entries']['stock']['mappings'] = []
+        if mutation == 'monthly_scope': data['entries']['sales'].update(status='supported', missing_requirements=[])
+        if mutation == 'monthly_channel':
+            data['entries']['channel'].update(status='supported', mappings=[dict(column='sales_channel',role='filter',operator='=',value='online')],missing_requirements=[])
+        if mutation == 'inventory_date':
+            data['entries']['period'].update(status='supported', mappings=[dict(column='snapshot_date',role='filter',operator='>=',value='2026-09-01')],missing_requirements=[])
+        if mutation == 'metadata_empty':
+            rec = recall(catalog).model_dump()
+            rec['requirements'][0]['kind'] = 'metadata'
+            data['entries']['stock']['mappings'] = []
+            with pytest.raises(ValueError): materialize(catalog, data, rec=RecallResult.model_validate(rec))
+            return
+>       with pytest.raises(ValueError): materialize(catalog, data, view)
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_slotted_view_coverage.py:138: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_slotted_view_coverage.py:38: in materialize
+    wire = api().parse_slots(AIMessage(content=json.dumps(data, ensure_ascii=False)), api().coverage_schema(rec))
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+        name = 'evaluations.slotted_view_coverage'
+>       assert importlib.util.find_spec(name) is not None, 'fixed named coverage slots are not implemented'
+E       AssertionError: fixed named coverage slots are not implemented
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7a7aa4baa0c0>('evaluations.slotted_view_coverage')
+E        +    where <function find_spec at 0x7a7aa4baa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_slotted_view_coverage.py:18: AssertionError
+__ test_slot_adapter_keeps_all_field_role_scope_and_evidence_guards[bad_path] __
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7a7aa1617020>
+mutation = 'bad_path'
+
+    @pytest.mark.parametrize('mutation', ['wrong_role', 'fake_column', 'bad_path', 'empty_supported',
+                                          'monthly_scope', 'monthly_channel', 'inventory_date', 'metadata_empty'])
+    def test_slot_adapter_keeps_all_field_role_scope_and_evidence_guards(catalog, mutation):
+        view = MONTH if mutation.startswith('monthly') else INV
+        data = slots(catalog, view)
+        if mutation == 'wrong_role': data['entries']['stock']['mappings'][0]['role'] = 'attribute'
+        if mutation == 'fake_column': data['entries']['stock']['mappings'][0]['column'] = 'invented'
+        if mutation == 'bad_path': data['entries']['stock']['contract_path'] = '/not-real'
+        if mutation == 'empty_supported': data['entries']['stock']['mappings'] = []
+        if mutation == 'monthly_scope': data['entries']['sales'].update(status='supported', missing_requirements=[])
+        if mutation == 'monthly_channel':
+            data['entries']['channel'].update(status='supported', mappings=[dict(column='sales_channel',role='filter',operator='=',value='online')],missing_requirements=[])
+        if mutation == 'inventory_date':
+            data['entries']['period'].update(status='supported', mappings=[dict(column='snapshot_date',role='filter',operator='>=',value='2026-09-01')],missing_requirements=[])
+        if mutation == 'metadata_empty':
+            rec = recall(catalog).model_dump()
+            rec['requirements'][0]['kind'] = 'metadata'
+            data['entries']['stock']['mappings'] = []
+            with pytest.raises(ValueError): materialize(catalog, data, rec=RecallResult.model_validate(rec))
+            return
+>       with pytest.raises(ValueError): materialize(catalog, data, view)
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_slotted_view_coverage.py:138: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_slotted_view_coverage.py:38: in materialize
+    wire = api().parse_slots(AIMessage(content=json.dumps(data, ensure_ascii=False)), api().coverage_schema(rec))
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+        name = 'evaluations.slotted_view_coverage'
+>       assert importlib.util.find_spec(name) is not None, 'fixed named coverage slots are not implemented'
+E       AssertionError: fixed named coverage slots are not implemented
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7a7aa4baa0c0>('evaluations.slotted_view_coverage')
+E        +    where <function find_spec at 0x7a7aa4baa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_slotted_view_coverage.py:18: AssertionError
+_ test_slot_adapter_keeps_all_field_role_scope_and_evidence_guards[empty_supported] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7a7aa16083e0>
+mutation = 'empty_supported'
+
+    @pytest.mark.parametrize('mutation', ['wrong_role', 'fake_column', 'bad_path', 'empty_supported',
+                                          'monthly_scope', 'monthly_channel', 'inventory_date', 'metadata_empty'])
+    def test_slot_adapter_keeps_all_field_role_scope_and_evidence_guards(catalog, mutation):
+        view = MONTH if mutation.startswith('monthly') else INV
+        data = slots(catalog, view)
+        if mutation == 'wrong_role': data['entries']['stock']['mappings'][0]['role'] = 'attribute'
+        if mutation == 'fake_column': data['entries']['stock']['mappings'][0]['column'] = 'invented'
+        if mutation == 'bad_path': data['entries']['stock']['contract_path'] = '/not-real'
+        if mutation == 'empty_supported': data['entries']['stock']['mappings'] = []
+        if mutation == 'monthly_scope': data['entries']['sales'].update(status='supported', missing_requirements=[])
+        if mutation == 'monthly_channel':
+            data['entries']['channel'].update(status='supported', mappings=[dict(column='sales_channel',role='filter',operator='=',value='online')],missing_requirements=[])
+        if mutation == 'inventory_date':
+            data['entries']['period'].update(status='supported', mappings=[dict(column='snapshot_date',role='filter',operator='>=',value='2026-09-01')],missing_requirements=[])
+        if mutation == 'metadata_empty':
+            rec = recall(catalog).model_dump()
+            rec['requirements'][0]['kind'] = 'metadata'
+            data['entries']['stock']['mappings'] = []
+            with pytest.raises(ValueError): materialize(catalog, data, rec=RecallResult.model_validate(rec))
+            return
+>       with pytest.raises(ValueError): materialize(catalog, data, view)
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_slotted_view_coverage.py:138: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_slotted_view_coverage.py:38: in materialize
+    wire = api().parse_slots(AIMessage(content=json.dumps(data, ensure_ascii=False)), api().coverage_schema(rec))
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+        name = 'evaluations.slotted_view_coverage'
+>       assert importlib.util.find_spec(name) is not None, 'fixed named coverage slots are not implemented'
+E       AssertionError: fixed named coverage slots are not implemented
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7a7aa4baa0c0>('evaluations.slotted_view_coverage')
+E        +    where <function find_spec at 0x7a7aa4baa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_slotted_view_coverage.py:18: AssertionError
+_ test_slot_adapter_keeps_all_field_role_scope_and_evidence_guards[monthly_scope] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7a7aa162da60>
+mutation = 'monthly_scope'
+
+    @pytest.mark.parametrize('mutation', ['wrong_role', 'fake_column', 'bad_path', 'empty_supported',
+                                          'monthly_scope', 'monthly_channel', 'inventory_date', 'metadata_empty'])
+    def test_slot_adapter_keeps_all_field_role_scope_and_evidence_guards(catalog, mutation):
+        view = MONTH if mutation.startswith('monthly') else INV
+        data = slots(catalog, view)
+        if mutation == 'wrong_role': data['entries']['stock']['mappings'][0]['role'] = 'attribute'
+        if mutation == 'fake_column': data['entries']['stock']['mappings'][0]['column'] = 'invented'
+        if mutation == 'bad_path': data['entries']['stock']['contract_path'] = '/not-real'
+        if mutation == 'empty_supported': data['entries']['stock']['mappings'] = []
+        if mutation == 'monthly_scope': data['entries']['sales'].update(status='supported', missing_requirements=[])
+        if mutation == 'monthly_channel':
+            data['entries']['channel'].update(status='supported', mappings=[dict(column='sales_channel',role='filter',operator='=',value='online')],missing_requirements=[])
+        if mutation == 'inventory_date':
+            data['entries']['period'].update(status='supported', mappings=[dict(column='snapshot_date',role='filter',operator='>=',value='2026-09-01')],missing_requirements=[])
+        if mutation == 'metadata_empty':
+            rec = recall(catalog).model_dump()
+            rec['requirements'][0]['kind'] = 'metadata'
+            data['entries']['stock']['mappings'] = []
+            with pytest.raises(ValueError): materialize(catalog, data, rec=RecallResult.model_validate(rec))
+            return
+>       with pytest.raises(ValueError): materialize(catalog, data, view)
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_slotted_view_coverage.py:138: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_slotted_view_coverage.py:38: in materialize
+    wire = api().parse_slots(AIMessage(content=json.dumps(data, ensure_ascii=False)), api().coverage_schema(rec))
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+        name = 'evaluations.slotted_view_coverage'
+>       assert importlib.util.find_spec(name) is not None, 'fixed named coverage slots are not implemented'
+E       AssertionError: fixed named coverage slots are not implemented
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7a7aa4baa0c0>('evaluations.slotted_view_coverage')
+E        +    where <function find_spec at 0x7a7aa4baa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_slotted_view_coverage.py:18: AssertionError
+_ test_slot_adapter_keeps_all_field_role_scope_and_evidence_guards[monthly_channel] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7a7aa151e090>
+mutation = 'monthly_channel'
+
+    @pytest.mark.parametrize('mutation', ['wrong_role', 'fake_column', 'bad_path', 'empty_supported',
+                                          'monthly_scope', 'monthly_channel', 'inventory_date', 'metadata_empty'])
+    def test_slot_adapter_keeps_all_field_role_scope_and_evidence_guards(catalog, mutation):
+        view = MONTH if mutation.startswith('monthly') else INV
+        data = slots(catalog, view)
+        if mutation == 'wrong_role': data['entries']['stock']['mappings'][0]['role'] = 'attribute'
+        if mutation == 'fake_column': data['entries']['stock']['mappings'][0]['column'] = 'invented'
+        if mutation == 'bad_path': data['entries']['stock']['contract_path'] = '/not-real'
+        if mutation == 'empty_supported': data['entries']['stock']['mappings'] = []
+        if mutation == 'monthly_scope': data['entries']['sales'].update(status='supported', missing_requirements=[])
+        if mutation == 'monthly_channel':
+            data['entries']['channel'].update(status='supported', mappings=[dict(column='sales_channel',role='filter',operator='=',value='online')],missing_requirements=[])
+        if mutation == 'inventory_date':
+            data['entries']['period'].update(status='supported', mappings=[dict(column='snapshot_date',role='filter',operator='>=',value='2026-09-01')],missing_requirements=[])
+        if mutation == 'metadata_empty':
+            rec = recall(catalog).model_dump()
+            rec['requirements'][0]['kind'] = 'metadata'
+            data['entries']['stock']['mappings'] = []
+            with pytest.raises(ValueError): materialize(catalog, data, rec=RecallResult.model_validate(rec))
+            return
+>       with pytest.raises(ValueError): materialize(catalog, data, view)
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_slotted_view_coverage.py:138: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_slotted_view_coverage.py:38: in materialize
+    wire = api().parse_slots(AIMessage(content=json.dumps(data, ensure_ascii=False)), api().coverage_schema(rec))
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+        name = 'evaluations.slotted_view_coverage'
+>       assert importlib.util.find_spec(name) is not None, 'fixed named coverage slots are not implemented'
+E       AssertionError: fixed named coverage slots are not implemented
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7a7aa4baa0c0>('evaluations.slotted_view_coverage')
+E        +    where <function find_spec at 0x7a7aa4baa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_slotted_view_coverage.py:18: AssertionError
+_ test_slot_adapter_keeps_all_field_role_scope_and_evidence_guards[inventory_date] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7a7aa1614fb0>
+mutation = 'inventory_date'
+
+    @pytest.mark.parametrize('mutation', ['wrong_role', 'fake_column', 'bad_path', 'empty_supported',
+                                          'monthly_scope', 'monthly_channel', 'inventory_date', 'metadata_empty'])
+    def test_slot_adapter_keeps_all_field_role_scope_and_evidence_guards(catalog, mutation):
+        view = MONTH if mutation.startswith('monthly') else INV
+        data = slots(catalog, view)
+        if mutation == 'wrong_role': data['entries']['stock']['mappings'][0]['role'] = 'attribute'
+        if mutation == 'fake_column': data['entries']['stock']['mappings'][0]['column'] = 'invented'
+        if mutation == 'bad_path': data['entries']['stock']['contract_path'] = '/not-real'
+        if mutation == 'empty_supported': data['entries']['stock']['mappings'] = []
+        if mutation == 'monthly_scope': data['entries']['sales'].update(status='supported', missing_requirements=[])
+        if mutation == 'monthly_channel':
+            data['entries']['channel'].update(status='supported', mappings=[dict(column='sales_channel',role='filter',operator='=',value='online')],missing_requirements=[])
+        if mutation == 'inventory_date':
+            data['entries']['period'].update(status='supported', mappings=[dict(column='snapshot_date',role='filter',operator='>=',value='2026-09-01')],missing_requirements=[])
+        if mutation == 'metadata_empty':
+            rec = recall(catalog).model_dump()
+            rec['requirements'][0]['kind'] = 'metadata'
+            data['entries']['stock']['mappings'] = []
+            with pytest.raises(ValueError): materialize(catalog, data, rec=RecallResult.model_validate(rec))
+            return
+>       with pytest.raises(ValueError): materialize(catalog, data, view)
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_slotted_view_coverage.py:138: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_slotted_view_coverage.py:38: in materialize
+    wire = api().parse_slots(AIMessage(content=json.dumps(data, ensure_ascii=False)), api().coverage_schema(rec))
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+        name = 'evaluations.slotted_view_coverage'
+>       assert importlib.util.find_spec(name) is not None, 'fixed named coverage slots are not implemented'
+E       AssertionError: fixed named coverage slots are not implemented
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7a7aa4baa0c0>('evaluations.slotted_view_coverage')
+E        +    where <function find_spec at 0x7a7aa4baa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_slotted_view_coverage.py:18: AssertionError
+_ test_slot_adapter_keeps_all_field_role_scope_and_evidence_guards[metadata_empty] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7a7aa1609ac0>
+mutation = 'metadata_empty'
+
+    @pytest.mark.parametrize('mutation', ['wrong_role', 'fake_column', 'bad_path', 'empty_supported',
+                                          'monthly_scope', 'monthly_channel', 'inventory_date', 'metadata_empty'])
+    def test_slot_adapter_keeps_all_field_role_scope_and_evidence_guards(catalog, mutation):
+        view = MONTH if mutation.startswith('monthly') else INV
+        data = slots(catalog, view)
+        if mutation == 'wrong_role': data['entries']['stock']['mappings'][0]['role'] = 'attribute'
+        if mutation == 'fake_column': data['entries']['stock']['mappings'][0]['column'] = 'invented'
+        if mutation == 'bad_path': data['entries']['stock']['contract_path'] = '/not-real'
+        if mutation == 'empty_supported': data['entries']['stock']['mappings'] = []
+        if mutation == 'monthly_scope': data['entries']['sales'].update(status='supported', missing_requirements=[])
+        if mutation == 'monthly_channel':
+            data['entries']['channel'].update(status='supported', mappings=[dict(column='sales_channel',role='filter',operator='=',value='online')],missing_requirements=[])
+        if mutation == 'inventory_date':
+            data['entries']['period'].update(status='supported', mappings=[dict(column='snapshot_date',role='filter',operator='>=',value='2026-09-01')],missing_requirements=[])
+        if mutation == 'metadata_empty':
+            rec = recall(catalog).model_dump()
+            rec['requirements'][0]['kind'] = 'metadata'
+            data['entries']['stock']['mappings'] = []
+>           with pytest.raises(ValueError): materialize(catalog, data, rec=RecallResult.model_validate(rec))
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_slotted_view_coverage.py:136: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_slotted_view_coverage.py:38: in materialize
+    wire = api().parse_slots(AIMessage(content=json.dumps(data, ensure_ascii=False)), api().coverage_schema(rec))
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+        name = 'evaluations.slotted_view_coverage'
+>       assert importlib.util.find_spec(name) is not None, 'fixed named coverage slots are not implemented'
+E       AssertionError: fixed named coverage slots are not implemented
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7a7aa4baa0c0>('evaluations.slotted_view_coverage')
+E        +    where <function find_spec at 0x7a7aa4baa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_slotted_view_coverage.py:18: AssertionError
+_ test_adapter_fails_closed_without_exact_valid_admitted_source[summary_missing] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7a7aa15fc920>
+source_change = 'summary_missing'
+
+    @pytest.mark.parametrize('source_change', ['summary_missing', 'summary_empty', 'unadmitted', 'modified'])
+    def test_adapter_fails_closed_without_exact_valid_admitted_source(catalog, source_change):
+        source = deepcopy(policy(catalog))
+        if source_change == 'summary_missing': source.pop('summary')
+        if source_change == 'summary_empty': source['summary'] = ''
+        if source_change == 'unadmitted': source['view'] = 'not_admitted'
+        if source_change == 'modified': source['summary'] += ' 不含退貨'
+>       with pytest.raises(ValueError): materialize(catalog, slots(catalog), source=source)
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_slotted_view_coverage.py:148: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_slotted_view_coverage.py:38: in materialize
+    wire = api().parse_slots(AIMessage(content=json.dumps(data, ensure_ascii=False)), api().coverage_schema(rec))
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+        name = 'evaluations.slotted_view_coverage'
+>       assert importlib.util.find_spec(name) is not None, 'fixed named coverage slots are not implemented'
+E       AssertionError: fixed named coverage slots are not implemented
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7a7aa4baa0c0>('evaluations.slotted_view_coverage')
+E        +    where <function find_spec at 0x7a7aa4baa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_slotted_view_coverage.py:18: AssertionError
+_ test_adapter_fails_closed_without_exact_valid_admitted_source[summary_empty] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7a7aa168b110>
+source_change = 'summary_empty'
+
+    @pytest.mark.parametrize('source_change', ['summary_missing', 'summary_empty', 'unadmitted', 'modified'])
+    def test_adapter_fails_closed_without_exact_valid_admitted_source(catalog, source_change):
+        source = deepcopy(policy(catalog))
+        if source_change == 'summary_missing': source.pop('summary')
+        if source_change == 'summary_empty': source['summary'] = ''
+        if source_change == 'unadmitted': source['view'] = 'not_admitted'
+        if source_change == 'modified': source['summary'] += ' 不含退貨'
+>       with pytest.raises(ValueError): materialize(catalog, slots(catalog), source=source)
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_slotted_view_coverage.py:148: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_slotted_view_coverage.py:38: in materialize
+    wire = api().parse_slots(AIMessage(content=json.dumps(data, ensure_ascii=False)), api().coverage_schema(rec))
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+        name = 'evaluations.slotted_view_coverage'
+>       assert importlib.util.find_spec(name) is not None, 'fixed named coverage slots are not implemented'
+E       AssertionError: fixed named coverage slots are not implemented
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7a7aa4baa0c0>('evaluations.slotted_view_coverage')
+E        +    where <function find_spec at 0x7a7aa4baa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_slotted_view_coverage.py:18: AssertionError
+__ test_adapter_fails_closed_without_exact_valid_admitted_source[unadmitted] ___
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7a7aa15d3e90>
+source_change = 'unadmitted'
+
+    @pytest.mark.parametrize('source_change', ['summary_missing', 'summary_empty', 'unadmitted', 'modified'])
+    def test_adapter_fails_closed_without_exact_valid_admitted_source(catalog, source_change):
+        source = deepcopy(policy(catalog))
+        if source_change == 'summary_missing': source.pop('summary')
+        if source_change == 'summary_empty': source['summary'] = ''
+        if source_change == 'unadmitted': source['view'] = 'not_admitted'
+        if source_change == 'modified': source['summary'] += ' 不含退貨'
+>       with pytest.raises(ValueError): materialize(catalog, slots(catalog), source=source)
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_slotted_view_coverage.py:148: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_slotted_view_coverage.py:38: in materialize
+    wire = api().parse_slots(AIMessage(content=json.dumps(data, ensure_ascii=False)), api().coverage_schema(rec))
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+        name = 'evaluations.slotted_view_coverage'
+>       assert importlib.util.find_spec(name) is not None, 'fixed named coverage slots are not implemented'
+E       AssertionError: fixed named coverage slots are not implemented
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7a7aa4baa0c0>('evaluations.slotted_view_coverage')
+E        +    where <function find_spec at 0x7a7aa4baa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_slotted_view_coverage.py:18: AssertionError
+___ test_adapter_fails_closed_without_exact_valid_admitted_source[modified] ____
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7a7aa15ca5d0>
+source_change = 'modified'
+
+    @pytest.mark.parametrize('source_change', ['summary_missing', 'summary_empty', 'unadmitted', 'modified'])
+    def test_adapter_fails_closed_without_exact_valid_admitted_source(catalog, source_change):
+        source = deepcopy(policy(catalog))
+        if source_change == 'summary_missing': source.pop('summary')
+        if source_change == 'summary_empty': source['summary'] = ''
+        if source_change == 'unadmitted': source['view'] = 'not_admitted'
+        if source_change == 'modified': source['summary'] += ' 不含退貨'
+>       with pytest.raises(ValueError): materialize(catalog, slots(catalog), source=source)
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_slotted_view_coverage.py:148: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_slotted_view_coverage.py:38: in materialize
+    wire = api().parse_slots(AIMessage(content=json.dumps(data, ensure_ascii=False)), api().coverage_schema(rec))
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+        name = 'evaluations.slotted_view_coverage'
+>       assert importlib.util.find_spec(name) is not None, 'fixed named coverage slots are not implemented'
+E       AssertionError: fixed named coverage slots are not implemented
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7a7aa4baa0c0>('evaluations.slotted_view_coverage')
+E        +    where <function find_spec at 0x7a7aa4baa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_slotted_view_coverage.py:18: AssertionError
+_____________ test_program_bound_population_is_not_auto_supported ______________
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7a7aa14a5760>
+
+    def test_program_bound_population_is_not_auto_supported(catalog):
+        data = slots(catalog, SALES)
+        data['entries']['population'].update(status='unsupported', mappings=[], contract_path='/summary',missing_requirements=['只有銷售鍵，不保證完整庫存母體'])
+>       row = next(e for e in materialize(catalog, data, SALES).entries if e.requirement_id == 'population')
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_slotted_view_coverage.py:154: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_slotted_view_coverage.py:38: in materialize
+    wire = api().parse_slots(AIMessage(content=json.dumps(data, ensure_ascii=False)), api().coverage_schema(rec))
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+        name = 'evaluations.slotted_view_coverage'
+>       assert importlib.util.find_spec(name) is not None, 'fixed named coverage slots are not implemented'
+E       AssertionError: fixed named coverage slots are not implemented
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7a7aa4baa0c0>('evaluations.slotted_view_coverage')
+E        +    where <function find_spec at 0x7a7aa4baa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_slotted_view_coverage.py:18: AssertionError
+_ test_slot_normalization_cannot_bypass_selection_population_grain_or_no_zero[inner] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7a7aa168b470>
+mutation = 'inner'
+
+    @pytest.mark.parametrize('mutation', ['inner', 'grain', 'zero'])
+    def test_slot_normalization_cannot_bypass_selection_population_grain_or_no_zero(catalog, mutation):
+>       mapped = [materialize(catalog, slots(catalog, v.name), v.name) for v in catalog.views()]
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_slotted_view_coverage.py:160: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_slotted_view_coverage.py:38: in materialize
+    wire = api().parse_slots(AIMessage(content=json.dumps(data, ensure_ascii=False)), api().coverage_schema(rec))
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+        name = 'evaluations.slotted_view_coverage'
+>       assert importlib.util.find_spec(name) is not None, 'fixed named coverage slots are not implemented'
+E       AssertionError: fixed named coverage slots are not implemented
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7a7aa4baa0c0>('evaluations.slotted_view_coverage')
+E        +    where <function find_spec at 0x7a7aa4baa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_slotted_view_coverage.py:18: AssertionError
+_ test_slot_normalization_cannot_bypass_selection_population_grain_or_no_zero[grain] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7a7aa15d1940>
+mutation = 'grain'
+
+    @pytest.mark.parametrize('mutation', ['inner', 'grain', 'zero'])
+    def test_slot_normalization_cannot_bypass_selection_population_grain_or_no_zero(catalog, mutation):
+>       mapped = [materialize(catalog, slots(catalog, v.name), v.name) for v in catalog.views()]
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_slotted_view_coverage.py:160: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_slotted_view_coverage.py:38: in materialize
+    wire = api().parse_slots(AIMessage(content=json.dumps(data, ensure_ascii=False)), api().coverage_schema(rec))
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+        name = 'evaluations.slotted_view_coverage'
+>       assert importlib.util.find_spec(name) is not None, 'fixed named coverage slots are not implemented'
+E       AssertionError: fixed named coverage slots are not implemented
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7a7aa4baa0c0>('evaluations.slotted_view_coverage')
+E        +    where <function find_spec at 0x7a7aa4baa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_slotted_view_coverage.py:18: AssertionError
+_ test_slot_normalization_cannot_bypass_selection_population_grain_or_no_zero[zero] _
+
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x7a7aa176d100>
+mutation = 'zero'
+
+    @pytest.mark.parametrize('mutation', ['inner', 'grain', 'zero'])
+    def test_slot_normalization_cannot_bypass_selection_population_grain_or_no_zero(catalog, mutation):
+>       mapped = [materialize(catalog, slots(catalog, v.name), v.name) for v in catalog.views()]
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_slotted_view_coverage.py:160: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_slotted_view_coverage.py:38: in materialize
+    wire = api().parse_slots(AIMessage(content=json.dumps(data, ensure_ascii=False)), api().coverage_schema(rec))
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+        name = 'evaluations.slotted_view_coverage'
+>       assert importlib.util.find_spec(name) is not None, 'fixed named coverage slots are not implemented'
+E       AssertionError: fixed named coverage slots are not implemented
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7a7aa4baa0c0>('evaluations.slotted_view_coverage')
+E        +    where <function find_spec at 0x7a7aa4baa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_slotted_view_coverage.py:18: AssertionError
+=========================== short test summary info ============================
+FAILED tests/unit/test_slotted_view_coverage.py::test_required_named_schema_handles_arbitrary_ids_without_position_or_reserved_name_loss[ids0]
+FAILED tests/unit/test_slotted_view_coverage.py::test_required_named_schema_handles_arbitrary_ids_without_position_or_reserved_name_loss[ids1]
+FAILED tests/unit/test_slotted_view_coverage.py::test_trusted_source_facts_come_from_exact_summary_and_partial_is_retained
+FAILED tests/unit/test_slotted_view_coverage.py::test_summary_text_is_preserved_without_inferred_exclusion[\u50c5\u542b\u5df2\u5b8c\u6210\u8a02\u55ae\u3002]
+FAILED tests/unit/test_slotted_view_coverage.py::test_summary_text_is_preserved_without_inferred_exclusion[\u4f86\u6e90\u660e\u78ba\u6392\u9664\u9000\u8ca8\uff0c\u50c5\u542b\u5df2\u5b8c\u6210\u8a02\u55ae\u3002]
+FAILED tests/unit/test_slotted_view_coverage.py::test_invalid_slot_shape_and_source_overrides_are_rejected[missing]
+FAILED tests/unit/test_slotted_view_coverage.py::test_invalid_slot_shape_and_source_overrides_are_rejected[extra]
+FAILED tests/unit/test_slotted_view_coverage.py::test_invalid_slot_shape_and_source_overrides_are_rejected[old_list]
+FAILED tests/unit/test_slotted_view_coverage.py::test_invalid_slot_shape_and_source_overrides_are_rejected[id]
+FAILED tests/unit/test_slotted_view_coverage.py::test_invalid_slot_shape_and_source_overrides_are_rejected[population]
+FAILED tests/unit/test_slotted_view_coverage.py::test_invalid_slot_shape_and_source_overrides_are_rejected[view]
+FAILED tests/unit/test_slotted_view_coverage.py::test_invalid_slot_shape_and_source_overrides_are_rejected[grain]
+FAILED tests/unit/test_slotted_view_coverage.py::test_invalid_slot_shape_and_source_overrides_are_rejected[keys]
+FAILED tests/unit/test_slotted_view_coverage.py::test_duplicate_json_keys_are_rejected_before_schema_or_last_wins[{"entries":{},"entries":{}}]
+FAILED tests/unit/test_slotted_view_coverage.py::test_duplicate_json_keys_are_rejected_before_schema_or_last_wins[{"entries":{"stock":{"status":"unsupported"},"stock":{"status":"unsupported"}}}]
+FAILED tests/unit/test_slotted_view_coverage.py::test_duplicate_json_keys_are_rejected_before_schema_or_last_wins[{"entries":{"stock":{"status":"supported"},"stock":{"status":"unsupported"}}}]
+FAILED tests/unit/test_slotted_view_coverage.py::test_duplicate_json_keys_are_rejected_before_schema_or_last_wins[{"entries":{"stock":{"mappings":[{"column":"stock_qty","column":"net_sales"}]}}}]
+FAILED tests/unit/test_slotted_view_coverage.py::test_duplicate_json_keys_are_rejected_before_schema_or_last_wins[{"entries":{"stock":{"mappings":[{"conditions":[{"value":1,"value":2}]}]}}}]
+FAILED tests/unit/test_slotted_view_coverage.py::test_slot_parser_requires_original_valid_json[```json\n{}\n```]
+FAILED tests/unit/test_slotted_view_coverage.py::test_slot_parser_requires_original_valid_json[{"entries": NaN}]
+FAILED tests/unit/test_slotted_view_coverage.py::test_slot_parser_requires_original_valid_json[{"entries":{}} trailing]
+FAILED tests/unit/test_slotted_view_coverage.py::test_slot_adapter_keeps_all_field_role_scope_and_evidence_guards[wrong_role]
+FAILED tests/unit/test_slotted_view_coverage.py::test_slot_adapter_keeps_all_field_role_scope_and_evidence_guards[fake_column]
+FAILED tests/unit/test_slotted_view_coverage.py::test_slot_adapter_keeps_all_field_role_scope_and_evidence_guards[bad_path]
+FAILED tests/unit/test_slotted_view_coverage.py::test_slot_adapter_keeps_all_field_role_scope_and_evidence_guards[empty_supported]
+FAILED tests/unit/test_slotted_view_coverage.py::test_slot_adapter_keeps_all_field_role_scope_and_evidence_guards[monthly_scope]
+FAILED tests/unit/test_slotted_view_coverage.py::test_slot_adapter_keeps_all_field_role_scope_and_evidence_guards[monthly_channel]
+FAILED tests/unit/test_slotted_view_coverage.py::test_slot_adapter_keeps_all_field_role_scope_and_evidence_guards[inventory_date]
+FAILED tests/unit/test_slotted_view_coverage.py::test_slot_adapter_keeps_all_field_role_scope_and_evidence_guards[metadata_empty]
+FAILED tests/unit/test_slotted_view_coverage.py::test_adapter_fails_closed_without_exact_valid_admitted_source[summary_missing]
+FAILED tests/unit/test_slotted_view_coverage.py::test_adapter_fails_closed_without_exact_valid_admitted_source[summary_empty]
+FAILED tests/unit/test_slotted_view_coverage.py::test_adapter_fails_closed_without_exact_valid_admitted_source[unadmitted]
+FAILED tests/unit/test_slotted_view_coverage.py::test_adapter_fails_closed_without_exact_valid_admitted_source[modified]
+FAILED tests/unit/test_slotted_view_coverage.py::test_program_bound_population_is_not_auto_supported
+FAILED tests/unit/test_slotted_view_coverage.py::test_slot_normalization_cannot_bypass_selection_population_grain_or_no_zero[inner]
+FAILED tests/unit/test_slotted_view_coverage.py::test_slot_normalization_cannot_bypass_selection_population_grain_or_no_zero[grain]
+FAILED tests/unit/test_slotted_view_coverage.py::test_slot_normalization_cannot_bypass_selection_population_grain_or_no_zero[zero]
+37 failed in 2.49s

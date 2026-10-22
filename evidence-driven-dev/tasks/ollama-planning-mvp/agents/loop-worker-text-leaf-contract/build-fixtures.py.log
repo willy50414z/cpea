@@ -1,0 +1,55 @@
+# Executed as a local fixture builder, not imported by runtime.
+from copy import deepcopy
+import json
+from pathlib import Path
+import yaml
+from evaluations.diagnostics import managed_text_leaf_evidence as m
+b=m.base;p=m.capability.load_package();root=m.FIXTURES
+write=lambda path,v:(path.parent.mkdir(parents=True,exist_ok=True),b.write_json(path,v))
+samples=[dict(id=s['id'],base=s['id'],view=s['view'],expected_reference=dict(manifest=m.capability.DEFAULT_MANIFEST.relative_to(m.ROOT).as_posix(),sample=s['id'])) for s in p['manifest']['samples']]
+idmap=p['legacy']['manifest']['id_map']
+
+def rename(value,mapping):
+ if isinstance(value,dict):return {mapping.get(k,k):rename(v,mapping) for k,v in value.items()}
+ if isinstance(value,list):return [rename(v,mapping) for v in value]
+ if isinstance(value,str):
+  for old,new in sorted(mapping.items(),key=lambda pair:-len(pair[0])):value=value.replace(old,new)
+ return value
+
+expected={}
+for index,base_sid,view,columns in [
+ (6,'COV-CAP-v1-04','diagnostic_leaf.member_a',{'customer_id':'person_key','lifetime_spend':'value_total','last_order_date':'latest_day'}),
+ (7,'COV-CAP-v1-05','diagnostic_leaf.stock_a',{'store_id':'site_key','product_id':'item_key','stock_qty':'onhand_value','snapshot_date':'counted_day'}),
+ (8,'COV-CAP-v1-05','diagnostic_leaf.stock_subset',{'store_id':'site_key','product_id':'item_key','stock_qty':'onhand_value','snapshot_date':'counted_day'}),
+ (9,'COV-CAP-v1-04','diagnostic_leaf.member_profit',{'customer_id':'person_key','lifetime_spend':'value_total','last_order_date':'latest_day'})]:
+ sid=f'COV-LEAF-v1-{index:02}';c=m.capability.prepare(p,base_sid)
+ original=next(v.policy for v in c['catalog'].views() if v.name==c['sample']['view']);v=rename(deepcopy(original),columns);v['view']=view
+ if index in [7,8]:
+  v['columns'].pop('stock_status')
+  print('inventory original summary:',v['summary'])
+  # Remove only the exact stock_status clause; retain all other source wording.
+  v['summary']=v['summary'].replace('stock_status: 缺貨/需補貨/正常。','')
+  if 'stock_status' in v['summary']:raise ValueError('stock_status summary clause not removed exactly')
+ if index==8:v['summary']='此來源僅保留 onhand_value > 0 的庫存列，缺貨列不出現。'+v['summary']
+ if index==9:v['columns']['value_total']['description']='會員累計毛利金額，單位 TWD；不是折扣後銷售淨額或消費金額。'
+ profile=root/f'profiles/{sid}'
+ write(profile/'manifest.yaml',dict(profile_id=f'leaf_control_{index}',contract_version='leaf-control-1',status='approved',source_kind='sql',catalog='catalog.yaml'))
+ write(profile/'catalog.yaml',dict(views={view:dict(path='view.yaml')}));write(profile/'view.yaml',v)
+ recall=b.read_json(p['legacy']['root']/'recall-original.json')
+ if index in [6,9]:recall=rename(recall,idmap)
+ write(root/f'recall-{sid}.json',recall)
+ value=rename(deepcopy(p['oracle']['positive_outputs'][base_sid]),columns)
+ if index in [6,9]:value=rename(value,idmap)
+ if index==8:value['entries']['POP-001'].update(status='partial',own_gap=True)
+ if index==9:value['entries'][idmap['MET-003']].update(status='unsupported',own_gap=True,mappings=[],contract_path=None)
+ expected[sid]=value
+ samples.append(dict(id=sid,base=base_sid,view=view,profile=f'profiles/{sid}',recall_transformed=f'recall-{sid}.json',
+   expected_reference=dict(path='expected-new.json',sample=sid),approval='PENDING_FRESH_REVIEW'))
+write(root/'panel.json',samples);write(root/'expected-new.json',expected)
+refs={n:b.digest(m.ROOT/n) for n in m.REFERENCE_PATHS}
+write(m.DEFAULT_MANIFEST,m.manifest_design(refs,{}));package=m.load_package()
+for cell in m.cells():
+ c=m.prepare(package,cell['sample_id'],cell['seed'])
+ for part,value in m.inputs(c).items():write(root/'inputs'/f'{cell["sample_id"]}-seed{cell["seed"]}-{part}.json',value)
+ print(cell['sample_id'],cell['seed'],c['input_tokens'])
+write(m.DEFAULT_MANIFEST,m.manifest_design(refs,m.bindings(package)))

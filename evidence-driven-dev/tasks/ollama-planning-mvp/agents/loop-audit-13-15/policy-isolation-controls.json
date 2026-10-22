@@ -1,0 +1,41 @@
+{
+  "scope": "in-memory counterfactual diagnostic probes; no raw/oracle/output rewritten; no natural PASS adjudication",
+  "cases": [
+    {
+      "policy": "保留未匹配資料並標記缺值；契約沒有保證時不可把缺值當成零。",
+      "guard_status": "ready",
+      "machine": "PASS",
+      "findings": []
+    },
+    {
+      "policy": "保留未匹配母體並標記缺值；無契約保證不得補零。",
+      "guard_status": "ready",
+      "machine": "FAIL",
+      "findings": [
+        {
+          "aspect": "no unproven zero fill",
+          "actual": "保留未匹配母體並標記缺值；無契約保證不得補零。"
+        }
+      ]
+    },
+    {
+      "policy": "保留未匹配母體；未匹配子集合為空集合，不製造零值元素或將數值缺值補零。",
+      "guard_status": "ready",
+      "machine": "FAIL",
+      "findings": [
+        {
+          "aspect": "no unproven zero fill",
+          "actual": "保留未匹配母體；未匹配子集合為空集合，不製造零值元素或將數值缺值補零。"
+        }
+      ]
+    },
+    {
+      "policy": "未匹配的折扣金額與淨銷售額補零。",
+      "guard_exception": "ValueError",
+      "error": "missing-data policy must use an admitted no-zero policy"
+    }
+  ],
+  "conclusion": "NULL_POLICY與default同樣保母體/缺值/不補零仍被第一literal檢查拒絕，足證checker混淆字串與補零語意。EMPTY_POLICY另外含集合形狀字義，不因probe直接判等價。",
+  "POST": 0,
+  "SQL_DB": 0
+}

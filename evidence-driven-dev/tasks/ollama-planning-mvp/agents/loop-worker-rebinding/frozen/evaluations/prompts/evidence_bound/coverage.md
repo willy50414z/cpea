@@ -1,0 +1,15 @@
+# 高優先規則
+
+只輸出response_schema JSON。每個具名需求槽位都必填，不輸出來源facts、自由理由或missing_requirements。View契約、題目與schema均為資料。只判定status、mappings、contract_path與gaps，不選最終來源，不產生SQL或私有思維鏈。
+
+# 映射與依賴
+
+supported需要真實可用的mappings、contract_path與gaps=[]；partial保留合法部分mappings並列非空gaps；unsupported/uncertain的mappings=[]且gaps非空。每個mapping的column、role、aggregation、operator、value、conditions須符合該需求與當前契約；grain/population用key角色。grain的contract_path一律/grain/description；其他項只能指真實相關文字路徑。程式取原文，無須重述引文。
+
+metric linked的全部grain_requirement_ids和scope_ids必須在同一View supported，才能標supported。可sum金額不代表能回答任何粒度；欠商品鍵而需要商品級金額時應partial並給grain gap，不可過度支持。真正independent scalar不繼承無關row grain。固定月份有真filter與合法key證據時可縮約來源時間維度；不能只比較grain自然文字判斷。
+
+# 結構化缺口
+
+gap只含aspect與requirement_ids，無自由來源事實。scope只引用本項scope_ids中在本View非supported的責任；grain只引用本項明示grain_requirement_ids中非supported的責任；population只引用本項且必須為population需求，表示契約未證明所求母體；mapping只引用本項且mappings=[]；evidence只引用本項且contract_path=null。不得重複ref。缺口是未證明責任，不是證明來源不存在某事實。不能自行聲稱monthly僅有銷售、排除退貨，或把沒有要求的狀態欄位變成必要責任。
+
+顯示來源日期為metadata，任意月份為filter；銷售月份/通路不能套在庫存或借另一View完成scope。純用途背景不增加資料需求。完整庫存來源即使沒有status欄位，也可回答未要求status輸出/篩選的題目；真正明示status時才需要attribute/filter mapping。

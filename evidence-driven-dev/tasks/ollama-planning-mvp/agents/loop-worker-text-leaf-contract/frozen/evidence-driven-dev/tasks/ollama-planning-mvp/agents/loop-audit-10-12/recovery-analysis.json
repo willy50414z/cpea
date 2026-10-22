@@ -1,0 +1,29 @@
+{
+  "findings": [
+    {
+      "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-semantics/review.json",
+      "original_sha256": "aaa8b740cc30fbd1b8670fa45ce5b68280dc073b9ee5e662dc43eeb68b903dfa",
+      "current_sha256": "0200cc20e8aa288580c0a5036d4056a144555a272b6b4afe64da357734118d6b",
+      "removed_exact_text": " 新Oracle的own_gap仍須fresh研究按來源母體/淨額定義裁定；本review只拒絕完全刪除有用金額mapping，不以離線alternative裁定自身已完整。",
+      "removed_utf8_bytes": 173,
+      "recorded_finished_at": "2026-10-21T21:01:32.642132+00:00",
+      "current_mtime": "2026-10-21T21:01:39.235729+00:00",
+      "seconds_after_finish": 6.593597,
+      "original_and_late_saved_in_audit": true
+    },
+    {
+      "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-semantics/semantic-review.log",
+      "original_sha256": "fa3e4654447f56bef7cffe64220195c4e2817ba20838d2c3b27eaf893a28eaaa",
+      "current_sha256": "3b7c9f3b51626a0634405b8e2c14efbcf730b600138aa60b067e74aceffca4f0",
+      "removed_exact_text": ", \"own_gap_ruling\": \"未替新Oracle最終裁定own_gap；本次已證有用金額分量不能清空，足以REJECT。offline alternative的own_gap=false只證現schema可表示該假設，不證其業務正確。會員來源母體是否完整涵蓋本題淨額、累計消費與淨銷售額定義差異是否另有自身缺口，須fresh研究依契約裁定並固定新版本，不能借未知退貨/稅額/非會員事實猜測。\"",
+      "removed_utf8_bytes": 434,
+      "recorded_finished_at": "2026-10-21T21:01:32.642132+00:00",
+      "current_mtime": "2026-10-21T21:01:39.233729+00:00",
+      "seconds_after_finish": 6.591597,
+      "original_and_late_saved_in_audit": true
+    }
+  ],
+  "semantic_effect": "原REJECT/有用金額能力遺漏結論不變；新增內容僅澄清own_gap未由原review定案，不使alternative自身完整。",
+  "root_cause_evidence": "兩檔mtime在round11 finish後約6.59秒，且只移除具名後補語意即可精確命中控制器原raw SHA256；不憑此斷言寫入者或其訊息事件。",
+  "recovery_constraint": "未改原檔。恢復前保留兩版；不得更改controller expected hash。原路徑精確還原後v2 live lineage會拒絕，不能改既完成v2湊PASS；需fresh研究版本化綁定原始與後補證據並重新父層語意驗收。"
+}

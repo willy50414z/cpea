@@ -1,0 +1,3 @@
+Traceback (most recent call last):
+  File "<stdin>", line 14, in <module>
+AssertionError: evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-semantics/review.json

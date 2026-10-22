@@ -1,0 +1,1074 @@
+{
+  "result": "PASS",
+  "calls": 0,
+  "replays": [
+    {
+      "batch": "kind-isolation-v2-rebind-1-20261021T215758Z-5bbdea",
+      "sample": "SEL-ISO-v1-01",
+      "mode": "live",
+      "result": {
+        "result": "FAIL",
+        "replay_verification": "PASS",
+        "stopped": {
+          "error_type": "ValueError",
+          "error": "fixed diagnostic semantic checks failed"
+        },
+        "inner": {
+          "result": "PASS",
+          "raw_replays": 1,
+          "stopped": {
+            "error_type": "ValueError",
+            "error": "fixed diagnostic semantic checks failed"
+          },
+          "upstream_injected": true,
+          "provider_calls": 0
+        },
+        "outer_receipt_sha256": "d614136521733536adc94c82d997575492c74417a87d98398ced63ca1f451278",
+        "provider_calls": 0,
+        "independent_semantic_approval": "PENDING"
+      },
+      "log": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/history-kind-isolation-v2-rebind-1-20261021T215758Z-5bbdea-SEL-ISO-v1-01-live.log",
+      "log_sha256": "1934ed81ff102804c088d18b5f7630b881d7dea102e8d39fc121fcccd7391f64"
+    },
+    {
+      "batch": "kind-isolation-v2-rebind-1-20261021T215758Z-5bbdea",
+      "sample": "SEL-ISO-v1-01",
+      "mode": "frozen",
+      "result": {
+        "result": "FAIL",
+        "replay_verification": "PASS",
+        "stopped": {
+          "error_type": "ValueError",
+          "error": "fixed diagnostic semantic checks failed"
+        },
+        "inner": {
+          "result": "PASS",
+          "raw_replays": 1,
+          "stopped": {
+            "error_type": "ValueError",
+            "error": "fixed diagnostic semantic checks failed"
+          },
+          "upstream_injected": true,
+          "provider_calls": 0
+        },
+        "outer_receipt_sha256": "d614136521733536adc94c82d997575492c74417a87d98398ced63ca1f451278",
+        "provider_calls": 0,
+        "independent_semantic_approval": "PENDING"
+      },
+      "log": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/history-kind-isolation-v2-rebind-1-20261021T215758Z-5bbdea-SEL-ISO-v1-01-frozen.log",
+      "log_sha256": "1934ed81ff102804c088d18b5f7630b881d7dea102e8d39fc121fcccd7391f64"
+    },
+    {
+      "batch": "kind-policy-shape-1-20261021T231146Z-570327",
+      "sample": "SEL-ISO-v1-01",
+      "mode": "live",
+      "result": {
+        "result": "PASS",
+        "replay_verification": "PASS",
+        "stopped": null,
+        "legacy_stopped": null,
+        "decision": {
+          "status": "PASS",
+          "legacy_findings": [],
+          "policy_findings": [],
+          "other_findings": [],
+          "response": {
+            "status": "ready",
+            "code": null,
+            "draft": {
+              "status": "ready",
+              "strategy": "multi_view",
+              "tasks": [
+                {
+                  "task_id": "task_inventory",
+                  "view": "demo_retail.v_inventory_status",
+                  "required_columns": [
+                    "store_id",
+                    "product_id",
+                    "stock_qty",
+                    "snapshot_date"
+                  ],
+                  "filters": [],
+                  "metrics": {
+                    "stock_qty": "sum"
+                  },
+                  "conditional_metrics": [],
+                  "attributes": [],
+                  "metadata_collections": [
+                    "snapshot_date"
+                  ],
+                  "group_by": [
+                    "store_id",
+                    "product_id"
+                  ],
+                  "output_grain": [
+                    "store_id",
+                    "product_id"
+                  ],
+                  "depends_on": [],
+                  "unbound_inputs": [],
+                  "request": "從 v_inventory_status 取門市×商品粒度的盤點庫存件數(stock_qty)加總與庫存盤點日期(snapshot_date)，保留所有庫存商品作為母體。"
+                },
+                {
+                  "task_id": "task_sales",
+                  "view": "demo_retail.v_sales_detail",
+                  "required_columns": [
+                    "store_id",
+                    "product_id",
+                    "discount_amount",
+                    "net_sales",
+                    "order_date",
+                    "sales_channel"
+                  ],
+                  "filters": [
+                    {
+                      "column": "order_date",
+                      "operator": ">=",
+                      "value": "2026-09-01"
+                    },
+                    {
+                      "column": "order_date",
+                      "operator": "<",
+                      "value": "2026-10-01"
+                    },
+                    {
+                      "column": "sales_channel",
+                      "operator": "=",
+                      "value": "online"
+                    }
+                  ],
+                  "metrics": {
+                    "discount_amount": "sum",
+                    "net_sales": "sum"
+                  },
+                  "conditional_metrics": [],
+                  "attributes": [],
+                  "metadata_collections": [],
+                  "group_by": [
+                    "store_id",
+                    "product_id"
+                  ],
+                  "output_grain": [
+                    "store_id",
+                    "product_id"
+                  ],
+                  "depends_on": [],
+                  "unbound_inputs": [],
+                  "request": "從 v_sales_detail 篩選 order_date 在 2026-09-01(含)至 2026-10-01(不含) 且 sales_channel=online 的訂單明細，按門市×商品彙總折扣金額(discount_amount)與淨銷售額(net_sales)。"
+                }
+              ],
+              "integration": {
+                "anchor_task": "task_inventory",
+                "output_grain": [
+                  "store_id",
+                  "product_id"
+                ],
+                "edges": [
+                  {
+                    "left_task": "task_inventory",
+                    "right_task": "task_sales",
+                    "left_keys": [
+                      "store_id",
+                      "product_id"
+                    ],
+                    "right_keys": [
+                      "store_id",
+                      "product_id"
+                    ],
+                    "mode": "left",
+                    "cardinality": "one_to_one",
+                    "preserve_task": "task_inventory"
+                  }
+                ],
+                "preparation": [
+                  {
+                    "task_id": "task_sales",
+                    "kind": "aggregate",
+                    "keys": [
+                      "store_id",
+                      "product_id"
+                    ],
+                    "description": "將 v_sales_detail 自訂單明細粒度彙總至門市×商品粒度，以 store_id、product_id 對齊左母體"
+                  }
+                ],
+                "missing_data_policy": "保留未匹配資料並標記缺值；契約沒有保證時不可把缺值當成零。",
+                "notes": [
+                  "無線上通路銷售的庫存商品，折扣金額與淨銷售額以缺值呈現，不補零。"
+                ]
+              },
+              "clarifications": [],
+              "unsupported_reasons": []
+            },
+            "prepared_requests": [
+              {
+                "task_id": "task_inventory",
+                "view": "demo_retail.v_inventory_status",
+                "payload": {
+                  "request": "只執行以下單一 View 資料查詢；保留全部條件及指定輸出粒度，不作跨來源整合或業務決策。 metadata_collections 為每組完整 DISTINCT 值集合，不增加分組，不任取單值。日期集合僅記錄資料時間，不代表日期一致；混合日期不得宣稱同日總額，仍須遵守契約的跨日禁止加總限制。\n{\"view\": \"demo_retail.v_inventory_status\", \"required_columns\": [\"store_id\", \"product_id\", \"stock_qty\", \"snapshot_date\"], \"filters\": [], \"metrics\": {\"stock_qty\": \"sum\"}, \"conditional_metrics\": [], \"metadata_collections\": [\"snapshot_date\"], \"attributes\": [], \"group_by\": [\"store_id\", \"product_id\"], \"output_grain\": [\"store_id\", \"product_id\"]}",
+                  "history": []
+                }
+              },
+              {
+                "task_id": "task_sales",
+                "view": "demo_retail.v_sales_detail",
+                "payload": {
+                  "request": "只執行以下單一 View 資料查詢；保留全部條件及指定輸出粒度，不作跨來源整合或業務決策。\n{\"view\": \"demo_retail.v_sales_detail\", \"required_columns\": [\"store_id\", \"product_id\", \"discount_amount\", \"net_sales\", \"order_date\", \"sales_channel\"], \"filters\": [{\"column\": \"order_date\", \"operator\": \">=\", \"value\": \"2026-09-01\"}, {\"column\": \"order_date\", \"operator\": \"<\", \"value\": \"2026-10-01\"}, {\"column\": \"sales_channel\", \"operator\": \"=\", \"value\": \"online\"}], \"metrics\": {\"discount_amount\": \"sum\", \"net_sales\": \"sum\"}, \"conditional_metrics\": [], \"metadata_collections\": [], \"attributes\": [], \"group_by\": [\"store_id\", \"product_id\"], \"output_grain\": [\"store_id\", \"product_id\"]}",
+                  "history": []
+                }
+              }
+            ],
+            "validation_errors": [],
+            "contract_fingerprint": "e5e5a5a2cc29a1be93dc4d6875aba8c47a35ed48c019c7d6838a45831d0441dc",
+            "context_tokens": 0,
+            "token_counter": ""
+          },
+          "independent_semantic_approval": "PENDING",
+          "free_text_review": "PENDING"
+        },
+        "raw_replays": 1,
+        "provider_calls": 0
+      },
+      "log": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/history-kind-policy-shape-1-20261021T231146Z-570327-SEL-ISO-v1-01-live.log",
+      "log_sha256": "d1e42b81d2499627381c943a977e933f6345b43e3b3713d18a4e6e95853cb6b8"
+    },
+    {
+      "batch": "kind-policy-shape-1-20261021T231146Z-570327",
+      "sample": "SEL-ISO-v1-01",
+      "mode": "frozen",
+      "result": {
+        "result": "PASS",
+        "replay_verification": "PASS",
+        "stopped": null,
+        "legacy_stopped": null,
+        "decision": {
+          "status": "PASS",
+          "legacy_findings": [],
+          "policy_findings": [],
+          "other_findings": [],
+          "response": {
+            "status": "ready",
+            "code": null,
+            "draft": {
+              "status": "ready",
+              "strategy": "multi_view",
+              "tasks": [
+                {
+                  "task_id": "task_inventory",
+                  "view": "demo_retail.v_inventory_status",
+                  "required_columns": [
+                    "store_id",
+                    "product_id",
+                    "stock_qty",
+                    "snapshot_date"
+                  ],
+                  "filters": [],
+                  "metrics": {
+                    "stock_qty": "sum"
+                  },
+                  "conditional_metrics": [],
+                  "attributes": [],
+                  "metadata_collections": [
+                    "snapshot_date"
+                  ],
+                  "group_by": [
+                    "store_id",
+                    "product_id"
+                  ],
+                  "output_grain": [
+                    "store_id",
+                    "product_id"
+                  ],
+                  "depends_on": [],
+                  "unbound_inputs": [],
+                  "request": "從 v_inventory_status 取門市×商品粒度的盤點庫存件數(stock_qty)加總與庫存盤點日期(snapshot_date)，保留所有庫存商品作為母體。"
+                },
+                {
+                  "task_id": "task_sales",
+                  "view": "demo_retail.v_sales_detail",
+                  "required_columns": [
+                    "store_id",
+                    "product_id",
+                    "discount_amount",
+                    "net_sales",
+                    "order_date",
+                    "sales_channel"
+                  ],
+                  "filters": [
+                    {
+                      "column": "order_date",
+                      "operator": ">=",
+                      "value": "2026-09-01"
+                    },
+                    {
+                      "column": "order_date",
+                      "operator": "<",
+                      "value": "2026-10-01"
+                    },
+                    {
+                      "column": "sales_channel",
+                      "operator": "=",
+                      "value": "online"
+                    }
+                  ],
+                  "metrics": {
+                    "discount_amount": "sum",
+                    "net_sales": "sum"
+                  },
+                  "conditional_metrics": [],
+                  "attributes": [],
+                  "metadata_collections": [],
+                  "group_by": [
+                    "store_id",
+                    "product_id"
+                  ],
+                  "output_grain": [
+                    "store_id",
+                    "product_id"
+                  ],
+                  "depends_on": [],
+                  "unbound_inputs": [],
+                  "request": "從 v_sales_detail 篩選 order_date 在 2026-09-01(含)至 2026-10-01(不含) 且 sales_channel=online 的訂單明細，按門市×商品彙總折扣金額(discount_amount)與淨銷售額(net_sales)。"
+                }
+              ],
+              "integration": {
+                "anchor_task": "task_inventory",
+                "output_grain": [
+                  "store_id",
+                  "product_id"
+                ],
+                "edges": [
+                  {
+                    "left_task": "task_inventory",
+                    "right_task": "task_sales",
+                    "left_keys": [
+                      "store_id",
+                      "product_id"
+                    ],
+                    "right_keys": [
+                      "store_id",
+                      "product_id"
+                    ],
+                    "mode": "left",
+                    "cardinality": "one_to_one",
+                    "preserve_task": "task_inventory"
+                  }
+                ],
+                "preparation": [
+                  {
+                    "task_id": "task_sales",
+                    "kind": "aggregate",
+                    "keys": [
+                      "store_id",
+                      "product_id"
+                    ],
+                    "description": "將 v_sales_detail 自訂單明細粒度彙總至門市×商品粒度，以 store_id、product_id 對齊左母體"
+                  }
+                ],
+                "missing_data_policy": "保留未匹配資料並標記缺值；契約沒有保證時不可把缺值當成零。",
+                "notes": [
+                  "無線上通路銷售的庫存商品，折扣金額與淨銷售額以缺值呈現，不補零。"
+                ]
+              },
+              "clarifications": [],
+              "unsupported_reasons": []
+            },
+            "prepared_requests": [
+              {
+                "task_id": "task_inventory",
+                "view": "demo_retail.v_inventory_status",
+                "payload": {
+                  "request": "只執行以下單一 View 資料查詢；保留全部條件及指定輸出粒度，不作跨來源整合或業務決策。 metadata_collections 為每組完整 DISTINCT 值集合，不增加分組，不任取單值。日期集合僅記錄資料時間，不代表日期一致；混合日期不得宣稱同日總額，仍須遵守契約的跨日禁止加總限制。\n{\"view\": \"demo_retail.v_inventory_status\", \"required_columns\": [\"store_id\", \"product_id\", \"stock_qty\", \"snapshot_date\"], \"filters\": [], \"metrics\": {\"stock_qty\": \"sum\"}, \"conditional_metrics\": [], \"metadata_collections\": [\"snapshot_date\"], \"attributes\": [], \"group_by\": [\"store_id\", \"product_id\"], \"output_grain\": [\"store_id\", \"product_id\"]}",
+                  "history": []
+                }
+              },
+              {
+                "task_id": "task_sales",
+                "view": "demo_retail.v_sales_detail",
+                "payload": {
+                  "request": "只執行以下單一 View 資料查詢；保留全部條件及指定輸出粒度，不作跨來源整合或業務決策。\n{\"view\": \"demo_retail.v_sales_detail\", \"required_columns\": [\"store_id\", \"product_id\", \"discount_amount\", \"net_sales\", \"order_date\", \"sales_channel\"], \"filters\": [{\"column\": \"order_date\", \"operator\": \">=\", \"value\": \"2026-09-01\"}, {\"column\": \"order_date\", \"operator\": \"<\", \"value\": \"2026-10-01\"}, {\"column\": \"sales_channel\", \"operator\": \"=\", \"value\": \"online\"}], \"metrics\": {\"discount_amount\": \"sum\", \"net_sales\": \"sum\"}, \"conditional_metrics\": [], \"metadata_collections\": [], \"attributes\": [], \"group_by\": [\"store_id\", \"product_id\"], \"output_grain\": [\"store_id\", \"product_id\"]}",
+                  "history": []
+                }
+              }
+            ],
+            "validation_errors": [],
+            "contract_fingerprint": "e5e5a5a2cc29a1be93dc4d6875aba8c47a35ed48c019c7d6838a45831d0441dc",
+            "context_tokens": 0,
+            "token_counter": ""
+          },
+          "independent_semantic_approval": "PENDING",
+          "free_text_review": "PENDING"
+        },
+        "raw_replays": 1,
+        "provider_calls": 0
+      },
+      "log": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/history-kind-policy-shape-1-20261021T231146Z-570327-SEL-ISO-v1-01-frozen.log",
+      "log_sha256": "d1e42b81d2499627381c943a977e933f6345b43e3b3713d18a4e6e95853cb6b8"
+    },
+    {
+      "batch": "kind-isolation-v2-rebind-1-20261022T000748Z-82acde",
+      "sample": "COV-ISO-v1-01",
+      "mode": "live",
+      "result": {
+        "result": "FAIL",
+        "replay_verification": "PASS",
+        "stopped": {
+          "error_type": "ValueError",
+          "error": "fixed diagnostic semantic checks failed"
+        },
+        "inner": {
+          "result": "PASS",
+          "raw_replays": 1,
+          "stopped": {
+            "error_type": "ValueError",
+            "error": "fixed diagnostic semantic checks failed"
+          },
+          "upstream_injected": true,
+          "provider_calls": 0
+        },
+        "outer_receipt_sha256": "8ba9a5aa5efb9f4449f46b6ebdb564114fd995de50f4b6ed030f5e01bc385a5e",
+        "provider_calls": 0,
+        "independent_semantic_approval": "PENDING"
+      },
+      "log": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/history-kind-isolation-v2-rebind-1-20261022T000748Z-82acde-COV-ISO-v1-01-live.log",
+      "log_sha256": "616f8149e2a150d7121a3ba4149f0f25eadbb6ac7c7f61fc516dddbd92bf17e2"
+    },
+    {
+      "batch": "kind-isolation-v2-rebind-1-20261022T000748Z-82acde",
+      "sample": "COV-ISO-v1-01",
+      "mode": "frozen",
+      "result": {
+        "result": "FAIL",
+        "replay_verification": "PASS",
+        "stopped": {
+          "error_type": "ValueError",
+          "error": "fixed diagnostic semantic checks failed"
+        },
+        "inner": {
+          "result": "PASS",
+          "raw_replays": 1,
+          "stopped": {
+            "error_type": "ValueError",
+            "error": "fixed diagnostic semantic checks failed"
+          },
+          "upstream_injected": true,
+          "provider_calls": 0
+        },
+        "outer_receipt_sha256": "8ba9a5aa5efb9f4449f46b6ebdb564114fd995de50f4b6ed030f5e01bc385a5e",
+        "provider_calls": 0,
+        "independent_semantic_approval": "PENDING"
+      },
+      "log": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/history-kind-isolation-v2-rebind-1-20261022T000748Z-82acde-COV-ISO-v1-01-frozen.log",
+      "log_sha256": "616f8149e2a150d7121a3ba4149f0f25eadbb6ac7c7f61fc516dddbd92bf17e2"
+    },
+    {
+      "batch": "kind-isolation-v2-rebind-1-20261022T000748Z-82acde",
+      "sample": "COV-ISO-v1-02",
+      "mode": "live",
+      "result": {
+        "result": "PASS",
+        "replay_verification": "PASS",
+        "stopped": null,
+        "inner": {
+          "result": "PASS",
+          "raw_replays": 1,
+          "stopped": null,
+          "upstream_injected": true,
+          "provider_calls": 0
+        },
+        "outer_receipt_sha256": "9f9df874b88cd7361b9bdaeaad3c4f5d9d9f0c0b05345d209aa322a2405c0b97",
+        "provider_calls": 0,
+        "independent_semantic_approval": "PENDING"
+      },
+      "log": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/history-kind-isolation-v2-rebind-1-20261022T000748Z-82acde-COV-ISO-v1-02-live.log",
+      "log_sha256": "881772ad636d93a24215c8666ae1300fdab72c1651f110c51909d74391196457"
+    },
+    {
+      "batch": "kind-isolation-v2-rebind-1-20261022T000748Z-82acde",
+      "sample": "COV-ISO-v1-02",
+      "mode": "frozen",
+      "result": {
+        "result": "PASS",
+        "replay_verification": "PASS",
+        "stopped": null,
+        "inner": {
+          "result": "PASS",
+          "raw_replays": 1,
+          "stopped": null,
+          "upstream_injected": true,
+          "provider_calls": 0
+        },
+        "outer_receipt_sha256": "9f9df874b88cd7361b9bdaeaad3c4f5d9d9f0c0b05345d209aa322a2405c0b97",
+        "provider_calls": 0,
+        "independent_semantic_approval": "PENDING"
+      },
+      "log": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/history-kind-isolation-v2-rebind-1-20261022T000748Z-82acde-COV-ISO-v1-02-frozen.log",
+      "log_sha256": "881772ad636d93a24215c8666ae1300fdab72c1651f110c51909d74391196457"
+    },
+    {
+      "batch": "kind-isolation-v2-rebind-1-20261022T000748Z-82acde",
+      "sample": "COV-ISO-v1-03",
+      "mode": "live",
+      "result": {
+        "result": "FAIL",
+        "replay_verification": "PASS",
+        "stopped": {
+          "error_type": "ValueError",
+          "error": "fixed diagnostic semantic checks failed"
+        },
+        "inner": {
+          "result": "PASS",
+          "raw_replays": 1,
+          "stopped": {
+            "error_type": "ValueError",
+            "error": "fixed diagnostic semantic checks failed"
+          },
+          "upstream_injected": true,
+          "provider_calls": 0
+        },
+        "outer_receipt_sha256": "837ee94de9c62fa87a2c9a5058d86fcbced98ab3d3a26cdef1c8f456cc2e483e",
+        "provider_calls": 0,
+        "independent_semantic_approval": "PENDING"
+      },
+      "log": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/history-kind-isolation-v2-rebind-1-20261022T000748Z-82acde-COV-ISO-v1-03-live.log",
+      "log_sha256": "cb5080c6f00f387a9c41437fd1616dc0a45d636e10cdc4072878f42adf86ecff"
+    },
+    {
+      "batch": "kind-isolation-v2-rebind-1-20261022T000748Z-82acde",
+      "sample": "COV-ISO-v1-03",
+      "mode": "frozen",
+      "result": {
+        "result": "FAIL",
+        "replay_verification": "PASS",
+        "stopped": {
+          "error_type": "ValueError",
+          "error": "fixed diagnostic semantic checks failed"
+        },
+        "inner": {
+          "result": "PASS",
+          "raw_replays": 1,
+          "stopped": {
+            "error_type": "ValueError",
+            "error": "fixed diagnostic semantic checks failed"
+          },
+          "upstream_injected": true,
+          "provider_calls": 0
+        },
+        "outer_receipt_sha256": "837ee94de9c62fa87a2c9a5058d86fcbced98ab3d3a26cdef1c8f456cc2e483e",
+        "provider_calls": 0,
+        "independent_semantic_approval": "PENDING"
+      },
+      "log": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/history-kind-isolation-v2-rebind-1-20261022T000748Z-82acde-COV-ISO-v1-03-frozen.log",
+      "log_sha256": "cb5080c6f00f387a9c41437fd1616dc0a45d636e10cdc4072878f42adf86ecff"
+    },
+    {
+      "batch": "kind-capability-projection-1-20261022T014118Z-68828b",
+      "sample": "COV-ISO-v1-01",
+      "mode": "live",
+      "result": {
+        "result": "FAIL",
+        "replay_verification": "PASS",
+        "decision": null,
+        "stopped": {
+          "error_type": "ValueError",
+          "error": "contract reference must point to nonempty text: /columns/sales_date"
+        },
+        "legacy_stopped": {
+          "error_type": "ValueError",
+          "error": "contract reference must point to nonempty text: /columns/sales_date"
+        },
+        "raw_replays": 1,
+        "provider_calls": 0
+      },
+      "log": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/history-kind-capability-projection-1-20261022T014118Z-68828b-COV-ISO-v1-01-live.log",
+      "log_sha256": "9175af589eec0f588c49b1d2c1b4ab377cb55a971da0bef2eb1eab450dc92fb9"
+    },
+    {
+      "batch": "kind-capability-projection-1-20261022T014118Z-68828b",
+      "sample": "COV-ISO-v1-01",
+      "mode": "frozen",
+      "result": {
+        "result": "FAIL",
+        "replay_verification": "PASS",
+        "decision": null,
+        "stopped": {
+          "error_type": "ValueError",
+          "error": "contract reference must point to nonempty text: /columns/sales_date"
+        },
+        "legacy_stopped": {
+          "error_type": "ValueError",
+          "error": "contract reference must point to nonempty text: /columns/sales_date"
+        },
+        "raw_replays": 1,
+        "provider_calls": 0
+      },
+      "log": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/history-kind-capability-projection-1-20261022T014118Z-68828b-COV-ISO-v1-01-frozen.log",
+      "log_sha256": "9175af589eec0f588c49b1d2c1b4ab377cb55a971da0bef2eb1eab450dc92fb9"
+    },
+    {
+      "batch": "kind-capability-projection-1-20261022T014118Z-68828b",
+      "sample": "COV-ISO-v1-02",
+      "mode": "live",
+      "result": {
+        "result": "PASS",
+        "replay_verification": "PASS",
+        "decision": {
+          "status": "PASS",
+          "legacy_findings": [],
+          "accepted_scope_AND_equivalences": [],
+          "other_findings": [],
+          "independent_semantic_approval": "PENDING",
+          "free_text_review": "PENDING"
+        },
+        "stopped": null,
+        "legacy_stopped": null,
+        "raw_replays": 1,
+        "provider_calls": 0
+      },
+      "log": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/history-kind-capability-projection-1-20261022T014118Z-68828b-COV-ISO-v1-02-live.log",
+      "log_sha256": "b5cc39973526bb89cd4959041faa00adc308e05763284427901debb65dd030cb"
+    },
+    {
+      "batch": "kind-capability-projection-1-20261022T014118Z-68828b",
+      "sample": "COV-ISO-v1-02",
+      "mode": "frozen",
+      "result": {
+        "result": "PASS",
+        "replay_verification": "PASS",
+        "decision": {
+          "status": "PASS",
+          "legacy_findings": [],
+          "accepted_scope_AND_equivalences": [],
+          "other_findings": [],
+          "independent_semantic_approval": "PENDING",
+          "free_text_review": "PENDING"
+        },
+        "stopped": null,
+        "legacy_stopped": null,
+        "raw_replays": 1,
+        "provider_calls": 0
+      },
+      "log": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/history-kind-capability-projection-1-20261022T014118Z-68828b-COV-ISO-v1-02-frozen.log",
+      "log_sha256": "b5cc39973526bb89cd4959041faa00adc308e05763284427901debb65dd030cb"
+    },
+    {
+      "batch": "kind-capability-projection-1-20261022T014118Z-68828b",
+      "sample": "COV-ISO-v1-03",
+      "mode": "live",
+      "result": {
+        "result": "FAIL",
+        "replay_verification": "PASS",
+        "decision": null,
+        "stopped": {
+          "error_type": "ValueError",
+          "error": "contract reference must point to nonempty text: /columns/day_key"
+        },
+        "legacy_stopped": {
+          "error_type": "ValueError",
+          "error": "contract reference must point to nonempty text: /columns/day_key"
+        },
+        "raw_replays": 1,
+        "provider_calls": 0
+      },
+      "log": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/history-kind-capability-projection-1-20261022T014118Z-68828b-COV-ISO-v1-03-live.log",
+      "log_sha256": "1363ab10d1d28133ced5392aeeb67027b5843944b9bb31c82bc6c0dec72a7eb2"
+    },
+    {
+      "batch": "kind-capability-projection-1-20261022T014118Z-68828b",
+      "sample": "COV-ISO-v1-03",
+      "mode": "frozen",
+      "result": {
+        "result": "FAIL",
+        "replay_verification": "PASS",
+        "decision": null,
+        "stopped": {
+          "error_type": "ValueError",
+          "error": "contract reference must point to nonempty text: /columns/day_key"
+        },
+        "legacy_stopped": {
+          "error_type": "ValueError",
+          "error": "contract reference must point to nonempty text: /columns/day_key"
+        },
+        "raw_replays": 1,
+        "provider_calls": 0
+      },
+      "log": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/history-kind-capability-projection-1-20261022T014118Z-68828b-COV-ISO-v1-03-frozen.log",
+      "log_sha256": "1363ab10d1d28133ced5392aeeb67027b5843944b9bb31c82bc6c0dec72a7eb2"
+    },
+    {
+      "batch": "kind-capability-projection-1-20261022T014118Z-68828b",
+      "sample": "COV-CAP-v1-04",
+      "mode": "live",
+      "result": {
+        "result": "FAIL",
+        "replay_verification": "PASS",
+        "decision": {
+          "status": "FAIL",
+          "legacy_findings": [
+            {
+              "requirement_id": "MET-003",
+              "aspect": "status/own_gap",
+              "expected": {
+                "status": "partial",
+                "own_gap": true,
+                "mappings": [
+                  {
+                    "column": "lifetime_spend",
+                    "aggregation": "sum",
+                    "conditions": []
+                  }
+                ],
+                "contract_path": "/columns/lifetime_spend/description"
+              },
+              "actual": {
+                "status": "unsupported",
+                "own_gap": true,
+                "mappings": [],
+                "contract_path": null
+              }
+            },
+            {
+              "requirement_id": "MET-003",
+              "aspect": "necessary mappings/predicates",
+              "expected": [
+                {
+                  "column": "lifetime_spend",
+                  "aggregation": "sum",
+                  "conditions": []
+                }
+              ],
+              "actual": []
+            },
+            {
+              "requirement_id": "MET-003",
+              "aspect": "contract_path requires review",
+              "expected": "/columns/lifetime_spend/description",
+              "actual": null
+            }
+          ],
+          "accepted_scope_AND_equivalences": [],
+          "other_findings": [
+            {
+              "requirement_id": "MET-003",
+              "aspect": "status/own_gap",
+              "expected": {
+                "status": "partial",
+                "own_gap": true,
+                "mappings": [
+                  {
+                    "column": "lifetime_spend",
+                    "aggregation": "sum",
+                    "conditions": []
+                  }
+                ],
+                "contract_path": "/columns/lifetime_spend/description"
+              },
+              "actual": {
+                "status": "unsupported",
+                "own_gap": true,
+                "mappings": [],
+                "contract_path": null
+              }
+            },
+            {
+              "requirement_id": "MET-003",
+              "aspect": "necessary mappings/predicates",
+              "expected": [
+                {
+                  "column": "lifetime_spend",
+                  "aggregation": "sum",
+                  "conditions": []
+                }
+              ],
+              "actual": []
+            },
+            {
+              "requirement_id": "MET-003",
+              "aspect": "contract_path requires review",
+              "expected": "/columns/lifetime_spend/description",
+              "actual": null
+            }
+          ],
+          "independent_semantic_approval": "PENDING",
+          "free_text_review": "PENDING"
+        },
+        "stopped": {
+          "error_type": "ValueError",
+          "error": "capability or other diagnostic semantic checks failed"
+        },
+        "legacy_stopped": {
+          "error_type": "ValueError",
+          "error": "fixed diagnostic semantic checks failed"
+        },
+        "raw_replays": 1,
+        "provider_calls": 0
+      },
+      "log": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/history-kind-capability-projection-1-20261022T014118Z-68828b-COV-CAP-v1-04-live.log",
+      "log_sha256": "e6e4e8ae2230a19db5d5002e2155b5d04a6375c9e04f68f8ccfc4d2196fd8cd5"
+    },
+    {
+      "batch": "kind-capability-projection-1-20261022T014118Z-68828b",
+      "sample": "COV-CAP-v1-04",
+      "mode": "frozen",
+      "result": {
+        "result": "FAIL",
+        "replay_verification": "PASS",
+        "decision": {
+          "status": "FAIL",
+          "legacy_findings": [
+            {
+              "requirement_id": "MET-003",
+              "aspect": "status/own_gap",
+              "expected": {
+                "status": "partial",
+                "own_gap": true,
+                "mappings": [
+                  {
+                    "column": "lifetime_spend",
+                    "aggregation": "sum",
+                    "conditions": []
+                  }
+                ],
+                "contract_path": "/columns/lifetime_spend/description"
+              },
+              "actual": {
+                "status": "unsupported",
+                "own_gap": true,
+                "mappings": [],
+                "contract_path": null
+              }
+            },
+            {
+              "requirement_id": "MET-003",
+              "aspect": "necessary mappings/predicates",
+              "expected": [
+                {
+                  "column": "lifetime_spend",
+                  "aggregation": "sum",
+                  "conditions": []
+                }
+              ],
+              "actual": []
+            },
+            {
+              "requirement_id": "MET-003",
+              "aspect": "contract_path requires review",
+              "expected": "/columns/lifetime_spend/description",
+              "actual": null
+            }
+          ],
+          "accepted_scope_AND_equivalences": [],
+          "other_findings": [
+            {
+              "requirement_id": "MET-003",
+              "aspect": "status/own_gap",
+              "expected": {
+                "status": "partial",
+                "own_gap": true,
+                "mappings": [
+                  {
+                    "column": "lifetime_spend",
+                    "aggregation": "sum",
+                    "conditions": []
+                  }
+                ],
+                "contract_path": "/columns/lifetime_spend/description"
+              },
+              "actual": {
+                "status": "unsupported",
+                "own_gap": true,
+                "mappings": [],
+                "contract_path": null
+              }
+            },
+            {
+              "requirement_id": "MET-003",
+              "aspect": "necessary mappings/predicates",
+              "expected": [
+                {
+                  "column": "lifetime_spend",
+                  "aggregation": "sum",
+                  "conditions": []
+                }
+              ],
+              "actual": []
+            },
+            {
+              "requirement_id": "MET-003",
+              "aspect": "contract_path requires review",
+              "expected": "/columns/lifetime_spend/description",
+              "actual": null
+            }
+          ],
+          "independent_semantic_approval": "PENDING",
+          "free_text_review": "PENDING"
+        },
+        "stopped": {
+          "error_type": "ValueError",
+          "error": "capability or other diagnostic semantic checks failed"
+        },
+        "legacy_stopped": {
+          "error_type": "ValueError",
+          "error": "fixed diagnostic semantic checks failed"
+        },
+        "raw_replays": 1,
+        "provider_calls": 0
+      },
+      "log": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/history-kind-capability-projection-1-20261022T014118Z-68828b-COV-CAP-v1-04-frozen.log",
+      "log_sha256": "e6e4e8ae2230a19db5d5002e2155b5d04a6375c9e04f68f8ccfc4d2196fd8cd5"
+    },
+    {
+      "batch": "kind-capability-projection-1-20261022T014118Z-68828b",
+      "sample": "COV-CAP-v1-05",
+      "mode": "live",
+      "result": {
+        "result": "FAIL",
+        "replay_verification": "PASS",
+        "decision": {
+          "status": "FAIL",
+          "legacy_findings": [
+            {
+              "requirement_id": "POP-001",
+              "aspect": "necessary mappings/predicates",
+              "expected": [
+                {
+                  "column": "store_id"
+                },
+                {
+                  "column": "product_id"
+                }
+              ],
+              "actual": [
+                {
+                  "column": "product_id"
+                }
+              ]
+            },
+            {
+              "requirement_id": "POP-001",
+              "aspect": "contract_path requires review",
+              "expected": "/summary",
+              "actual": "/columns/product_id/description"
+            }
+          ],
+          "accepted_scope_AND_equivalences": [],
+          "other_findings": [
+            {
+              "requirement_id": "POP-001",
+              "aspect": "necessary mappings/predicates",
+              "expected": [
+                {
+                  "column": "store_id"
+                },
+                {
+                  "column": "product_id"
+                }
+              ],
+              "actual": [
+                {
+                  "column": "product_id"
+                }
+              ]
+            },
+            {
+              "requirement_id": "POP-001",
+              "aspect": "contract_path requires review",
+              "expected": "/summary",
+              "actual": "/columns/product_id/description"
+            }
+          ],
+          "independent_semantic_approval": "PENDING",
+          "free_text_review": "PENDING"
+        },
+        "stopped": {
+          "error_type": "ValueError",
+          "error": "capability or other diagnostic semantic checks failed"
+        },
+        "legacy_stopped": {
+          "error_type": "ValueError",
+          "error": "fixed diagnostic semantic checks failed"
+        },
+        "raw_replays": 1,
+        "provider_calls": 0
+      },
+      "log": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/history-kind-capability-projection-1-20261022T014118Z-68828b-COV-CAP-v1-05-live.log",
+      "log_sha256": "b8e7bdeff57a3f1ae6d92d8425373035a6be0e28ddc602e54080e638318d59b4"
+    },
+    {
+      "batch": "kind-capability-projection-1-20261022T014118Z-68828b",
+      "sample": "COV-CAP-v1-05",
+      "mode": "frozen",
+      "result": {
+        "result": "FAIL",
+        "replay_verification": "PASS",
+        "decision": {
+          "status": "FAIL",
+          "legacy_findings": [
+            {
+              "requirement_id": "POP-001",
+              "aspect": "necessary mappings/predicates",
+              "expected": [
+                {
+                  "column": "store_id"
+                },
+                {
+                  "column": "product_id"
+                }
+              ],
+              "actual": [
+                {
+                  "column": "product_id"
+                }
+              ]
+            },
+            {
+              "requirement_id": "POP-001",
+              "aspect": "contract_path requires review",
+              "expected": "/summary",
+              "actual": "/columns/product_id/description"
+            }
+          ],
+          "accepted_scope_AND_equivalences": [],
+          "other_findings": [
+            {
+              "requirement_id": "POP-001",
+              "aspect": "necessary mappings/predicates",
+              "expected": [
+                {
+                  "column": "store_id"
+                },
+                {
+                  "column": "product_id"
+                }
+              ],
+              "actual": [
+                {
+                  "column": "product_id"
+                }
+              ]
+            },
+            {
+              "requirement_id": "POP-001",
+              "aspect": "contract_path requires review",
+              "expected": "/summary",
+              "actual": "/columns/product_id/description"
+            }
+          ],
+          "independent_semantic_approval": "PENDING",
+          "free_text_review": "PENDING"
+        },
+        "stopped": {
+          "error_type": "ValueError",
+          "error": "capability or other diagnostic semantic checks failed"
+        },
+        "legacy_stopped": {
+          "error_type": "ValueError",
+          "error": "fixed diagnostic semantic checks failed"
+        },
+        "raw_replays": 1,
+        "provider_calls": 0
+      },
+      "log": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-text-leaf-contract/history-kind-capability-projection-1-20261022T014118Z-68828b-COV-CAP-v1-05-frozen.log",
+      "log_sha256": "b8e7bdeff57a3f1ae6d92d8425373035a6be0e28ddc602e54080e638318d59b4"
+    }
+  ]
+}

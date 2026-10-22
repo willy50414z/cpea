@@ -1,0 +1,15 @@
+{
+  "result": "PASS",
+  "checks": {
+    "baseline30": true,
+    "baseline_classification_total": true,
+    "baseline_original_file_unchanged": true,
+    "mvp1_finished_and12": true,
+    "mvp1_pairs": true,
+    "mvp1_all_raw_response_payload_reproduced": true,
+    "mvp1_six_per_arm": true,
+    "mvp1_no_upgrade": true,
+    "utf8_without_bom": true
+  },
+  "meaning": "審核證據與紀錄一致；模型MVP1 Gate仍FAIL"
+}

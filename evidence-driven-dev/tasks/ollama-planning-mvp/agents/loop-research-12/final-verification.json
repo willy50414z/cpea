@@ -1,0 +1,15 @@
+{
+  "result": "PASS",
+  "scope": "research plan structure and immutable evidence only; no implementation or semantic approval",
+  "preserved_old_nodes": 17,
+  "proposed_nodes": 18,
+  "root_goal_acceptance_exact": true,
+  "passed_author_child_unchanged": true,
+  "new_leaf_parent": "kind_diagnostic_fixture_semantics",
+  "immutable_lineage_files_verified": 13,
+  "json_utf8_without_BOM": true,
+  "rounds": 12,
+  "local_POSTs": 21,
+  "research_model_POSTs": 0,
+  "all_implementation_and_semantic_effects": "PENDING"
+}

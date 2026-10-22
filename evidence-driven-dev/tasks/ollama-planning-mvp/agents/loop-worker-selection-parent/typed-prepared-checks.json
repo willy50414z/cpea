@@ -1,0 +1,93 @@
+{
+  "result": "PASS",
+  "inventory_anchor": true,
+  "no_inventory_scope_filter": true,
+  "both_sides_store_product": true,
+  "sales_same_task_full_month_online_two_sums": true,
+  "metadata_not_group_or_scalar": true,
+  "left_preserve_inventory": true,
+  "one_to_one_both_keys": true,
+  "flat_policy_no_zero": true,
+  "no_nest": true,
+  "prepared": [
+    {
+      "task_id": "task_inventory",
+      "exact_raw_typed_payload": true,
+      "payload": {
+        "view": "demo_retail.v_inventory_status",
+        "required_columns": [
+          "store_id",
+          "product_id",
+          "stock_qty",
+          "snapshot_date"
+        ],
+        "filters": [],
+        "metrics": {
+          "stock_qty": "sum"
+        },
+        "conditional_metrics": [],
+        "metadata_collections": [
+          "snapshot_date"
+        ],
+        "attributes": [],
+        "group_by": [
+          "store_id",
+          "product_id"
+        ],
+        "output_grain": [
+          "store_id",
+          "product_id"
+        ]
+      },
+      "request_prefix": "只執行以下單一 View 資料查詢；保留全部條件及指定輸出粒度，不作跨來源整合或業務決策。 metadata_collections 為每組完整 DISTINCT 值集合，不增加分組，不任取單值。日期集合僅記錄資料時間，不代表日期一致；混合日期不得宣稱同日總額，仍須遵守契約的跨日禁止加總限制。"
+    },
+    {
+      "task_id": "task_sales",
+      "exact_raw_typed_payload": true,
+      "payload": {
+        "view": "demo_retail.v_sales_detail",
+        "required_columns": [
+          "store_id",
+          "product_id",
+          "discount_amount",
+          "net_sales",
+          "order_date",
+          "sales_channel"
+        ],
+        "filters": [
+          {
+            "column": "order_date",
+            "operator": ">=",
+            "value": "2026-09-01"
+          },
+          {
+            "column": "order_date",
+            "operator": "<",
+            "value": "2026-10-01"
+          },
+          {
+            "column": "sales_channel",
+            "operator": "=",
+            "value": "online"
+          }
+        ],
+        "metrics": {
+          "discount_amount": "sum",
+          "net_sales": "sum"
+        },
+        "conditional_metrics": [],
+        "metadata_collections": [],
+        "attributes": [],
+        "group_by": [
+          "store_id",
+          "product_id"
+        ],
+        "output_grain": [
+          "store_id",
+          "product_id"
+        ]
+      },
+      "request_prefix": "只執行以下單一 View 資料查詢；保留全部條件及指定輸出粒度，不作跨來源整合或業務決策。"
+    }
+  ]
+}

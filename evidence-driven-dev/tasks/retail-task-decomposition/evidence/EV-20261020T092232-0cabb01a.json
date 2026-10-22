@@ -1,0 +1,22 @@
+{
+  "id": "EV-20261020T092232-0cabb01a",
+  "kind": "review",
+  "command": [
+    ".venv/bin/python",
+    "evidence-driven-dev/tasks/retail-task-decomposition/reports/audit_ollama_round.py",
+    "--local",
+    "projects/retail/artifacts/task_decomposition/20261020T061325410052Z-bc09c67f-ollama-0e14eb"
+  ],
+  "cwd": "/home/willy/code/cpea_terms",
+  "started_at": "2026-10-20T09:22:32+00:00",
+  "finished_at": "2026-10-20T09:22:33+00:00",
+  "exit_code": 0,
+  "revision": "bc09c67fc4078501599c37e4cdfecdee40af2ef8",
+  "diff_fingerprint": "aa41d10592dbead4910485bf28a61ea48d945514929dbccc513e0b4e93b18997",
+  "post_fingerprint": "aa41d10592dbead4910485bf28a61ea48d945514929dbccc513e0b4e93b18997",
+  "source_unchanged": true,
+  "output_sha256": "4fee096e9d1c701cb1256efa606eb0b325f0715aa8ebc2559ec07ef97f0eb230",
+  "raw_output": ".local/EV-20261020T092232-0cabb01a.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "7e9f9ea2d552f8f8ee8ead90445d3276e3b5c2aceb0b9daf6d93e6eedf9cf4ef"
+}

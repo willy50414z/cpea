@@ -1,0 +1,1 @@
+{"execute": false, "version": "managed-node-diagnostics-rebind-1", "engine_version": "managed-node-diagnostics-1", "fixture_approval": "PENDING_FRESH_INDEPENDENT_REVIEW", "samples": ["COV-ISO-v1-01", "COV-ISO-v1-02", "COV-ISO-v1-03"], "input_tokens": {"COV-ISO-v1-01": 4619, "COV-ISO-v1-02": 2788, "COV-ISO-v1-03": 4549}, "bindings_match": true, "provider_calls": 0}

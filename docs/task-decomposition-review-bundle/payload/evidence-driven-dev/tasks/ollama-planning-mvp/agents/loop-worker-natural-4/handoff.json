@@ -1,0 +1,21 @@
+{
+  "ticket": "efb4eb78622b40fe8110e2aac2197280",
+  "result": "FAIL",
+  "evidence": [
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-4/execution.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-4/semantic-review.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-4/failure-context.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-4/freeze-before.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-4/freeze-after.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-4/replay-live.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-4/replay-frozen.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T194515Z-8cb75b/run.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T194515Z-8cb75b/recall-call.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T194515Z-8cb75b/map-01-call.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T194515Z-8cb75b/map-02-call.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T194515Z-8cb75b/map-02-parsed.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T194515Z-8cb75b/map-02-error.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T194515Z-8cb75b/usage.json"
+  ],
+  "summary": "固定managed-own-responsibility-1單一新自然樣本FAIL：3次本機首次POST/0retry/0cloud。recall與customer通結構；daily_sales首契約錯only metric mapping may aggregate，原filter mapping用conditions而aggregation/operator/value省略（parse後null）。另GRN-001 unsupported空mapping未保留來源store_id合法部分key，依既定partial自然gate記語意缺失，不推測模型動機；交fresh研究。首錯停止，後5View/selection/prepared未驗。live及155-source frozen各3raw replay均精確重現首錯；155 live/frozen、1164歷史工件、candidate fingerprint與兩src hash未變。累計21 local POST/0retry/0cloud；未SQL/DB、改source/tests/Task/control或commit/push。worker未finish，不宣告父層/根驗收。"
+}

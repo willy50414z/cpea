@@ -1,0 +1,5 @@
+{
+  "error_type": "ValidationError",
+  "error": "1 validation error for KindCoverage_917e5de3fe5e386d\nentries.grain.mappings.0.conditions\n  Extra inputs are not permitted [type=extra_forbidden, input_value=[], input_type=list]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden",
+  "raw_saved": true
+}

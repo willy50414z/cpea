@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "scope": "研究輸出封存；不自證業務或自然成功",
+  "files": {
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-20/controller-check-evidence.log": "6a7dee2df6decc78d70dd3a9fcef13555f24ec05ef34f4d611783f4084b4e866",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-20/handoff.json": "00adab58bd3a6f1450d3bf5416ec6eb83a1cb7162d0800f30116fc72b2c78865",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-20/old-nodes-snapshot.json": "7ffe1b788a5fe3240ad1524700fe868fc2bff1a2b2cf5b6f431c15dd838dbb8e",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-20/plan.json": "7821ce073885f3796e45ff994de82c1f62e91a156db25b9d6f24f4b96fa2a43e",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-20/protected-before.json": "184efd725a6c0c63a2ae83e251109862d60d0987b1555cc86d98f51a94be3be8",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-20/research.json": "510f95977944aa11f75e3d0888ccd5a119f398af48ae67a3d323cebd4fc65793",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-20/verification.json": "950425198e472b592d32482c3504b91f46d48a3e04c3c26170bc7e05ddcd215e"
+  },
+  "excluded_self": "proof-inventory.json避免自引用hash"
+}

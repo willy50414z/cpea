@@ -1,0 +1,20 @@
+{
+  "id": "EV-20261020T131636-0594c38e",
+  "kind": "review",
+  "command": [
+    ".venv/bin/python",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/reports/verify_gpt_sol_probe.py"
+  ],
+  "cwd": "/home/willy/code/cpea_terms",
+  "started_at": "2026-10-20T13:16:36+00:00",
+  "finished_at": "2026-10-20T13:16:38+00:00",
+  "exit_code": 0,
+  "revision": "bc09c67fc4078501599c37e4cdfecdee40af2ef8",
+  "diff_fingerprint": "0f7015c93cc0a0fbd9d676bc81dbfef18400ca1e37e99fefa5ddc7133100b8d6",
+  "post_fingerprint": "0f7015c93cc0a0fbd9d676bc81dbfef18400ca1e37e99fefa5ddc7133100b8d6",
+  "source_unchanged": true,
+  "output_sha256": "ec2dfb8e672b2396d7f90c5f0bfefef6a3fec0e5f432fea1f02e27cb041ed923",
+  "raw_output": ".local/EV-20261020T131636-0594c38e.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "ba7a8182187cacc9716d2e942ea84ad55fc5d4dacb6d0f1a1c656b211749493c"
+}

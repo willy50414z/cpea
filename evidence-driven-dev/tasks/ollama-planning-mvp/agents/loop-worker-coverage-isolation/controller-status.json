@@ -1,0 +1,38 @@
+{
+  "loop_id": "f8ee2e2f8f9d43dbb46dbf7e11594a98",
+  "action": "wait",
+  "node": "natural_kind_coverage_isolation",
+  "active_path": [
+    "root",
+    "three_stage_integration",
+    "natural_qwen_three_stage",
+    "natural_slots_three_stage",
+    "natural_evidence_bound_three_stage",
+    "natural_own_responsibility_three_stage",
+    "natural_kind_mapping_three_stage",
+    "natural_kind_coverage_isolation"
+  ],
+  "used": {
+    "agent_dispatches": 35,
+    "cloud_calls": 0,
+    "local_calls": 26,
+    "model_retries": 0
+  },
+  "limits": {
+    "max_rounds": 1000000000000000000000000000000,
+    "max_model_retries_per_case": 1000000000000000000000000000000,
+    "max_cloud_calls": 0,
+    "max_local_calls": 1000000000000000000000000000000,
+    "max_agent_dispatches": 1000000000000000000000000000000,
+    "review_every": 3,
+    "request_timeout_seconds": null,
+    "phase": "feasibility",
+    "endpoint_envs": {
+      "local": [
+        "EDD_LOCAL_ENDPOINT"
+      ]
+    }
+  },
+  "rounds": 19,
+  "remaining_cloud_calls": 0
+}

@@ -1,0 +1,827 @@
+{
+  "sample": "COV-CAP-v1-05",
+  "result": "FAIL",
+  "upstream_injected": true,
+  "rows": [
+    {
+      "requirement_id": "GRN-001",
+      "kind": "grain",
+      "verdict": "PASS",
+      "reason": "store_id與product_id為完整店商品鍵，supported/own=false，未因缺sales能力錯降partial。",
+      "raw": {
+        "mappings": [
+          {
+            "column": "store_id"
+          },
+          {
+            "column": "product_id"
+          }
+        ],
+        "own_gap": false,
+        "status": "supported"
+      },
+      "required_presence": "PASS",
+      "independent_gap_graph": {},
+      "normalized_gap_graph_matches": true,
+      "normalized": {
+        "requirement_id": "GRN-001",
+        "status": "supported",
+        "mappings": [
+          {
+            "column": "store_id",
+            "role": "key",
+            "source_quote": "各店各商品",
+            "aggregation": null,
+            "operator": null,
+            "value": null,
+            "conditions": [],
+            "contract_evidence": [
+              {
+                "path": "/columns/store_id/description",
+                "quote": "庫存所屬門市識別碼；與 product_id 組合唯一決定一列。"
+              }
+            ]
+          },
+          {
+            "column": "product_id",
+            "role": "key",
+            "source_quote": "各店各商品",
+            "aggregation": null,
+            "operator": null,
+            "value": null,
+            "conditions": [],
+            "contract_evidence": [
+              {
+                "path": "/columns/product_id/description",
+                "quote": "庫存商品識別碼；與 store_id 組合唯一決定一列。"
+              }
+            ]
+          }
+        ],
+        "contract_evidence": [
+          {
+            "path": "/grain/description",
+            "quote": "門市×商品"
+          }
+        ],
+        "missing_requirements": []
+      }
+    },
+    {
+      "requirement_id": "MET-001",
+      "kind": "metric",
+      "verdict": "PASS",
+      "reason": "stock_qty sum正確，conditions=[]、supported/own=false；僅本快照店商品粒度，不跨不同快照加總，未加任意日期filter。",
+      "raw": {
+        "contract_path": "/columns/stock_qty/description",
+        "mappings": [
+          {
+            "aggregation": "sum",
+            "column": "stock_qty",
+            "conditions": []
+          }
+        ],
+        "own_gap": false,
+        "status": "supported"
+      },
+      "required_presence": "PASS",
+      "independent_gap_graph": {},
+      "normalized_gap_graph_matches": true,
+      "normalized": {
+        "requirement_id": "MET-001",
+        "status": "supported",
+        "mappings": [
+          {
+            "column": "stock_qty",
+            "role": "metric",
+            "source_quote": "盤點庫存件數",
+            "aggregation": "sum",
+            "operator": null,
+            "value": null,
+            "conditions": [],
+            "contract_evidence": [
+              {
+                "path": "/columns/stock_qty/description",
+                "quote": "快照當日此門市此商品的庫存件數，單位件；同商品跨門市可加總，不可跨不同快照日期直接加總。"
+              }
+            ]
+          }
+        ],
+        "contract_evidence": [
+          {
+            "path": "/columns/stock_qty/description",
+            "quote": "快照當日此門市此商品的庫存件數，單位件；同商品跨門市可加總，不可跨不同快照日期直接加總。"
+          }
+        ],
+        "missing_requirements": []
+      }
+    },
+    {
+      "requirement_id": "FILT-001",
+      "kind": "filter",
+      "verdict": "PASS",
+      "reason": "2026九月明示屬sales雙metric，不能套snapshot_date；unsupported自身缺口正確，不因此降庫存metric。",
+      "raw": {
+        "contract_path": null,
+        "mappings": [],
+        "own_gap": true,
+        "status": "unsupported"
+      },
+      "required_presence": "PASS",
+      "independent_gap_graph": {
+        "self": [
+          "FILT-001"
+        ]
+      },
+      "normalized_gap_graph_matches": true,
+      "normalized": {
+        "requirement_id": "FILT-001",
+        "status": "unsupported",
+        "mappings": [],
+        "contract_evidence": [],
+        "missing_requirements": [
+          "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"self\", \"requirements\": [{\"requirement_id\": \"FILT-001\", \"quote\": \"2026 年 9 月\", \"status\": \"unsupported\"}]}"
+        ]
+      }
+    },
+    {
+      "requirement_id": "FILT-002",
+      "kind": "filter",
+      "verdict": "PASS",
+      "reason": "庫存View無online/channel欄位，unsupported/own=true正確。",
+      "raw": {
+        "contract_path": null,
+        "mappings": [],
+        "own_gap": true,
+        "status": "unsupported"
+      },
+      "required_presence": "PASS",
+      "independent_gap_graph": {
+        "self": [
+          "FILT-002"
+        ]
+      },
+      "normalized_gap_graph_matches": true,
+      "normalized": {
+        "requirement_id": "FILT-002",
+        "status": "unsupported",
+        "mappings": [],
+        "contract_evidence": [],
+        "missing_requirements": [
+          "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"self\", \"requirements\": [{\"requirement_id\": \"FILT-002\", \"quote\": \"線上通路\", \"status\": \"unsupported\"}]}"
+        ]
+      }
+    },
+    {
+      "requirement_id": "MET-002",
+      "kind": "metric",
+      "verdict": "PASS",
+      "reason": "inventory_cost_value是庫存成本而非折扣，unsupported自身與月份/通路缺口完整，grain已supported不添grain gap。",
+      "raw": {
+        "contract_path": null,
+        "mappings": [],
+        "own_gap": true,
+        "status": "unsupported"
+      },
+      "required_presence": "PASS",
+      "independent_gap_graph": {
+        "self": [
+          "MET-002"
+        ],
+        "scope": [
+          "FILT-001",
+          "FILT-002"
+        ]
+      },
+      "normalized_gap_graph_matches": true,
+      "normalized": {
+        "requirement_id": "MET-002",
+        "status": "unsupported",
+        "mappings": [],
+        "contract_evidence": [],
+        "missing_requirements": [
+          "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"self\", \"requirements\": [{\"requirement_id\": \"MET-002\", \"quote\": \"折扣金額\", \"status\": \"unsupported\"}]}",
+          "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"scope\", \"requirements\": [{\"requirement_id\": \"FILT-001\", \"quote\": \"2026 年 9 月\", \"status\": \"unsupported\"}, {\"requirement_id\": \"FILT-002\", \"quote\": \"線上通路\", \"status\": \"unsupported\"}]}"
+        ]
+      }
+    },
+    {
+      "requirement_id": "MET-003",
+      "kind": "metric",
+      "verdict": "PASS",
+      "reason": "庫存成本非淨銷售額；unsupported自身與月份/通路缺口完整，不虛稱sales能力。",
+      "raw": {
+        "contract_path": null,
+        "mappings": [],
+        "own_gap": true,
+        "status": "unsupported"
+      },
+      "required_presence": "PASS",
+      "independent_gap_graph": {
+        "self": [
+          "MET-003"
+        ],
+        "scope": [
+          "FILT-001",
+          "FILT-002"
+        ]
+      },
+      "normalized_gap_graph_matches": true,
+      "normalized": {
+        "requirement_id": "MET-003",
+        "status": "unsupported",
+        "mappings": [],
+        "contract_evidence": [],
+        "missing_requirements": [
+          "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"self\", \"requirements\": [{\"requirement_id\": \"MET-003\", \"quote\": \"淨銷售額\", \"status\": \"unsupported\"}]}",
+          "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"scope\", \"requirements\": [{\"requirement_id\": \"FILT-001\", \"quote\": \"2026 年 9 月\", \"status\": \"unsupported\"}, {\"requirement_id\": \"FILT-002\", \"quote\": \"線上通路\", \"status\": \"unsupported\"}]}"
+        ]
+      }
+    },
+    {
+      "requirement_id": "META-001",
+      "kind": "metadata",
+      "verdict": "PASS",
+      "reason": "snapshot_date是原題顯示的盤點日期，合法非filter metadata且supported/own=false，未產固定日期義務。",
+      "raw": {
+        "contract_path": "/columns/snapshot_date/description",
+        "mappings": [
+          {
+            "column": "snapshot_date"
+          }
+        ],
+        "own_gap": false,
+        "status": "supported"
+      },
+      "required_presence": "PASS",
+      "independent_gap_graph": {},
+      "normalized_gap_graph_matches": true,
+      "normalized": {
+        "requirement_id": "META-001",
+        "status": "supported",
+        "mappings": [
+          {
+            "column": "snapshot_date",
+            "role": "metadata",
+            "source_quote": "庫存盤點日期",
+            "aggregation": null,
+            "operator": null,
+            "value": null,
+            "conditions": [],
+            "contract_evidence": [
+              {
+                "path": "/columns/snapshot_date/description",
+                "quote": "庫存盤點日期"
+              }
+            ]
+          }
+        ],
+        "contract_evidence": [
+          {
+            "path": "/columns/snapshot_date/description",
+            "quote": "庫存盤點日期"
+          }
+        ],
+        "missing_requirements": []
+      }
+    },
+    {
+      "requirement_id": "POP-001",
+      "kind": "population",
+      "verdict": "FAIL",
+      "reason": "完整庫存來源本可supported/own=false，但此責任是全部店×商品庫存，不是只商品識別；原raw只product_id漏必要store_id，不能借另一grain row補成此row完整mappings。/columns/product_id/description只證與store_id組合唯一識別，不證完整母體；來源完整母體應有summary及完整雙鍵依據。raw未提供所需完整證據，既定原56rows驗收不放寬。",
+      "raw": {
+        "contract_path": "/columns/product_id/description",
+        "mappings": [
+          {
+            "column": "product_id"
+          }
+        ],
+        "own_gap": false,
+        "status": "supported"
+      },
+      "required_presence": "PASS",
+      "independent_gap_graph": {},
+      "normalized_gap_graph_matches": true,
+      "normalized": {
+        "requirement_id": "POP-001",
+        "status": "supported",
+        "mappings": [
+          {
+            "column": "product_id",
+            "role": "key",
+            "source_quote": "保留所有庫存商品",
+            "aggregation": null,
+            "operator": null,
+            "value": null,
+            "conditions": [],
+            "contract_evidence": [
+              {
+                "path": "/columns/product_id/description",
+                "quote": "庫存商品識別碼；與 store_id 組合唯一決定一列。"
+              }
+            ]
+          }
+        ],
+        "contract_evidence": [
+          {
+            "path": "/columns/product_id/description",
+            "quote": "庫存商品識別碼；與 store_id 組合唯一決定一列。"
+          }
+        ],
+        "missing_requirements": []
+      }
+    }
+  ],
+  "raw_equals_parsed": true,
+  "normalized_saved": true,
+  "provider_all_strings": [
+    {
+      "path": "/model",
+      "characters": 11,
+      "sha256": "86005524442c923e1a1e23a3ac7685e9468c4e2ea9aab5cb2e2d50df43d77721",
+      "reviewed": true
+    },
+    {
+      "path": "/created_at",
+      "characters": 30,
+      "sha256": "aa3f67fca98dee128446a59d5ff72c6436f5f1ee13a3359c2507c4b874666d8c",
+      "reviewed": true
+    },
+    {
+      "path": "/message/role",
+      "characters": 9,
+      "sha256": "43f3a43f5a7fef31effcd812e256c8f245da366db65c225fcde611385a4df753",
+      "reviewed": true
+    },
+    {
+      "path": "/message/content",
+      "characters": 912,
+      "sha256": "eea3d515b63c208c25ab428ec6d0549e272895a1b57d0dbd67f5307f15662164",
+      "reviewed": true
+    },
+    {
+      "path": "/message/thinking",
+      "characters": 12394,
+      "sha256": "14d93c3013914cf3f5586bef9e058c10b52ded029bc245a8b5cef7743e9ac6a8",
+      "reviewed": true
+    },
+    {
+      "path": "/done_reason",
+      "characters": 4,
+      "sha256": "6f2be2fe58ca2ba48e809c9588269fb710ce2535ba22acafb1123cdbb7421a02",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/view",
+      "characters": 30,
+      "sha256": "d20907dd11ba1cc0934e21ebc201dd9a29ce6d0b8520381f51a3058bf918e6b2",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/0/requirement_id",
+      "characters": 7,
+      "sha256": "ebde217472c9b15ec682df136010e53715f5be0b5822c96e16050ef129120a52",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/0/status",
+      "characters": 9,
+      "sha256": "b54ed9760f83ecc1e66b179535ad821d4cc4ba614075b4fa044729bc2862e83b",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/0/mappings/0/column",
+      "characters": 8,
+      "sha256": "312b600d2c2ff42700eda5b11a24b151bf897b8e9ea6e3d3d556d235b5ffe542",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/0/mappings/0/role",
+      "characters": 3,
+      "sha256": "c0c1baf2fa65372c83bc5781a31d3ee0bceb37e7917317f33a92825fe5367189",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/0/mappings/0/source_quote",
+      "characters": 5,
+      "sha256": "8c3c070fb908862a3446a3cdb43bfa20d0adef2168afc40c4865a47fc9f9e3f7",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/0/mappings/0/contract_evidence/0/path",
+      "characters": 29,
+      "sha256": "88e5a1d0e0e81ae53c96a2d6932605d380d71b5447a520c818429acb1e289ad1",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/0/mappings/0/contract_evidence/0/quote",
+      "characters": 32,
+      "sha256": "fdbb542097cd4c5474f3775bb83f69dd55e4faf7805002989653c5ed7b3f4986",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/0/mappings/1/column",
+      "characters": 10,
+      "sha256": "43abf5a4963e13dab64c3bb7eb2ba24ad2b5d1c7468d3b5d29f13fa0a028acc2",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/0/mappings/1/role",
+      "characters": 3,
+      "sha256": "c0c1baf2fa65372c83bc5781a31d3ee0bceb37e7917317f33a92825fe5367189",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/0/mappings/1/source_quote",
+      "characters": 5,
+      "sha256": "8c3c070fb908862a3446a3cdb43bfa20d0adef2168afc40c4865a47fc9f9e3f7",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/0/mappings/1/contract_evidence/0/path",
+      "characters": 31,
+      "sha256": "114031ec2e5d30fd9d0778dea80a5d9d1c6c7e882b9535a2c61539782796ae3d",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/0/mappings/1/contract_evidence/0/quote",
+      "characters": 28,
+      "sha256": "46e4216984a7d69734e469d8222d53aa1628a9be500c82ded0d93967c0feeb1f",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/0/contract_evidence/0/path",
+      "characters": 18,
+      "sha256": "511b26ba0f57da50a36abadb3d0e805226404ea8c6d64c5c65f8265376e3f0f5",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/0/contract_evidence/0/quote",
+      "characters": 5,
+      "sha256": "59f5c190d8e771d605aa2d093f0b13b8f1aee8b6e796a12dd92ac3809223e745",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/1/requirement_id",
+      "characters": 7,
+      "sha256": "df764536d5ba619c193ff64e81b43aea61758ff43f94f5dbe48bc95d8ed27050",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/1/status",
+      "characters": 9,
+      "sha256": "b54ed9760f83ecc1e66b179535ad821d4cc4ba614075b4fa044729bc2862e83b",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/1/mappings/0/column",
+      "characters": 9,
+      "sha256": "5661c0109395c4aa0dc2a0e4997a86e25fff6904a9462acbde3d641dc3dfc882",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/1/mappings/0/role",
+      "characters": 6,
+      "sha256": "0603972e565cf3ff957ac3243e2e97b7cac885b2b79662c68dc9e388c347184b",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/1/mappings/0/source_quote",
+      "characters": 6,
+      "sha256": "8c7f7a165f8763014b853335a46405817584b43146cedc5119e1493eab35b4d1",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/1/mappings/0/aggregation",
+      "characters": 3,
+      "sha256": "4482ea0ae0ce3742ddbdc1953682872957da22ba1fd100977e444012ed63572c",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/1/mappings/0/contract_evidence/0/path",
+      "characters": 30,
+      "sha256": "37daf60d36861b8ec896fd267e00998e9568e53fc80ca8d2b027099d360d7092",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/1/mappings/0/contract_evidence/0/quote",
+      "characters": 44,
+      "sha256": "5147f844260e2aa0be67c6eb0f206992ce09b49f33483eedd79355cdb3cd3bed",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/1/contract_evidence/0/path",
+      "characters": 30,
+      "sha256": "37daf60d36861b8ec896fd267e00998e9568e53fc80ca8d2b027099d360d7092",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/1/contract_evidence/0/quote",
+      "characters": 44,
+      "sha256": "5147f844260e2aa0be67c6eb0f206992ce09b49f33483eedd79355cdb3cd3bed",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/2/requirement_id",
+      "characters": 8,
+      "sha256": "50789821887b615572c76cb484ab6ad4fcc38dbf7f3aaa766bc5a3192de627e6",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/2/status",
+      "characters": 11,
+      "sha256": "0bc6f540bbf1d48a52b38b78f201053bc6ac6a49a3bd6105deccacea34c8b9b8",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/2/missing_requirements/0",
+      "characters": 146,
+      "sha256": "35e114b115c7b0b3dc436139b420599c2dc73bee31f0f0edd62f6814db860ebf",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/3/requirement_id",
+      "characters": 8,
+      "sha256": "04c19a1d4ee8a02759e89644f7e0b284699c6ed1b0a6da1d6e9aaa458fcb179d",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/3/status",
+      "characters": 11,
+      "sha256": "0bc6f540bbf1d48a52b38b78f201053bc6ac6a49a3bd6105deccacea34c8b9b8",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/3/missing_requirements/0",
+      "characters": 140,
+      "sha256": "fc09d728be5f4450e8327efb5a19656a839f6d957575fa3d6f041fab67c2f13e",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/4/requirement_id",
+      "characters": 7,
+      "sha256": "830697fdc859a0bea1f67c4c172b3f3ca89ca746410b73c4e9d7e92faa5bed01",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/4/status",
+      "characters": 11,
+      "sha256": "0bc6f540bbf1d48a52b38b78f201053bc6ac6a49a3bd6105deccacea34c8b9b8",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/4/missing_requirements/0",
+      "characters": 139,
+      "sha256": "c35e86a984abf94627e941334562ce6787f488038686f67bc6869d17c7f95231",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/4/missing_requirements/1",
+      "characters": 221,
+      "sha256": "d458933be06e953303c34f4f5352d6c851f0f481b4f23df474dd8d64e38a23ff",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/5/requirement_id",
+      "characters": 7,
+      "sha256": "2e3d7227af1d06577975df431501ce67d0b1327b29d50e21bacd808e2e4e623f",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/5/status",
+      "characters": 11,
+      "sha256": "0bc6f540bbf1d48a52b38b78f201053bc6ac6a49a3bd6105deccacea34c8b9b8",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/5/missing_requirements/0",
+      "characters": 139,
+      "sha256": "2c77e4919f161e4948fd85819a0798b91436b0bb15db6c84dd4b27fb40471725",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/5/missing_requirements/1",
+      "characters": 221,
+      "sha256": "d458933be06e953303c34f4f5352d6c851f0f481b4f23df474dd8d64e38a23ff",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/6/requirement_id",
+      "characters": 8,
+      "sha256": "e4bb67c81b9d592b0f3aa87a376e2f15f3bd70ca342230e747a9d11653ac71ed",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/6/status",
+      "characters": 9,
+      "sha256": "b54ed9760f83ecc1e66b179535ad821d4cc4ba614075b4fa044729bc2862e83b",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/6/mappings/0/column",
+      "characters": 13,
+      "sha256": "6bd1416d61ff56bffc19d522e186bbc6a05f37e3e5ca742b7ec5b312d4371a40",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/6/mappings/0/role",
+      "characters": 8,
+      "sha256": "cad5d1ef0023953da8d63bd2a4d67fcc925fca4c658f0011df19326428162e95",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/6/mappings/0/source_quote",
+      "characters": 6,
+      "sha256": "faef65be82efdaa695ebbc7796ea578b93ffbca9041f56e67ba588dd5181a74c",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/6/mappings/0/contract_evidence/0/path",
+      "characters": 34,
+      "sha256": "f0c9cefd32cb96c151663fc84beab11e7356e6d6235da85cf8dea3e41deede0f",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/6/mappings/0/contract_evidence/0/quote",
+      "characters": 6,
+      "sha256": "faef65be82efdaa695ebbc7796ea578b93ffbca9041f56e67ba588dd5181a74c",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/6/contract_evidence/0/path",
+      "characters": 34,
+      "sha256": "f0c9cefd32cb96c151663fc84beab11e7356e6d6235da85cf8dea3e41deede0f",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/6/contract_evidence/0/quote",
+      "characters": 6,
+      "sha256": "faef65be82efdaa695ebbc7796ea578b93ffbca9041f56e67ba588dd5181a74c",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/7/requirement_id",
+      "characters": 7,
+      "sha256": "f487aad000dc53dfe1db6d3e1011ab1fc7231603977f50638265e1d5b188850c",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/7/status",
+      "characters": 9,
+      "sha256": "b54ed9760f83ecc1e66b179535ad821d4cc4ba614075b4fa044729bc2862e83b",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/7/mappings/0/column",
+      "characters": 10,
+      "sha256": "43abf5a4963e13dab64c3bb7eb2ba24ad2b5d1c7468d3b5d29f13fa0a028acc2",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/7/mappings/0/role",
+      "characters": 3,
+      "sha256": "c0c1baf2fa65372c83bc5781a31d3ee0bceb37e7917317f33a92825fe5367189",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/7/mappings/0/source_quote",
+      "characters": 8,
+      "sha256": "2447d32f9446324b838876946819a4122f482781226c58da1663fb37c8494500",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/7/mappings/0/contract_evidence/0/path",
+      "characters": 31,
+      "sha256": "114031ec2e5d30fd9d0778dea80a5d9d1c6c7e882b9535a2c61539782796ae3d",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/7/mappings/0/contract_evidence/0/quote",
+      "characters": 28,
+      "sha256": "46e4216984a7d69734e469d8222d53aa1628a9be500c82ded0d93967c0feeb1f",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/7/contract_evidence/0/path",
+      "characters": 31,
+      "sha256": "114031ec2e5d30fd9d0778dea80a5d9d1c6c7e882b9535a2c61539782796ae3d",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/entries/7/contract_evidence/0/quote",
+      "characters": 28,
+      "sha256": "46e4216984a7d69734e469d8222d53aa1628a9be500c82ded0d93967c0feeb1f",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/grain",
+      "characters": 5,
+      "sha256": "59f5c190d8e771d605aa2d093f0b13b8f1aee8b6e796a12dd92ac3809223e745",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/keys/0",
+      "characters": 8,
+      "sha256": "312b600d2c2ff42700eda5b11a24b151bf897b8e9ea6e3d3d556d235b5ffe542",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/keys/1",
+      "characters": 10,
+      "sha256": "43abf5a4963e13dab64c3bb7eb2ba24ad2b5d1c7468d3b5d29f13fa0a028acc2",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/population",
+      "characters": 81,
+      "sha256": "6772b27efada27ebdca659d0e006fb303122d195177e56feca4dc9a8f2e016a1",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/contract_evidence/0/path",
+      "characters": 8,
+      "sha256": "c6c3350785d93e170d9d80cb9edd112463bf1431e19f8074ed3c3224577d88e7",
+      "reviewed": true
+    },
+    {
+      "path": "/normalized/contract_evidence/0/quote",
+      "characters": 81,
+      "sha256": "6772b27efada27ebdca659d0e006fb303122d195177e56feca4dc9a8f2e016a1",
+      "reviewed": true
+    }
+  ],
+  "provider_text_ruling": "完整content/thinking及normalized所有字串已讀；模型多次考慮將sales月份套snapshot_date但最終明確拒絕，沒有產該錯predicate。完整grain、stock sum及metadata正確，未跨快照加總或加未要求status欄。POP理由反覆用stock_status值域列舉推無母體排除，該推論單獨不足；最終只商品key與欄位識別說明也未完整證明所需店商品母體。normalized原summary/雙鍵/stock限制/metadata引文皆真，正規化完整raw依賴圖不挽救POP映射與證據欠缺。",
+  "legacy_findings": [
+    {
+      "requirement_id": "POP-001",
+      "aspect": "necessary mappings/predicates",
+      "expected": [
+        {
+          "column": "store_id"
+        },
+        {
+          "column": "product_id"
+        }
+      ],
+      "actual": [
+        {
+          "column": "product_id"
+        }
+      ]
+    },
+    {
+      "requirement_id": "POP-001",
+      "aspect": "contract_path requires review",
+      "expected": "/summary",
+      "actual": "/columns/product_id/description"
+    }
+  ],
+  "accepted_scope_AND_equivalences": [],
+  "new_other_findings": [
+    {
+      "requirement_id": "POP-001",
+      "aspect": "necessary mappings/predicates",
+      "expected": [
+        {
+          "column": "store_id"
+        },
+        {
+          "column": "product_id"
+        }
+      ],
+      "actual": [
+        {
+          "column": "product_id"
+        }
+      ]
+    },
+    {
+      "requirement_id": "POP-001",
+      "aspect": "contract_path requires review",
+      "expected": "/summary",
+      "actual": "/columns/product_id/description"
+    }
+  ],
+  "artifacts": {
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-CAP-v1-05/node-provider-response.json": "49950b3802c07b48bfb5e7cb83936a784d6ba95c4dea2de811ef17c76ad0dc6d",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-CAP-v1-05/node-managed.json": "cfc2f6c49681972aa9fe7cc9af9f6b4caab2a9c1bcea6f56e823c0f695c2711b",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-CAP-v1-05/semantic-review.json": "4087b4156fb1d16cbcb43592a91b21cb8cc4b442d69eda87f473335610278c3f",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-CAP-v1-05/run.json": "5a19f5336f87813ba9f28f2cde12f2da8ad431e7f6a625f67ec05b1a061dcb6f",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-CAP-v1-05/usage.json": "5761a20bf289e8f24bf6e7133ed01858fdf59c05cd0b20983d9447bea96115f3",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-CAP-v1-05/node-body.json": "5f3b505770e993469badc4f151e9b98c860952a14a48f2cfbbc14893ecf667b4",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-CAP-v1-05/node-call.json": "919b2f2fd0c0edd218b95d0a5e5a56584912c2af26a26ce06b722038d7155ee8",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-CAP-v1-05/node-compiled.json": "0187afb220793bd482b80a4f54be3a9725fcdfa89d50303773c6984fea1af3e9",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-CAP-v1-05/node-normalized.json": "7300ae3fdf37fdeffbd5d058b3886e97a33709f37938f1b2ea9d86f86848436f",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-CAP-v1-05/node-parsed.json": "82902350af040488eea8f0ff3c60c727341969a1c3f51ba71f6b09fe709ce52d",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-CAP-v1-05/node-refs.json": "8bf4764694545a8ca997b8325dcf87ed7d8f8a722093267c922fce924c4c3a5d",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-CAP-v1-05/upstream.json": "036a95a6bfce7584579489eee72802bbaccb8cfd93f3a5392790759e5e21eeec",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-CAP-v1-05/node-request.json": "b3b29214ec1af131dc6fe4c7fba526fbace75440b3b8013522a5ba93461b86cb",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-CAP-v1-05/node-presence.json": "977188f780d4f482dc5d2cba789481380b219a6e06c8b558d585f48a1374e07d",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-capability-projection-1-20261022T014118Z-68828b/COV-CAP-v1-05/node-error.json": "5eeb4c824f637c7d507cd527738ff1d1091b4ffcbe1591f3c4d75bf1805743a5"
+  },
+  "outer_receipt_sha256": "43a08510eb91af2b4bf822027391c328f5f7e33d7f01544f63aee433c3651281",
+  "POST": 1,
+  "retry": 0,
+  "SQL_DB": 0
+}

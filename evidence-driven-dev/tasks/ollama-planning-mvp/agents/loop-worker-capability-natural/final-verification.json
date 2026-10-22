@@ -1,0 +1,325 @@
+{
+  "result": "PASS",
+  "scope": "僅完整性/記帳/重播驗證；自然語意整node仍FAIL",
+  "protected_original_files": 8048,
+  "unchanged": 8047,
+  "expected_changed": [
+    "evidence-driven-dev/tasks/ollama-planning-mvp/task.md"
+  ],
+  "unexpected_changed": [],
+  "missing": [],
+  "full_current_bindings": "PASS",
+  "frozen": [
+    {
+      "manifest": "freeze.json",
+      "entries": 239
+    },
+    {
+      "manifest": "policy-freeze.json",
+      "entries": 12
+    },
+    {
+      "manifest": "capability-freeze.json",
+      "entries": 35
+    }
+  ],
+  "actual_frozen_files": 288,
+  "requests": [
+    {
+      "id": "b2bca399f95d43b5a93e901ba5e237ce",
+      "ticket_id": "afed9ab55d0f44db8d04242d0f9c99e7",
+      "provider": "local",
+      "case_key": "kind-capability-projection-1:ISOLATION:COV-ISO-v1-01:node",
+      "request_sha": "c238adb591fa9f18aa2b1f792ff1cda6cf4680ad68a6131a0c58f1943e039cfb",
+      "retry_number": 0,
+      "retry_of": null,
+      "status": "ok",
+      "round": 23,
+      "reserved_at": "2026-10-22T01:42:00.363250+00:00",
+      "finished_at": "2026-10-22T01:47:41.333526+00:00",
+      "details": {
+        "http_status": 200,
+        "response_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/b2bca399f95d43b5a93e901ba5e237ce.response.txt",
+        "response_sha256": "ffc8df337e934d4a29643967401ae8a0cd4681fec3e1d03b02b869ec666b8a2b"
+      }
+    },
+    {
+      "id": "b5a046baca9c498fbd4502d607f9a98c",
+      "ticket_id": "afed9ab55d0f44db8d04242d0f9c99e7",
+      "provider": "local",
+      "case_key": "kind-capability-projection-1:ISOLATION:COV-ISO-v1-02:node",
+      "request_sha": "9f1e4c266fd30b2bfcba6ef8aa43988b37add1bd831ca58a421a41e0b19e2b48",
+      "retry_number": 0,
+      "retry_of": null,
+      "status": "ok",
+      "round": 23,
+      "reserved_at": "2026-10-22T01:48:17.040901+00:00",
+      "finished_at": "2026-10-22T01:52:22.766064+00:00",
+      "details": {
+        "http_status": 200,
+        "response_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/b5a046baca9c498fbd4502d607f9a98c.response.txt",
+        "response_sha256": "ec262e80d1d2ec745ebe4fb19c5cc03d119efd1507221636450b2dc3daebd99f"
+      }
+    },
+    {
+      "id": "92d30768809a449ca1e21a0638e7827e",
+      "ticket_id": "afed9ab55d0f44db8d04242d0f9c99e7",
+      "provider": "local",
+      "case_key": "kind-capability-projection-1:ISOLATION:COV-ISO-v1-03:node",
+      "request_sha": "5687d786112604f45c85aa4ce089c0051ac45a6b11f2450b86aad0c79bed1d0d",
+      "retry_number": 0,
+      "retry_of": null,
+      "status": "ok",
+      "round": 23,
+      "reserved_at": "2026-10-22T01:52:58.638271+00:00",
+      "finished_at": "2026-10-22T02:08:14.369998+00:00",
+      "details": {
+        "http_status": 200,
+        "response_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/92d30768809a449ca1e21a0638e7827e.response.txt",
+        "response_sha256": "a11df15c322b38359fb19c8736696e7ec22758473b9d622d1db16b550999f190"
+      }
+    },
+    {
+      "id": "6da4b8f97a904821bf8f2221c151e65a",
+      "ticket_id": "afed9ab55d0f44db8d04242d0f9c99e7",
+      "provider": "local",
+      "case_key": "kind-capability-projection-1:ISOLATION:COV-CAP-v1-04:node",
+      "request_sha": "fd0c1c5d81315b4e898ec60f7bd25bdd7e01f3053da6ded9f76849f4a3154912",
+      "retry_number": 0,
+      "retry_of": null,
+      "status": "ok",
+      "round": 23,
+      "reserved_at": "2026-10-22T02:08:50.110560+00:00",
+      "finished_at": "2026-10-22T02:22:22.015278+00:00",
+      "details": {
+        "http_status": 200,
+        "response_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/6da4b8f97a904821bf8f2221c151e65a.response.txt",
+        "response_sha256": "f150acacbe1f1caf2ff9ea7be1b3867fc1d108cb384f05fb25da02f2f2d2b305"
+      }
+    },
+    {
+      "id": "3b787d488b6c46919e5577c430a614d1",
+      "ticket_id": "afed9ab55d0f44db8d04242d0f9c99e7",
+      "provider": "local",
+      "case_key": "kind-capability-projection-1:ISOLATION:COV-CAP-v1-05:node",
+      "request_sha": "f0c66dfc86392ffd0bf8db2d11eb04ad535ce2f68482e70c6ebd587907e615a9",
+      "retry_number": 0,
+      "retry_of": null,
+      "status": "ok",
+      "round": 23,
+      "reserved_at": "2026-10-22T02:22:57.859239+00:00",
+      "finished_at": "2026-10-22T02:49:20.377792+00:00",
+      "details": {
+        "http_status": 200,
+        "response_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/3b787d488b6c46919e5577c430a614d1.response.txt",
+        "response_sha256": "fa23700b32eb848f83b94071a9b5762c191728964a3f17f356f6bf826573b633"
+      }
+    }
+  ],
+  "model_runs": [
+    {
+      "sample": "COV-ISO-v1-01",
+      "request_id": "b2bca399f95d43b5a93e901ba5e237ce",
+      "http_status": 200,
+      "model_identity": {
+        "name": "qwen3.8:27b",
+        "digest": "aaee06c39dcf2437cde036998d960e1fc1494b8191be7cc9657d01e509097813",
+        "checked_at": "2026-10-22T01:41:18.469075+00:00"
+      },
+      "provider_usage": {
+        "prompt_eval_count": 4245,
+        "eval_count": 2371,
+        "total_duration": 340916458558
+      },
+      "outer_status": "FAIL",
+      "legacy_reached": false,
+      "normalized_saved": false
+    },
+    {
+      "sample": "COV-ISO-v1-02",
+      "request_id": "b5a046baca9c498fbd4502d607f9a98c",
+      "http_status": 200,
+      "model_identity": {
+        "name": "qwen3.8:27b",
+        "digest": "aaee06c39dcf2437cde036998d960e1fc1494b8191be7cc9657d01e509097813",
+        "checked_at": "2026-10-22T01:41:18.469075+00:00"
+      },
+      "provider_usage": {
+        "prompt_eval_count": 2309,
+        "eval_count": 524,
+        "total_duration": 245669870764
+      },
+      "outer_status": "PASS",
+      "legacy_reached": true,
+      "normalized_saved": true
+    },
+    {
+      "sample": "COV-ISO-v1-03",
+      "request_id": "92d30768809a449ca1e21a0638e7827e",
+      "http_status": 200,
+      "model_identity": {
+        "name": "qwen3.8:27b",
+        "digest": "aaee06c39dcf2437cde036998d960e1fc1494b8191be7cc9657d01e509097813",
+        "checked_at": "2026-10-22T01:41:18.469075+00:00"
+      },
+      "provider_usage": {
+        "prompt_eval_count": 4158,
+        "eval_count": 2310,
+        "total_duration": 915675978573
+      },
+      "outer_status": "FAIL",
+      "legacy_reached": false,
+      "normalized_saved": false
+    },
+    {
+      "sample": "COV-CAP-v1-04",
+      "request_id": "6da4b8f97a904821bf8f2221c151e65a",
+      "http_status": 200,
+      "model_identity": {
+        "name": "qwen3.8:27b",
+        "digest": "aaee06c39dcf2437cde036998d960e1fc1494b8191be7cc9657d01e509097813",
+        "checked_at": "2026-10-22T01:41:18.469075+00:00"
+      },
+      "provider_usage": {
+        "prompt_eval_count": 4294,
+        "eval_count": 1842,
+        "total_duration": 811849214273
+      },
+      "outer_status": "FAIL",
+      "legacy_reached": true,
+      "normalized_saved": true
+    },
+    {
+      "sample": "COV-CAP-v1-05",
+      "request_id": "3b787d488b6c46919e5577c430a614d1",
+      "http_status": 200,
+      "model_identity": {
+        "name": "qwen3.8:27b",
+        "digest": "aaee06c39dcf2437cde036998d960e1fc1494b8191be7cc9657d01e509097813",
+        "checked_at": "2026-10-22T01:41:18.469075+00:00"
+      },
+      "provider_usage": {
+        "prompt_eval_count": 4576,
+        "eval_count": 3787,
+        "total_duration": 1582455167431
+      },
+      "outer_status": "FAIL",
+      "legacy_reached": true,
+      "normalized_saved": true
+    }
+  ],
+  "replays": [
+    {
+      "sample": "COV-ISO-v1-01",
+      "mode": "live",
+      "exit_code": 1,
+      "verification": "PASS",
+      "result": "FAIL",
+      "raw_replays": 1,
+      "provider_calls": 0
+    },
+    {
+      "sample": "COV-ISO-v1-01",
+      "mode": "frozen",
+      "exit_code": 1,
+      "verification": "PASS",
+      "result": "FAIL",
+      "raw_replays": 1,
+      "provider_calls": 0
+    },
+    {
+      "sample": "COV-ISO-v1-02",
+      "mode": "live",
+      "exit_code": 0,
+      "verification": "PASS",
+      "result": "PASS",
+      "raw_replays": 1,
+      "provider_calls": 0
+    },
+    {
+      "sample": "COV-ISO-v1-02",
+      "mode": "frozen",
+      "exit_code": 0,
+      "verification": "PASS",
+      "result": "PASS",
+      "raw_replays": 1,
+      "provider_calls": 0
+    },
+    {
+      "sample": "COV-ISO-v1-03",
+      "mode": "live",
+      "exit_code": 1,
+      "verification": "PASS",
+      "result": "FAIL",
+      "raw_replays": 1,
+      "provider_calls": 0
+    },
+    {
+      "sample": "COV-ISO-v1-03",
+      "mode": "frozen",
+      "exit_code": 1,
+      "verification": "PASS",
+      "result": "FAIL",
+      "raw_replays": 1,
+      "provider_calls": 0
+    },
+    {
+      "sample": "COV-CAP-v1-04",
+      "mode": "live",
+      "exit_code": 1,
+      "verification": "PASS",
+      "result": "FAIL",
+      "raw_replays": 1,
+      "provider_calls": 0
+    },
+    {
+      "sample": "COV-CAP-v1-04",
+      "mode": "frozen",
+      "exit_code": 1,
+      "verification": "PASS",
+      "result": "FAIL",
+      "raw_replays": 1,
+      "provider_calls": 0
+    },
+    {
+      "sample": "COV-CAP-v1-05",
+      "mode": "live",
+      "exit_code": 1,
+      "verification": "PASS",
+      "result": "FAIL",
+      "raw_replays": 1,
+      "provider_calls": 0
+    },
+    {
+      "sample": "COV-CAP-v1-05",
+      "mode": "frozen",
+      "exit_code": 1,
+      "verification": "PASS",
+      "result": "FAIL",
+      "raw_replays": 1,
+      "provider_calls": 0
+    }
+  ],
+  "independent_semantic_rows": 33,
+  "outcomes": [
+    "FAIL",
+    "PASS",
+    "FAIL",
+    "FAIL",
+    "FAIL"
+  ],
+  "used": {
+    "agent_dispatches": 40,
+    "cloud_calls": 0,
+    "local_calls": 31,
+    "model_retries": 0
+  },
+  "inflight": 0,
+  "upstream_injected": true,
+  "POST_this_worker": 5,
+  "retry": 0,
+  "cloud": 0,
+  "SQL_DB": 0,
+  "source_tests_fixture_oracle_prompt_manifest_Task_control_manual_edits": 0,
+  "commit_push": 0
+}

@@ -1,0 +1,241 @@
+{
+  "selected_views": [
+    "demo_retail.v_inventory_status",
+    "demo_retail.v_sales_detail"
+  ],
+  "assignments": [
+    {
+      "requirement_id": "GRN-001",
+      "view": "demo_retail.v_inventory_status",
+      "task_id": "inventory-observation"
+    },
+    {
+      "requirement_id": "MET-001",
+      "view": "demo_retail.v_inventory_status",
+      "task_id": "inventory-observation"
+    },
+    {
+      "requirement_id": "FILT-001",
+      "view": "demo_retail.v_sales_detail",
+      "task_id": "period-sales"
+    },
+    {
+      "requirement_id": "FILT-002",
+      "view": "demo_retail.v_sales_detail",
+      "task_id": "period-sales"
+    },
+    {
+      "requirement_id": "MET-002",
+      "view": "demo_retail.v_sales_detail",
+      "task_id": "period-sales"
+    },
+    {
+      "requirement_id": "MET-003",
+      "view": "demo_retail.v_sales_detail",
+      "task_id": "period-sales"
+    },
+    {
+      "requirement_id": "META-001",
+      "view": "demo_retail.v_inventory_status",
+      "task_id": "inventory-observation"
+    },
+    {
+      "requirement_id": "POP-001",
+      "view": "demo_retail.v_inventory_status",
+      "task_id": "inventory-observation"
+    }
+  ],
+  "exclusions": [
+    {
+      "view": "demo_retail.v_customer_value",
+      "refs": [
+        {
+          "kind": "gap",
+          "requirement_ids": [
+            "MET-001"
+          ],
+          "selected_view": null
+        }
+      ]
+    },
+    {
+      "view": "demo_retail.v_daily_sales",
+      "refs": [
+        {
+          "kind": "gap",
+          "requirement_ids": [
+            "MET-001"
+          ],
+          "selected_view": null
+        }
+      ]
+    },
+    {
+      "view": "demo_retail.v_order_summary",
+      "refs": [
+        {
+          "kind": "gap",
+          "requirement_ids": [
+            "MET-001"
+          ],
+          "selected_view": null
+        }
+      ]
+    },
+    {
+      "view": "demo_retail.v_product_monthly",
+      "refs": [
+        {
+          "kind": "gap",
+          "requirement_ids": [
+            "MET-001"
+          ],
+          "selected_view": null
+        }
+      ]
+    },
+    {
+      "view": "demo_retail.v_store_monthly_kpi",
+      "refs": [
+        {
+          "kind": "gap",
+          "requirement_ids": [
+            "MET-001"
+          ],
+          "selected_view": null
+        }
+      ]
+    }
+  ],
+  "draft": {
+    "status": "ready",
+    "strategy": "multi_view",
+    "tasks": [
+      {
+        "task_id": "inventory-observation",
+        "view": "demo_retail.v_inventory_status",
+        "required_columns": [
+          "store_id",
+          "product_id",
+          "stock_qty",
+          "snapshot_date"
+        ],
+        "filters": [
+          {
+            "column": "order_date",
+            "operator": ">=",
+            "value": "2026-09-01"
+          },
+          {
+            "column": "order_date",
+            "operator": "<",
+            "value": "2026-10-01"
+          },
+          {
+            "column": "sales_channel",
+            "operator": "=",
+            "value": "online"
+          }
+        ],
+        "metrics": {
+          "stock_qty": "sum"
+        },
+        "conditional_metrics": [],
+        "attributes": [],
+        "metadata_collections": [
+          "snapshot_date"
+        ],
+        "group_by": [
+          "store_id",
+          "product_id"
+        ],
+        "output_grain": [
+          "store_id",
+          "product_id"
+        ],
+        "depends_on": [],
+        "unbound_inputs": [],
+        "request": "取得各店各商品盤點庫存件數並收集盤點日期，保留全部庫存商品"
+      },
+      {
+        "task_id": "period-sales",
+        "view": "demo_retail.v_sales_detail",
+        "required_columns": [
+          "store_id",
+          "product_id",
+          "discount_amount",
+          "net_sales",
+          "order_date",
+          "sales_channel"
+        ],
+        "filters": [],
+        "metrics": {
+          "discount_amount": "sum",
+          "net_sales": "sum"
+        },
+        "conditional_metrics": [],
+        "attributes": [],
+        "metadata_collections": [],
+        "group_by": [
+          "store_id",
+          "product_id"
+        ],
+        "output_grain": [
+          "store_id",
+          "product_id"
+        ],
+        "depends_on": [],
+        "unbound_inputs": [],
+        "request": "彙總2026年9月線上通路各店商品折扣及淨銷售額"
+      }
+    ],
+    "integration": {
+      "anchor_task": "inventory-observation",
+      "output_grain": [
+        "store_id",
+        "product_id"
+      ],
+      "edges": [
+        {
+          "left_task": "inventory-observation",
+          "right_task": "period-sales",
+          "left_keys": [
+            "store_id",
+            "product_id"
+          ],
+          "right_keys": [
+            "store_id",
+            "product_id"
+          ],
+          "mode": "left",
+          "cardinality": "one_to_one",
+          "preserve_task": "inventory-observation"
+        }
+      ],
+      "preparation": [
+        {
+          "task_id": "inventory-observation",
+          "kind": "aggregate",
+          "keys": [
+            "store_id",
+            "product_id"
+          ],
+          "description": "依店商品彙總庫存件數並收集不同盤點日期"
+        },
+        {
+          "task_id": "period-sales",
+          "kind": "aggregate",
+          "keys": [
+            "store_id",
+            "product_id"
+          ],
+          "description": "先篩選月份與通路，再依店商品彙總折扣及淨額"
+        }
+      ],
+      "missing_data_policy": "保留未匹配資料並標記缺值；契約沒有保證時不可把缺值當成零。",
+      "notes": []
+    },
+    "clarifications": [],
+    "unsupported_reasons": []
+  }
+}

@@ -1,0 +1,750 @@
+FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF                                        [100%]
+=================================== FAILURES ===================================
+_ test_fixed_upstream_preserves_useful_unselected_capabilities_and_two_prepared _
+
+    def test_fixed_upstream_preserves_useful_unselected_capabilities_and_two_prepared():
+>       mod = api()
+              ^^^^^
+
+tests/unit/test_managed_node_diagnostics.py:18: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.managed_node_diagnostics'), 'isolation runner missing'
+E       AssertionError: isolation runner missing
+E       assert None
+E        +  where None = <function find_spec at 0x7c94cb5ae0c0>('evaluations.managed_node_diagnostics')
+E        +    where <function find_spec at 0x7c94cb5ae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_managed_node_diagnostics.py:13: AssertionError
+_ test_record_replay_preserves_raw_presence_compilation_and_injected_provenance[COV-ISO-v1-01] _
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-41/test_record_replay_preserves_r0')
+sample = 'COV-ISO-v1-01'
+
+    @pytest.mark.parametrize('sample', ['COV-ISO-v1-01', 'COV-ISO-v1-02', 'COV-ISO-v1-03', 'SEL-ISO-v1-01'])
+    def test_record_replay_preserves_raw_presence_compilation_and_injected_provenance(tmp_path, sample):
+>       mod = api(); package = mod.load_package(); context = mod.prepare(package, sample)
+              ^^^^^
+
+tests/unit/test_managed_node_diagnostics.py:40: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.managed_node_diagnostics'), 'isolation runner missing'
+E       AssertionError: isolation runner missing
+E       assert None
+E        +  where None = <function find_spec at 0x7c94cb5ae0c0>('evaluations.managed_node_diagnostics')
+E        +    where <function find_spec at 0x7c94cb5ae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_managed_node_diagnostics.py:13: AssertionError
+_ test_record_replay_preserves_raw_presence_compilation_and_injected_provenance[COV-ISO-v1-02] _
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-41/test_record_replay_preserves_r1')
+sample = 'COV-ISO-v1-02'
+
+    @pytest.mark.parametrize('sample', ['COV-ISO-v1-01', 'COV-ISO-v1-02', 'COV-ISO-v1-03', 'SEL-ISO-v1-01'])
+    def test_record_replay_preserves_raw_presence_compilation_and_injected_provenance(tmp_path, sample):
+>       mod = api(); package = mod.load_package(); context = mod.prepare(package, sample)
+              ^^^^^
+
+tests/unit/test_managed_node_diagnostics.py:40: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.managed_node_diagnostics'), 'isolation runner missing'
+E       AssertionError: isolation runner missing
+E       assert None
+E        +  where None = <function find_spec at 0x7c94cb5ae0c0>('evaluations.managed_node_diagnostics')
+E        +    where <function find_spec at 0x7c94cb5ae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_managed_node_diagnostics.py:13: AssertionError
+_ test_record_replay_preserves_raw_presence_compilation_and_injected_provenance[COV-ISO-v1-03] _
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-41/test_record_replay_preserves_r2')
+sample = 'COV-ISO-v1-03'
+
+    @pytest.mark.parametrize('sample', ['COV-ISO-v1-01', 'COV-ISO-v1-02', 'COV-ISO-v1-03', 'SEL-ISO-v1-01'])
+    def test_record_replay_preserves_raw_presence_compilation_and_injected_provenance(tmp_path, sample):
+>       mod = api(); package = mod.load_package(); context = mod.prepare(package, sample)
+              ^^^^^
+
+tests/unit/test_managed_node_diagnostics.py:40: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.managed_node_diagnostics'), 'isolation runner missing'
+E       AssertionError: isolation runner missing
+E       assert None
+E        +  where None = <function find_spec at 0x7c94cb5ae0c0>('evaluations.managed_node_diagnostics')
+E        +    where <function find_spec at 0x7c94cb5ae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_managed_node_diagnostics.py:13: AssertionError
+_ test_record_replay_preserves_raw_presence_compilation_and_injected_provenance[SEL-ISO-v1-01] _
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-41/test_record_replay_preserves_r3')
+sample = 'SEL-ISO-v1-01'
+
+    @pytest.mark.parametrize('sample', ['COV-ISO-v1-01', 'COV-ISO-v1-02', 'COV-ISO-v1-03', 'SEL-ISO-v1-01'])
+    def test_record_replay_preserves_raw_presence_compilation_and_injected_provenance(tmp_path, sample):
+>       mod = api(); package = mod.load_package(); context = mod.prepare(package, sample)
+              ^^^^^
+
+tests/unit/test_managed_node_diagnostics.py:40: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.managed_node_diagnostics'), 'isolation runner missing'
+E       AssertionError: isolation runner missing
+E       assert None
+E        +  where None = <function find_spec at 0x7c94cb5ae0c0>('evaluations.managed_node_diagnostics')
+E        +    where <function find_spec at 0x7c94cb5ae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_managed_node_diagnostics.py:13: AssertionError
+______ test_first_failure_is_saved_and_replayed_without_repair[provider] _______
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-41/test_first_failure_is_saved_an0')
+failure = 'provider'
+
+    @pytest.mark.parametrize('failure', ['provider', 'parse', 'predicate', 'own', 'typed', 'null', 'duplicate', 'nan'])
+    def test_first_failure_is_saved_and_replayed_without_repair(tmp_path, failure):
+>       mod = api(); package = mod.load_package()
+              ^^^^^
+
+tests/unit/test_managed_node_diagnostics.py:63: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.managed_node_diagnostics'), 'isolation runner missing'
+E       AssertionError: isolation runner missing
+E       assert None
+E        +  where None = <function find_spec at 0x7c94cb5ae0c0>('evaluations.managed_node_diagnostics')
+E        +    where <function find_spec at 0x7c94cb5ae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_managed_node_diagnostics.py:13: AssertionError
+________ test_first_failure_is_saved_and_replayed_without_repair[parse] ________
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-41/test_first_failure_is_saved_an1')
+failure = 'parse'
+
+    @pytest.mark.parametrize('failure', ['provider', 'parse', 'predicate', 'own', 'typed', 'null', 'duplicate', 'nan'])
+    def test_first_failure_is_saved_and_replayed_without_repair(tmp_path, failure):
+>       mod = api(); package = mod.load_package()
+              ^^^^^
+
+tests/unit/test_managed_node_diagnostics.py:63: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.managed_node_diagnostics'), 'isolation runner missing'
+E       AssertionError: isolation runner missing
+E       assert None
+E        +  where None = <function find_spec at 0x7c94cb5ae0c0>('evaluations.managed_node_diagnostics')
+E        +    where <function find_spec at 0x7c94cb5ae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_managed_node_diagnostics.py:13: AssertionError
+______ test_first_failure_is_saved_and_replayed_without_repair[predicate] ______
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-41/test_first_failure_is_saved_an2')
+failure = 'predicate'
+
+    @pytest.mark.parametrize('failure', ['provider', 'parse', 'predicate', 'own', 'typed', 'null', 'duplicate', 'nan'])
+    def test_first_failure_is_saved_and_replayed_without_repair(tmp_path, failure):
+>       mod = api(); package = mod.load_package()
+              ^^^^^
+
+tests/unit/test_managed_node_diagnostics.py:63: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.managed_node_diagnostics'), 'isolation runner missing'
+E       AssertionError: isolation runner missing
+E       assert None
+E        +  where None = <function find_spec at 0x7c94cb5ae0c0>('evaluations.managed_node_diagnostics')
+E        +    where <function find_spec at 0x7c94cb5ae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_managed_node_diagnostics.py:13: AssertionError
+_________ test_first_failure_is_saved_and_replayed_without_repair[own] _________
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-41/test_first_failure_is_saved_an3')
+failure = 'own'
+
+    @pytest.mark.parametrize('failure', ['provider', 'parse', 'predicate', 'own', 'typed', 'null', 'duplicate', 'nan'])
+    def test_first_failure_is_saved_and_replayed_without_repair(tmp_path, failure):
+>       mod = api(); package = mod.load_package()
+              ^^^^^
+
+tests/unit/test_managed_node_diagnostics.py:63: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.managed_node_diagnostics'), 'isolation runner missing'
+E       AssertionError: isolation runner missing
+E       assert None
+E        +  where None = <function find_spec at 0x7c94cb5ae0c0>('evaluations.managed_node_diagnostics')
+E        +    where <function find_spec at 0x7c94cb5ae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_managed_node_diagnostics.py:13: AssertionError
+________ test_first_failure_is_saved_and_replayed_without_repair[typed] ________
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-41/test_first_failure_is_saved_an4')
+failure = 'typed'
+
+    @pytest.mark.parametrize('failure', ['provider', 'parse', 'predicate', 'own', 'typed', 'null', 'duplicate', 'nan'])
+    def test_first_failure_is_saved_and_replayed_without_repair(tmp_path, failure):
+>       mod = api(); package = mod.load_package()
+              ^^^^^
+
+tests/unit/test_managed_node_diagnostics.py:63: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.managed_node_diagnostics'), 'isolation runner missing'
+E       AssertionError: isolation runner missing
+E       assert None
+E        +  where None = <function find_spec at 0x7c94cb5ae0c0>('evaluations.managed_node_diagnostics')
+E        +    where <function find_spec at 0x7c94cb5ae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_managed_node_diagnostics.py:13: AssertionError
+________ test_first_failure_is_saved_and_replayed_without_repair[null] _________
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-41/test_first_failure_is_saved_an5')
+failure = 'null'
+
+    @pytest.mark.parametrize('failure', ['provider', 'parse', 'predicate', 'own', 'typed', 'null', 'duplicate', 'nan'])
+    def test_first_failure_is_saved_and_replayed_without_repair(tmp_path, failure):
+>       mod = api(); package = mod.load_package()
+              ^^^^^
+
+tests/unit/test_managed_node_diagnostics.py:63: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.managed_node_diagnostics'), 'isolation runner missing'
+E       AssertionError: isolation runner missing
+E       assert None
+E        +  where None = <function find_spec at 0x7c94cb5ae0c0>('evaluations.managed_node_diagnostics')
+E        +    where <function find_spec at 0x7c94cb5ae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_managed_node_diagnostics.py:13: AssertionError
+______ test_first_failure_is_saved_and_replayed_without_repair[duplicate] ______
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-41/test_first_failure_is_saved_an6')
+failure = 'duplicate'
+
+    @pytest.mark.parametrize('failure', ['provider', 'parse', 'predicate', 'own', 'typed', 'null', 'duplicate', 'nan'])
+    def test_first_failure_is_saved_and_replayed_without_repair(tmp_path, failure):
+>       mod = api(); package = mod.load_package()
+              ^^^^^
+
+tests/unit/test_managed_node_diagnostics.py:63: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.managed_node_diagnostics'), 'isolation runner missing'
+E       AssertionError: isolation runner missing
+E       assert None
+E        +  where None = <function find_spec at 0x7c94cb5ae0c0>('evaluations.managed_node_diagnostics')
+E        +    where <function find_spec at 0x7c94cb5ae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_managed_node_diagnostics.py:13: AssertionError
+_________ test_first_failure_is_saved_and_replayed_without_repair[nan] _________
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-41/test_first_failure_is_saved_an7')
+failure = 'nan'
+
+    @pytest.mark.parametrize('failure', ['provider', 'parse', 'predicate', 'own', 'typed', 'null', 'duplicate', 'nan'])
+    def test_first_failure_is_saved_and_replayed_without_repair(tmp_path, failure):
+>       mod = api(); package = mod.load_package()
+              ^^^^^
+
+tests/unit/test_managed_node_diagnostics.py:63: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.managed_node_diagnostics'), 'isolation runner missing'
+E       AssertionError: isolation runner missing
+E       assert None
+E        +  where None = <function find_spec at 0x7c94cb5ae0c0>('evaluations.managed_node_diagnostics')
+E        +    where <function find_spec at 0x7c94cb5ae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_managed_node_diagnostics.py:13: AssertionError
+_ test_semantic_controls_never_promote_structural_acceptance_to_correctness[omit_key] _
+
+mutation = 'omit_key'
+
+    @pytest.mark.parametrize('mutation', ['omit_key', 'complete_key', 'customer_key', 'wrong_month', 'one_boundary', 'own_net', 'population'])
+    def test_semantic_controls_never_promote_structural_acceptance_to_correctness(mutation):
+>       mod = api(); package = mod.load_package()
+              ^^^^^
+
+tests/unit/test_managed_node_diagnostics.py:85: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.managed_node_diagnostics'), 'isolation runner missing'
+E       AssertionError: isolation runner missing
+E       assert None
+E        +  where None = <function find_spec at 0x7c94cb5ae0c0>('evaluations.managed_node_diagnostics')
+E        +    where <function find_spec at 0x7c94cb5ae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_managed_node_diagnostics.py:13: AssertionError
+_ test_semantic_controls_never_promote_structural_acceptance_to_correctness[complete_key] _
+
+mutation = 'complete_key'
+
+    @pytest.mark.parametrize('mutation', ['omit_key', 'complete_key', 'customer_key', 'wrong_month', 'one_boundary', 'own_net', 'population'])
+    def test_semantic_controls_never_promote_structural_acceptance_to_correctness(mutation):
+>       mod = api(); package = mod.load_package()
+              ^^^^^
+
+tests/unit/test_managed_node_diagnostics.py:85: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.managed_node_diagnostics'), 'isolation runner missing'
+E       AssertionError: isolation runner missing
+E       assert None
+E        +  where None = <function find_spec at 0x7c94cb5ae0c0>('evaluations.managed_node_diagnostics')
+E        +    where <function find_spec at 0x7c94cb5ae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_managed_node_diagnostics.py:13: AssertionError
+_ test_semantic_controls_never_promote_structural_acceptance_to_correctness[customer_key] _
+
+mutation = 'customer_key'
+
+    @pytest.mark.parametrize('mutation', ['omit_key', 'complete_key', 'customer_key', 'wrong_month', 'one_boundary', 'own_net', 'population'])
+    def test_semantic_controls_never_promote_structural_acceptance_to_correctness(mutation):
+>       mod = api(); package = mod.load_package()
+              ^^^^^
+
+tests/unit/test_managed_node_diagnostics.py:85: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.managed_node_diagnostics'), 'isolation runner missing'
+E       AssertionError: isolation runner missing
+E       assert None
+E        +  where None = <function find_spec at 0x7c94cb5ae0c0>('evaluations.managed_node_diagnostics')
+E        +    where <function find_spec at 0x7c94cb5ae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_managed_node_diagnostics.py:13: AssertionError
+_ test_semantic_controls_never_promote_structural_acceptance_to_correctness[wrong_month] _
+
+mutation = 'wrong_month'
+
+    @pytest.mark.parametrize('mutation', ['omit_key', 'complete_key', 'customer_key', 'wrong_month', 'one_boundary', 'own_net', 'population'])
+    def test_semantic_controls_never_promote_structural_acceptance_to_correctness(mutation):
+>       mod = api(); package = mod.load_package()
+              ^^^^^
+
+tests/unit/test_managed_node_diagnostics.py:85: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.managed_node_diagnostics'), 'isolation runner missing'
+E       AssertionError: isolation runner missing
+E       assert None
+E        +  where None = <function find_spec at 0x7c94cb5ae0c0>('evaluations.managed_node_diagnostics')
+E        +    where <function find_spec at 0x7c94cb5ae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_managed_node_diagnostics.py:13: AssertionError
+_ test_semantic_controls_never_promote_structural_acceptance_to_correctness[one_boundary] _
+
+mutation = 'one_boundary'
+
+    @pytest.mark.parametrize('mutation', ['omit_key', 'complete_key', 'customer_key', 'wrong_month', 'one_boundary', 'own_net', 'population'])
+    def test_semantic_controls_never_promote_structural_acceptance_to_correctness(mutation):
+>       mod = api(); package = mod.load_package()
+              ^^^^^
+
+tests/unit/test_managed_node_diagnostics.py:85: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.managed_node_diagnostics'), 'isolation runner missing'
+E       AssertionError: isolation runner missing
+E       assert None
+E        +  where None = <function find_spec at 0x7c94cb5ae0c0>('evaluations.managed_node_diagnostics')
+E        +    where <function find_spec at 0x7c94cb5ae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_managed_node_diagnostics.py:13: AssertionError
+_ test_semantic_controls_never_promote_structural_acceptance_to_correctness[own_net] _
+
+mutation = 'own_net'
+
+    @pytest.mark.parametrize('mutation', ['omit_key', 'complete_key', 'customer_key', 'wrong_month', 'one_boundary', 'own_net', 'population'])
+    def test_semantic_controls_never_promote_structural_acceptance_to_correctness(mutation):
+>       mod = api(); package = mod.load_package()
+              ^^^^^
+
+tests/unit/test_managed_node_diagnostics.py:85: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.managed_node_diagnostics'), 'isolation runner missing'
+E       AssertionError: isolation runner missing
+E       assert None
+E        +  where None = <function find_spec at 0x7c94cb5ae0c0>('evaluations.managed_node_diagnostics')
+E        +    where <function find_spec at 0x7c94cb5ae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_managed_node_diagnostics.py:13: AssertionError
+_ test_semantic_controls_never_promote_structural_acceptance_to_correctness[population] _
+
+mutation = 'population'
+
+    @pytest.mark.parametrize('mutation', ['omit_key', 'complete_key', 'customer_key', 'wrong_month', 'one_boundary', 'own_net', 'population'])
+    def test_semantic_controls_never_promote_structural_acceptance_to_correctness(mutation):
+>       mod = api(); package = mod.load_package()
+              ^^^^^
+
+tests/unit/test_managed_node_diagnostics.py:85: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.managed_node_diagnostics'), 'isolation runner missing'
+E       AssertionError: isolation runner missing
+E       assert None
+E        +  where None = <function find_spec at 0x7c94cb5ae0c0>('evaluations.managed_node_diagnostics')
+E        +    where <function find_spec at 0x7c94cb5ae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_managed_node_diagnostics.py:13: AssertionError
+_________ test_dry_run_and_execute_rejection_never_construct_provider __________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7c94c82d7f20>
+capsys = <_pytest.capture.CaptureFixture object at 0x7c94c82d7890>
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-41/test_dry_run_and_execute_rejec0')
+
+    def test_dry_run_and_execute_rejection_never_construct_provider(monkeypatch, capsys, tmp_path):
+>       mod = api()
+              ^^^^^
+
+tests/unit/test_managed_node_diagnostics.py:105: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.managed_node_diagnostics'), 'isolation runner missing'
+E       AssertionError: isolation runner missing
+E       assert None
+E        +  where None = <function find_spec at 0x7c94cb5ae0c0>('evaluations.managed_node_diagnostics')
+E        +    where <function find_spec at 0x7c94cb5ae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_managed_node_diagnostics.py:13: AssertionError
+___ test_execute_preflight_refuses_any_unreviewed_or_drifted_input[missing] ____
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-41/test_execute_preflight_refuses0')
+mutation = 'missing'
+
+    @pytest.mark.parametrize('mutation', ['missing', 'reject', 'self_review', 'manifest', 'binding', 'context', 'body', 'schema', 'source', 'fixture', 'omitted_view'])
+    def test_execute_preflight_refuses_any_unreviewed_or_drifted_input(tmp_path, mutation):
+>       mod = api(); package = mod.load_package()
+              ^^^^^
+
+tests/unit/test_managed_node_diagnostics.py:119: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.managed_node_diagnostics'), 'isolation runner missing'
+E       AssertionError: isolation runner missing
+E       assert None
+E        +  where None = <function find_spec at 0x7c94cb5ae0c0>('evaluations.managed_node_diagnostics')
+E        +    where <function find_spec at 0x7c94cb5ae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_managed_node_diagnostics.py:13: AssertionError
+____ test_execute_preflight_refuses_any_unreviewed_or_drifted_input[reject] ____
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-41/test_execute_preflight_refuses1')
+mutation = 'reject'
+
+    @pytest.mark.parametrize('mutation', ['missing', 'reject', 'self_review', 'manifest', 'binding', 'context', 'body', 'schema', 'source', 'fixture', 'omitted_view'])
+    def test_execute_preflight_refuses_any_unreviewed_or_drifted_input(tmp_path, mutation):
+>       mod = api(); package = mod.load_package()
+              ^^^^^
+
+tests/unit/test_managed_node_diagnostics.py:119: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.managed_node_diagnostics'), 'isolation runner missing'
+E       AssertionError: isolation runner missing
+E       assert None
+E        +  where None = <function find_spec at 0x7c94cb5ae0c0>('evaluations.managed_node_diagnostics')
+E        +    where <function find_spec at 0x7c94cb5ae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_managed_node_diagnostics.py:13: AssertionError
+_ test_execute_preflight_refuses_any_unreviewed_or_drifted_input[self_review] __
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-41/test_execute_preflight_refuses2')
+mutation = 'self_review'
+
+    @pytest.mark.parametrize('mutation', ['missing', 'reject', 'self_review', 'manifest', 'binding', 'context', 'body', 'schema', 'source', 'fixture', 'omitted_view'])
+    def test_execute_preflight_refuses_any_unreviewed_or_drifted_input(tmp_path, mutation):
+>       mod = api(); package = mod.load_package()
+              ^^^^^
+
+tests/unit/test_managed_node_diagnostics.py:119: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.managed_node_diagnostics'), 'isolation runner missing'
+E       AssertionError: isolation runner missing
+E       assert None
+E        +  where None = <function find_spec at 0x7c94cb5ae0c0>('evaluations.managed_node_diagnostics')
+E        +    where <function find_spec at 0x7c94cb5ae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_managed_node_diagnostics.py:13: AssertionError
+___ test_execute_preflight_refuses_any_unreviewed_or_drifted_input[manifest] ___
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-41/test_execute_preflight_refuses3')
+mutation = 'manifest'
+
+    @pytest.mark.parametrize('mutation', ['missing', 'reject', 'self_review', 'manifest', 'binding', 'context', 'body', 'schema', 'source', 'fixture', 'omitted_view'])
+    def test_execute_preflight_refuses_any_unreviewed_or_drifted_input(tmp_path, mutation):
+>       mod = api(); package = mod.load_package()
+              ^^^^^
+
+tests/unit/test_managed_node_diagnostics.py:119: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.managed_node_diagnostics'), 'isolation runner missing'
+E       AssertionError: isolation runner missing
+E       assert None
+E        +  where None = <function find_spec at 0x7c94cb5ae0c0>('evaluations.managed_node_diagnostics')
+E        +    where <function find_spec at 0x7c94cb5ae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_managed_node_diagnostics.py:13: AssertionError
+___ test_execute_preflight_refuses_any_unreviewed_or_drifted_input[binding] ____
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-41/test_execute_preflight_refuses4')
+mutation = 'binding'
+
+    @pytest.mark.parametrize('mutation', ['missing', 'reject', 'self_review', 'manifest', 'binding', 'context', 'body', 'schema', 'source', 'fixture', 'omitted_view'])
+    def test_execute_preflight_refuses_any_unreviewed_or_drifted_input(tmp_path, mutation):
+>       mod = api(); package = mod.load_package()
+              ^^^^^
+
+tests/unit/test_managed_node_diagnostics.py:119: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.managed_node_diagnostics'), 'isolation runner missing'
+E       AssertionError: isolation runner missing
+E       assert None
+E        +  where None = <function find_spec at 0x7c94cb5ae0c0>('evaluations.managed_node_diagnostics')
+E        +    where <function find_spec at 0x7c94cb5ae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_managed_node_diagnostics.py:13: AssertionError
+___ test_execute_preflight_refuses_any_unreviewed_or_drifted_input[context] ____
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-41/test_execute_preflight_refuses5')
+mutation = 'context'
+
+    @pytest.mark.parametrize('mutation', ['missing', 'reject', 'self_review', 'manifest', 'binding', 'context', 'body', 'schema', 'source', 'fixture', 'omitted_view'])
+    def test_execute_preflight_refuses_any_unreviewed_or_drifted_input(tmp_path, mutation):
+>       mod = api(); package = mod.load_package()
+              ^^^^^
+
+tests/unit/test_managed_node_diagnostics.py:119: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.managed_node_diagnostics'), 'isolation runner missing'
+E       AssertionError: isolation runner missing
+E       assert None
+E        +  where None = <function find_spec at 0x7c94cb5ae0c0>('evaluations.managed_node_diagnostics')
+E        +    where <function find_spec at 0x7c94cb5ae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_managed_node_diagnostics.py:13: AssertionError
+_____ test_execute_preflight_refuses_any_unreviewed_or_drifted_input[body] _____
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-41/test_execute_preflight_refuses6')
+mutation = 'body'
+
+    @pytest.mark.parametrize('mutation', ['missing', 'reject', 'self_review', 'manifest', 'binding', 'context', 'body', 'schema', 'source', 'fixture', 'omitted_view'])
+    def test_execute_preflight_refuses_any_unreviewed_or_drifted_input(tmp_path, mutation):
+>       mod = api(); package = mod.load_package()
+              ^^^^^
+
+tests/unit/test_managed_node_diagnostics.py:119: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.managed_node_diagnostics'), 'isolation runner missing'
+E       AssertionError: isolation runner missing
+E       assert None
+E        +  where None = <function find_spec at 0x7c94cb5ae0c0>('evaluations.managed_node_diagnostics')
+E        +    where <function find_spec at 0x7c94cb5ae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_managed_node_diagnostics.py:13: AssertionError
+____ test_execute_preflight_refuses_any_unreviewed_or_drifted_input[schema] ____
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-41/test_execute_preflight_refuses7')
+mutation = 'schema'
+
+    @pytest.mark.parametrize('mutation', ['missing', 'reject', 'self_review', 'manifest', 'binding', 'context', 'body', 'schema', 'source', 'fixture', 'omitted_view'])
+    def test_execute_preflight_refuses_any_unreviewed_or_drifted_input(tmp_path, mutation):
+>       mod = api(); package = mod.load_package()
+              ^^^^^
+
+tests/unit/test_managed_node_diagnostics.py:119: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.managed_node_diagnostics'), 'isolation runner missing'
+E       AssertionError: isolation runner missing
+E       assert None
+E        +  where None = <function find_spec at 0x7c94cb5ae0c0>('evaluations.managed_node_diagnostics')
+E        +    where <function find_spec at 0x7c94cb5ae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_managed_node_diagnostics.py:13: AssertionError
+____ test_execute_preflight_refuses_any_unreviewed_or_drifted_input[source] ____
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-41/test_execute_preflight_refuses8')
+mutation = 'source'
+
+    @pytest.mark.parametrize('mutation', ['missing', 'reject', 'self_review', 'manifest', 'binding', 'context', 'body', 'schema', 'source', 'fixture', 'omitted_view'])
+    def test_execute_preflight_refuses_any_unreviewed_or_drifted_input(tmp_path, mutation):
+>       mod = api(); package = mod.load_package()
+              ^^^^^
+
+tests/unit/test_managed_node_diagnostics.py:119: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.managed_node_diagnostics'), 'isolation runner missing'
+E       AssertionError: isolation runner missing
+E       assert None
+E        +  where None = <function find_spec at 0x7c94cb5ae0c0>('evaluations.managed_node_diagnostics')
+E        +    where <function find_spec at 0x7c94cb5ae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_managed_node_diagnostics.py:13: AssertionError
+___ test_execute_preflight_refuses_any_unreviewed_or_drifted_input[fixture] ____
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-41/test_execute_preflight_refuses9')
+mutation = 'fixture'
+
+    @pytest.mark.parametrize('mutation', ['missing', 'reject', 'self_review', 'manifest', 'binding', 'context', 'body', 'schema', 'source', 'fixture', 'omitted_view'])
+    def test_execute_preflight_refuses_any_unreviewed_or_drifted_input(tmp_path, mutation):
+>       mod = api(); package = mod.load_package()
+              ^^^^^
+
+tests/unit/test_managed_node_diagnostics.py:119: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.managed_node_diagnostics'), 'isolation runner missing'
+E       AssertionError: isolation runner missing
+E       assert None
+E        +  where None = <function find_spec at 0x7c94cb5ae0c0>('evaluations.managed_node_diagnostics')
+E        +    where <function find_spec at 0x7c94cb5ae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_managed_node_diagnostics.py:13: AssertionError
+_ test_execute_preflight_refuses_any_unreviewed_or_drifted_input[omitted_view] _
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-41/test_execute_preflight_refuses10')
+mutation = 'omitted_view'
+
+    @pytest.mark.parametrize('mutation', ['missing', 'reject', 'self_review', 'manifest', 'binding', 'context', 'body', 'schema', 'source', 'fixture', 'omitted_view'])
+    def test_execute_preflight_refuses_any_unreviewed_or_drifted_input(tmp_path, mutation):
+>       mod = api(); package = mod.load_package()
+              ^^^^^
+
+tests/unit/test_managed_node_diagnostics.py:119: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.managed_node_diagnostics'), 'isolation runner missing'
+E       AssertionError: isolation runner missing
+E       assert None
+E        +  where None = <function find_spec at 0x7c94cb5ae0c0>('evaluations.managed_node_diagnostics')
+E        +    where <function find_spec at 0x7c94cb5ae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_managed_node_diagnostics.py:13: AssertionError
+______________ test_frozen_replay_and_artifact_drift_are_enforced ______________
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-41/test_frozen_replay_and_artifac0')
+
+    def test_frozen_replay_and_artifact_drift_are_enforced(tmp_path):
+>       mod = api(); package = mod.load_package(); context = mod.prepare(package, 'COV-ISO-v1-03')
+              ^^^^^
+
+tests/unit/test_managed_node_diagnostics.py:139: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.managed_node_diagnostics'), 'isolation runner missing'
+E       AssertionError: isolation runner missing
+E       assert None
+E        +  where None = <function find_spec at 0x7c94cb5ae0c0>('evaluations.managed_node_diagnostics')
+E        +    where <function find_spec at 0x7c94cb5ae0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/unit/test_managed_node_diagnostics.py:13: AssertionError
+=========================== short test summary info ============================
+FAILED tests/unit/test_managed_node_diagnostics.py::test_fixed_upstream_preserves_useful_unselected_capabilities_and_two_prepared
+FAILED tests/unit/test_managed_node_diagnostics.py::test_record_replay_preserves_raw_presence_compilation_and_injected_provenance[COV-ISO-v1-01]
+FAILED tests/unit/test_managed_node_diagnostics.py::test_record_replay_preserves_raw_presence_compilation_and_injected_provenance[COV-ISO-v1-02]
+FAILED tests/unit/test_managed_node_diagnostics.py::test_record_replay_preserves_raw_presence_compilation_and_injected_provenance[COV-ISO-v1-03]
+FAILED tests/unit/test_managed_node_diagnostics.py::test_record_replay_preserves_raw_presence_compilation_and_injected_provenance[SEL-ISO-v1-01]
+FAILED tests/unit/test_managed_node_diagnostics.py::test_first_failure_is_saved_and_replayed_without_repair[provider]
+FAILED tests/unit/test_managed_node_diagnostics.py::test_first_failure_is_saved_and_replayed_without_repair[parse]
+FAILED tests/unit/test_managed_node_diagnostics.py::test_first_failure_is_saved_and_replayed_without_repair[predicate]
+FAILED tests/unit/test_managed_node_diagnostics.py::test_first_failure_is_saved_and_replayed_without_repair[own]
+FAILED tests/unit/test_managed_node_diagnostics.py::test_first_failure_is_saved_and_replayed_without_repair[typed]
+FAILED tests/unit/test_managed_node_diagnostics.py::test_first_failure_is_saved_and_replayed_without_repair[null]
+FAILED tests/unit/test_managed_node_diagnostics.py::test_first_failure_is_saved_and_replayed_without_repair[duplicate]
+FAILED tests/unit/test_managed_node_diagnostics.py::test_first_failure_is_saved_and_replayed_without_repair[nan]
+FAILED tests/unit/test_managed_node_diagnostics.py::test_semantic_controls_never_promote_structural_acceptance_to_correctness[omit_key]
+FAILED tests/unit/test_managed_node_diagnostics.py::test_semantic_controls_never_promote_structural_acceptance_to_correctness[complete_key]
+FAILED tests/unit/test_managed_node_diagnostics.py::test_semantic_controls_never_promote_structural_acceptance_to_correctness[customer_key]
+FAILED tests/unit/test_managed_node_diagnostics.py::test_semantic_controls_never_promote_structural_acceptance_to_correctness[wrong_month]
+FAILED tests/unit/test_managed_node_diagnostics.py::test_semantic_controls_never_promote_structural_acceptance_to_correctness[one_boundary]
+FAILED tests/unit/test_managed_node_diagnostics.py::test_semantic_controls_never_promote_structural_acceptance_to_correctness[own_net]
+FAILED tests/unit/test_managed_node_diagnostics.py::test_semantic_controls_never_promote_structural_acceptance_to_correctness[population]
+FAILED tests/unit/test_managed_node_diagnostics.py::test_dry_run_and_execute_rejection_never_construct_provider
+FAILED tests/unit/test_managed_node_diagnostics.py::test_execute_preflight_refuses_any_unreviewed_or_drifted_input[missing]
+FAILED tests/unit/test_managed_node_diagnostics.py::test_execute_preflight_refuses_any_unreviewed_or_drifted_input[reject]
+FAILED tests/unit/test_managed_node_diagnostics.py::test_execute_preflight_refuses_any_unreviewed_or_drifted_input[self_review]
+FAILED tests/unit/test_managed_node_diagnostics.py::test_execute_preflight_refuses_any_unreviewed_or_drifted_input[manifest]
+FAILED tests/unit/test_managed_node_diagnostics.py::test_execute_preflight_refuses_any_unreviewed_or_drifted_input[binding]
+FAILED tests/unit/test_managed_node_diagnostics.py::test_execute_preflight_refuses_any_unreviewed_or_drifted_input[context]
+FAILED tests/unit/test_managed_node_diagnostics.py::test_execute_preflight_refuses_any_unreviewed_or_drifted_input[body]
+FAILED tests/unit/test_managed_node_diagnostics.py::test_execute_preflight_refuses_any_unreviewed_or_drifted_input[schema]
+FAILED tests/unit/test_managed_node_diagnostics.py::test_execute_preflight_refuses_any_unreviewed_or_drifted_input[source]
+FAILED tests/unit/test_managed_node_diagnostics.py::test_execute_preflight_refuses_any_unreviewed_or_drifted_input[fixture]
+FAILED tests/unit/test_managed_node_diagnostics.py::test_execute_preflight_refuses_any_unreviewed_or_drifted_input[omitted_view]
+FAILED tests/unit/test_managed_node_diagnostics.py::test_frozen_replay_and_artifact_drift_are_enforced
+33 failed in 0.55s

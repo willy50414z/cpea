@@ -1,0 +1,79 @@
+{
+  "stage": "MVP1",
+  "version": "B1",
+  "frozen": {
+    "version": "semantic-mvp-b1",
+    "catalog": "e5e5a5a2cc29a1be93dc4d6875aba8c47a35ed48c019c7d6838a45831d0441dc",
+    "source_hashes": {
+      "evaluations/planning_mvp.py": "972d16210114153db1aee4a05db8354312d34591c90dfa58ea2012582290f711",
+      "evaluations/planning_mvp_runner.py": "33f76a27a31bf87ce2e52bbbb5dbacf789c70e7a4e56fdbd94625e9f01dc47d1",
+      "src/cpea/workflows/task_decomposition/validation.py": "ea214f4ee199f391546b0b8cc07b848e49905a0ed3bbb4adebe33f348e9fa2e8",
+      "src/cpea/workflows/task_decomposition/prompt.py": "83f7869377eeb641d7bb51c21551d8db047762272635198a189cba5212c7f440",
+      "evaluations/decomposition_grading.py": "1c70bd7ee47dc76f39bd7ee21205be434c0307d3817e092cd68d1fc1702b1cbd"
+    },
+    "schema_sha256": "e5d06d0dea7f140c1df001532ae55e8e2ffd2ca2a73b2c374264583f2c64bcde",
+    "prompt_sha256": "464028de9aab54865bd4dbe9a0136bde87190ed6b65748e609bd04b4285fc934",
+    "baseline_prompt_sha256": "16b81a357dbc049ed57c27a54f8b5be16ac3eed0d87810edfdea7e885badfe53",
+    "cases_sha256": "5670d9bf39d1e48f638c98537ac45ee67e3a1165412030787eb4ed36fe33c63a"
+  },
+  "source_unchanged": true,
+  "complete": 12,
+  "model_calls": 12,
+  "sql_db_calls": 0,
+  "ollama_calls": 0,
+  "retry_calls": 0,
+  "elapsed_seconds": 174.39872970999568,
+  "generated_tokens": 6811,
+  "arms": {
+    "v3": {
+      "ready": 3,
+      "original_automated_pass": 1,
+      "diagnostic_safe_pending_review": 0,
+      "elapsed_model_seconds": 147.7290127160013,
+      "tokens": {
+        "input_tokens": 44806,
+        "output_tokens": 4423,
+        "total_tokens": 49229
+      },
+      "independent_semantic_safe_ready": 2,
+      "unsafe_ready": 1,
+      "independent_node_scores": {
+        "source_selection": 4,
+        "population_anchor": 4,
+        "root_grain_executable_semantics": 3,
+        "required_semantic_coverage": 2
+      }
+    },
+    "B1": {
+      "ready": 2,
+      "original_automated_pass": 2,
+      "diagnostic_safe_pending_review": 2,
+      "elapsed_model_seconds": 25.669115590004367,
+      "tokens": {
+        "input_tokens": 39010,
+        "output_tokens": 2388,
+        "total_tokens": 41398
+      },
+      "independent_semantic_safe_ready": 2,
+      "unsafe_ready": 0,
+      "independent_node_scores": {
+        "source_selection": 6,
+        "population_anchor": 6,
+        "root_grain_executable_semantics": 5,
+        "required_semantic_coverage": 4
+      }
+    }
+  },
+  "decision": "STOP_MVP1：獨立首次語意分B1與v3皆2/6，淨增0；B1 unsafe ready0，但未達端到端門檻，禁止擴十題／38題／Ollama。",
+  "limitation": "六題為已見開發集；dirty工作樹固定source指紋研究，非乾淨revision正式Gate；不同prompt及輸出上限，觀測延遲不是泛化效能結論。",
+  "semantic_review": "agents/oracle-audit/mvp1-semantic-review.json",
+  "gate": {
+    "minimum_safe_ready_or_net_improvement": "FAIL: B1 2/6，非>=5/6，也非>=4/6且淨增2；淨增0",
+    "no_unsafe_ready_candidate": "PASS: B1 0",
+    "source_population_root_at_least5": "PASS: B1 5/6；14有效root聚合不成立，28日期是有證據冗餘維度",
+    "controls": "NOT_PASSED:02已恢復，07仍存在真店粒度錯誤且error；fresh v3 07也錯誤拒絕，無法把其與B1錯誤比較說成相對安全成功退步，但既有成功控制未保持成功",
+    "overall": "FAIL",
+    "may_expand_to_ten": false,
+    "may_call_ollama": false
+  }
+}

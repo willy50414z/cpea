@@ -1,0 +1,21 @@
+{
+  "id": "EV-20261020T122759-bac7d28f",
+  "kind": "review",
+  "command": [
+    "python3",
+    "-c",
+    "import hashlib,json,subprocess\nfrom pathlib import Path\nroot=Path(\"evidence-driven-dev/tasks/ollama-planning-mvp\")\nfiles={}\nfor name in (\"background-brief.md\",\"subagent-proposal.md\",\"integrated-plan.md\"):\n p=root/\"reports\"/name\n b=p.read_bytes()\n s=b.decode(\"utf-8\")\n assert not b.startswith(bytes([239,187,191])),name\n files[name]={\"characters\":len(s.rstrip(\"\\n\")),\"sha256\":hashlib.sha256(b).hexdigest(),\"utf8_no_bom\":True}\nassert files[\"background-brief.md\"][\"characters\"]<=1000\ntracked=subprocess.check_output([\"git\",\"diff\",\"HEAD\",\"--name-only\"],text=True,encoding=\"utf-8\").splitlines()\nassert not tracked,tracked\nhead=subprocess.check_output([\"git\",\"rev-parse\",\"HEAD\"],text=True,encoding=\"utf-8\").strip()\nassert head==\"bc09c67fc4078501599c37e4cdfecdee40af2ef8\"\ntask=json.loads((root/\"task.md\").read_text(encoding=\"utf-8\").split(\"---\",2)[1])\nassert all(a[\"integrated\"] for a in task[\"agents\"])\nreport={\"artifact_validation\":\"PASS\",\"model_quality\":\"NOT_VERIFIED\",\"files\":files,\"head\":head,\"tracked_changes\":tracked,\"agent_handoff_integrated\":True,\"new_model_calls\":0,\"new_sql_or_db_calls\":0}\n(root/\"reports\"/\"artifact-verification.json\").write_text(json.dumps(report,ensure_ascii=False,indent=2)+\"\\n\",encoding=\"utf-8\")\nprint(json.dumps(report,ensure_ascii=False,indent=2))\n"
+  ],
+  "cwd": "/home/willy/code/cpea_terms",
+  "started_at": "2026-10-20T12:27:59+00:00",
+  "finished_at": "2026-10-20T12:27:59+00:00",
+  "exit_code": 0,
+  "revision": "bc09c67fc4078501599c37e4cdfecdee40af2ef8",
+  "diff_fingerprint": "aa41d10592dbead4910485bf28a61ea48d945514929dbccc513e0b4e93b18997",
+  "post_fingerprint": "aa41d10592dbead4910485bf28a61ea48d945514929dbccc513e0b4e93b18997",
+  "source_unchanged": true,
+  "output_sha256": "aaa9571c35f0d26fb5ffe193c8c5afa446ba792da6c27cdc7b0fb23a4fc6d7bd",
+  "raw_output": ".local/EV-20261020T122759-bac7d28f.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "06b9621763e0b0f9556b04f077030992a584fdbc33fe300f0906573773c46a42"
+}

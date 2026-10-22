@@ -1,0 +1,74 @@
+{
+  "state": {
+    "status": "RUNNING",
+    "active": null,
+    "audit_due": true,
+    "used": {
+      "agent_dispatches": 38,
+      "cloud_calls": 0,
+      "local_calls": 26,
+      "model_retries": 0
+    }
+  },
+  "task_sha256": "d65b19aca374621073618c70da5136271bc4498ce89d90b410152ea02cce8bae",
+  "rounds": [
+    {
+      "round": 19,
+      "node": "natural_kind_selection_isolation",
+      "result": "PASS",
+      "producer": "/root/loop_worker_selection_parent",
+      "verified_evidence": 11
+    },
+    {
+      "round": 20,
+      "node": "natural_kind_coverage_isolation",
+      "result": "FAIL",
+      "producer": "/root/loop_worker_coverage_isolation",
+      "verified_evidence": 73
+    },
+    {
+      "round": 21,
+      "node": "capability_projection_contract",
+      "result": "PASS",
+      "producer": "/root/loop_worker_capability_contract",
+      "verified_evidence": 28
+    }
+  ],
+  "proof_count": 1435,
+  "old_file_changes": [
+    "evidence-driven-dev/tasks/ollama-planning-mvp/task.md"
+  ],
+  "old_files": 6390,
+  "frozen": {
+    "freeze.json": 239,
+    "policy-freeze.json": 12,
+    "capability-freeze.json": 34
+  },
+  "node_status": {
+    "root": "pending",
+    "three_stage_integration": "pending",
+    "contract_and_managed_runner": "passed",
+    "natural_qwen_three_stage": "failed",
+    "coverage_slots_contract": "passed",
+    "natural_slots_three_stage": "failed",
+    "evidence_bound_managed_contract": "passed",
+    "natural_evidence_bound_three_stage": "failed",
+    "own_responsibility_managed_contract": "passed",
+    "natural_own_responsibility_three_stage": "failed",
+    "kind_mapping_managed_contract": "passed",
+    "natural_kind_mapping_three_stage": "pending",
+    "kind_diagnostic_fixture_harness": "passed",
+    "kind_diagnostic_fixture_semantics": "passed",
+    "natural_kind_selection_isolation": "passed",
+    "natural_kind_coverage_isolation": "failed",
+    "kind_diagnostic_fixture_v2_correction": "passed",
+    "kind_diagnostic_evidence_rebinding": "passed",
+    "kind_policy_shape_contract": "passed",
+    "kind_policy_shape_semantics": "passed",
+    "natural_kind_policy_shape_selection": "passed",
+    "capability_projection_contract": "passed",
+    "capability_projection_semantics": "pending",
+    "natural_capability_projection_coverage": "pending"
+  },
+  "result": "PASS"
+}

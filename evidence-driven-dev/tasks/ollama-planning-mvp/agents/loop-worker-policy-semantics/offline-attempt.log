@@ -1,0 +1,4 @@
+第一次獨立驗證腳本：wrong_keys預期新checker FAIL，但原prepare guard已先REJECT，測試腳本的分類assertion過窄。非實作放行；下一次明確區分結構REJECT與semantic FAIL，兩者均禁止通過。
+Traceback (most recent call last):
+  File "<stdin>", line 70, in <module>
+AssertionError: wrong_keys

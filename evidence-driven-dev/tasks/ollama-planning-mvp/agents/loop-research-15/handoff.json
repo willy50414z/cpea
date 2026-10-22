@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "ticket": "d51bf89a0fb6427d9d3c5409d56eab12",
+  "role": "fresh_research",
+  "result": "REPLAN_READY",
+  "plan": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-15/plan.json",
+  "plan_sha256": "ab7e06f413455ff51d81f77dd9ba9779d6829eab2bc836623c7ad8fdcc20df99",
+  "recommendation": "新增單一policy-shape candidate及selection-only manifest；old literals不變，新增條件適用性，default/NULL等價接受、EMPTY須真nest。保留原raw為shape負例，不翻第15輪FAIL；新prompt澄清後固定一次selection，再回三coverage及自然9POST。",
+  "minimality": {
+    "new_versions": [
+      "managed-policy-shape-1 candidate",
+      "kind-policy-shape-1 selection-only manifest"
+    ],
+    "new_nodes": [
+      "kind_policy_shape_contract",
+      "kind_policy_shape_semantics",
+      "natural_kind_policy_shape_selection"
+    ],
+    "existing_nodes_preserved": 18,
+    "expected_new_files": [
+      "evaluations/diagnostics/managed_policy_shape.py",
+      "tests/diagnostics/test_managed_policy_shape.py",
+      "evaluations/fixtures/kind_diagnostics_policy_shape/manifest.json",
+      "必要新selection messages/body/schema/upstream frozen inputs；不複製業務fixtures／Oracle"
+    ],
+    "existing_source_changes": 0,
+    "why_nested_paths": "原base.source_paths掃evaluations/*.py、全部evaluations/prompts/**/*.md、tests/unit/*.py；放nested diagnostics module/test且suffix內嵌，舊167-source bindings可逐bytes保持，避免再做全套evidence rebind。",
+    "original_api_reuse": [
+      "managed_three_stage_runner.record_run/replay with contract=新candidate for fake and full natural",
+      "base.prepare explicit old package for unchanged business upstream",
+      "base.record_sample/_run and original parse/materialize/finish for legacy node engine; outer checks new context and policy",
+      "ManagedInvoke/loopctl for each real HTTP, no SDK/direct POST"
+    ],
+    "oracle_migration": "保留完整legacy findings，新policy predicate只替換已定位第一literal比較，兩者分別保存；僅legacy stopped==固定semantic-check失敗且除了被取代literal clause無其他finding、所有原parse/materialize/finish成功、新policy/完整語意亦通過時，新outer才可能PASS。其他錯誤絕不降格。這是新版本離線/現場判定，並非重寫原第15輪run。",
+    "replay": "新wrapper重建帶suffix的新context，重播immutable response；同時核對原engine artifacts/原停止、新policy outcome與完整outer receipt，不直接調用會重建舊body的舊rebound.replay當新body證據。必要薄replay接線即可，不複製整套harness。"
+  },
+  "alternatives": [
+    {
+      "option": "僅將==第一literal改成in三policy",
+      "decision": "REJECT",
+      "reason": "能修NULL誤拒，卻未界定無nest的EMPTY shape；不足解本次兩獨立問題。"
+    },
+    {
+      "option": "canonicalize policy、補nest或改raw後重播升原PASS",
+      "decision": "REJECT",
+      "reason": "代模型改答案或變更輸出形狀，破壞首次證據，不證自然可行。"
+    },
+    {
+      "option": "刪policy欄或再添多種schema欄位／重建harness",
+      "decision": "REJECT",
+      "reason": "現有typed preparation可分flat/nest；有限tokens足夠，只缺條件適用性與正確Oracle，新增複雜度沒有必要。"
+    }
+  ],
+  "staged_acceptance": [
+    {
+      "stage": "Node/offline",
+      "node": "kind_policy_shape_contract",
+      "local_POST": 0,
+      "checks": "六原始memory控制＋少量錯nest/改名對照；new focused＋three related original test files；完整fake9／兩prepared與首錯及同版/frozen；原第15輪frozen FAIL與舊167-source/lineage保持。"
+    },
+    {
+      "stage": "Fresh approval",
+      "node": "kind_policy_shape_semantics",
+      "local_POST": 0,
+      "checks": "不同fresh worker核准新policy contract/prompt及完整新bindings，沿用原未變fixture核准；真closed PASS前不可POST。"
+    },
+    {
+      "stage": "New isolated selection",
+      "node": "natural_kind_policy_shape_selection",
+      "local_POST": 1,
+      "checks": "一次實質澄清後首次，完整raw typed/prose/prepared及新shape核對，同版/frozen。"
+    },
+    {
+      "stage": "Parent integration",
+      "node": "natural_kind_selection_isolation",
+      "local_POST": 0,
+      "checks": "重播新唯一自然raw，完整本parent驗收、歷史FAIL與差異整合；不得自動因孩子PASS。"
+    },
+    {
+      "stage": "Existing fixed coverage",
+      "node": "natural_kind_coverage_isolation",
+      "local_POST": 3,
+      "checks": "原rebound固定COV-ISO-v1-01/02/03與三body不變，舊review仍有真來源，全部獨立預定樣本完成，任一錯整node FAIL。"
+    },
+    {
+      "stage": "Full natural three stages",
+      "node": "natural_kind_mapping_three_stage",
+      "local_POST": 9,
+      "checks": "新candidate單一固定完整recall＋7View＋selection，從原request自然重做不得注入recall/coverage；全部View及prose語意、raw presence、兩prepared、同版/frozen；首錯停止FAIL。"
+    },
+    {
+      "stage": "All ancestors and final",
+      "nodes": [
+        "natural_own_responsibility_three_stage",
+        "natural_evidence_bound_three_stage",
+        "natural_slots_three_stage",
+        "natural_qwen_three_stage",
+        "three_stage_integration",
+        "root"
+      ],
+      "local_POST": 0,
+      "checks": "各自以同一自然9raw做自己整合／必要回歸，無需每祖先新9POST；每3輪fresh audit，根PASS後全新final verifier ACCEPT。"
+    }
+  ],
+  "future_local_POST_if_all_gates_pass": 13,
+  "retries": 0,
+  "cloud": 0,
+  "SQL_DB": 0,
+  "current_research": {
+    "local_POST": 0,
+    "SQL_DB": 0,
+    "production_source_test_fixture_changes": 0,
+    "Task_controller_changes": 0,
+    "commit_push": 0,
+    "probes": 6,
+    "validation": "獨立實跑原evaluate精確重現單一literal finding與兩prepared；原rebound complete bindings相符、原真三方preflight PASS。原memory controls flat default可過、flat NULL被舊checker誤拒、原EMPTY flat被新prototype判shape不符、nested EMPTY僅policy正例、zero與inner由原guard拒。未實作新版、未跑新版pytest，所有未來門檻PENDING。"
+  },
+  "stop_replan": [
+    "任何作者/reviewer/version/body/provenance/source drift或未真closed PASS：不POST，FAIL定位。",
+    "fresh reviewer不同意shape界線或出現未決語意：FAIL回fresh研究；不由Main選替代。",
+    "新selection或任一coverage/natural語意失敗：保存首次raw後FAIL交fresh研究，不原樣重抽。",
+    "429／controller needs_user或其他停止條件依既有控制器；不洗計數／放寬驗收。"
+  ],
+  "preserved": {
+    "original_round15": "FAIL unchanged",
+    "passed_nodes": "all unchanged; no child under passed node",
+    "historical_gate": "38x2 remains unpassed",
+    "unverified": "coverage3/fullnatural9/allancestorintegration/freshfinal PENDING"
+  },
+  "evidence": [
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-15/research-facts.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-15/policy-shape-controls.json"
+  ],
+  "no_user_gate_required": "需求／成本／生產風險未變；研究為版本化契約修正，既有授權足夠，fresh reviewer為必要技術門檻。"
+}

@@ -1,0 +1,1 @@
+{"execute": false, "version": "managed-node-diagnostics-rebind-1", "engine_version": "managed-node-diagnostics-1", "fixture_approval": "PENDING_FRESH_INDEPENDENT_REVIEW", "samples": ["SEL-ISO-v1-01"], "input_tokens": {"SEL-ISO-v1-01": 22011}, "bindings_match": true, "provider_calls": 0}

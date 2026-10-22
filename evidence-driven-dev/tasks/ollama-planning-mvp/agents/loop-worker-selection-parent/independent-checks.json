@@ -1,0 +1,118 @@
+{
+  "authorization": {
+    "ticket": {
+      "id": "315d9203195d4080b655f6d8afe659dd",
+      "role": "worker",
+      "node": "natural_kind_selection_isolation",
+      "round": 19,
+      "platform_id": "/root/loop_worker_selection_parent",
+      "closed": false,
+      "reserved_at": "2026-10-21T23:56:54.629955+00:00"
+    },
+    "used_start": {
+      "agent_dispatches": 34,
+      "cloud_calls": 0,
+      "local_calls": 23,
+      "model_retries": 0
+    },
+    "audit_reviewed": [
+      16,
+      17,
+      18
+    ],
+    "audit_expected_sha256": "673600b1fe3ff21d937b6e1718fa2df4475ee3138c4d801b8ec90f9d88504a31",
+    "script_initial_failure": "初次誤假設controller review含ticket，實際儲存reviewer/rounds/evidence；已按真結構核對，失敗log保留。"
+  },
+  "preservation": {
+    "counts": {
+      "protected": 5203,
+      "policy_author": 668,
+      "natural": 284,
+      "historical15": 29
+    },
+    "changed": [],
+    "protected_index_sha256": "3bcce507e72f599d8d29925846ee08af81443cd974633b8a948cea3f5dfe53db"
+  },
+  "provenance": {
+    "preflight": "PASS",
+    "complete_bindings": "exact",
+    "legacy_rebound_bindings": "exact",
+    "roles": {
+      "policy_author": {
+        "ticket": "34175c2580224eddb7061898d2af61ef",
+        "node": "kind_policy_shape_contract",
+        "round": 16,
+        "platform_id": "/root/loop_worker_policy_shape",
+        "closed": true,
+        "completion_result": "PASS"
+      },
+      "policy_reviewer": {
+        "ticket": "ed5abbeeea324bea8ac64d526e38fb55",
+        "node": "kind_policy_shape_semantics",
+        "round": 17,
+        "platform_id": "/root/loop_worker_policy_semantics",
+        "closed": true,
+        "completion_result": "PASS"
+      },
+      "content_author": {
+        "ticket": "4810e837bb3e44d5a05d9392d9140e84",
+        "node": "kind_diagnostic_fixture_v2_correction",
+        "round": 12,
+        "platform_id": "/root/loop_worker_fixture_v2",
+        "closed": true,
+        "completion_result": "PASS"
+      },
+      "binding_author": {
+        "ticket": "098d0ce2e31f4254905064d4fd34c97b",
+        "node": "kind_diagnostic_evidence_rebinding",
+        "round": 13,
+        "platform_id": "/root/loop_worker_rebinding",
+        "closed": true,
+        "completion_result": "PASS"
+      },
+      "reviewer": {
+        "ticket": "d6de6a4fd21f4e7e862b06ceb27b86f7",
+        "node": "kind_diagnostic_fixture_semantics",
+        "round": 14,
+        "platform_id": "/root/loop_worker_semantics_rebound",
+        "closed": true,
+        "completion_result": "PASS"
+      }
+    },
+    "manifest_sha256": "2ec21c08c50f1772538c61fbbd4d7c5ea00c3fb43527395ffe5fa10e61082992"
+  },
+  "body_delta": {
+    "only_difference": "/messages/0/content附加通用policy形狀suffix",
+    "suffix": "\n\n缺值政策與輸出形狀的適用條件：\nmissing_policy_options 的第一與第二項皆適用於保留未匹配母體、以缺值表示未匹配的平面 scalar 輸出；兩者都禁止在無契約保證時補零。\n第三項的「子集合為空集合」只適用於實際輸出 nested child collection：每條可能未匹配且保留左母體的 child edge，必須在 integration.preparation 明示 kind=nest，task_id 精確為該 edge.right_task，keys 精確對應該 edge.right_keys，且 edge.mode=left、preserve_task=edge.left_task。\naggregate 僅表示彙總，不表示 nested output；metadata_collections、來源沒有 right row 也不等於 typed nest。平面 scalar 缺值不能以不存在的子集合政策宣稱保證。請依實際需求選擇適用的既有政策並自行明填所有 typed 欄位；不可為使用某政策而新增需求未要求的集合形狀。以上條件不取代來源、scope、grain、assignment、母體或其他守門。\n",
+    "schema_equal": true,
+    "upstream_equal": true,
+    "other_messages_and_options_equal": true,
+    "old_input_tokens": 22011,
+    "new_input_tokens": 22383,
+    "no_oracle_draft_or_source_answer_in_suffix": true
+  },
+  "natural_request": {
+    "id": "52128e22c3864f24a84bef58cb85c369",
+    "case": "kind-policy-shape-1:ISOLATION:SEL-ISO-v1-01:node",
+    "attempts": 1,
+    "HTTP": 200,
+    "retry": 0,
+    "round": 18,
+    "raw_sha256": "adb16c725add4720e42ae422d1c47973ccd003adcff62425c6d2711c195d2d7b",
+    "upstream_injected": true
+  },
+  "frozen_evidence": {
+    "hash_checks_including_overlaps": 251,
+    "round18_full_frozen_replay": "PASS",
+    "round18_result_exact": true,
+    "round15_original_frozen_replay": "FAIL保持",
+    "external_runtime": "沿用原.venv與lock；本輪依獨立核hash的完整frozen replay工件，不重跑大量歷史。"
+  },
+  "result": "PASS",
+  "task_sha256_start_end": "b71a4df71376144306e7f57f058395344e5ab011164ff840abd287fc0dddd91a",
+  "POST": 0,
+  "SQL_DB": 0,
+  "retry": 0,
+  "source_tests_fixture_Task_control_edits": 0,
+  "commit_push": 0
+}

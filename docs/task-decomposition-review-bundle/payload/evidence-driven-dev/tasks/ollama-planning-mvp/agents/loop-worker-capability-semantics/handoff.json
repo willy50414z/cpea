@@ -1,0 +1,17 @@
+{
+  "ticket": "1c6e2a219fc049658752332c271cc48d",
+  "result": "PASS",
+  "evidence": [
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-semantics/review.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-semantics/final-verification.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-semantics/input-lineage-controls.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-semantics/independent-semantic-controls.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-semantics/authorization-controls.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-semantics/verification-notices.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-semantics/input-verification.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-semantics/semantic-verification.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-semantics/authorization-verification.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-semantics/focused-network-guard.log"
+  ],
+  "summary": "fresh capability_projection_semantics離線delta ACCEPT。原需求/20原raw/真View與原56rows逐項核對，無損cards不洩漏答案或刪會員自身限制；daily有用店鍵與依賴-only own=false、customer無關鍵與會員自身own=true、inventory完整責任均保持。有限AND只允同View明示已完整驗證supported filter完整群聯集；17真context、16多群子集合、7動態kind、15授權控制與1focused實跑通過。五輸入與16新增引用rows、全部新舊bindings及作者28閉合證據吻合；精確review在真open審者下於settings/model/network前拒絕，未造Task。原20仍FAIL/PASS/FAIL，原15FAIL/18PASS、38×2 Gate未過及root PENDING不變。0POST/SQL/DB，僅新本審核JSON/log；未重跑作者81/228或全frozen，核其正式log及audit。全部程序/proof已結束；Main核真FINAL及hash/check-evidence、finish本輪closed PASS後才准固定五自然coverage。"
+}

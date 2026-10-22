@@ -1,0 +1,5055 @@
+{
+  "version": "kind-isolation-oracle-v2",
+  "approval": "PENDING_FRESH_INDEPENDENT_REVIEW",
+  "coverage_evidence": [
+    {
+      "view": "demo_retail.v_customer_value",
+      "requirement_id": "GRN-001",
+      "kind": "grain",
+      "status": "unsupported",
+      "own_gap": true,
+      "mappings": [],
+      "derived_gaps": [
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "self",
+          "requirements": [
+            {
+              "requirement_id": "GRN-001",
+              "quote": "各店各商品",
+              "status": "unsupported"
+            }
+          ]
+        }
+      ],
+      "contract_evidence": [
+        {
+          "path": "/summary",
+          "quote": "粒度：每會員一列，包含未下單會員；"
+        },
+        {
+          "path": "/grain/description",
+          "quote": "每會員一列，包含未下單會員"
+        },
+        {
+          "path": "/columns/customer_id/description",
+          "quote": "會員id"
+        },
+        {
+          "path": "/columns/customer_name/description",
+          "quote": "會員名稱"
+        },
+        {
+          "path": "/columns/membership_tier/description",
+          "quote": "會員等級；一般、銀卡、金卡、VIP"
+        },
+        {
+          "path": "/columns/city/description",
+          "quote": "會員登記城市，不是交易門市所在地"
+        },
+        {
+          "path": "/columns/registered_on/description",
+          "quote": "會員註冊日期。"
+        },
+        {
+          "path": "/columns/completed_order_count/description",
+          "quote": "會員已完成訂單筆數；未下單為 0"
+        },
+        {
+          "path": "/columns/lifetime_spend/description",
+          "quote": "會員在累計折扣後消費金額，單位 TWD"
+        },
+        {
+          "path": "/columns/avg_order_value/description",
+          "quote": "會員平均已完成訂單消費額，單位 TWD/筆"
+        },
+        {
+          "path": "/columns/last_order_date/description",
+          "quote": "會員最後一筆已完成訂單的日期；沒有已完成訂單時為 NULL"
+        },
+        {
+          "path": "/columns/active_in_last_90d/description",
+          "quote": "最近 90 日內有已完成訂單；沒有則為 false。"
+        }
+      ],
+      "reasoning": "會員鍵不提供門市或商品能力。",
+      "independent_review": "PENDING",
+      "requirement_quote": "各店各商品",
+      "scope_ids": [],
+      "grain_requirement_ids": [],
+      "grain_binding": null,
+      "contract_path": "/grain/description"
+    },
+    {
+      "view": "demo_retail.v_customer_value",
+      "requirement_id": "MET-001",
+      "kind": "metric",
+      "status": "unsupported",
+      "own_gap": true,
+      "mappings": [],
+      "derived_gaps": [
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "self",
+          "requirements": [
+            {
+              "requirement_id": "MET-001",
+              "quote": "盤點庫存件數",
+              "status": "unsupported"
+            }
+          ]
+        },
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "grain",
+          "requirements": [
+            {
+              "requirement_id": "GRN-001",
+              "quote": "各店各商品",
+              "status": "unsupported"
+            }
+          ]
+        }
+      ],
+      "contract_evidence": [
+        {
+          "path": "/summary",
+          "quote": "粒度：每會員一列，包含未下單會員；"
+        },
+        {
+          "path": "/grain/description",
+          "quote": "每會員一列，包含未下單會員"
+        },
+        {
+          "path": "/columns/customer_id/description",
+          "quote": "會員id"
+        },
+        {
+          "path": "/columns/customer_name/description",
+          "quote": "會員名稱"
+        },
+        {
+          "path": "/columns/membership_tier/description",
+          "quote": "會員等級；一般、銀卡、金卡、VIP"
+        },
+        {
+          "path": "/columns/city/description",
+          "quote": "會員登記城市，不是交易門市所在地"
+        },
+        {
+          "path": "/columns/registered_on/description",
+          "quote": "會員註冊日期。"
+        },
+        {
+          "path": "/columns/completed_order_count/description",
+          "quote": "會員已完成訂單筆數；未下單為 0"
+        },
+        {
+          "path": "/columns/lifetime_spend/description",
+          "quote": "會員在累計折扣後消費金額，單位 TWD"
+        },
+        {
+          "path": "/columns/avg_order_value/description",
+          "quote": "會員平均已完成訂單消費額，單位 TWD/筆"
+        },
+        {
+          "path": "/columns/last_order_date/description",
+          "quote": "會員最後一筆已完成訂單的日期；沒有已完成訂單時為 NULL"
+        },
+        {
+          "path": "/columns/active_in_last_90d/description",
+          "quote": "最近 90 日內有已完成訂單；沒有則為 false。"
+        }
+      ],
+      "reasoning": "無庫存件數；訂單數不是盤點件數。",
+      "independent_review": "PENDING",
+      "requirement_quote": "盤點庫存件數",
+      "scope_ids": [],
+      "grain_requirement_ids": [
+        "GRN-001"
+      ],
+      "grain_binding": "linked",
+      "contract_path": null
+    },
+    {
+      "view": "demo_retail.v_customer_value",
+      "requirement_id": "FILT-001",
+      "kind": "filter",
+      "status": "unsupported",
+      "own_gap": true,
+      "mappings": [],
+      "derived_gaps": [
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "self",
+          "requirements": [
+            {
+              "requirement_id": "FILT-001",
+              "quote": "2026 年 9 月",
+              "status": "unsupported"
+            }
+          ]
+        }
+      ],
+      "contract_evidence": [
+        {
+          "path": "/summary",
+          "quote": "粒度：每會員一列，包含未下單會員；"
+        },
+        {
+          "path": "/grain/description",
+          "quote": "每會員一列，包含未下單會員"
+        },
+        {
+          "path": "/columns/customer_id/description",
+          "quote": "會員id"
+        },
+        {
+          "path": "/columns/customer_name/description",
+          "quote": "會員名稱"
+        },
+        {
+          "path": "/columns/membership_tier/description",
+          "quote": "會員等級；一般、銀卡、金卡、VIP"
+        },
+        {
+          "path": "/columns/city/description",
+          "quote": "會員登記城市，不是交易門市所在地"
+        },
+        {
+          "path": "/columns/registered_on/description",
+          "quote": "會員註冊日期。"
+        },
+        {
+          "path": "/columns/completed_order_count/description",
+          "quote": "會員已完成訂單筆數；未下單為 0"
+        },
+        {
+          "path": "/columns/lifetime_spend/description",
+          "quote": "會員在累計折扣後消費金額，單位 TWD"
+        },
+        {
+          "path": "/columns/avg_order_value/description",
+          "quote": "會員平均已完成訂單消費額，單位 TWD/筆"
+        },
+        {
+          "path": "/columns/last_order_date/description",
+          "quote": "會員最後一筆已完成訂單的日期；沒有已完成訂單時為 NULL"
+        },
+        {
+          "path": "/columns/active_in_last_90d/description",
+          "quote": "最近 90 日內有已完成訂單；沒有則為 false。"
+        }
+      ],
+      "reasoning": "最後一筆訂單日期不能指定完整交易月份，註冊日期也不是交易日期。",
+      "independent_review": "PENDING",
+      "requirement_quote": "2026 年 9 月",
+      "scope_ids": [],
+      "grain_requirement_ids": [],
+      "grain_binding": null,
+      "contract_path": null
+    },
+    {
+      "view": "demo_retail.v_customer_value",
+      "requirement_id": "FILT-002",
+      "kind": "filter",
+      "status": "unsupported",
+      "own_gap": true,
+      "mappings": [],
+      "derived_gaps": [
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "self",
+          "requirements": [
+            {
+              "requirement_id": "FILT-002",
+              "quote": "線上通路",
+              "status": "unsupported"
+            }
+          ]
+        }
+      ],
+      "contract_evidence": [
+        {
+          "path": "/summary",
+          "quote": "粒度：每會員一列，包含未下單會員；"
+        },
+        {
+          "path": "/grain/description",
+          "quote": "每會員一列，包含未下單會員"
+        },
+        {
+          "path": "/columns/customer_id/description",
+          "quote": "會員id"
+        },
+        {
+          "path": "/columns/customer_name/description",
+          "quote": "會員名稱"
+        },
+        {
+          "path": "/columns/membership_tier/description",
+          "quote": "會員等級；一般、銀卡、金卡、VIP"
+        },
+        {
+          "path": "/columns/city/description",
+          "quote": "會員登記城市，不是交易門市所在地"
+        },
+        {
+          "path": "/columns/registered_on/description",
+          "quote": "會員註冊日期。"
+        },
+        {
+          "path": "/columns/completed_order_count/description",
+          "quote": "會員已完成訂單筆數；未下單為 0"
+        },
+        {
+          "path": "/columns/lifetime_spend/description",
+          "quote": "會員在累計折扣後消費金額，單位 TWD"
+        },
+        {
+          "path": "/columns/avg_order_value/description",
+          "quote": "會員平均已完成訂單消費額，單位 TWD/筆"
+        },
+        {
+          "path": "/columns/last_order_date/description",
+          "quote": "會員最後一筆已完成訂單的日期；沒有已完成訂單時為 NULL"
+        },
+        {
+          "path": "/columns/active_in_last_90d/description",
+          "quote": "最近 90 日內有已完成訂單；沒有則為 false。"
+        }
+      ],
+      "reasoning": "無交易通路。",
+      "independent_review": "PENDING",
+      "requirement_quote": "線上通路",
+      "scope_ids": [],
+      "grain_requirement_ids": [],
+      "grain_binding": null,
+      "contract_path": null
+    },
+    {
+      "view": "demo_retail.v_customer_value",
+      "requirement_id": "MET-002",
+      "kind": "metric",
+      "status": "unsupported",
+      "own_gap": true,
+      "mappings": [],
+      "derived_gaps": [
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "self",
+          "requirements": [
+            {
+              "requirement_id": "MET-002",
+              "quote": "折扣金額",
+              "status": "unsupported"
+            }
+          ]
+        },
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "scope",
+          "requirements": [
+            {
+              "requirement_id": "FILT-001",
+              "quote": "2026 年 9 月",
+              "status": "unsupported"
+            },
+            {
+              "requirement_id": "FILT-002",
+              "quote": "線上通路",
+              "status": "unsupported"
+            }
+          ]
+        },
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "grain",
+          "requirements": [
+            {
+              "requirement_id": "GRN-001",
+              "quote": "各店各商品",
+              "status": "unsupported"
+            }
+          ]
+        }
+      ],
+      "contract_evidence": [
+        {
+          "path": "/summary",
+          "quote": "粒度：每會員一列，包含未下單會員；"
+        },
+        {
+          "path": "/grain/description",
+          "quote": "每會員一列，包含未下單會員"
+        },
+        {
+          "path": "/columns/customer_id/description",
+          "quote": "會員id"
+        },
+        {
+          "path": "/columns/customer_name/description",
+          "quote": "會員名稱"
+        },
+        {
+          "path": "/columns/membership_tier/description",
+          "quote": "會員等級；一般、銀卡、金卡、VIP"
+        },
+        {
+          "path": "/columns/city/description",
+          "quote": "會員登記城市，不是交易門市所在地"
+        },
+        {
+          "path": "/columns/registered_on/description",
+          "quote": "會員註冊日期。"
+        },
+        {
+          "path": "/columns/completed_order_count/description",
+          "quote": "會員已完成訂單筆數；未下單為 0"
+        },
+        {
+          "path": "/columns/lifetime_spend/description",
+          "quote": "會員在累計折扣後消費金額，單位 TWD"
+        },
+        {
+          "path": "/columns/avg_order_value/description",
+          "quote": "會員平均已完成訂單消費額，單位 TWD/筆"
+        },
+        {
+          "path": "/columns/last_order_date/description",
+          "quote": "會員最後一筆已完成訂單的日期；沒有已完成訂單時為 NULL"
+        },
+        {
+          "path": "/columns/active_in_last_90d/description",
+          "quote": "最近 90 日內有已完成訂單；沒有則為 false。"
+        }
+      ],
+      "reasoning": "無折扣金額。",
+      "independent_review": "PENDING",
+      "requirement_quote": "折扣金額",
+      "scope_ids": [
+        "FILT-001",
+        "FILT-002"
+      ],
+      "grain_requirement_ids": [
+        "GRN-001"
+      ],
+      "grain_binding": "linked",
+      "contract_path": null
+    },
+    {
+      "view": "demo_retail.v_customer_value",
+      "requirement_id": "MET-003",
+      "kind": "metric",
+      "status": "partial",
+      "own_gap": true,
+      "mappings": [
+        {
+          "column": "lifetime_spend",
+          "role": "metric",
+          "source_quote": "淨銷售額",
+          "aggregation": "sum",
+          "operator": null,
+          "value": null,
+          "conditions": [],
+          "contract_evidence": [
+            {
+              "path": "/columns/lifetime_spend/description",
+              "quote": "會員在累計折扣後消費金額，單位 TWD"
+            }
+          ]
+        }
+      ],
+      "derived_gaps": [
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "self",
+          "requirements": [
+            {
+              "requirement_id": "MET-003",
+              "quote": "淨銷售額",
+              "status": "partial"
+            }
+          ]
+        },
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "scope",
+          "requirements": [
+            {
+              "requirement_id": "FILT-001",
+              "quote": "2026 年 9 月",
+              "status": "unsupported"
+            },
+            {
+              "requirement_id": "FILT-002",
+              "quote": "線上通路",
+              "status": "unsupported"
+            }
+          ]
+        },
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "grain",
+          "requirements": [
+            {
+              "requirement_id": "GRN-001",
+              "quote": "各店各商品",
+              "status": "unsupported"
+            }
+          ]
+        }
+      ],
+      "contract_evidence": [
+        {
+          "path": "/columns/lifetime_spend/description",
+          "quote": "會員在累計折扣後消費金額，單位 TWD"
+        }
+      ],
+      "reasoning": "會員累計折扣後消費提供可加總的金額部分。原題未限定會員，契約未證會員金額完整涵蓋銷售母體，因此自身仍有缺口；不推論非會員交易實際存在。指定月份、線上通路與店商品粒度另列scope及grain缺口。",
+      "independent_review": "PENDING",
+      "requirement_quote": "淨銷售額",
+      "scope_ids": [
+        "FILT-001",
+        "FILT-002"
+      ],
+      "grain_requirement_ids": [
+        "GRN-001"
+      ],
+      "grain_binding": "linked",
+      "contract_path": "/columns/lifetime_spend/description"
+    },
+    {
+      "view": "demo_retail.v_customer_value",
+      "requirement_id": "META-001",
+      "kind": "metadata",
+      "status": "unsupported",
+      "own_gap": true,
+      "mappings": [],
+      "derived_gaps": [
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "self",
+          "requirements": [
+            {
+              "requirement_id": "META-001",
+              "quote": "庫存盤點日期",
+              "status": "unsupported"
+            }
+          ]
+        },
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "grain",
+          "requirements": [
+            {
+              "requirement_id": "GRN-001",
+              "quote": "各店各商品",
+              "status": "unsupported"
+            }
+          ]
+        }
+      ],
+      "contract_evidence": [
+        {
+          "path": "/summary",
+          "quote": "粒度：每會員一列，包含未下單會員；"
+        },
+        {
+          "path": "/grain/description",
+          "quote": "每會員一列，包含未下單會員"
+        },
+        {
+          "path": "/columns/customer_id/description",
+          "quote": "會員id"
+        },
+        {
+          "path": "/columns/customer_name/description",
+          "quote": "會員名稱"
+        },
+        {
+          "path": "/columns/membership_tier/description",
+          "quote": "會員等級；一般、銀卡、金卡、VIP"
+        },
+        {
+          "path": "/columns/city/description",
+          "quote": "會員登記城市，不是交易門市所在地"
+        },
+        {
+          "path": "/columns/registered_on/description",
+          "quote": "會員註冊日期。"
+        },
+        {
+          "path": "/columns/completed_order_count/description",
+          "quote": "會員已完成訂單筆數；未下單為 0"
+        },
+        {
+          "path": "/columns/lifetime_spend/description",
+          "quote": "會員在累計折扣後消費金額，單位 TWD"
+        },
+        {
+          "path": "/columns/avg_order_value/description",
+          "quote": "會員平均已完成訂單消費額，單位 TWD/筆"
+        },
+        {
+          "path": "/columns/last_order_date/description",
+          "quote": "會員最後一筆已完成訂單的日期；沒有已完成訂單時為 NULL"
+        },
+        {
+          "path": "/columns/active_in_last_90d/description",
+          "quote": "最近 90 日內有已完成訂單；沒有則為 false。"
+        }
+      ],
+      "reasoning": "最後訂單日期與註冊日期均不是庫存盤點日期。",
+      "independent_review": "PENDING",
+      "requirement_quote": "庫存盤點日期",
+      "scope_ids": [],
+      "grain_requirement_ids": [
+        "GRN-001"
+      ],
+      "grain_binding": null,
+      "contract_path": null
+    },
+    {
+      "view": "demo_retail.v_customer_value",
+      "requirement_id": "POP-001",
+      "kind": "population",
+      "status": "unsupported",
+      "own_gap": true,
+      "mappings": [],
+      "derived_gaps": [
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "self",
+          "requirements": [
+            {
+              "requirement_id": "POP-001",
+              "quote": "保留所有庫存商品",
+              "status": "unsupported"
+            }
+          ]
+        },
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "grain",
+          "requirements": [
+            {
+              "requirement_id": "GRN-001",
+              "quote": "各店各商品",
+              "status": "unsupported"
+            }
+          ]
+        }
+      ],
+      "contract_evidence": [
+        {
+          "path": "/summary",
+          "quote": "粒度：每會員一列，包含未下單會員；"
+        },
+        {
+          "path": "/grain/description",
+          "quote": "每會員一列，包含未下單會員"
+        },
+        {
+          "path": "/columns/customer_id/description",
+          "quote": "會員id"
+        },
+        {
+          "path": "/columns/customer_name/description",
+          "quote": "會員名稱"
+        },
+        {
+          "path": "/columns/membership_tier/description",
+          "quote": "會員等級；一般、銀卡、金卡、VIP"
+        },
+        {
+          "path": "/columns/city/description",
+          "quote": "會員登記城市，不是交易門市所在地"
+        },
+        {
+          "path": "/columns/registered_on/description",
+          "quote": "會員註冊日期。"
+        },
+        {
+          "path": "/columns/completed_order_count/description",
+          "quote": "會員已完成訂單筆數；未下單為 0"
+        },
+        {
+          "path": "/columns/lifetime_spend/description",
+          "quote": "會員在累計折扣後消費金額，單位 TWD"
+        },
+        {
+          "path": "/columns/avg_order_value/description",
+          "quote": "會員平均已完成訂單消費額，單位 TWD/筆"
+        },
+        {
+          "path": "/columns/last_order_date/description",
+          "quote": "會員最後一筆已完成訂單的日期；沒有已完成訂單時為 NULL"
+        },
+        {
+          "path": "/columns/active_in_last_90d/description",
+          "quote": "最近 90 日內有已完成訂單；沒有則為 false。"
+        }
+      ],
+      "reasoning": "包含未下單會員不等於包含全部庫存商品。",
+      "independent_review": "PENDING",
+      "requirement_quote": "保留所有庫存商品",
+      "scope_ids": [],
+      "grain_requirement_ids": [
+        "GRN-001"
+      ],
+      "grain_binding": null,
+      "contract_path": null
+    },
+    {
+      "view": "demo_retail.v_daily_sales",
+      "requirement_id": "GRN-001",
+      "kind": "grain",
+      "status": "partial",
+      "own_gap": true,
+      "mappings": [
+        {
+          "column": "store_id"
+        }
+      ],
+      "derived_gaps": [
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "self",
+          "requirements": [
+            {
+              "requirement_id": "GRN-001",
+              "quote": "各店各商品",
+              "status": "partial"
+            }
+          ]
+        }
+      ],
+      "contract_evidence": [
+        {
+          "path": "/summary",
+          "quote": "粒度：門市×有銷售的日期；沒有交易的門市日期不出現。適合每日營收、門市趨勢"
+        },
+        {
+          "path": "/grain/description",
+          "quote": "門市×有銷售的日期"
+        },
+        {
+          "path": "/columns/store_id/description",
+          "quote": "門市id"
+        }
+      ],
+      "reasoning": "門市鍵是真實必要分量，但缺商品鍵；日期可彙總，不能創造商品。",
+      "independent_review": "PENDING",
+      "requirement_quote": "各店各商品",
+      "scope_ids": [],
+      "grain_requirement_ids": [],
+      "grain_binding": null,
+      "contract_path": "/grain/description"
+    },
+    {
+      "view": "demo_retail.v_daily_sales",
+      "requirement_id": "MET-001",
+      "kind": "metric",
+      "status": "unsupported",
+      "own_gap": true,
+      "mappings": [],
+      "derived_gaps": [
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "self",
+          "requirements": [
+            {
+              "requirement_id": "MET-001",
+              "quote": "盤點庫存件數",
+              "status": "unsupported"
+            }
+          ]
+        },
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "grain",
+          "requirements": [
+            {
+              "requirement_id": "GRN-001",
+              "quote": "各店各商品",
+              "status": "partial"
+            }
+          ]
+        }
+      ],
+      "contract_evidence": [
+        {
+          "path": "/summary",
+          "quote": "粒度：門市×有銷售的日期；沒有交易的門市日期不出現。適合每日營收、門市趨勢"
+        },
+        {
+          "path": "/grain/description",
+          "quote": "門市×有銷售的日期"
+        },
+        {
+          "path": "/columns/sales_date/description",
+          "quote": "已完成訂單的銷售日期；無交易的門市日期不會有資料列。"
+        },
+        {
+          "path": "/columns/store_id/description",
+          "quote": "門市id"
+        },
+        {
+          "path": "/columns/store_name/description",
+          "quote": "門市名稱"
+        },
+        {
+          "path": "/columns/region/description",
+          "quote": "門市所屬區域；北部、中部、南部"
+        },
+        {
+          "path": "/columns/city/description",
+          "quote": "門市所在城市"
+        },
+        {
+          "path": "/columns/order_count/description",
+          "quote": "門市已完成訂單筆數"
+        },
+        {
+          "path": "/columns/units_sold/description",
+          "quote": "門市已完成訂單銷售的商品總件數；單位件"
+        },
+        {
+          "path": "/columns/revenue/description",
+          "quote": "門市折扣後的銷售淨額總和，單位 TWD"
+        },
+        {
+          "path": "/columns/gross_profit/description",
+          "quote": "門市此日毛利總額（折扣後淨額 − 商品成本），單位 TWD"
+        }
+      ],
+      "reasoning": "銷售件數不是盤點庫存件數。",
+      "independent_review": "PENDING",
+      "requirement_quote": "盤點庫存件數",
+      "scope_ids": [],
+      "grain_requirement_ids": [
+        "GRN-001"
+      ],
+      "grain_binding": "linked",
+      "contract_path": null
+    },
+    {
+      "view": "demo_retail.v_daily_sales",
+      "requirement_id": "FILT-001",
+      "kind": "filter",
+      "status": "supported",
+      "own_gap": false,
+      "mappings": [
+        {
+          "column": "sales_date",
+          "operator": ">=",
+          "value": "2026-09-01"
+        },
+        {
+          "column": "sales_date",
+          "operator": "<",
+          "value": "2026-10-01"
+        }
+      ],
+      "derived_gaps": [],
+      "contract_evidence": [
+        {
+          "path": "/summary",
+          "quote": "粒度：門市×有銷售的日期；沒有交易的門市日期不出現。適合每日營收、門市趨勢"
+        },
+        {
+          "path": "/grain/description",
+          "quote": "門市×有銷售的日期"
+        },
+        {
+          "path": "/columns/sales_date/description",
+          "quote": "已完成訂單的銷售日期；無交易的門市日期不會有資料列。"
+        }
+      ],
+      "reasoning": "銷售曆日雙predicate涵蓋整個九月；此普通filter無輸出grain依賴。",
+      "independent_review": "PENDING",
+      "requirement_quote": "2026 年 9 月",
+      "scope_ids": [],
+      "grain_requirement_ids": [],
+      "grain_binding": null,
+      "contract_path": "/columns/sales_date/description"
+    },
+    {
+      "view": "demo_retail.v_daily_sales",
+      "requirement_id": "FILT-002",
+      "kind": "filter",
+      "status": "unsupported",
+      "own_gap": true,
+      "mappings": [],
+      "derived_gaps": [
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "self",
+          "requirements": [
+            {
+              "requirement_id": "FILT-002",
+              "quote": "線上通路",
+              "status": "unsupported"
+            }
+          ]
+        }
+      ],
+      "contract_evidence": [
+        {
+          "path": "/summary",
+          "quote": "粒度：門市×有銷售的日期；沒有交易的門市日期不出現。適合每日營收、門市趨勢"
+        },
+        {
+          "path": "/grain/description",
+          "quote": "門市×有銷售的日期"
+        },
+        {
+          "path": "/columns/sales_date/description",
+          "quote": "已完成訂單的銷售日期；無交易的門市日期不會有資料列。"
+        },
+        {
+          "path": "/columns/store_id/description",
+          "quote": "門市id"
+        },
+        {
+          "path": "/columns/store_name/description",
+          "quote": "門市名稱"
+        },
+        {
+          "path": "/columns/region/description",
+          "quote": "門市所屬區域；北部、中部、南部"
+        },
+        {
+          "path": "/columns/city/description",
+          "quote": "門市所在城市"
+        },
+        {
+          "path": "/columns/order_count/description",
+          "quote": "門市已完成訂單筆數"
+        },
+        {
+          "path": "/columns/units_sold/description",
+          "quote": "門市已完成訂單銷售的商品總件數；單位件"
+        },
+        {
+          "path": "/columns/revenue/description",
+          "quote": "門市折扣後的銷售淨額總和，單位 TWD"
+        },
+        {
+          "path": "/columns/gross_profit/description",
+          "quote": "門市此日毛利總額（折扣後淨額 − 商品成本），單位 TWD"
+        }
+      ],
+      "reasoning": "無通路欄。",
+      "independent_review": "PENDING",
+      "requirement_quote": "線上通路",
+      "scope_ids": [],
+      "grain_requirement_ids": [],
+      "grain_binding": null,
+      "contract_path": null
+    },
+    {
+      "view": "demo_retail.v_daily_sales",
+      "requirement_id": "MET-002",
+      "kind": "metric",
+      "status": "unsupported",
+      "own_gap": true,
+      "mappings": [],
+      "derived_gaps": [
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "self",
+          "requirements": [
+            {
+              "requirement_id": "MET-002",
+              "quote": "折扣金額",
+              "status": "unsupported"
+            }
+          ]
+        },
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "scope",
+          "requirements": [
+            {
+              "requirement_id": "FILT-002",
+              "quote": "線上通路",
+              "status": "unsupported"
+            }
+          ]
+        },
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "grain",
+          "requirements": [
+            {
+              "requirement_id": "GRN-001",
+              "quote": "各店各商品",
+              "status": "partial"
+            }
+          ]
+        }
+      ],
+      "contract_evidence": [
+        {
+          "path": "/summary",
+          "quote": "粒度：門市×有銷售的日期；沒有交易的門市日期不出現。適合每日營收、門市趨勢"
+        },
+        {
+          "path": "/grain/description",
+          "quote": "門市×有銷售的日期"
+        },
+        {
+          "path": "/columns/sales_date/description",
+          "quote": "已完成訂單的銷售日期；無交易的門市日期不會有資料列。"
+        },
+        {
+          "path": "/columns/store_id/description",
+          "quote": "門市id"
+        },
+        {
+          "path": "/columns/store_name/description",
+          "quote": "門市名稱"
+        },
+        {
+          "path": "/columns/region/description",
+          "quote": "門市所屬區域；北部、中部、南部"
+        },
+        {
+          "path": "/columns/city/description",
+          "quote": "門市所在城市"
+        },
+        {
+          "path": "/columns/order_count/description",
+          "quote": "門市已完成訂單筆數"
+        },
+        {
+          "path": "/columns/units_sold/description",
+          "quote": "門市已完成訂單銷售的商品總件數；單位件"
+        },
+        {
+          "path": "/columns/revenue/description",
+          "quote": "門市折扣後的銷售淨額總和，單位 TWD"
+        },
+        {
+          "path": "/columns/gross_profit/description",
+          "quote": "門市此日毛利總額（折扣後淨額 − 商品成本），單位 TWD"
+        }
+      ],
+      "reasoning": "沒有折扣金額欄，毛利與淨額不能代替折扣。",
+      "independent_review": "PENDING",
+      "requirement_quote": "折扣金額",
+      "scope_ids": [
+        "FILT-001",
+        "FILT-002"
+      ],
+      "grain_requirement_ids": [
+        "GRN-001"
+      ],
+      "grain_binding": "linked",
+      "contract_path": null
+    },
+    {
+      "view": "demo_retail.v_daily_sales",
+      "requirement_id": "MET-003",
+      "kind": "metric",
+      "status": "partial",
+      "own_gap": false,
+      "mappings": [
+        {
+          "column": "revenue",
+          "aggregation": "sum",
+          "conditions": []
+        }
+      ],
+      "derived_gaps": [
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "scope",
+          "requirements": [
+            {
+              "requirement_id": "FILT-002",
+              "quote": "線上通路",
+              "status": "unsupported"
+            }
+          ]
+        },
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "grain",
+          "requirements": [
+            {
+              "requirement_id": "GRN-001",
+              "quote": "各店各商品",
+              "status": "partial"
+            }
+          ]
+        }
+      ],
+      "contract_evidence": [
+        {
+          "path": "/summary",
+          "quote": "粒度：門市×有銷售的日期；沒有交易的門市日期不出現。適合每日營收、門市趨勢"
+        },
+        {
+          "path": "/grain/description",
+          "quote": "門市×有銷售的日期"
+        },
+        {
+          "path": "/columns/revenue/description",
+          "quote": "門市折扣後的銷售淨額總和，單位 TWD"
+        }
+      ],
+      "reasoning": "revenue明示折扣後銷售淨額，可sum；自身完整，仍欠線上通路及商品grain。",
+      "independent_review": "PENDING",
+      "requirement_quote": "淨銷售額",
+      "scope_ids": [
+        "FILT-001",
+        "FILT-002"
+      ],
+      "grain_requirement_ids": [
+        "GRN-001"
+      ],
+      "grain_binding": "linked",
+      "contract_path": "/columns/revenue/description"
+    },
+    {
+      "view": "demo_retail.v_daily_sales",
+      "requirement_id": "META-001",
+      "kind": "metadata",
+      "status": "unsupported",
+      "own_gap": true,
+      "mappings": [],
+      "derived_gaps": [
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "self",
+          "requirements": [
+            {
+              "requirement_id": "META-001",
+              "quote": "庫存盤點日期",
+              "status": "unsupported"
+            }
+          ]
+        },
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "grain",
+          "requirements": [
+            {
+              "requirement_id": "GRN-001",
+              "quote": "各店各商品",
+              "status": "partial"
+            }
+          ]
+        }
+      ],
+      "contract_evidence": [
+        {
+          "path": "/summary",
+          "quote": "粒度：門市×有銷售的日期；沒有交易的門市日期不出現。適合每日營收、門市趨勢"
+        },
+        {
+          "path": "/grain/description",
+          "quote": "門市×有銷售的日期"
+        },
+        {
+          "path": "/columns/sales_date/description",
+          "quote": "已完成訂單的銷售日期；無交易的門市日期不會有資料列。"
+        },
+        {
+          "path": "/columns/store_id/description",
+          "quote": "門市id"
+        },
+        {
+          "path": "/columns/store_name/description",
+          "quote": "門市名稱"
+        },
+        {
+          "path": "/columns/region/description",
+          "quote": "門市所屬區域；北部、中部、南部"
+        },
+        {
+          "path": "/columns/city/description",
+          "quote": "門市所在城市"
+        },
+        {
+          "path": "/columns/order_count/description",
+          "quote": "門市已完成訂單筆數"
+        },
+        {
+          "path": "/columns/units_sold/description",
+          "quote": "門市已完成訂單銷售的商品總件數；單位件"
+        },
+        {
+          "path": "/columns/revenue/description",
+          "quote": "門市折扣後的銷售淨額總和，單位 TWD"
+        },
+        {
+          "path": "/columns/gross_profit/description",
+          "quote": "門市此日毛利總額（折扣後淨額 − 商品成本），單位 TWD"
+        }
+      ],
+      "reasoning": "銷售日期不是庫存盤點日期。",
+      "independent_review": "PENDING",
+      "requirement_quote": "庫存盤點日期",
+      "scope_ids": [],
+      "grain_requirement_ids": [
+        "GRN-001"
+      ],
+      "grain_binding": null,
+      "contract_path": null
+    },
+    {
+      "view": "demo_retail.v_daily_sales",
+      "requirement_id": "POP-001",
+      "kind": "population",
+      "status": "unsupported",
+      "own_gap": true,
+      "mappings": [],
+      "derived_gaps": [
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "self",
+          "requirements": [
+            {
+              "requirement_id": "POP-001",
+              "quote": "保留所有庫存商品",
+              "status": "unsupported"
+            }
+          ]
+        },
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "grain",
+          "requirements": [
+            {
+              "requirement_id": "GRN-001",
+              "quote": "各店各商品",
+              "status": "partial"
+            }
+          ]
+        }
+      ],
+      "contract_evidence": [
+        {
+          "path": "/summary",
+          "quote": "粒度：門市×有銷售的日期；沒有交易的門市日期不出現。適合每日營收、門市趨勢"
+        },
+        {
+          "path": "/grain/description",
+          "quote": "門市×有銷售的日期"
+        },
+        {
+          "path": "/columns/sales_date/description",
+          "quote": "已完成訂單的銷售日期；無交易的門市日期不會有資料列。"
+        },
+        {
+          "path": "/columns/store_id/description",
+          "quote": "門市id"
+        },
+        {
+          "path": "/columns/store_name/description",
+          "quote": "門市名稱"
+        },
+        {
+          "path": "/columns/region/description",
+          "quote": "門市所屬區域；北部、中部、南部"
+        },
+        {
+          "path": "/columns/city/description",
+          "quote": "門市所在城市"
+        },
+        {
+          "path": "/columns/order_count/description",
+          "quote": "門市已完成訂單筆數"
+        },
+        {
+          "path": "/columns/units_sold/description",
+          "quote": "門市已完成訂單銷售的商品總件數；單位件"
+        },
+        {
+          "path": "/columns/revenue/description",
+          "quote": "門市折扣後的銷售淨額總和，單位 TWD"
+        },
+        {
+          "path": "/columns/gross_profit/description",
+          "quote": "門市此日毛利總額（折扣後淨額 − 商品成本），單位 TWD"
+        }
+      ],
+      "reasoning": "只有有銷售的門市日期，店鍵不證保留全部庫存商品。",
+      "independent_review": "PENDING",
+      "requirement_quote": "保留所有庫存商品",
+      "scope_ids": [],
+      "grain_requirement_ids": [
+        "GRN-001"
+      ],
+      "grain_binding": null,
+      "contract_path": null
+    },
+    {
+      "view": "demo_retail.v_inventory_status",
+      "requirement_id": "GRN-001",
+      "kind": "grain",
+      "status": "supported",
+      "own_gap": false,
+      "mappings": [
+        {
+          "column": "store_id"
+        },
+        {
+          "column": "product_id"
+        }
+      ],
+      "derived_gaps": [],
+      "contract_evidence": [
+        {
+          "path": "/summary",
+          "quote": "粒度：門市×商品；stock_status: 缺貨/需補貨/正常。estimated_days_of_supply 根據最近30日銷量估算，無銷量時為 NULL。"
+        },
+        {
+          "path": "/grain/description",
+          "quote": "門市×商品"
+        },
+        {
+          "path": "/columns/store_id/description",
+          "quote": "庫存所屬門市識別碼；與 product_id 組合唯一決定一列。"
+        },
+        {
+          "path": "/columns/product_id/description",
+          "quote": "庫存商品識別碼；與 store_id 組合唯一決定一列。"
+        }
+      ],
+      "reasoning": "店商品鍵唯一決定一列。",
+      "independent_review": "PENDING",
+      "requirement_quote": "各店各商品",
+      "scope_ids": [],
+      "grain_requirement_ids": [],
+      "grain_binding": null,
+      "contract_path": "/grain/description"
+    },
+    {
+      "view": "demo_retail.v_inventory_status",
+      "requirement_id": "MET-001",
+      "kind": "metric",
+      "status": "supported",
+      "own_gap": false,
+      "mappings": [
+        {
+          "column": "stock_qty",
+          "aggregation": "sum",
+          "conditions": []
+        }
+      ],
+      "derived_gaps": [],
+      "contract_evidence": [
+        {
+          "path": "/summary",
+          "quote": "粒度：門市×商品；stock_status: 缺貨/需補貨/正常。estimated_days_of_supply 根據最近30日銷量估算，無銷量時為 NULL。"
+        },
+        {
+          "path": "/grain/description",
+          "quote": "門市×商品"
+        },
+        {
+          "path": "/columns/stock_qty/description",
+          "quote": "快照當日此門市此商品的庫存件數，單位件；同商品跨門市可加總，不可跨不同快照日期直接加總。"
+        }
+      ],
+      "reasoning": "盤點快照當日庫存件數可依店商品sum；沒有跨快照日期加總。",
+      "independent_review": "PENDING",
+      "requirement_quote": "盤點庫存件數",
+      "scope_ids": [],
+      "grain_requirement_ids": [
+        "GRN-001"
+      ],
+      "grain_binding": "linked",
+      "contract_path": "/columns/stock_qty/description"
+    },
+    {
+      "view": "demo_retail.v_inventory_status",
+      "requirement_id": "FILT-001",
+      "kind": "filter",
+      "status": "unsupported",
+      "own_gap": true,
+      "mappings": [],
+      "derived_gaps": [
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "self",
+          "requirements": [
+            {
+              "requirement_id": "FILT-001",
+              "quote": "2026 年 9 月",
+              "status": "unsupported"
+            }
+          ]
+        }
+      ],
+      "contract_evidence": [
+        {
+          "path": "/summary",
+          "quote": "粒度：門市×商品；stock_status: 缺貨/需補貨/正常。estimated_days_of_supply 根據最近30日銷量估算，無銷量時為 NULL。"
+        },
+        {
+          "path": "/grain/description",
+          "quote": "門市×商品"
+        },
+        {
+          "path": "/columns/snapshot_date/description",
+          "quote": "庫存盤點日期"
+        },
+        {
+          "path": "/columns/store_id/description",
+          "quote": "庫存所屬門市識別碼；與 product_id 組合唯一決定一列。"
+        },
+        {
+          "path": "/columns/store_name/description",
+          "quote": "庫存所屬門市名稱。"
+        },
+        {
+          "path": "/columns/region/description",
+          "quote": "庫存門市所屬區域；北部、中部、南部。"
+        },
+        {
+          "path": "/columns/city/description",
+          "quote": "庫存門市所在城市。"
+        },
+        {
+          "path": "/columns/product_id/description",
+          "quote": "庫存商品識別碼；與 store_id 組合唯一決定一列。"
+        },
+        {
+          "path": "/columns/sku/description",
+          "quote": "商品庫存單位代碼（SKU）。"
+        },
+        {
+          "path": "/columns/product_name/description",
+          "quote": "庫存商品名稱。"
+        },
+        {
+          "path": "/columns/category/description",
+          "quote": "庫存商品分類。"
+        },
+        {
+          "path": "/columns/stock_qty/description",
+          "quote": "快照當日此門市此商品的庫存件數，單位件；同商品跨門市可加總，不可跨不同快照日期直接加總。"
+        },
+        {
+          "path": "/columns/reorder_point/description",
+          "quote": "此門市此商品的補貨警戒件數；stock_qty 不高於此值即判定需補貨（若為 0 件則為缺貨）。"
+        },
+        {
+          "path": "/columns/stock_status/description",
+          "quote": "庫存狀態；stock_qty=0 為缺貨，0<stock_qty<=reorder_point 為需補貨，其餘為正常。"
+        },
+        {
+          "path": "/columns/inventory_cost_value/description",
+          "quote": "庫存成本估值，stock_qty × 商品主檔 unit_cost，單位 TWD；不是預估銷售額。"
+        },
+        {
+          "path": "/columns/sold_qty_30d/description",
+          "quote": "過去 30 個曆日，此門市此商品已完成訂單銷售件數；無銷量為 0。"
+        },
+        {
+          "path": "/columns/estimated_days_of_supply/description",
+          "quote": "預估庫存可銷售天數，stock_qty × 30 ÷ sold_qty_30d，單位天；近 30 日銷量為 0 時為 NULL，屬簡化估計。"
+        }
+      ],
+      "reasoning": "盤點日期非銷售日期；過去30日窗口非指定月份。",
+      "independent_review": "PENDING",
+      "requirement_quote": "2026 年 9 月",
+      "scope_ids": [],
+      "grain_requirement_ids": [],
+      "grain_binding": null,
+      "contract_path": null
+    },
+    {
+      "view": "demo_retail.v_inventory_status",
+      "requirement_id": "FILT-002",
+      "kind": "filter",
+      "status": "unsupported",
+      "own_gap": true,
+      "mappings": [],
+      "derived_gaps": [
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "self",
+          "requirements": [
+            {
+              "requirement_id": "FILT-002",
+              "quote": "線上通路",
+              "status": "unsupported"
+            }
+          ]
+        }
+      ],
+      "contract_evidence": [
+        {
+          "path": "/summary",
+          "quote": "粒度：門市×商品；stock_status: 缺貨/需補貨/正常。estimated_days_of_supply 根據最近30日銷量估算，無銷量時為 NULL。"
+        },
+        {
+          "path": "/grain/description",
+          "quote": "門市×商品"
+        },
+        {
+          "path": "/columns/snapshot_date/description",
+          "quote": "庫存盤點日期"
+        },
+        {
+          "path": "/columns/store_id/description",
+          "quote": "庫存所屬門市識別碼；與 product_id 組合唯一決定一列。"
+        },
+        {
+          "path": "/columns/store_name/description",
+          "quote": "庫存所屬門市名稱。"
+        },
+        {
+          "path": "/columns/region/description",
+          "quote": "庫存門市所屬區域；北部、中部、南部。"
+        },
+        {
+          "path": "/columns/city/description",
+          "quote": "庫存門市所在城市。"
+        },
+        {
+          "path": "/columns/product_id/description",
+          "quote": "庫存商品識別碼；與 store_id 組合唯一決定一列。"
+        },
+        {
+          "path": "/columns/sku/description",
+          "quote": "商品庫存單位代碼（SKU）。"
+        },
+        {
+          "path": "/columns/product_name/description",
+          "quote": "庫存商品名稱。"
+        },
+        {
+          "path": "/columns/category/description",
+          "quote": "庫存商品分類。"
+        },
+        {
+          "path": "/columns/stock_qty/description",
+          "quote": "快照當日此門市此商品的庫存件數，單位件；同商品跨門市可加總，不可跨不同快照日期直接加總。"
+        },
+        {
+          "path": "/columns/reorder_point/description",
+          "quote": "此門市此商品的補貨警戒件數；stock_qty 不高於此值即判定需補貨（若為 0 件則為缺貨）。"
+        },
+        {
+          "path": "/columns/stock_status/description",
+          "quote": "庫存狀態；stock_qty=0 為缺貨，0<stock_qty<=reorder_point 為需補貨，其餘為正常。"
+        },
+        {
+          "path": "/columns/inventory_cost_value/description",
+          "quote": "庫存成本估值，stock_qty × 商品主檔 unit_cost，單位 TWD；不是預估銷售額。"
+        },
+        {
+          "path": "/columns/sold_qty_30d/description",
+          "quote": "過去 30 個曆日，此門市此商品已完成訂單銷售件數；無銷量為 0。"
+        },
+        {
+          "path": "/columns/estimated_days_of_supply/description",
+          "quote": "預估庫存可銷售天數，stock_qty × 30 ÷ sold_qty_30d，單位天；近 30 日銷量為 0 時為 NULL，屬簡化估計。"
+        }
+      ],
+      "reasoning": "無通路。",
+      "independent_review": "PENDING",
+      "requirement_quote": "線上通路",
+      "scope_ids": [],
+      "grain_requirement_ids": [],
+      "grain_binding": null,
+      "contract_path": null
+    },
+    {
+      "view": "demo_retail.v_inventory_status",
+      "requirement_id": "MET-002",
+      "kind": "metric",
+      "status": "unsupported",
+      "own_gap": true,
+      "mappings": [],
+      "derived_gaps": [
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "self",
+          "requirements": [
+            {
+              "requirement_id": "MET-002",
+              "quote": "折扣金額",
+              "status": "unsupported"
+            }
+          ]
+        },
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "scope",
+          "requirements": [
+            {
+              "requirement_id": "FILT-001",
+              "quote": "2026 年 9 月",
+              "status": "unsupported"
+            },
+            {
+              "requirement_id": "FILT-002",
+              "quote": "線上通路",
+              "status": "unsupported"
+            }
+          ]
+        }
+      ],
+      "contract_evidence": [
+        {
+          "path": "/summary",
+          "quote": "粒度：門市×商品；stock_status: 缺貨/需補貨/正常。estimated_days_of_supply 根據最近30日銷量估算，無銷量時為 NULL。"
+        },
+        {
+          "path": "/grain/description",
+          "quote": "門市×商品"
+        },
+        {
+          "path": "/columns/snapshot_date/description",
+          "quote": "庫存盤點日期"
+        },
+        {
+          "path": "/columns/store_id/description",
+          "quote": "庫存所屬門市識別碼；與 product_id 組合唯一決定一列。"
+        },
+        {
+          "path": "/columns/store_name/description",
+          "quote": "庫存所屬門市名稱。"
+        },
+        {
+          "path": "/columns/region/description",
+          "quote": "庫存門市所屬區域；北部、中部、南部。"
+        },
+        {
+          "path": "/columns/city/description",
+          "quote": "庫存門市所在城市。"
+        },
+        {
+          "path": "/columns/product_id/description",
+          "quote": "庫存商品識別碼；與 store_id 組合唯一決定一列。"
+        },
+        {
+          "path": "/columns/sku/description",
+          "quote": "商品庫存單位代碼（SKU）。"
+        },
+        {
+          "path": "/columns/product_name/description",
+          "quote": "庫存商品名稱。"
+        },
+        {
+          "path": "/columns/category/description",
+          "quote": "庫存商品分類。"
+        },
+        {
+          "path": "/columns/stock_qty/description",
+          "quote": "快照當日此門市此商品的庫存件數，單位件；同商品跨門市可加總，不可跨不同快照日期直接加總。"
+        },
+        {
+          "path": "/columns/reorder_point/description",
+          "quote": "此門市此商品的補貨警戒件數；stock_qty 不高於此值即判定需補貨（若為 0 件則為缺貨）。"
+        },
+        {
+          "path": "/columns/stock_status/description",
+          "quote": "庫存狀態；stock_qty=0 為缺貨，0<stock_qty<=reorder_point 為需補貨，其餘為正常。"
+        },
+        {
+          "path": "/columns/inventory_cost_value/description",
+          "quote": "庫存成本估值，stock_qty × 商品主檔 unit_cost，單位 TWD；不是預估銷售額。"
+        },
+        {
+          "path": "/columns/sold_qty_30d/description",
+          "quote": "過去 30 個曆日，此門市此商品已完成訂單銷售件數；無銷量為 0。"
+        },
+        {
+          "path": "/columns/estimated_days_of_supply/description",
+          "quote": "預估庫存可銷售天數，stock_qty × 30 ÷ sold_qty_30d，單位天；近 30 日銷量為 0 時為 NULL，屬簡化估計。"
+        }
+      ],
+      "reasoning": "庫存成本不是銷售折扣。",
+      "independent_review": "PENDING",
+      "requirement_quote": "折扣金額",
+      "scope_ids": [
+        "FILT-001",
+        "FILT-002"
+      ],
+      "grain_requirement_ids": [
+        "GRN-001"
+      ],
+      "grain_binding": "linked",
+      "contract_path": null
+    },
+    {
+      "view": "demo_retail.v_inventory_status",
+      "requirement_id": "MET-003",
+      "kind": "metric",
+      "status": "unsupported",
+      "own_gap": true,
+      "mappings": [],
+      "derived_gaps": [
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "self",
+          "requirements": [
+            {
+              "requirement_id": "MET-003",
+              "quote": "淨銷售額",
+              "status": "unsupported"
+            }
+          ]
+        },
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "scope",
+          "requirements": [
+            {
+              "requirement_id": "FILT-001",
+              "quote": "2026 年 9 月",
+              "status": "unsupported"
+            },
+            {
+              "requirement_id": "FILT-002",
+              "quote": "線上通路",
+              "status": "unsupported"
+            }
+          ]
+        }
+      ],
+      "contract_evidence": [
+        {
+          "path": "/summary",
+          "quote": "粒度：門市×商品；stock_status: 缺貨/需補貨/正常。estimated_days_of_supply 根據最近30日銷量估算，無銷量時為 NULL。"
+        },
+        {
+          "path": "/grain/description",
+          "quote": "門市×商品"
+        },
+        {
+          "path": "/columns/snapshot_date/description",
+          "quote": "庫存盤點日期"
+        },
+        {
+          "path": "/columns/store_id/description",
+          "quote": "庫存所屬門市識別碼；與 product_id 組合唯一決定一列。"
+        },
+        {
+          "path": "/columns/store_name/description",
+          "quote": "庫存所屬門市名稱。"
+        },
+        {
+          "path": "/columns/region/description",
+          "quote": "庫存門市所屬區域；北部、中部、南部。"
+        },
+        {
+          "path": "/columns/city/description",
+          "quote": "庫存門市所在城市。"
+        },
+        {
+          "path": "/columns/product_id/description",
+          "quote": "庫存商品識別碼；與 store_id 組合唯一決定一列。"
+        },
+        {
+          "path": "/columns/sku/description",
+          "quote": "商品庫存單位代碼（SKU）。"
+        },
+        {
+          "path": "/columns/product_name/description",
+          "quote": "庫存商品名稱。"
+        },
+        {
+          "path": "/columns/category/description",
+          "quote": "庫存商品分類。"
+        },
+        {
+          "path": "/columns/stock_qty/description",
+          "quote": "快照當日此門市此商品的庫存件數，單位件；同商品跨門市可加總，不可跨不同快照日期直接加總。"
+        },
+        {
+          "path": "/columns/reorder_point/description",
+          "quote": "此門市此商品的補貨警戒件數；stock_qty 不高於此值即判定需補貨（若為 0 件則為缺貨）。"
+        },
+        {
+          "path": "/columns/stock_status/description",
+          "quote": "庫存狀態；stock_qty=0 為缺貨，0<stock_qty<=reorder_point 為需補貨，其餘為正常。"
+        },
+        {
+          "path": "/columns/inventory_cost_value/description",
+          "quote": "庫存成本估值，stock_qty × 商品主檔 unit_cost，單位 TWD；不是預估銷售額。"
+        },
+        {
+          "path": "/columns/sold_qty_30d/description",
+          "quote": "過去 30 個曆日，此門市此商品已完成訂單銷售件數；無銷量為 0。"
+        },
+        {
+          "path": "/columns/estimated_days_of_supply/description",
+          "quote": "預估庫存可銷售天數，stock_qty × 30 ÷ sold_qty_30d，單位天；近 30 日銷量為 0 時為 NULL，屬簡化估計。"
+        }
+      ],
+      "reasoning": "庫存估值非銷售淨額，30日銷量非金額。",
+      "independent_review": "PENDING",
+      "requirement_quote": "淨銷售額",
+      "scope_ids": [
+        "FILT-001",
+        "FILT-002"
+      ],
+      "grain_requirement_ids": [
+        "GRN-001"
+      ],
+      "grain_binding": "linked",
+      "contract_path": null
+    },
+    {
+      "view": "demo_retail.v_inventory_status",
+      "requirement_id": "META-001",
+      "kind": "metadata",
+      "status": "supported",
+      "own_gap": false,
+      "mappings": [
+        {
+          "column": "snapshot_date"
+        }
+      ],
+      "derived_gaps": [],
+      "contract_evidence": [
+        {
+          "path": "/summary",
+          "quote": "粒度：門市×商品；stock_status: 缺貨/需補貨/正常。estimated_days_of_supply 根據最近30日銷量估算，無銷量時為 NULL。"
+        },
+        {
+          "path": "/grain/description",
+          "quote": "門市×商品"
+        },
+        {
+          "path": "/columns/snapshot_date/description",
+          "quote": "庫存盤點日期"
+        }
+      ],
+      "reasoning": "snapshot_date明示庫存盤點日期，作metadata收集。",
+      "independent_review": "PENDING",
+      "requirement_quote": "庫存盤點日期",
+      "scope_ids": [],
+      "grain_requirement_ids": [
+        "GRN-001"
+      ],
+      "grain_binding": null,
+      "contract_path": "/columns/snapshot_date/description"
+    },
+    {
+      "view": "demo_retail.v_inventory_status",
+      "requirement_id": "POP-001",
+      "kind": "population",
+      "status": "supported",
+      "own_gap": false,
+      "mappings": [
+        {
+          "column": "store_id"
+        },
+        {
+          "column": "product_id"
+        }
+      ],
+      "derived_gaps": [],
+      "contract_evidence": [
+        {
+          "path": "/summary",
+          "quote": "粒度：門市×商品；stock_status: 缺貨/需補貨/正常。estimated_days_of_supply 根據最近30日銷量估算，無銷量時為 NULL。"
+        },
+        {
+          "path": "/grain/description",
+          "quote": "門市×商品"
+        },
+        {
+          "path": "/columns/store_id/description",
+          "quote": "庫存所屬門市識別碼；與 product_id 組合唯一決定一列。"
+        },
+        {
+          "path": "/columns/product_id/description",
+          "quote": "庫存商品識別碼；與 store_id 組合唯一決定一列。"
+        }
+      ],
+      "reasoning": "以庫存View店商品為anchor，不加stock_status或>0條件；summary明列缺貨/需補貨/正常，保留全部庫存來源列。",
+      "independent_review": "PENDING",
+      "requirement_quote": "保留所有庫存商品",
+      "scope_ids": [],
+      "grain_requirement_ids": [
+        "GRN-001"
+      ],
+      "grain_binding": null,
+      "contract_path": "/summary"
+    },
+    {
+      "view": "demo_retail.v_order_summary",
+      "requirement_id": "GRN-001",
+      "kind": "grain",
+      "status": "partial",
+      "own_gap": true,
+      "mappings": [
+        {
+          "column": "store_id"
+        }
+      ],
+      "derived_gaps": [
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "self",
+          "requirements": [
+            {
+              "requirement_id": "GRN-001",
+              "quote": "各店各商品",
+              "status": "partial"
+            }
+          ]
+        }
+      ],
+      "contract_evidence": [
+        {
+          "path": "/summary",
+          "quote": "粒度：每筆已完成訂單一列；適合訂單數、客單價、單筆訂單金額與通路分析；取消訂單已排除。"
+        },
+        {
+          "path": "/grain/description",
+          "quote": "每筆已完成訂單一列"
+        },
+        {
+          "path": "/columns/store_id/description",
+          "quote": "訂單所屬門市識別碼。"
+        }
+      ],
+      "reasoning": "有訂單門市識別碼，缺商品鍵；訂單或會員識別碼不能代替。",
+      "independent_review": "PENDING",
+      "requirement_quote": "各店各商品",
+      "scope_ids": [],
+      "grain_requirement_ids": [],
+      "grain_binding": null,
+      "contract_path": "/grain/description"
+    },
+    {
+      "view": "demo_retail.v_order_summary",
+      "requirement_id": "MET-001",
+      "kind": "metric",
+      "status": "unsupported",
+      "own_gap": true,
+      "mappings": [],
+      "derived_gaps": [
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "self",
+          "requirements": [
+            {
+              "requirement_id": "MET-001",
+              "quote": "盤點庫存件數",
+              "status": "unsupported"
+            }
+          ]
+        },
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "grain",
+          "requirements": [
+            {
+              "requirement_id": "GRN-001",
+              "quote": "各店各商品",
+              "status": "partial"
+            }
+          ]
+        }
+      ],
+      "contract_evidence": [
+        {
+          "path": "/summary",
+          "quote": "粒度：每筆已完成訂單一列；適合訂單數、客單價、單筆訂單金額與通路分析；取消訂單已排除。"
+        },
+        {
+          "path": "/grain/description",
+          "quote": "每筆已完成訂單一列"
+        },
+        {
+          "path": "/columns/order_id/description",
+          "quote": "已完成訂單的唯一識別碼；本 View 每筆訂單只有一列。"
+        },
+        {
+          "path": "/columns/order_no/description",
+          "quote": "訂單編號；本 View 每筆已完成訂單只有一列。"
+        },
+        {
+          "path": "/columns/order_date/description",
+          "quote": "訂單成立日期（曆日），不含時間。"
+        },
+        {
+          "path": "/columns/order_month/description",
+          "quote": "訂單成立月份的第一天，供月份統計與篩選。"
+        },
+        {
+          "path": "/columns/store_id/description",
+          "quote": "訂單所屬門市識別碼。"
+        },
+        {
+          "path": "/columns/store_name/description",
+          "quote": "訂單所屬門市名稱。"
+        },
+        {
+          "path": "/columns/region/description",
+          "quote": "訂單門市所屬區域；北部、中部、南部。"
+        },
+        {
+          "path": "/columns/store_city/description",
+          "quote": "訂單門市所在城市，不是會員居住城市。"
+        },
+        {
+          "path": "/columns/sales_channel/description",
+          "quote": "訂單銷售通路；in_store=實體門市，online=線上。"
+        },
+        {
+          "path": "/columns/customer_id/description",
+          "quote": "下單會員識別碼。"
+        },
+        {
+          "path": "/columns/customer_name/description",
+          "quote": "下單會員名稱；為虛構測試資料。"
+        },
+        {
+          "path": "/columns/membership_tier/description",
+          "quote": "下單會員等級；一般、銀卡、金卡、VIP。"
+        },
+        {
+          "path": "/columns/item_lines/description",
+          "quote": "此訂單的商品明細列數（COUNT order_item_id）；不是總銷售件數。"
+        },
+        {
+          "path": "/columns/total_quantity/description",
+          "quote": "此訂單全部明細的商品銷售件數加總；單位件。"
+        },
+        {
+          "path": "/columns/order_amount/description",
+          "quote": "此訂單折扣後的總銷售金額（各明細 quantity × unit_price − discount），單位 TWD。"
+        },
+        {
+          "path": "/columns/cost_amount/description",
+          "quote": "此訂單全部明細的商品成本總額，單位 TWD。"
+        },
+        {
+          "path": "/columns/gross_profit/description",
+          "quote": "此訂單毛利，order_amount − cost_amount，單位 TWD。"
+        }
+      ],
+      "reasoning": "訂單商品銷售件數非盤點庫存。",
+      "independent_review": "PENDING",
+      "requirement_quote": "盤點庫存件數",
+      "scope_ids": [],
+      "grain_requirement_ids": [
+        "GRN-001"
+      ],
+      "grain_binding": "linked",
+      "contract_path": null
+    },
+    {
+      "view": "demo_retail.v_order_summary",
+      "requirement_id": "FILT-001",
+      "kind": "filter",
+      "status": "supported",
+      "own_gap": false,
+      "mappings": [
+        {
+          "column": "order_date",
+          "operator": ">=",
+          "value": "2026-09-01"
+        },
+        {
+          "column": "order_date",
+          "operator": "<",
+          "value": "2026-10-01"
+        }
+      ],
+      "derived_gaps": [],
+      "contract_evidence": [
+        {
+          "path": "/summary",
+          "quote": "粒度：每筆已完成訂單一列；適合訂單數、客單價、單筆訂單金額與通路分析；取消訂單已排除。"
+        },
+        {
+          "path": "/grain/description",
+          "quote": "每筆已完成訂單一列"
+        },
+        {
+          "path": "/columns/order_date/description",
+          "quote": "訂單成立日期（曆日），不含時間。"
+        }
+      ],
+      "reasoning": "訂單曆日完整九月雙predicate獨立支持。",
+      "independent_review": "PENDING",
+      "requirement_quote": "2026 年 9 月",
+      "scope_ids": [],
+      "grain_requirement_ids": [],
+      "grain_binding": null,
+      "contract_path": "/columns/order_date/description"
+    },
+    {
+      "view": "demo_retail.v_order_summary",
+      "requirement_id": "FILT-002",
+      "kind": "filter",
+      "status": "supported",
+      "own_gap": false,
+      "mappings": [
+        {
+          "column": "sales_channel",
+          "operator": "=",
+          "value": "online"
+        }
+      ],
+      "derived_gaps": [],
+      "contract_evidence": [
+        {
+          "path": "/summary",
+          "quote": "粒度：每筆已完成訂單一列；適合訂單數、客單價、單筆訂單金額與通路分析；取消訂單已排除。"
+        },
+        {
+          "path": "/grain/description",
+          "quote": "每筆已完成訂單一列"
+        },
+        {
+          "path": "/columns/sales_channel/description",
+          "quote": "訂單銷售通路；in_store=實體門市，online=線上。"
+        }
+      ],
+      "reasoning": "sales_channel online為明示線上通路。",
+      "independent_review": "PENDING",
+      "requirement_quote": "線上通路",
+      "scope_ids": [],
+      "grain_requirement_ids": [],
+      "grain_binding": null,
+      "contract_path": "/columns/sales_channel/description"
+    },
+    {
+      "view": "demo_retail.v_order_summary",
+      "requirement_id": "MET-002",
+      "kind": "metric",
+      "status": "unsupported",
+      "own_gap": true,
+      "mappings": [],
+      "derived_gaps": [
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "self",
+          "requirements": [
+            {
+              "requirement_id": "MET-002",
+              "quote": "折扣金額",
+              "status": "unsupported"
+            }
+          ]
+        },
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "grain",
+          "requirements": [
+            {
+              "requirement_id": "GRN-001",
+              "quote": "各店各商品",
+              "status": "partial"
+            }
+          ]
+        }
+      ],
+      "contract_evidence": [
+        {
+          "path": "/summary",
+          "quote": "粒度：每筆已完成訂單一列；適合訂單數、客單價、單筆訂單金額與通路分析；取消訂單已排除。"
+        },
+        {
+          "path": "/grain/description",
+          "quote": "每筆已完成訂單一列"
+        },
+        {
+          "path": "/columns/order_id/description",
+          "quote": "已完成訂單的唯一識別碼；本 View 每筆訂單只有一列。"
+        },
+        {
+          "path": "/columns/order_no/description",
+          "quote": "訂單編號；本 View 每筆已完成訂單只有一列。"
+        },
+        {
+          "path": "/columns/order_date/description",
+          "quote": "訂單成立日期（曆日），不含時間。"
+        },
+        {
+          "path": "/columns/order_month/description",
+          "quote": "訂單成立月份的第一天，供月份統計與篩選。"
+        },
+        {
+          "path": "/columns/store_id/description",
+          "quote": "訂單所屬門市識別碼。"
+        },
+        {
+          "path": "/columns/store_name/description",
+          "quote": "訂單所屬門市名稱。"
+        },
+        {
+          "path": "/columns/region/description",
+          "quote": "訂單門市所屬區域；北部、中部、南部。"
+        },
+        {
+          "path": "/columns/store_city/description",
+          "quote": "訂單門市所在城市，不是會員居住城市。"
+        },
+        {
+          "path": "/columns/sales_channel/description",
+          "quote": "訂單銷售通路；in_store=實體門市，online=線上。"
+        },
+        {
+          "path": "/columns/customer_id/description",
+          "quote": "下單會員識別碼。"
+        },
+        {
+          "path": "/columns/customer_name/description",
+          "quote": "下單會員名稱；為虛構測試資料。"
+        },
+        {
+          "path": "/columns/membership_tier/description",
+          "quote": "下單會員等級；一般、銀卡、金卡、VIP。"
+        },
+        {
+          "path": "/columns/item_lines/description",
+          "quote": "此訂單的商品明細列數（COUNT order_item_id）；不是總銷售件數。"
+        },
+        {
+          "path": "/columns/total_quantity/description",
+          "quote": "此訂單全部明細的商品銷售件數加總；單位件。"
+        },
+        {
+          "path": "/columns/order_amount/description",
+          "quote": "此訂單折扣後的總銷售金額（各明細 quantity × unit_price − discount），單位 TWD。"
+        },
+        {
+          "path": "/columns/cost_amount/description",
+          "quote": "此訂單全部明細的商品成本總額，單位 TWD。"
+        },
+        {
+          "path": "/columns/gross_profit/description",
+          "quote": "此訂單毛利，order_amount − cost_amount，單位 TWD。"
+        }
+      ],
+      "reasoning": "訂單折扣後金額並非折扣金額，無折扣欄。",
+      "independent_review": "PENDING",
+      "requirement_quote": "折扣金額",
+      "scope_ids": [
+        "FILT-001",
+        "FILT-002"
+      ],
+      "grain_requirement_ids": [
+        "GRN-001"
+      ],
+      "grain_binding": "linked",
+      "contract_path": null
+    },
+    {
+      "view": "demo_retail.v_order_summary",
+      "requirement_id": "MET-003",
+      "kind": "metric",
+      "status": "partial",
+      "own_gap": false,
+      "mappings": [
+        {
+          "column": "order_amount",
+          "aggregation": "sum",
+          "conditions": []
+        }
+      ],
+      "derived_gaps": [
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "grain",
+          "requirements": [
+            {
+              "requirement_id": "GRN-001",
+              "quote": "各店各商品",
+              "status": "partial"
+            }
+          ]
+        }
+      ],
+      "contract_evidence": [
+        {
+          "path": "/summary",
+          "quote": "粒度：每筆已完成訂單一列；適合訂單數、客單價、單筆訂單金額與通路分析；取消訂單已排除。"
+        },
+        {
+          "path": "/grain/description",
+          "quote": "每筆已完成訂單一列"
+        },
+        {
+          "path": "/columns/order_amount/description",
+          "quote": "此訂單折扣後的總銷售金額（各明細 quantity × unit_price − discount），單位 TWD。"
+        }
+      ],
+      "reasoning": "每完成訂單折扣後總額可sum，自身完整但缺商品grain。",
+      "independent_review": "PENDING",
+      "requirement_quote": "淨銷售額",
+      "scope_ids": [
+        "FILT-001",
+        "FILT-002"
+      ],
+      "grain_requirement_ids": [
+        "GRN-001"
+      ],
+      "grain_binding": "linked",
+      "contract_path": "/columns/order_amount/description"
+    },
+    {
+      "view": "demo_retail.v_order_summary",
+      "requirement_id": "META-001",
+      "kind": "metadata",
+      "status": "unsupported",
+      "own_gap": true,
+      "mappings": [],
+      "derived_gaps": [
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "self",
+          "requirements": [
+            {
+              "requirement_id": "META-001",
+              "quote": "庫存盤點日期",
+              "status": "unsupported"
+            }
+          ]
+        },
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "grain",
+          "requirements": [
+            {
+              "requirement_id": "GRN-001",
+              "quote": "各店各商品",
+              "status": "partial"
+            }
+          ]
+        }
+      ],
+      "contract_evidence": [
+        {
+          "path": "/summary",
+          "quote": "粒度：每筆已完成訂單一列；適合訂單數、客單價、單筆訂單金額與通路分析；取消訂單已排除。"
+        },
+        {
+          "path": "/grain/description",
+          "quote": "每筆已完成訂單一列"
+        },
+        {
+          "path": "/columns/order_id/description",
+          "quote": "已完成訂單的唯一識別碼；本 View 每筆訂單只有一列。"
+        },
+        {
+          "path": "/columns/order_no/description",
+          "quote": "訂單編號；本 View 每筆已完成訂單只有一列。"
+        },
+        {
+          "path": "/columns/order_date/description",
+          "quote": "訂單成立日期（曆日），不含時間。"
+        },
+        {
+          "path": "/columns/order_month/description",
+          "quote": "訂單成立月份的第一天，供月份統計與篩選。"
+        },
+        {
+          "path": "/columns/store_id/description",
+          "quote": "訂單所屬門市識別碼。"
+        },
+        {
+          "path": "/columns/store_name/description",
+          "quote": "訂單所屬門市名稱。"
+        },
+        {
+          "path": "/columns/region/description",
+          "quote": "訂單門市所屬區域；北部、中部、南部。"
+        },
+        {
+          "path": "/columns/store_city/description",
+          "quote": "訂單門市所在城市，不是會員居住城市。"
+        },
+        {
+          "path": "/columns/sales_channel/description",
+          "quote": "訂單銷售通路；in_store=實體門市，online=線上。"
+        },
+        {
+          "path": "/columns/customer_id/description",
+          "quote": "下單會員識別碼。"
+        },
+        {
+          "path": "/columns/customer_name/description",
+          "quote": "下單會員名稱；為虛構測試資料。"
+        },
+        {
+          "path": "/columns/membership_tier/description",
+          "quote": "下單會員等級；一般、銀卡、金卡、VIP。"
+        },
+        {
+          "path": "/columns/item_lines/description",
+          "quote": "此訂單的商品明細列數（COUNT order_item_id）；不是總銷售件數。"
+        },
+        {
+          "path": "/columns/total_quantity/description",
+          "quote": "此訂單全部明細的商品銷售件數加總；單位件。"
+        },
+        {
+          "path": "/columns/order_amount/description",
+          "quote": "此訂單折扣後的總銷售金額（各明細 quantity × unit_price − discount），單位 TWD。"
+        },
+        {
+          "path": "/columns/cost_amount/description",
+          "quote": "此訂單全部明細的商品成本總額，單位 TWD。"
+        },
+        {
+          "path": "/columns/gross_profit/description",
+          "quote": "此訂單毛利，order_amount − cost_amount，單位 TWD。"
+        }
+      ],
+      "reasoning": "訂單日期非盤點日期。",
+      "independent_review": "PENDING",
+      "requirement_quote": "庫存盤點日期",
+      "scope_ids": [],
+      "grain_requirement_ids": [
+        "GRN-001"
+      ],
+      "grain_binding": null,
+      "contract_path": null
+    },
+    {
+      "view": "demo_retail.v_order_summary",
+      "requirement_id": "POP-001",
+      "kind": "population",
+      "status": "unsupported",
+      "own_gap": true,
+      "mappings": [],
+      "derived_gaps": [
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "self",
+          "requirements": [
+            {
+              "requirement_id": "POP-001",
+              "quote": "保留所有庫存商品",
+              "status": "unsupported"
+            }
+          ]
+        },
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "grain",
+          "requirements": [
+            {
+              "requirement_id": "GRN-001",
+              "quote": "各店各商品",
+              "status": "partial"
+            }
+          ]
+        }
+      ],
+      "contract_evidence": [
+        {
+          "path": "/summary",
+          "quote": "粒度：每筆已完成訂單一列；適合訂單數、客單價、單筆訂單金額與通路分析；取消訂單已排除。"
+        },
+        {
+          "path": "/grain/description",
+          "quote": "每筆已完成訂單一列"
+        },
+        {
+          "path": "/columns/order_id/description",
+          "quote": "已完成訂單的唯一識別碼；本 View 每筆訂單只有一列。"
+        },
+        {
+          "path": "/columns/order_no/description",
+          "quote": "訂單編號；本 View 每筆已完成訂單只有一列。"
+        },
+        {
+          "path": "/columns/order_date/description",
+          "quote": "訂單成立日期（曆日），不含時間。"
+        },
+        {
+          "path": "/columns/order_month/description",
+          "quote": "訂單成立月份的第一天，供月份統計與篩選。"
+        },
+        {
+          "path": "/columns/store_id/description",
+          "quote": "訂單所屬門市識別碼。"
+        },
+        {
+          "path": "/columns/store_name/description",
+          "quote": "訂單所屬門市名稱。"
+        },
+        {
+          "path": "/columns/region/description",
+          "quote": "訂單門市所屬區域；北部、中部、南部。"
+        },
+        {
+          "path": "/columns/store_city/description",
+          "quote": "訂單門市所在城市，不是會員居住城市。"
+        },
+        {
+          "path": "/columns/sales_channel/description",
+          "quote": "訂單銷售通路；in_store=實體門市，online=線上。"
+        },
+        {
+          "path": "/columns/customer_id/description",
+          "quote": "下單會員識別碼。"
+        },
+        {
+          "path": "/columns/customer_name/description",
+          "quote": "下單會員名稱；為虛構測試資料。"
+        },
+        {
+          "path": "/columns/membership_tier/description",
+          "quote": "下單會員等級；一般、銀卡、金卡、VIP。"
+        },
+        {
+          "path": "/columns/item_lines/description",
+          "quote": "此訂單的商品明細列數（COUNT order_item_id）；不是總銷售件數。"
+        },
+        {
+          "path": "/columns/total_quantity/description",
+          "quote": "此訂單全部明細的商品銷售件數加總；單位件。"
+        },
+        {
+          "path": "/columns/order_amount/description",
+          "quote": "此訂單折扣後的總銷售金額（各明細 quantity × unit_price − discount），單位 TWD。"
+        },
+        {
+          "path": "/columns/cost_amount/description",
+          "quote": "此訂單全部明細的商品成本總額，單位 TWD。"
+        },
+        {
+          "path": "/columns/gross_profit/description",
+          "quote": "此訂單毛利，order_amount − cost_amount，單位 TWD。"
+        }
+      ],
+      "reasoning": "完成訂單來源非全部庫存商品，店鍵不證庫存母體。",
+      "independent_review": "PENDING",
+      "requirement_quote": "保留所有庫存商品",
+      "scope_ids": [],
+      "grain_requirement_ids": [
+        "GRN-001"
+      ],
+      "grain_binding": null,
+      "contract_path": null
+    },
+    {
+      "view": "demo_retail.v_product_monthly",
+      "requirement_id": "GRN-001",
+      "kind": "grain",
+      "status": "supported",
+      "own_gap": false,
+      "mappings": [
+        {
+          "column": "store_id"
+        },
+        {
+          "column": "product_id"
+        }
+      ],
+      "derived_gaps": [],
+      "contract_evidence": [
+        {
+          "path": "/summary",
+          "quote": "粒度：門市×月份×商品；適合商品/分類排行、商品銷量及毛利，不含訂單筆數；商品跨店排行需加總 net_sales/units_sold。"
+        },
+        {
+          "path": "/grain/description",
+          "quote": "門市×月份×商品"
+        },
+        {
+          "path": "/columns/store_id/description",
+          "quote": "交易門市識別碼；與 sales_month、product_id 組合唯一決定一列。"
+        },
+        {
+          "path": "/columns/product_id/description",
+          "quote": "商品識別碼；與 store_id、sales_month 組合唯一決定一列。"
+        }
+      ],
+      "reasoning": "店月商品鍵且固定唯一月份，縮約後有店商品完整鍵。",
+      "independent_review": "PENDING",
+      "requirement_quote": "各店各商品",
+      "scope_ids": [],
+      "grain_requirement_ids": [],
+      "grain_binding": null,
+      "contract_path": "/grain/description"
+    },
+    {
+      "view": "demo_retail.v_product_monthly",
+      "requirement_id": "MET-001",
+      "kind": "metric",
+      "status": "unsupported",
+      "own_gap": true,
+      "mappings": [],
+      "derived_gaps": [
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "self",
+          "requirements": [
+            {
+              "requirement_id": "MET-001",
+              "quote": "盤點庫存件數",
+              "status": "unsupported"
+            }
+          ]
+        }
+      ],
+      "contract_evidence": [
+        {
+          "path": "/summary",
+          "quote": "粒度：門市×月份×商品；適合商品/分類排行、商品銷量及毛利，不含訂單筆數；商品跨店排行需加總 net_sales/units_sold。"
+        },
+        {
+          "path": "/grain/description",
+          "quote": "門市×月份×商品"
+        },
+        {
+          "path": "/columns/sales_month/description",
+          "quote": "商品銷售統計月份的第一天；月度粒度。"
+        },
+        {
+          "path": "/columns/store_id/description",
+          "quote": "交易門市識別碼；與 sales_month、product_id 組合唯一決定一列。"
+        },
+        {
+          "path": "/columns/store_name/description",
+          "quote": "交易門市名稱。"
+        },
+        {
+          "path": "/columns/region/description",
+          "quote": "交易門市所屬區域；北部、中部、南部。"
+        },
+        {
+          "path": "/columns/city/description",
+          "quote": "交易門市所在城市。"
+        },
+        {
+          "path": "/columns/product_id/description",
+          "quote": "商品識別碼；與 store_id、sales_month 組合唯一決定一列。"
+        },
+        {
+          "path": "/columns/sku/description",
+          "quote": "商品庫存單位代碼（SKU）。"
+        },
+        {
+          "path": "/columns/product_name/description",
+          "quote": "商品名稱。"
+        },
+        {
+          "path": "/columns/category/description",
+          "quote": "商品分類，例如飲料、零食、日用品。"
+        },
+        {
+          "path": "/columns/units_sold/description",
+          "quote": "此門市此月份此商品的銷售件數合計；單位件。"
+        },
+        {
+          "path": "/columns/gross_sales/description",
+          "quote": "此門市此月份此商品的折扣前銷售額，單位 TWD。"
+        },
+        {
+          "path": "/columns/discount_amount/description",
+          "quote": "此門市此月份此商品的折扣金額合計，單位 TWD。"
+        },
+        {
+          "path": "/columns/net_sales/description",
+          "quote": "此門市此月份此商品的折扣後銷售額，單位 TWD；適合跨門市彙總商品營收。"
+        },
+        {
+          "path": "/columns/gross_profit/description",
+          "quote": "此門市此月份此商品的毛利總額，單位 TWD；不是毛利率。"
+        }
+      ],
+      "reasoning": "商品銷售件數非盤點庫存。",
+      "independent_review": "PENDING",
+      "requirement_quote": "盤點庫存件數",
+      "scope_ids": [],
+      "grain_requirement_ids": [
+        "GRN-001"
+      ],
+      "grain_binding": "linked",
+      "contract_path": null
+    },
+    {
+      "view": "demo_retail.v_product_monthly",
+      "requirement_id": "FILT-001",
+      "kind": "filter",
+      "status": "supported",
+      "own_gap": false,
+      "mappings": [
+        {
+          "column": "sales_month",
+          "operator": "=",
+          "value": "2026-09-01"
+        }
+      ],
+      "derived_gaps": [],
+      "contract_evidence": [
+        {
+          "path": "/summary",
+          "quote": "粒度：門市×月份×商品；適合商品/分類排行、商品銷量及毛利，不含訂單筆數；商品跨店排行需加總 net_sales/units_sold。"
+        },
+        {
+          "path": "/grain/description",
+          "quote": "門市×月份×商品"
+        },
+        {
+          "path": "/columns/sales_month/description",
+          "quote": "商品銷售統計月份的第一天；月度粒度。"
+        }
+      ],
+      "reasoning": "月欄明示月初且月度粒度，=2026-09-01完整限定九月。",
+      "independent_review": "PENDING",
+      "requirement_quote": "2026 年 9 月",
+      "scope_ids": [],
+      "grain_requirement_ids": [],
+      "grain_binding": null,
+      "contract_path": "/columns/sales_month/description"
+    },
+    {
+      "view": "demo_retail.v_product_monthly",
+      "requirement_id": "FILT-002",
+      "kind": "filter",
+      "status": "unsupported",
+      "own_gap": true,
+      "mappings": [],
+      "derived_gaps": [
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "self",
+          "requirements": [
+            {
+              "requirement_id": "FILT-002",
+              "quote": "線上通路",
+              "status": "unsupported"
+            }
+          ]
+        }
+      ],
+      "contract_evidence": [
+        {
+          "path": "/summary",
+          "quote": "粒度：門市×月份×商品；適合商品/分類排行、商品銷量及毛利，不含訂單筆數；商品跨店排行需加總 net_sales/units_sold。"
+        },
+        {
+          "path": "/grain/description",
+          "quote": "門市×月份×商品"
+        },
+        {
+          "path": "/columns/sales_month/description",
+          "quote": "商品銷售統計月份的第一天；月度粒度。"
+        },
+        {
+          "path": "/columns/store_id/description",
+          "quote": "交易門市識別碼；與 sales_month、product_id 組合唯一決定一列。"
+        },
+        {
+          "path": "/columns/store_name/description",
+          "quote": "交易門市名稱。"
+        },
+        {
+          "path": "/columns/region/description",
+          "quote": "交易門市所屬區域；北部、中部、南部。"
+        },
+        {
+          "path": "/columns/city/description",
+          "quote": "交易門市所在城市。"
+        },
+        {
+          "path": "/columns/product_id/description",
+          "quote": "商品識別碼；與 store_id、sales_month 組合唯一決定一列。"
+        },
+        {
+          "path": "/columns/sku/description",
+          "quote": "商品庫存單位代碼（SKU）。"
+        },
+        {
+          "path": "/columns/product_name/description",
+          "quote": "商品名稱。"
+        },
+        {
+          "path": "/columns/category/description",
+          "quote": "商品分類，例如飲料、零食、日用品。"
+        },
+        {
+          "path": "/columns/units_sold/description",
+          "quote": "此門市此月份此商品的銷售件數合計；單位件。"
+        },
+        {
+          "path": "/columns/gross_sales/description",
+          "quote": "此門市此月份此商品的折扣前銷售額，單位 TWD。"
+        },
+        {
+          "path": "/columns/discount_amount/description",
+          "quote": "此門市此月份此商品的折扣金額合計，單位 TWD。"
+        },
+        {
+          "path": "/columns/net_sales/description",
+          "quote": "此門市此月份此商品的折扣後銷售額，單位 TWD；適合跨門市彙總商品營收。"
+        },
+        {
+          "path": "/columns/gross_profit/description",
+          "quote": "此門市此月份此商品的毛利總額，單位 TWD；不是毛利率。"
+        }
+      ],
+      "reasoning": "無通路。",
+      "independent_review": "PENDING",
+      "requirement_quote": "線上通路",
+      "scope_ids": [],
+      "grain_requirement_ids": [],
+      "grain_binding": null,
+      "contract_path": null
+    },
+    {
+      "view": "demo_retail.v_product_monthly",
+      "requirement_id": "MET-002",
+      "kind": "metric",
+      "status": "partial",
+      "own_gap": false,
+      "mappings": [
+        {
+          "column": "discount_amount",
+          "aggregation": "sum",
+          "conditions": []
+        }
+      ],
+      "derived_gaps": [
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "scope",
+          "requirements": [
+            {
+              "requirement_id": "FILT-002",
+              "quote": "線上通路",
+              "status": "unsupported"
+            }
+          ]
+        }
+      ],
+      "contract_evidence": [
+        {
+          "path": "/summary",
+          "quote": "粒度：門市×月份×商品；適合商品/分類排行、商品銷量及毛利，不含訂單筆數；商品跨店排行需加總 net_sales/units_sold。"
+        },
+        {
+          "path": "/grain/description",
+          "quote": "門市×月份×商品"
+        },
+        {
+          "path": "/columns/discount_amount/description",
+          "quote": "此門市此月份此商品的折扣金額合計，單位 TWD。"
+        }
+      ],
+      "reasoning": "discount_amount可sum，自身與grain完整，僅欠線上scope。",
+      "independent_review": "PENDING",
+      "requirement_quote": "折扣金額",
+      "scope_ids": [
+        "FILT-001",
+        "FILT-002"
+      ],
+      "grain_requirement_ids": [
+        "GRN-001"
+      ],
+      "grain_binding": "linked",
+      "contract_path": "/columns/discount_amount/description"
+    },
+    {
+      "view": "demo_retail.v_product_monthly",
+      "requirement_id": "MET-003",
+      "kind": "metric",
+      "status": "partial",
+      "own_gap": false,
+      "mappings": [
+        {
+          "column": "net_sales",
+          "aggregation": "sum",
+          "conditions": []
+        }
+      ],
+      "derived_gaps": [
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "scope",
+          "requirements": [
+            {
+              "requirement_id": "FILT-002",
+              "quote": "線上通路",
+              "status": "unsupported"
+            }
+          ]
+        }
+      ],
+      "contract_evidence": [
+        {
+          "path": "/summary",
+          "quote": "粒度：門市×月份×商品；適合商品/分類排行、商品銷量及毛利，不含訂單筆數；商品跨店排行需加總 net_sales/units_sold。"
+        },
+        {
+          "path": "/grain/description",
+          "quote": "門市×月份×商品"
+        },
+        {
+          "path": "/columns/net_sales/description",
+          "quote": "此門市此月份此商品的折扣後銷售額，單位 TWD；適合跨門市彙總商品營收。"
+        }
+      ],
+      "reasoning": "net_sales折扣後銷售額可sum，自身與grain完整，僅欠線上scope。",
+      "independent_review": "PENDING",
+      "requirement_quote": "淨銷售額",
+      "scope_ids": [
+        "FILT-001",
+        "FILT-002"
+      ],
+      "grain_requirement_ids": [
+        "GRN-001"
+      ],
+      "grain_binding": "linked",
+      "contract_path": "/columns/net_sales/description"
+    },
+    {
+      "view": "demo_retail.v_product_monthly",
+      "requirement_id": "META-001",
+      "kind": "metadata",
+      "status": "unsupported",
+      "own_gap": true,
+      "mappings": [],
+      "derived_gaps": [
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "self",
+          "requirements": [
+            {
+              "requirement_id": "META-001",
+              "quote": "庫存盤點日期",
+              "status": "unsupported"
+            }
+          ]
+        }
+      ],
+      "contract_evidence": [
+        {
+          "path": "/summary",
+          "quote": "粒度：門市×月份×商品；適合商品/分類排行、商品銷量及毛利，不含訂單筆數；商品跨店排行需加總 net_sales/units_sold。"
+        },
+        {
+          "path": "/grain/description",
+          "quote": "門市×月份×商品"
+        },
+        {
+          "path": "/columns/sales_month/description",
+          "quote": "商品銷售統計月份的第一天；月度粒度。"
+        },
+        {
+          "path": "/columns/store_id/description",
+          "quote": "交易門市識別碼；與 sales_month、product_id 組合唯一決定一列。"
+        },
+        {
+          "path": "/columns/store_name/description",
+          "quote": "交易門市名稱。"
+        },
+        {
+          "path": "/columns/region/description",
+          "quote": "交易門市所屬區域；北部、中部、南部。"
+        },
+        {
+          "path": "/columns/city/description",
+          "quote": "交易門市所在城市。"
+        },
+        {
+          "path": "/columns/product_id/description",
+          "quote": "商品識別碼；與 store_id、sales_month 組合唯一決定一列。"
+        },
+        {
+          "path": "/columns/sku/description",
+          "quote": "商品庫存單位代碼（SKU）。"
+        },
+        {
+          "path": "/columns/product_name/description",
+          "quote": "商品名稱。"
+        },
+        {
+          "path": "/columns/category/description",
+          "quote": "商品分類，例如飲料、零食、日用品。"
+        },
+        {
+          "path": "/columns/units_sold/description",
+          "quote": "此門市此月份此商品的銷售件數合計；單位件。"
+        },
+        {
+          "path": "/columns/gross_sales/description",
+          "quote": "此門市此月份此商品的折扣前銷售額，單位 TWD。"
+        },
+        {
+          "path": "/columns/discount_amount/description",
+          "quote": "此門市此月份此商品的折扣金額合計，單位 TWD。"
+        },
+        {
+          "path": "/columns/net_sales/description",
+          "quote": "此門市此月份此商品的折扣後銷售額，單位 TWD；適合跨門市彙總商品營收。"
+        },
+        {
+          "path": "/columns/gross_profit/description",
+          "quote": "此門市此月份此商品的毛利總額，單位 TWD；不是毛利率。"
+        }
+      ],
+      "reasoning": "銷售月份非盤點日期。",
+      "independent_review": "PENDING",
+      "requirement_quote": "庫存盤點日期",
+      "scope_ids": [],
+      "grain_requirement_ids": [
+        "GRN-001"
+      ],
+      "grain_binding": null,
+      "contract_path": null
+    },
+    {
+      "view": "demo_retail.v_product_monthly",
+      "requirement_id": "POP-001",
+      "kind": "population",
+      "status": "unsupported",
+      "own_gap": true,
+      "mappings": [],
+      "derived_gaps": [
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "self",
+          "requirements": [
+            {
+              "requirement_id": "POP-001",
+              "quote": "保留所有庫存商品",
+              "status": "unsupported"
+            }
+          ]
+        }
+      ],
+      "contract_evidence": [
+        {
+          "path": "/summary",
+          "quote": "粒度：門市×月份×商品；適合商品/分類排行、商品銷量及毛利，不含訂單筆數；商品跨店排行需加總 net_sales/units_sold。"
+        },
+        {
+          "path": "/grain/description",
+          "quote": "門市×月份×商品"
+        },
+        {
+          "path": "/columns/sales_month/description",
+          "quote": "商品銷售統計月份的第一天；月度粒度。"
+        },
+        {
+          "path": "/columns/store_id/description",
+          "quote": "交易門市識別碼；與 sales_month、product_id 組合唯一決定一列。"
+        },
+        {
+          "path": "/columns/store_name/description",
+          "quote": "交易門市名稱。"
+        },
+        {
+          "path": "/columns/region/description",
+          "quote": "交易門市所屬區域；北部、中部、南部。"
+        },
+        {
+          "path": "/columns/city/description",
+          "quote": "交易門市所在城市。"
+        },
+        {
+          "path": "/columns/product_id/description",
+          "quote": "商品識別碼；與 store_id、sales_month 組合唯一決定一列。"
+        },
+        {
+          "path": "/columns/sku/description",
+          "quote": "商品庫存單位代碼（SKU）。"
+        },
+        {
+          "path": "/columns/product_name/description",
+          "quote": "商品名稱。"
+        },
+        {
+          "path": "/columns/category/description",
+          "quote": "商品分類，例如飲料、零食、日用品。"
+        },
+        {
+          "path": "/columns/units_sold/description",
+          "quote": "此門市此月份此商品的銷售件數合計；單位件。"
+        },
+        {
+          "path": "/columns/gross_sales/description",
+          "quote": "此門市此月份此商品的折扣前銷售額，單位 TWD。"
+        },
+        {
+          "path": "/columns/discount_amount/description",
+          "quote": "此門市此月份此商品的折扣金額合計，單位 TWD。"
+        },
+        {
+          "path": "/columns/net_sales/description",
+          "quote": "此門市此月份此商品的折扣後銷售額，單位 TWD；適合跨門市彙總商品營收。"
+        },
+        {
+          "path": "/columns/gross_profit/description",
+          "quote": "此門市此月份此商品的毛利總額，單位 TWD；不是毛利率。"
+        }
+      ],
+      "reasoning": "店商品鍵不證包含全部庫存商品；不追加僅含銷售等未寫事實。",
+      "independent_review": "PENDING",
+      "requirement_quote": "保留所有庫存商品",
+      "scope_ids": [],
+      "grain_requirement_ids": [
+        "GRN-001"
+      ],
+      "grain_binding": null,
+      "contract_path": null
+    },
+    {
+      "view": "demo_retail.v_sales_detail",
+      "requirement_id": "GRN-001",
+      "kind": "grain",
+      "status": "supported",
+      "own_gap": false,
+      "mappings": [
+        {
+          "column": "store_id"
+        },
+        {
+          "column": "product_id"
+        }
+      ],
+      "derived_gaps": [],
+      "contract_evidence": [
+        {
+          "path": "/summary",
+          "quote": "粒度：每筆已完成訂單的每個商品品項；僅含已完成訂單。銷售額為折扣後淨額，毛利=淨額-成本。請勿以 COUNT(*) 當訂單數。"
+        },
+        {
+          "path": "/grain/description",
+          "quote": "每筆已完成訂單的每筆商品明細"
+        },
+        {
+          "path": "/columns/store_id/description",
+          "quote": "交易所屬門市的識別碼。"
+        },
+        {
+          "path": "/columns/product_id/description",
+          "quote": "商品識別碼；同商品可能出現在不同訂單明細。"
+        }
+      ],
+      "reasoning": "交易門市及商品鍵可彙總為店商品。",
+      "independent_review": "PENDING",
+      "requirement_quote": "各店各商品",
+      "scope_ids": [],
+      "grain_requirement_ids": [],
+      "grain_binding": null,
+      "contract_path": "/grain/description"
+    },
+    {
+      "view": "demo_retail.v_sales_detail",
+      "requirement_id": "MET-001",
+      "kind": "metric",
+      "status": "unsupported",
+      "own_gap": true,
+      "mappings": [],
+      "derived_gaps": [
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "self",
+          "requirements": [
+            {
+              "requirement_id": "MET-001",
+              "quote": "盤點庫存件數",
+              "status": "unsupported"
+            }
+          ]
+        }
+      ],
+      "contract_evidence": [
+        {
+          "path": "/summary",
+          "quote": "粒度：每筆已完成訂單的每個商品品項；僅含已完成訂單。銷售額為折扣後淨額，毛利=淨額-成本。請勿以 COUNT(*) 當訂單數。"
+        },
+        {
+          "path": "/grain/description",
+          "quote": "每筆已完成訂單的每筆商品明細"
+        },
+        {
+          "path": "/columns/order_id/description",
+          "quote": "訂單內部識別碼；同一訂單可有多筆商品明細，因此此欄位在本 View 不唯一。"
+        },
+        {
+          "path": "/columns/order_no/description",
+          "quote": "提供使用者辨識訂單的訂單編號；同一訂單的多筆明細會重複。"
+        },
+        {
+          "path": "/columns/order_date/description",
+          "quote": "訂單成立的曆日，由 ordered_at 轉為日期；不含時間。"
+        },
+        {
+          "path": "/columns/order_month/description",
+          "quote": "訂單成立月份的第一天，供月度篩選與彙總；不是付款月份。"
+        },
+        {
+          "path": "/columns/store_id/description",
+          "quote": "交易所屬門市的識別碼。"
+        },
+        {
+          "path": "/columns/store_name/description",
+          "quote": "交易所屬門市名稱。"
+        },
+        {
+          "path": "/columns/region/description",
+          "quote": "門市所屬區域；測試資料為北部、中部、南部。"
+        },
+        {
+          "path": "/columns/store_city/description",
+          "quote": "交易門市所在城市；不是會員居住城市。"
+        },
+        {
+          "path": "/columns/sales_channel/description",
+          "quote": "銷售通路；in_store=實體門市，online=線上。"
+        },
+        {
+          "path": "/columns/customer_id/description",
+          "quote": "下單會員識別碼；同一會員可能有多筆訂單及明細。"
+        },
+        {
+          "path": "/columns/customer_name/description",
+          "quote": "下單會員名稱；為虛構測試資料。"
+        },
+        {
+          "path": "/columns/membership_tier/description",
+          "quote": "下單會員所屬等級；一般、銀卡、金卡、VIP。"
+        },
+        {
+          "path": "/columns/product_id/description",
+          "quote": "商品識別碼；同商品可能出現在不同訂單明細。"
+        },
+        {
+          "path": "/columns/sku/description",
+          "quote": "商品庫存單位代碼（SKU），用於辨識商品。"
+        },
+        {
+          "path": "/columns/product_name/description",
+          "quote": "本筆訂單明細販售的商品名稱。"
+        },
+        {
+          "path": "/columns/category/description",
+          "quote": "商品所屬分類，例如飲料、零食、日用品。"
+        },
+        {
+          "path": "/columns/quantity/description",
+          "quote": "本筆明細銷售件數；僅含已完成訂單，可依商品、門市、期間加總。"
+        },
+        {
+          "path": "/columns/unit_price/description",
+          "quote": "下單時每件商品的銷售單價，單位 TWD/件；不代表商品目前定價，不應直接加總單價。"
+        },
+        {
+          "path": "/columns/gross_sales/description",
+          "quote": "本筆明細折扣前銷售金額，計算為 quantity × unit_price，單位 TWD。"
+        },
+        {
+          "path": "/columns/discount_amount/description",
+          "quote": "本筆明細的折扣金額，單位 TWD；為非負數。"
+        },
+        {
+          "path": "/columns/net_sales/description",
+          "quote": "本筆明細折扣後銷售金額，gross_sales − discount_amount，單位 TWD；不等於 gross_sales。"
+        },
+        {
+          "path": "/columns/cost_amount/description",
+          "quote": "本筆明細商品成本總額，quantity × 下單時 unit_cost，單位 TWD。"
+        },
+        {
+          "path": "/columns/gross_profit/description",
+          "quote": "本筆明細毛利，net_sales − cost_amount，單位 TWD；不是毛利率。"
+        }
+      ],
+      "reasoning": "銷售件數非盤點庫存。",
+      "independent_review": "PENDING",
+      "requirement_quote": "盤點庫存件數",
+      "scope_ids": [],
+      "grain_requirement_ids": [
+        "GRN-001"
+      ],
+      "grain_binding": "linked",
+      "contract_path": null
+    },
+    {
+      "view": "demo_retail.v_sales_detail",
+      "requirement_id": "FILT-001",
+      "kind": "filter",
+      "status": "supported",
+      "own_gap": false,
+      "mappings": [
+        {
+          "column": "order_date",
+          "operator": ">=",
+          "value": "2026-09-01"
+        },
+        {
+          "column": "order_date",
+          "operator": "<",
+          "value": "2026-10-01"
+        }
+      ],
+      "derived_gaps": [],
+      "contract_evidence": [
+        {
+          "path": "/summary",
+          "quote": "粒度：每筆已完成訂單的每個商品品項；僅含已完成訂單。銷售額為折扣後淨額，毛利=淨額-成本。請勿以 COUNT(*) 當訂單數。"
+        },
+        {
+          "path": "/grain/description",
+          "quote": "每筆已完成訂單的每筆商品明細"
+        },
+        {
+          "path": "/columns/order_date/description",
+          "quote": "訂單成立的曆日，由 ordered_at 轉為日期；不含時間。"
+        }
+      ],
+      "reasoning": "訂單曆日雙predicate涵蓋完整九月。",
+      "independent_review": "PENDING",
+      "requirement_quote": "2026 年 9 月",
+      "scope_ids": [],
+      "grain_requirement_ids": [],
+      "grain_binding": null,
+      "contract_path": "/columns/order_date/description"
+    },
+    {
+      "view": "demo_retail.v_sales_detail",
+      "requirement_id": "FILT-002",
+      "kind": "filter",
+      "status": "supported",
+      "own_gap": false,
+      "mappings": [
+        {
+          "column": "sales_channel",
+          "operator": "=",
+          "value": "online"
+        }
+      ],
+      "derived_gaps": [],
+      "contract_evidence": [
+        {
+          "path": "/summary",
+          "quote": "粒度：每筆已完成訂單的每個商品品項；僅含已完成訂單。銷售額為折扣後淨額，毛利=淨額-成本。請勿以 COUNT(*) 當訂單數。"
+        },
+        {
+          "path": "/grain/description",
+          "quote": "每筆已完成訂單的每筆商品明細"
+        },
+        {
+          "path": "/columns/sales_channel/description",
+          "quote": "銷售通路；in_store=實體門市，online=線上。"
+        }
+      ],
+      "reasoning": "sales_channel online明示線上通路。",
+      "independent_review": "PENDING",
+      "requirement_quote": "線上通路",
+      "scope_ids": [],
+      "grain_requirement_ids": [],
+      "grain_binding": null,
+      "contract_path": "/columns/sales_channel/description"
+    },
+    {
+      "view": "demo_retail.v_sales_detail",
+      "requirement_id": "MET-002",
+      "kind": "metric",
+      "status": "supported",
+      "own_gap": false,
+      "mappings": [
+        {
+          "column": "discount_amount",
+          "aggregation": "sum",
+          "conditions": []
+        }
+      ],
+      "derived_gaps": [],
+      "contract_evidence": [
+        {
+          "path": "/summary",
+          "quote": "粒度：每筆已完成訂單的每個商品品項；僅含已完成訂單。銷售額為折扣後淨額，毛利=淨額-成本。請勿以 COUNT(*) 當訂單數。"
+        },
+        {
+          "path": "/grain/description",
+          "quote": "每筆已完成訂單的每筆商品明細"
+        },
+        {
+          "path": "/columns/discount_amount/description",
+          "quote": "本筆明細的折扣金額，單位 TWD；為非負數。"
+        }
+      ],
+      "reasoning": "discount_amount折扣可sum，與月份/通路及grain同來源。",
+      "independent_review": "PENDING",
+      "requirement_quote": "折扣金額",
+      "scope_ids": [
+        "FILT-001",
+        "FILT-002"
+      ],
+      "grain_requirement_ids": [
+        "GRN-001"
+      ],
+      "grain_binding": "linked",
+      "contract_path": "/columns/discount_amount/description"
+    },
+    {
+      "view": "demo_retail.v_sales_detail",
+      "requirement_id": "MET-003",
+      "kind": "metric",
+      "status": "supported",
+      "own_gap": false,
+      "mappings": [
+        {
+          "column": "net_sales",
+          "aggregation": "sum",
+          "conditions": []
+        }
+      ],
+      "derived_gaps": [],
+      "contract_evidence": [
+        {
+          "path": "/summary",
+          "quote": "粒度：每筆已完成訂單的每個商品品項；僅含已完成訂單。銷售額為折扣後淨額，毛利=淨額-成本。請勿以 COUNT(*) 當訂單數。"
+        },
+        {
+          "path": "/grain/description",
+          "quote": "每筆已完成訂單的每筆商品明細"
+        },
+        {
+          "path": "/columns/net_sales/description",
+          "quote": "本筆明細折扣後銷售金額，gross_sales − discount_amount，單位 TWD；不等於 gross_sales。"
+        }
+      ],
+      "reasoning": "net_sales折扣後淨額可sum，與月份/通路及grain同來源。",
+      "independent_review": "PENDING",
+      "requirement_quote": "淨銷售額",
+      "scope_ids": [
+        "FILT-001",
+        "FILT-002"
+      ],
+      "grain_requirement_ids": [
+        "GRN-001"
+      ],
+      "grain_binding": "linked",
+      "contract_path": "/columns/net_sales/description"
+    },
+    {
+      "view": "demo_retail.v_sales_detail",
+      "requirement_id": "META-001",
+      "kind": "metadata",
+      "status": "unsupported",
+      "own_gap": true,
+      "mappings": [],
+      "derived_gaps": [
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "self",
+          "requirements": [
+            {
+              "requirement_id": "META-001",
+              "quote": "庫存盤點日期",
+              "status": "unsupported"
+            }
+          ]
+        }
+      ],
+      "contract_evidence": [
+        {
+          "path": "/summary",
+          "quote": "粒度：每筆已完成訂單的每個商品品項；僅含已完成訂單。銷售額為折扣後淨額，毛利=淨額-成本。請勿以 COUNT(*) 當訂單數。"
+        },
+        {
+          "path": "/grain/description",
+          "quote": "每筆已完成訂單的每筆商品明細"
+        },
+        {
+          "path": "/columns/order_id/description",
+          "quote": "訂單內部識別碼；同一訂單可有多筆商品明細，因此此欄位在本 View 不唯一。"
+        },
+        {
+          "path": "/columns/order_no/description",
+          "quote": "提供使用者辨識訂單的訂單編號；同一訂單的多筆明細會重複。"
+        },
+        {
+          "path": "/columns/order_date/description",
+          "quote": "訂單成立的曆日，由 ordered_at 轉為日期；不含時間。"
+        },
+        {
+          "path": "/columns/order_month/description",
+          "quote": "訂單成立月份的第一天，供月度篩選與彙總；不是付款月份。"
+        },
+        {
+          "path": "/columns/store_id/description",
+          "quote": "交易所屬門市的識別碼。"
+        },
+        {
+          "path": "/columns/store_name/description",
+          "quote": "交易所屬門市名稱。"
+        },
+        {
+          "path": "/columns/region/description",
+          "quote": "門市所屬區域；測試資料為北部、中部、南部。"
+        },
+        {
+          "path": "/columns/store_city/description",
+          "quote": "交易門市所在城市；不是會員居住城市。"
+        },
+        {
+          "path": "/columns/sales_channel/description",
+          "quote": "銷售通路；in_store=實體門市，online=線上。"
+        },
+        {
+          "path": "/columns/customer_id/description",
+          "quote": "下單會員識別碼；同一會員可能有多筆訂單及明細。"
+        },
+        {
+          "path": "/columns/customer_name/description",
+          "quote": "下單會員名稱；為虛構測試資料。"
+        },
+        {
+          "path": "/columns/membership_tier/description",
+          "quote": "下單會員所屬等級；一般、銀卡、金卡、VIP。"
+        },
+        {
+          "path": "/columns/product_id/description",
+          "quote": "商品識別碼；同商品可能出現在不同訂單明細。"
+        },
+        {
+          "path": "/columns/sku/description",
+          "quote": "商品庫存單位代碼（SKU），用於辨識商品。"
+        },
+        {
+          "path": "/columns/product_name/description",
+          "quote": "本筆訂單明細販售的商品名稱。"
+        },
+        {
+          "path": "/columns/category/description",
+          "quote": "商品所屬分類，例如飲料、零食、日用品。"
+        },
+        {
+          "path": "/columns/quantity/description",
+          "quote": "本筆明細銷售件數；僅含已完成訂單，可依商品、門市、期間加總。"
+        },
+        {
+          "path": "/columns/unit_price/description",
+          "quote": "下單時每件商品的銷售單價，單位 TWD/件；不代表商品目前定價，不應直接加總單價。"
+        },
+        {
+          "path": "/columns/gross_sales/description",
+          "quote": "本筆明細折扣前銷售金額，計算為 quantity × unit_price，單位 TWD。"
+        },
+        {
+          "path": "/columns/discount_amount/description",
+          "quote": "本筆明細的折扣金額，單位 TWD；為非負數。"
+        },
+        {
+          "path": "/columns/net_sales/description",
+          "quote": "本筆明細折扣後銷售金額，gross_sales − discount_amount，單位 TWD；不等於 gross_sales。"
+        },
+        {
+          "path": "/columns/cost_amount/description",
+          "quote": "本筆明細商品成本總額，quantity × 下單時 unit_cost，單位 TWD。"
+        },
+        {
+          "path": "/columns/gross_profit/description",
+          "quote": "本筆明細毛利，net_sales − cost_amount，單位 TWD；不是毛利率。"
+        }
+      ],
+      "reasoning": "訂單日期非盤點日期。",
+      "independent_review": "PENDING",
+      "requirement_quote": "庫存盤點日期",
+      "scope_ids": [],
+      "grain_requirement_ids": [
+        "GRN-001"
+      ],
+      "grain_binding": null,
+      "contract_path": null
+    },
+    {
+      "view": "demo_retail.v_sales_detail",
+      "requirement_id": "POP-001",
+      "kind": "population",
+      "status": "unsupported",
+      "own_gap": true,
+      "mappings": [],
+      "derived_gaps": [
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "self",
+          "requirements": [
+            {
+              "requirement_id": "POP-001",
+              "quote": "保留所有庫存商品",
+              "status": "unsupported"
+            }
+          ]
+        }
+      ],
+      "contract_evidence": [
+        {
+          "path": "/summary",
+          "quote": "粒度：每筆已完成訂單的每個商品品項；僅含已完成訂單。銷售額為折扣後淨額，毛利=淨額-成本。請勿以 COUNT(*) 當訂單數。"
+        },
+        {
+          "path": "/grain/description",
+          "quote": "每筆已完成訂單的每筆商品明細"
+        },
+        {
+          "path": "/columns/order_id/description",
+          "quote": "訂單內部識別碼；同一訂單可有多筆商品明細，因此此欄位在本 View 不唯一。"
+        },
+        {
+          "path": "/columns/order_no/description",
+          "quote": "提供使用者辨識訂單的訂單編號；同一訂單的多筆明細會重複。"
+        },
+        {
+          "path": "/columns/order_date/description",
+          "quote": "訂單成立的曆日，由 ordered_at 轉為日期；不含時間。"
+        },
+        {
+          "path": "/columns/order_month/description",
+          "quote": "訂單成立月份的第一天，供月度篩選與彙總；不是付款月份。"
+        },
+        {
+          "path": "/columns/store_id/description",
+          "quote": "交易所屬門市的識別碼。"
+        },
+        {
+          "path": "/columns/store_name/description",
+          "quote": "交易所屬門市名稱。"
+        },
+        {
+          "path": "/columns/region/description",
+          "quote": "門市所屬區域；測試資料為北部、中部、南部。"
+        },
+        {
+          "path": "/columns/store_city/description",
+          "quote": "交易門市所在城市；不是會員居住城市。"
+        },
+        {
+          "path": "/columns/sales_channel/description",
+          "quote": "銷售通路；in_store=實體門市，online=線上。"
+        },
+        {
+          "path": "/columns/customer_id/description",
+          "quote": "下單會員識別碼；同一會員可能有多筆訂單及明細。"
+        },
+        {
+          "path": "/columns/customer_name/description",
+          "quote": "下單會員名稱；為虛構測試資料。"
+        },
+        {
+          "path": "/columns/membership_tier/description",
+          "quote": "下單會員所屬等級；一般、銀卡、金卡、VIP。"
+        },
+        {
+          "path": "/columns/product_id/description",
+          "quote": "商品識別碼；同商品可能出現在不同訂單明細。"
+        },
+        {
+          "path": "/columns/sku/description",
+          "quote": "商品庫存單位代碼（SKU），用於辨識商品。"
+        },
+        {
+          "path": "/columns/product_name/description",
+          "quote": "本筆訂單明細販售的商品名稱。"
+        },
+        {
+          "path": "/columns/category/description",
+          "quote": "商品所屬分類，例如飲料、零食、日用品。"
+        },
+        {
+          "path": "/columns/quantity/description",
+          "quote": "本筆明細銷售件數；僅含已完成訂單，可依商品、門市、期間加總。"
+        },
+        {
+          "path": "/columns/unit_price/description",
+          "quote": "下單時每件商品的銷售單價，單位 TWD/件；不代表商品目前定價，不應直接加總單價。"
+        },
+        {
+          "path": "/columns/gross_sales/description",
+          "quote": "本筆明細折扣前銷售金額，計算為 quantity × unit_price，單位 TWD。"
+        },
+        {
+          "path": "/columns/discount_amount/description",
+          "quote": "本筆明細的折扣金額，單位 TWD；為非負數。"
+        },
+        {
+          "path": "/columns/net_sales/description",
+          "quote": "本筆明細折扣後銷售金額，gross_sales − discount_amount，單位 TWD；不等於 gross_sales。"
+        },
+        {
+          "path": "/columns/cost_amount/description",
+          "quote": "本筆明細商品成本總額，quantity × 下單時 unit_cost，單位 TWD。"
+        },
+        {
+          "path": "/columns/gross_profit/description",
+          "quote": "本筆明細毛利，net_sales − cost_amount，單位 TWD；不是毛利率。"
+        }
+      ],
+      "reasoning": "完成訂單商品明細不證全部庫存商品，不能以鍵齊推母體。",
+      "independent_review": "PENDING",
+      "requirement_quote": "保留所有庫存商品",
+      "scope_ids": [],
+      "grain_requirement_ids": [
+        "GRN-001"
+      ],
+      "grain_binding": null,
+      "contract_path": null
+    },
+    {
+      "view": "demo_retail.v_store_monthly_kpi",
+      "requirement_id": "GRN-001",
+      "kind": "grain",
+      "status": "partial",
+      "own_gap": true,
+      "mappings": [
+        {
+          "column": "store_id"
+        }
+      ],
+      "derived_gaps": [
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "self",
+          "requirements": [
+            {
+              "requirement_id": "GRN-001",
+              "quote": "各店各商品",
+              "status": "partial"
+            }
+          ]
+        }
+      ],
+      "contract_evidence": [
+        {
+          "path": "/summary",
+          "quote": "粒度：每門市每月一列。營收、毛利、訂單數、客單價、月目標與達標率；百分比數值為 0~100。"
+        },
+        {
+          "path": "/grain/description",
+          "quote": "每門市每月一列"
+        },
+        {
+          "path": "/columns/store_id/description",
+          "quote": "門市識別碼；與 sales_month 組合唯一決定一列。"
+        }
+      ],
+      "reasoning": "有店鍵，固定月份可縮約但無商品鍵。",
+      "independent_review": "PENDING",
+      "requirement_quote": "各店各商品",
+      "scope_ids": [],
+      "grain_requirement_ids": [],
+      "grain_binding": null,
+      "contract_path": "/grain/description"
+    },
+    {
+      "view": "demo_retail.v_store_monthly_kpi",
+      "requirement_id": "MET-001",
+      "kind": "metric",
+      "status": "unsupported",
+      "own_gap": true,
+      "mappings": [],
+      "derived_gaps": [
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "self",
+          "requirements": [
+            {
+              "requirement_id": "MET-001",
+              "quote": "盤點庫存件數",
+              "status": "unsupported"
+            }
+          ]
+        },
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "grain",
+          "requirements": [
+            {
+              "requirement_id": "GRN-001",
+              "quote": "各店各商品",
+              "status": "partial"
+            }
+          ]
+        }
+      ],
+      "contract_evidence": [
+        {
+          "path": "/summary",
+          "quote": "粒度：每門市每月一列。營收、毛利、訂單數、客單價、月目標與達標率；百分比數值為 0~100。"
+        },
+        {
+          "path": "/grain/description",
+          "quote": "每門市每月一列"
+        },
+        {
+          "path": "/columns/sales_month/description",
+          "quote": "業績統計月份的第一天；月度粒度，而不是單日交易。"
+        },
+        {
+          "path": "/columns/store_id/description",
+          "quote": "門市識別碼；與 sales_month 組合唯一決定一列。"
+        },
+        {
+          "path": "/columns/store_name/description",
+          "quote": "門市名稱。"
+        },
+        {
+          "path": "/columns/region/description",
+          "quote": "門市所屬區域；北部、中部、南部。"
+        },
+        {
+          "path": "/columns/city/description",
+          "quote": "門市所在城市。"
+        },
+        {
+          "path": "/columns/order_count/description",
+          "quote": "該門市當月已完成訂單筆數；沒有成交訂單時為 0。"
+        },
+        {
+          "path": "/columns/units_sold/description",
+          "quote": "該門市當月已完成訂單的商品銷售件數總和；單位件。"
+        },
+        {
+          "path": "/columns/revenue/description",
+          "quote": "該門市當月折扣後銷售淨額，單位 TWD；沒有成交訂單時為 0。"
+        },
+        {
+          "path": "/columns/gross_profit/description",
+          "quote": "該門市當月毛利總額（折扣後淨額 − 商品成本），單位 TWD。"
+        },
+        {
+          "path": "/columns/gross_margin_pct/description",
+          "quote": "該門市當月毛利率，gross_profit ÷ revenue × 100，單位 %（0～100 表示百分比）；營收為 0 時回傳 0。跨門市或月份需以總毛利／總營收重算，勿直接加總或平均百分比。"
+        },
+        {
+          "path": "/columns/avg_order_value/description",
+          "quote": "該門市當月平均每筆已完成訂單的折扣後金額，revenue ÷ order_count，單位 TWD/筆；沒有訂單時為 0。跨門市或月份應以總營收／總訂單數重算。"
+        },
+        {
+          "path": "/columns/target_amount/description",
+          "quote": "該門市該月份設定的營收目標，單位 TWD。"
+        },
+        {
+          "path": "/columns/target_achievement_pct/description",
+          "quote": "該門市當月營收達標率，revenue ÷ target_amount × 100，單位 %；目標為 0 時回傳 NULL。跨門市或月份應以總營收／總目標重算。"
+        },
+        {
+          "path": "/columns/is_complete_month/description",
+          "quote": "是否為此示範資料中的完整統計月份；2026-10 為 false，其他月份為 true；為固定示範邏輯，非即時判斷。"
+        }
+      ],
+      "reasoning": "銷售件數非盤點庫存。",
+      "independent_review": "PENDING",
+      "requirement_quote": "盤點庫存件數",
+      "scope_ids": [],
+      "grain_requirement_ids": [
+        "GRN-001"
+      ],
+      "grain_binding": "linked",
+      "contract_path": null
+    },
+    {
+      "view": "demo_retail.v_store_monthly_kpi",
+      "requirement_id": "FILT-001",
+      "kind": "filter",
+      "status": "supported",
+      "own_gap": false,
+      "mappings": [
+        {
+          "column": "sales_month",
+          "operator": "=",
+          "value": "2026-09-01"
+        }
+      ],
+      "derived_gaps": [],
+      "contract_evidence": [
+        {
+          "path": "/summary",
+          "quote": "粒度：每門市每月一列。營收、毛利、訂單數、客單價、月目標與達標率；百分比數值為 0~100。"
+        },
+        {
+          "path": "/grain/description",
+          "quote": "每門市每月一列"
+        },
+        {
+          "path": "/columns/sales_month/description",
+          "quote": "業績統計月份的第一天；月度粒度，而不是單日交易。"
+        }
+      ],
+      "reasoning": "月初月度欄=2026-09-01完整限定九月。",
+      "independent_review": "PENDING",
+      "requirement_quote": "2026 年 9 月",
+      "scope_ids": [],
+      "grain_requirement_ids": [],
+      "grain_binding": null,
+      "contract_path": "/columns/sales_month/description"
+    },
+    {
+      "view": "demo_retail.v_store_monthly_kpi",
+      "requirement_id": "FILT-002",
+      "kind": "filter",
+      "status": "unsupported",
+      "own_gap": true,
+      "mappings": [],
+      "derived_gaps": [
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "self",
+          "requirements": [
+            {
+              "requirement_id": "FILT-002",
+              "quote": "線上通路",
+              "status": "unsupported"
+            }
+          ]
+        }
+      ],
+      "contract_evidence": [
+        {
+          "path": "/summary",
+          "quote": "粒度：每門市每月一列。營收、毛利、訂單數、客單價、月目標與達標率；百分比數值為 0~100。"
+        },
+        {
+          "path": "/grain/description",
+          "quote": "每門市每月一列"
+        },
+        {
+          "path": "/columns/sales_month/description",
+          "quote": "業績統計月份的第一天；月度粒度，而不是單日交易。"
+        },
+        {
+          "path": "/columns/store_id/description",
+          "quote": "門市識別碼；與 sales_month 組合唯一決定一列。"
+        },
+        {
+          "path": "/columns/store_name/description",
+          "quote": "門市名稱。"
+        },
+        {
+          "path": "/columns/region/description",
+          "quote": "門市所屬區域；北部、中部、南部。"
+        },
+        {
+          "path": "/columns/city/description",
+          "quote": "門市所在城市。"
+        },
+        {
+          "path": "/columns/order_count/description",
+          "quote": "該門市當月已完成訂單筆數；沒有成交訂單時為 0。"
+        },
+        {
+          "path": "/columns/units_sold/description",
+          "quote": "該門市當月已完成訂單的商品銷售件數總和；單位件。"
+        },
+        {
+          "path": "/columns/revenue/description",
+          "quote": "該門市當月折扣後銷售淨額，單位 TWD；沒有成交訂單時為 0。"
+        },
+        {
+          "path": "/columns/gross_profit/description",
+          "quote": "該門市當月毛利總額（折扣後淨額 − 商品成本），單位 TWD。"
+        },
+        {
+          "path": "/columns/gross_margin_pct/description",
+          "quote": "該門市當月毛利率，gross_profit ÷ revenue × 100，單位 %（0～100 表示百分比）；營收為 0 時回傳 0。跨門市或月份需以總毛利／總營收重算，勿直接加總或平均百分比。"
+        },
+        {
+          "path": "/columns/avg_order_value/description",
+          "quote": "該門市當月平均每筆已完成訂單的折扣後金額，revenue ÷ order_count，單位 TWD/筆；沒有訂單時為 0。跨門市或月份應以總營收／總訂單數重算。"
+        },
+        {
+          "path": "/columns/target_amount/description",
+          "quote": "該門市該月份設定的營收目標，單位 TWD。"
+        },
+        {
+          "path": "/columns/target_achievement_pct/description",
+          "quote": "該門市當月營收達標率，revenue ÷ target_amount × 100，單位 %；目標為 0 時回傳 NULL。跨門市或月份應以總營收／總目標重算。"
+        },
+        {
+          "path": "/columns/is_complete_month/description",
+          "quote": "是否為此示範資料中的完整統計月份；2026-10 為 false，其他月份為 true；為固定示範邏輯，非即時判斷。"
+        }
+      ],
+      "reasoning": "無通路。",
+      "independent_review": "PENDING",
+      "requirement_quote": "線上通路",
+      "scope_ids": [],
+      "grain_requirement_ids": [],
+      "grain_binding": null,
+      "contract_path": null
+    },
+    {
+      "view": "demo_retail.v_store_monthly_kpi",
+      "requirement_id": "MET-002",
+      "kind": "metric",
+      "status": "unsupported",
+      "own_gap": true,
+      "mappings": [],
+      "derived_gaps": [
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "self",
+          "requirements": [
+            {
+              "requirement_id": "MET-002",
+              "quote": "折扣金額",
+              "status": "unsupported"
+            }
+          ]
+        },
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "scope",
+          "requirements": [
+            {
+              "requirement_id": "FILT-002",
+              "quote": "線上通路",
+              "status": "unsupported"
+            }
+          ]
+        },
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "grain",
+          "requirements": [
+            {
+              "requirement_id": "GRN-001",
+              "quote": "各店各商品",
+              "status": "partial"
+            }
+          ]
+        }
+      ],
+      "contract_evidence": [
+        {
+          "path": "/summary",
+          "quote": "粒度：每門市每月一列。營收、毛利、訂單數、客單價、月目標與達標率；百分比數值為 0~100。"
+        },
+        {
+          "path": "/grain/description",
+          "quote": "每門市每月一列"
+        },
+        {
+          "path": "/columns/sales_month/description",
+          "quote": "業績統計月份的第一天；月度粒度，而不是單日交易。"
+        },
+        {
+          "path": "/columns/store_id/description",
+          "quote": "門市識別碼；與 sales_month 組合唯一決定一列。"
+        },
+        {
+          "path": "/columns/store_name/description",
+          "quote": "門市名稱。"
+        },
+        {
+          "path": "/columns/region/description",
+          "quote": "門市所屬區域；北部、中部、南部。"
+        },
+        {
+          "path": "/columns/city/description",
+          "quote": "門市所在城市。"
+        },
+        {
+          "path": "/columns/order_count/description",
+          "quote": "該門市當月已完成訂單筆數；沒有成交訂單時為 0。"
+        },
+        {
+          "path": "/columns/units_sold/description",
+          "quote": "該門市當月已完成訂單的商品銷售件數總和；單位件。"
+        },
+        {
+          "path": "/columns/revenue/description",
+          "quote": "該門市當月折扣後銷售淨額，單位 TWD；沒有成交訂單時為 0。"
+        },
+        {
+          "path": "/columns/gross_profit/description",
+          "quote": "該門市當月毛利總額（折扣後淨額 − 商品成本），單位 TWD。"
+        },
+        {
+          "path": "/columns/gross_margin_pct/description",
+          "quote": "該門市當月毛利率，gross_profit ÷ revenue × 100，單位 %（0～100 表示百分比）；營收為 0 時回傳 0。跨門市或月份需以總毛利／總營收重算，勿直接加總或平均百分比。"
+        },
+        {
+          "path": "/columns/avg_order_value/description",
+          "quote": "該門市當月平均每筆已完成訂單的折扣後金額，revenue ÷ order_count，單位 TWD/筆；沒有訂單時為 0。跨門市或月份應以總營收／總訂單數重算。"
+        },
+        {
+          "path": "/columns/target_amount/description",
+          "quote": "該門市該月份設定的營收目標，單位 TWD。"
+        },
+        {
+          "path": "/columns/target_achievement_pct/description",
+          "quote": "該門市當月營收達標率，revenue ÷ target_amount × 100，單位 %；目標為 0 時回傳 NULL。跨門市或月份應以總營收／總目標重算。"
+        },
+        {
+          "path": "/columns/is_complete_month/description",
+          "quote": "是否為此示範資料中的完整統計月份；2026-10 為 false，其他月份為 true；為固定示範邏輯，非即時判斷。"
+        }
+      ],
+      "reasoning": "沒有折扣金額欄，毛利非折扣。",
+      "independent_review": "PENDING",
+      "requirement_quote": "折扣金額",
+      "scope_ids": [
+        "FILT-001",
+        "FILT-002"
+      ],
+      "grain_requirement_ids": [
+        "GRN-001"
+      ],
+      "grain_binding": "linked",
+      "contract_path": null
+    },
+    {
+      "view": "demo_retail.v_store_monthly_kpi",
+      "requirement_id": "MET-003",
+      "kind": "metric",
+      "status": "partial",
+      "own_gap": false,
+      "mappings": [
+        {
+          "column": "revenue",
+          "aggregation": "sum",
+          "conditions": []
+        }
+      ],
+      "derived_gaps": [
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "scope",
+          "requirements": [
+            {
+              "requirement_id": "FILT-002",
+              "quote": "線上通路",
+              "status": "unsupported"
+            }
+          ]
+        },
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "grain",
+          "requirements": [
+            {
+              "requirement_id": "GRN-001",
+              "quote": "各店各商品",
+              "status": "partial"
+            }
+          ]
+        }
+      ],
+      "contract_evidence": [
+        {
+          "path": "/summary",
+          "quote": "粒度：每門市每月一列。營收、毛利、訂單數、客單價、月目標與達標率；百分比數值為 0~100。"
+        },
+        {
+          "path": "/grain/description",
+          "quote": "每門市每月一列"
+        },
+        {
+          "path": "/columns/revenue/description",
+          "quote": "該門市當月折扣後銷售淨額，單位 TWD；沒有成交訂單時為 0。"
+        }
+      ],
+      "reasoning": "門市當月淨額可sum，自身完整但缺線上及商品grain；零交易為0不授權庫存left缺值補零。",
+      "independent_review": "PENDING",
+      "requirement_quote": "淨銷售額",
+      "scope_ids": [
+        "FILT-001",
+        "FILT-002"
+      ],
+      "grain_requirement_ids": [
+        "GRN-001"
+      ],
+      "grain_binding": "linked",
+      "contract_path": "/columns/revenue/description"
+    },
+    {
+      "view": "demo_retail.v_store_monthly_kpi",
+      "requirement_id": "META-001",
+      "kind": "metadata",
+      "status": "unsupported",
+      "own_gap": true,
+      "mappings": [],
+      "derived_gaps": [
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "self",
+          "requirements": [
+            {
+              "requirement_id": "META-001",
+              "quote": "庫存盤點日期",
+              "status": "unsupported"
+            }
+          ]
+        },
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "grain",
+          "requirements": [
+            {
+              "requirement_id": "GRN-001",
+              "quote": "各店各商品",
+              "status": "partial"
+            }
+          ]
+        }
+      ],
+      "contract_evidence": [
+        {
+          "path": "/summary",
+          "quote": "粒度：每門市每月一列。營收、毛利、訂單數、客單價、月目標與達標率；百分比數值為 0~100。"
+        },
+        {
+          "path": "/grain/description",
+          "quote": "每門市每月一列"
+        },
+        {
+          "path": "/columns/sales_month/description",
+          "quote": "業績統計月份的第一天；月度粒度，而不是單日交易。"
+        },
+        {
+          "path": "/columns/store_id/description",
+          "quote": "門市識別碼；與 sales_month 組合唯一決定一列。"
+        },
+        {
+          "path": "/columns/store_name/description",
+          "quote": "門市名稱。"
+        },
+        {
+          "path": "/columns/region/description",
+          "quote": "門市所屬區域；北部、中部、南部。"
+        },
+        {
+          "path": "/columns/city/description",
+          "quote": "門市所在城市。"
+        },
+        {
+          "path": "/columns/order_count/description",
+          "quote": "該門市當月已完成訂單筆數；沒有成交訂單時為 0。"
+        },
+        {
+          "path": "/columns/units_sold/description",
+          "quote": "該門市當月已完成訂單的商品銷售件數總和；單位件。"
+        },
+        {
+          "path": "/columns/revenue/description",
+          "quote": "該門市當月折扣後銷售淨額，單位 TWD；沒有成交訂單時為 0。"
+        },
+        {
+          "path": "/columns/gross_profit/description",
+          "quote": "該門市當月毛利總額（折扣後淨額 − 商品成本），單位 TWD。"
+        },
+        {
+          "path": "/columns/gross_margin_pct/description",
+          "quote": "該門市當月毛利率，gross_profit ÷ revenue × 100，單位 %（0～100 表示百分比）；營收為 0 時回傳 0。跨門市或月份需以總毛利／總營收重算，勿直接加總或平均百分比。"
+        },
+        {
+          "path": "/columns/avg_order_value/description",
+          "quote": "該門市當月平均每筆已完成訂單的折扣後金額，revenue ÷ order_count，單位 TWD/筆；沒有訂單時為 0。跨門市或月份應以總營收／總訂單數重算。"
+        },
+        {
+          "path": "/columns/target_amount/description",
+          "quote": "該門市該月份設定的營收目標，單位 TWD。"
+        },
+        {
+          "path": "/columns/target_achievement_pct/description",
+          "quote": "該門市當月營收達標率，revenue ÷ target_amount × 100，單位 %；目標為 0 時回傳 NULL。跨門市或月份應以總營收／總目標重算。"
+        },
+        {
+          "path": "/columns/is_complete_month/description",
+          "quote": "是否為此示範資料中的完整統計月份；2026-10 為 false，其他月份為 true；為固定示範邏輯，非即時判斷。"
+        }
+      ],
+      "reasoning": "業績月份非盤點日期。",
+      "independent_review": "PENDING",
+      "requirement_quote": "庫存盤點日期",
+      "scope_ids": [],
+      "grain_requirement_ids": [
+        "GRN-001"
+      ],
+      "grain_binding": null,
+      "contract_path": null
+    },
+    {
+      "view": "demo_retail.v_store_monthly_kpi",
+      "requirement_id": "POP-001",
+      "kind": "population",
+      "status": "unsupported",
+      "own_gap": true,
+      "mappings": [],
+      "derived_gaps": [
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "self",
+          "requirements": [
+            {
+              "requirement_id": "POP-001",
+              "quote": "保留所有庫存商品",
+              "status": "unsupported"
+            }
+          ]
+        },
+        {
+          "statement": "契約未證明以下責任完整可用",
+          "aspect": "grain",
+          "requirements": [
+            {
+              "requirement_id": "GRN-001",
+              "quote": "各店各商品",
+              "status": "partial"
+            }
+          ]
+        }
+      ],
+      "contract_evidence": [
+        {
+          "path": "/summary",
+          "quote": "粒度：每門市每月一列。營收、毛利、訂單數、客單價、月目標與達標率；百分比數值為 0~100。"
+        },
+        {
+          "path": "/grain/description",
+          "quote": "每門市每月一列"
+        },
+        {
+          "path": "/columns/sales_month/description",
+          "quote": "業績統計月份的第一天；月度粒度，而不是單日交易。"
+        },
+        {
+          "path": "/columns/store_id/description",
+          "quote": "門市識別碼；與 sales_month 組合唯一決定一列。"
+        },
+        {
+          "path": "/columns/store_name/description",
+          "quote": "門市名稱。"
+        },
+        {
+          "path": "/columns/region/description",
+          "quote": "門市所屬區域；北部、中部、南部。"
+        },
+        {
+          "path": "/columns/city/description",
+          "quote": "門市所在城市。"
+        },
+        {
+          "path": "/columns/order_count/description",
+          "quote": "該門市當月已完成訂單筆數；沒有成交訂單時為 0。"
+        },
+        {
+          "path": "/columns/units_sold/description",
+          "quote": "該門市當月已完成訂單的商品銷售件數總和；單位件。"
+        },
+        {
+          "path": "/columns/revenue/description",
+          "quote": "該門市當月折扣後銷售淨額，單位 TWD；沒有成交訂單時為 0。"
+        },
+        {
+          "path": "/columns/gross_profit/description",
+          "quote": "該門市當月毛利總額（折扣後淨額 − 商品成本），單位 TWD。"
+        },
+        {
+          "path": "/columns/gross_margin_pct/description",
+          "quote": "該門市當月毛利率，gross_profit ÷ revenue × 100，單位 %（0～100 表示百分比）；營收為 0 時回傳 0。跨門市或月份需以總毛利／總營收重算，勿直接加總或平均百分比。"
+        },
+        {
+          "path": "/columns/avg_order_value/description",
+          "quote": "該門市當月平均每筆已完成訂單的折扣後金額，revenue ÷ order_count，單位 TWD/筆；沒有訂單時為 0。跨門市或月份應以總營收／總訂單數重算。"
+        },
+        {
+          "path": "/columns/target_amount/description",
+          "quote": "該門市該月份設定的營收目標，單位 TWD。"
+        },
+        {
+          "path": "/columns/target_achievement_pct/description",
+          "quote": "該門市當月營收達標率，revenue ÷ target_amount × 100，單位 %；目標為 0 時回傳 NULL。跨門市或月份應以總營收／總目標重算。"
+        },
+        {
+          "path": "/columns/is_complete_month/description",
+          "quote": "是否為此示範資料中的完整統計月份；2026-10 為 false，其他月份為 true；為固定示範邏輯，非即時判斷。"
+        }
+      ],
+      "reasoning": "門市業績含0訂單月不證全部庫存商品。",
+      "independent_review": "PENDING",
+      "requirement_quote": "保留所有庫存商品",
+      "scope_ids": [],
+      "grain_requirement_ids": [
+        "GRN-001"
+      ],
+      "grain_binding": null,
+      "contract_path": null
+    }
+  ],
+  "positive_outputs": {
+    "SEL-ISO-v1-01": {
+      "selected_views": [
+        "demo_retail.v_inventory_status",
+        "demo_retail.v_sales_detail"
+      ],
+      "assignments": [
+        {
+          "requirement_id": "GRN-001",
+          "view": "demo_retail.v_inventory_status",
+          "task_id": "inventory-observation"
+        },
+        {
+          "requirement_id": "MET-001",
+          "view": "demo_retail.v_inventory_status",
+          "task_id": "inventory-observation"
+        },
+        {
+          "requirement_id": "FILT-001",
+          "view": "demo_retail.v_sales_detail",
+          "task_id": "period-sales"
+        },
+        {
+          "requirement_id": "FILT-002",
+          "view": "demo_retail.v_sales_detail",
+          "task_id": "period-sales"
+        },
+        {
+          "requirement_id": "MET-002",
+          "view": "demo_retail.v_sales_detail",
+          "task_id": "period-sales"
+        },
+        {
+          "requirement_id": "MET-003",
+          "view": "demo_retail.v_sales_detail",
+          "task_id": "period-sales"
+        },
+        {
+          "requirement_id": "META-001",
+          "view": "demo_retail.v_inventory_status",
+          "task_id": "inventory-observation"
+        },
+        {
+          "requirement_id": "POP-001",
+          "view": "demo_retail.v_inventory_status",
+          "task_id": "inventory-observation"
+        }
+      ],
+      "exclusions": [
+        {
+          "view": "demo_retail.v_customer_value",
+          "refs": [
+            {
+              "kind": "gap",
+              "requirement_ids": [
+                "MET-001"
+              ],
+              "selected_view": null
+            }
+          ]
+        },
+        {
+          "view": "demo_retail.v_daily_sales",
+          "refs": [
+            {
+              "kind": "gap",
+              "requirement_ids": [
+                "MET-001"
+              ],
+              "selected_view": null
+            }
+          ]
+        },
+        {
+          "view": "demo_retail.v_order_summary",
+          "refs": [
+            {
+              "kind": "gap",
+              "requirement_ids": [
+                "MET-001"
+              ],
+              "selected_view": null
+            }
+          ]
+        },
+        {
+          "view": "demo_retail.v_product_monthly",
+          "refs": [
+            {
+              "kind": "gap",
+              "requirement_ids": [
+                "MET-001"
+              ],
+              "selected_view": null
+            }
+          ]
+        },
+        {
+          "view": "demo_retail.v_store_monthly_kpi",
+          "refs": [
+            {
+              "kind": "gap",
+              "requirement_ids": [
+                "MET-001"
+              ],
+              "selected_view": null
+            }
+          ]
+        }
+      ],
+      "draft": {
+        "status": "ready",
+        "strategy": "multi_view",
+        "tasks": [
+          {
+            "task_id": "inventory-observation",
+            "view": "demo_retail.v_inventory_status",
+            "required_columns": [
+              "store_id",
+              "product_id",
+              "stock_qty",
+              "snapshot_date"
+            ],
+            "filters": [],
+            "metrics": {
+              "stock_qty": "sum"
+            },
+            "conditional_metrics": [],
+            "attributes": [],
+            "metadata_collections": [
+              "snapshot_date"
+            ],
+            "group_by": [
+              "store_id",
+              "product_id"
+            ],
+            "output_grain": [
+              "store_id",
+              "product_id"
+            ],
+            "depends_on": [],
+            "unbound_inputs": [],
+            "request": "取得各店各商品盤點庫存件數並收集盤點日期，保留全部庫存商品"
+          },
+          {
+            "task_id": "period-sales",
+            "view": "demo_retail.v_sales_detail",
+            "required_columns": [
+              "store_id",
+              "product_id",
+              "discount_amount",
+              "net_sales",
+              "order_date",
+              "sales_channel"
+            ],
+            "filters": [
+              {
+                "column": "order_date",
+                "operator": ">=",
+                "value": "2026-09-01"
+              },
+              {
+                "column": "order_date",
+                "operator": "<",
+                "value": "2026-10-01"
+              },
+              {
+                "column": "sales_channel",
+                "operator": "=",
+                "value": "online"
+              }
+            ],
+            "metrics": {
+              "discount_amount": "sum",
+              "net_sales": "sum"
+            },
+            "conditional_metrics": [],
+            "attributes": [],
+            "metadata_collections": [],
+            "group_by": [
+              "store_id",
+              "product_id"
+            ],
+            "output_grain": [
+              "store_id",
+              "product_id"
+            ],
+            "depends_on": [],
+            "unbound_inputs": [],
+            "request": "彙總2026年9月線上通路各店商品折扣及淨銷售額"
+          }
+        ],
+        "integration": {
+          "anchor_task": "inventory-observation",
+          "output_grain": [
+            "store_id",
+            "product_id"
+          ],
+          "edges": [
+            {
+              "left_task": "inventory-observation",
+              "right_task": "period-sales",
+              "left_keys": [
+                "store_id",
+                "product_id"
+              ],
+              "right_keys": [
+                "store_id",
+                "product_id"
+              ],
+              "mode": "left",
+              "cardinality": "one_to_one",
+              "preserve_task": "inventory-observation"
+            }
+          ],
+          "preparation": [
+            {
+              "task_id": "inventory-observation",
+              "kind": "aggregate",
+              "keys": [
+                "store_id",
+                "product_id"
+              ],
+              "description": "依店商品彙總庫存件數並收集不同盤點日期"
+            },
+            {
+              "task_id": "period-sales",
+              "kind": "aggregate",
+              "keys": [
+                "store_id",
+                "product_id"
+              ],
+              "description": "先篩選月份與通路，再依店商品彙總折扣及淨額"
+            }
+          ],
+          "missing_data_policy": "保留未匹配資料並標記缺值；契約沒有保證時不可把缺值當成零。",
+          "notes": []
+        },
+        "clarifications": [],
+        "unsupported_reasons": []
+      }
+    },
+    "COV-ISO-v1-01": {
+      "entries": {
+        "GRN-001": {
+          "status": "partial",
+          "own_gap": true,
+          "mappings": [
+            {
+              "column": "store_id"
+            }
+          ]
+        },
+        "MET-001": {
+          "status": "unsupported",
+          "own_gap": true,
+          "mappings": [],
+          "contract_path": null
+        },
+        "FILT-001": {
+          "status": "supported",
+          "own_gap": false,
+          "mappings": [
+            {
+              "column": "sales_date",
+              "operator": ">=",
+              "value": "2026-09-01"
+            },
+            {
+              "column": "sales_date",
+              "operator": "<",
+              "value": "2026-10-01"
+            }
+          ],
+          "contract_path": "/columns/sales_date/description"
+        },
+        "FILT-002": {
+          "status": "unsupported",
+          "own_gap": true,
+          "mappings": [],
+          "contract_path": null
+        },
+        "MET-002": {
+          "status": "unsupported",
+          "own_gap": true,
+          "mappings": [],
+          "contract_path": null
+        },
+        "MET-003": {
+          "status": "partial",
+          "own_gap": false,
+          "mappings": [
+            {
+              "column": "revenue",
+              "aggregation": "sum",
+              "conditions": []
+            }
+          ],
+          "contract_path": "/columns/revenue/description"
+        },
+        "META-001": {
+          "status": "unsupported",
+          "own_gap": true,
+          "mappings": [],
+          "contract_path": null
+        },
+        "POP-001": {
+          "status": "unsupported",
+          "own_gap": true,
+          "mappings": [],
+          "contract_path": null
+        }
+      }
+    },
+    "COV-ISO-v1-02": {
+      "entries": {
+        "unrelated/識別~鍵": {
+          "status": "unsupported",
+          "own_gap": true,
+          "mappings": []
+        }
+      }
+    },
+    "COV-ISO-v1-03": {
+      "entries": {
+        "slot_0/🧾": {
+          "status": "partial",
+          "own_gap": true,
+          "mappings": [
+            {
+              "column": "loc_key"
+            }
+          ]
+        },
+        "model_dump": {
+          "status": "unsupported",
+          "own_gap": true,
+          "mappings": [],
+          "contract_path": null
+        },
+        "月~邊界": {
+          "status": "supported",
+          "own_gap": false,
+          "mappings": [
+            {
+              "column": "day_key",
+              "operator": ">=",
+              "value": "2032-02-01"
+            },
+            {
+              "column": "day_key",
+              "operator": "<",
+              "value": "2032-03-01"
+            }
+          ],
+          "contract_path": "/columns/day_key/description"
+        },
+        "scope-channel": {
+          "status": "unsupported",
+          "own_gap": true,
+          "mappings": [],
+          "contract_path": null
+        },
+        "m_discount": {
+          "status": "unsupported",
+          "own_gap": true,
+          "mappings": [],
+          "contract_path": null
+        },
+        "amount/net": {
+          "status": "partial",
+          "own_gap": false,
+          "mappings": [
+            {
+              "column": "amount_value",
+              "aggregation": "sum",
+              "conditions": []
+            }
+          ],
+          "contract_path": "/columns/amount_value/description"
+        },
+        "元資料": {
+          "status": "unsupported",
+          "own_gap": true,
+          "mappings": [],
+          "contract_path": null
+        },
+        "保留/全部": {
+          "status": "unsupported",
+          "own_gap": true,
+          "mappings": [],
+          "contract_path": null
+        }
+      }
+    }
+  },
+  "selection_positive": {
+    "selected_views": [
+      "demo_retail.v_inventory_status",
+      "demo_retail.v_sales_detail"
+    ],
+    "assignments": [
+      {
+        "requirement_id": "GRN-001",
+        "view": "demo_retail.v_inventory_status",
+        "task_id": "inventory-observation"
+      },
+      {
+        "requirement_id": "MET-001",
+        "view": "demo_retail.v_inventory_status",
+        "task_id": "inventory-observation"
+      },
+      {
+        "requirement_id": "FILT-001",
+        "view": "demo_retail.v_sales_detail",
+        "task_id": "period-sales"
+      },
+      {
+        "requirement_id": "FILT-002",
+        "view": "demo_retail.v_sales_detail",
+        "task_id": "period-sales"
+      },
+      {
+        "requirement_id": "MET-002",
+        "view": "demo_retail.v_sales_detail",
+        "task_id": "period-sales"
+      },
+      {
+        "requirement_id": "MET-003",
+        "view": "demo_retail.v_sales_detail",
+        "task_id": "period-sales"
+      },
+      {
+        "requirement_id": "META-001",
+        "view": "demo_retail.v_inventory_status",
+        "task_id": "inventory-observation"
+      },
+      {
+        "requirement_id": "POP-001",
+        "view": "demo_retail.v_inventory_status",
+        "task_id": "inventory-observation"
+      }
+    ],
+    "exclusions": [
+      {
+        "view": "demo_retail.v_customer_value",
+        "refs": [
+          {
+            "kind": "gap",
+            "requirement_ids": [
+              "MET-001"
+            ],
+            "selected_view": null
+          }
+        ]
+      },
+      {
+        "view": "demo_retail.v_daily_sales",
+        "refs": [
+          {
+            "kind": "gap",
+            "requirement_ids": [
+              "MET-001"
+            ],
+            "selected_view": null
+          }
+        ]
+      },
+      {
+        "view": "demo_retail.v_order_summary",
+        "refs": [
+          {
+            "kind": "gap",
+            "requirement_ids": [
+              "MET-001"
+            ],
+            "selected_view": null
+          }
+        ]
+      },
+      {
+        "view": "demo_retail.v_product_monthly",
+        "refs": [
+          {
+            "kind": "gap",
+            "requirement_ids": [
+              "MET-001"
+            ],
+            "selected_view": null
+          }
+        ]
+      },
+      {
+        "view": "demo_retail.v_store_monthly_kpi",
+        "refs": [
+          {
+            "kind": "gap",
+            "requirement_ids": [
+              "MET-001"
+            ],
+            "selected_view": null
+          }
+        ]
+      }
+    ],
+    "draft": {
+      "status": "ready",
+      "strategy": "multi_view",
+      "tasks": [
+        {
+          "task_id": "inventory-observation",
+          "view": "demo_retail.v_inventory_status",
+          "required_columns": [
+            "store_id",
+            "product_id",
+            "stock_qty",
+            "snapshot_date"
+          ],
+          "filters": [],
+          "metrics": {
+            "stock_qty": "sum"
+          },
+          "conditional_metrics": [],
+          "attributes": [],
+          "metadata_collections": [
+            "snapshot_date"
+          ],
+          "group_by": [
+            "store_id",
+            "product_id"
+          ],
+          "output_grain": [
+            "store_id",
+            "product_id"
+          ],
+          "depends_on": [],
+          "unbound_inputs": [],
+          "request": "取得各店各商品盤點庫存件數並收集盤點日期，保留全部庫存商品"
+        },
+        {
+          "task_id": "period-sales",
+          "view": "demo_retail.v_sales_detail",
+          "required_columns": [
+            "store_id",
+            "product_id",
+            "discount_amount",
+            "net_sales",
+            "order_date",
+            "sales_channel"
+          ],
+          "filters": [
+            {
+              "column": "order_date",
+              "operator": ">=",
+              "value": "2026-09-01"
+            },
+            {
+              "column": "order_date",
+              "operator": "<",
+              "value": "2026-10-01"
+            },
+            {
+              "column": "sales_channel",
+              "operator": "=",
+              "value": "online"
+            }
+          ],
+          "metrics": {
+            "discount_amount": "sum",
+            "net_sales": "sum"
+          },
+          "conditional_metrics": [],
+          "attributes": [],
+          "metadata_collections": [],
+          "group_by": [
+            "store_id",
+            "product_id"
+          ],
+          "output_grain": [
+            "store_id",
+            "product_id"
+          ],
+          "depends_on": [],
+          "unbound_inputs": [],
+          "request": "彙總2026年9月線上通路各店商品折扣及淨銷售額"
+        }
+      ],
+      "integration": {
+        "anchor_task": "inventory-observation",
+        "output_grain": [
+          "store_id",
+          "product_id"
+        ],
+        "edges": [
+          {
+            "left_task": "inventory-observation",
+            "right_task": "period-sales",
+            "left_keys": [
+              "store_id",
+              "product_id"
+            ],
+            "right_keys": [
+              "store_id",
+              "product_id"
+            ],
+            "mode": "left",
+            "cardinality": "one_to_one",
+            "preserve_task": "inventory-observation"
+          }
+        ],
+        "preparation": [
+          {
+            "task_id": "inventory-observation",
+            "kind": "aggregate",
+            "keys": [
+              "store_id",
+              "product_id"
+            ],
+            "description": "依店商品彙總庫存件數並收集不同盤點日期"
+          },
+          {
+            "task_id": "period-sales",
+            "kind": "aggregate",
+            "keys": [
+              "store_id",
+              "product_id"
+            ],
+            "description": "先篩選月份與通路，再依店商品彙總折扣及淨額"
+          }
+        ],
+        "missing_data_policy": "保留未匹配資料並標記缺值；契約沒有保證時不可把缺值當成零。",
+        "notes": []
+      },
+      "clarifications": [],
+      "unsupported_reasons": []
+    }
+  },
+  "equivalences": {
+    "coverage_status": "unsupported與uncertain對無能力列皆可；其餘status/own_gap及能力分量不變",
+    "mapping_order": "映射及predicate順序不拘；grain同義key須逐契約審核，固定控制使用顯式識別碼",
+    "date_ranges": ">=月首且<次月首，或>=月首且<=當月正確末日；兩條為AND，不能缺一邊或OR",
+    "monthly": "真正月初的月度欄可等於月首；selection僅可用已注入coverage的order_date能力，不新增order_month",
+    "selection": "task ID、list順序及非實質文字可不同；所有typed/assignment/exclusion及其他文字須逐項人工審核"
+  },
+  "selection_requirements": {
+    "inventory_view": "demo_retail.v_inventory_status",
+    "sales_view": "demo_retail.v_sales_detail",
+    "keys": [
+      "store_id",
+      "product_id"
+    ],
+    "inventory_metrics": {
+      "stock_qty": "sum"
+    },
+    "inventory_metadata": [
+      "snapshot_date"
+    ],
+    "inventory_filters": [],
+    "sales_metrics": {
+      "discount_amount": "sum",
+      "net_sales": "sum"
+    },
+    "sales_month": [
+      "2026-09-01",
+      "2026-10-01"
+    ],
+    "channel": "online",
+    "anchor": "demo_retail.v_inventory_status",
+    "join": "left",
+    "cardinality": "one_to_one",
+    "zero_fill": false,
+    "free_text_review": "核對tasks.request、preparation.description、notes、missing_data_policy、所有剩餘文字及derived reasons無未保證斷言；parser與作者machine checker不能核准語意"
+  }
+}

@@ -1,0 +1,144 @@
+{
+  "binding": {
+    "id": "53c4b924fde9402aa540b459bc6aa47a",
+    "role": "auditor",
+    "node": null,
+    "round": 15,
+    "platform_id": "/root/loop_audit_13_15",
+    "closed": false,
+    "reserved_at": "2026-10-21T22:34:45.525582+00:00"
+  },
+  "reviewed_rounds": [
+    13,
+    14,
+    15
+  ],
+  "round_results": [
+    {
+      "round": 13,
+      "node": "kind_diagnostic_evidence_rebinding",
+      "result": "PASS",
+      "producer": "/root/loop_worker_rebinding"
+    },
+    {
+      "round": 14,
+      "node": "kind_diagnostic_fixture_semantics",
+      "result": "PASS",
+      "producer": "/root/loop_worker_semantics_rebound"
+    },
+    {
+      "round": 15,
+      "node": "natural_kind_selection_isolation",
+      "result": "FAIL",
+      "producer": "/root/loop_worker_selection_isolation"
+    }
+  ],
+  "used": {
+    "agent_dispatches": 28,
+    "cloud_calls": 0,
+    "local_calls": 22,
+    "model_retries": 0
+  },
+  "manifest_sha256": "9efa86b883366ff1ef4edd555f59f08499fa123288c6ca1ffe98998d84156187",
+  "complete_bindings_equal": true,
+  "sources": 167,
+  "lineage": 13,
+  "all_four_inputs_rebuilt": true,
+  "input_tokens": {
+    "SEL-ISO-v1-01": 22011,
+    "COV-ISO-v1-01": 4619,
+    "COV-ISO-v1-02": 2788,
+    "COV-ISO-v1-03": 4549
+  },
+  "real_three_role_preflight": {
+    "result": "PASS",
+    "roles": {
+      "content_author": {
+        "ticket": "4810e837bb3e44d5a05d9392d9140e84",
+        "platform_id": "/root/loop_worker_fixture_v2",
+        "closed": true,
+        "node": "kind_diagnostic_fixture_v2_correction",
+        "round": 12
+      },
+      "binding_author": {
+        "ticket": "098d0ce2e31f4254905064d4fd34c97b",
+        "platform_id": "/root/loop_worker_rebinding",
+        "closed": true,
+        "node": "kind_diagnostic_evidence_rebinding",
+        "round": 13
+      },
+      "reviewer": {
+        "ticket": "d6de6a4fd21f4e7e862b06ceb27b86f7",
+        "platform_id": "/root/loop_worker_semantics_rebound",
+        "closed": true,
+        "node": "kind_diagnostic_fixture_semantics",
+        "round": 14
+      }
+    }
+  },
+  "old_v2_live": "EXPECTED_REJECT: fixed v2 diagnostic design/lineage differs",
+  "selection_body_user_top_keys": [
+    "request",
+    "requirements",
+    "coverages",
+    "views",
+    "missing_policy_options",
+    "response_schema"
+  ],
+  "no_selection_oracle_or_answer_prefill": true,
+  "natural_raw_equal_strict_parsed_no_defaults": true,
+  "raw_object_count": 30,
+  "raw_duplicate_keys": false,
+  "typed_response_draft_exactly_raw": true,
+  "normalization_draft_exactly_raw": true,
+  "prepared_count": 2,
+  "guard_ready": true,
+  "original_machine_findings_reproduced": [
+    {
+      "aspect": "no unproven zero fill",
+      "actual": "保留未匹配母體；未匹配子集合為空集合，不製造零值元素或將數值缺值補零。"
+    }
+  ],
+  "actual_policy_is_prompt_admitted": true,
+  "policy_options": [
+    "保留未匹配資料並標記缺值；契約沒有保證時不可把缺值當成零。",
+    "保留未匹配母體並標記缺值；無契約保證不得補零。",
+    "保留未匹配母體；未匹配子集合為空集合，不製造零值元素或將數值缺值補零。"
+  ],
+  "scope": "離線來源/契約/重播核對；不核准根任務或原FAIL翻案",
+  "POST": 0,
+  "SQL_DB": 0,
+  "round13_protected_files_rechecked": {
+    "count": 4237,
+    "changes": [
+      {
+        "path": "evidence-driven-dev/tasks/ollama-planning-mvp/task.md",
+        "expected": "3a61044dff153a7f4dd297d35ed20f2a89d3f26066c7e04e916719443ad5a128",
+        "actual": "32547d28dbaaa26bc3190970c51b6587efbf641dcd0d2aa3c0f009cf1afb0a71"
+      }
+    ],
+    "interpretation": "唯一差異為Main合法追加round13-15及本auditor binding的Task，全部其餘4236檔一致。"
+  },
+  "frozen_hashes": [
+    {
+      "root": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/frozen",
+      "files": 239,
+      "hashes_match": true
+    },
+    {
+      "root": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/outer-probe-frozen",
+      "files": 239,
+      "hashes_match": true
+    },
+    {
+      "root": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261021T215758Z-5bbdea/frozen",
+      "files": 239,
+      "hashes_match": true
+    }
+  ],
+  "normalized_statements": [
+    "契約未證明以下責任完整可用",
+    "選擇本來源已驗證責任"
+  ],
+  "normalized_contract_quote_count": 63
+}

@@ -1,0 +1,5 @@
+{
+  "error_type": "ValueError",
+  "error": "contract reference must point to nonempty text: /columns/sales_date",
+  "raw_saved": true
+}

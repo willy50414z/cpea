@@ -1,0 +1,16 @@
+{
+  "source_freeze_matches": true,
+  "source_freeze_path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-slots/source-freeze.json",
+  "frozen_fingerprint_sha256": "e0fcba8e3954231b0f3496587ac82bbd8f916dc3a4dc2b91f07ec51a96459b40",
+  "run_artifacts_verified_by_same_version_replay": true,
+  "replay": {
+    "result": "PASS",
+    "raw_replays": 9,
+    "stopped": {
+      "error_type": "ValueError",
+      "error": "final grain differs from verified requirement keys"
+    }
+  },
+  "model_config_all_9_bodies_valid": true,
+  "source_facts_all_7_exact": true
+}

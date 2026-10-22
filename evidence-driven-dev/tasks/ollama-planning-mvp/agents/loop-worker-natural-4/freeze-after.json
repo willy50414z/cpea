@@ -1,0 +1,86 @@
+{
+  "sources_count": 155,
+  "live_and_frozen_changes": [],
+  "historical_count": 1164,
+  "historical_changes": [],
+  "candidate_fingerprint_match": true,
+  "run_artifact_hashes_verified": true,
+  "map01_complete_derived_gap_ids_verified": [
+    "GRN-001",
+    "MET-001",
+    "FILT-001",
+    "FILT-002",
+    "MET-002",
+    "MET-003",
+    "META-001",
+    "POP-001"
+  ],
+  "map01_literal_policy_metadata_verified": true,
+  "existing_src_hashes": {
+    "src/cpea/application/models/decomposition.py": "1fe4eb06da88fc67c3e65250a93393ac944dbbba9f2c4ac3349134e044b10558",
+    "src/cpea/workflows/task_decomposition/prompt.py": "4655d352feaaab93bdef78a2ced51da9ae93adf1f907aa99eb8c1a237876349b"
+  },
+  "controller_used": {
+    "agent_dispatches": 14,
+    "cloud_calls": 0,
+    "local_calls": 21,
+    "model_retries": 0
+  },
+  "ticket_requests": {
+    "b11f0629e8224e9b9f6f99d3603169c8": {
+      "id": "b11f0629e8224e9b9f6f99d3603169c8",
+      "ticket_id": "efb4eb78622b40fe8110e2aac2197280",
+      "provider": "local",
+      "case_key": "diagnostic-request-1cf6e584921c:managed-own-responsibility-1:recall",
+      "request_sha": "6b67d996389b1ad5f62afcbda45f51480fe09c4744ce600f32c4d376860d67aa",
+      "retry_number": 0,
+      "retry_of": null,
+      "status": "ok",
+      "round": 8,
+      "reserved_at": "2026-10-21T19:45:16.282263+00:00",
+      "finished_at": "2026-10-21T19:58:42.494533+00:00",
+      "details": {
+        "http_status": 200,
+        "response_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/b11f0629e8224e9b9f6f99d3603169c8.response.txt",
+        "response_sha256": "29e75488fe84e02e4365321c11e3b37f872769e79b1c53623a54cea7aadd9c79"
+      }
+    },
+    "55272c8e63f84d9fa04f9c87a7c979bb": {
+      "id": "55272c8e63f84d9fa04f9c87a7c979bb",
+      "ticket_id": "efb4eb78622b40fe8110e2aac2197280",
+      "provider": "local",
+      "case_key": "diagnostic-request-1cf6e584921c:managed-own-responsibility-1:map-01",
+      "request_sha": "6728ed5ba19975074ebd9d2bb94c18e9dd2079a54ce9e1593ba3d661caa7d07f",
+      "retry_number": 0,
+      "retry_of": null,
+      "status": "ok",
+      "round": 8,
+      "reserved_at": "2026-10-21T19:58:42.729102+00:00",
+      "finished_at": "2026-10-21T20:01:24.347567+00:00",
+      "details": {
+        "http_status": 200,
+        "response_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/55272c8e63f84d9fa04f9c87a7c979bb.response.txt",
+        "response_sha256": "dd1f6a05d737230598d68555527fdc0d8710cb9ee636d895cf0cc35fc5dad5ce"
+      }
+    },
+    "67ce668444f348b1886ffa9dd9247db1": {
+      "id": "67ce668444f348b1886ffa9dd9247db1",
+      "ticket_id": "efb4eb78622b40fe8110e2aac2197280",
+      "provider": "local",
+      "case_key": "diagnostic-request-1cf6e584921c:managed-own-responsibility-1:map-02",
+      "request_sha": "07c8fffbfdad5c894f6a370108126a92719dbb6925754ab9bde345a19a603dde",
+      "retry_number": 0,
+      "retry_of": null,
+      "status": "ok",
+      "round": 8,
+      "reserved_at": "2026-10-21T20:01:24.583349+00:00",
+      "finished_at": "2026-10-21T20:07:34.201060+00:00",
+      "details": {
+        "http_status": 200,
+        "response_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/edd-loop/requests/67ce668444f348b1886ffa9dd9247db1.response.txt",
+        "response_sha256": "6e4b991d03a5dc3681fe1d708f64ec70fb23c0460203f6e6731250d7d06ed1e9"
+      }
+    }
+  },
+  "inflight_request_ids": []
+}

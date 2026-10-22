@@ -1,0 +1,13 @@
+candidate=managed-own-responsibility-1
+run=evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T194515Z-8cb75b
+recall: 8項原始責任完整；各原文index/quote正確，純用途背景未列資料要求。三metric linked同店商品grain，sales兩scope未套inventory。普通月份/通路refs=[]，metadata與保留母體明示grain dependency合理。全7候選均由程式保留。
+recall ambiguity: MET-003.population「所有在庫商品」較原句「所有庫存商品」用詞可能含混；尚無排除stock_qty=0或狀態條件證據，待selection/prepared行為審查，不單憑字詞判FAIL。
+map-01 customer_value: 8項均unsupported、空mapping、own_gap=true合理；customer_id不是本題店商品key，累計會員額不等於本題商品/月/線上淨額，last_order_date不是交易完整月份predicate。未新增資料義務或母體斷言。normalized完整依賴另於最終機械核對。
+map-02 daily_sales: FAIL，首契約錯ValueError: only metric mapping may aggregate。raw /entries/FILT-001/mappings/0/conditions把>=2026-09-01與<=2026-09-30放filter.conditions，operator/value未填；月份範圍語意本身正確且refs=[]可獨立支持，但wire表達違反既有非metric不可conditions規則。不得修raw或放寬guard翻案。
+map-02 semantic FAIL: /entries/GRN-001/status=unsupported、mappings=[]，契約/columns/store_id是number identifier「門市id」，需求「各店各商品」有合法店key部分支持，應保留partial而非丟映射。此錯即使後續ready也使整樣本FAIL。
+map-02其他已讀責任：庫存/折扣/盤點日期無可用直接欄位、通路缺欄位；revenue sum合法partial且不可商品完整supported。MET-003 own_gap=true可能混入依賴缺口，缺自由理由不作另一確證根因。POP-001要求所有庫存母體，daily銷售來源本身不保證；有store key是否足以構成該母體合法部分支持需研究判定，非本次主FAIL依據。
+map-01全部8 normalized缺口精確等於own_gap自身與scope/grain全部未supported集合，ID/quote/status/順序逐一比對通過；來源grain/keys/population逐字契約通過。map-02未產normalized，不補生成答案。
+runner首錯停止；3/3首次local POST正常HTTP stop，0retry/0cloud，無map03或selection請求、無prepared。其餘5View與selection/prepared NOT_VERIFIED。
+同版live與155-source frozen replay各3raw，均PASS重現完全相同ValueError；這是重播一致性，不是自然PASS。155 live/frozen hash、1164歷史工件、candidate fingerprint與兩src既存hash全未變，run artifact hashes完整。未重跑pytest、未SQL/DB、未改source/tests/Task/control、未commit/push。
+精確raw與parsed區分：FILT-001原raw mapping有column=sales_date、role=filter及兩個conditions；aggregation/operator/value三欄原raw均省略。ReferencedMapping parse後三者均default null，conditions完整保留。第一報錯仍是nonmetric有conditions觸發only metric mapping may aggregate，並非aggregation實際填sum。完整欄位與presence保存在failure-context.json。
+店key遺漏之判斷依預定research-6 natural_gate及coverage prompt部分支持責任；不推測模型省略store_id的意圖，後續交fresh研究核對必要性與語意。

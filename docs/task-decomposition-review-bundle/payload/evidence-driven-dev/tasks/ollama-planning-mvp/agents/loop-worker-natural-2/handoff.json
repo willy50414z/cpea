@@ -1,0 +1,16 @@
+{
+  "ticket": "35d0dc38e8c64f1d8f60df54e2862009",
+  "result": "FAIL",
+  "evidence": [
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-2/preflight.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-2/execute.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-2/replay.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-2/semantic-review.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-2/hash-verification.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T171721Z-fa4587/run.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T171721Z-fa4587/selection-call.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T171721Z-fa4587/selection-parsed.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T171721Z-fa4587/selection-error.json"
+  ],
+  "summary": "新slots候選完整自然9節點（recall+7View+selection）已收集，9本地POST/累計15，0retry/雲端/SQL/DB。前輪duplicate-ID消除，但recall仍捏造monthly通路能力；未選order_summary過度支持商品級net_sales，monthly缺口/selection理由加未保證母體斷言。selection原JSON未填typed filters/metrics/metadata/group_by與integration，僅task.request文字提條件，既有guard於final grain differs from verified requirement keys停止，未產生prepared。顧客View額外缺口措辭保留歧義交fresh研究。9 raw同版離線replay一致，source-freeze及7View來源facts精確相符；未改sources/tests、未自行修改Task/control（僅loopctl正常請求記帳），未修答案或重送。"
+}

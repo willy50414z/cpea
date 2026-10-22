@@ -1,0 +1,1 @@
+{"result": "FAIL", "replay_verification": "PASS", "decision": null, "stopped": {"error_type": "ValueError", "error": "contract reference must point to nonempty text: /columns/sales_date"}, "legacy_stopped": {"error_type": "ValueError", "error": "contract reference must point to nonempty text: /columns/sales_date"}, "raw_replays": 1, "provider_calls": 0}

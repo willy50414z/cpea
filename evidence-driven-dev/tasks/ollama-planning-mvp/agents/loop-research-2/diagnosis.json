@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "ticket": "343083820be4478aa94373e4dc2e9b0b",
+  "role": "research",
+  "original": {
+    "result": "FAIL",
+    "error_type": "ValueError",
+    "error": "duplicate coverage requirement IDs"
+  },
+  "diagnostic_only_remove_entry": {
+    "1": {
+      "result": "PASS",
+      "entries": 8,
+      "population": "僅含已發生已完成訂單銷售交易的門市×日期組合；無交易的門市日期不出現，不涵蓋商品庫存母體"
+    },
+    "4": {
+      "result": "PASS",
+      "entries": 8,
+      "population": "僅含已發生已完成訂單銷售交易的門市×日期組合；無交易的門市日期不出現，不涵蓋商品庫存母體"
+    }
+  },
+  "map03_original": {
+    "result": "PASS",
+    "entries": 8,
+    "population": "已完成訂單之每個商品品項明細（僅含已完成訂單，不含未成交、退貨或無銷售之庫存商品）"
+  },
+  "duplicate_object_key_parser_probe": {
+    "result": "ACCEPTED_LAST_VALUE",
+    "input_first_view": "wrong",
+    "parsed_view": "demo_retail.v_sales_detail",
+    "implication": "現有 Pydantic JSON 解碼會默默覆蓋重複物件 key；若改 keyed wire 必須先做嚴格重複 key 檢查，不能只換成 dict。"
+  },
+  "source_hashes": {
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T161155Z-cb9cb4/run.json": "3537bcce3b2c110c6b989e1d5fc92c334769e315760ee692229a9af57d85d7ab",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T161155Z-cb9cb4/recall-result.json": "7b040cfc84fba927561c1254685c242af3b831ddefc4cfd185d9ee253cce776e",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T161155Z-cb9cb4/map-05-call.json": "01eb97f8f4c157bbb029d500b1ba55e3c50e3f1417fba826aa584a6697782a84",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T161155Z-cb9cb4/map-05-parsed.json": "75ddb3a430089d0719e248b98cd43eb6ace4a31ec561d6c8aeb0bee88097bf16",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T161155Z-cb9cb4/map-03-parsed.json": "db3bbe6a9d965b54144bff270e3ad420f7f3f4919561b0ee70de482a3fa519d0",
+    "evaluations/referenced_view_coverage.py": "6f3ab1234270ed3d3955149ef22080b21c79d166d992d7c14410e2382277d437",
+    "evaluations/managed_three_stage_runner.py": "cdb1cdeca61c3987e0c5423c37fa53e0171ab9ab3940634363950182c94a7de8",
+    "evaluations/prompts/coverage_references.md": "13e0f45e6b003a460e54106711fc0c45b7ab9c8255b4906be5d775d9df05f628",
+    "projects/retail/views/demo_retail/v_sales_detail.yaml": "c0381bd2ab84330dd24a6e138350065d4cc1a40c4856295f0ecfd9a359d5048f",
+    "src/cpea/application/models/decomposition.py": "1fe4eb06da88fc67c3e65250a93393ac944dbbba9f2c4ac3349134e044b10558",
+    "src/cpea/workflows/task_decomposition/prompt.py": "4655d352feaaab93bdef78a2ced51da9ae93adf1f907aa99eb8c1a237876349b"
+  },
+  "limitations": [
+    "反事實僅在記憶體定位，沒有寫回或修正任何 raw；不計自然 PASS。",
+    "未執行新模型、SQL、DB或實作；未跑新測試套件。",
+    "首次使用系統 python 匯入失敗 ModuleNotFoundError: cpea；改用既有 .venv 後上述離線探針實際執行成功，沒有模型呼叫。"
+  ]
+}

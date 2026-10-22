@@ -1,0 +1,100 @@
+{
+  "result": "PASS",
+  "fake_only": true,
+  "stock": {
+    "view": "demo_retail.v_inventory_status",
+    "required_columns": [
+      "store_id",
+      "product_id",
+      "stock_qty",
+      "snapshot_date"
+    ],
+    "filters": [],
+    "metrics": {
+      "stock_qty": "sum"
+    },
+    "conditional_metrics": [],
+    "metadata_collections": [
+      "snapshot_date"
+    ],
+    "attributes": [],
+    "group_by": [
+      "store_id",
+      "product_id"
+    ],
+    "output_grain": [
+      "store_id",
+      "product_id"
+    ]
+  },
+  "sales": {
+    "view": "demo_retail.v_sales_detail",
+    "required_columns": [
+      "store_id",
+      "product_id",
+      "discount_amount",
+      "net_sales",
+      "sales_channel",
+      "order_date"
+    ],
+    "filters": [
+      {
+        "column": "sales_channel",
+        "operator": "=",
+        "value": "online"
+      },
+      {
+        "column": "order_date",
+        "operator": ">=",
+        "value": "2026-09-01"
+      },
+      {
+        "column": "order_date",
+        "operator": "<",
+        "value": "2026-10-01"
+      }
+    ],
+    "metrics": {
+      "discount_amount": "sum",
+      "net_sales": "sum"
+    },
+    "conditional_metrics": [],
+    "metadata_collections": [],
+    "attributes": [],
+    "group_by": [
+      "store_id",
+      "product_id"
+    ],
+    "output_grain": [
+      "store_id",
+      "product_id"
+    ]
+  },
+  "integration": {
+    "anchor_task": "stock",
+    "output_grain": [
+      "store_id",
+      "product_id"
+    ],
+    "edges": [
+      {
+        "left_task": "stock",
+        "right_task": "sales",
+        "left_keys": [
+          "store_id",
+          "product_id"
+        ],
+        "right_keys": [
+          "store_id",
+          "product_id"
+        ],
+        "mode": "left",
+        "cardinality": "one_to_one",
+        "preserve_task": "stock"
+      }
+    ],
+    "preparation": [],
+    "missing_data_policy": "保留未匹配資料並標記缺值；契約沒有保證時不可把缺值當成零。",
+    "notes": []
+  }
+}

@@ -1,0 +1,188 @@
+{
+  "requirements": [
+    {
+      "requirement_id": "GRN-001",
+      "scope_ids": [],
+      "grain_binding": null,
+      "grain_requirement_ids": []
+    },
+    {
+      "requirement_id": "MET-001",
+      "scope_ids": [],
+      "grain_binding": "linked",
+      "grain_requirement_ids": [
+        "GRN-001"
+      ]
+    },
+    {
+      "requirement_id": "FILT-001",
+      "scope_ids": [],
+      "grain_binding": null,
+      "grain_requirement_ids": []
+    },
+    {
+      "requirement_id": "FILT-002",
+      "scope_ids": [],
+      "grain_binding": null,
+      "grain_requirement_ids": []
+    },
+    {
+      "requirement_id": "MET-002",
+      "scope_ids": [
+        "FILT-001",
+        "FILT-002"
+      ],
+      "grain_binding": "linked",
+      "grain_requirement_ids": [
+        "GRN-001"
+      ]
+    },
+    {
+      "requirement_id": "MET-003",
+      "scope_ids": [
+        "FILT-001",
+        "FILT-002"
+      ],
+      "grain_binding": "linked",
+      "grain_requirement_ids": [
+        "GRN-001"
+      ]
+    },
+    {
+      "requirement_id": "META-001",
+      "scope_ids": [],
+      "grain_binding": null,
+      "grain_requirement_ids": [
+        "GRN-001"
+      ]
+    },
+    {
+      "requirement_id": "POP-001",
+      "scope_ids": [],
+      "grain_binding": null,
+      "grain_requirement_ids": [
+        "GRN-001"
+      ]
+    }
+  ],
+  "wire": {
+    "selected_views": [
+      "demo_retail.v_inventory_status",
+      "demo_retail.v_sales_detail"
+    ],
+    "assignments": [
+      {
+        "requirement_id": "GRN-001",
+        "view": "demo_retail.v_inventory_status",
+        "task_id": "inventory-observation"
+      },
+      {
+        "requirement_id": "MET-001",
+        "view": "demo_retail.v_inventory_status",
+        "task_id": "inventory-observation"
+      },
+      {
+        "requirement_id": "FILT-001",
+        "view": "demo_retail.v_sales_detail",
+        "task_id": "period-sales"
+      },
+      {
+        "requirement_id": "FILT-002",
+        "view": "demo_retail.v_sales_detail",
+        "task_id": "period-sales"
+      },
+      {
+        "requirement_id": "MET-002",
+        "view": "demo_retail.v_sales_detail",
+        "task_id": "period-sales"
+      },
+      {
+        "requirement_id": "MET-003",
+        "view": "demo_retail.v_sales_detail",
+        "task_id": "period-sales"
+      },
+      {
+        "requirement_id": "META-001",
+        "view": "demo_retail.v_inventory_status",
+        "task_id": "inventory-observation"
+      },
+      {
+        "requirement_id": "POP-001",
+        "view": "demo_retail.v_inventory_status",
+        "task_id": "inventory-observation"
+      }
+    ],
+    "exclusions": [
+      {
+        "view": "demo_retail.v_customer_value",
+        "refs": [
+          {
+            "kind": "gap",
+            "requirement_ids": [
+              "MET-001"
+            ],
+            "selected_view": null
+          }
+        ]
+      },
+      {
+        "view": "demo_retail.v_daily_sales",
+        "refs": [
+          {
+            "kind": "gap",
+            "requirement_ids": [
+              "MET-001"
+            ],
+            "selected_view": null
+          }
+        ]
+      },
+      {
+        "view": "demo_retail.v_order_summary",
+        "refs": [
+          {
+            "kind": "gap",
+            "requirement_ids": [
+              "MET-001"
+            ],
+            "selected_view": null
+          }
+        ]
+      },
+      {
+        "view": "demo_retail.v_product_monthly",
+        "refs": [
+          {
+            "kind": "gap",
+            "requirement_ids": [
+              "MET-001"
+            ],
+            "selected_view": null
+          }
+        ]
+      },
+      {
+        "view": "demo_retail.v_store_monthly_kpi",
+        "refs": [
+          {
+            "kind": "gap",
+            "requirement_ids": [
+              "MET-001"
+            ],
+            "selected_view": null
+          }
+        ]
+      }
+    ],
+    "draft": {
+      "status": "unsupported",
+      "strategy": "multi_view",
+      "tasks": [],
+      "integration": null,
+      "clarifications": [],
+      "unsupported_reasons": [
+        "無能力"
+      ]
+    }
+  }
+}

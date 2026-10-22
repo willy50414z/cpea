@@ -1,0 +1,22 @@
+{
+  "id": "EV-20261020T160323-a2b40349",
+  "kind": "experiment",
+  "command": [
+    ".venv/bin/python",
+    "-m",
+    "evaluations.coverage_priority_probe",
+    "--execute"
+  ],
+  "cwd": "/home/willy/code/cpea_terms",
+  "started_at": "2026-10-20T16:03:23+00:00",
+  "finished_at": "2026-10-20T16:04:16+00:00",
+  "exit_code": 0,
+  "revision": "bc09c67fc4078501599c37e4cdfecdee40af2ef8",
+  "diff_fingerprint": "5274df6709595ee5441fe4d8a889da7a4233844d922cb0d999bdcd0918502dc2",
+  "post_fingerprint": "5274df6709595ee5441fe4d8a889da7a4233844d922cb0d999bdcd0918502dc2",
+  "source_unchanged": true,
+  "output_sha256": "980cf14df0442faee2fcda51b010dbe8b42a19f5a4d635b688e75c6ba7c26cd4",
+  "raw_output": ".local/EV-20261020T160323-a2b40349.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "56bcf16ebd8f30ca90f0c63e79eb9a2d2b90eaeff94caa57ff43fdf3c17fa7fa"
+}

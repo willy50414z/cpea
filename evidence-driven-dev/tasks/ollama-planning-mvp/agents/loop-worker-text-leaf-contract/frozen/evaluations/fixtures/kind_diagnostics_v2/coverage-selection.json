@@ -1,0 +1,514 @@
+{
+  "demo_retail.v_customer_value": {
+    "entries": {
+      "GRN-001": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": []
+      },
+      "MET-001": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      },
+      "FILT-001": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      },
+      "FILT-002": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      },
+      "MET-002": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      },
+      "MET-003": {
+        "status": "partial",
+        "own_gap": true,
+        "mappings": [
+          {
+            "column": "lifetime_spend",
+            "aggregation": "sum",
+            "conditions": []
+          }
+        ],
+        "contract_path": "/columns/lifetime_spend/description"
+      },
+      "META-001": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      },
+      "POP-001": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      }
+    }
+  },
+  "demo_retail.v_daily_sales": {
+    "entries": {
+      "GRN-001": {
+        "status": "partial",
+        "own_gap": true,
+        "mappings": [
+          {
+            "column": "store_id"
+          }
+        ]
+      },
+      "MET-001": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      },
+      "FILT-001": {
+        "status": "supported",
+        "own_gap": false,
+        "mappings": [
+          {
+            "column": "sales_date",
+            "operator": ">=",
+            "value": "2026-09-01"
+          },
+          {
+            "column": "sales_date",
+            "operator": "<",
+            "value": "2026-10-01"
+          }
+        ],
+        "contract_path": "/columns/sales_date/description"
+      },
+      "FILT-002": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      },
+      "MET-002": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      },
+      "MET-003": {
+        "status": "partial",
+        "own_gap": false,
+        "mappings": [
+          {
+            "column": "revenue",
+            "aggregation": "sum",
+            "conditions": []
+          }
+        ],
+        "contract_path": "/columns/revenue/description"
+      },
+      "META-001": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      },
+      "POP-001": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      }
+    }
+  },
+  "demo_retail.v_inventory_status": {
+    "entries": {
+      "GRN-001": {
+        "status": "supported",
+        "own_gap": false,
+        "mappings": [
+          {
+            "column": "store_id"
+          },
+          {
+            "column": "product_id"
+          }
+        ]
+      },
+      "MET-001": {
+        "status": "supported",
+        "own_gap": false,
+        "mappings": [
+          {
+            "column": "stock_qty",
+            "aggregation": "sum",
+            "conditions": []
+          }
+        ],
+        "contract_path": "/columns/stock_qty/description"
+      },
+      "FILT-001": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      },
+      "FILT-002": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      },
+      "MET-002": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      },
+      "MET-003": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      },
+      "META-001": {
+        "status": "supported",
+        "own_gap": false,
+        "mappings": [
+          {
+            "column": "snapshot_date"
+          }
+        ],
+        "contract_path": "/columns/snapshot_date/description"
+      },
+      "POP-001": {
+        "status": "supported",
+        "own_gap": false,
+        "mappings": [
+          {
+            "column": "store_id"
+          },
+          {
+            "column": "product_id"
+          }
+        ],
+        "contract_path": "/summary"
+      }
+    }
+  },
+  "demo_retail.v_order_summary": {
+    "entries": {
+      "GRN-001": {
+        "status": "partial",
+        "own_gap": true,
+        "mappings": [
+          {
+            "column": "store_id"
+          }
+        ]
+      },
+      "MET-001": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      },
+      "FILT-001": {
+        "status": "supported",
+        "own_gap": false,
+        "mappings": [
+          {
+            "column": "order_date",
+            "operator": ">=",
+            "value": "2026-09-01"
+          },
+          {
+            "column": "order_date",
+            "operator": "<",
+            "value": "2026-10-01"
+          }
+        ],
+        "contract_path": "/columns/order_date/description"
+      },
+      "FILT-002": {
+        "status": "supported",
+        "own_gap": false,
+        "mappings": [
+          {
+            "column": "sales_channel",
+            "operator": "=",
+            "value": "online"
+          }
+        ],
+        "contract_path": "/columns/sales_channel/description"
+      },
+      "MET-002": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      },
+      "MET-003": {
+        "status": "partial",
+        "own_gap": false,
+        "mappings": [
+          {
+            "column": "order_amount",
+            "aggregation": "sum",
+            "conditions": []
+          }
+        ],
+        "contract_path": "/columns/order_amount/description"
+      },
+      "META-001": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      },
+      "POP-001": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      }
+    }
+  },
+  "demo_retail.v_product_monthly": {
+    "entries": {
+      "GRN-001": {
+        "status": "supported",
+        "own_gap": false,
+        "mappings": [
+          {
+            "column": "store_id"
+          },
+          {
+            "column": "product_id"
+          }
+        ]
+      },
+      "MET-001": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      },
+      "FILT-001": {
+        "status": "supported",
+        "own_gap": false,
+        "mappings": [
+          {
+            "column": "sales_month",
+            "operator": "=",
+            "value": "2026-09-01"
+          }
+        ],
+        "contract_path": "/columns/sales_month/description"
+      },
+      "FILT-002": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      },
+      "MET-002": {
+        "status": "partial",
+        "own_gap": false,
+        "mappings": [
+          {
+            "column": "discount_amount",
+            "aggregation": "sum",
+            "conditions": []
+          }
+        ],
+        "contract_path": "/columns/discount_amount/description"
+      },
+      "MET-003": {
+        "status": "partial",
+        "own_gap": false,
+        "mappings": [
+          {
+            "column": "net_sales",
+            "aggregation": "sum",
+            "conditions": []
+          }
+        ],
+        "contract_path": "/columns/net_sales/description"
+      },
+      "META-001": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      },
+      "POP-001": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      }
+    }
+  },
+  "demo_retail.v_sales_detail": {
+    "entries": {
+      "GRN-001": {
+        "status": "supported",
+        "own_gap": false,
+        "mappings": [
+          {
+            "column": "store_id"
+          },
+          {
+            "column": "product_id"
+          }
+        ]
+      },
+      "MET-001": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      },
+      "FILT-001": {
+        "status": "supported",
+        "own_gap": false,
+        "mappings": [
+          {
+            "column": "order_date",
+            "operator": ">=",
+            "value": "2026-09-01"
+          },
+          {
+            "column": "order_date",
+            "operator": "<",
+            "value": "2026-10-01"
+          }
+        ],
+        "contract_path": "/columns/order_date/description"
+      },
+      "FILT-002": {
+        "status": "supported",
+        "own_gap": false,
+        "mappings": [
+          {
+            "column": "sales_channel",
+            "operator": "=",
+            "value": "online"
+          }
+        ],
+        "contract_path": "/columns/sales_channel/description"
+      },
+      "MET-002": {
+        "status": "supported",
+        "own_gap": false,
+        "mappings": [
+          {
+            "column": "discount_amount",
+            "aggregation": "sum",
+            "conditions": []
+          }
+        ],
+        "contract_path": "/columns/discount_amount/description"
+      },
+      "MET-003": {
+        "status": "supported",
+        "own_gap": false,
+        "mappings": [
+          {
+            "column": "net_sales",
+            "aggregation": "sum",
+            "conditions": []
+          }
+        ],
+        "contract_path": "/columns/net_sales/description"
+      },
+      "META-001": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      },
+      "POP-001": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      }
+    }
+  },
+  "demo_retail.v_store_monthly_kpi": {
+    "entries": {
+      "GRN-001": {
+        "status": "partial",
+        "own_gap": true,
+        "mappings": [
+          {
+            "column": "store_id"
+          }
+        ]
+      },
+      "MET-001": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      },
+      "FILT-001": {
+        "status": "supported",
+        "own_gap": false,
+        "mappings": [
+          {
+            "column": "sales_month",
+            "operator": "=",
+            "value": "2026-09-01"
+          }
+        ],
+        "contract_path": "/columns/sales_month/description"
+      },
+      "FILT-002": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      },
+      "MET-002": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      },
+      "MET-003": {
+        "status": "partial",
+        "own_gap": false,
+        "mappings": [
+          {
+            "column": "revenue",
+            "aggregation": "sum",
+            "conditions": []
+          }
+        ],
+        "contract_path": "/columns/revenue/description"
+      },
+      "META-001": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      },
+      "POP-001": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      }
+    }
+  }
+}

@@ -1,0 +1,694 @@
+...................................................FFFFFFFFFFFFFFFF..... [ 48%]
+........................................................................ [ 96%]
+.....                                                                    [100%]
+=================================== FAILURES ===================================
+__ test_new_roles_reject_incomplete_or_forged_closed_provenance[open-author] ___
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-79/test_new_roles_reject_incomple0')
+who = 'author', mutation = 'open'
+
+    @pytest.mark.parametrize('who',['author','reviewer'])
+    @pytest.mark.parametrize('mutation',['open','missing','node','round','producer','fail','same_platform','evidence'])
+    def test_new_roles_reject_incomplete_or_forged_closed_provenance(tmp_path,who,mutation):
+        m,p=package();loop=deepcopy(m._loop());ticket='offline-control-review'
+        review=dict(schema_version=1,verdict='ACCEPT',reviewer_role='fresh_capability_projection_semantics',ticket=ticket,
+            author_ticket=m.AUTHOR_TICKET,manifest_sha256=m.base.digest(m.DEFAULT_MANIFEST),bindings=p['manifest']['bindings'])
+        proof=tmp_path/'offline-review.json';m.base.write_json(proof,review)
+        for t,node,number,platform in [(m.AUTHOR_TICKET,'capability_projection_contract',21,'/root/loop_worker_capability_contract'),
+                (ticket,'capability_projection_semantics',22,'/offline-fresh-reviewer')]:
+            loop['tickets'][t]=dict(role='worker',node=node,round=number,platform_id=platform,closed=True)
+            loop['rounds'].append(dict(round=number,node=node,producer=platform,result='PASS',evidence=[dict(
+                path=m.DEFAULT_MANIFEST.relative_to(m.ROOT).as_posix(),sha256=m.base.digest(m.DEFAULT_MANIFEST))] if number==21
+                else [dict(path=str(proof),sha256=m.base.digest(proof))]))
+        # Only the pure provenance checker uses this synthetic control; no HTTP authorization is issued.
+>       assert len(m._roles(p,review,loop))==2
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/diagnostics/test_managed_capability_projection.py:240: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+package = {'manifest': {'schema_version': 1, 'version': 'kind-capability-projection-1', 'runner_version': 'managed-capability-pr...': {'entries': {'slot_0/🧾': {...}, 'model_dump': {...}, '月~邊界': {...}, 'scope-channel': {...}, ...}}}, ...}, ...}, ...}
+review = {'schema_version': 1, 'verdict': 'ACCEPT', 'reviewer_role': 'fresh_capability_projection_semantics', 'ticket': 'offline-control-review', ...}
+loop = {'id': 'f8ee2e2f8f9d43dbb46dbf7e11594a98', 'target': {'goal': '修正目前三階段任務拆分測試的失敗，以本機 Ollama qwen3.8:27b 完成目前診斷案例的自然端到端驗...000000000000, 'max_cloud_calls': 0, 'max_local_calls': 1000000000000000000000000000000, ...}, 'status': 'RUNNING', ...}
+
+    def _roles(package,review,loop):
+        roles={}
+        for role,ticket,node in [('author',AUTHOR_TICKET,'capability_projection_contract'),
+                ('reviewer',review['ticket'],'capability_projection_semantics')]:
+            item=loop['tickets'].get(ticket)
+            completed=[r for r in loop['rounds'] if item and r.get('round')==item.get('round') and r.get('node')==node
+                and r.get('producer')==item.get('platform_id') and r.get('result')=='PASS']
+            if (not item or item.get('role')!='worker' or item.get('node')!=node or item.get('closed') is not True
+                    or type(item.get('round')) is not int or not item.get('platform_id') or len(completed)!=1):
+>               raise ValueError('capability review lacks closed provenance')
+E               ValueError: capability review lacks closed provenance
+
+evaluations/diagnostics/managed_capability_projection.py:241: ValueError
+_ test_new_roles_reject_incomplete_or_forged_closed_provenance[open-reviewer] __
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-79/test_new_roles_reject_incomple1')
+who = 'reviewer', mutation = 'open'
+
+    @pytest.mark.parametrize('who',['author','reviewer'])
+    @pytest.mark.parametrize('mutation',['open','missing','node','round','producer','fail','same_platform','evidence'])
+    def test_new_roles_reject_incomplete_or_forged_closed_provenance(tmp_path,who,mutation):
+        m,p=package();loop=deepcopy(m._loop());ticket='offline-control-review'
+        review=dict(schema_version=1,verdict='ACCEPT',reviewer_role='fresh_capability_projection_semantics',ticket=ticket,
+            author_ticket=m.AUTHOR_TICKET,manifest_sha256=m.base.digest(m.DEFAULT_MANIFEST),bindings=p['manifest']['bindings'])
+        proof=tmp_path/'offline-review.json';m.base.write_json(proof,review)
+        for t,node,number,platform in [(m.AUTHOR_TICKET,'capability_projection_contract',21,'/root/loop_worker_capability_contract'),
+                (ticket,'capability_projection_semantics',22,'/offline-fresh-reviewer')]:
+            loop['tickets'][t]=dict(role='worker',node=node,round=number,platform_id=platform,closed=True)
+            loop['rounds'].append(dict(round=number,node=node,producer=platform,result='PASS',evidence=[dict(
+                path=m.DEFAULT_MANIFEST.relative_to(m.ROOT).as_posix(),sha256=m.base.digest(m.DEFAULT_MANIFEST))] if number==21
+                else [dict(path=str(proof),sha256=m.base.digest(proof))]))
+        # Only the pure provenance checker uses this synthetic control; no HTTP authorization is issued.
+>       assert len(m._roles(p,review,loop))==2
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/diagnostics/test_managed_capability_projection.py:240: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+package = {'manifest': {'schema_version': 1, 'version': 'kind-capability-projection-1', 'runner_version': 'managed-capability-pr...': {'entries': {'slot_0/🧾': {...}, 'model_dump': {...}, '月~邊界': {...}, 'scope-channel': {...}, ...}}}, ...}, ...}, ...}
+review = {'schema_version': 1, 'verdict': 'ACCEPT', 'reviewer_role': 'fresh_capability_projection_semantics', 'ticket': 'offline-control-review', ...}
+loop = {'id': 'f8ee2e2f8f9d43dbb46dbf7e11594a98', 'target': {'goal': '修正目前三階段任務拆分測試的失敗，以本機 Ollama qwen3.8:27b 完成目前診斷案例的自然端到端驗...000000000000, 'max_cloud_calls': 0, 'max_local_calls': 1000000000000000000000000000000, ...}, 'status': 'RUNNING', ...}
+
+    def _roles(package,review,loop):
+        roles={}
+        for role,ticket,node in [('author',AUTHOR_TICKET,'capability_projection_contract'),
+                ('reviewer',review['ticket'],'capability_projection_semantics')]:
+            item=loop['tickets'].get(ticket)
+            completed=[r for r in loop['rounds'] if item and r.get('round')==item.get('round') and r.get('node')==node
+                and r.get('producer')==item.get('platform_id') and r.get('result')=='PASS']
+            if (not item or item.get('role')!='worker' or item.get('node')!=node or item.get('closed') is not True
+                    or type(item.get('round')) is not int or not item.get('platform_id') or len(completed)!=1):
+>               raise ValueError('capability review lacks closed provenance')
+E               ValueError: capability review lacks closed provenance
+
+evaluations/diagnostics/managed_capability_projection.py:241: ValueError
+_ test_new_roles_reject_incomplete_or_forged_closed_provenance[missing-author] _
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-79/test_new_roles_reject_incomple2')
+who = 'author', mutation = 'missing'
+
+    @pytest.mark.parametrize('who',['author','reviewer'])
+    @pytest.mark.parametrize('mutation',['open','missing','node','round','producer','fail','same_platform','evidence'])
+    def test_new_roles_reject_incomplete_or_forged_closed_provenance(tmp_path,who,mutation):
+        m,p=package();loop=deepcopy(m._loop());ticket='offline-control-review'
+        review=dict(schema_version=1,verdict='ACCEPT',reviewer_role='fresh_capability_projection_semantics',ticket=ticket,
+            author_ticket=m.AUTHOR_TICKET,manifest_sha256=m.base.digest(m.DEFAULT_MANIFEST),bindings=p['manifest']['bindings'])
+        proof=tmp_path/'offline-review.json';m.base.write_json(proof,review)
+        for t,node,number,platform in [(m.AUTHOR_TICKET,'capability_projection_contract',21,'/root/loop_worker_capability_contract'),
+                (ticket,'capability_projection_semantics',22,'/offline-fresh-reviewer')]:
+            loop['tickets'][t]=dict(role='worker',node=node,round=number,platform_id=platform,closed=True)
+            loop['rounds'].append(dict(round=number,node=node,producer=platform,result='PASS',evidence=[dict(
+                path=m.DEFAULT_MANIFEST.relative_to(m.ROOT).as_posix(),sha256=m.base.digest(m.DEFAULT_MANIFEST))] if number==21
+                else [dict(path=str(proof),sha256=m.base.digest(proof))]))
+        # Only the pure provenance checker uses this synthetic control; no HTTP authorization is issued.
+>       assert len(m._roles(p,review,loop))==2
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/diagnostics/test_managed_capability_projection.py:240: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+package = {'manifest': {'schema_version': 1, 'version': 'kind-capability-projection-1', 'runner_version': 'managed-capability-pr...': {'entries': {'slot_0/🧾': {...}, 'model_dump': {...}, '月~邊界': {...}, 'scope-channel': {...}, ...}}}, ...}, ...}, ...}
+review = {'schema_version': 1, 'verdict': 'ACCEPT', 'reviewer_role': 'fresh_capability_projection_semantics', 'ticket': 'offline-control-review', ...}
+loop = {'id': 'f8ee2e2f8f9d43dbb46dbf7e11594a98', 'target': {'goal': '修正目前三階段任務拆分測試的失敗，以本機 Ollama qwen3.8:27b 完成目前診斷案例的自然端到端驗...000000000000, 'max_cloud_calls': 0, 'max_local_calls': 1000000000000000000000000000000, ...}, 'status': 'RUNNING', ...}
+
+    def _roles(package,review,loop):
+        roles={}
+        for role,ticket,node in [('author',AUTHOR_TICKET,'capability_projection_contract'),
+                ('reviewer',review['ticket'],'capability_projection_semantics')]:
+            item=loop['tickets'].get(ticket)
+            completed=[r for r in loop['rounds'] if item and r.get('round')==item.get('round') and r.get('node')==node
+                and r.get('producer')==item.get('platform_id') and r.get('result')=='PASS']
+            if (not item or item.get('role')!='worker' or item.get('node')!=node or item.get('closed') is not True
+                    or type(item.get('round')) is not int or not item.get('platform_id') or len(completed)!=1):
+>               raise ValueError('capability review lacks closed provenance')
+E               ValueError: capability review lacks closed provenance
+
+evaluations/diagnostics/managed_capability_projection.py:241: ValueError
+_ test_new_roles_reject_incomplete_or_forged_closed_provenance[missing-reviewer] _
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-79/test_new_roles_reject_incomple3')
+who = 'reviewer', mutation = 'missing'
+
+    @pytest.mark.parametrize('who',['author','reviewer'])
+    @pytest.mark.parametrize('mutation',['open','missing','node','round','producer','fail','same_platform','evidence'])
+    def test_new_roles_reject_incomplete_or_forged_closed_provenance(tmp_path,who,mutation):
+        m,p=package();loop=deepcopy(m._loop());ticket='offline-control-review'
+        review=dict(schema_version=1,verdict='ACCEPT',reviewer_role='fresh_capability_projection_semantics',ticket=ticket,
+            author_ticket=m.AUTHOR_TICKET,manifest_sha256=m.base.digest(m.DEFAULT_MANIFEST),bindings=p['manifest']['bindings'])
+        proof=tmp_path/'offline-review.json';m.base.write_json(proof,review)
+        for t,node,number,platform in [(m.AUTHOR_TICKET,'capability_projection_contract',21,'/root/loop_worker_capability_contract'),
+                (ticket,'capability_projection_semantics',22,'/offline-fresh-reviewer')]:
+            loop['tickets'][t]=dict(role='worker',node=node,round=number,platform_id=platform,closed=True)
+            loop['rounds'].append(dict(round=number,node=node,producer=platform,result='PASS',evidence=[dict(
+                path=m.DEFAULT_MANIFEST.relative_to(m.ROOT).as_posix(),sha256=m.base.digest(m.DEFAULT_MANIFEST))] if number==21
+                else [dict(path=str(proof),sha256=m.base.digest(proof))]))
+        # Only the pure provenance checker uses this synthetic control; no HTTP authorization is issued.
+>       assert len(m._roles(p,review,loop))==2
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/diagnostics/test_managed_capability_projection.py:240: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+package = {'manifest': {'schema_version': 1, 'version': 'kind-capability-projection-1', 'runner_version': 'managed-capability-pr...': {'entries': {'slot_0/🧾': {...}, 'model_dump': {...}, '月~邊界': {...}, 'scope-channel': {...}, ...}}}, ...}, ...}, ...}
+review = {'schema_version': 1, 'verdict': 'ACCEPT', 'reviewer_role': 'fresh_capability_projection_semantics', 'ticket': 'offline-control-review', ...}
+loop = {'id': 'f8ee2e2f8f9d43dbb46dbf7e11594a98', 'target': {'goal': '修正目前三階段任務拆分測試的失敗，以本機 Ollama qwen3.8:27b 完成目前診斷案例的自然端到端驗...000000000000, 'max_cloud_calls': 0, 'max_local_calls': 1000000000000000000000000000000, ...}, 'status': 'RUNNING', ...}
+
+    def _roles(package,review,loop):
+        roles={}
+        for role,ticket,node in [('author',AUTHOR_TICKET,'capability_projection_contract'),
+                ('reviewer',review['ticket'],'capability_projection_semantics')]:
+            item=loop['tickets'].get(ticket)
+            completed=[r for r in loop['rounds'] if item and r.get('round')==item.get('round') and r.get('node')==node
+                and r.get('producer')==item.get('platform_id') and r.get('result')=='PASS']
+            if (not item or item.get('role')!='worker' or item.get('node')!=node or item.get('closed') is not True
+                    or type(item.get('round')) is not int or not item.get('platform_id') or len(completed)!=1):
+>               raise ValueError('capability review lacks closed provenance')
+E               ValueError: capability review lacks closed provenance
+
+evaluations/diagnostics/managed_capability_projection.py:241: ValueError
+__ test_new_roles_reject_incomplete_or_forged_closed_provenance[node-author] ___
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-79/test_new_roles_reject_incomple4')
+who = 'author', mutation = 'node'
+
+    @pytest.mark.parametrize('who',['author','reviewer'])
+    @pytest.mark.parametrize('mutation',['open','missing','node','round','producer','fail','same_platform','evidence'])
+    def test_new_roles_reject_incomplete_or_forged_closed_provenance(tmp_path,who,mutation):
+        m,p=package();loop=deepcopy(m._loop());ticket='offline-control-review'
+        review=dict(schema_version=1,verdict='ACCEPT',reviewer_role='fresh_capability_projection_semantics',ticket=ticket,
+            author_ticket=m.AUTHOR_TICKET,manifest_sha256=m.base.digest(m.DEFAULT_MANIFEST),bindings=p['manifest']['bindings'])
+        proof=tmp_path/'offline-review.json';m.base.write_json(proof,review)
+        for t,node,number,platform in [(m.AUTHOR_TICKET,'capability_projection_contract',21,'/root/loop_worker_capability_contract'),
+                (ticket,'capability_projection_semantics',22,'/offline-fresh-reviewer')]:
+            loop['tickets'][t]=dict(role='worker',node=node,round=number,platform_id=platform,closed=True)
+            loop['rounds'].append(dict(round=number,node=node,producer=platform,result='PASS',evidence=[dict(
+                path=m.DEFAULT_MANIFEST.relative_to(m.ROOT).as_posix(),sha256=m.base.digest(m.DEFAULT_MANIFEST))] if number==21
+                else [dict(path=str(proof),sha256=m.base.digest(proof))]))
+        # Only the pure provenance checker uses this synthetic control; no HTTP authorization is issued.
+>       assert len(m._roles(p,review,loop))==2
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/diagnostics/test_managed_capability_projection.py:240: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+package = {'manifest': {'schema_version': 1, 'version': 'kind-capability-projection-1', 'runner_version': 'managed-capability-pr...': {'entries': {'slot_0/🧾': {...}, 'model_dump': {...}, '月~邊界': {...}, 'scope-channel': {...}, ...}}}, ...}, ...}, ...}
+review = {'schema_version': 1, 'verdict': 'ACCEPT', 'reviewer_role': 'fresh_capability_projection_semantics', 'ticket': 'offline-control-review', ...}
+loop = {'id': 'f8ee2e2f8f9d43dbb46dbf7e11594a98', 'target': {'goal': '修正目前三階段任務拆分測試的失敗，以本機 Ollama qwen3.8:27b 完成目前診斷案例的自然端到端驗...000000000000, 'max_cloud_calls': 0, 'max_local_calls': 1000000000000000000000000000000, ...}, 'status': 'RUNNING', ...}
+
+    def _roles(package,review,loop):
+        roles={}
+        for role,ticket,node in [('author',AUTHOR_TICKET,'capability_projection_contract'),
+                ('reviewer',review['ticket'],'capability_projection_semantics')]:
+            item=loop['tickets'].get(ticket)
+            completed=[r for r in loop['rounds'] if item and r.get('round')==item.get('round') and r.get('node')==node
+                and r.get('producer')==item.get('platform_id') and r.get('result')=='PASS']
+            if (not item or item.get('role')!='worker' or item.get('node')!=node or item.get('closed') is not True
+                    or type(item.get('round')) is not int or not item.get('platform_id') or len(completed)!=1):
+>               raise ValueError('capability review lacks closed provenance')
+E               ValueError: capability review lacks closed provenance
+
+evaluations/diagnostics/managed_capability_projection.py:241: ValueError
+_ test_new_roles_reject_incomplete_or_forged_closed_provenance[node-reviewer] __
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-79/test_new_roles_reject_incomple5')
+who = 'reviewer', mutation = 'node'
+
+    @pytest.mark.parametrize('who',['author','reviewer'])
+    @pytest.mark.parametrize('mutation',['open','missing','node','round','producer','fail','same_platform','evidence'])
+    def test_new_roles_reject_incomplete_or_forged_closed_provenance(tmp_path,who,mutation):
+        m,p=package();loop=deepcopy(m._loop());ticket='offline-control-review'
+        review=dict(schema_version=1,verdict='ACCEPT',reviewer_role='fresh_capability_projection_semantics',ticket=ticket,
+            author_ticket=m.AUTHOR_TICKET,manifest_sha256=m.base.digest(m.DEFAULT_MANIFEST),bindings=p['manifest']['bindings'])
+        proof=tmp_path/'offline-review.json';m.base.write_json(proof,review)
+        for t,node,number,platform in [(m.AUTHOR_TICKET,'capability_projection_contract',21,'/root/loop_worker_capability_contract'),
+                (ticket,'capability_projection_semantics',22,'/offline-fresh-reviewer')]:
+            loop['tickets'][t]=dict(role='worker',node=node,round=number,platform_id=platform,closed=True)
+            loop['rounds'].append(dict(round=number,node=node,producer=platform,result='PASS',evidence=[dict(
+                path=m.DEFAULT_MANIFEST.relative_to(m.ROOT).as_posix(),sha256=m.base.digest(m.DEFAULT_MANIFEST))] if number==21
+                else [dict(path=str(proof),sha256=m.base.digest(proof))]))
+        # Only the pure provenance checker uses this synthetic control; no HTTP authorization is issued.
+>       assert len(m._roles(p,review,loop))==2
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/diagnostics/test_managed_capability_projection.py:240: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+package = {'manifest': {'schema_version': 1, 'version': 'kind-capability-projection-1', 'runner_version': 'managed-capability-pr...': {'entries': {'slot_0/🧾': {...}, 'model_dump': {...}, '月~邊界': {...}, 'scope-channel': {...}, ...}}}, ...}, ...}, ...}
+review = {'schema_version': 1, 'verdict': 'ACCEPT', 'reviewer_role': 'fresh_capability_projection_semantics', 'ticket': 'offline-control-review', ...}
+loop = {'id': 'f8ee2e2f8f9d43dbb46dbf7e11594a98', 'target': {'goal': '修正目前三階段任務拆分測試的失敗，以本機 Ollama qwen3.8:27b 完成目前診斷案例的自然端到端驗...000000000000, 'max_cloud_calls': 0, 'max_local_calls': 1000000000000000000000000000000, ...}, 'status': 'RUNNING', ...}
+
+    def _roles(package,review,loop):
+        roles={}
+        for role,ticket,node in [('author',AUTHOR_TICKET,'capability_projection_contract'),
+                ('reviewer',review['ticket'],'capability_projection_semantics')]:
+            item=loop['tickets'].get(ticket)
+            completed=[r for r in loop['rounds'] if item and r.get('round')==item.get('round') and r.get('node')==node
+                and r.get('producer')==item.get('platform_id') and r.get('result')=='PASS']
+            if (not item or item.get('role')!='worker' or item.get('node')!=node or item.get('closed') is not True
+                    or type(item.get('round')) is not int or not item.get('platform_id') or len(completed)!=1):
+>               raise ValueError('capability review lacks closed provenance')
+E               ValueError: capability review lacks closed provenance
+
+evaluations/diagnostics/managed_capability_projection.py:241: ValueError
+__ test_new_roles_reject_incomplete_or_forged_closed_provenance[round-author] __
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-79/test_new_roles_reject_incomple6')
+who = 'author', mutation = 'round'
+
+    @pytest.mark.parametrize('who',['author','reviewer'])
+    @pytest.mark.parametrize('mutation',['open','missing','node','round','producer','fail','same_platform','evidence'])
+    def test_new_roles_reject_incomplete_or_forged_closed_provenance(tmp_path,who,mutation):
+        m,p=package();loop=deepcopy(m._loop());ticket='offline-control-review'
+        review=dict(schema_version=1,verdict='ACCEPT',reviewer_role='fresh_capability_projection_semantics',ticket=ticket,
+            author_ticket=m.AUTHOR_TICKET,manifest_sha256=m.base.digest(m.DEFAULT_MANIFEST),bindings=p['manifest']['bindings'])
+        proof=tmp_path/'offline-review.json';m.base.write_json(proof,review)
+        for t,node,number,platform in [(m.AUTHOR_TICKET,'capability_projection_contract',21,'/root/loop_worker_capability_contract'),
+                (ticket,'capability_projection_semantics',22,'/offline-fresh-reviewer')]:
+            loop['tickets'][t]=dict(role='worker',node=node,round=number,platform_id=platform,closed=True)
+            loop['rounds'].append(dict(round=number,node=node,producer=platform,result='PASS',evidence=[dict(
+                path=m.DEFAULT_MANIFEST.relative_to(m.ROOT).as_posix(),sha256=m.base.digest(m.DEFAULT_MANIFEST))] if number==21
+                else [dict(path=str(proof),sha256=m.base.digest(proof))]))
+        # Only the pure provenance checker uses this synthetic control; no HTTP authorization is issued.
+>       assert len(m._roles(p,review,loop))==2
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/diagnostics/test_managed_capability_projection.py:240: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+package = {'manifest': {'schema_version': 1, 'version': 'kind-capability-projection-1', 'runner_version': 'managed-capability-pr...': {'entries': {'slot_0/🧾': {...}, 'model_dump': {...}, '月~邊界': {...}, 'scope-channel': {...}, ...}}}, ...}, ...}, ...}
+review = {'schema_version': 1, 'verdict': 'ACCEPT', 'reviewer_role': 'fresh_capability_projection_semantics', 'ticket': 'offline-control-review', ...}
+loop = {'id': 'f8ee2e2f8f9d43dbb46dbf7e11594a98', 'target': {'goal': '修正目前三階段任務拆分測試的失敗，以本機 Ollama qwen3.8:27b 完成目前診斷案例的自然端到端驗...000000000000, 'max_cloud_calls': 0, 'max_local_calls': 1000000000000000000000000000000, ...}, 'status': 'RUNNING', ...}
+
+    def _roles(package,review,loop):
+        roles={}
+        for role,ticket,node in [('author',AUTHOR_TICKET,'capability_projection_contract'),
+                ('reviewer',review['ticket'],'capability_projection_semantics')]:
+            item=loop['tickets'].get(ticket)
+            completed=[r for r in loop['rounds'] if item and r.get('round')==item.get('round') and r.get('node')==node
+                and r.get('producer')==item.get('platform_id') and r.get('result')=='PASS']
+            if (not item or item.get('role')!='worker' or item.get('node')!=node or item.get('closed') is not True
+                    or type(item.get('round')) is not int or not item.get('platform_id') or len(completed)!=1):
+>               raise ValueError('capability review lacks closed provenance')
+E               ValueError: capability review lacks closed provenance
+
+evaluations/diagnostics/managed_capability_projection.py:241: ValueError
+_ test_new_roles_reject_incomplete_or_forged_closed_provenance[round-reviewer] _
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-79/test_new_roles_reject_incomple7')
+who = 'reviewer', mutation = 'round'
+
+    @pytest.mark.parametrize('who',['author','reviewer'])
+    @pytest.mark.parametrize('mutation',['open','missing','node','round','producer','fail','same_platform','evidence'])
+    def test_new_roles_reject_incomplete_or_forged_closed_provenance(tmp_path,who,mutation):
+        m,p=package();loop=deepcopy(m._loop());ticket='offline-control-review'
+        review=dict(schema_version=1,verdict='ACCEPT',reviewer_role='fresh_capability_projection_semantics',ticket=ticket,
+            author_ticket=m.AUTHOR_TICKET,manifest_sha256=m.base.digest(m.DEFAULT_MANIFEST),bindings=p['manifest']['bindings'])
+        proof=tmp_path/'offline-review.json';m.base.write_json(proof,review)
+        for t,node,number,platform in [(m.AUTHOR_TICKET,'capability_projection_contract',21,'/root/loop_worker_capability_contract'),
+                (ticket,'capability_projection_semantics',22,'/offline-fresh-reviewer')]:
+            loop['tickets'][t]=dict(role='worker',node=node,round=number,platform_id=platform,closed=True)
+            loop['rounds'].append(dict(round=number,node=node,producer=platform,result='PASS',evidence=[dict(
+                path=m.DEFAULT_MANIFEST.relative_to(m.ROOT).as_posix(),sha256=m.base.digest(m.DEFAULT_MANIFEST))] if number==21
+                else [dict(path=str(proof),sha256=m.base.digest(proof))]))
+        # Only the pure provenance checker uses this synthetic control; no HTTP authorization is issued.
+>       assert len(m._roles(p,review,loop))==2
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/diagnostics/test_managed_capability_projection.py:240: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+package = {'manifest': {'schema_version': 1, 'version': 'kind-capability-projection-1', 'runner_version': 'managed-capability-pr...': {'entries': {'slot_0/🧾': {...}, 'model_dump': {...}, '月~邊界': {...}, 'scope-channel': {...}, ...}}}, ...}, ...}, ...}
+review = {'schema_version': 1, 'verdict': 'ACCEPT', 'reviewer_role': 'fresh_capability_projection_semantics', 'ticket': 'offline-control-review', ...}
+loop = {'id': 'f8ee2e2f8f9d43dbb46dbf7e11594a98', 'target': {'goal': '修正目前三階段任務拆分測試的失敗，以本機 Ollama qwen3.8:27b 完成目前診斷案例的自然端到端驗...000000000000, 'max_cloud_calls': 0, 'max_local_calls': 1000000000000000000000000000000, ...}, 'status': 'RUNNING', ...}
+
+    def _roles(package,review,loop):
+        roles={}
+        for role,ticket,node in [('author',AUTHOR_TICKET,'capability_projection_contract'),
+                ('reviewer',review['ticket'],'capability_projection_semantics')]:
+            item=loop['tickets'].get(ticket)
+            completed=[r for r in loop['rounds'] if item and r.get('round')==item.get('round') and r.get('node')==node
+                and r.get('producer')==item.get('platform_id') and r.get('result')=='PASS']
+            if (not item or item.get('role')!='worker' or item.get('node')!=node or item.get('closed') is not True
+                    or type(item.get('round')) is not int or not item.get('platform_id') or len(completed)!=1):
+>               raise ValueError('capability review lacks closed provenance')
+E               ValueError: capability review lacks closed provenance
+
+evaluations/diagnostics/managed_capability_projection.py:241: ValueError
+_ test_new_roles_reject_incomplete_or_forged_closed_provenance[producer-author] _
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-79/test_new_roles_reject_incomple8')
+who = 'author', mutation = 'producer'
+
+    @pytest.mark.parametrize('who',['author','reviewer'])
+    @pytest.mark.parametrize('mutation',['open','missing','node','round','producer','fail','same_platform','evidence'])
+    def test_new_roles_reject_incomplete_or_forged_closed_provenance(tmp_path,who,mutation):
+        m,p=package();loop=deepcopy(m._loop());ticket='offline-control-review'
+        review=dict(schema_version=1,verdict='ACCEPT',reviewer_role='fresh_capability_projection_semantics',ticket=ticket,
+            author_ticket=m.AUTHOR_TICKET,manifest_sha256=m.base.digest(m.DEFAULT_MANIFEST),bindings=p['manifest']['bindings'])
+        proof=tmp_path/'offline-review.json';m.base.write_json(proof,review)
+        for t,node,number,platform in [(m.AUTHOR_TICKET,'capability_projection_contract',21,'/root/loop_worker_capability_contract'),
+                (ticket,'capability_projection_semantics',22,'/offline-fresh-reviewer')]:
+            loop['tickets'][t]=dict(role='worker',node=node,round=number,platform_id=platform,closed=True)
+            loop['rounds'].append(dict(round=number,node=node,producer=platform,result='PASS',evidence=[dict(
+                path=m.DEFAULT_MANIFEST.relative_to(m.ROOT).as_posix(),sha256=m.base.digest(m.DEFAULT_MANIFEST))] if number==21
+                else [dict(path=str(proof),sha256=m.base.digest(proof))]))
+        # Only the pure provenance checker uses this synthetic control; no HTTP authorization is issued.
+>       assert len(m._roles(p,review,loop))==2
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/diagnostics/test_managed_capability_projection.py:240: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+package = {'manifest': {'schema_version': 1, 'version': 'kind-capability-projection-1', 'runner_version': 'managed-capability-pr...': {'entries': {'slot_0/🧾': {...}, 'model_dump': {...}, '月~邊界': {...}, 'scope-channel': {...}, ...}}}, ...}, ...}, ...}
+review = {'schema_version': 1, 'verdict': 'ACCEPT', 'reviewer_role': 'fresh_capability_projection_semantics', 'ticket': 'offline-control-review', ...}
+loop = {'id': 'f8ee2e2f8f9d43dbb46dbf7e11594a98', 'target': {'goal': '修正目前三階段任務拆分測試的失敗，以本機 Ollama qwen3.8:27b 完成目前診斷案例的自然端到端驗...000000000000, 'max_cloud_calls': 0, 'max_local_calls': 1000000000000000000000000000000, ...}, 'status': 'RUNNING', ...}
+
+    def _roles(package,review,loop):
+        roles={}
+        for role,ticket,node in [('author',AUTHOR_TICKET,'capability_projection_contract'),
+                ('reviewer',review['ticket'],'capability_projection_semantics')]:
+            item=loop['tickets'].get(ticket)
+            completed=[r for r in loop['rounds'] if item and r.get('round')==item.get('round') and r.get('node')==node
+                and r.get('producer')==item.get('platform_id') and r.get('result')=='PASS']
+            if (not item or item.get('role')!='worker' or item.get('node')!=node or item.get('closed') is not True
+                    or type(item.get('round')) is not int or not item.get('platform_id') or len(completed)!=1):
+>               raise ValueError('capability review lacks closed provenance')
+E               ValueError: capability review lacks closed provenance
+
+evaluations/diagnostics/managed_capability_projection.py:241: ValueError
+_ test_new_roles_reject_incomplete_or_forged_closed_provenance[producer-reviewer] _
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-79/test_new_roles_reject_incomple9')
+who = 'reviewer', mutation = 'producer'
+
+    @pytest.mark.parametrize('who',['author','reviewer'])
+    @pytest.mark.parametrize('mutation',['open','missing','node','round','producer','fail','same_platform','evidence'])
+    def test_new_roles_reject_incomplete_or_forged_closed_provenance(tmp_path,who,mutation):
+        m,p=package();loop=deepcopy(m._loop());ticket='offline-control-review'
+        review=dict(schema_version=1,verdict='ACCEPT',reviewer_role='fresh_capability_projection_semantics',ticket=ticket,
+            author_ticket=m.AUTHOR_TICKET,manifest_sha256=m.base.digest(m.DEFAULT_MANIFEST),bindings=p['manifest']['bindings'])
+        proof=tmp_path/'offline-review.json';m.base.write_json(proof,review)
+        for t,node,number,platform in [(m.AUTHOR_TICKET,'capability_projection_contract',21,'/root/loop_worker_capability_contract'),
+                (ticket,'capability_projection_semantics',22,'/offline-fresh-reviewer')]:
+            loop['tickets'][t]=dict(role='worker',node=node,round=number,platform_id=platform,closed=True)
+            loop['rounds'].append(dict(round=number,node=node,producer=platform,result='PASS',evidence=[dict(
+                path=m.DEFAULT_MANIFEST.relative_to(m.ROOT).as_posix(),sha256=m.base.digest(m.DEFAULT_MANIFEST))] if number==21
+                else [dict(path=str(proof),sha256=m.base.digest(proof))]))
+        # Only the pure provenance checker uses this synthetic control; no HTTP authorization is issued.
+>       assert len(m._roles(p,review,loop))==2
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/diagnostics/test_managed_capability_projection.py:240: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+package = {'manifest': {'schema_version': 1, 'version': 'kind-capability-projection-1', 'runner_version': 'managed-capability-pr...': {'entries': {'slot_0/🧾': {...}, 'model_dump': {...}, '月~邊界': {...}, 'scope-channel': {...}, ...}}}, ...}, ...}, ...}
+review = {'schema_version': 1, 'verdict': 'ACCEPT', 'reviewer_role': 'fresh_capability_projection_semantics', 'ticket': 'offline-control-review', ...}
+loop = {'id': 'f8ee2e2f8f9d43dbb46dbf7e11594a98', 'target': {'goal': '修正目前三階段任務拆分測試的失敗，以本機 Ollama qwen3.8:27b 完成目前診斷案例的自然端到端驗...000000000000, 'max_cloud_calls': 0, 'max_local_calls': 1000000000000000000000000000000, ...}, 'status': 'RUNNING', ...}
+
+    def _roles(package,review,loop):
+        roles={}
+        for role,ticket,node in [('author',AUTHOR_TICKET,'capability_projection_contract'),
+                ('reviewer',review['ticket'],'capability_projection_semantics')]:
+            item=loop['tickets'].get(ticket)
+            completed=[r for r in loop['rounds'] if item and r.get('round')==item.get('round') and r.get('node')==node
+                and r.get('producer')==item.get('platform_id') and r.get('result')=='PASS']
+            if (not item or item.get('role')!='worker' or item.get('node')!=node or item.get('closed') is not True
+                    or type(item.get('round')) is not int or not item.get('platform_id') or len(completed)!=1):
+>               raise ValueError('capability review lacks closed provenance')
+E               ValueError: capability review lacks closed provenance
+
+evaluations/diagnostics/managed_capability_projection.py:241: ValueError
+__ test_new_roles_reject_incomplete_or_forged_closed_provenance[fail-author] ___
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-79/test_new_roles_reject_incomple10')
+who = 'author', mutation = 'fail'
+
+    @pytest.mark.parametrize('who',['author','reviewer'])
+    @pytest.mark.parametrize('mutation',['open','missing','node','round','producer','fail','same_platform','evidence'])
+    def test_new_roles_reject_incomplete_or_forged_closed_provenance(tmp_path,who,mutation):
+        m,p=package();loop=deepcopy(m._loop());ticket='offline-control-review'
+        review=dict(schema_version=1,verdict='ACCEPT',reviewer_role='fresh_capability_projection_semantics',ticket=ticket,
+            author_ticket=m.AUTHOR_TICKET,manifest_sha256=m.base.digest(m.DEFAULT_MANIFEST),bindings=p['manifest']['bindings'])
+        proof=tmp_path/'offline-review.json';m.base.write_json(proof,review)
+        for t,node,number,platform in [(m.AUTHOR_TICKET,'capability_projection_contract',21,'/root/loop_worker_capability_contract'),
+                (ticket,'capability_projection_semantics',22,'/offline-fresh-reviewer')]:
+            loop['tickets'][t]=dict(role='worker',node=node,round=number,platform_id=platform,closed=True)
+            loop['rounds'].append(dict(round=number,node=node,producer=platform,result='PASS',evidence=[dict(
+                path=m.DEFAULT_MANIFEST.relative_to(m.ROOT).as_posix(),sha256=m.base.digest(m.DEFAULT_MANIFEST))] if number==21
+                else [dict(path=str(proof),sha256=m.base.digest(proof))]))
+        # Only the pure provenance checker uses this synthetic control; no HTTP authorization is issued.
+>       assert len(m._roles(p,review,loop))==2
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/diagnostics/test_managed_capability_projection.py:240: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+package = {'manifest': {'schema_version': 1, 'version': 'kind-capability-projection-1', 'runner_version': 'managed-capability-pr...': {'entries': {'slot_0/🧾': {...}, 'model_dump': {...}, '月~邊界': {...}, 'scope-channel': {...}, ...}}}, ...}, ...}, ...}
+review = {'schema_version': 1, 'verdict': 'ACCEPT', 'reviewer_role': 'fresh_capability_projection_semantics', 'ticket': 'offline-control-review', ...}
+loop = {'id': 'f8ee2e2f8f9d43dbb46dbf7e11594a98', 'target': {'goal': '修正目前三階段任務拆分測試的失敗，以本機 Ollama qwen3.8:27b 完成目前診斷案例的自然端到端驗...000000000000, 'max_cloud_calls': 0, 'max_local_calls': 1000000000000000000000000000000, ...}, 'status': 'RUNNING', ...}
+
+    def _roles(package,review,loop):
+        roles={}
+        for role,ticket,node in [('author',AUTHOR_TICKET,'capability_projection_contract'),
+                ('reviewer',review['ticket'],'capability_projection_semantics')]:
+            item=loop['tickets'].get(ticket)
+            completed=[r for r in loop['rounds'] if item and r.get('round')==item.get('round') and r.get('node')==node
+                and r.get('producer')==item.get('platform_id') and r.get('result')=='PASS']
+            if (not item or item.get('role')!='worker' or item.get('node')!=node or item.get('closed') is not True
+                    or type(item.get('round')) is not int or not item.get('platform_id') or len(completed)!=1):
+>               raise ValueError('capability review lacks closed provenance')
+E               ValueError: capability review lacks closed provenance
+
+evaluations/diagnostics/managed_capability_projection.py:241: ValueError
+_ test_new_roles_reject_incomplete_or_forged_closed_provenance[fail-reviewer] __
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-79/test_new_roles_reject_incomple11')
+who = 'reviewer', mutation = 'fail'
+
+    @pytest.mark.parametrize('who',['author','reviewer'])
+    @pytest.mark.parametrize('mutation',['open','missing','node','round','producer','fail','same_platform','evidence'])
+    def test_new_roles_reject_incomplete_or_forged_closed_provenance(tmp_path,who,mutation):
+        m,p=package();loop=deepcopy(m._loop());ticket='offline-control-review'
+        review=dict(schema_version=1,verdict='ACCEPT',reviewer_role='fresh_capability_projection_semantics',ticket=ticket,
+            author_ticket=m.AUTHOR_TICKET,manifest_sha256=m.base.digest(m.DEFAULT_MANIFEST),bindings=p['manifest']['bindings'])
+        proof=tmp_path/'offline-review.json';m.base.write_json(proof,review)
+        for t,node,number,platform in [(m.AUTHOR_TICKET,'capability_projection_contract',21,'/root/loop_worker_capability_contract'),
+                (ticket,'capability_projection_semantics',22,'/offline-fresh-reviewer')]:
+            loop['tickets'][t]=dict(role='worker',node=node,round=number,platform_id=platform,closed=True)
+            loop['rounds'].append(dict(round=number,node=node,producer=platform,result='PASS',evidence=[dict(
+                path=m.DEFAULT_MANIFEST.relative_to(m.ROOT).as_posix(),sha256=m.base.digest(m.DEFAULT_MANIFEST))] if number==21
+                else [dict(path=str(proof),sha256=m.base.digest(proof))]))
+        # Only the pure provenance checker uses this synthetic control; no HTTP authorization is issued.
+>       assert len(m._roles(p,review,loop))==2
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/diagnostics/test_managed_capability_projection.py:240: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+package = {'manifest': {'schema_version': 1, 'version': 'kind-capability-projection-1', 'runner_version': 'managed-capability-pr...': {'entries': {'slot_0/🧾': {...}, 'model_dump': {...}, '月~邊界': {...}, 'scope-channel': {...}, ...}}}, ...}, ...}, ...}
+review = {'schema_version': 1, 'verdict': 'ACCEPT', 'reviewer_role': 'fresh_capability_projection_semantics', 'ticket': 'offline-control-review', ...}
+loop = {'id': 'f8ee2e2f8f9d43dbb46dbf7e11594a98', 'target': {'goal': '修正目前三階段任務拆分測試的失敗，以本機 Ollama qwen3.8:27b 完成目前診斷案例的自然端到端驗...000000000000, 'max_cloud_calls': 0, 'max_local_calls': 1000000000000000000000000000000, ...}, 'status': 'RUNNING', ...}
+
+    def _roles(package,review,loop):
+        roles={}
+        for role,ticket,node in [('author',AUTHOR_TICKET,'capability_projection_contract'),
+                ('reviewer',review['ticket'],'capability_projection_semantics')]:
+            item=loop['tickets'].get(ticket)
+            completed=[r for r in loop['rounds'] if item and r.get('round')==item.get('round') and r.get('node')==node
+                and r.get('producer')==item.get('platform_id') and r.get('result')=='PASS']
+            if (not item or item.get('role')!='worker' or item.get('node')!=node or item.get('closed') is not True
+                    or type(item.get('round')) is not int or not item.get('platform_id') or len(completed)!=1):
+>               raise ValueError('capability review lacks closed provenance')
+E               ValueError: capability review lacks closed provenance
+
+evaluations/diagnostics/managed_capability_projection.py:241: ValueError
+_ test_new_roles_reject_incomplete_or_forged_closed_provenance[same_platform-author] _
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-79/test_new_roles_reject_incomple12')
+who = 'author', mutation = 'same_platform'
+
+    @pytest.mark.parametrize('who',['author','reviewer'])
+    @pytest.mark.parametrize('mutation',['open','missing','node','round','producer','fail','same_platform','evidence'])
+    def test_new_roles_reject_incomplete_or_forged_closed_provenance(tmp_path,who,mutation):
+        m,p=package();loop=deepcopy(m._loop());ticket='offline-control-review'
+        review=dict(schema_version=1,verdict='ACCEPT',reviewer_role='fresh_capability_projection_semantics',ticket=ticket,
+            author_ticket=m.AUTHOR_TICKET,manifest_sha256=m.base.digest(m.DEFAULT_MANIFEST),bindings=p['manifest']['bindings'])
+        proof=tmp_path/'offline-review.json';m.base.write_json(proof,review)
+        for t,node,number,platform in [(m.AUTHOR_TICKET,'capability_projection_contract',21,'/root/loop_worker_capability_contract'),
+                (ticket,'capability_projection_semantics',22,'/offline-fresh-reviewer')]:
+            loop['tickets'][t]=dict(role='worker',node=node,round=number,platform_id=platform,closed=True)
+            loop['rounds'].append(dict(round=number,node=node,producer=platform,result='PASS',evidence=[dict(
+                path=m.DEFAULT_MANIFEST.relative_to(m.ROOT).as_posix(),sha256=m.base.digest(m.DEFAULT_MANIFEST))] if number==21
+                else [dict(path=str(proof),sha256=m.base.digest(proof))]))
+        # Only the pure provenance checker uses this synthetic control; no HTTP authorization is issued.
+>       assert len(m._roles(p,review,loop))==2
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/diagnostics/test_managed_capability_projection.py:240: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+package = {'manifest': {'schema_version': 1, 'version': 'kind-capability-projection-1', 'runner_version': 'managed-capability-pr...': {'entries': {'slot_0/🧾': {...}, 'model_dump': {...}, '月~邊界': {...}, 'scope-channel': {...}, ...}}}, ...}, ...}, ...}
+review = {'schema_version': 1, 'verdict': 'ACCEPT', 'reviewer_role': 'fresh_capability_projection_semantics', 'ticket': 'offline-control-review', ...}
+loop = {'id': 'f8ee2e2f8f9d43dbb46dbf7e11594a98', 'target': {'goal': '修正目前三階段任務拆分測試的失敗，以本機 Ollama qwen3.8:27b 完成目前診斷案例的自然端到端驗...000000000000, 'max_cloud_calls': 0, 'max_local_calls': 1000000000000000000000000000000, ...}, 'status': 'RUNNING', ...}
+
+    def _roles(package,review,loop):
+        roles={}
+        for role,ticket,node in [('author',AUTHOR_TICKET,'capability_projection_contract'),
+                ('reviewer',review['ticket'],'capability_projection_semantics')]:
+            item=loop['tickets'].get(ticket)
+            completed=[r for r in loop['rounds'] if item and r.get('round')==item.get('round') and r.get('node')==node
+                and r.get('producer')==item.get('platform_id') and r.get('result')=='PASS']
+            if (not item or item.get('role')!='worker' or item.get('node')!=node or item.get('closed') is not True
+                    or type(item.get('round')) is not int or not item.get('platform_id') or len(completed)!=1):
+>               raise ValueError('capability review lacks closed provenance')
+E               ValueError: capability review lacks closed provenance
+
+evaluations/diagnostics/managed_capability_projection.py:241: ValueError
+_ test_new_roles_reject_incomplete_or_forged_closed_provenance[same_platform-reviewer] _
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-79/test_new_roles_reject_incomple13')
+who = 'reviewer', mutation = 'same_platform'
+
+    @pytest.mark.parametrize('who',['author','reviewer'])
+    @pytest.mark.parametrize('mutation',['open','missing','node','round','producer','fail','same_platform','evidence'])
+    def test_new_roles_reject_incomplete_or_forged_closed_provenance(tmp_path,who,mutation):
+        m,p=package();loop=deepcopy(m._loop());ticket='offline-control-review'
+        review=dict(schema_version=1,verdict='ACCEPT',reviewer_role='fresh_capability_projection_semantics',ticket=ticket,
+            author_ticket=m.AUTHOR_TICKET,manifest_sha256=m.base.digest(m.DEFAULT_MANIFEST),bindings=p['manifest']['bindings'])
+        proof=tmp_path/'offline-review.json';m.base.write_json(proof,review)
+        for t,node,number,platform in [(m.AUTHOR_TICKET,'capability_projection_contract',21,'/root/loop_worker_capability_contract'),
+                (ticket,'capability_projection_semantics',22,'/offline-fresh-reviewer')]:
+            loop['tickets'][t]=dict(role='worker',node=node,round=number,platform_id=platform,closed=True)
+            loop['rounds'].append(dict(round=number,node=node,producer=platform,result='PASS',evidence=[dict(
+                path=m.DEFAULT_MANIFEST.relative_to(m.ROOT).as_posix(),sha256=m.base.digest(m.DEFAULT_MANIFEST))] if number==21
+                else [dict(path=str(proof),sha256=m.base.digest(proof))]))
+        # Only the pure provenance checker uses this synthetic control; no HTTP authorization is issued.
+>       assert len(m._roles(p,review,loop))==2
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/diagnostics/test_managed_capability_projection.py:240: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+package = {'manifest': {'schema_version': 1, 'version': 'kind-capability-projection-1', 'runner_version': 'managed-capability-pr...': {'entries': {'slot_0/🧾': {...}, 'model_dump': {...}, '月~邊界': {...}, 'scope-channel': {...}, ...}}}, ...}, ...}, ...}
+review = {'schema_version': 1, 'verdict': 'ACCEPT', 'reviewer_role': 'fresh_capability_projection_semantics', 'ticket': 'offline-control-review', ...}
+loop = {'id': 'f8ee2e2f8f9d43dbb46dbf7e11594a98', 'target': {'goal': '修正目前三階段任務拆分測試的失敗，以本機 Ollama qwen3.8:27b 完成目前診斷案例的自然端到端驗...000000000000, 'max_cloud_calls': 0, 'max_local_calls': 1000000000000000000000000000000, ...}, 'status': 'RUNNING', ...}
+
+    def _roles(package,review,loop):
+        roles={}
+        for role,ticket,node in [('author',AUTHOR_TICKET,'capability_projection_contract'),
+                ('reviewer',review['ticket'],'capability_projection_semantics')]:
+            item=loop['tickets'].get(ticket)
+            completed=[r for r in loop['rounds'] if item and r.get('round')==item.get('round') and r.get('node')==node
+                and r.get('producer')==item.get('platform_id') and r.get('result')=='PASS']
+            if (not item or item.get('role')!='worker' or item.get('node')!=node or item.get('closed') is not True
+                    or type(item.get('round')) is not int or not item.get('platform_id') or len(completed)!=1):
+>               raise ValueError('capability review lacks closed provenance')
+E               ValueError: capability review lacks closed provenance
+
+evaluations/diagnostics/managed_capability_projection.py:241: ValueError
+_ test_new_roles_reject_incomplete_or_forged_closed_provenance[evidence-author] _
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-79/test_new_roles_reject_incomple14')
+who = 'author', mutation = 'evidence'
+
+    @pytest.mark.parametrize('who',['author','reviewer'])
+    @pytest.mark.parametrize('mutation',['open','missing','node','round','producer','fail','same_platform','evidence'])
+    def test_new_roles_reject_incomplete_or_forged_closed_provenance(tmp_path,who,mutation):
+        m,p=package();loop=deepcopy(m._loop());ticket='offline-control-review'
+        review=dict(schema_version=1,verdict='ACCEPT',reviewer_role='fresh_capability_projection_semantics',ticket=ticket,
+            author_ticket=m.AUTHOR_TICKET,manifest_sha256=m.base.digest(m.DEFAULT_MANIFEST),bindings=p['manifest']['bindings'])
+        proof=tmp_path/'offline-review.json';m.base.write_json(proof,review)
+        for t,node,number,platform in [(m.AUTHOR_TICKET,'capability_projection_contract',21,'/root/loop_worker_capability_contract'),
+                (ticket,'capability_projection_semantics',22,'/offline-fresh-reviewer')]:
+            loop['tickets'][t]=dict(role='worker',node=node,round=number,platform_id=platform,closed=True)
+            loop['rounds'].append(dict(round=number,node=node,producer=platform,result='PASS',evidence=[dict(
+                path=m.DEFAULT_MANIFEST.relative_to(m.ROOT).as_posix(),sha256=m.base.digest(m.DEFAULT_MANIFEST))] if number==21
+                else [dict(path=str(proof),sha256=m.base.digest(proof))]))
+        # Only the pure provenance checker uses this synthetic control; no HTTP authorization is issued.
+>       assert len(m._roles(p,review,loop))==2
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/diagnostics/test_managed_capability_projection.py:240: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+package = {'manifest': {'schema_version': 1, 'version': 'kind-capability-projection-1', 'runner_version': 'managed-capability-pr...': {'entries': {'slot_0/🧾': {...}, 'model_dump': {...}, '月~邊界': {...}, 'scope-channel': {...}, ...}}}, ...}, ...}, ...}
+review = {'schema_version': 1, 'verdict': 'ACCEPT', 'reviewer_role': 'fresh_capability_projection_semantics', 'ticket': 'offline-control-review', ...}
+loop = {'id': 'f8ee2e2f8f9d43dbb46dbf7e11594a98', 'target': {'goal': '修正目前三階段任務拆分測試的失敗，以本機 Ollama qwen3.8:27b 完成目前診斷案例的自然端到端驗...000000000000, 'max_cloud_calls': 0, 'max_local_calls': 1000000000000000000000000000000, ...}, 'status': 'RUNNING', ...}
+
+    def _roles(package,review,loop):
+        roles={}
+        for role,ticket,node in [('author',AUTHOR_TICKET,'capability_projection_contract'),
+                ('reviewer',review['ticket'],'capability_projection_semantics')]:
+            item=loop['tickets'].get(ticket)
+            completed=[r for r in loop['rounds'] if item and r.get('round')==item.get('round') and r.get('node')==node
+                and r.get('producer')==item.get('platform_id') and r.get('result')=='PASS']
+            if (not item or item.get('role')!='worker' or item.get('node')!=node or item.get('closed') is not True
+                    or type(item.get('round')) is not int or not item.get('platform_id') or len(completed)!=1):
+>               raise ValueError('capability review lacks closed provenance')
+E               ValueError: capability review lacks closed provenance
+
+evaluations/diagnostics/managed_capability_projection.py:241: ValueError
+_ test_new_roles_reject_incomplete_or_forged_closed_provenance[evidence-reviewer] _
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-79/test_new_roles_reject_incomple15')
+who = 'reviewer', mutation = 'evidence'
+
+    @pytest.mark.parametrize('who',['author','reviewer'])
+    @pytest.mark.parametrize('mutation',['open','missing','node','round','producer','fail','same_platform','evidence'])
+    def test_new_roles_reject_incomplete_or_forged_closed_provenance(tmp_path,who,mutation):
+        m,p=package();loop=deepcopy(m._loop());ticket='offline-control-review'
+        review=dict(schema_version=1,verdict='ACCEPT',reviewer_role='fresh_capability_projection_semantics',ticket=ticket,
+            author_ticket=m.AUTHOR_TICKET,manifest_sha256=m.base.digest(m.DEFAULT_MANIFEST),bindings=p['manifest']['bindings'])
+        proof=tmp_path/'offline-review.json';m.base.write_json(proof,review)
+        for t,node,number,platform in [(m.AUTHOR_TICKET,'capability_projection_contract',21,'/root/loop_worker_capability_contract'),
+                (ticket,'capability_projection_semantics',22,'/offline-fresh-reviewer')]:
+            loop['tickets'][t]=dict(role='worker',node=node,round=number,platform_id=platform,closed=True)
+            loop['rounds'].append(dict(round=number,node=node,producer=platform,result='PASS',evidence=[dict(
+                path=m.DEFAULT_MANIFEST.relative_to(m.ROOT).as_posix(),sha256=m.base.digest(m.DEFAULT_MANIFEST))] if number==21
+                else [dict(path=str(proof),sha256=m.base.digest(proof))]))
+        # Only the pure provenance checker uses this synthetic control; no HTTP authorization is issued.
+>       assert len(m._roles(p,review,loop))==2
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/diagnostics/test_managed_capability_projection.py:240: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+package = {'manifest': {'schema_version': 1, 'version': 'kind-capability-projection-1', 'runner_version': 'managed-capability-pr...': {'entries': {'slot_0/🧾': {...}, 'model_dump': {...}, '月~邊界': {...}, 'scope-channel': {...}, ...}}}, ...}, ...}, ...}
+review = {'schema_version': 1, 'verdict': 'ACCEPT', 'reviewer_role': 'fresh_capability_projection_semantics', 'ticket': 'offline-control-review', ...}
+loop = {'id': 'f8ee2e2f8f9d43dbb46dbf7e11594a98', 'target': {'goal': '修正目前三階段任務拆分測試的失敗，以本機 Ollama qwen3.8:27b 完成目前診斷案例的自然端到端驗...000000000000, 'max_cloud_calls': 0, 'max_local_calls': 1000000000000000000000000000000, ...}, 'status': 'RUNNING', ...}
+
+    def _roles(package,review,loop):
+        roles={}
+        for role,ticket,node in [('author',AUTHOR_TICKET,'capability_projection_contract'),
+                ('reviewer',review['ticket'],'capability_projection_semantics')]:
+            item=loop['tickets'].get(ticket)
+            completed=[r for r in loop['rounds'] if item and r.get('round')==item.get('round') and r.get('node')==node
+                and r.get('producer')==item.get('platform_id') and r.get('result')=='PASS']
+            if (not item or item.get('role')!='worker' or item.get('node')!=node or item.get('closed') is not True
+                    or type(item.get('round')) is not int or not item.get('platform_id') or len(completed)!=1):
+>               raise ValueError('capability review lacks closed provenance')
+E               ValueError: capability review lacks closed provenance
+
+evaluations/diagnostics/managed_capability_projection.py:241: ValueError
+=========================== short test summary info ============================
+FAILED tests/diagnostics/test_managed_capability_projection.py::test_new_roles_reject_incomplete_or_forged_closed_provenance[open-author]
+FAILED tests/diagnostics/test_managed_capability_projection.py::test_new_roles_reject_incomplete_or_forged_closed_provenance[open-reviewer]
+FAILED tests/diagnostics/test_managed_capability_projection.py::test_new_roles_reject_incomplete_or_forged_closed_provenance[missing-author]
+FAILED tests/diagnostics/test_managed_capability_projection.py::test_new_roles_reject_incomplete_or_forged_closed_provenance[missing-reviewer]
+FAILED tests/diagnostics/test_managed_capability_projection.py::test_new_roles_reject_incomplete_or_forged_closed_provenance[node-author]
+FAILED tests/diagnostics/test_managed_capability_projection.py::test_new_roles_reject_incomplete_or_forged_closed_provenance[node-reviewer]
+FAILED tests/diagnostics/test_managed_capability_projection.py::test_new_roles_reject_incomplete_or_forged_closed_provenance[round-author]
+FAILED tests/diagnostics/test_managed_capability_projection.py::test_new_roles_reject_incomplete_or_forged_closed_provenance[round-reviewer]
+FAILED tests/diagnostics/test_managed_capability_projection.py::test_new_roles_reject_incomplete_or_forged_closed_provenance[producer-author]
+FAILED tests/diagnostics/test_managed_capability_projection.py::test_new_roles_reject_incomplete_or_forged_closed_provenance[producer-reviewer]
+FAILED tests/diagnostics/test_managed_capability_projection.py::test_new_roles_reject_incomplete_or_forged_closed_provenance[fail-author]
+FAILED tests/diagnostics/test_managed_capability_projection.py::test_new_roles_reject_incomplete_or_forged_closed_provenance[fail-reviewer]
+FAILED tests/diagnostics/test_managed_capability_projection.py::test_new_roles_reject_incomplete_or_forged_closed_provenance[same_platform-author]
+FAILED tests/diagnostics/test_managed_capability_projection.py::test_new_roles_reject_incomplete_or_forged_closed_provenance[same_platform-reviewer]
+FAILED tests/diagnostics/test_managed_capability_projection.py::test_new_roles_reject_incomplete_or_forged_closed_provenance[evidence-author]
+FAILED tests/diagnostics/test_managed_capability_projection.py::test_new_roles_reject_incomplete_or_forged_closed_provenance[evidence-reviewer]
+16 failed, 133 passed in 453.82s (0:07:33)

@@ -1,0 +1,470 @@
+{
+  "cards": [
+    {
+      "sample": "COV-ISO-v1-01",
+      "rows": 8,
+      "view": "demo_retail.v_daily_sales",
+      "tokens": 5147,
+      "roundtrip": true,
+      "only_generic_system_and_lossless_cards_delta": true,
+      "lineage": {
+        "path": "oracle.json",
+        "positive_output": "COV-ISO-v1-01"
+      }
+    },
+    {
+      "sample": "COV-ISO-v1-02",
+      "rows": 1,
+      "view": "demo_retail.v_customer_value",
+      "tokens": 3239,
+      "roundtrip": true,
+      "only_generic_system_and_lossless_cards_delta": true,
+      "lineage": {
+        "path": "oracle.json",
+        "positive_output": "COV-ISO-v1-02"
+      }
+    },
+    {
+      "sample": "COV-ISO-v1-03",
+      "rows": 8,
+      "view": "diagnostic9.observation",
+      "tokens": 5077,
+      "roundtrip": true,
+      "only_generic_system_and_lossless_cards_delta": true,
+      "lineage": {
+        "path": "oracle.json",
+        "positive_output": "COV-ISO-v1-03"
+      }
+    },
+    {
+      "sample": "COV-CAP-v1-04",
+      "rows": 8,
+      "view": "demo_retail.v_customer_value",
+      "tokens": 5194,
+      "roundtrip": true,
+      "only_generic_system_and_lossless_cards_delta": true,
+      "lineage": {
+        "path": "coverage-selection.json",
+        "view": "demo_retail.v_customer_value"
+      }
+    },
+    {
+      "sample": "COV-CAP-v1-05",
+      "rows": 8,
+      "view": "demo_retail.v_inventory_status",
+      "tokens": 5568,
+      "roundtrip": true,
+      "only_generic_system_and_lossless_cards_delta": true,
+      "lineage": {
+        "path": "coverage-selection.json",
+        "view": "demo_retail.v_inventory_status"
+      }
+    }
+  ],
+  "noncoverage_delegation": true,
+  "historical_raw": [
+    {
+      "sample": "COV-ISO-v1-01",
+      "new_status": "FAIL",
+      "legacy_findings": [
+        {
+          "requirement_id": "GRN-001",
+          "aspect": "status/own_gap",
+          "expected": {
+            "status": "partial",
+            "own_gap": true,
+            "mappings": [
+              {
+                "column": "store_id"
+              }
+            ]
+          },
+          "actual": {
+            "status": "unsupported",
+            "own_gap": true,
+            "mappings": []
+          }
+        },
+        {
+          "requirement_id": "GRN-001",
+          "aspect": "necessary mappings/predicates",
+          "expected": [
+            {
+              "column": "store_id"
+            }
+          ],
+          "actual": []
+        },
+        {
+          "requirement_id": "MET-003",
+          "aspect": "status/own_gap",
+          "expected": {
+            "status": "partial",
+            "own_gap": false,
+            "mappings": [
+              {
+                "column": "revenue",
+                "aggregation": "sum",
+                "conditions": []
+              }
+            ],
+            "contract_path": "/columns/revenue/description"
+          },
+          "actual": {
+            "status": "partial",
+            "own_gap": true,
+            "mappings": [
+              {
+                "column": "revenue",
+                "aggregation": "sum",
+                "conditions": []
+              }
+            ],
+            "contract_path": "/columns/revenue/description"
+          }
+        }
+      ],
+      "equivalences": [],
+      "remaining": [
+        {
+          "requirement_id": "GRN-001",
+          "aspect": "status/own_gap",
+          "expected": {
+            "status": "partial",
+            "own_gap": true,
+            "mappings": [
+              {
+                "column": "store_id"
+              }
+            ]
+          },
+          "actual": {
+            "status": "unsupported",
+            "own_gap": true,
+            "mappings": []
+          }
+        },
+        {
+          "requirement_id": "GRN-001",
+          "aspect": "necessary mappings/predicates",
+          "expected": [
+            {
+              "column": "store_id"
+            }
+          ],
+          "actual": []
+        },
+        {
+          "requirement_id": "MET-003",
+          "aspect": "status/own_gap",
+          "expected": {
+            "status": "partial",
+            "own_gap": false,
+            "mappings": [
+              {
+                "column": "revenue",
+                "aggregation": "sum",
+                "conditions": []
+              }
+            ],
+            "contract_path": "/columns/revenue/description"
+          },
+          "actual": {
+            "status": "partial",
+            "own_gap": true,
+            "mappings": [
+              {
+                "column": "revenue",
+                "aggregation": "sum",
+                "conditions": []
+              }
+            ],
+            "contract_path": "/columns/revenue/description"
+          }
+        }
+      ],
+      "actual_rows": {
+        "FILT-001": {
+          "contract_path": "/columns/sales_date/description",
+          "mappings": [
+            {
+              "column": "sales_date",
+              "operator": ">=",
+              "value": "2026-09-01"
+            },
+            {
+              "column": "sales_date",
+              "operator": "<",
+              "value": "2026-10-01"
+            }
+          ],
+          "own_gap": false,
+          "status": "supported"
+        },
+        "FILT-002": {
+          "contract_path": null,
+          "mappings": [],
+          "own_gap": true,
+          "status": "unsupported"
+        },
+        "GRN-001": {
+          "mappings": [],
+          "own_gap": true,
+          "status": "unsupported"
+        },
+        "MET-001": {
+          "contract_path": null,
+          "mappings": [],
+          "own_gap": true,
+          "status": "unsupported"
+        },
+        "MET-002": {
+          "contract_path": null,
+          "mappings": [],
+          "own_gap": true,
+          "status": "unsupported"
+        },
+        "MET-003": {
+          "contract_path": "/columns/revenue/description",
+          "mappings": [
+            {
+              "aggregation": "sum",
+              "column": "revenue",
+              "conditions": []
+            }
+          ],
+          "own_gap": true,
+          "status": "partial"
+        },
+        "META-001": {
+          "contract_path": null,
+          "mappings": [],
+          "own_gap": true,
+          "status": "unsupported"
+        },
+        "POP-001": {
+          "contract_path": null,
+          "mappings": [],
+          "own_gap": true,
+          "status": "unsupported"
+        }
+      }
+    },
+    {
+      "sample": "COV-ISO-v1-02",
+      "new_status": "PASS",
+      "legacy_findings": [],
+      "equivalences": [],
+      "remaining": [],
+      "actual_rows": {
+        "unrelated/識別~鍵": {
+          "mappings": [],
+          "own_gap": true,
+          "status": "unsupported"
+        }
+      }
+    },
+    {
+      "sample": "COV-ISO-v1-03",
+      "new_status": "FAIL",
+      "legacy_findings": [
+        {
+          "requirement_id": "slot_0/🧾",
+          "aspect": "status/own_gap",
+          "expected": {
+            "status": "partial",
+            "own_gap": true,
+            "mappings": [
+              {
+                "column": "loc_key"
+              }
+            ]
+          },
+          "actual": {
+            "status": "unsupported",
+            "own_gap": true,
+            "mappings": []
+          }
+        },
+        {
+          "requirement_id": "slot_0/🧾",
+          "aspect": "necessary mappings/predicates",
+          "expected": [
+            {
+              "column": "loc_key"
+            }
+          ],
+          "actual": []
+        },
+        {
+          "requirement_id": "amount/net",
+          "aspect": "necessary mappings/predicates",
+          "expected": [
+            {
+              "column": "amount_value",
+              "aggregation": "sum",
+              "conditions": []
+            }
+          ],
+          "actual": [
+            {
+              "column": "amount_value",
+              "aggregation": "sum",
+              "conditions": [
+                {
+                  "column": "day_key",
+                  "operator": ">=",
+                  "value": "2032-02-01"
+                },
+                {
+                  "column": "day_key",
+                  "operator": "<",
+                  "value": "2032-03-01"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "equivalences": [
+        {
+          "requirement_id": "amount/net",
+          "aspect": "necessary mappings/predicates",
+          "expected": [
+            {
+              "column": "amount_value",
+              "aggregation": "sum",
+              "conditions": []
+            }
+          ],
+          "actual": [
+            {
+              "column": "amount_value",
+              "aggregation": "sum",
+              "conditions": [
+                {
+                  "column": "day_key",
+                  "operator": ">=",
+                  "value": "2032-02-01"
+                },
+                {
+                  "column": "day_key",
+                  "operator": "<",
+                  "value": "2032-03-01"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "remaining": [
+        {
+          "requirement_id": "slot_0/🧾",
+          "aspect": "status/own_gap",
+          "expected": {
+            "status": "partial",
+            "own_gap": true,
+            "mappings": [
+              {
+                "column": "loc_key"
+              }
+            ]
+          },
+          "actual": {
+            "status": "unsupported",
+            "own_gap": true,
+            "mappings": []
+          }
+        },
+        {
+          "requirement_id": "slot_0/🧾",
+          "aspect": "necessary mappings/predicates",
+          "expected": [
+            {
+              "column": "loc_key"
+            }
+          ],
+          "actual": []
+        }
+      ],
+      "actual_rows": {
+        "amount/net": {
+          "contract_path": "/columns/amount_value/description",
+          "mappings": [
+            {
+              "aggregation": "sum",
+              "column": "amount_value",
+              "conditions": [
+                {
+                  "column": "day_key",
+                  "operator": ">=",
+                  "value": "2032-02-01"
+                },
+                {
+                  "column": "day_key",
+                  "operator": "<",
+                  "value": "2032-03-01"
+                }
+              ]
+            }
+          ],
+          "own_gap": false,
+          "status": "partial"
+        },
+        "m_discount": {
+          "contract_path": null,
+          "mappings": [],
+          "own_gap": true,
+          "status": "unsupported"
+        },
+        "model_dump": {
+          "contract_path": null,
+          "mappings": [],
+          "own_gap": true,
+          "status": "unsupported"
+        },
+        "scope-channel": {
+          "contract_path": null,
+          "mappings": [],
+          "own_gap": true,
+          "status": "unsupported"
+        },
+        "slot_0/🧾": {
+          "mappings": [],
+          "own_gap": true,
+          "status": "unsupported"
+        },
+        "保留/全部": {
+          "contract_path": null,
+          "mappings": [],
+          "own_gap": true,
+          "status": "unsupported"
+        },
+        "元資料": {
+          "contract_path": null,
+          "mappings": [],
+          "own_gap": true,
+          "status": "unsupported"
+        },
+        "月~邊界": {
+          "contract_path": "/columns/day_key/description",
+          "mappings": [
+            {
+              "column": "day_key",
+              "operator": ">=",
+              "value": "2032-02-01"
+            },
+            {
+              "column": "day_key",
+              "operator": "<",
+              "value": "2032-03-01"
+            }
+          ],
+          "own_gap": false,
+          "status": "supported"
+        }
+      }
+    }
+  ],
+  "result": "PASS"
+}

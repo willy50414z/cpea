@@ -1,0 +1,25 @@
+{
+  "changed_rows": [
+    [
+      "demo_retail.v_customer_value",
+      "MET-003"
+    ]
+  ],
+  "unchanged_rows": 55,
+  "all_rows": 56,
+  "selection_hashes": {
+    "body": "eb6a1dd98d63365b76b4f513cbf4794b293d9706489c00344f435b13fe133957",
+    "schema": "0e911df0c74d2f30238d24c9b6c483d47a9778e0d23ab18af34fd99aaf5e8bbe",
+    "upstream": "70460cc22c0deccd75d96896c4bd914efc0038a5a3bb300dc8e20be8ad4e43ff",
+    "messages": "c6116af069cb945c678d5aea9e64b1c8eae6371e0a9decd7b809325847877ec5",
+    "profile_id": "demo_retail_draft",
+    "catalog": "e5e5a5a2cc29a1be93dc4d6875aba8c47a35ed48c019c7d6838a45831d0441dc",
+    "input_tokens": 22011
+  },
+  "approval": "PENDING_FRESH_INDEPENDENT_REVIEW",
+  "oracle_approval": "PENDING_FRESH_INDEPENDENT_REVIEW",
+  "v1_bindings_match": true,
+  "manifest_sha256": "33cf44c84c10842adb60bfb7cbfbb269bac6dfa136c124a43159efabd27d543f",
+  "sources": 165,
+  "POSTs": 0
+}

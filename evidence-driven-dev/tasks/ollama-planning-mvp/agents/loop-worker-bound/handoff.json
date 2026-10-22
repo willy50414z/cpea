@@ -1,0 +1,105 @@
+{
+  "ticket": "11bcb8bdf3ab49c08a3c3aecb486e61d",
+  "result": "PASS",
+  "evidence": [
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-bound/old-replay.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-bound/old-frozen-replay-verified.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-bound/regression-final.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-bound/fake-record-replay.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-bound/fake-manifest.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-bound/frozen-replays-final.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-bound/dry-run.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-bound/hash-verification.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-bound/candidate-fingerprint.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-bound/sources-before.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-bound/sources-after.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-bound/red.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-bound/red-runner.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-bound/red-redundancy.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-2/semantic-review.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T171721Z-fa4587/run.json"
+  ],
+  "summary": "第5輪純離線 evidence_bound_managed_contract PASS：requirements-only indexed recall及逐字契約候選理由、精確metric grain依賴、結構化gap/selection refs、真正必填完整typed selection已接共用managed runner；原238相關加69新測試共307通過。原第4輪仍完整FAIL，9raw原版與凍結版精確重現原首錯；新版fake9節點/2prepared與7類首錯同版及凍結版replay一致。0模型POST/SQL/DB。只完成本離線子節點，未宣稱自然或父/root通過。",
+  "node": "evidence_bound_managed_contract",
+  "changes": [
+    "evaluations/evidence_bound_managed_contract.py：新managed wire、required typed schema、依賴與refs檢查、逐字facts正規化；重用舊parse_slots/materialize_coverage/finish_selection。",
+    "evaluations/managed_three_stage_runner.py：僅增可選contract與--evidence-bound接線、refs工件及完整來源fingerprint；共用既有raw保存、record_run/replay、ManagedInvoke及loopctl transport，沒有複製另一套runner。",
+    "evaluations/prompts/evidence_bound/{recall,coverage,selection}.md：新版專用prompt；舊prompts及wire未修改。",
+    "tests/unit/test_evidence_bound_managed_contract.py、tests/unit/test_evidence_bound_managed_runner.py：69項新必要正反例與完整fake，既有測試未修改。"
+  ],
+  "verification": {
+    "command": ".venv/bin/python -m pytest tests/unit/test_managed_three_stage_runner.py tests/unit/test_indexed_requirement_recall.py tests/unit/test_referenced_view_coverage.py tests/unit/test_slotted_view_coverage.py tests/unit/test_three_stage_view_selection.py tests/unit/test_planning_mvp.py tests/unit/test_task_decomposition_contract.py tests/unit/test_task_decomposition_workflow.py tests/unit/test_decomposition_evaluation.py tests/unit/test_decomposition_decision_chain.py tests/unit/test_decomposition_decision_summary.py tests/unit/test_planning_reasoning_probe.py tests/unit/test_evidence_bound_managed_contract.py tests/unit/test_evidence_bound_managed_runner.py -q",
+    "result": "307 passed in 29.32s",
+    "existing_related_tests": 238,
+    "new_tests": 69,
+    "tdd": {
+      "wire_red": "40 failed：新wire尚不存在；red.log",
+      "runner_red": "9 failed：尚無contract接線或--evidence-bound；red-runner.log",
+      "redundancy_red": "1 failed：不同能力子集可冒稱redundant；red-redundancy.log",
+      "intermediate_failures": "green-first.log保留fixture誤認catalog排序造成5敗；改正控例來源後40通過。green-runner-first.log保留1個舊monkeypatch呼叫相容錯；預設舊路徑不傳新keyword修復，沒有改舊測試或guard。"
+    },
+    "controls": "原map04 order_amount sum商品grain unsupported拒絕、partial+grain gap保留且不可assignment；真訂單grain可支持、兩metric各連不同業務grain及真正全域scalar、固定月份縮約、改名來源/欄位、任意Unicode IDs、真metadata與背景、無status欄位庫存/明示status負例、population未證明與明示排除原文、typed每欄省略與完整typed空責任、同源scope與原guards、redundancy雙側能力核對。",
+    "fake": {
+      "runs": 8,
+      "complete_raw_calls": 9,
+      "prepared_requests": 2,
+      "total_raw_replays": 39,
+      "failures": [
+        "provider",
+        "parse",
+        "gap",
+        "typed",
+        "null",
+        "old_wire",
+        "nested_duplicate"
+      ],
+      "manifest": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-bound/fake-manifest.json",
+      "prepared": "inventory店商品anchor、stock_qty sum、snapshot_date metadata；sales_detail同task三filter/兩sum、店商品彙總、left保母體與原不補零policy。"
+    },
+    "replay": "原版9raw及新fake全部完整/失敗前綴，在現版與可執行來源凍結快照都精確一致。舊raw拒絕當新版結果；不去重/補欄/repair。",
+    "dry_run": "--evidence-bound 0網路；ManagedInvoke舊測試確認僅loopctl request、stream=false、num_predict=-1、無HTTP或外層timeout/retry。"
+  },
+  "preservation": {
+    "historical_files_verified": 892,
+    "historical_changed": [],
+    "old_natural_result": "仍為FAIL；recall捏造monthly通路、order商品級metric過度支持、monthly缺口/排除母體斷言、typed省略及map07額外status義務原文均保留，詳原semantic-review.log與research-4/diagnosis.json。",
+    "snapshots": {
+      "before_files": 129,
+      "after_files": 138,
+      "paths": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-bound/sources-{before,after}",
+      "replay_command": ".venv/bin/python evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-bound/replay_frozen.py",
+      "relocation": "replay_frozen.py先驗證快照hash，再只將搬移的絕對fingerprint key還原canonical identity；原schema/來源hash/輸入/工件/首錯比較全部保留。新快照同存絕對fingerprint來源與相對import副本。"
+    },
+    "two_existing_src_changes": "兩src hash保持原值，詳hash-verification.json。",
+    "after_final_307": "live source/tests/prompts完全未改；後續僅修正snapshot import副本/manifest及落盤hash/handoff。",
+    "task_controller_changed_by_worker": false,
+    "commits": 0,
+    "pushes": 0
+  },
+  "boundaries": [
+    "本輪0模型POST；未測Qwen自然遵從新wire，strict schema及refs合法不等於語意正確。",
+    "模型仍負需求scope、grain適用性、逐View status/mapping/gaps與完整typed來源選擇/整合；錯把本題商品metric宣independent，或自由request/notes加錯事實，須由下一自然語意gate判FAIL。",
+    "不同grain與固定維度正例只證明明示依賴一致性，不以NL相似度證等價或替模型自動修降級。",
+    "原coverage/selection/finish guard與wire保持；新wire正規化後回原嚴格finish，不從task.request編譯typed答案。",
+    "依父派遣純離線/no SQL/DB範圍，只跑既有238相關加新增集，未跑可能包含provider/DB的無關全repository suite。"
+  ],
+  "resources": {
+    "model_POSTs": 0,
+    "cloud": 0,
+    "retry": 0,
+    "SQL": 0,
+    "DB": 0
+  },
+  "next": {
+    "node": "natural_evidence_bound_three_stage",
+    "action": "Main以本handoff finish後按controller派fresh自然worker；本worker不續跑模型。",
+    "command": ".venv/bin/python -m evaluations.managed_three_stage_runner --evidence-bound --execute --ticket \"$EDD_WORKER_TICKET\"",
+    "candidate_version": "managed-evidence-bound-1",
+    "model": "qwen3.8:27b",
+    "model_digest": "aaee06c39dcf2437cde036998d960e1fc1494b8191be7cc9657d01e509097813",
+    "sample": "固定新候選單一預定樣本，自requirements-only recall、catalog全部7View各mapping、selection（最多9正常POST）；首provider/parse/contract錯即停，保存全部原文，不repair或原樣retry挑分。",
+    "semantic_gate": "逐項審全部原文責任/grain links/7View狀態與gaps/selection refs及全部剩餘自由文，含未選來源；自然ready/prepared才可另判。",
+    "configuration": "think=true temperature=1 top_p=1 seed=42 num_ctx=32768 num_predict=-1；HTTP/外層timeout=None，僅loopctl request。",
+    "parent_return": "第6輪自然結果後先fresh audit完整4–6輪，再按controller返回natural_slots_three_stage、natural_qwen_three_stage、three_stage_integration及root各自驗收；最終仍需fresh verifier ACCEPT。"
+  }
+}

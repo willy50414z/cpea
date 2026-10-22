@@ -1,0 +1,76 @@
+.................F.                                                      [100%]
+=================================== FAILURES ===================================
+___ test_original_guards_and_other_semantic_failures_remain_fatal[business] ____
+
+failure = 'business'
+
+    @pytest.mark.parametrize('failure',['typed','inner','zero','business'])
+    def test_original_guards_and_other_semantic_failures_remain_fatal(failure):
+        mod=api(); context=mod.prepare(mod.load_package()); value=original()
+        value['draft']['integration']['missing_data_policy']=MISSING_POLICIES[1]
+        if failure=='typed': value['draft']['tasks'][0].pop('filters')
+        if failure=='inner': value['draft']['integration']['edges'][0].update(mode='inner',preserve_task=None)
+        if failure=='zero': value['draft']['integration']['missing_data_policy']='補零'
+        if failure=='business': value['draft']['tasks'][1]['metrics']['discount_amount']='max'
+>       if failure=='business': assert mod.evaluate(context,json.dumps(value,ensure_ascii=False))['status']=='FAIL'
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/diagnostics/test_managed_policy_shape.py:68: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluations/diagnostics/managed_policy_shape.py:153: in evaluate
+    result = base.evaluate(context,raw)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluations/managed_node_diagnostics.py:300: in evaluate
+    normalized = contract.materialize_selection(parsed_model, context['recall'], context['coverages'], context['request'], context['catalog'])
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluations/evidence_bound_managed_contract.py:262: in materialize_selection
+    finish_selection(result, recall, coverages, request, catalog)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+selection = SelectionResult(selected_views=['demo_retail.v_inventory_status', 'demo_retail.v_sales_detail'], assignments=[Assignme...與淨銷售額至門市×商品粒度')], missing_data_policy='保留未匹配母體並標記缺值；無契約保證不得補零。', notes=[]), clarifications=[], unsupported_reasons=[]))
+recall = BoundRecall(requirements=[BoundRequirement(requirement_id='GRN-001', quote='各店各商品', business_object='各店各商品', kind='gra...", "quote": "粒度：每門市每月一列。營收、毛利、訂單數、客單價、月目標與達標率；百分比數值為 0~100。"}, {"path": "/grain/description", "quote": "每門市每月一列"}]}')])
+coverages = [ViewCoverage(view='demo_retail.v_customer_value', entries=[RequirementCoverage(requirement_id='GRN-001', status='unsu...nce=[ContractEvidence(path='/summary', quote='粒度：每筆已完成訂單的每個商品品項；僅含已完成訂單。銷售額為折扣後淨額，毛利=淨額-成本。請勿以 COUNT(*) 當訂單數。')]), ...]
+request = '對照各店各商品的盤點庫存件數與 2026 年 9 月線上通路的折扣金額及淨銷售額，並顯示庫存盤點日期，準備促銷後補貨評估；保留所有庫存商品。'
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x77954816b2c0>
+
+    def finish_selection(selection, recall, coverages, request, catalog):
+        validate_recall(recall, request, catalog)
+        _unique([v.view for v in coverages], 'coverage views')
+        if {v.view for v in coverages} != {v.view for v in recall.candidate_views}:
+            raise ValueError('missing candidate coverage')
+        for coverage in coverages:
+            validate_coverage(coverage, recall, request, catalog)
+        if selection.draft.status != 'ready':
+            if selection.draft.tasks or selection.assignments or selection.selected_views:
+                raise ValueError('non-ready selection cannot contain executable assignments')
+            return finish(selection.draft, catalog, guard=True)
+        _unique(selection.selected_views, 'selected views')
+        _unique([a.requirement_id for a in selection.assignments], 'assignments')
+        requirements = {r.requirement_id: r for r in recall.requirements}
+        if {a.requirement_id for a in selection.assignments} != set(requirements):
+            raise ValueError('selection omitted requirements')
+        tasks = {t.task_id: t for t in selection.draft.tasks}
+        if len(tasks) != len(selection.draft.tasks):
+            raise ValueError('duplicate task IDs')
+        selected = set(selection.selected_views)
+        if selected != {t.view for t in tasks.values()} or selected != {a.view for a in selection.assignments}:
+            raise ValueError('selected views/tasks/assignments differ')
+        excluded = [v.view for v in selection.exclusions]
+        _unique(excluded, 'exclusions')
+        if selected & set(excluded) or selected | set(excluded) != {v.view for v in recall.candidate_views}:
+            raise ValueError('every candidate must be selected or excluded')
+        entries = {(v.view, e.requirement_id): e for v in coverages for e in v.entries}
+        for a in selection.assignments:
+            entry = entries.get((a.view, a.requirement_id))
+            task = tasks.get(a.task_id)
+            if not entry or entry.status != 'supported' or not task or task.view != a.view:
+                raise ValueError('assignment lacks supported same-source mapping')
+            required = [entry, *(entries[(a.view, s)] for s in requirements[a.requirement_id].scope_ids)]
+            if any(e.status != 'supported' or any(not _mapping_in_task(m, task) for m in e.mappings) for e in required):
+>               raise ValueError('task omitted verified requirement/scope mapping')
+E               ValueError: task omitted verified requirement/scope mapping
+
+evaluations/three_stage_view_selection.py:268: ValueError
+=========================== short test summary info ============================
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_original_guards_and_other_semantic_failures_remain_fatal[business]
+1 failed, 18 passed in 3.80s

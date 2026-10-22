@@ -1,0 +1,20 @@
+{
+  "id": "EV-20261020T154143-4f2a9ac3",
+  "kind": "review",
+  "command": [
+    ".venv/bin/python",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/reports/verify_decision_chain.py"
+  ],
+  "cwd": "/home/willy/code/cpea_terms",
+  "started_at": "2026-10-20T15:41:43+00:00",
+  "finished_at": "2026-10-20T15:41:45+00:00",
+  "exit_code": 0,
+  "revision": "bc09c67fc4078501599c37e4cdfecdee40af2ef8",
+  "diff_fingerprint": "969917bd94ac3ddafec02cf86c6f5b4bf6737b686b846ea58aba070bb2a9089b",
+  "post_fingerprint": "969917bd94ac3ddafec02cf86c6f5b4bf6737b686b846ea58aba070bb2a9089b",
+  "source_unchanged": true,
+  "output_sha256": "69ecae23e8bcf03f453f8cac0556eaca81fd3c2c6e471d252cd074d269d686d2",
+  "raw_output": ".local/EV-20261020T154143-4f2a9ac3.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "73f5a72c83d4a524a33aad230faac5f171580c03ba7fdfe808d376611b52739f"
+}

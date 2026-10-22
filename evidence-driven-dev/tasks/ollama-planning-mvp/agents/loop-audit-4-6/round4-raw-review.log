@@ -1,0 +1,10 @@
+Monthly candidate {"view": "demo_retail.v_product_monthly", "reason": "門市×月份×商品粒度具 discount_amount 與 net_sales，可按 2026-09 及通路篩選後與庫存對照"}
+Monthly contract columns ['sales_month', 'store_id', 'store_name', 'region', 'city', 'product_id', 'sku', 'product_name', 'category', 'units_sold', 'gross_sales', 'discount_amount', 'net_sales', 'gross_profit']
+Monthly summary 粒度：門市×月份×商品；適合商品/分類排行、商品銷量及毛利，不含訂單筆數；商品跨店排行需加總 net_sales/units_sold。
+Order source demo_retail.v_order_summary
+Order grain/metric [{"requirement_id": "grain_store_product", "status": "unsupported", "mappings": [], "contract_evidence": [{"path": "/grain/description", "quote": "每筆已完成訂單一列"}], "missing_requirements": ["本 View 粒度為每筆已完成訂單（key: order_id），無商品層級欄位，無法支持門市×商品粒度"]}, {"requirement_id": "metric_net_sales", "status": "supported", "mappings": [{"column": "order_amount", "role": "metric", "source_quote": "淨銷售額", "aggregation": "sum", "operator": null, "value": null, "conditions": [], "contract_evidence": [{"path": "/columns/order_amount/description", "quote": "此訂單折扣後的總銷售金額（各明細 quantity × unit_price − discount），單位 TWD。"}]}], "contract_evidence": [{"path": "/columns/order_amount/description", "quote": "此訂單折扣後的總銷售金額（各明細 quantity × unit_price − discount），單位 TWD。"}], "missing_requirements": []}]
+Monthly population {"requirement_id": "population_all_inventory", "status": "unsupported", "mappings": [], "contract_evidence": [], "missing_requirements": ["本View為銷售統計，母體僅包含有銷售紀錄之門市×商品組合，無法涵蓋無銷售之全量庫存商品（含缺貨、需補貨狀態）"]}
+RAW selection draft keys ['status', 'strategy', 'tasks', 'unsupported_reasons']
+RAW tasks keys [['output_grain', 'request', 'required_columns', 'task_id', 'view', 'unbound_inputs'], ['output_grain', 'request', 'required_columns', 'task_id', 'view', 'unbound_inputs']]
+Parsed artifact includes Pydantic defaults; raw response above is source of omission evidence.
+Round4 FAIL remains: invented monthly channel, over-supported order metric, unsupported population assertion, omitted typed selection. No raw/score modified.

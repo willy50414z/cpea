@@ -1,0 +1,15 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/willy/code/cpea_terms/evaluations/diagnostics/managed_policy_shape.py", line 404, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/home/willy/code/cpea_terms/evaluations/diagnostics/managed_policy_shape.py", line 386, in main
+    review=base.read_json(args.review) if args.review else None; auth=preflight(package,context,review)
+                                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/willy/code/cpea_terms/evaluations/diagnostics/managed_policy_shape.py", line 218, in preflight
+    roles = _roles(package,review,loop)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/willy/code/cpea_terms/evaluations/diagnostics/managed_policy_shape.py", line 181, in _roles
+    raise ValueError('policy review lacks completed provenance')
+ValueError: policy review lacks completed provenance

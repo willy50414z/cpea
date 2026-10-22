@@ -1,0 +1,1 @@
+{"folder": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T185423Z-5d276f", "stopped": {"error_type": "ValueError", "error": "gap aspect contradicts evidence or dependencies: grain"}}

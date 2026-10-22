@@ -1,0 +1,24 @@
+{
+  "id": "EV-20261020T045315-ad94c58f",
+  "kind": "experiment",
+  "command": [
+    ".venv/bin/python",
+    "-m",
+    "pytest",
+    "tests/unit/test_task_decomposition_contract.py",
+    "tests/unit/test_task_decomposition_workflow.py",
+    "-q"
+  ],
+  "cwd": "/home/willy/code/cpea_terms",
+  "started_at": "2026-10-20T04:53:15+00:00",
+  "finished_at": "2026-10-20T04:53:20+00:00",
+  "exit_code": 0,
+  "revision": "27779833af3f59b3058ce31a6019581f5f6509e0",
+  "diff_fingerprint": "9e39810c63cbcb2494df14fc7f3221fa35f144096dbd009672e9f1d43c3af6b3",
+  "post_fingerprint": "9e39810c63cbcb2494df14fc7f3221fa35f144096dbd009672e9f1d43c3af6b3",
+  "source_unchanged": true,
+  "output_sha256": "2a6cd989abd0bf233f8e678ba55cf4b8c064644ef852fb514b01dc261a33966e",
+  "raw_output": ".local/EV-20261020T045315-ad94c58f.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "c6dfa692fbe1b60eb5944a825e59b2c7791b72f1428eb40cb0b74259b1c33ea4"
+}

@@ -1,0 +1,8 @@
+{
+  "protected_total": 5203,
+  "protected_checked": 5203,
+  "changed": {},
+  "author_index_count": 668,
+  "author_changed": {},
+  "task_excluded_reason": "Main正常控制器推進；不以舊Task全檔hash判漂移"
+}

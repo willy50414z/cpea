@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "classification": "自然可行性實驗辨識力不足；非第7/9輪schema已證錯誤，亦非三階段已被否證",
+  "facts": [
+    {
+      "claim": "現run_pipeline把recording node封在內部，固定順序recall→所有View→selection，不能直接只跑選擇；ManagedInvoke可獨立重用，逐次POST已走loopctl。",
+      "source": "evaluations/managed_three_stage_runner.py:78,132,165"
+    },
+    {
+      "claim": "新kind shape只固定role/null/[]/grain path；status、own_gap、column、predicate、aggregation與typed仍由模型。既有own adapter已支援合法dependency-only partial，因此本輪不需要再改表示欄位。",
+      "source": "evaluations/kind_mapping_managed_contract.py:40,59; evaluations/own_responsibility_managed_contract.py:45"
+    },
+    {
+      "claim": "現完整fake對daily/order/store_monthly未提供真實有用能力；它可證wire/runner但不能作selection語意Oracle。",
+      "source": "tests/unit/test_evidence_bound_managed_contract.py:25; tests/unit/test_three_stage_view_selection.py:46"
+    },
+    {
+      "claim": "read-only probe重建八項recall、新的七View能力矩陣（含未選partial），現contract全部materialize且現有typed synthetic selection適配身份後ready/2prepared；僅證目前表示/守門相容，不證該矩陣是獨立Oracle或模型可自然完成。",
+      "source": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-9/research-probe.log"
+    }
+  ],
+  "questions": [
+    {
+      "id": "H-COV",
+      "claim": "在正確固定recall下，既有kind形狀是否能讓Qwen自然區分有用partial、自身與依賴缺口、無關identifier及獨立整月predicate？",
+      "falsifier": "固定三樣本任一必要語意錯即FAIL；特別漏店鍵、customer硬湊partial、淨額依賴缺口誤own_gap、月份漏邊界或錯閏年。",
+      "status": "PENDING"
+    },
+    {
+      "id": "H-SEL",
+      "claim": "在正確完整七View coverage下，現required typed schema/prompt是否能由Qwen自然形成正確兩來源plan與prepared？",
+      "falsifier": "首次一樣本任何typed省略、錯月份/online/sum/metadata、錯anchor/鍵/彙總/left/nozero或文字無支持即FAIL。",
+      "status": "PENDING"
+    }
+  ],
+  "responsibility": {
+    "retain": "模型仍負所有核心語意與typed；Python只編譯已決不變量/派生依賴。不可因schema合法直接宣稱語意正確。",
+    "next_change": "只增加診斷入口、固定fixture/manifest、獨立語意核對與log；不改產品pipeline或任何candidate schema/prompt/guard。",
+    "why_selection_first": "完整required typed自第5輪後未自然到達；先測selection可直接消除此最重要未知，避免再次由coverage首錯遮住。coverage樣本另為獨立節點。",
+    "customer_boundary": "customer_id與店商品需求無對應，不能作partial key。lifetime_spend只保證會員累計消費，不能由此證明本題交易淨額/交易日期/店商品歸屬；fixed coverage保守不採用它。不得把last_order_date當完整交易月份。fresh reviewer必須獨立核對，不得僅引用前輪all-unsupported結論；若認定有可證必要部分能力，先FAIL/修fixture版本再POST。",
+    "population_boundary": "population映射必須證明保留全部庫存列；其他View即使店商品鍵齊也不是該母體的必要能力分量，不能只用keys構造partial。inventory可用原summary與完整鍵，不另要求stock_status欄或>0 filter。"
+  },
+  "source_sha256": {
+    "evaluations/managed_three_stage_runner.py": "8588648e937eb384d91ecd108d6ea2fc6832ca4374b54830bde741b8f2e58a48",
+    "evaluations/kind_mapping_managed_contract.py": "5e8bcefcbf5a28918944ce4b8b5901e4b8bb0719b8dbac174d6cd36c1a1e0e99",
+    "evaluations/own_responsibility_managed_contract.py": "1682eb317b21a26b7fa77dd49ac9c8f3f5a827cd1dff1186413f7809c452c78c",
+    "evaluations/evidence_bound_managed_contract.py": "6451efd734c17f20c91a737210c156bfb52034b0f804e1d76f5411483a4c75c8",
+    "evaluations/prompts/kind_mapping/coverage.md": "e548b64a9a41bb446de0b6f6a5071527634ad06d197587174ca239ea14213687",
+    "evaluations/prompts/evidence_bound/selection.md": "347c31f0d425f8b38a010da708da65b76cec939ff3a0d4204acbddf933b2ba92",
+    "evaluations/three_stage_view_selection.py": "3ae39cf501aca0b3a8e2f293314fca9b96250453d18c2251e6f6f3f365725323",
+    "src/cpea/application/models/decomposition.py": "1fe4eb06da88fc67c3e65250a93393ac944dbbba9f2c4ac3349134e044b10558",
+    "src/cpea/workflows/task_decomposition/prompt.py": "4655d352feaaab93bdef78a2ced51da9ae93adf1f907aa99eb8c1a237876349b"
+  },
+  "implementation_changed": false,
+  "task_or_control_changed": false,
+  "model_POSTs": 0,
+  "SQL_DB": 0
+}

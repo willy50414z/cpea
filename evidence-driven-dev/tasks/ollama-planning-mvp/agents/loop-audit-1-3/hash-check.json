@@ -1,0 +1,144 @@
+{
+  "immutable_evidence_checked": 34,
+  "hash_failures": [],
+  "requests": [
+    {
+      "id": "436132c5fc81426ba2d2988fbc336844",
+      "provider": "local",
+      "retry_number": 0,
+      "status": "ok",
+      "response_hash_matches": true
+    },
+    {
+      "id": "cd42974eb8894d0283b362ab938b8bbf",
+      "provider": "local",
+      "retry_number": 0,
+      "status": "ok",
+      "response_hash_matches": true
+    },
+    {
+      "id": "026ee1b04a924d59b1cb8c5eb79e8b5a",
+      "provider": "local",
+      "retry_number": 0,
+      "status": "ok",
+      "response_hash_matches": true
+    },
+    {
+      "id": "6a9eb995d6ef4c708e3b30bc8bf5e55e",
+      "provider": "local",
+      "retry_number": 0,
+      "status": "ok",
+      "response_hash_matches": true
+    },
+    {
+      "id": "2c03ff55d59745849b3e0f9524942571",
+      "provider": "local",
+      "retry_number": 0,
+      "status": "ok",
+      "response_hash_matches": true
+    },
+    {
+      "id": "7a725bd28f414097ba31bd4c4cd0be0c",
+      "provider": "local",
+      "retry_number": 0,
+      "status": "ok",
+      "response_hash_matches": true
+    }
+  ],
+  "used": {
+    "agent_dispatches": 6,
+    "cloud_calls": 0,
+    "local_calls": 6,
+    "model_retries": 0
+  },
+  "request_timeout_seconds": null,
+  "historical_gate": [
+    {
+      "id": "I0",
+      "description": "MVP0原30筆一致、閉包100%typed coverage、12unsafe全擋且6合法控制不退步、oracle審核完成。",
+      "status": "FAIL",
+      "evidence": [
+        "evidence/EV-20261020T125444-1e0000c4.json",
+        "agents/oracle-audit/mvp0-b1-review.json",
+        "reports/mvp0-summary.json"
+      ]
+    },
+    {
+      "id": "I1",
+      "description": "DeepSeek六題與十題逐階段達提案門檻，first pass與repair分列。",
+      "status": "FAIL",
+      "evidence": [
+        "evidence/EV-20261020T125606-8b36efcb.json",
+        "agents/oracle-audit/mvp1-semantic-review.json"
+      ]
+    },
+    {
+      "id": "I2",
+      "description": "固定版本DeepSeek原30＋封存8題，兩輪首次各38/38語意完整正確且無oracle待審。",
+      "status": "PENDING",
+      "evidence": []
+    },
+    {
+      "id": "I3",
+      "description": "通過I2才凍結並轉Qwen，以相同兩輪38/38 Gate驗收。",
+      "status": "PENDING",
+      "evidence": []
+    },
+    {
+      "id": "TS0",
+      "description": "三階段離線契約、合法部分支持、scope綁定、負例／重播／預算守門通過。",
+      "status": "PASS",
+      "evidence": [
+        "evidence/EV-20261021T015608-374f69fc.json",
+        "evidence/EV-20261021T015828-e8216b14.json"
+      ]
+    },
+    {
+      "id": "TS1",
+      "description": "第11題自然完整需求映射、來源選擇、整合與prepared requests通過；本次停在inventory引用契約，門檻未達。",
+      "status": "FAIL",
+      "evidence": [
+        "evidence/EV-20261021T015637-436c6855.json",
+        "reports/three-stage-view-selection-results.md"
+      ]
+    },
+    {
+      "id": "IDX0",
+      "description": "第一步wire無quote、嚴格Unicode索引與Python裁切、既有scope/View guard、raw/parsed/derived保存與重播通過。",
+      "status": "PASS",
+      "evidence": [
+        "evidence/EV-20261021T033818-dd272774.json",
+        "evidence/EV-20261021T034118-e12c74ed.json",
+        "agents/indexed-recall-review/handoff.json"
+      ]
+    },
+    {
+      "id": "IDX1",
+      "description": "本固定候選單次自然index完整對應需求且角色正確；實測5組尾端不完整且母體錯列filter，未達標準。",
+      "status": "FAIL",
+      "evidence": [
+        "evidence/EV-20261021T033920-61ce56e4.json",
+        "reports/indexed-recall-results.md"
+      ]
+    }
+  ],
+  "baselines": [
+    {
+      "phase": "loop-worker-contract",
+      "files": 485,
+      "changed": [
+        "evaluations/prompts/three_stage/recall_indexed.md"
+      ],
+      "missing": []
+    },
+    {
+      "phase": "loop-worker-slots",
+      "files": 823,
+      "changed": [
+        "evaluations/managed_three_stage_runner.py",
+        "tests/unit/test_managed_three_stage_runner.py"
+      ],
+      "missing": []
+    }
+  ]
+}

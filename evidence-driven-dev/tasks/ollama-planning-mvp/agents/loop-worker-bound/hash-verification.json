@@ -1,0 +1,20 @@
+{
+  "result": "PASS",
+  "historical_files_verified": 892,
+  "historical_changed": [],
+  "snapshots": {
+    "before": 129,
+    "after": 138
+  },
+  "preserved_src": {
+    "src/cpea/application/models/decomposition.py": "1fe4eb06da88fc67c3e65250a93393ac944dbbba9f2c4ac3349134e044b10558",
+    "src/cpea/workflows/task_decomposition/prompt.py": "4655d352feaaab93bdef78a2ced51da9ae93adf1f907aa99eb8c1a237876349b"
+  },
+  "changed_existing_sources": [
+    "/home/willy/code/cpea_terms/evaluations/managed_three_stage_runner.py",
+    "evaluations/managed_three_stage_runner.py"
+  ],
+  "candidate_fingerprint_matches": true,
+  "model_POSTs": 0,
+  "snapshot_import_paths": "absolute fingerprint sources and relative package import copies both verified"
+}

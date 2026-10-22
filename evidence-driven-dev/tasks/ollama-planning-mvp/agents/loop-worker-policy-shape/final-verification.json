@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "ticket": "34175c2580224eddb7061898d2af61ef",
+  "node": "kind_policy_shape_contract",
+  "result": "PASS",
+  "validations": {
+    "focused_pytest": 68,
+    "necessary_original_pytest": 103,
+    "protected_files": 5203,
+    "old_source_count": 167,
+    "added_source_count": 2,
+    "immutable_original_round15_same_version": "精確FAIL",
+    "immutable_original_round15_original_frozen": "精確FAIL",
+    "original_raw_new_policy": "無nest shape FAIL；legacy literal finding不等於補零",
+    "live_selection_controls": 4,
+    "exact_live_selection_raw_frozen_replays": 4,
+    "full_fake_nine_live_and_frozen_controls": 3,
+    "full_nine_cross_source_identical_raw": 27,
+    "full_nine_cross_source_identical_output_artifacts": 162,
+    "prepared_requests_positive": 2,
+    "old_rebound_bindings": "保持",
+    "historical_v2_live_loader": "仍拒絕",
+    "author_review_guards": "真closed PASS、distinct platform、原fixture三方provenance、新review immutable completion evidence、active node/audit、前後重核",
+    "error_guards": "provider/typed/parse/shape/其他semantic首錯、同版replay、raw保存、來源/授權漂移及中斷均不升PASS"
+  },
+  "acceptance_evidence": {
+    "original_raw": [
+      "original-raw-policy-check.json",
+      "original-raw-live-control.log",
+      "original-frozen-replay.log"
+    ],
+    "policy_and_original_guards": [
+      "red.log",
+      "red-complete-fingerprint-provider.log",
+      "focused-final.log"
+    ],
+    "prompt_binding": [
+      "operation-handoff.json",
+      "preservation-check.json"
+    ],
+    "source_freeze": [
+      "frozen/policy-freeze.json",
+      "frozen/freeze.json",
+      "final-binding-check.log"
+    ],
+    "complete_offline_replay": [
+      "offline-controls.json",
+      "frozen-controls.json",
+      "cross-source-raw-check.json"
+    ],
+    "regression_and_preservation": [
+      "necessary-regression.log",
+      "preservation-before.json",
+      "preservation-check.json"
+    ]
+  },
+  "pending": [
+    "fresh kind_policy_shape_semantics獨立核准及closed PASS",
+    "新自然selection一次",
+    "原selection parent整合",
+    "coverage3",
+    "完整自然9POST",
+    "各祖先整合",
+    "fresh final verifier"
+  ],
+  "limitations": [
+    "機器通過不代替自由文字與業務完整性的fresh語意審核；nested正例只證policy形狀。",
+    "完整fake9之live/frozen每份raw與輸出精確一致；fingerprint只對封存root絕對路徑作身分正規化比對，未改原run/global。",
+    "封存重播沿用同一.venv、uv.lock及已綁外部runtime，未vendor第三方套件。"
+  ],
+  "preservation": "所有舊source/test/prompt/fixture/manifest/raw/frozen/Gate及兩src bytes保持；未改Task/control或舊expected hash。",
+  "all_worker_processes_ended": true,
+  "POST": 0,
+  "SQL_DB": 0,
+  "commit_push": 0
+}

@@ -1,0 +1,196 @@
+{
+  "objects": [
+    {
+      "path": "",
+      "keys": [
+        "entries"
+      ]
+    },
+    {
+      "path": "/entries",
+      "keys": [
+        "FILT-001",
+        "FILT-002",
+        "GRN-001",
+        "MET-001",
+        "MET-002",
+        "MET-003",
+        "META-001",
+        "POP-001"
+      ]
+    },
+    {
+      "path": "/entries/FILT-001",
+      "keys": [
+        "contract_path",
+        "mappings",
+        "own_gap",
+        "status"
+      ]
+    },
+    {
+      "path": "/entries/FILT-001/mappings/0",
+      "keys": [
+        "column",
+        "operator",
+        "value"
+      ]
+    },
+    {
+      "path": "/entries/FILT-001/mappings/1",
+      "keys": [
+        "column",
+        "operator",
+        "value"
+      ]
+    },
+    {
+      "path": "/entries/FILT-002",
+      "keys": [
+        "contract_path",
+        "mappings",
+        "own_gap",
+        "status"
+      ]
+    },
+    {
+      "path": "/entries/GRN-001",
+      "keys": [
+        "mappings",
+        "own_gap",
+        "status"
+      ]
+    },
+    {
+      "path": "/entries/MET-001",
+      "keys": [
+        "contract_path",
+        "mappings",
+        "own_gap",
+        "status"
+      ]
+    },
+    {
+      "path": "/entries/MET-002",
+      "keys": [
+        "contract_path",
+        "mappings",
+        "own_gap",
+        "status"
+      ]
+    },
+    {
+      "path": "/entries/MET-003",
+      "keys": [
+        "contract_path",
+        "mappings",
+        "own_gap",
+        "status"
+      ]
+    },
+    {
+      "path": "/entries/MET-003/mappings/0",
+      "keys": [
+        "aggregation",
+        "column",
+        "conditions"
+      ]
+    },
+    {
+      "path": "/entries/META-001",
+      "keys": [
+        "contract_path",
+        "mappings",
+        "own_gap",
+        "status"
+      ]
+    },
+    {
+      "path": "/entries/POP-001",
+      "keys": [
+        "contract_path",
+        "mappings",
+        "own_gap",
+        "status"
+      ]
+    }
+  ],
+  "object_key_sequences_in_parse_order": [
+    [
+      "column",
+      "operator",
+      "value"
+    ],
+    [
+      "column",
+      "operator",
+      "value"
+    ],
+    [
+      "contract_path",
+      "mappings",
+      "own_gap",
+      "status"
+    ],
+    [
+      "contract_path",
+      "mappings",
+      "own_gap",
+      "status"
+    ],
+    [
+      "mappings",
+      "own_gap",
+      "status"
+    ],
+    [
+      "contract_path",
+      "mappings",
+      "own_gap",
+      "status"
+    ],
+    [
+      "contract_path",
+      "mappings",
+      "own_gap",
+      "status"
+    ],
+    [
+      "aggregation",
+      "column",
+      "conditions"
+    ],
+    [
+      "contract_path",
+      "mappings",
+      "own_gap",
+      "status"
+    ],
+    [
+      "contract_path",
+      "mappings",
+      "own_gap",
+      "status"
+    ],
+    [
+      "contract_path",
+      "mappings",
+      "own_gap",
+      "status"
+    ],
+    [
+      "FILT-001",
+      "FILT-002",
+      "GRN-001",
+      "MET-001",
+      "MET-002",
+      "MET-003",
+      "META-001",
+      "POP-001"
+    ],
+    [
+      "entries"
+    ]
+  ],
+  "note": "raw JSON key sequences include duplicates; strict parser verdict recorded separately"
+}

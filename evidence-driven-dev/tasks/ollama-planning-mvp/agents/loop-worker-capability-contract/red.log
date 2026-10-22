@@ -1,0 +1,125 @@
+FFFF                                                                     [100%]
+=================================== FAILURES ===================================
+_____________ test_lossless_dynamic_cards_all_kinds_unknown_values _____________
+
+    def test_lossless_dynamic_cards_all_kinds_unknown_values():
+>       m=api()
+          ^^^^^
+
+tests/diagnostics/test_managed_capability_projection.py:13: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/diagnostics/test_managed_capability_projection.py:9: in api
+    return importlib.import_module('evaluations.diagnostics.managed_capability_projection')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluations.diagnostics.managed_capability_projection'
+import_ = <function _gcd_import at 0x76ca647a40e0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluations.diagnostics.managed_capability_projection'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+______________ test_restore_rejects_loss_or_invention[duplicate] _______________
+
+mutation = 'duplicate'
+
+    @pytest.mark.parametrize('mutation',['duplicate','missing','invented'])
+    def test_restore_rejects_loss_or_invention(mutation):
+>       m=api();rows=[dict(requirement_id='X',kind='metric',quote='q',business_object='b')];cards=m.project_cards(rows)
+          ^^^^^
+
+tests/diagnostics/test_managed_capability_projection.py:29: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/diagnostics/test_managed_capability_projection.py:9: in api
+    return importlib.import_module('evaluations.diagnostics.managed_capability_projection')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluations.diagnostics.managed_capability_projection'
+import_ = <function _gcd_import at 0x76ca647a40e0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluations.diagnostics.managed_capability_projection'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+_______________ test_restore_rejects_loss_or_invention[missing] ________________
+
+mutation = 'missing'
+
+    @pytest.mark.parametrize('mutation',['duplicate','missing','invented'])
+    def test_restore_rejects_loss_or_invention(mutation):
+>       m=api();rows=[dict(requirement_id='X',kind='metric',quote='q',business_object='b')];cards=m.project_cards(rows)
+          ^^^^^
+
+tests/diagnostics/test_managed_capability_projection.py:29: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/diagnostics/test_managed_capability_projection.py:9: in api
+    return importlib.import_module('evaluations.diagnostics.managed_capability_projection')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluations.diagnostics.managed_capability_projection'
+import_ = <function _gcd_import at 0x76ca647a40e0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluations.diagnostics.managed_capability_projection'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+_______________ test_restore_rejects_loss_or_invention[invented] _______________
+
+mutation = 'invented'
+
+    @pytest.mark.parametrize('mutation',['duplicate','missing','invented'])
+    def test_restore_rejects_loss_or_invention(mutation):
+>       m=api();rows=[dict(requirement_id='X',kind='metric',quote='q',business_object='b')];cards=m.project_cards(rows)
+          ^^^^^
+
+tests/diagnostics/test_managed_capability_projection.py:29: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/diagnostics/test_managed_capability_projection.py:9: in api
+    return importlib.import_module('evaluations.diagnostics.managed_capability_projection')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluations.diagnostics.managed_capability_projection'
+import_ = <function _gcd_import at 0x76ca647a40e0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluations.diagnostics.managed_capability_projection'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+=========================== short test summary info ============================
+FAILED tests/diagnostics/test_managed_capability_projection.py::test_lossless_dynamic_cards_all_kinds_unknown_values
+FAILED tests/diagnostics/test_managed_capability_projection.py::test_restore_rejects_loss_or_invention[duplicate]
+FAILED tests/diagnostics/test_managed_capability_projection.py::test_restore_rejects_loss_or_invention[missing]
+FAILED tests/diagnostics/test_managed_capability_projection.py::test_restore_rejects_loss_or_invention[invented]
+4 failed in 0.11s

@@ -1,0 +1,102 @@
+{
+  "ticket": "098d0ce2e31f4254905064d4fd34c97b",
+  "result": "PASS",
+  "evidence": [
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/red-focused.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/red-outer-receipt.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/red-active-stage.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/green-focused.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/focused-complete.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/necessary-regression.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/historical-v2-focused.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/historical-v2-replays.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/managed-authorization-controls.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/offline-controls.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/offline-controls-index.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/frozen-replays.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/frozen/freeze.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/outer-controls.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/outer-interruption-process.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/outer-probe-frozen/freeze.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/preservation-check.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/preservation-check.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/controller-check-evidence.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/dry-run-selection.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/dry-run-coverage.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/execute-without-review.log",
+    "evaluations/fixtures/kind_diagnostics_rebound/manifest.json",
+    "evaluations/diagnostics/managed_node_diagnostics_rebound.py",
+    "tests/diagnostics/test_managed_node_diagnostics_rebound.py",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/final-verification.json"
+  ],
+  "summary": "第13輪僅離線證據rebind完成：唯一新manifest引用原v2 33cf44…root；167-source/full-model/runtime/13份immutable lineage完整綁定，直接重用base prepare/evaluate/record/replay與原kind/finish。inner163-source誠實保留v1 engine；獨立outer receipt在HTTP前、raw保存後重核完整版本/authorization/review/receipt，source或receipt漂移即FAIL，真SIGINT於inner PASS後仍INTERRUPTED且raw保留，不以inner PASS冒充完整PASS。75新focused、原3檔160回歸、歷史第12輪frozen v2 62測試/15replay通過；新四正例＋11首錯同版及完整frozen各15組一致。4237既有保護檔、17舊nodes/Task/control、v1 live bindings、原v2 manifest/fixtures/source/test/frozen/全部舊raw/兩src/38Gate保持，check-evidence真PASS；0POST/SQL/DB/commit/push。真preflight仍因本作者未finish及缺fresh原semantic parent closed PASS而拒絕，屬預期；所有自然效果PENDING。所有程序已結束，FINAL後不再補寫proof。",
+  "changed": [
+    "evaluations/fixtures/kind_diagnostics_rebound/manifest.json",
+    "evaluations/diagnostics/managed_node_diagnostics_rebound.py",
+    "tests/diagnostics/test_managed_node_diagnostics_rebound.py"
+  ],
+  "verification": {
+    "final_verification": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/final-verification.json",
+    "manifest_sha256": "9efa86b883366ff1ef4edd555f59f08499fa123288c6ca1ffe98998d84156187",
+    "focused": 75,
+    "necessary_regression": 160,
+    "historical_v2_snapshot_focused": 62,
+    "new_same_version_replays": 15,
+    "new_complete_frozen_replays": 15,
+    "historical_v2_frozen_replays": 15,
+    "protected_files": 4237,
+    "source_files": 167,
+    "immutable_lineage_files": 13,
+    "model_POSTs": 0
+  },
+  "freeze": {
+    "root": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/frozen",
+    "files": 239,
+    "source_files": 167,
+    "external_imports": 2,
+    "includes": "完整原相對路徑sources/imports/prompts/tests/uv.lock、兩版fixtures/manifest、新manifest、13 immutable lineage；freeze.json綁runtime；同已安裝.venv，非vendored external dependencies",
+    "outer_probe_snapshot": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/outer-probe-frozen",
+    "outer_probe_snapshot_final_hashes_restored": true,
+    "replay": "以frozen cwd與PYTHONPATH=<frozen>/src:<frozen>、原repo/.venv/bin/python呼叫 -m evaluations.diagnostics.managed_node_diagnostics_rebound --replay <absolute sample folder>。首錯重播replay_verification=PASS而result=FAIL；INTERRUPTED永拒。"
+  },
+  "provenance_gates": {
+    "content_author": {
+      "ticket": "4810e837bb3e44d5a05d9392d9140e84",
+      "node": "kind_diagnostic_fixture_v2_correction",
+      "must": "保留原第12輪真closed PASS/producer/platform"
+    },
+    "binding_author": {
+      "ticket": "098d0ce2e31f4254905064d4fd34c97b",
+      "node": "kind_diagnostic_evidence_rebinding",
+      "must": "Main等本FINAL後重核hash/finish真closed PASS"
+    },
+    "reviewer": {
+      "node": "kind_diagnostic_fixture_semantics",
+      "must": "另一fresh原parent worker全體核對後外部ACCEPT且Main finish真closed PASS；ticket/platform不同兩作者"
+    },
+    "pre_finish_real_preflight": "EXPECTED_REJECT; never fake controller completion"
+  },
+  "next_fresh_review": {
+    "node": "kind_diagnostic_fixture_semantics",
+    "review_file": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-semantics-rebound/review.json",
+    "required_json": {
+      "schema_version": 1,
+      "verdict": "ACCEPT或REJECT",
+      "reviewer_role": "fresh_fixture_semantics",
+      "ticket": "<真正fresh原semantic parent worker ticket>",
+      "author_ticket": "098d0ce2e31f4254905064d4fd34c97b",
+      "content_author_ticket": "4810e837bb3e44d5a05d9392d9140e84",
+      "manifest_sha256": "9efa86b883366ff1ef4edd555f59f08499fa123288c6ca1ffe98998d84156187",
+      "bindings": "<完整原樣新manifest.bindings JSON object，禁止投影刪key>"
+    },
+    "scope": "全八需求/56 rows、typed assignments/exclusions、全部prepared及自由文字、3固定coverage、任意ID改名2032閏年；不能只核customer或沿用舊55列當完成"
+  },
+  "pending": [
+    "fresh original semantic parent whole eight requirements/56 rows/typed/free-text ACCEPT and true closed PASS",
+    "selection first1 POST",
+    "coverage first3 POSTs",
+    "original parent new natural9 POSTs",
+    "each original ancestor integration",
+    "fresh final verifier"
+  ]
+}

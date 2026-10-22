@@ -1,0 +1,76 @@
+{
+  "$defs": {
+    "ColumnMapping": {
+      "additionalProperties": false,
+      "properties": {
+        "column": {
+          "minLength": 1,
+          "title": "Column",
+          "type": "string"
+        }
+      },
+      "required": [
+        "column"
+      ],
+      "title": "ColumnMapping",
+      "type": "object"
+    },
+    "KindDecision_grain_88d9e8c8a1f7dd26": {
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "enum": [
+            "supported",
+            "partial",
+            "unsupported",
+            "uncertain"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "own_gap": {
+          "title": "Own Gap",
+          "type": "boolean"
+        },
+        "mappings": {
+          "items": {
+            "$ref": "#/$defs/ColumnMapping"
+          },
+          "title": "Mappings",
+          "type": "array"
+        }
+      },
+      "required": [
+        "status",
+        "own_gap",
+        "mappings"
+      ],
+      "title": "KindDecision_grain_88d9e8c8a1f7dd26",
+      "type": "object"
+    },
+    "KindSlots_88d9e8c8a1f7dd26": {
+      "additionalProperties": false,
+      "properties": {
+        "unrelated/識別~鍵": {
+          "$ref": "#/$defs/KindDecision_grain_88d9e8c8a1f7dd26"
+        }
+      },
+      "required": [
+        "unrelated/識別~鍵"
+      ],
+      "title": "KindSlots_88d9e8c8a1f7dd26",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "entries": {
+      "$ref": "#/$defs/KindSlots_88d9e8c8a1f7dd26"
+    }
+  },
+  "required": [
+    "entries"
+  ],
+  "title": "KindCoverage_88d9e8c8a1f7dd26",
+  "type": "object"
+}

@@ -1,0 +1,116 @@
+{
+  "requirements": [
+    {
+      "requirement_id": "slot_0/🧾",
+      "start": 2,
+      "end": 7,
+      "kind": "grain",
+      "business_object": "各店各商品",
+      "scope_ids": [],
+      "grain": "門市×商品",
+      "population": "所有庫存商品",
+      "grain_binding": null,
+      "grain_requirement_ids": []
+    },
+    {
+      "requirement_id": "model_dump",
+      "start": 8,
+      "end": 14,
+      "kind": "metric",
+      "business_object": "盤點庫存件數",
+      "scope_ids": [],
+      "grain": "門市×商品",
+      "population": "所有庫存商品",
+      "grain_binding": "linked",
+      "grain_requirement_ids": [
+        "slot_0/🧾"
+      ]
+    },
+    {
+      "requirement_id": "月~邊界",
+      "start": 16,
+      "end": 26,
+      "kind": "filter",
+      "business_object": "2032 年 2 月",
+      "scope_ids": [],
+      "grain": "門市×商品",
+      "population": "所有庫存商品",
+      "grain_binding": null,
+      "grain_requirement_ids": []
+    },
+    {
+      "requirement_id": "scope-channel",
+      "start": 26,
+      "end": 30,
+      "kind": "filter",
+      "business_object": "線上通路",
+      "scope_ids": [],
+      "grain": "門市×商品",
+      "population": "所有庫存商品",
+      "grain_binding": null,
+      "grain_requirement_ids": []
+    },
+    {
+      "requirement_id": "m_discount",
+      "start": 31,
+      "end": 35,
+      "kind": "metric",
+      "business_object": "折扣金額",
+      "scope_ids": [
+        "月~邊界",
+        "scope-channel"
+      ],
+      "grain": "門市×商品",
+      "population": "所有庫存商品",
+      "grain_binding": "linked",
+      "grain_requirement_ids": [
+        "slot_0/🧾"
+      ]
+    },
+    {
+      "requirement_id": "amount/net",
+      "start": 36,
+      "end": 40,
+      "kind": "metric",
+      "business_object": "淨銷售額",
+      "scope_ids": [
+        "月~邊界",
+        "scope-channel"
+      ],
+      "grain": "門市×商品",
+      "population": "所有庫存商品",
+      "grain_binding": "linked",
+      "grain_requirement_ids": [
+        "slot_0/🧾"
+      ]
+    },
+    {
+      "requirement_id": "元資料",
+      "start": 44,
+      "end": 50,
+      "kind": "metadata",
+      "business_object": "庫存盤點日期",
+      "scope_ids": [],
+      "grain": "門市×商品",
+      "population": "所有庫存商品",
+      "grain_binding": null,
+      "grain_requirement_ids": [
+        "slot_0/🧾"
+      ]
+    },
+    {
+      "requirement_id": "保留/全部",
+      "start": 61,
+      "end": 69,
+      "kind": "population",
+      "business_object": "保留所有庫存商品",
+      "scope_ids": [],
+      "grain": "門市×商品",
+      "population": "所有庫存商品",
+      "grain_binding": null,
+      "grain_requirement_ids": [
+        "slot_0/🧾"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "ticket": "ed5abbeeea324bea8ac64d526e38fb55",
+  "result": "PASS",
+  "evidence": [
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-semantics/review.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-semantics/final-verification.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-semantics/offline-checks.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-semantics/focused-checks.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-semantics/independent-replays.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-semantics/independent-frozen-replays.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-semantics/original15-frozen.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-semantics/null-frozen.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-semantics/empty-frozen.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-semantics/real-provenance-gates.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-semantics/real-open-execute.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-semantics/controller-check-evidence.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-semantics/offline-attempt.log"
+  ],
+  "summary": "第17輪fresh policy/shape semantics ACCEPT。獨立讀真需求、原15raw、三literal、typed shape／新suffix／原guards與checker，裁定default/NULL flat保缺值等價、EMPTY必每child真nest且task/keys吻合，aggregate或metadata不代表nested；未決語意為空，nested memory正例非原題自然成功。新review精確綁新manifest／完整sources/import/schema/model/runtime/suffix/messages/body/upstream及原fixture/review/lineage。原8需求56列與三coverage bytes及第14輪完整review bindings相同，原fixture真三方closed PASS保持；新author第16輪真closed PASS與本17輪reviewer distinct。本review仍open，實查preflight及真execute在network前拒絕，Main必須等本真FINAL核hash/check-evidence與finish PASS才容後續一次selection。31 focused passed、15獨立memory控制、5 live與3 frozen replay符合預期；5203保護檔、668作者索引及167舊sources保持，舊rebound bindings相等、v2 live仍預期拒絕。原15輪同版/frozen精確FAIL與新shape負例不翻案。一次驗證腳本wrong_keys預期分類過窄已保留失敗log並依原guard先REJECT校正，未改實作。0POST/SQL/DB/retry/cloud，local累計22；未改source/test/fixture/舊證據/Task/control、無commit/push。僅本離線child PASS，父/root及自然效果保持PENDING。"
+}

@@ -1,0 +1,11 @@
+{
+  "ticket": "d6de6a4fd21f4e7e862b06ceb27b86f7",
+  "result": "PASS",
+  "evidence": [
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-semantics-rebound/review.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-semantics-rebound/semantic-review.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-semantics-rebound/offline-checks.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-semantics-rebound/offline-checks.json"
+  ],
+  "summary": "ACCEPT：本fresh原semantic parent直接重讀全部真契約，獨立核對8需求索引/role/scope/grain/背景、7View×8共56列status/mapping/own_gap及完整self/scope/grain缺口，非沿用舊55列。customer lifetime_spend sum保留有用累計會員折扣後金額；扣除明示scope/grain後仍未證未限定會員的全銷售完整性，own_gap=true有據，未推論非會員實際交易；最後訂單日期非完整交易月。部分店鍵及月縮約不證庫存母體。三coverage樣本、2032閏年/改名/UnicodeIDs、四body無Oracle/預填來源答案、synthetic全8assignment/5排除/全部typed與2prepared及所有自由文字均核對。新manifest/full167source/13immutablelineage精確一致僅證來源；機器接受的無據全庫存補零文字反例由人工明確REJECT。真兩作者closed PASS且三平台不同，本人open使preflight預期拒絕，待Main真FINAL後finish。只核准固定fixture語意，不代表自然selection/coverage/父9POST或祖先/root通過。0POST/SQL/DB/commit/push，未重跑544，既有fixture/Oracle/code/manifest/Task/control未改。"
+}

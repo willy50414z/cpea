@@ -1,0 +1,276 @@
+{
+  "candidate_source_sha256": "44fc1a6ec68f2b3c7562e27dcc0cc59e8145692aee8ea8f86e551c033087dd3d",
+  "results": [
+    {
+      "sample": "COV-ISO-v1-01",
+      "raw_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261022T000748Z-82acde/COV-ISO-v1-01/node-call.json",
+      "sha256": "bf59512af544cb0aefaa55aa52f1eca7a66006b076ef44516017df9443aa206d",
+      "result": {
+        "status": "FAIL",
+        "legacy_findings": [
+          {
+            "requirement_id": "GRN-001",
+            "aspect": "status/own_gap",
+            "expected": {
+              "status": "partial",
+              "own_gap": true,
+              "mappings": [
+                {
+                  "column": "store_id"
+                }
+              ]
+            },
+            "actual": {
+              "status": "unsupported",
+              "own_gap": true,
+              "mappings": []
+            }
+          },
+          {
+            "requirement_id": "GRN-001",
+            "aspect": "necessary mappings/predicates",
+            "expected": [
+              {
+                "column": "store_id"
+              }
+            ],
+            "actual": []
+          },
+          {
+            "requirement_id": "MET-003",
+            "aspect": "status/own_gap",
+            "expected": {
+              "status": "partial",
+              "own_gap": false,
+              "mappings": [
+                {
+                  "column": "revenue",
+                  "aggregation": "sum",
+                  "conditions": []
+                }
+              ],
+              "contract_path": "/columns/revenue/description"
+            },
+            "actual": {
+              "status": "partial",
+              "own_gap": true,
+              "mappings": [
+                {
+                  "column": "revenue",
+                  "aggregation": "sum",
+                  "conditions": []
+                }
+              ],
+              "contract_path": "/columns/revenue/description"
+            }
+          }
+        ],
+        "accepted_scope_AND_equivalences": [],
+        "other_findings": [
+          {
+            "requirement_id": "GRN-001",
+            "aspect": "status/own_gap",
+            "expected": {
+              "status": "partial",
+              "own_gap": true,
+              "mappings": [
+                {
+                  "column": "store_id"
+                }
+              ]
+            },
+            "actual": {
+              "status": "unsupported",
+              "own_gap": true,
+              "mappings": []
+            }
+          },
+          {
+            "requirement_id": "GRN-001",
+            "aspect": "necessary mappings/predicates",
+            "expected": [
+              {
+                "column": "store_id"
+              }
+            ],
+            "actual": []
+          },
+          {
+            "requirement_id": "MET-003",
+            "aspect": "status/own_gap",
+            "expected": {
+              "status": "partial",
+              "own_gap": false,
+              "mappings": [
+                {
+                  "column": "revenue",
+                  "aggregation": "sum",
+                  "conditions": []
+                }
+              ],
+              "contract_path": "/columns/revenue/description"
+            },
+            "actual": {
+              "status": "partial",
+              "own_gap": true,
+              "mappings": [
+                {
+                  "column": "revenue",
+                  "aggregation": "sum",
+                  "conditions": []
+                }
+              ],
+              "contract_path": "/columns/revenue/description"
+            }
+          }
+        ],
+        "independent_semantic_approval": "PENDING",
+        "free_text_review": "PENDING"
+      }
+    },
+    {
+      "sample": "COV-ISO-v1-02",
+      "raw_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261022T000748Z-82acde/COV-ISO-v1-02/node-call.json",
+      "sha256": "611e018408339de013df9d84dde83a25d1d064d1c42e49c8d478da6e229e1978",
+      "result": {
+        "status": "PASS",
+        "legacy_findings": [],
+        "accepted_scope_AND_equivalences": [],
+        "other_findings": [],
+        "independent_semantic_approval": "PENDING",
+        "free_text_review": "PENDING"
+      }
+    },
+    {
+      "sample": "COV-ISO-v1-03",
+      "raw_path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261022T000748Z-82acde/COV-ISO-v1-03/node-call.json",
+      "sha256": "0b671a9a7e96b20405f8311e24faf56c085f4cc1550c47268810788c1064a9ca",
+      "result": {
+        "status": "FAIL",
+        "legacy_findings": [
+          {
+            "requirement_id": "slot_0/🧾",
+            "aspect": "status/own_gap",
+            "expected": {
+              "status": "partial",
+              "own_gap": true,
+              "mappings": [
+                {
+                  "column": "loc_key"
+                }
+              ]
+            },
+            "actual": {
+              "status": "unsupported",
+              "own_gap": true,
+              "mappings": []
+            }
+          },
+          {
+            "requirement_id": "slot_0/🧾",
+            "aspect": "necessary mappings/predicates",
+            "expected": [
+              {
+                "column": "loc_key"
+              }
+            ],
+            "actual": []
+          },
+          {
+            "requirement_id": "amount/net",
+            "aspect": "necessary mappings/predicates",
+            "expected": [
+              {
+                "column": "amount_value",
+                "aggregation": "sum",
+                "conditions": []
+              }
+            ],
+            "actual": [
+              {
+                "column": "amount_value",
+                "aggregation": "sum",
+                "conditions": [
+                  {
+                    "column": "day_key",
+                    "operator": ">=",
+                    "value": "2032-02-01"
+                  },
+                  {
+                    "column": "day_key",
+                    "operator": "<",
+                    "value": "2032-03-01"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "accepted_scope_AND_equivalences": [
+          {
+            "requirement_id": "amount/net",
+            "aspect": "necessary mappings/predicates",
+            "expected": [
+              {
+                "column": "amount_value",
+                "aggregation": "sum",
+                "conditions": []
+              }
+            ],
+            "actual": [
+              {
+                "column": "amount_value",
+                "aggregation": "sum",
+                "conditions": [
+                  {
+                    "column": "day_key",
+                    "operator": ">=",
+                    "value": "2032-02-01"
+                  },
+                  {
+                    "column": "day_key",
+                    "operator": "<",
+                    "value": "2032-03-01"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "other_findings": [
+          {
+            "requirement_id": "slot_0/🧾",
+            "aspect": "status/own_gap",
+            "expected": {
+              "status": "partial",
+              "own_gap": true,
+              "mappings": [
+                {
+                  "column": "loc_key"
+                }
+              ]
+            },
+            "actual": {
+              "status": "unsupported",
+              "own_gap": true,
+              "mappings": []
+            }
+          },
+          {
+            "requirement_id": "slot_0/🧾",
+            "aspect": "necessary mappings/predicates",
+            "expected": [
+              {
+                "column": "loc_key"
+              }
+            ],
+            "actual": []
+          }
+        ],
+        "independent_semantic_approval": "PENDING",
+        "free_text_review": "PENDING"
+      }
+    }
+  ],
+  "legacy_and_239_frozen": "history-live.json/history-frozen.json保存原FAIL/PASS/FAIL；本處只另外判有限AND，不翻原FAIL。"
+}

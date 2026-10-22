@@ -1,0 +1,16 @@
+[
+  {
+    "label": "initial_resolved_symlink_wrong_runtime",
+    "executable": "/usr/bin/python3.12",
+    "exit_code": 1,
+    "stdout": "",
+    "stderr": "Traceback (most recent call last):\n  File \"<frozen runpy>\", line 198, in _run_module_as_main\n  File \"<frozen runpy>\", line 88, in _run_code\n  File \"/home/willy/code/cpea_terms/evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261021T215758Z-5bbdea/frozen/evaluations/diagnostics/managed_node_diagnostics_rebound.py\", line 13, in <module>\n    from evaluations import managed_node_diagnostics as base\n  File \"/home/willy/code/cpea_terms/evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261021T215758Z-5bbdea/frozen/evaluations/managed_node_diagnostics.py\", line 17, in <module>\n    from langchain_core.messages import AIMessage\nModuleNotFoundError: No module named 'langchain_core'\n"
+  },
+  {
+    "label": "correct_project_venv",
+    "executable": "/home/willy/code/cpea_terms/.venv/bin/python",
+    "exit_code": 1,
+    "stdout": "{\"result\": \"FAIL\", \"replay_verification\": \"PASS\", \"stopped\": {\"error_type\": \"ValueError\", \"error\": \"fixed diagnostic semantic checks failed\"}, \"inner\": {\"result\": \"PASS\", \"raw_replays\": 1, \"stopped\": {\"error_type\": \"ValueError\", \"error\": \"fixed diagnostic semantic checks failed\"}, \"upstream_injected\": true, \"provider_calls\": 0}, \"outer_receipt_sha256\": \"d614136521733536adc94c82d997575492c74417a87d98398ced63ca1f451278\", \"provider_calls\": 0, \"independent_semantic_approval\": \"PENDING\"}\n",
+    "stderr": ""
+  }
+]

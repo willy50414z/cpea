@@ -1,0 +1,13 @@
+{
+  "entries": {
+    "unrelated/識別~鍵": {
+      "status": "partial",
+      "own_gap": true,
+      "mappings": [
+        {
+          "column": "customer_id"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "files": {
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-13-15/independent-check.json": "9161a6101b3fcef023ae6798adcc063a5be277adcf662a11496ae2c43adaab9b",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-13-15/controller-check-evidence.log": "6a7dee2df6decc78d70dd3a9fcef13555f24ec05ef34f4d611783f4084b4e866",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-13-15/replay-current.json": "e31bf5cadc8b81c2434e5697b70fae59e89f92ca3920ff679ba048a735fff292",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-13-15/selected-round13-replays.json": "f66f24f0bbd337b9496da05cb1e71b5bf690b1bbd0c413f5486c0ce215303de3",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-13-15/replay-frozen.log": "39bdaf582b358689c7f9a6e153bb76280d34ca9745e7102015dafdea609b99cb",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-13-15/policy-isolation-controls.json": "e3be85f561dabe7aa1c5b8a9a9dadf4ed09a57e9af00b4fb1c63c9ee433448cf",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-13-15/direction-analysis.json": "18c7b4faaaaf27f916bc6b2e48fc472ae8b685631f6f5c589c463158dab1397a",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-13-15/research-facts.json": "a8919cedf635a182122e679b44c90694e01818de462b0411ae431fcacf97c19e"
+  },
+  "POST": 0,
+  "SQL_DB": 0
+}

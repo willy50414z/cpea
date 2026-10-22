@@ -1,0 +1,20 @@
+{
+  "id": "EV-20261021T015828-e8216b14",
+  "kind": "review",
+  "command": [
+    ".venv/bin/python",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/reports/verify_three_stage_evidence.py"
+  ],
+  "cwd": "/home/willy/code/cpea_terms",
+  "started_at": "2026-10-21T01:58:28+00:00",
+  "finished_at": "2026-10-21T01:58:30+00:00",
+  "exit_code": 0,
+  "revision": "bc09c67fc4078501599c37e4cdfecdee40af2ef8",
+  "diff_fingerprint": "f336807c479b07db9a896096b917934a76a31c5e99090a3d921fcee4ee2f2996",
+  "post_fingerprint": "f336807c479b07db9a896096b917934a76a31c5e99090a3d921fcee4ee2f2996",
+  "source_unchanged": true,
+  "output_sha256": "014c3d16ea5de34c27e66ff9aa5dc46296b87e30996c95e68457303440fd90b0",
+  "raw_output": ".local/EV-20261021T015828-e8216b14.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "9d6cb5f1873409aa1516c4550dc0258f4555c8486c32731a5eb96a2b4c751521"
+}

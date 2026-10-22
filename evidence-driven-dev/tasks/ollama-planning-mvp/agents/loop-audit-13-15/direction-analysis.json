@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "reviewed_rounds": [
+    13,
+    14,
+    15
+  ],
+  "auditor": "/root/loop_audit_13_15",
+  "result": "REPLAN",
+  "POST": 0,
+  "SQL_DB": 0,
+  "round13": {
+    "judgment": "PASS範圍成立：離線版本/證據重綁；不代表自然能力通過。",
+    "independent_checks": [
+      "rebound load與全bindings逐值相同；167 sources/13 lineage",
+      "4固定inputs重新prepare成功；原v2 live明確因舊lineage拒絕，沒有篡改舊版",
+      "原4237保護檔重核：僅Task隨Main進度變動，其他4236檔完全一致",
+      "兩份round13及一份round15 snapshot各239檔hash一致",
+      "selection正例、typed缺欄、2032閏年錯邊界三份round13 outer replay獨立通過；FAIL仍保留FAIL",
+      "三方真closed PASS、平台皆不同；新preflight PASS"
+    ],
+    "worker_test_evidence_reviewed": {
+      "focused": 75,
+      "necessary_regression": 160,
+      "historical_snapshot_focused": 62,
+      "same_and_frozen_replays_each": 15
+    },
+    "limitation": "以上測試數為已審查worker證據；本audit未重跑數百測試或全部15組。"
+  },
+  "round14": {
+    "judgment": "固定上游與Oracle全體語意核准有據；不外推自然pipeline。",
+    "requirements": "真原文8資料需求：店商品grain、庫存sum、2026-09、online、折扣sum、淨額sum、庫存日期metadata、全庫存母體；促銷後補貨評估為目的背景，不變成欄位。",
+    "views_56_rows": [
+      {
+        "view": "v_customer_value",
+        "assessment": "會員grain不具店商品；last_order_date不能完整月份篩選；無online/庫存/折扣/盤點日。lifetime_spend為有用累計折扣後會員金額，保留sum partial；scope/grain另缺，且僅會員母體未證完整未限定會員的銷售，own_gap=true有據；不推論實際非會員交易。"
+      },
+      {
+        "view": "v_daily_sales",
+        "assessment": "store_id部分grain；sales_date整月supported，不能因無商品grain否認獨立月份條件。revenue淨額sum自身完整但缺online及商品grain而partial；無庫存/折扣/盤點日/保庫存能力。"
+      },
+      {
+        "view": "v_inventory_status",
+        "assessment": "store_id/product_id唯一一列的庫存grain；stock_qty sum、snapshot_date metadata、原庫存母體supported；無sales月份/channel/折扣/淨額。不得自行添加所有商品主檔、退貨、盤點同期等保證。"
+      },
+      {
+        "view": "v_order_summary",
+        "assessment": "store_id部分grain，order_date整月及sales_channel online supported；order_amount折扣後總額sum有用但無商品grain；無庫存/折扣獨立度量/盤點日/庫存母體。"
+      },
+      {
+        "view": "v_product_monthly",
+        "assessment": "固定sales_month=月首可縮約至店商品grain，月份supported；discount_amount/net_sales sum有用但缺online而partial；交易店商品不證全庫存母體。"
+      },
+      {
+        "view": "v_sales_detail",
+        "assessment": "具店商品key映射、明細order_date整月、online及兩sum，皆可在同task supported；無庫存/盤點日/庫存母體。已完成訂單描述保留來源本身限制，不擴充退貨等保證。"
+      },
+      {
+        "view": "v_store_monthly_kpi",
+        "assessment": "固定月份不產生商品key；store_id部分grain，月份supported；revenue sum partial因缺商品及online。契約revenue無交易為0不能跨用為inventory-sales缺值補零。"
+      }
+    ],
+    "three_coverage_cases": "daily_sales原需求、customer任意ID店商品grain、改名契約/Unicode IDs/2032閏年均逐看；部分store key保留、獨立月份完整、淨額partial、無據能力拒絕，與新fixture一致。",
+    "synthetic_selection": "8 assignments/5 exclusions/全部typed/2 prepared及原prose可接受；核准的是default缺值政策正例，未證所有prompt alternatives皆形狀等價。"
+  },
+  "round15": {
+    "judgment": "首次自然selection隔離實驗的機械FAIL可重現；不能由此判模型補零、不能升自然E2E PASS。",
+    "transport": "唯一預定SEL-ISO-v1-01：HTTP200/done stop，1963.19秒；controller request已completed，無inflight/retry；全局22 local/0retry/0cloud。",
+    "raw": "完整raw與strict parsed相同；30物件無重複key，全部typed欄位模型自行填入。normalized及guard response draft與raw逐值相同。body只有原request/需求/7view coverage/契約/schema/options，無selection答案或Oracle預填。",
+    "typed": "2 sources正確；inventory無篩選、stock_qty sum、snapshot_date metadata、店商品anchor；sales同task 2026-09-01<=date<2026-10-01/online/discount_amount sum/net_sales sum/店商品group；先aggregate sales、one_to_one left保inventory；8 assignments與5排除責任有效，無額外依賴。",
+    "prepared": "2 prepared精確轉載typed roles/filters/metrics/keys；snapshot_date為distinct集合且保留跨日期不得直接sum說明；非模型自行新增日期一致或補零。",
+    "all_text": "已逐看2 tasks.request、1 preparation.description、policy、notes/clarifications/unsupported空列表及全部normalized assignment/exclusion derived文字。兩task只說各自來源能力；sales prose使用9/1至9/30，typed半開整月相容。63契約引文及derived self/scope/grain statements對應原契約，不產生新母體宣稱。",
+    "actual_failure": "managed_node_diagnostics.py:253把no unproven zero fill實作為missing_data_policy == MISSING_POLICIES[0]。實際模型逐字選MISSING_POLICIES[2]/EMPTY_POLICY，prompt明允許，finish guard也接受。",
+    "independent_controls": "只在記憶體換policy：default -> machine PASS；語意同樣保母體/標缺值/不補零的NULL_POLICY -> guard ready但machine FAIL；EMPTY_POLICY ->原FAIL；明文補零 ->原guard ValueError。不修原raw、不回寫Oracle、不把反事實當自然模型答案。",
+    "shape_unknown": "本raw為同key一對一left、只aggregate無nest/pivot。EMPTY_POLICY提未匹配子集合空集合，不能僅因不補零就宣稱與flat scalar missing完全等價；目前契約/guard未提供policy和shape關聯的明確可驗證約束，原需求也未明定NULL與空集合的外部呈現。這是需研究的表示契約問題，尚非已證補零錯。",
+    "replay": "本audit重建evaluate產物逐值吻合；同版及完整167-source frozen均replay_verification PASS，忠實重現FAIL。第一次frozen啟動resolve python symlink誤用系統runtime，缺dependency；已保留stderr並用原project .venv正確重播，無provider呼叫。"
+  },
+  "classification": {
+    "proven": "診斷Oracle literal與prompt/guard集合不一致；NULL_POLICY反事實足證literal檢查不是可靠補零判據。",
+    "not_proven": "EMPTY_POLICY在此flat plan的形狀等價、自然coverage成功、自然三階段成功、歷史Gate通過。",
+    "resource_or_transport": "無額度/timeout/HTTP未完成阻塞。",
+    "needs_user_now": false
+  },
+  "ancestor_progress": "natural_kind_mapping_three_stage尚pending；selection isolation failed、coverage isolation pending。natural_own_responsibility_three_stage、natural_evidence_bound_three_stage、natural_slots_three_stage、natural_qwen_three_stage既有FAIL保留；three_stage_integration及root pending。fixed fixture PASS不可替代原父預定9POST、各祖先整合與fresh final verifier ACCEPT；38×2首次完整採用Gate狀態不變未過。"
+}

@@ -1,0 +1,152 @@
+{
+  "schema_version": 1,
+  "ticket": "9ea07a8befa742fe9bd1fadcd71b58bc",
+  "classification": "FIXTURE_ORACLE_ERROR_AND_OWN_GAP_POPULATION_CLARIFICATION",
+  "verdict_on_round_11": "REJECT有據；這是離線fixture作者的能力遺漏，不是尚未執行模型的失敗。",
+  "evidence_sha256": {
+    "evaluations/fixtures/kind_diagnostics_v1/manifest.json": "1749d09913e0f5d5a1caab4a4ede1bf4fa80fee260bb4e257f1f705634d934be",
+    "evaluations/fixtures/kind_diagnostics_v1/oracle.json": "bbb7e49216762475df7f809fb7ccae55139af5580d632e0227a60f9126c3063a",
+    "evaluations/fixtures/kind_diagnostics_v1/coverage-selection.json": "24cc1439480ca3706e304554e126f2f83750028d2ef2addac5a9942436b21b5a",
+    "evaluations/fixtures/kind_diagnostics_v1/coverage-selection-normalized.json": "26a266ff2218973428af8a8df636527713f6896b25f85bfa8f47dcd525c78e1f",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-semantics/review.json": "0200cc20e8aa288580c0a5036d4056a144555a272b6b4afe64da357734118d6b",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-semantics/semantic-review.log": "3b7c9f3b51626a0634405b8e2c14efbcf730b600138aa60b067e74aceffca4f0",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-semantics/offline-checks.json": "c3afcc84962df861074744a5c935787b2685770728e0e2eeac800c1b180ba891",
+    "evaluations/managed_node_diagnostics.py": "40ea53099e0adc769c1739f604d73ff570d10454083509624aa12ff18b272400",
+    "evaluations/kind_mapping_managed_contract.py": "5e8bcefcbf5a28918944ce4b8b5901e4b8bb0719b8dbac174d6cd36c1a1e0e99",
+    "evaluations/own_responsibility_managed_contract.py": "1682eb317b21a26b7fa77dd49ac9c8f3f5a827cd1dff1186413f7809c452c78c",
+    "evaluations/prompts/kind_mapping/coverage.md": "e548b64a9a41bb446de0b6f6a5071527634ad06d197587174ca239ea14213687",
+    "projects/retail/views/demo_retail/v_customer_value.yaml": "d3ef37ced4521ef46a65980f418088683c4aefa9f138802a6829f87fb531f2cc"
+  },
+  "source_facts": [
+    {
+      "path": "projects/retail/views/demo_retail/v_customer_value.yaml#/summary",
+      "quote": "粒度：每會員一列，包含未下單會員；"
+    },
+    {
+      "path": "projects/retail/views/demo_retail/v_customer_value.yaml#/columns/lifetime_spend/description",
+      "quote": "會員在累計折扣後消費金額，單位 TWD"
+    },
+    {
+      "path": "projects/retail/views/demo_retail/v_customer_value.yaml#/columns/last_order_date/description",
+      "quote": "會員最後一筆已完成訂單的日期；沒有已完成訂單時為 NULL"
+    },
+    {
+      "path": "evaluations/prompts/kind_mapping/coverage.md:19",
+      "quote": "own_gap 表示先不計本項明示 scope_ids、grain_requirement_ids，合法映射與證據是否仍未完整履行本項自身責任。"
+    },
+    {
+      "path": "evaluations/prompts/kind_mapping/coverage.md:21",
+      "quote": "unsupported 表示沒有可證的有用 mapping，不能只因整項未完成就刪掉有用部分。"
+    }
+  ],
+  "own_gap_ruling": {
+    "decision": true,
+    "supported_component": "lifetime_spend為累計、折扣後、TWD金額；每會員唯一列可對會員加總。這提供金額的有用分量，必保留sum mapping，不能再空mapping unsupported。",
+    "self_gap": "原題淨銷售額未限定會員；契約僅證會員累計消費、未聲明所有銷售皆屬會員或此欄完整涵蓋全銷售母體。排除明示2026-09/online scope及店商品grain後，會員限定仍在，故自身完整性仍未獲證。這個未證完整性屬metric本身母體責任，不新增會員filter、資料欄或要求。",
+    "not_the_reason": [
+      "累計無指定月份是FILT-001缺口，不是本次own_gap=true理由。",
+      "缺online是FILT-002缺口，缺店商品是GRN-001缺口，均另外完整列出。",
+      "不假設有真實非會員交易、退貨、稅額、貨幣差異或任何SQL定義。",
+      "包含未下單會員不代表數值有重複，不是拒絕sum理由。"
+    ],
+    "falsifiable_population_witness": {
+      "type": "純邏輯反例，非DB事實或新fixture資料",
+      "world_A": "所有銷售可由會員累計金額解釋。",
+      "world_B": "同一會員view數值之外另有未歸屬會員的銷售金額；該可能性未被此view契約排除。",
+      "conclusion": "兩個世界皆不違背會員view文字但未限定會員的淨額不同，故僅憑此view不能證全額。不是聲稱world_B實際存在。",
+      "revisit": "若獨立審者能指出現有同一真契約明確保證全部銷售均納入會員金額，才以證據重判own_gap；不能由作者補寫產品契約、猜DB或用模型偏好裁定。"
+    },
+    "alternative_own_false": "只保留scope/grain的替代在現schema確可materialize，這僅證表示能力。它省略上述會員母體未證缺口，不能作本v2業務Oracle。",
+    "recommended_customer_MET_003": {
+      "status": "partial",
+      "own_gap": true,
+      "mappings": [
+        {
+          "column": "lifetime_spend",
+          "aggregation": "sum",
+          "conditions": []
+        }
+      ],
+      "contract_path": "/columns/lifetime_spend/description"
+    },
+    "derived_gaps": [
+      {
+        "aspect": "self",
+        "requirements": [
+          {
+            "requirement_id": "MET-003",
+            "quote": "淨銷售額",
+            "status": "partial"
+          }
+        ]
+      },
+      {
+        "aspect": "scope",
+        "requirements": [
+          {
+            "requirement_id": "FILT-001",
+            "quote": "2026 年 9 月",
+            "status": "unsupported"
+          },
+          {
+            "requirement_id": "FILT-002",
+            "quote": "線上通路",
+            "status": "unsupported"
+          }
+        ]
+      },
+      {
+        "aspect": "grain",
+        "requirements": [
+          {
+            "requirement_id": "GRN-001",
+            "quote": "各店各商品",
+            "status": "unsupported"
+          }
+        ]
+      }
+    ],
+    "unchanged_customer_responsibilities": "其餘7列仍unsupported/own=true/無mapping；最後訂單日不可當完整交易月份，customer_id不是store_id/product_id，無庫存母體證據。",
+    "daily_contrast": "daily.revenue契約是門市折扣後的銷售淨額總和，未另限定會員；自身金額完整、own=false，缺online與完整店商品grain依舊partial。不能把customer的會員母體缺口套到所有聚合金額。"
+  },
+  "actual_read_only_probes": {
+    "processes": 2,
+    "POSTs": 0,
+    "method": "直接記憶體deepcopy現v1 coverage，只改推薦customer row後呼叫真kind coverage schema/materialize及selection/finish；沒有寫fixtures、呼叫provider或改答案紀錄。",
+    "current_v1_bindings_match": true,
+    "recommended_partial_own_true_materializes": true,
+    "gaps_observed": [
+      "self",
+      "scope",
+      "grain"
+    ],
+    "synthetic_existing_selection_with_corrected_upstream": {
+      "status": "ready",
+      "prepared_requests": 2,
+      "model_result": false
+    },
+    "alternative_own_false_structurally_accepts": true,
+    "new_selection_expected_inputs": {
+      "body": "eb6a1dd98d63365b76b4f513cbf4794b293d9706489c00344f435b13fe133957",
+      "messages": "c6116af069cb945c678d5aea9e64b1c8eae6371e0a9decd7b809325847877ec5",
+      "upstream": "70460cc22c0deccd75d96896c4bd914efc0038a5a3bb300dc8e20be8ad4e43ff",
+      "schema": "0e911df0c74d2f30238d24c9b6c483d47a9778e0d23ab18af34fd99aaf5e8bbe",
+      "input_tokens": 22011
+    },
+    "limits": "只有原schema表示能力與既有synthetic selection的read-only feasibility probe；v2 runner/fixtures/tests/fresh review尚未建立或執行，未宣稱v2 PASS或任何模型效果。"
+  },
+  "actual_gate_findings": {
+    "load_package": "現v1僅允許DEFAULT_MANIFEST固定絕對path、kind-isolation-v1/version、4個固定logical IDs與ISOLATION/count=1；不能將v2 JSON傳原--manifest假裝可執行。",
+    "review_gate": "review schema=1、verdict=ACCEPT、reviewer_role=fresh_fixture_semantics、author精確等於manifest、不同ticket；manifest raw hash及全bindings精確，context/body/schema/upstream/catalog/model/runtime再計算。",
+    "review_provenance": "真Task中reviewer必為worker、node恰kind_diagnostic_fixture_semantics、closed=True、platform非空且不同author.platform；同round/node/producer有PASS。作者child的review、research/auditor ticket或未finish的reviewer均不合。",
+    "author_gap_in_v1": "原碼只查author ticket存在及平台不同，未核author role/node/closed/own round PASS；v2按授權用途補齊作者為本child完成的真worker證據，不放寬reviewer門檻。",
+    "controller_plan": "set_plan嚴格保留全部既有id/parent/goal/acceptance，passed node不能加child；kind_diagnostic_fixture_semantics為failed可加修正child。完整child PASS後仍必回原parent做verify_parent，不能作者自己ACCEPT。",
+    "source_binding_coupling": "v1 source_paths掃evaluations/*.py及tests/unit/*.py等全量；若在這兩個目錄頂層加v2檔會令v1 live bindings漂移。新版本放nested目錄且v2 bindings明列自身runner/test，是不同import closure隔離；v1實際imports未變，所有v2新source仍須綁hash/freeze。"
+  },
+  "implementation_changed": false,
+  "task_or_control_changed": false,
+  "tests": "未跑pytest；沒有重跑544或舊31組完整replay。",
+  "SQL_DB": 0,
+  "commits": 0,
+  "pushes": 0
+}

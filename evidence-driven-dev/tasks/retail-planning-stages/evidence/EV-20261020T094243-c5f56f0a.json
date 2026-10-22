@@ -1,0 +1,20 @@
+{
+  "id": "EV-20261020T094243-c5f56f0a",
+  "kind": "baseline",
+  "command": [
+    ".venv/bin/python",
+    "evidence-driven-dev/tasks/retail-planning-stages/reports/replay_baseline.py"
+  ],
+  "cwd": "/home/willy/code/cpea_terms",
+  "started_at": "2026-10-20T09:42:43+00:00",
+  "finished_at": "2026-10-20T09:42:46+00:00",
+  "exit_code": 0,
+  "revision": "bc09c67fc4078501599c37e4cdfecdee40af2ef8",
+  "diff_fingerprint": "aa41d10592dbead4910485bf28a61ea48d945514929dbccc513e0b4e93b18997",
+  "post_fingerprint": "aa41d10592dbead4910485bf28a61ea48d945514929dbccc513e0b4e93b18997",
+  "source_unchanged": true,
+  "output_sha256": "2a7e1e037750cafc4368b62786b0cf12c9b76f04373908fcf60914ba2224e09f",
+  "raw_output": ".local/EV-20261020T094243-c5f56f0a.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "3c3d57a3f7784925ba0ef35b08bd25ee80b84ed1a751168f48aacb8b447a0984"
+}

@@ -1,0 +1,285 @@
+{
+  "schema_version": 1,
+  "ticket": "8691344a91fe4a049135ef53f652526d",
+  "role": "research",
+  "result": "PLAN_READY",
+  "task_id": "ollama-planning-mvp",
+  "summary": "REPLAN採現candidate不改schema/prompt/guards，先將自然coverage與required typed selection分開測。新四children依序：離線固定fixture/runner→fresh獨立語意核對→selection單樣本→coverage三個固定控制；優先selection因現格式從未自然驗到。diagnostic為注入上游的局部自然輸出，不能代替父層完整自然。研究只做現契約read-only representation probe，七View保留未選能力的矩陣可materialize並2prepared；所有新harness/fixture審核/模型效果仍PENDING。",
+  "evidence": [
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-9/plan.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-9/diagnosis.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-9/research-probe.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-7-9/review.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-8/handoff.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-kind/handoff.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-4/failure-context.json"
+  ],
+  "design": {
+    "version": "kind-isolation-v1",
+    "candidate": "managed-kind-mapping-1，schema/prompt/model與第9輪完全相同；診斷runner版本另標，不改原candidate責任。",
+    "new_files": [
+      "evaluations/managed_node_diagnostics.py",
+      "evaluations/fixtures/kind_diagnostics_v1/manifest.json",
+      "evaluations/fixtures/kind_diagnostics_v1/request-original.txt",
+      "evaluations/fixtures/kind_diagnostics_v1/recall-original.json",
+      "evaluations/fixtures/kind_diagnostics_v1/coverage-selection.json",
+      "evaluations/fixtures/kind_diagnostics_v1/oracle.json",
+      "evaluations/fixtures/kind_diagnostics_v1/renamed-profile/manifest.yaml及catalog/view YAML",
+      "tests/unit/test_managed_node_diagnostics.py"
+    ],
+    "ownership": "第10輪worker只新增診斷module/fixture/focused tests及自身raw/log/handoff，不能動現runner/module/prompt/schema/tests/兩src/Task/controller。第11輪不同fresh worker只讀核對所有fixture及Oracle，寫自身review/log，不修作者fixture。Main只按既定樹與controller派遣；fixture拒絕交fresh研究決定新版本。",
+    "runner": "獨立module提供--stage selection|coverage，預設只dry-run，另--execute --ticket；提供--replay與--manifest。只能載入指定fixture package，不接受任意輸出repair、動態改Oracle或舊raw轉答案。重用ManagedInvoke（不新HTTP client）、MODEL/MODEL_OPTIONS、TiktokenCounter、contract.messages/parse_wire/schema/materialize、finish_selection及hash utility。現run_pipeline內node不可直接重用，因此在新module建立最小單節點record/replay，不抽改舊runner；這是診斷接線而非產品架構重寫。",
+    "execution_inputs": "coverage：固定RecallWire先materialize，再contract.messages(coverage,coverage_schema(recall),request,requirements=[...],view=exact_policy)；只有該View契約/需求/schema，不放預期status/mapping/own_gap/Oracle。selection：先以同版adapter將固定七View wire全部materialize，與預先凍結normalized精確相等，再原selection messages(request,requirements,coverages,views,missing_policy_options)；不放選中來源/assignment/draft/typed範例/Oracle。",
+    "preflight": "execute前強制驗fresh ACCEPT review所綁manifest全部hash（含fixtures、Oracle、normalized、messages/body/schema、實作全imports、原prompts/tests/lockfile、model設定）。缺review/hash漂移/上下文>=32768即0POST失敗。schema/byte比較不代表語意已驗。run前後皆hash查核；模型identity照既有受控本機設定核對，所有POST只有loopctl request。",
+    "recording": "每sample新空目錄；保存sample ID/role/upstream_injected=true/注入來源hash、schema、messages/body、原provider/call raw、receipt/requestID、JSON欄位presence、parse/compile/normalized、response或首錯、usage/settings及完整semantic-review。原raw字串不改；parse/contract錯仍保存。replay只讀原raw，不建立provider，重建messages/schema/derived gaps/首錯並逐artifact核對；完整import freeze與同.venv/lockfile保留，不冒稱vendor了外部套件。",
+    "round_order": {
+      "10": "kind_diagnostic_fixture_harness：0POST",
+      "11": "kind_diagnostic_fixture_semantics：fresh reviewer 0POST",
+      "12": "natural_kind_selection_isolation：1個預定POST；之後必fresh audit完整10–12",
+      "13": "natural_kind_coverage_isolation：3個固定獨立POST",
+      "14_if_all_pass": "natural_kind_mapping_three_stage verify_parent：原題全新完整自然，正常9POST；不拿診斷raw代替。實際輪數以controller為準，FAIL/審核會增加研究但不重置9輪。"
+    }
+  },
+  "fixed_manifest_spec": {
+    "freeze_rule": "以下ID、角色、順序、數量與語意門檻由本plan在POST前固定；第10輪將實際bytes/body/hash產成manifest，第11輪獨立核准。凡內容或Oracle需改須新版本並重新離線審核，不能模型失敗後放寬或改名重送。",
+    "original_request": {
+      "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/index-recall-request.txt",
+      "sha256": "1cf6e584921c4a47c1a8cbe010aebafec41ed4a0cc83bc2b4e638c0c0165087b",
+      "text": "對照各店各商品的盤點庫存件數與 2026 年 9 月線上通路的折扣金額及淨銷售額，並顯示庫存盤點日期，準備促銷後補貨評估；保留所有庫存商品。"
+    },
+    "original_fixed_recall": "新fixture由原題獨立作者建立8項：GRN-001各店各商品；MET-001盤點庫存件數；FILT-001 2026 年 9 月；FILT-002線上通路；MET-002折扣金額；MET-003淨銷售額；META-001庫存盤點日期；POP-001保留所有庫存商品。索引精確原文；3metric linked到GRN，兩銷售metric scope=[FILT-001,FILT-002]，庫存metric scope=[]；META/POP grain_refs=[GRN]；兩普通filter refs=[]；GRN無self依賴。純準備促銷後補貨評估留背景。population統一為原文所有庫存商品，不能複製前raw較含混的所有在庫商品。本fixture是注入的規範輸入，不改原raw、不稱自然recall。",
+    "samples": [
+      {
+        "id": "SEL-ISO-v1-01",
+        "stage": "selection",
+        "count": 1,
+        "request": "原題精確bytes",
+        "upstream": "固定已核對recall與下述完整七View coverage共56 entries",
+        "success": "原SelectionWire/finish通過且所有typed/來源/assignment/exclusion/free text/2prepared語意全正確；不能以nonready合法當成功"
+      },
+      {
+        "id": "COV-ISO-v1-01",
+        "stage": "coverage",
+        "count": 1,
+        "request": "原題精確bytes",
+        "upstream": "固定已核對full-eight recall；原demo_retail.v_daily_sales",
+        "success": "全部8entries正確，尤其store_id partial own=true；revenue sum partial own=false，缺channel+grain；sales_date全9月雙predicate supported own=false；POP不得靠store_id宣稱部分母體支持；其餘無真支持保持無mapping"
+      },
+      {
+        "id": "COV-ISO-v1-02",
+        "stage": "coverage",
+        "count": 1,
+        "request": "列出各店各商品。",
+        "upstream": "新固定只有grain需求，ID=unrelated/識別~鍵，quote=各店各商品，精確索引，無scope/grain依賴；原demo_retail.v_customer_value",
+        "success": "unsupported或uncertain、own_gap=true、mappings=[]。customer_id/member/name/city不對應店商品，不能硬湊partial；該單grain題不涉及累計金額歧義"
+      },
+      {
+        "id": "COV-ISO-v1-03",
+        "stage": "coverage",
+        "count": 1,
+        "request": "原題只將2026 年 9 月替換為2032 年 2 月，其他文字不變",
+        "upstream": "full-eight新索引；單View診斷profile=kind_diag_renamed_v1（approved、source_kind=sql、contract_version=3-diagnostic-v1），只包含原daily深拷貝並view改diagnostic9.observation，store_id→loc_key、sales_date→day_key、revenue→amount_value、units_sold→piece_value；同步grain.keys與description中機械欄位名，其餘型別/業務文字/能力不變。使用真SchemaCatalog讀固定YAML，不monkeypatch既有生產catalog。",
+        "id_map": {
+          "GRN-001": "slot_0/🧾",
+          "MET-001": "model_dump",
+          "FILT-001": "月~邊界",
+          "FILT-002": "scope-channel",
+          "MET-002": "m_discount",
+          "MET-003": "amount/net",
+          "META-001": "元資料",
+          "POP-001": "保留/全部"
+        },
+        "success": "與01能力對應完全一致但只用改名key/date/amount；整月必>=2032-02-01且<2032-03-01或date<=2032-02-29，不能照抄2026/2031或少一天；partial/own與依賴身份精確。此控制一次改ID/欄位/日期是預先等變性反例，不聲稱單因素因果。"
+      }
+    ],
+    "coverage_batch_policy": "樣本皆一個獨立coverage節點、各一次POST。按01→02→03執行；一個樣本無下游，首parse/contract錯保存該樣本即結束。其餘固定獨立樣本仍執行以取得對照，任何失敗令總節點FAIL，不挑選單個PASS。429/transport/inflight/identity/hash/context等安全或有效性問題停止整批並依controller流程處理，不能發替代樣本；不設內容錯答retry。",
+    "no_success_sampling": "selection只1，coverage每ID只1，不以新增ID繞dedup。預先另固定父層E2E-RETURN-v1-01單樣本（recall+7maps+selection各最多1、首錯停）；它只在診斷全PASS/audit允許後執行。首個POST前的manifest先固定這些ID/角色/數量及唯一允許的跨角色重複：同stage body若恰相同，ISOLATION一次與PARENT_NATURAL一次可分別作節點診斷及新自然上游整合驗證；實際父層body生成後、送出前記錄與早期body的共同hash/角色連結（無法在自然上游產生前預知未來body hash）。此明確預先規劃的角色重複只在局部全PASS後適用，後者上游必為當次全新自然raw，不能拿它重抽失敗診斷。其餘相同body一律不改case重送；完整自然失敗後也不能原版再跑，先fresh研究重判。原full runner沿既有case key，不為繞dedup改名，另在外部manifest記E2E角色。"
+  },
+  "complete_coverage_fixture_oracle": {
+    "column_order": [
+      "grain",
+      "stock",
+      "month",
+      "online",
+      "discount",
+      "net",
+      "snapshot_metadata",
+      "preserve_inventory_population"
+    ],
+    "notation": "S=supported/own_gap=false；U=unsupported/own_gap=true/mappings=[]（grain path由compiler固定，其他可null）；P-key=partial/own=true；P-metric=partial/own=false，缺口只能依現recall與同View statuses完整導出。此為先驗fixture要求，仍須第11輪fresh reviewer獨立核對。",
+    "rows": {
+      "demo_retail.v_customer_value": {
+        "status": [
+          "U",
+          "U",
+          "U",
+          "U",
+          "U",
+          "U",
+          "U",
+          "U"
+        ],
+        "evidence": "會員鍵非店商品鍵；會員累計消費/最後訂單日沒有證據等同本題交易淨額與完整交易月份，不能把last_order_date篩選冒稱月度交易範圍。沒有盤點或庫存母體證據。fresh reviewer需逐責任核對這個保守fixture決定。"
+      },
+      "demo_retail.v_daily_sales": {
+        "status": [
+          "P-key",
+          "U",
+          "S",
+          "U",
+          "U",
+          "P-metric",
+          "U",
+          "U"
+        ],
+        "mappings": "grain=[store_id]；month=sales_date>=2026-09-01 AND <2026-10-01；net=revenue sum conditions=[]。grain缺商品；net own完整但缺online與完整grain。store_id只對grain有用，對全部庫存母體無證。"
+      },
+      "demo_retail.v_inventory_status": {
+        "status": [
+          "S",
+          "S",
+          "U",
+          "U",
+          "U",
+          "U",
+          "S",
+          "S"
+        ],
+        "mappings": "grain=[store_id,product_id]；stock=stock_qty sum []；snapshot=snapshot_date metadata；population=[store_id,product_id] path=/summary。無銷售scope套庫存、無stock_status/>0新義務、無snapshot日期filter。"
+      },
+      "demo_retail.v_order_summary": {
+        "status": [
+          "P-key",
+          "U",
+          "S",
+          "S",
+          "U",
+          "P-metric",
+          "U",
+          "U"
+        ],
+        "mappings": "grain=[store_id]；month=order_date>=2026-09-01 AND <2026-10-01；online=sales_channel=online；net=order_amount sum []。net own完整但缺商品grain；不用customer_id或order_id假裝商品，不捏造折扣欄。"
+      },
+      "demo_retail.v_product_monthly": {
+        "status": [
+          "S",
+          "U",
+          "S",
+          "U",
+          "P-metric",
+          "P-metric",
+          "U",
+          "U"
+        ],
+        "mappings": "grain=[store_id,product_id]；month=sales_month=2026-09-01；discount=discount_amount sum []；net=net_sales sum []。固定單月及合法key可縮約原月份；兩metric自身完整且grain完整，僅缺online scope。不可聲稱只含銷售以外契約未寫事實。"
+      },
+      "demo_retail.v_sales_detail": {
+        "status": [
+          "S",
+          "U",
+          "S",
+          "S",
+          "S",
+          "S",
+          "U",
+          "U"
+        ],
+        "mappings": "grain=[store_id,product_id]；month=order_date>=2026-09-01 AND <2026-10-01；online=sales_channel=online；discount=discount_amount sum []；net=net_sales sum []。可彙總成店商品，但來源不證全部庫存母體，不因鍵齊把POP supported。"
+      },
+      "demo_retail.v_store_monthly_kpi": {
+        "status": [
+          "P-key",
+          "U",
+          "S",
+          "U",
+          "U",
+          "P-metric",
+          "U",
+          "U"
+        ],
+        "mappings": "grain=[store_id]；month=sales_month=2026-09-01；net=revenue sum []。net own完整但缺online+商品；其單月零交易為0的文字不能成為庫存left缺值補零理由。"
+      }
+    },
+    "paths": "metric用各自/columns/<column>/description，filter用相應日期/通路description，metadata用snapshot_date description，grain只/grain/description，population inventory用/summary；逐欄column引文由程式取原契約。不把任意summary當業務支持證明。",
+    "equivalences": "coverage自然月份date雙predicate允許>=月初且<次月或<=正確月底，mapping順序不強求；不接受單邊或OR。true月度欄可=月首，完整選擇fixture固定sales.order_date雙predicate，所以selection不得新增未在coverage映射的order_month；角色/任務ID/list順序/其他無害排法不作固定字串比對。",
+    "review_rule": "作者需完整56-row evidence表而非這個簡表當完成。fresh reviewer若認為customer金額有可證部分、monthly grain縮約未成立、或任何U遺漏必要獨立能力，拒絕整套；研究重判並新版本，不把已跑結果倒填。"
+  },
+  "offline_acceptance": {
+    "baseline": ".venv/bin/python -m pytest tests/unit/test_managed_three_stage_runner.py tests/unit/test_indexed_requirement_recall.py tests/unit/test_referenced_view_coverage.py tests/unit/test_slotted_view_coverage.py tests/unit/test_three_stage_view_selection.py tests/unit/test_planning_mvp.py tests/unit/test_task_decomposition_contract.py tests/unit/test_task_decomposition_workflow.py tests/unit/test_decomposition_evaluation.py tests/unit/test_decomposition_decision_chain.py tests/unit/test_decomposition_decision_summary.py tests/unit/test_planning_reasoning_probe.py tests/unit/test_evidence_bound_managed_contract.py tests/unit/test_evidence_bound_managed_runner.py -q tests/unit/test_own_responsibility_managed_contract.py tests/unit/test_own_responsibility_managed_runner.py tests/unit/test_kind_mapping_managed_contract.py tests/unit/test_kind_mapping_managed_runner.py",
+    "scope": "既有496原樣跑，加一個新focused測試檔；先focused再必要既有回歸。不要擴跑可能provider/DB的無關suite。未跑不得填PASS。",
+    "positive_controls": [
+      "三coverage樣本與完整selection在原contract可materialize；新fixed全7coverage不省略未選能力。",
+      "完整synthetic typed selection以同上游產2prepared，checks依責任/欄位而非固定taskID或字典順序；dry-run/replay均禁止構造provider。",
+      "逐sample原始欄位presence/parsed/compiled逐欄比對；record和replay完整或失敗prefix相等，profile路徑與非預設catalog也正確fingerprint。"
+    ],
+    "negative_controls": [
+      {
+        "mutation": "coverage省useful store key/錯把only store當完整店商品/用customer_id作店商品partial/錯月份或漏一邊/淨額dependency-only卻own=true/銷售鍵齊宣稱庫存母體",
+        "expected": "各預先標SEMANTIC_REJECT；現guard可接受時必如實記ACCEPT，不能聲稱parser擋住；oracle runner或人工固定核對必判FAIL。"
+      },
+      {
+        "mutation": "typed漏filters或metadata_collections等required、ready integration=null、missing predicate value、非法role/extra/duplicatekey/NaN",
+        "expected": "原schema/parser拒絕，保留首錯與raw。"
+      },
+      {
+        "mutation": "scope跨來源、stock加銷售月份/online、只task.request寫sum/月份、錯anchor/inner/錯鍵/erase key/補零",
+        "expected": "原guards與獨立語意核對均不得放行；分清結構拒絕與語意拒絕。"
+      },
+      {
+        "mutation": "fixture/review/source/schema/body hash漂移、漏coverage View、review未ACCEPT、缺preflight",
+        "expected": "execute在POST前拒絕；replay 0POST並拒絕不一致版本。"
+      }
+    ],
+    "important_limit": "研究現probe不是上述新runner的驗證。新runner與fixtures未實作，496未重跑，freshfixture核對、模型自然可行性全部PENDING。"
+  },
+  "parent_return": [
+    "plan保留全部12個舊nodes之id/parent/goal/acceptance逐字與順序，root逐字同Task，只在未通過natural_kind_mapping_three_stage下新增4children；原FAIL/PENDING不改判。",
+    "四children全部PASS並按每3輪audit獲允許，controller回natural_kind_mapping_three_stage為verify_parent：執行預定原題E2E-RETURN-v1-01，當次全新recall→全7View各一次→required typed selection與2prepared。不得重用固定recall/coverage或診斷raw；所有View含未選逐項語意與所有自由文字完整核對，任何結構/語意首錯FAIL，不修答。",
+    "父層完整自然PASS之後依序natural_own_responsibility_three_stage→natural_evidence_bound_three_stage→natural_slots_three_stage→natural_qwen_three_stage→three_stage_integration→root，各節點有自己的父層整合驗收證據，不能因子項PASS自動PASS。現版同raw完整/失敗prefix及frozen replay、必要回歸、歷史raw/分數/38Gate與兩src保持必核對。",
+    "每3輪fresh audit與root PASS後fresh final verifier ACCEPT都保留；不得用孤立測試或representation probe代替LOOP1–4與歷史38Gate。"
+  ],
+  "failure_rejudge": [
+    "fixture/Oracle有歧義先0POST FAIL，fresh研究用真契約決定精確責任，不要求Main代選。若現表示無法表達合法答案或必須改原guards才能通，停止診斷實作回研究，不偷偷更改schema。",
+    "selection首次若FAIL，保留錯誤並交fresh研究區分schema表達能力、模型typed責任過載、驗證Oracle問題與整合語意，禁止自動新增欄位/repair/原樣重抽。coverage是已固定的獨立研究問題；只有fresh研究重新授予下一個合理動作後才執行，不能Main跳過needs_research。",
+    "coverage任何樣本FAIL，整節點FAIL並由fresh研究重判責任切分/可行性，不能僅繼續加格式欄位。比較可由已驗資料確定的決策是否仍錯置給模型、是否需另種表示；任何新候選先離線再單次有辨識力測試。",
+    "局部PASS只支持該固定小節點，可回答部分可行性，不證概率/穩定性或完整自然；不以無限額度當可行性證據。"
+  ],
+  "resources": {
+    "research_model_POSTs": 0,
+    "research_offline_probe_processes": 1,
+    "used_before_research": {
+      "rounds": 9,
+      "local_POSTs": 21,
+      "retry": 0,
+      "cloud": 0
+    },
+    "diagnostic_fixed_POSTs": {
+      "selection": 1,
+      "coverage": 3,
+      "total": 4
+    },
+    "parent_full_natural_max_POSTs": 9,
+    "planned_new_POSTs_before_parent_integration": 13,
+    "max_cloud": 0,
+    "model": "qwen3.8:27b digest aaee06c39dcf2437cde036998d960e1fc1494b8191be7cc9657d01e509097813；think=true temperature=1 top_p=1 seed=42 num_ctx=32768 num_predict=-1；HTTP/outer timeout=None；只有context物理容量，不加token或牆鐘配額。",
+    "authorization": "使用者不限本機POST/retry/輪次/agents/token/timeout，cloud0，每3輪fresh audit；不限額不允許成功HTTP錯答原樣重抽，所有歷史消耗不重置。"
+  },
+  "next": {
+    "node": "kind_diagnostic_fixture_harness",
+    "round_if_no_extra": "10",
+    "worker_scope": "按design與fixed_manifest_spec建立新診斷module/固定fixtures與focused test，不改candidate/產品pipeline；先離線0POST。",
+    "first_natural_gate": "第11輪freshfixture review明確ACCEPT並全部hash精確相等；selection第12輪原1樣本；完成後audit10–12再決定coverage，不自動連跑。"
+  },
+  "pending": [
+    "新diagnostic runner與fixtures未實作",
+    "所有新focused/496回歸未執行",
+    "fresh fixture review未執行",
+    "selection/coverage局部自然及父層完整自然/祖先/root皆PENDING"
+  ],
+  "blocking_ambiguities": [],
+  "implementation_changed": false,
+  "task_or_controller_changed": false,
+  "SQL_DB": 0,
+  "commits": 0,
+  "pushes": 0
+}

@@ -1,0 +1,26 @@
+{
+  "artifact_validation": "PASS",
+  "model_quality": "NOT_VERIFIED",
+  "files": {
+    "background-brief.md": {
+      "characters": 999,
+      "sha256": "3dcdfe3139f577f0e2dd78803d6bdfc5eb012aa8427cef5e7d36e9b1785c5d63",
+      "utf8_no_bom": true
+    },
+    "subagent-proposal.md": {
+      "characters": 12295,
+      "sha256": "4e31fcdca35d1af83443d381b72516631aa962dbce5414d9c68b7b1a705122c3",
+      "utf8_no_bom": true
+    },
+    "integrated-plan.md": {
+      "characters": 2507,
+      "sha256": "3718685d106feab992433211dbda426ad4905d48771d0a1e8b183de4877733e6",
+      "utf8_no_bom": true
+    }
+  },
+  "head": "bc09c67fc4078501599c37e4cdfecdee40af2ef8",
+  "tracked_changes": [],
+  "agent_handoff_integrated": true,
+  "new_model_calls": 0,
+  "new_sql_or_db_calls": 0
+}

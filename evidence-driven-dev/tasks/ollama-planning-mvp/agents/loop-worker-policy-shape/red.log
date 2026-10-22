@@ -1,0 +1,441 @@
+FFFFFFFFFFFFFFFFFFF                                                      [100%]
+=================================== FAILURES ===================================
+_____ test_policy_shape_requires_actual_nest_for_every_child[default-True] _____
+
+case = 'default', want = True
+
+    @pytest.mark.parametrize('case,want', [('default', True), ('null', True), ('empty', False),
+        ('nested', True), ('aggregate', False), ('wrong_child', False), ('wrong_keys', False),
+        ('zero', False), ('metadata', False), ('renamed', True), ('second_child', False)])
+    def test_policy_shape_requires_actual_nest_for_every_child(case, want):
+>       mod = api(); value = original(); integration = value['draft']['integration']
+              ^^^^^
+
+tests/diagnostics/test_managed_policy_shape.py:31: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.diagnostics.managed_policy_shape'), 'policy shape candidate missing'
+E       AssertionError: policy shape candidate missing
+E       assert None
+E        +  where None = <function find_spec at 0x73e208daa0c0>('evaluations.diagnostics.managed_policy_shape')
+E        +    where <function find_spec at 0x73e208daa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/diagnostics/test_managed_policy_shape.py:19: AssertionError
+______ test_policy_shape_requires_actual_nest_for_every_child[null-True] _______
+
+case = 'null', want = True
+
+    @pytest.mark.parametrize('case,want', [('default', True), ('null', True), ('empty', False),
+        ('nested', True), ('aggregate', False), ('wrong_child', False), ('wrong_keys', False),
+        ('zero', False), ('metadata', False), ('renamed', True), ('second_child', False)])
+    def test_policy_shape_requires_actual_nest_for_every_child(case, want):
+>       mod = api(); value = original(); integration = value['draft']['integration']
+              ^^^^^
+
+tests/diagnostics/test_managed_policy_shape.py:31: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.diagnostics.managed_policy_shape'), 'policy shape candidate missing'
+E       AssertionError: policy shape candidate missing
+E       assert None
+E        +  where None = <function find_spec at 0x73e208daa0c0>('evaluations.diagnostics.managed_policy_shape')
+E        +    where <function find_spec at 0x73e208daa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/diagnostics/test_managed_policy_shape.py:19: AssertionError
+_____ test_policy_shape_requires_actual_nest_for_every_child[empty-False] ______
+
+case = 'empty', want = False
+
+    @pytest.mark.parametrize('case,want', [('default', True), ('null', True), ('empty', False),
+        ('nested', True), ('aggregate', False), ('wrong_child', False), ('wrong_keys', False),
+        ('zero', False), ('metadata', False), ('renamed', True), ('second_child', False)])
+    def test_policy_shape_requires_actual_nest_for_every_child(case, want):
+>       mod = api(); value = original(); integration = value['draft']['integration']
+              ^^^^^
+
+tests/diagnostics/test_managed_policy_shape.py:31: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.diagnostics.managed_policy_shape'), 'policy shape candidate missing'
+E       AssertionError: policy shape candidate missing
+E       assert None
+E        +  where None = <function find_spec at 0x73e208daa0c0>('evaluations.diagnostics.managed_policy_shape')
+E        +    where <function find_spec at 0x73e208daa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/diagnostics/test_managed_policy_shape.py:19: AssertionError
+_____ test_policy_shape_requires_actual_nest_for_every_child[nested-True] ______
+
+case = 'nested', want = True
+
+    @pytest.mark.parametrize('case,want', [('default', True), ('null', True), ('empty', False),
+        ('nested', True), ('aggregate', False), ('wrong_child', False), ('wrong_keys', False),
+        ('zero', False), ('metadata', False), ('renamed', True), ('second_child', False)])
+    def test_policy_shape_requires_actual_nest_for_every_child(case, want):
+>       mod = api(); value = original(); integration = value['draft']['integration']
+              ^^^^^
+
+tests/diagnostics/test_managed_policy_shape.py:31: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.diagnostics.managed_policy_shape'), 'policy shape candidate missing'
+E       AssertionError: policy shape candidate missing
+E       assert None
+E        +  where None = <function find_spec at 0x73e208daa0c0>('evaluations.diagnostics.managed_policy_shape')
+E        +    where <function find_spec at 0x73e208daa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/diagnostics/test_managed_policy_shape.py:19: AssertionError
+___ test_policy_shape_requires_actual_nest_for_every_child[aggregate-False] ____
+
+case = 'aggregate', want = False
+
+    @pytest.mark.parametrize('case,want', [('default', True), ('null', True), ('empty', False),
+        ('nested', True), ('aggregate', False), ('wrong_child', False), ('wrong_keys', False),
+        ('zero', False), ('metadata', False), ('renamed', True), ('second_child', False)])
+    def test_policy_shape_requires_actual_nest_for_every_child(case, want):
+>       mod = api(); value = original(); integration = value['draft']['integration']
+              ^^^^^
+
+tests/diagnostics/test_managed_policy_shape.py:31: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.diagnostics.managed_policy_shape'), 'policy shape candidate missing'
+E       AssertionError: policy shape candidate missing
+E       assert None
+E        +  where None = <function find_spec at 0x73e208daa0c0>('evaluations.diagnostics.managed_policy_shape')
+E        +    where <function find_spec at 0x73e208daa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/diagnostics/test_managed_policy_shape.py:19: AssertionError
+__ test_policy_shape_requires_actual_nest_for_every_child[wrong_child-False] ___
+
+case = 'wrong_child', want = False
+
+    @pytest.mark.parametrize('case,want', [('default', True), ('null', True), ('empty', False),
+        ('nested', True), ('aggregate', False), ('wrong_child', False), ('wrong_keys', False),
+        ('zero', False), ('metadata', False), ('renamed', True), ('second_child', False)])
+    def test_policy_shape_requires_actual_nest_for_every_child(case, want):
+>       mod = api(); value = original(); integration = value['draft']['integration']
+              ^^^^^
+
+tests/diagnostics/test_managed_policy_shape.py:31: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.diagnostics.managed_policy_shape'), 'policy shape candidate missing'
+E       AssertionError: policy shape candidate missing
+E       assert None
+E        +  where None = <function find_spec at 0x73e208daa0c0>('evaluations.diagnostics.managed_policy_shape')
+E        +    where <function find_spec at 0x73e208daa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/diagnostics/test_managed_policy_shape.py:19: AssertionError
+___ test_policy_shape_requires_actual_nest_for_every_child[wrong_keys-False] ___
+
+case = 'wrong_keys', want = False
+
+    @pytest.mark.parametrize('case,want', [('default', True), ('null', True), ('empty', False),
+        ('nested', True), ('aggregate', False), ('wrong_child', False), ('wrong_keys', False),
+        ('zero', False), ('metadata', False), ('renamed', True), ('second_child', False)])
+    def test_policy_shape_requires_actual_nest_for_every_child(case, want):
+>       mod = api(); value = original(); integration = value['draft']['integration']
+              ^^^^^
+
+tests/diagnostics/test_managed_policy_shape.py:31: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.diagnostics.managed_policy_shape'), 'policy shape candidate missing'
+E       AssertionError: policy shape candidate missing
+E       assert None
+E        +  where None = <function find_spec at 0x73e208daa0c0>('evaluations.diagnostics.managed_policy_shape')
+E        +    where <function find_spec at 0x73e208daa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/diagnostics/test_managed_policy_shape.py:19: AssertionError
+______ test_policy_shape_requires_actual_nest_for_every_child[zero-False] ______
+
+case = 'zero', want = False
+
+    @pytest.mark.parametrize('case,want', [('default', True), ('null', True), ('empty', False),
+        ('nested', True), ('aggregate', False), ('wrong_child', False), ('wrong_keys', False),
+        ('zero', False), ('metadata', False), ('renamed', True), ('second_child', False)])
+    def test_policy_shape_requires_actual_nest_for_every_child(case, want):
+>       mod = api(); value = original(); integration = value['draft']['integration']
+              ^^^^^
+
+tests/diagnostics/test_managed_policy_shape.py:31: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.diagnostics.managed_policy_shape'), 'policy shape candidate missing'
+E       AssertionError: policy shape candidate missing
+E       assert None
+E        +  where None = <function find_spec at 0x73e208daa0c0>('evaluations.diagnostics.managed_policy_shape')
+E        +    where <function find_spec at 0x73e208daa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/diagnostics/test_managed_policy_shape.py:19: AssertionError
+____ test_policy_shape_requires_actual_nest_for_every_child[metadata-False] ____
+
+case = 'metadata', want = False
+
+    @pytest.mark.parametrize('case,want', [('default', True), ('null', True), ('empty', False),
+        ('nested', True), ('aggregate', False), ('wrong_child', False), ('wrong_keys', False),
+        ('zero', False), ('metadata', False), ('renamed', True), ('second_child', False)])
+    def test_policy_shape_requires_actual_nest_for_every_child(case, want):
+>       mod = api(); value = original(); integration = value['draft']['integration']
+              ^^^^^
+
+tests/diagnostics/test_managed_policy_shape.py:31: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.diagnostics.managed_policy_shape'), 'policy shape candidate missing'
+E       AssertionError: policy shape candidate missing
+E       assert None
+E        +  where None = <function find_spec at 0x73e208daa0c0>('evaluations.diagnostics.managed_policy_shape')
+E        +    where <function find_spec at 0x73e208daa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/diagnostics/test_managed_policy_shape.py:19: AssertionError
+_____ test_policy_shape_requires_actual_nest_for_every_child[renamed-True] _____
+
+case = 'renamed', want = True
+
+    @pytest.mark.parametrize('case,want', [('default', True), ('null', True), ('empty', False),
+        ('nested', True), ('aggregate', False), ('wrong_child', False), ('wrong_keys', False),
+        ('zero', False), ('metadata', False), ('renamed', True), ('second_child', False)])
+    def test_policy_shape_requires_actual_nest_for_every_child(case, want):
+>       mod = api(); value = original(); integration = value['draft']['integration']
+              ^^^^^
+
+tests/diagnostics/test_managed_policy_shape.py:31: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.diagnostics.managed_policy_shape'), 'policy shape candidate missing'
+E       AssertionError: policy shape candidate missing
+E       assert None
+E        +  where None = <function find_spec at 0x73e208daa0c0>('evaluations.diagnostics.managed_policy_shape')
+E        +    where <function find_spec at 0x73e208daa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/diagnostics/test_managed_policy_shape.py:19: AssertionError
+__ test_policy_shape_requires_actual_nest_for_every_child[second_child-False] __
+
+case = 'second_child', want = False
+
+    @pytest.mark.parametrize('case,want', [('default', True), ('null', True), ('empty', False),
+        ('nested', True), ('aggregate', False), ('wrong_child', False), ('wrong_keys', False),
+        ('zero', False), ('metadata', False), ('renamed', True), ('second_child', False)])
+    def test_policy_shape_requires_actual_nest_for_every_child(case, want):
+>       mod = api(); value = original(); integration = value['draft']['integration']
+              ^^^^^
+
+tests/diagnostics/test_managed_policy_shape.py:31: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.diagnostics.managed_policy_shape'), 'policy shape candidate missing'
+E       AssertionError: policy shape candidate missing
+E       assert None
+E        +  where None = <function find_spec at 0x73e208daa0c0>('evaluations.diagnostics.managed_policy_shape')
+E        +    where <function find_spec at 0x73e208daa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/diagnostics/test_managed_policy_shape.py:19: AssertionError
+_____ test_literal_migration_keeps_original_findings_and_new_shape[0-PASS] _____
+
+policy_index = 0, want = 'PASS'
+
+    @pytest.mark.parametrize('policy_index,want', [(0,'PASS'),(1,'PASS'),(2,'FAIL')])
+    def test_literal_migration_keeps_original_findings_and_new_shape(policy_index,want):
+>       mod=api(); context=mod.prepare(mod.load_package()); value=original()
+            ^^^^^
+
+tests/diagnostics/test_managed_policy_shape.py:51: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.diagnostics.managed_policy_shape'), 'policy shape candidate missing'
+E       AssertionError: policy shape candidate missing
+E       assert None
+E        +  where None = <function find_spec at 0x73e208daa0c0>('evaluations.diagnostics.managed_policy_shape')
+E        +    where <function find_spec at 0x73e208daa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/diagnostics/test_managed_policy_shape.py:19: AssertionError
+_____ test_literal_migration_keeps_original_findings_and_new_shape[1-PASS] _____
+
+policy_index = 1, want = 'PASS'
+
+    @pytest.mark.parametrize('policy_index,want', [(0,'PASS'),(1,'PASS'),(2,'FAIL')])
+    def test_literal_migration_keeps_original_findings_and_new_shape(policy_index,want):
+>       mod=api(); context=mod.prepare(mod.load_package()); value=original()
+            ^^^^^
+
+tests/diagnostics/test_managed_policy_shape.py:51: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.diagnostics.managed_policy_shape'), 'policy shape candidate missing'
+E       AssertionError: policy shape candidate missing
+E       assert None
+E        +  where None = <function find_spec at 0x73e208daa0c0>('evaluations.diagnostics.managed_policy_shape')
+E        +    where <function find_spec at 0x73e208daa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/diagnostics/test_managed_policy_shape.py:19: AssertionError
+_____ test_literal_migration_keeps_original_findings_and_new_shape[2-FAIL] _____
+
+policy_index = 2, want = 'FAIL'
+
+    @pytest.mark.parametrize('policy_index,want', [(0,'PASS'),(1,'PASS'),(2,'FAIL')])
+    def test_literal_migration_keeps_original_findings_and_new_shape(policy_index,want):
+>       mod=api(); context=mod.prepare(mod.load_package()); value=original()
+            ^^^^^
+
+tests/diagnostics/test_managed_policy_shape.py:51: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.diagnostics.managed_policy_shape'), 'policy shape candidate missing'
+E       AssertionError: policy shape candidate missing
+E       assert None
+E        +  where None = <function find_spec at 0x73e208daa0c0>('evaluations.diagnostics.managed_policy_shape')
+E        +    where <function find_spec at 0x73e208daa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/diagnostics/test_managed_policy_shape.py:19: AssertionError
+_____ test_original_guards_and_other_semantic_failures_remain_fatal[typed] _____
+
+failure = 'typed'
+
+    @pytest.mark.parametrize('failure',['typed','inner','zero','business'])
+    def test_original_guards_and_other_semantic_failures_remain_fatal(failure):
+>       mod=api(); context=mod.prepare(mod.load_package()); value=original()
+            ^^^^^
+
+tests/diagnostics/test_managed_policy_shape.py:62: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.diagnostics.managed_policy_shape'), 'policy shape candidate missing'
+E       AssertionError: policy shape candidate missing
+E       assert None
+E        +  where None = <function find_spec at 0x73e208daa0c0>('evaluations.diagnostics.managed_policy_shape')
+E        +    where <function find_spec at 0x73e208daa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/diagnostics/test_managed_policy_shape.py:19: AssertionError
+_____ test_original_guards_and_other_semantic_failures_remain_fatal[inner] _____
+
+failure = 'inner'
+
+    @pytest.mark.parametrize('failure',['typed','inner','zero','business'])
+    def test_original_guards_and_other_semantic_failures_remain_fatal(failure):
+>       mod=api(); context=mod.prepare(mod.load_package()); value=original()
+            ^^^^^
+
+tests/diagnostics/test_managed_policy_shape.py:62: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.diagnostics.managed_policy_shape'), 'policy shape candidate missing'
+E       AssertionError: policy shape candidate missing
+E       assert None
+E        +  where None = <function find_spec at 0x73e208daa0c0>('evaluations.diagnostics.managed_policy_shape')
+E        +    where <function find_spec at 0x73e208daa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/diagnostics/test_managed_policy_shape.py:19: AssertionError
+_____ test_original_guards_and_other_semantic_failures_remain_fatal[zero] ______
+
+failure = 'zero'
+
+    @pytest.mark.parametrize('failure',['typed','inner','zero','business'])
+    def test_original_guards_and_other_semantic_failures_remain_fatal(failure):
+>       mod=api(); context=mod.prepare(mod.load_package()); value=original()
+            ^^^^^
+
+tests/diagnostics/test_managed_policy_shape.py:62: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.diagnostics.managed_policy_shape'), 'policy shape candidate missing'
+E       AssertionError: policy shape candidate missing
+E       assert None
+E        +  where None = <function find_spec at 0x73e208daa0c0>('evaluations.diagnostics.managed_policy_shape')
+E        +    where <function find_spec at 0x73e208daa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/diagnostics/test_managed_policy_shape.py:19: AssertionError
+___ test_original_guards_and_other_semantic_failures_remain_fatal[business] ____
+
+failure = 'business'
+
+    @pytest.mark.parametrize('failure',['typed','inner','zero','business'])
+    def test_original_guards_and_other_semantic_failures_remain_fatal(failure):
+>       mod=api(); context=mod.prepare(mod.load_package()); value=original()
+            ^^^^^
+
+tests/diagnostics/test_managed_policy_shape.py:62: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.diagnostics.managed_policy_shape'), 'policy shape candidate missing'
+E       AssertionError: policy shape candidate missing
+E       assert None
+E        +  where None = <function find_spec at 0x73e208daa0c0>('evaluations.diagnostics.managed_policy_shape')
+E        +    where <function find_spec at 0x73e208daa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/diagnostics/test_managed_policy_shape.py:19: AssertionError
+_____________ test_new_input_changes_only_selection_system_suffix ______________
+
+    def test_new_input_changes_only_selection_system_suffix():
+>       mod=api(); package=mod.load_package(); context=mod.prepare(package)
+            ^^^^^
+
+tests/diagnostics/test_managed_policy_shape.py:74: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def api():
+>       assert importlib.util.find_spec('evaluations.diagnostics.managed_policy_shape'), 'policy shape candidate missing'
+E       AssertionError: policy shape candidate missing
+E       assert None
+E        +  where None = <function find_spec at 0x73e208daa0c0>('evaluations.diagnostics.managed_policy_shape')
+E        +    where <function find_spec at 0x73e208daa0c0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+tests/diagnostics/test_managed_policy_shape.py:19: AssertionError
+=========================== short test summary info ============================
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_policy_shape_requires_actual_nest_for_every_child[default-True]
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_policy_shape_requires_actual_nest_for_every_child[null-True]
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_policy_shape_requires_actual_nest_for_every_child[empty-False]
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_policy_shape_requires_actual_nest_for_every_child[nested-True]
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_policy_shape_requires_actual_nest_for_every_child[aggregate-False]
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_policy_shape_requires_actual_nest_for_every_child[wrong_child-False]
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_policy_shape_requires_actual_nest_for_every_child[wrong_keys-False]
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_policy_shape_requires_actual_nest_for_every_child[zero-False]
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_policy_shape_requires_actual_nest_for_every_child[metadata-False]
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_policy_shape_requires_actual_nest_for_every_child[renamed-True]
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_policy_shape_requires_actual_nest_for_every_child[second_child-False]
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_literal_migration_keeps_original_findings_and_new_shape[0-PASS]
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_literal_migration_keeps_original_findings_and_new_shape[1-PASS]
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_literal_migration_keeps_original_findings_and_new_shape[2-FAIL]
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_original_guards_and_other_semantic_failures_remain_fatal[typed]
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_original_guards_and_other_semantic_failures_remain_fatal[inner]
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_original_guards_and_other_semantic_failures_remain_fatal[zero]
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_original_guards_and_other_semantic_failures_remain_fatal[business]
+FAILED tests/diagnostics/test_managed_policy_shape.py::test_new_input_changes_only_selection_system_suffix
+19 failed in 1.02s

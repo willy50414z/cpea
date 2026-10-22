@@ -1,0 +1,20 @@
+{
+  "ticket": "34175c2580224eddb7061898d2af61ef",
+  "result": "PASS",
+  "evidence": [
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-shape/final-verification.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-shape/focused-final.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-shape/necessary-regression.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-shape/original-raw-policy-check.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-shape/original-frozen-replay.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-shape/offline-controls.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-shape/frozen-controls.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-shape/cross-source-raw-check.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-shape/preservation-check.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-shape/operation-handoff.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-shape/frozen/policy-freeze.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-policy-shape/evidence-index.json",
+    "evaluations/fixtures/kind_diagnostics_policy_shape/manifest.json"
+  ],
+  "summary": "第16輪0POST離線contract完成：單一nested薄candidate/test及selection-only manifest，重用全部原kind/typed/finish與managed engines。default/NULL flat均可過；EMPTY必須逐child同task/keys的typed nest，aggregate不代nest，zero/inner及其他首錯仍拒。唯一prompt差異為通用policy適用條件suffix；schema/三literal/上游8需求56列不變。原第15輪同版及原frozen仍精確FAIL，新predicate以同原raw另判shape FAIL，不翻案。68新focused+103指定原回歸通過；4selection控制同版及live原raw frozen重播，完整fake9正例和shape/typed首錯live/frozen共27raw與162輸出artifact一致；正例2prepared。5203既有檔與舊167source逐bytes不變，rebound bindings保持、v2 live仍歷史拒絕。真作者open/未fresh reviewer時HTTP拒絕，來源/授權漂移及中斷不PASS；完整proof均最後封存、全部程序結束。0SQL/DB/commit/push，未改Task/control或舊expectedhash。僅本node PASS；待Main核FINAL/hash及finish後由真fresh不同worker核新語意，後續自然selection/coverage3/自然9POST/各父層與final仍PENDING。"
+}

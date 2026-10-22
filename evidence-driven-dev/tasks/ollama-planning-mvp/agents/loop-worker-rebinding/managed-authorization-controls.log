@@ -1,0 +1,4 @@
+SYNTHETIC TMP-ONLY wrong full-binding authorization rejected before invoke
+SYNTHETIC TMP-ONLY managed receipt/three-role authorization/inner association and replay PASS; 0POST
+REAL TASK preflight still rejects unfinished binding author and missing fresh parent PASS; expected
+{"synthetic_only": true, "tmp_files_removed": true, "model_POSTs": 0, "real_semantic_approval": "PENDING"}

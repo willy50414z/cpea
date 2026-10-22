@@ -1,0 +1,20 @@
+{
+  "id": "EV-20261020T125652-cc46b4a0",
+  "kind": "negative",
+  "command": [
+    ".venv/bin/python",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/reports/relational_witnesses.py"
+  ],
+  "cwd": "/home/willy/code/cpea_terms",
+  "started_at": "2026-10-20T12:56:52+00:00",
+  "finished_at": "2026-10-20T12:56:52+00:00",
+  "exit_code": 0,
+  "revision": "bc09c67fc4078501599c37e4cdfecdee40af2ef8",
+  "diff_fingerprint": "ed8164d51e1effbe4901f04de42d143c8813eff6e02ee06ee29944f7ecba9729",
+  "post_fingerprint": "ed8164d51e1effbe4901f04de42d143c8813eff6e02ee06ee29944f7ecba9729",
+  "source_unchanged": true,
+  "output_sha256": "547fa13d28b752d3f3ff534860acf3ae5cd7a59c336f96470242ab91eb3760e9",
+  "raw_output": ".local/EV-20261020T125652-cc46b4a0.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "7b1188a406d048ec18978ce70c9cbe2ac4eaf62c2a3ebb2d1238595dc63fa343"
+}

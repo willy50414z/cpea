@@ -1,0 +1,20 @@
+{
+  "id": "EV-20261020T095021-077ae0a4",
+  "kind": "regression",
+  "command": [
+    ".venv/bin/python",
+    "evidence-driven-dev/tasks/retail-planning-stages/reports/verify_findings.py"
+  ],
+  "cwd": "/home/willy/code/cpea_terms",
+  "started_at": "2026-10-20T09:50:21+00:00",
+  "finished_at": "2026-10-20T09:50:21+00:00",
+  "exit_code": 0,
+  "revision": "bc09c67fc4078501599c37e4cdfecdee40af2ef8",
+  "diff_fingerprint": "aa41d10592dbead4910485bf28a61ea48d945514929dbccc513e0b4e93b18997",
+  "post_fingerprint": "aa41d10592dbead4910485bf28a61ea48d945514929dbccc513e0b4e93b18997",
+  "source_unchanged": true,
+  "output_sha256": "33f8da40d1aeaac003e22dab3af2acaf5c5b873d494fe879efed0d2204848f8b",
+  "raw_output": ".local/EV-20261020T095021-077ae0a4.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "83a34833a08d5010a746c75d8148925c887f3fd9b94cac1849b82aa2300c1972"
+}

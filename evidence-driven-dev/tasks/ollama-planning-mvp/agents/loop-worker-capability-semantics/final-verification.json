@@ -1,0 +1,162 @@
+{
+  "result": "PASS",
+  "review_sha256": "c509270ef90e86b4f6c0ee064ae19b218bb2426f6dc8f88a4171496b819d00d7",
+  "manifest_sha256": "a2eb2f76c0479b49294245987346e4676db78c86fbefac02dd4e153d8c590f2d",
+  "source_fixture_lineage_model_runtime_schema_fullbindings_final_equal": true,
+  "author_round21_evidence_files_checked": 28,
+  "author_round21_evidence": [
+    {
+      "path": "evaluations/fixtures/kind_diagnostics_capability_projection/manifest.json",
+      "sha256": "a2eb2f76c0479b49294245987346e4676db78c86fbefac02dd4e153d8c590f2d"
+    },
+    {
+      "path": "evaluations/diagnostics/managed_capability_projection.py",
+      "sha256": "44fc1a6ec68f2b3c7562e27dcc0cc59e8145692aee8ea8f86e551c033087dd3d"
+    },
+    {
+      "path": "tests/diagnostics/test_managed_capability_projection.py",
+      "sha256": "ddf30e05642a4cc36540cbae20c3a4561a36594fa125871762df16a333dc0bf1"
+    },
+    {
+      "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/final-verification.json",
+      "sha256": "1202e333672ca799ba40887f7fd03eb8c3e71f98b37db810d4aa3211505d9160"
+    },
+    {
+      "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/proof-inventory.json",
+      "sha256": "6613f83242c967e94740f148cbca4d80bb87a627954f33bdbb28e61c4581aa4a"
+    },
+    {
+      "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/operation-handoff.json",
+      "sha256": "f69ce068cab3ac578fa108d800b345afa34d2563f057055308b7fa6b5fd84a52"
+    },
+    {
+      "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/preservation-start.json",
+      "sha256": "871686f064753457666582e8c8e515ce83ba835eaf6ff3a5cfae7ab3e0d94289"
+    },
+    {
+      "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/preservation-final.json",
+      "sha256": "9375f34101bc431a4b29162130b919275ea890d1059ef48b36b1c1b5daffaa0a"
+    },
+    {
+      "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/focused-authoritative.log",
+      "sha256": "8ea496b36ed3abe4718c77b5c6e8765d8c81afc741c9e5a716550167e5f16b13"
+    },
+    {
+      "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/direct-regression.log",
+      "sha256": "06316d7fe701c13e37a47b577f9ed02cc86bd76438ae4380e2640806c28770ad"
+    },
+    {
+      "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/historical-open-state-test.log",
+      "sha256": "0d5d7300416f92408111e8f284117f7ddff6dcfafdbbca57c5ad8236c6d6f0be"
+    },
+    {
+      "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/validation-notices.json",
+      "sha256": "74ffb82bac8939d9ee7d70b080de387b5555c73e078b4e2f7e98fcba7acfa65f"
+    },
+    {
+      "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/red.log",
+      "sha256": "cfe6c4a0aa640c348c1915002b9aa5981bb680b5ba58e56c7a2fcf23ba63b43c"
+    },
+    {
+      "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/old-nodes-exact.json",
+      "sha256": "2208217655900ac1793a45fdc18c2bb52534595a57ecbf3071a59052e1baab74"
+    },
+    {
+      "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/history-live.json",
+      "sha256": "553e98174548c657ad4dcf5005f4d085b0dc67774d909334f6a4ecc5d2f13bc3"
+    },
+    {
+      "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/history-frozen.json",
+      "sha256": "16cdd9dff339c381f0dd05e4cbd8aa4fd036ce5afa7e58197d713aa7f8eeb274"
+    },
+    {
+      "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/history-final-candidate.json",
+      "sha256": "4661b1c93020dcbaf803877102c0ff8b9669e93d2d3fdde5a51fc7baaa4adaf7"
+    },
+    {
+      "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/selection-history.json",
+      "sha256": "ea01088096d3151c61b73f10a731c39e67efc37c96cc678a8ed5867ba85df3ae"
+    },
+    {
+      "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/legacy-v2-rejection.json",
+      "sha256": "33f98b63d90348f45334828c962bf71fc14c8ebf6f2a4568ff7eb85ae8e0e3ae"
+    },
+    {
+      "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/legacy-closed-provenance.json",
+      "sha256": "f5cba879b9ea4999c36f2da2bec76198e1ac82d142efe79e34954f9b8553fa72"
+    },
+    {
+      "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/multi-scope-union-probes.json",
+      "sha256": "907552ca0a199b71591e51dc24b966adb10380fa65250cc1eed270109b9df3e6"
+    },
+    {
+      "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/live-frozen-final-controls.json",
+      "sha256": "c3f7f40b272d7f3983056b4a1ec70cb22c61913e4c282cf6f51b2800cf6c293f"
+    },
+    {
+      "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/frozen-final-source-drift.json",
+      "sha256": "0033589eebd64b94dbbed8a84b9fb6d579610a53790b2392789aecd1a30e45df"
+    },
+    {
+      "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/controller-check-evidence-final.log",
+      "sha256": "6a7dee2df6decc78d70dd3a9fcef13555f24ec05ef34f4d611783f4084b4e866"
+    },
+    {
+      "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/dry-run.log",
+      "sha256": "d0f0efb3b5c7997c0de4437202dacaad1cc34a2c76aaf11e994761ff27b9a380"
+    },
+    {
+      "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/frozen-final/freeze.json",
+      "sha256": "7d52d3c7639e8caf00e2d55cdd2dd4a3aca1b394c3ef90fec0c7e8e3079eeea9"
+    },
+    {
+      "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/frozen-final/policy-freeze.json",
+      "sha256": "99a62eef564c97d2ae473e9c06cf3e4397e2a7e9fa7722a235f1e7052c27b5c0"
+    },
+    {
+      "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-capability-contract/frozen-final/capability-freeze.json",
+      "sha256": "fb9d90541d2e259436398a1905d379422eab5b318e229878951b958905c9bd70"
+    }
+  ],
+  "independent_counts": {
+    "fixed_cases": 5,
+    "new_reference_rows": 16,
+    "original56rows_preserved": 56,
+    "real_semantic_controls": 17,
+    "exhaustive_multi_scope_subsets": 16,
+    "dynamic_kinds": 7,
+    "authorization_controls": 15,
+    "focused_test_passed": 1
+  },
+  "reviewed_author_test_accounting": {
+    "focused": 81,
+    "direct": 228,
+    "detail": "227+另行1實跑；本審者未重跑"
+  },
+  "true_current_closed_rounds": 21,
+  "true_current_used": {
+    "agent_dispatches": 39,
+    "cloud_calls": 0,
+    "local_calls": 26,
+    "model_retries": 0
+  },
+  "true_reviewer_open_until_Main_finish": true,
+  "root_status": "pending",
+  "old20_status": [
+    "FAIL",
+    "PASS",
+    "FAIL"
+  ],
+  "remaining": [
+    "Main核FINAL/hash/check-evidence及finish本round22",
+    "固定五自然coverage",
+    "原coverage父自身整合",
+    "全新自然9POST",
+    "各祖先自身整合/每3輪audit/fresh final"
+  ],
+  "all_review_processes_ended": true,
+  "unresolved": [],
+  "POST": 0,
+  "SQL_DB": 0,
+  "commit_push": 0
+}

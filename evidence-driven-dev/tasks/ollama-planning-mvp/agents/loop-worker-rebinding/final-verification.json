@@ -1,0 +1,110 @@
+{
+  "result": "PASS_OFFLINE_REBINDING_ONLY",
+  "manifest_sha256": "9efa86b883366ff1ef4edd555f59f08499fa123288c6ca1ffe98998d84156187",
+  "content_manifest": {
+    "path": "evaluations/fixtures/kind_diagnostics_v2/manifest.json",
+    "sha256": "33cf44c84c10842adb60bfb7cbfbb269bac6dfa136c124a43159efabd27d543f"
+  },
+  "focused": "75 passed in 182.45s",
+  "necessary_original_three_file_regression": "160 passed in 51.16s",
+  "historical_round12_frozen_v2_focused": "62 passed in 65.39s",
+  "historical_round12_frozen_v2_replays": 15,
+  "rebound_same_version_replays": 15,
+  "rebound_complete167_source_frozen_replays": 15,
+  "synthetic_original_four_positive_and_eleven_first_errors": true,
+  "outer_controls": {
+    "source167_only_drift": "FAIL with inner PASS and saved raw",
+    "receipt_drift": "FAIL with inner PASS and saved raw",
+    "real_SIGINT_after_inner_PASS": "INTERRUPTED with saved raw; outer replay refuses"
+  },
+  "managed_authorization_controls": "TMP-ONLY synthetic complete roles/record/replay PASS; mismatched authorization refuses before invoke; no synthetic records in real Task",
+  "test_history": {
+    "initial_missing_adapter_RED": true,
+    "first_focused_run": "66 passed; freeze dictionary duplicate-key TypeError, fixed without weakening test",
+    "receipt_drift_RED": true,
+    "missing_active_stage_guard_RED": true,
+    "last_focused_result": "75 passed"
+  },
+  "preservation": {
+    "result": "PASS",
+    "protected_existing_files": 4237,
+    "changed": [],
+    "task_sha256": "3a61044dff153a7f4dd297d35ed20f2a89d3f26066c7e04e916719443ad5a128",
+    "task_and_control_unchanged": true,
+    "old_nodes_unchanged": 17,
+    "original_rounds": 12,
+    "local_calls": 21,
+    "cloud_calls": 0,
+    "retries": 0,
+    "v1_live_bindings_match": true,
+    "original_v2_manifest_sha256": "33cf44c84c10842adb60bfb7cbfbb269bac6dfa136c124a43159efabd27d543f",
+    "original_v2_old165_source_hashes_unchanged": true,
+    "new167_source_bindings_match": true,
+    "new_sources": [
+      "evaluations/diagnostics/managed_node_diagnostics_rebound.py",
+      "tests/diagnostics/test_managed_node_diagnostics_rebound.py"
+    ],
+    "new_manifest_sha256": "9efa86b883366ff1ef4edd555f59f08499fa123288c6ca1ffe98998d84156187",
+    "all_four_sample_bindings_identical_to_v2": true,
+    "immutable_lineage_files": 13,
+    "snapshots": [
+      {
+        "root": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/frozen",
+        "files": 239,
+        "sources": 167,
+        "external_imports": 2,
+        "all_hashes_match": true
+      },
+      {
+        "root": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/outer-probe-frozen",
+        "files": 239,
+        "sources": 167,
+        "external_imports": 2,
+        "all_hashes_match": true
+      }
+    ],
+    "original_raw_oracle_frozen_two_src_38gate_unchanged": true
+  },
+  "artifact_hashes": {
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/red-focused.log": "fe1b6c5205649fc4b70e04b5cdcd78f11ffced076bb00bce90dfcca7afa9735c",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/red-outer-receipt.log": "71a5621383e5c5d78d068eac67ceccb7f6d8e7ba3fbb69af95ef9f1f5d9b8c15",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/red-active-stage.log": "e2b0b1e8c77f72eaeae927543d9028a205e3aebd613502afef591277fde5e2c1",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/green-focused.log": "1f74fa5571dd3384b99c59cf917d8f332976dc886d599e9138ad671cd3fa79c2",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/focused-complete.log": "559347971cd971b53afe3ee3c64571f43421a20a2f99d41632eb16439dd18394",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/necessary-regression.log": "de181620e645040367857aa26541a9b1a71af4c0b81d2f50697b52388f8fea36",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/historical-v2-focused.log": "4b9cd4cd466baf5ec38bced3996940fd34915d23997de5b5d3ead18819cf1f6b",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/historical-v2-replays.log": "ce02eae4de22eaccf9fb8d758099b66da6ec92a6742bad0dd77a2b2b6f0be94e",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/managed-authorization-controls.log": "a06d5236a755797f355f508b65628e0fea9401a39fe53f4d39fbdc606daf462a",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/offline-controls.log": "7c1dc2fed4de8379814ce8f42ab401b8d1e09ef52abbcd6d432fb2c6062a42f3",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/offline-controls-index.json": "eaeef958ed970f24aba7089a5061b61a0d97f7dfe1cce5f1a74e7265aac2e2d6",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/frozen-replays.log": "9250e6e3bf1aff92d23b2d0ddfa4aa4b128ed466e7dde6f62798f6d402f52c88",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/frozen/freeze.json": "7d52d3c7639e8caf00e2d55cdd2dd4a3aca1b394c3ef90fec0c7e8e3079eeea9",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/outer-controls.log": "1afbdeea7fdca679123fa92c8bfb06a4847a924397beb42968201193115ea5de",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/outer-interruption-process.log": "50f0949006760c038ee4368d3067e8d3bd50d7dc285a6a740e773695a4e6585f",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/outer-probe-frozen/freeze.json": "7d52d3c7639e8caf00e2d55cdd2dd4a3aca1b394c3ef90fec0c7e8e3079eeea9",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/preservation-check.json": "e881fc1e3018f8c94a45d9eaabb2b178fab9ed855718d8b210294131ac00ee85",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/preservation-check.log": "e881fc1e3018f8c94a45d9eaabb2b178fab9ed855718d8b210294131ac00ee85",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/controller-check-evidence.log": "6a7dee2df6decc78d70dd3a9fcef13555f24ec05ef34f4d611783f4084b4e866",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/dry-run-selection.log": "28fa080165228f204a9b99c383b8835fe4106482aa38801f1938503a3bd93999",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/dry-run-coverage.log": "2110a262527a93eb393d4c1377126aea3ae8b22895738009fd8fc74d69baf30e",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-rebinding/execute-without-review.log": "5ed05457f983db9e8684d7a89d562f9f09ae38cce245223bbaa424dd3b5b720c",
+    "evaluations/fixtures/kind_diagnostics_rebound/manifest.json": "9efa86b883366ff1ef4edd555f59f08499fa123288c6ca1ffe98998d84156187",
+    "evaluations/diagnostics/managed_node_diagnostics_rebound.py": "d9cb08e98fdcd9d186cddcf47f48ea466e804d153880546d08324f4d35871200",
+    "tests/diagnostics/test_managed_node_diagnostics_rebound.py": "2b0766b1646e1f3b0d5a09ed5277f1edcd70adaab2e0afd29e62cad531196739"
+  },
+  "source_test_manifest_unchanged_after_final_tests": true,
+  "all_started_test_and_child_processes_completed": true,
+  "new_model_POSTs": 0,
+  "cloud_POSTs": 0,
+  "SQL_DB": 0,
+  "commits": 0,
+  "pushes": 0,
+  "pending": [
+    "fresh original semantic parent whole eight requirements/56 rows/typed/free-text ACCEPT and true closed PASS",
+    "selection first1 POST",
+    "coverage first3 POSTs",
+    "original parent new natural9 POSTs",
+    "each original ancestor integration",
+    "fresh final verifier"
+  ]
+}

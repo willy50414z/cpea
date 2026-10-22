@@ -1,0 +1,17 @@
+{
+  "result": "PASS",
+  "protected_before_file_sha256": "078853d940d9db5d8418982e0ea03061b1346c57dde244907a7fa205201c20af",
+  "protected_old_files": 5919,
+  "changed_old_files": [],
+  "frozen_files": 239,
+  "frozen_drift": [],
+  "external_runtime_hashes_equal": true,
+  "live_complete_rebound_bindings_equal": true,
+  "manifest_sha256": "9efa86b883366ff1ef4edd555f59f08499fa123288c6ca1ffe98998d84156187",
+  "original_review_sha256": "f986fd1f361948c4ea4ecc24d4c7e779956210488467533411908f440f07c135",
+  "controller_check_evidence_exit_code": 0,
+  "direct_Task_or_control_edits": false,
+  "source_test_fixture_or_oracle_edits": false,
+  "SQL_or_DB_calls": 0,
+  "commit_or_push": false
+}

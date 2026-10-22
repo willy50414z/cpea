@@ -1,0 +1,53 @@
+version: 3
+view: demo_retail.v_customer_value
+summary: 粒度：每會員一列，包含未下單會員；
+grain:
+  description: 每會員一列，包含未下單會員
+  keys:
+  - customer_id
+columns:
+  customer_id:
+    type: number
+    role: identifier
+    description: 會員id
+  customer_name:
+    type: string
+    role: dimension
+    description: 會員名稱
+  membership_tier:
+    type: string
+    role: dimension
+    description: 會員等級；一般、銀卡、金卡、VIP
+  city:
+    type: string
+    role: dimension
+    description: 會員登記城市，不是交易門市所在地
+  registered_on:
+    type: date
+    role: dimension
+    description: 會員註冊日期。
+  completed_order_count:
+    type: number
+    role: measure
+    description: 會員已完成訂單筆數；未下單為 0
+  lifetime_spend:
+    type: number
+    role: measure
+    description: 會員在累計折扣後消費金額，單位 TWD
+    unit: TWD
+  avg_order_value:
+    type: number
+    role: measure
+    description: 會員平均已完成訂單消費額，單位 TWD/筆
+    unit: TWD/筆
+    disallowed_aggregations:
+    - sum
+    - avg
+  last_order_date:
+    type: date
+    role: dimension
+    description: 會員最後一筆已完成訂單的日期；沒有已完成訂單時為 NULL
+  active_in_last_90d:
+    type: boolean
+    role: dimension
+    description: 最近 90 日內有已完成訂單；沒有則為 false。

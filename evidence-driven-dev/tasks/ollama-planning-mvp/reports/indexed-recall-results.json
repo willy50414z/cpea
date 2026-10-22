@@ -1,0 +1,120 @@
+{
+  "experiment": "EXP-012",
+  "version": "three-stage-view-selection-indexed-1",
+  "request": "對照各店各商品的盤點庫存件數與 2026 年 9 月線上通路的折扣金額及淨銷售額，並顯示庫存盤點日期，準備促銷後補貨評估；保留所有庫存商品。",
+  "wire_schema_result": "PASS",
+  "python_materialization": "PASS",
+  "raw_quote_fields": 0,
+  "requirements": 7,
+  "exact_boundaries": 2,
+  "end_minus_one": 5,
+  "rows": [
+    {
+      "id": "req_inventory_stock_qty",
+      "start": 8,
+      "end": 13,
+      "derived_quote": "盤點庫存件",
+      "expected_term": "盤點庫存件數",
+      "expected_start": 8,
+      "expected_end": 14,
+      "exact_boundary": false,
+      "kind": "metric",
+      "scope_ids": [
+        "req_filter_all_inventory_products"
+      ]
+    },
+    {
+      "id": "req_filter_all_inventory_products",
+      "start": 61,
+      "end": 69,
+      "derived_quote": "保留所有庫存商品",
+      "expected_term": "保留所有庫存商品",
+      "expected_start": 61,
+      "expected_end": 69,
+      "exact_boundary": true,
+      "kind": "filter",
+      "scope_ids": []
+    },
+    {
+      "id": "req_period_2026_09",
+      "start": 16,
+      "end": 25,
+      "derived_quote": "2026 年 9 ",
+      "expected_term": "2026 年 9 月",
+      "expected_start": 16,
+      "expected_end": 26,
+      "exact_boundary": false,
+      "kind": "filter",
+      "scope_ids": []
+    },
+    {
+      "id": "req_channel_online",
+      "start": 26,
+      "end": 30,
+      "derived_quote": "線上通路",
+      "expected_term": "線上通路",
+      "expected_start": 26,
+      "expected_end": 30,
+      "exact_boundary": true,
+      "kind": "filter",
+      "scope_ids": [
+        "req_period_2026_09"
+      ]
+    },
+    {
+      "id": "req_discount_amount",
+      "start": 31,
+      "end": 34,
+      "derived_quote": "折扣金",
+      "expected_term": "折扣金額",
+      "expected_start": 31,
+      "expected_end": 35,
+      "exact_boundary": false,
+      "kind": "metric",
+      "scope_ids": [
+        "req_period_2026_09",
+        "req_channel_online"
+      ]
+    },
+    {
+      "id": "req_net_sales",
+      "start": 36,
+      "end": 39,
+      "derived_quote": "淨銷售",
+      "expected_term": "淨銷售額",
+      "expected_start": 36,
+      "expected_end": 40,
+      "exact_boundary": false,
+      "kind": "metric",
+      "scope_ids": [
+        "req_period_2026_09",
+        "req_channel_online"
+      ]
+    },
+    {
+      "id": "req_inventory_snapshot_date",
+      "start": 44,
+      "end": 49,
+      "derived_quote": "庫存盤點日",
+      "expected_term": "庫存盤點日期",
+      "expected_start": 44,
+      "expected_end": 50,
+      "exact_boundary": false,
+      "kind": "attribute",
+      "scope_ids": [
+        "req_filter_all_inventory_products"
+      ]
+    }
+  ],
+  "semantic_result": "FAIL: preserved population misclassified as filter; explicit key/grain requirements absent",
+  "source_mapping": "NOT_EXECUTED",
+  "end_to_end": "NOT_VERIFIED",
+  "calls": 1,
+  "input_tokens": 6707,
+  "output_tokens": 982,
+  "elapsed_seconds": 8.170141804001105,
+  "cost_usd": null,
+  "raw_run_sha256": "0b4437d9f5d4574124afd9009f2bf1d8b332a0588236c35dd8879cb63a66c49f",
+  "same_agent_semantic_review": true,
+  "independent_review_scope": "Code/indices/storage/replay only, not natural semantic output"
+}

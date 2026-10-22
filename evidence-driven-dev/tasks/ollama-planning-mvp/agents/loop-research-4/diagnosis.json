@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "result": "REPLAN",
+  "all_proposed_effects": "PENDING；僅研究未實作/新POST/測試，不能宣稱新候選通過。",
+  "first_semantic_deviation": {
+    "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T171721Z-fa4587/recall-result.json#/candidate_views/1/reason",
+    "finding": "monthly無channel卻聲稱可通路篩選；第2與4輪同類錯誤重現，不能再保留完全相同recall wire僅重送整輪。"
+  },
+  "confirmed_failures": [
+    {
+      "id": "R4-F1",
+      "layer": "recall冗餘自由來源能力理由",
+      "fact": "所有七View是MVP固定全部保留，沒有top-k決策；仍要求模型重述能力，產生monthly channel捏造。",
+      "root_cause_boundary": "把已知候選集合與未驗證能力聲明混在需求抽取，不是需求索引/角色本身失敗。"
+    },
+    {
+      "id": "R4-F2",
+      "layer": "逐View metric完整支持",
+      "fact": "map04將店商品月net_sales標supported且missing=[]，同View grain項明確unsupported、無product。",
+      "root_cause_boundary": "既有validate_coverage只強制scope_ids的filter依賴，沒有metric→grain_requirement關聯；欄位order_amount可sum不等於該粒度金額可支持。"
+    },
+    {
+      "id": "R4-F3",
+      "layer": "缺口與selection理由自由文",
+      "fact": "map02 missing_requirements與selection exclusions自行宣稱monthly母體僅有銷售紀錄；契約無此保證。",
+      "root_cause_boundary": "已知population來源由policy取文只修頂層，其他自由說明仍可重新推導未保證母體。否定完整庫存保證合理，但only-sales斷言不是必要證據。"
+    },
+    {
+      "id": "R4-F4",
+      "layer": "selection模型輸出契約",
+      "fact": "draft integration省略、兩task.filters/metrics/metadata/group_by等省略，Pydantic填預設空值；原guard正確拒絕。",
+      "root_cause_boundary": "selection prompt要求typed責任，schema卻只要求draft.status及task五欄；允許省略與「自然句提到即算」形成輸出契約缺口。不是guard誤拒、不是只缺一個grain欄位。"
+    }
+  ],
+  "map07_adjudication": {
+    "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T171721Z-fa4587/map-07-result.json#/entries/7/missing_requirements",
+    "finding": "整段先說需要庫存商品母體，再另列「需要庫存狀態欄位」。在現題只要求保留所有庫存商品、無狀態輸出/篩選時，該肯定必要性額外增加資料義務；無須將其詞彙等同具名stock_status才能判斷。",
+    "counterexample": "只要來源完整保留所有庫存商品、店商品鍵與本題度量/日期，其沒有任何status欄位仍能回答本題。應以population_unproven缺口表達customer來源不足，不把狀態欄位當前提。",
+    "impact": "customer全部unsupported之操作判定仍合理，但該條缺口不能算全文正確；新wire/自然審查保留此反例。"
+  },
+  "necessary": [
+    "自然抽取原文責任/條件/背景、精確索引、真metadata、sales同源scope與適用grain",
+    "每候選每需求唯一且完整判定、真實映射/aggregation/角色/條件、partial及缺口不遺失",
+    "母體支持與anchor/left、不補零、根/子粒度、prepared typed責任、全部理由語意",
+    "完整首次raw及失敗版本、受控記帳、父層整合與fresh最終驗收"
+  ],
+  "redundant": [
+    "固定保留全部候選時由模型自由重述召回能力；改由catalog列舉與原文依據不是替模型選來源",
+    "讓模型自由重寫來源population或缺口中的來源事實；可保留模型選擇的結構化缺口refs及證據",
+    "要求模型重複敘述assignment/exclusion已可由其選擇與validated coverage證實的內容；可轉成有驗證的refs後render"
+  ],
+  "limits": [
+    "無法由輸出證明模型內部推理原因。新增schema可能使Qwen失敗，效果尚未驗證。",
+    "refs/schema可拒絕錯引用或一致性矛盾，不能證明任意自然語意；需求grain連結與所有剩餘自由文仍需逐項語意驗收。",
+    "原始第4輪9raw replay PASS只證精確重現FAIL，七View結構通過不表示語意通過。"
+  ]
+}

@@ -1,0 +1,163 @@
+{
+  "experiment": "EXP-018",
+  "provider": "ollama",
+  "model": "qwen3.8:27b",
+  "model_digest": "aaee06c39dcf2437cde036998d960e1fc1494b8191be7cc9657d01e509097813",
+  "request": "對照各店各商品的盤點庫存件數與 2026 年 9 月線上通路的折扣金額及淨銷售額，並顯示庫存盤點日期，準備促銷後補貨評估；保留所有庫存商品。",
+  "new_provider_calls": 1,
+  "retry_calls": 0,
+  "network_timeout_seconds": null,
+  "outer_timeout_seconds": null,
+  "thinking": true,
+  "output_limit": 4096,
+  "context_window": 32768,
+  "temperature": 1,
+  "top_p": 1,
+  "seed": 42,
+  "same_core_source_schema_catalog_case_messages": true,
+  "harness_difference": "only timeouts removed and metadata added; original frozen harness preserved",
+  "elapsed_seconds": 555.5377970709997,
+  "stop_reason": "length",
+  "provider_done": true,
+  "usage": {
+    "input_tokens": 6444,
+    "output_tokens": 4096,
+    "total_tokens": 10540
+  },
+  "load_seconds": 13.122272769,
+  "prompt_eval_seconds": 30.28982,
+  "generation_seconds": 511.774708,
+  "generation_tokens_per_second": 8.003521737146885,
+  "response_characters": 1865,
+  "full_JSON_result": "FAIL: EOF while parsing a value",
+  "model_completion_vs_complete_answer": "provider finished due to token limit; answer JSON incomplete",
+  "semantic_result": "NOT_VERIFIED as a complete recall; partial prefix inspected only",
+  "complete_objects_in_prefix": 8,
+  "partial_prefix_rows": [
+    {
+      "requirement_id": "R_GRAIN",
+      "start": 2,
+      "end": 8,
+      "derived_quote": "各店各商品的",
+      "kind": "grain",
+      "scope_ids": [],
+      "population": "所有庫存商品與對應銷售"
+    },
+    {
+      "requirement_id": "R_STOCK_QTY",
+      "start": 8,
+      "end": 14,
+      "derived_quote": "盤點庫存件數",
+      "kind": "metric",
+      "scope_ids": [],
+      "population": "所有庫存商品"
+    },
+    {
+      "requirement_id": "F_TIME",
+      "start": 16,
+      "end": 26,
+      "derived_quote": "2026 年 9 月",
+      "kind": "filter",
+      "scope_ids": [],
+      "population": "2026年9月已完成訂單"
+    },
+    {
+      "requirement_id": "F_CHANNEL",
+      "start": 26,
+      "end": 30,
+      "derived_quote": "線上通路",
+      "kind": "filter",
+      "scope_ids": [],
+      "population": "線上通路訂單"
+    },
+    {
+      "requirement_id": "R_DISCOUNT",
+      "start": 31,
+      "end": 35,
+      "derived_quote": "折扣金額",
+      "kind": "metric",
+      "scope_ids": [
+        "F_TIME",
+        "F_CHANNEL"
+      ],
+      "population": "線上通路、2026年9月已完成訂單"
+    },
+    {
+      "requirement_id": "R_NET_SALES",
+      "start": 36,
+      "end": 40,
+      "derived_quote": "淨銷售額",
+      "kind": "metric",
+      "scope_ids": [
+        "F_TIME",
+        "F_CHANNEL"
+      ],
+      "population": "線上通路、2026年9月已完成訂單"
+    },
+    {
+      "requirement_id": "R_SNAPSHOT_DATE",
+      "start": 44,
+      "end": 50,
+      "derived_quote": "庫存盤點日期",
+      "kind": "attribute",
+      "scope_ids": [],
+      "population": "所有庫存商品"
+    },
+    {
+      "requirement_id": "R_PURPOSE",
+      "start": 51,
+      "end": 60,
+      "derived_quote": "準備促銷後補貨評估",
+      "kind": "metadata",
+      "scope_ids": [],
+      "population": "N/A"
+    }
+  ],
+  "partial_target_term_visibility": [
+    {
+      "target_term": "盤點庫存件數",
+      "visible_in_complete_prefix_object": true
+    },
+    {
+      "target_term": "2026 年 9 月",
+      "visible_in_complete_prefix_object": true
+    },
+    {
+      "target_term": "線上通路",
+      "visible_in_complete_prefix_object": true
+    },
+    {
+      "target_term": "折扣金額",
+      "visible_in_complete_prefix_object": true
+    },
+    {
+      "target_term": "淨銷售額",
+      "visible_in_complete_prefix_object": true
+    },
+    {
+      "target_term": "庫存盤點日期",
+      "visible_in_complete_prefix_object": true
+    },
+    {
+      "target_term": "保留所有庫存商品",
+      "visible_in_complete_prefix_object": false
+    }
+  ],
+  "visible_complete_target_terms": 6,
+  "expected_target_terms": 7,
+  "candidate_views_completed": false,
+  "population_requirement_completed": false,
+  "source_mapping": "NOT_EXECUTED",
+  "end_to_end": "NOT_VERIFIED",
+  "raw_replay": "PASS: same saved truncated response produces same ValidationError",
+  "repair_or_runtime_salvage": false,
+  "reviewer": "主Agent與fresh subprocess，非跨Agent獨立語意審查",
+  "artifact_folder": ".local/qwen-indexed-20261021T073913Z-2c9172",
+  "raw_run_sha256": "b861f6d3090df6c0326cf9bd12940fe4b6eed55fe53e1dc683418ee4fea80260",
+  "wait_harness_sha256": "7630d84d54721ad9b6438472f48720fb84e76b072657e6177bb385ef822be4dd",
+  "cost_usd": null,
+  "evidence": [
+    "evidence/EV-20261021T073912-568459f3.json",
+    "evidence/EV-20261021T074905-2b4c73bf.json"
+  ]
+}

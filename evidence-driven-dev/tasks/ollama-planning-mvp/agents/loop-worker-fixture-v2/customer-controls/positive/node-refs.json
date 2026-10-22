@@ -1,0 +1,125 @@
+{
+  "requirements": [
+    {
+      "requirement_id": "GRN-001",
+      "scope_ids": [],
+      "grain_binding": null,
+      "grain_requirement_ids": []
+    },
+    {
+      "requirement_id": "MET-001",
+      "scope_ids": [],
+      "grain_binding": "linked",
+      "grain_requirement_ids": [
+        "GRN-001"
+      ]
+    },
+    {
+      "requirement_id": "FILT-001",
+      "scope_ids": [],
+      "grain_binding": null,
+      "grain_requirement_ids": []
+    },
+    {
+      "requirement_id": "FILT-002",
+      "scope_ids": [],
+      "grain_binding": null,
+      "grain_requirement_ids": []
+    },
+    {
+      "requirement_id": "MET-002",
+      "scope_ids": [
+        "FILT-001",
+        "FILT-002"
+      ],
+      "grain_binding": "linked",
+      "grain_requirement_ids": [
+        "GRN-001"
+      ]
+    },
+    {
+      "requirement_id": "MET-003",
+      "scope_ids": [
+        "FILT-001",
+        "FILT-002"
+      ],
+      "grain_binding": "linked",
+      "grain_requirement_ids": [
+        "GRN-001"
+      ]
+    },
+    {
+      "requirement_id": "META-001",
+      "scope_ids": [],
+      "grain_binding": null,
+      "grain_requirement_ids": [
+        "GRN-001"
+      ]
+    },
+    {
+      "requirement_id": "POP-001",
+      "scope_ids": [],
+      "grain_binding": null,
+      "grain_requirement_ids": [
+        "GRN-001"
+      ]
+    }
+  ],
+  "wire": {
+    "entries": {
+      "GRN-001": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": []
+      },
+      "MET-001": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      },
+      "FILT-001": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      },
+      "FILT-002": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      },
+      "MET-002": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      },
+      "MET-003": {
+        "status": "partial",
+        "own_gap": true,
+        "mappings": [
+          {
+            "column": "lifetime_spend",
+            "aggregation": "sum",
+            "conditions": []
+          }
+        ],
+        "contract_path": "/columns/lifetime_spend/description"
+      },
+      "META-001": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      },
+      "POP-001": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      }
+    }
+  }
+}

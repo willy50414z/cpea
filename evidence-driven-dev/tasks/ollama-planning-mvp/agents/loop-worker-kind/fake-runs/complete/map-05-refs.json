@@ -1,0 +1,81 @@
+{
+  "entries": {
+    "stock": {
+      "status": "unsupported",
+      "own_gap": true,
+      "mappings": [],
+      "contract_path": "/grain/description"
+    },
+    "sales": {
+      "status": "partial",
+      "own_gap": false,
+      "mappings": [
+        {
+          "column": "discount_amount",
+          "aggregation": "sum",
+          "conditions": []
+        },
+        {
+          "column": "net_sales",
+          "aggregation": "sum",
+          "conditions": []
+        }
+      ],
+      "contract_path": "/grain/description"
+    },
+    "channel": {
+      "status": "unsupported",
+      "own_gap": true,
+      "mappings": [],
+      "contract_path": "/grain/description"
+    },
+    "period": {
+      "status": "supported",
+      "own_gap": false,
+      "mappings": [
+        {
+          "column": "sales_month",
+          "operator": ">=",
+          "value": "2026-09-01"
+        },
+        {
+          "column": "sales_month",
+          "operator": "<",
+          "value": "2026-10-01"
+        }
+      ],
+      "contract_path": "/grain/description"
+    },
+    "population": {
+      "status": "supported",
+      "own_gap": false,
+      "mappings": [
+        {
+          "column": "store_id"
+        },
+        {
+          "column": "product_id"
+        }
+      ],
+      "contract_path": "/grain/description"
+    },
+    "grain": {
+      "status": "supported",
+      "own_gap": false,
+      "mappings": [
+        {
+          "column": "store_id"
+        },
+        {
+          "column": "product_id"
+        }
+      ]
+    },
+    "R_PURPOSE": {
+      "status": "unsupported",
+      "own_gap": true,
+      "mappings": [],
+      "contract_path": null
+    }
+  }
+}

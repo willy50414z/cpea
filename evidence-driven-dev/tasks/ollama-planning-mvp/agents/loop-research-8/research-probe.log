@@ -1,0 +1,14 @@
+original_raw_field_presence= {"column": true, "role": true, "aggregation": false, "operator": false, "value": false, "conditions": true}
+original_raw_mapping= {"column": "sales_date", "role": "filter", "conditions": [{"column": "sales_date", "operator": ">=", "value": "2026-09-01"}, {"column": "sales_date", "operator": "<=", "value": "2026-09-30"}]}
+original_parse=PASS (schema allows nonmetric conditions and missing predicate)
+original_materialize_error= 'only metric mapping may aggregate'
+ReferencedMapping.required= ['column', 'role']
+ReferencedMapping.properties= ['column', 'role', 'aggregation', 'operator', 'value', 'conditions']
+date_column_contract= {"type": "date", "role": "dimension", "description": "已完成訂單的銷售日期；無交易的門市日期不會有資料列。"}
+store_id_contract= {"type": "number", "role": "identifier", "description": "門市id"}
+source_grain= {"description": "門市×有銷售的日期", "keys": ["sales_date", "store_id"]}
+synthetic_grain_control= {"view": "demo_retail.v_daily_sales", "status": "partial", "mappings": ["store_id"], "structural": "PASS", "meaning": "runtime does not decide semantic completeness"}
+synthetic_grain_control= {"view": "demo_retail.v_daily_sales", "status": "unsupported", "mappings": [], "structural": "PASS", "meaning": "runtime does not decide semantic completeness"}
+synthetic_grain_control= {"view": "demo_retail.v_customer_value", "status": "partial", "mappings": ["customer_id"], "structural": "PASS", "meaning": "runtime does not decide semantic completeness"}
+synthetic_grain_control= {"view": "demo_retail.v_customer_value", "status": "unsupported", "mappings": [], "structural": "PASS", "meaning": "runtime does not decide semantic completeness"}
+All original bytes left unchanged. No candidate implementation. 0 model POST/SQL/DB.

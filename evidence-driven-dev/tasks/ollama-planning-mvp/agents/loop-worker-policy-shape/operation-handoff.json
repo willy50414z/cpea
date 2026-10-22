@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "candidate": "managed-policy-shape-1",
+  "module": "evaluations.diagnostics.managed_policy_shape",
+  "manifest": "evaluations/fixtures/kind_diagnostics_policy_shape/manifest.json",
+  "author": {
+    "ticket": "34175c2580224eddb7061898d2af61ef",
+    "node": "kind_policy_shape_contract",
+    "round": 16,
+    "platform": "/root/loop_worker_policy_shape",
+    "state": "本交接時仍open；僅Main核FINAL不可變hash並finish PASS後成為closed，作者不自批"
+  },
+  "next_fresh_review": {
+    "node": "kind_policy_shape_semantics",
+    "POST": 0,
+    "requirements": [
+      "真fresh不同platform；獨立審新suffix/predicate/舊guard保留、NULL與default等價及EMPTY/nest界線。",
+      "原8需求56列/fixtures/Oracle/原review逐bytes不變；不重作者化已核准內容。",
+      "review JSON需schema_version=1、verdict=ACCEPT、reviewer_role=fresh_policy_shape_semantics、真reviewer ticket、author_ticket、manifest_sha256及完整bindings；可增加繁中語意理由。",
+      "作者finish evidence必直接包含新manifest path/hash；審者finish evidence必包含其精確review JSON path/hash；review ticket/node/round/producer/platform與PASS均由真Task檢查。",
+      "審者真FINAL及Main finish形成closed PASS前，preflight與execute均必拒絕；不把open ticket或synthetic tmp Task當正式核准。"
+    ]
+  },
+  "selection_execute": {
+    "command": ".venv/bin/python -m evaluations.diagnostics.managed_policy_shape --execute --review <fresh-review.json> --ticket <new-bound-worker-ticket>",
+    "node": "natural_kind_policy_shape_selection",
+    "logical_id": "SEL-ISO-v1-01",
+    "physical_case": "kind-policy-shape-1:ISOLATION:SEL-ISO-v1-01:node",
+    "POST": 1,
+    "retry": 0,
+    "guards": "完整bindings/context/原fixture三方+新作者審者真closed PASS、active worker/audit，以及HTTP前和保存raw後重核；每次POST只走原ManagedInvoke/loopctl。",
+    "body_delta": "只有selection system suffix新增；原human/schema/options/三policy tokens/upstream保持；22011→22383 cl100k估算tokens。",
+    "result_scope": "首次成功HTTP但錯答亦FAIL回fresh研究；原第15輪FAIL不翻案。全部自由文字與nested是否額外義務另由fresh語意審核。"
+  },
+  "full_natural_entry": {
+    "api": "evaluations.managed_three_stage_runner.record_run(folder,catalog,case,invoke,contract=policy_module)",
+    "replay_api": "evaluations.managed_three_stage_runner.replay(folder,catalog,case,contract=policy_module)",
+    "policy_module": "evaluations.diagnostics.managed_policy_shape",
+    "prerequisites": "按既有樹逐父層整合、coverage3與audit後才由原自然9POST父層執行；自然recall和7coverage不得注入fixture。HTTP前先對已closed fresh review做policy preflight；原ManagedInvoke/loopctl與完整candidate.SOURCES保留。",
+    "frozen_verification": "本輪完整fake9在live與完整frozen source各重播，九份raw及其餘輸出逐值相同；僅fingerprint中repo絕對檔名做相對路徑身分比對，未改metadata/global。selection四個live raw另直接由新frozen replay驗證。"
+  },
+  "pending": [
+    "fresh policy reviewer ACCEPT/closed PASS",
+    "一次新自然selection",
+    "原selection parent整合",
+    "coverage3自然樣本",
+    "原父完整自然9POST",
+    "各祖先整合",
+    "fresh final verifier"
+  ],
+  "POST_this_worker": 0,
+  "SQL_DB": 0,
+  "commit_push": 0
+}

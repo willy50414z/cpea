@@ -1,0 +1,46 @@
+{
+  "view": "demo_retail.v_customer_value",
+  "entries": [
+    {
+      "requirement_id": "unrelated/識別~鍵",
+      "status": "partial",
+      "mappings": [
+        {
+          "column": "customer_id",
+          "role": "key",
+          "source_quote": "各店各商品",
+          "aggregation": null,
+          "operator": null,
+          "value": null,
+          "conditions": [],
+          "contract_evidence": [
+            {
+              "path": "/columns/customer_id/description",
+              "quote": "會員id"
+            }
+          ]
+        }
+      ],
+      "contract_evidence": [
+        {
+          "path": "/grain/description",
+          "quote": "每會員一列，包含未下單會員"
+        }
+      ],
+      "missing_requirements": [
+        "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"self\", \"requirements\": [{\"requirement_id\": \"unrelated/識別~鍵\", \"quote\": \"各店各商品\", \"status\": \"partial\"}]}"
+      ]
+    }
+  ],
+  "grain": "每會員一列，包含未下單會員",
+  "keys": [
+    "customer_id"
+  ],
+  "population": "粒度：每會員一列，包含未下單會員；",
+  "contract_evidence": [
+    {
+      "path": "/summary",
+      "quote": "粒度：每會員一列，包含未下單會員；"
+    }
+  ]
+}

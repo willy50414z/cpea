@@ -1,0 +1,205 @@
+{
+  "objects": [
+    {
+      "path": "",
+      "keys": [
+        "entries"
+      ]
+    },
+    {
+      "path": "/entries",
+      "keys": [
+        "slot_0/🧾",
+        "model_dump",
+        "月~邊界",
+        "scope-channel",
+        "m_discount",
+        "amount/net",
+        "元資料",
+        "保留/全部"
+      ]
+    },
+    {
+      "path": "/entries/slot_0~1🧾",
+      "keys": [
+        "status",
+        "own_gap",
+        "mappings"
+      ]
+    },
+    {
+      "path": "/entries/slot_0~1🧾/mappings/0",
+      "keys": [
+        "column"
+      ]
+    },
+    {
+      "path": "/entries/model_dump",
+      "keys": [
+        "status",
+        "own_gap",
+        "mappings",
+        "contract_path"
+      ]
+    },
+    {
+      "path": "/entries/月~0邊界",
+      "keys": [
+        "status",
+        "own_gap",
+        "mappings",
+        "contract_path"
+      ]
+    },
+    {
+      "path": "/entries/月~0邊界/mappings/0",
+      "keys": [
+        "column",
+        "operator",
+        "value"
+      ]
+    },
+    {
+      "path": "/entries/月~0邊界/mappings/1",
+      "keys": [
+        "column",
+        "operator",
+        "value"
+      ]
+    },
+    {
+      "path": "/entries/scope-channel",
+      "keys": [
+        "status",
+        "own_gap",
+        "mappings",
+        "contract_path"
+      ]
+    },
+    {
+      "path": "/entries/m_discount",
+      "keys": [
+        "status",
+        "own_gap",
+        "mappings",
+        "contract_path"
+      ]
+    },
+    {
+      "path": "/entries/amount~1net",
+      "keys": [
+        "status",
+        "own_gap",
+        "mappings",
+        "contract_path"
+      ]
+    },
+    {
+      "path": "/entries/amount~1net/mappings/0",
+      "keys": [
+        "column",
+        "aggregation",
+        "conditions"
+      ]
+    },
+    {
+      "path": "/entries/元資料",
+      "keys": [
+        "status",
+        "own_gap",
+        "mappings",
+        "contract_path"
+      ]
+    },
+    {
+      "path": "/entries/保留~1全部",
+      "keys": [
+        "status",
+        "own_gap",
+        "mappings",
+        "contract_path"
+      ]
+    }
+  ],
+  "object_key_sequences_in_parse_order": [
+    [
+      "column"
+    ],
+    [
+      "status",
+      "own_gap",
+      "mappings"
+    ],
+    [
+      "status",
+      "own_gap",
+      "mappings",
+      "contract_path"
+    ],
+    [
+      "column",
+      "operator",
+      "value"
+    ],
+    [
+      "column",
+      "operator",
+      "value"
+    ],
+    [
+      "status",
+      "own_gap",
+      "mappings",
+      "contract_path"
+    ],
+    [
+      "status",
+      "own_gap",
+      "mappings",
+      "contract_path"
+    ],
+    [
+      "status",
+      "own_gap",
+      "mappings",
+      "contract_path"
+    ],
+    [
+      "column",
+      "aggregation",
+      "conditions"
+    ],
+    [
+      "status",
+      "own_gap",
+      "mappings",
+      "contract_path"
+    ],
+    [
+      "status",
+      "own_gap",
+      "mappings",
+      "contract_path"
+    ],
+    [
+      "status",
+      "own_gap",
+      "mappings",
+      "contract_path"
+    ],
+    [
+      "slot_0/🧾",
+      "model_dump",
+      "月~邊界",
+      "scope-channel",
+      "m_discount",
+      "amount/net",
+      "元資料",
+      "保留/全部"
+    ],
+    [
+      "entries"
+    ]
+  ],
+  "note": "raw JSON key sequences include duplicates; strict parser verdict recorded separately"
+}

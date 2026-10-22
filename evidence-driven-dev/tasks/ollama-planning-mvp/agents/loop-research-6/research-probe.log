@@ -1,0 +1,6 @@
+研究讀取控制；沒有新自然答案、模型POST、SQL或DB。candidate v2未實作。
+{"case": "ordinary month predicate with no hard output-grain dependency", "current_v1_status": "ACCEPT", "coverage": [["R1", "unsupported", []], ["F1", "supported", ["sales_date", "sales_date"]]]}
+{"case": "same predicate carrying an explicit hard dependency", "current_v1_status": "ACCEPT", "coverage": [["R1", "unsupported", []], ["F1", "supported", ["sales_date", "sales_date"]]]}
+{"source": "demo_retail.v_daily_sales", "grain": {"description": "門市×有銷售的日期", "keys": ["sales_date", "store_id"]}, "date_column": {"type": "date", "role": "dimension", "description": "已完成訂單的銷售日期；無交易的門市日期不會有資料列。"}, "request_filter_quote": "2026 年 9 月"}
+第一個ACCEPT為合理控制：能篩選既有銷售日期不等於能輸出商品粒度。第二個ACCEPT僅證v1不強制非metric明示硬依賴，不能宣稱兩種recall語義等價。
+原第6輪FAIL未變；研究probe無自然修復或PASS宣稱。

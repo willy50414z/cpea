@@ -1,0 +1,161 @@
+{
+  "schema_version": 1,
+  "result": "PASS_OFFLINE_CONTRACT_ONLY",
+  "ticket": "c3b66ba5cf4c4d549e846203bb29b5e7",
+  "node": "capability_projection_contract",
+  "round": 21,
+  "producer": "/root/loop_worker_capability_contract",
+  "candidate": "managed-capability-projection-1",
+  "manifest_sha256": "a2eb2f76c0479b49294245987346e4676db78c86fbefac02dd4e153d8c590f2d",
+  "source_sha256": "44fc1a6ec68f2b3c7562e27dcc0cc59e8145692aee8ea8f86e551c033087dd3d",
+  "test_sha256": "ddf30e05642a4cc36540cbae20c3a4561a36594fa125871762df16a333dc0bf1",
+  "focused": {
+    "passed": 81,
+    "failed": 0,
+    "log": "focused-authoritative.log"
+  },
+  "direct_regression": {
+    "passed": 228,
+    "failed": 0,
+    "logs": [
+      "direct-regression.log",
+      "historical-open-state-test.log"
+    ],
+    "accounting": "227 PASS及1 deselected，再單獨實跑該1項PASS；無未執行項計為PASS，詳細前置狀態／更正見validation-notices.json。"
+  },
+  "required_RED": {
+    "failed_as_expected": 4,
+    "log": "red.log",
+    "reason": "新module尚未存在；之後實作與所有focused測試通過。"
+  },
+  "cards": "所有kind／未知欄位／任意Unicode身分無損還原；重疊、缺失、自造欄位拒絕；原request/View/schema/options保持。",
+  "semantic_controls": "daily有用部分鍵及dependency-only、customer無關鍵/會員自身母體限制、inventory完整鍵/stock/metadata/庫存母體正反例通過；不冒稱自然模型效果。",
+  "scope_AND": "完整同View supported獨立scope filter一群或群聯集、順序與重複AND正例；半界線/錯月欄值operator/sum/額外或未明示scope/跨View/缺獨立filter/非supported/expected原有必要條件全部拒絕；legacy findings保留。",
+  "final_freeze": {
+    "files": 287,
+    "bound_files": 282,
+    "external_files": 2,
+    "metadata_files": 3,
+    "artifact_equality": 190,
+    "variants": {
+      "live-final-controls": {
+        "None": {
+          "raw_nodes": 9,
+          "stopped": null,
+          "prepared_requests": 2
+        },
+        "scope": {
+          "raw_nodes": 7,
+          "stopped": {
+            "error_type": "ValueError",
+            "error": "supported requires same-source scope support"
+          },
+          "prepared_requests": 0
+        },
+        "typed": {
+          "raw_nodes": 9,
+          "stopped": {
+            "error_type": "ValidationError",
+            "error": "1 validation error for SelectionWire\ndraft.ready.tasks.0.filters\n  Field required [type=missing, input_value={'task_id': 'stock', 'vie...店商品庫存件數'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing"
+          },
+          "prepared_requests": 0
+        }
+      },
+      "frozen-final-controls": {
+        "None": {
+          "raw_nodes": 9,
+          "stopped": null,
+          "prepared_requests": 2
+        },
+        "scope": {
+          "raw_nodes": 7,
+          "stopped": {
+            "error_type": "ValueError",
+            "error": "supported requires same-source scope support"
+          },
+          "prepared_requests": 0
+        },
+        "typed": {
+          "raw_nodes": 9,
+          "stopped": {
+            "error_type": "ValidationError",
+            "error": "1 validation error for SelectionWire\ndraft.ready.tasks.0.filters\n  Field required [type=missing, input_value={'task_id': 'stock', 'vie...店商品庫存件數'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing"
+          },
+          "prepared_requests": 0
+        }
+      }
+    }
+  },
+  "guards": "context/body/schema/upstream/tokens、真bound角色/producer/closed完成、audit19–21、source/receipt/interrupt拒絕；真ManagedInvoke不得走OFFLINE，managed ticket/folder/physical case必固定。",
+  "historical": {
+    "round20_live_and_239_frozen": [
+      "FAIL",
+      "PASS",
+      "FAIL"
+    ],
+    "final_candidate_recheck": [
+      "FAIL",
+      "PASS",
+      "FAIL"
+    ],
+    "round15": "FAIL",
+    "round18": "PASS",
+    "old_v2_live": "EXPECTED_REJECT"
+  },
+  "preservation": {
+    "result": "PASS",
+    "protected_old_files": 6390,
+    "unchanged_old_files": 6389,
+    "known_authorized_main_change": [
+      "evidence-driven-dev/tasks/ollama-planning-mvp/task.md"
+    ],
+    "worker_Task_control_drift": false,
+    "Task_sha256": "45760d1f793b8a6e44f9b6594d5a0b311d04fbc69dcf0597690e44d688df06cb",
+    "old_nodes": 21,
+    "completed_rounds": 20,
+    "active": {
+      "round": 21,
+      "node": "capability_projection_contract",
+      "started_at": "2026-10-22T00:59:36.404890+00:00"
+    },
+    "used_before": {
+      "agent_dispatches": 37,
+      "cloud_calls": 0,
+      "local_calls": 26,
+      "model_retries": 0
+    },
+    "used_after": {
+      "agent_dispatches": 37,
+      "cloud_calls": 0,
+      "local_calls": 26,
+      "model_retries": 0
+    },
+    "final_frozen_bound_files": 282,
+    "final_frozen_files": 287,
+    "old_rebound_bindings_equal": true,
+    "source_sha256": "44fc1a6ec68f2b3c7562e27dcc0cc59e8145692aee8ea8f86e551c033087dd3d",
+    "test_sha256": "ddf30e05642a4cc36540cbae20c3a4561a36594fa125871762df16a333dc0bf1",
+    "manifest_sha256": "a2eb2f76c0479b49294245987346e4676db78c86fbefac02dd4e153d8c590f2d",
+    "UTF8_without_BOM": true
+  },
+  "limitations": [
+    "本輪0POST/SQL/DB，未聲稱新cards改善自然Qwen。",
+    "新作者及fresh delta reviewer尚未真closed PASS；本輪FINAL後由Main核hash並finish，再必先fresh audit19–21。",
+    "正式MANAGED成功／HTTP後authorization撤銷自然效果尚未執行；目前僅離線拒絕與provenance反例、source/receipt/interrupt拒絕控制。",
+    "五自然coverage、原coverage父整合、全新自然9POST、全部祖先與fresh final仍PENDING；歷史38×2 Gate未過不變。"
+  ],
+  "resources": {
+    "local_POST": 0,
+    "cloud": 0,
+    "retry": 0,
+    "SQL_DB": 0,
+    "commit_push": 0,
+    "used": {
+      "agent_dispatches": 37,
+      "cloud_calls": 0,
+      "local_calls": 26,
+      "model_retries": 0
+    }
+  },
+  "finalization": "全部程序與proof已完成；本handoff封存後真FINAL，作者不再改任何工件。"
+}

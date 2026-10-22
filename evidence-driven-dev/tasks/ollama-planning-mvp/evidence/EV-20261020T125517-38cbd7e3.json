@@ -1,0 +1,23 @@
+{
+  "id": "EV-20261020T125517-38cbd7e3",
+  "kind": "focused",
+  "command": [
+    ".venv/bin/python",
+    "-m",
+    "pytest",
+    "tests/unit/test_planning_mvp.py",
+    "-q"
+  ],
+  "cwd": "/home/willy/code/cpea_terms",
+  "started_at": "2026-10-20T12:55:17+00:00",
+  "finished_at": "2026-10-20T12:55:19+00:00",
+  "exit_code": 0,
+  "revision": "bc09c67fc4078501599c37e4cdfecdee40af2ef8",
+  "diff_fingerprint": "7e28142bd10969edc6ce090853beb98e3e9afd65fb1aea6ce17cacb30afbc3a9",
+  "post_fingerprint": "7e28142bd10969edc6ce090853beb98e3e9afd65fb1aea6ce17cacb30afbc3a9",
+  "source_unchanged": true,
+  "output_sha256": "638946dbfd890f8b2866e8b8abf520364a4af9df6a8376dcb1f824f83c4ca036",
+  "raw_output": ".local/EV-20261020T125517-38cbd7e3.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "ae07e25a13d0d345c84e18228c1f024660eb5ccabc9dd99eaf251221d611740b"
+}

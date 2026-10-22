@@ -1,0 +1,62 @@
+{
+  "experiment": "EXP-011",
+  "case": {
+    "case_id": "cross-view-11-explicit-snapshot",
+    "request": "對照各店各商品的盤點庫存件數與 2026 年 9 月線上通路的折扣金額及淨銷售額，並顯示庫存盤點日期，準備促銷後補貨評估；保留所有庫存商品。"
+  },
+  "calls": 1,
+  "input_tokens": 5611,
+  "output_tokens": 1482,
+  "elapsed_seconds": 14.028542469000968,
+  "cost_usd": null,
+  "recall_structure": "Pydantic parse PASS; exact quote validation FAIL",
+  "invalid_quotes": [
+    {
+      "requirement_id": "req_online_channel_net_sales_2026_09",
+      "quote": "2026 年 9 月線上通路的...淨銷售額"
+    }
+  ],
+  "filter_requirements": [
+    {
+      "requirement_id": "req_period_2026_09",
+      "quote": "2026 年 9 月",
+      "business_object": "銷售",
+      "kind": "filter",
+      "scope_ids": [],
+      "grain": "訂單月份",
+      "population": "2026 年 9 月成立之已完成訂單"
+    },
+    {
+      "requirement_id": "req_channel_online",
+      "quote": "線上通路",
+      "business_object": "銷售",
+      "kind": "filter",
+      "scope_ids": [],
+      "grain": "銷售通路",
+      "population": "sales_channel = online"
+    }
+  ],
+  "inventory_date_requirements": [
+    {
+      "requirement_id": "req_inventory_snapshot_date",
+      "quote": "並顯示庫存盤點日期",
+      "business_object": "庫存",
+      "kind": "attribute",
+      "scope_ids": [],
+      "grain": "門市×商品",
+      "population": "保留所有庫存商品"
+    }
+  ],
+  "inventory_time_filter_requirements": [],
+  "candidate_count": 7,
+  "inventory_mapping": "NOT_EXECUTED",
+  "end_to_end": "NOT_VERIFIED",
+  "first_time_requirement_classification": "Date requested as attribute; no current/latest filter requirement",
+  "stopped": {
+    "error_type": "ValueError",
+    "error": "req_online_channel_net_sales_2026_09: request quote does not exist"
+  },
+  "raw_run_sha256": "202bacc91e97ac20d167d3bf52057c8ee209d52b76fd398836e3456e035abaad",
+  "oracle_status": "diagnostic reference only; not independently approved benchmark",
+  "source_changes": "new Task reports probe only; product/catalog/prompt/schema unchanged"
+}

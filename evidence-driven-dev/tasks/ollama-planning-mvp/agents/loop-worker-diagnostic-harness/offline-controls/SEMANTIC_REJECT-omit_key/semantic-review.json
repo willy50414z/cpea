@@ -1,0 +1,37 @@
+{
+  "machine_verdict": "FAIL",
+  "classification": "SEMANTIC_REJECT",
+  "findings": [
+    {
+      "requirement_id": "GRN-001",
+      "aspect": "status/own_gap",
+      "expected": {
+        "status": "partial",
+        "own_gap": true,
+        "mappings": [
+          {
+            "column": "store_id"
+          }
+        ]
+      },
+      "actual": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": []
+      }
+    },
+    {
+      "requirement_id": "GRN-001",
+      "aspect": "necessary mappings/predicates",
+      "expected": [
+        {
+          "column": "store_id"
+        }
+      ],
+      "actual": []
+    }
+  ],
+  "independent_semantic_approval": "PENDING",
+  "free_text_review": "PENDING: all raw/normalized text, tasks.request, preparation, notes, policies, assignment/exclusion refs and remaining claims require independent semantic review",
+  "fixture_approval": "PENDING_FRESH_INDEPENDENT_REVIEW"
+}

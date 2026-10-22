@@ -1,0 +1,16 @@
+{
+  "result": "PASS",
+  "checks": {
+    "cases_exactly_30": true,
+    "case_hashes_current": true,
+    "original_all_pending": true,
+    "all_reviewed_approved": true,
+    "all_dimensions_reviewed": true,
+    "source_hashes_current": true,
+    "six_automated_passes": true,
+    "unsound_count_task_match_reproduced": true,
+    "no_new_model_db_calls": true,
+    "utf8_without_bom": true
+  },
+  "meaning": "僅報告及離線合成反例驗證；不代表模型Gate已通過"
+}

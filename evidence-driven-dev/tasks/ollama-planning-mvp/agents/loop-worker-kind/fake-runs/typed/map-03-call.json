@@ -1,0 +1,10 @@
+{
+  "response": "{\"entries\": {\"stock\": {\"status\": \"supported\", \"mappings\": [{\"column\": \"stock_qty\", \"aggregation\": \"sum\", \"conditions\": []}], \"contract_path\": \"/grain/description\", \"own_gap\": false}, \"sales\": {\"status\": \"unsupported\", \"mappings\": [], \"contract_path\": \"/grain/description\", \"own_gap\": true}, \"channel\": {\"status\": \"unsupported\", \"mappings\": [], \"contract_path\": \"/grain/description\", \"own_gap\": true}, \"period\": {\"status\": \"unsupported\", \"mappings\": [], \"contract_path\": \"/grain/description\", \"own_gap\": true}, \"population\": {\"status\": \"supported\", \"mappings\": [{\"column\": \"store_id\"}, {\"column\": \"product_id\"}], \"contract_path\": \"/grain/description\", \"own_gap\": false}, \"grain\": {\"status\": \"supported\", \"mappings\": [{\"column\": \"store_id\"}, {\"column\": \"product_id\"}], \"own_gap\": false}, \"R_PURPOSE\": {\"status\": \"supported\", \"mappings\": [{\"column\": \"snapshot_date\"}], \"contract_path\": \"/columns/snapshot_date/description\", \"own_gap\": false}}}",
+  "usage": {
+    "input_tokens": 10,
+    "output_tokens": 20,
+    "total_tokens": 30
+  },
+  "response_metadata": {},
+  "elapsed_seconds": 0.005449614996905439
+}

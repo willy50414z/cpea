@@ -1,0 +1,131 @@
+{
+  "schema_version": 1,
+  "role": "fresh_fail23_improvement_research",
+  "ticket": "8a59062f68c646139853d64a40f68171",
+  "document": {
+    "path": "docs/next_enhance_advice.md",
+    "sha256": "91e8dcee858369d84838ec249cc0785515a59c346aa8e0778f804c15fd8f09de",
+    "lines": 1178,
+    "full_read": true,
+    "authority": "改善建議，非已核准採用架構；不修改文件"
+  },
+  "fact_deltas": [
+    {
+      "section": "4.3、7 Phase0、12、14",
+      "document": "第23輪部分結果，未取得五案完整結案",
+      "current": "23輪已closed FAIL，五案HTTP200，FAIL/PASS/FAIL/FAIL/FAIL；完整33rows及全provider文字審核、5live+5frozen重播結案",
+      "consequence": "Phase0不再補抽樣或等待；利用原immutable結果。04/05使問題不只是path。"
+    },
+    {
+      "section": "2.3",
+      "document": "manifest approved只是技術測試，業務仍draft",
+      "current": "manifest.yaml確為approved；contract_review.md卻仍聲稱manifest draft，且sales_detail keys=null，而真YAML keys=[order_id,product_id]",
+      "consequence": "保留三者矛盾，不改業務契約、不升正式認證；技術案例先店商品SUM後join不依賴(order_id,product_id)明細唯一。不得宣稱草稿矛盾已被實驗解決。"
+    },
+    {
+      "section": "3.1、3.2",
+      "document": "九次POST、確定性能力已存在",
+      "current": "run_pipeline確為1recall+7coverage+1selection；schema(recall)未收policy，原guards與mapping欄位description取證已存在",
+      "consequence": "A1須真body/schema接線；不可只改Human response_schema卻讓provider format仍舊schema。新增綁catalog的contract物件可保持原runner公開介面，不用globals或複製pipeline。"
+    },
+    {
+      "section": "8.5多seed",
+      "document": "三次與多seed建議",
+      "current": "現ManagedInvoke/base._body固定seed42，沒有既存seed注入參數",
+      "consequence": "本新版本需最小明確body/managed傳輸介面、0POST檢查真seed/完整meta綁定；不得以改globals實現或只改記錄。若此介面驗證失敗則本候選FAIL，audit22–24可裁定是否值得此有限額外成本。"
+    }
+  ],
+  "candidates": [
+    {
+      "id": "A1",
+      "decision": "採為下一個有限可否證候選，非正式架構採用",
+      "scope": "Coverage evidence pointer的字串值域，限定真契約的非空文字leaf或null；維持cards/status/own_gap/mappings及全部guards；不寫新的題目語意提示",
+      "evidence": "01/03四object path可機械排除，純離線probe已確認；04 null與05文字description照樣合法，故不能自動解決二項語意錯。",
+      "cost_risk": "修改小；enum可能增input，且合法path仍可能無關。必核<32768、實際provider schema與訊息一致、current View驗證及獨立語意不降級。",
+      "adoption": "固定9案例×3預定seed全部通過、無false accept、原回歸/父整合/自然9POST/fresh final依序完成；不將一次daily成功當採用。"
+    },
+    {
+      "id": "A2",
+      "decision": "暫緩，列第二個機械候選，與A1不得混合抽樣",
+      "scope": "若要移除模型的entry contract_path，僅能對模型已選欄位生成identity evidence；population與自身完整性的證據責任仍在",
+      "evidence": "referenced_view_coverage已逐mapping產description，故再次生成不補04遺漏；把05路徑自動改summary會掩蓋原錯且可能錯推母體。",
+      "why_defer": "多欄mapping及population entry evidence不是一般欄位存在證明，未證可安全統一。A1先測清楚的非法pointer來源，保留語意責任。"
+    },
+    {
+      "id": "A3",
+      "decision": "暫緩prompt精簡",
+      "evidence": "cards已有無損分工，04/05仍有語意錯；沒有ablation證明哪段重複造成失敗。",
+      "why_defer": "與schema同時改會無法區分效果；先保持全部原system/cards業務邊界。"
+    },
+    {
+      "id": "B1",
+      "decision": "A1語意FAIL後優先fresh研究的隔離候選，現在不自動實作",
+      "scope": "每View內兩步：原子mapping extraction不產status/own；其已驗mapping唯讀交給own/status判定；模型仍負own及status，原adapter驗證依賴",
+      "evidence": "04 thinking先認對lifetime_spend卻被依賴判斷覆蓋；05將來源母體與商品identity混同，分離可直接測這兩種競爭假設",
+      "falsifier": "第一步仍漏淨額/複合母體key，或第二步仍錯判自身/母體，則拆分未解根因；不得下游補mapping",
+      "cost_risk": "兩步會增加物理POST及錯誤傳遞；可用同面板配對比較，不憑架構名稱宣布降低負擔。",
+      "adoption": "須比A1在同模型/相同面板/預固定seed的語意指標有改善且零新增安全錯；若要轉自然主入口，現既有9POST與各View一次的驗收須由方向審核明確裁定相容性；本計畫不暗改。"
+    },
+    {
+      "id": "B-three-step",
+      "decision": "暫緩第三個status-only LLM步驟",
+      "evidence": "23輪主要為mapping遺漏/母體證據及path，沒有純status-only故障；增加一步不能自行找回漏能力。",
+      "why_defer": "先B1定位mapping vs own/status，無需預先付第三步成本。"
+    },
+    {
+      "id": "B2/C-status",
+      "decision": "僅研究邊界，不採用status推導",
+      "scope": "validated mapping+own可信時，可依同View scope/grain圖推導status；不能推導own或漏能力",
+      "evidence": "own_responsibility已完整導gap並驗status一致；23輪有用mapping缺失時再確定性分類仍會得到錯unsupported。",
+      "why_defer": "當前無status冗餘造成獨立故障的實證；可能系統化錯誤own。先A1/B1證據再決定。"
+    },
+    {
+      "id": "C-own/Semantic-Layer",
+      "decision": "暫緩，不擴充業務契約",
+      "evidence": "YAML有type/role/grain/descriptions但無完整母體包含、指標公式、FD/跨View cardinality及可加性；approved/draft與唯一鍵又有矛盾",
+      "why_defer": "無足夠權威資料把own、母體或join真實性自動化；不做DB、partial跨來源合成或全Semantic Graph。"
+    }
+  ],
+  "research_order": {
+    "accepted": [
+      "Phase0直接使用已closed23，不重跑A0",
+      "Phase1只A1，先0POST實作/新版本/fresh delta review，再固定面板；依事先門檻決定是否續穩定性",
+      "A1若任一語意FAIL則fresh研究B1最小兩步，保留A1全輸出作比較，不能只再加格式提示",
+      "只有mapping/own穩定且status仍獨立失誤才研究C-status",
+      "候選通過才能原coverage各父層整合、全新自然九POST與全部祖先/final"
+    ],
+    "adjustment": "文件把B稱最高研究價值與A第一順序並不矛盾；第23完整04/05提高B的根因相關性，但不能省去機械取證與公平基線。A1一次固定面板失敗就否證充分性，不無限修prompt。",
+    "not_claimed": "本0POST研究未完成文件§13所列各方案自然實測，沒有假裝已取得A/B/C性能優劣。"
+  },
+  "oracle_and_controls": {
+    "accepted": [
+      "結構/contract/語意/規劃安全分層記錄，first error外可另讀raw逐列觀察，正式pipeline依舊拒絕",
+      "原日期有限等價及21/22有限scope AND沿用，不擴任意WHERE等價",
+      "對新合法alternative path保持需fresh語意審，不把單一expected literal當業務真相",
+      "新面板與期望在POST前獨立核准；38曝光題僅回歸",
+      "保存每次首次輸出與耗時/token，分開品質與成本，不取最好"
+    ],
+    "clarifications": [
+      "目前_contract_path requires review是待語意裁定，不自動等同業務錯；05整體仍真FAIL，因漏store_id及證據只識別商品，沒有合理false-reject證據。",
+      "會員累計折扣後消費金額可作淨額的有用分量；無月份/channel/grain歸屬不消除部分能力。會員母體是否完整未知，所以own=true；不推斷實際非會員交易存在。",
+      "完整庫存母體的技術判準是被治理庫存來源在店×商品粒度的所有來源庫存列，不是查DB證實全企業現實庫存；必同時保留來源summary、雙key及无縮限操作/安全anchor。status值域、單product_id或grain文字任一單獨均不證完整。",
+      "若新fresh reviewer認為原inventory summary連來源相對完整性也不足，必FAIL並具體指出與第14/22已PASS語意衝突，交方向審核記錄決策；不能自行改old expected、升partial或重開PASS。",
+      "合成restricted-inventory正反例須明示限縮契約，限制是自身母體缺口，不能因同grain/keys與statusenum齊全宣稱supported。"
+    ],
+    "metrics": "逐row/能力分量計Evidence Recall/Precision、OwnGap、Dependency、Status、path有效與相關、metamorphic；另報zero-tolerance安全錯及Oracle FA/FR。分母為模型測試前fresh review核准的能力atoms/rows或注入控制數，缺席/未執行不算PASS；不以多個finding把同一遺漏重算多個能力錯。"
+  },
+  "limits": {
+    "POST": 0,
+    "SQL_DB": 0,
+    "code_fixture_oracle_changes": 0,
+    "cloud": 0,
+    "no_business_certification": true,
+    "preserve_original_gate": "38×2未過保持",
+    "local_natural_effect": "尚未測試新候選"
+  },
+  "open_questions": [
+    "A1會否只消格式錯但保留04/05語意錯，或能透過減少無用字串生成改善語意？需固定自然對照。",
+    "B1會否真的找回被依賴否決的mapping，以及population proof能否不再混成identifier？尚無自然結果。",
+    "受控技術契約的庫存基準足以本規劃案例驗收，正式業務完整性與明細唯一鍵仍未核准。"
+  ]
+}

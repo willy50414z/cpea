@@ -1,0 +1,11 @@
+{
+  "result": "PASS",
+  "checked_files": 138,
+  "changed": [],
+  "candidate_fingerprint_matches": true,
+  "run_fingerprint_matches": true,
+  "preserved_src": {
+    "src/cpea/application/models/decomposition.py": "1fe4eb06da88fc67c3e65250a93393ac944dbbba9f2c4ac3349134e044b10558",
+    "src/cpea/workflows/task_decomposition/prompt.py": "4655d352feaaab93bdef78a2ced51da9ae93adf1f907aa99eb8c1a237876349b"
+  }
+}

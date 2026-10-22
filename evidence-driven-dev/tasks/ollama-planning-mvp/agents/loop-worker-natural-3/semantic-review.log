@@ -1,0 +1,45 @@
+第6輪固定自然樣本：FAIL；未修改 source/tests/prompts/Task/controller，未 repair/retry/換樣本。
+run=evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T185423Z-5d276f
+ticket=378cab1f79c6485ab7c4df5b18a7e598；runner session 89761 已結束 exit=1；沒有 inflight。
+設定：managed-evidence-bound-1，qwen3.8:27b，digest=aaee06c39dcf2437cde036998d960e1fc1494b8191be7cc9657d01e509097813；think=true、seed=42、temperature=1、top_p=1、num_ctx=32768、num_predict=-1、HTTP/外層timeout=None。
+所有3 POST均經loopctl，HTTP200；0retry、0cloud、0SQL/DB；累計local 15→18。usage input=7190/output=10322，無usage缺失。
+
+一、recall：完整8類資料責任，來源片段逐項為：
+{"id": "R1", "span": [2, 7], "quote": "各店各商品", "kind": "grain", "scope_ids": [], "grain_binding": null, "grain_requirement_ids": []}
+{"id": "R2", "span": [8, 14], "quote": "盤點庫存件數", "kind": "metric", "scope_ids": [], "grain_binding": "linked", "grain_requirement_ids": ["R1"]}
+{"id": "F1", "span": [16, 26], "quote": "2026 年 9 月", "kind": "filter", "scope_ids": [], "grain_binding": null, "grain_requirement_ids": ["R1"]}
+{"id": "F2", "span": [26, 30], "quote": "線上通路", "kind": "filter", "scope_ids": [], "grain_binding": null, "grain_requirement_ids": ["R1"]}
+{"id": "R3", "span": [31, 35], "quote": "折扣金額", "kind": "metric", "scope_ids": ["F1", "F2"], "grain_binding": "linked", "grain_requirement_ids": ["R1"]}
+{"id": "R4", "span": [36, 40], "quote": "淨銷售額", "kind": "metric", "scope_ids": ["F1", "F2"], "grain_binding": "linked", "grain_requirement_ids": ["R1"]}
+{"id": "R5", "span": [44, 50], "quote": "庫存盤點日期", "kind": "metadata", "scope_ids": [], "grain_binding": null, "grain_requirement_ids": ["R1"]}
+{"id": "R6", "span": [61, 69], "quote": "保留所有庫存商品", "kind": "population", "scope_ids": [], "grain_binding": null, "grain_requirement_ids": ["R1"]}
+索引以Python Unicode code point核對，8引文完整。庫存量、折扣金額、淨銷售額均linked精確店商品R1；兩sales metric各scope F1+F2，庫存量/metadata/population無銷售月份通路條件。純「準備促銷後補貨評估」保留背景，未新增資料義務。
+候選7View由程式保留catalog全清單，理由只含policy與逐字summary/grain，未見來源能力捏造。
+歧義保留：R1.population="all store-product combinations"文字比R6="all inventory items retained regardless of sales activity"寬；尚無selection證明是否意指笛卡兒母體，不能單憑此斷言已膨脹母體。F1/F2為n/a grain但另列R1依賴，對filter的語意必要性交audit檢視。
+
+二、map-01 customer_value：8槽均unsupported、mappings=[]；會員粒度不能回答店商品庫存/銷售；缺口僅引用自身責任，R6為population。完整/grain/description、summary與正規化缺口保留原文，不新增排除/來源事實。此節點完整normalized/result已保存。
+
+三、map-02 daily_sales：HTTP/JSON/schema完成，adapter首contract錯後停止；未生成normalized/result。
+精確首偏離 /entries/R1/gaps/0：grain gap refs=[R1]，但R1.grain_requirement_ids=[]；觸發 ValueError: gap aspect contradicts evidence or dependencies: grain。
+R1完整內容={"status": "unsupported", "mappings": [], "contract_path": "/grain/description", "gaps": [{"aspect": "grain", "requirement_ids": ["R1"]}]}
+R1原需求={"requirement_id": "R1", "quote": "各店各商品", "business_object": "store_product", "kind": "grain", "scope_ids": [], "grain": "store × product", "population": "all store-product combinations", "grain_binding": null, "grain_requirement_ids": []}
+Gap規則原文：gap只含aspect與requirement_ids，無自由來源事實。scope只引用本項scope_ids中在本View非supported的責任；grain只引用本項明示grain_requirement_ids中非supported的責任；population只引用本項且必須為population需求，表示契約未證明所求母體；mapping只引用本項且mappings=[]；evidence只引用本項且contract_path=null。不得重複ref。缺口是未證明責任，不是證明來源不存在某事實。不能自行聲稱monthly僅有銷售、排除退貨，或把沒有要求的狀態欄位變成必要責任。
+完整原slot schema、system prompt與R1決策另精確保存在failure-context.json，且原map-02-request.json/body.json/parsed.json/raw未改。Schema允許此JSON形狀，contextual adapter拒絕；不預先歸因模型或表示設計。
+逐項原決策如下（首錯以外內容僅核對raw，不當已驗證coverage）：
+{"pointer": "/entries/R1", "status": "unsupported", "mappings": [], "contract_path": "/grain/description", "gaps": [{"aspect": "grain", "requirement_ids": ["R1"]}]}
+{"pointer": "/entries/R2", "status": "unsupported", "mappings": [], "contract_path": null, "gaps": [{"aspect": "mapping", "requirement_ids": ["R2"]}, {"aspect": "grain", "requirement_ids": ["R1"]}]}
+{"pointer": "/entries/F1", "status": "partial", "mappings": [{"column": "sales_date", "role": "filter", "aggregation": null, "operator": ">=", "value": "2026-09-01", "conditions": []}, {"column": "sales_date", "role": "filter", "aggregation": null, "operator": "<=", "value": "2026-09-30", "conditions": []}], "contract_path": "/columns/sales_date/description", "gaps": [{"aspect": "grain", "requirement_ids": ["R1"]}]}
+{"pointer": "/entries/F2", "status": "unsupported", "mappings": [], "contract_path": null, "gaps": [{"aspect": "mapping", "requirement_ids": ["F2"]}]}
+{"pointer": "/entries/R3", "status": "unsupported", "mappings": [], "contract_path": null, "gaps": [{"aspect": "mapping", "requirement_ids": ["R3"]}, {"aspect": "grain", "requirement_ids": ["R1"]}, {"aspect": "scope", "requirement_ids": ["F1", "F2"]}]}
+{"pointer": "/entries/R4", "status": "partial", "mappings": [{"column": "revenue", "role": "metric", "aggregation": "sum", "operator": null, "value": null, "conditions": []}], "contract_path": "/columns/revenue/description", "gaps": [{"aspect": "grain", "requirement_ids": ["R1"]}, {"aspect": "scope", "requirement_ids": ["F1", "F2"]}]}
+{"pointer": "/entries/R5", "status": "unsupported", "mappings": [], "contract_path": null, "gaps": [{"aspect": "mapping", "requirement_ids": ["R5"]}]}
+{"pointer": "/entries/R6", "status": "unsupported", "mappings": [], "contract_path": null, "gaps": [{"aspect": "population", "requirement_ids": ["R6"]}, {"aspect": "grain", "requirement_ids": ["R1"]}]}
+語意觀察：daily_sales確無product_id，R1 unsupported合理；R4 revenue/sum僅partial、列商品grain與scope缺口，未冒稱能完整支持線上商品淨額；R3缺折扣欄位、F2缺通路、R2缺庫存、R5缺盤點日期、R6未證庫存母體。F1使用sales_date>=2026-09-01且sales_date<=2026-09-30，對date欄位涵蓋整月，但列partial/grain gap；這個filter額外grain相依的合理性尚待audit，不把引用合法視為語意已證。
+沒有以monthly summary推導only-sales/退貨母體，亦無額外stock_status義務；兩來源內容均無自由request/notes/description欄位。recall其餘business_object/grain/population文字已逐項讀取。
+
+四、未執行：map-03 inventory_status、map-04 order_summary、map-05 product_monthly、map-06 sales_detail、map-07 store_monthly_kpi、selection、prepared requests。
+因此尚未驗證monthly無channel、order_summary無product的自然新決策，也未驗證inventory anchor/store-product、stock_qty sum、snapshot_date metadata、sales同task月份/online與兩sum、先彙總、left保庫存、不補零；不能由成功recall或後續ready洗成PASS。
+
+五、同版離線replay：PASS，3 raw精確重現首錯，未新增POST；這是重播一致性，不是自然語意通過。
+freeze-before/after：138檔無變，candidate/run fingerprint皆一致；兩既存src變更hash保持原值。未重複pytest/擴測，沿用第5輪307測試證據，未宣稱本輪執行。
+本輪唯一確證停止原因為contract拒絕；更深根因與schema/prompt表示能力交Main派fresh audit完整4–6輪。父層/root驗收均未完成。

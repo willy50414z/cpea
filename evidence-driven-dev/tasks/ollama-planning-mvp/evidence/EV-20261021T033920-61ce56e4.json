@@ -1,0 +1,25 @@
+{
+  "id": "EV-20261021T033920-61ce56e4",
+  "kind": "experiment",
+  "command": [
+    ".venv/bin/python",
+    "-m",
+    "evaluations.three_stage_view_selection_runner",
+    "--execute",
+    "--recall-only",
+    "--request-file",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/index-recall-request.txt"
+  ],
+  "cwd": "/home/willy/code/cpea_terms",
+  "started_at": "2026-10-21T03:39:20+00:00",
+  "finished_at": "2026-10-21T03:39:29+00:00",
+  "exit_code": 0,
+  "revision": "bc09c67fc4078501599c37e4cdfecdee40af2ef8",
+  "diff_fingerprint": "7055794fccfac615aaa94cdd99d6e17a66113c46da353a4d231b958a8476f3a5",
+  "post_fingerprint": "7055794fccfac615aaa94cdd99d6e17a66113c46da353a4d231b958a8476f3a5",
+  "source_unchanged": true,
+  "output_sha256": "9df92ab3d43d363bebb8fa74dffc87be086eb9ec63db730e25715fa3ee752a33",
+  "raw_output": ".local/EV-20261021T033920-61ce56e4.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "52b5b932c8734fbe5fed03527b00b0e6af37c6295fa77fa54a4fac8cbe503462"
+}

@@ -1,0 +1,229 @@
+{
+  "view": "demo_retail.v_product_monthly",
+  "entries": [
+    {
+      "requirement_id": "stock",
+      "status": "unsupported",
+      "mappings": [],
+      "contract_evidence": [
+        {
+          "path": "/grain/description",
+          "quote": "門市×月份×商品"
+        }
+      ],
+      "missing_requirements": [
+        "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"self\", \"requirements\": [{\"requirement_id\": \"stock\", \"quote\": \"目前庫存件數\", \"status\": \"unsupported\"}]}"
+      ]
+    },
+    {
+      "requirement_id": "sales",
+      "status": "partial",
+      "mappings": [
+        {
+          "column": "discount_amount",
+          "role": "metric",
+          "source_quote": "折扣金額及淨銷售額",
+          "aggregation": "sum",
+          "operator": null,
+          "value": null,
+          "conditions": [],
+          "contract_evidence": [
+            {
+              "path": "/columns/discount_amount/description",
+              "quote": "此門市此月份此商品的折扣金額合計，單位 TWD。"
+            }
+          ]
+        },
+        {
+          "column": "net_sales",
+          "role": "metric",
+          "source_quote": "折扣金額及淨銷售額",
+          "aggregation": "sum",
+          "operator": null,
+          "value": null,
+          "conditions": [],
+          "contract_evidence": [
+            {
+              "path": "/columns/net_sales/description",
+              "quote": "此門市此月份此商品的折扣後銷售額，單位 TWD；適合跨門市彙總商品營收。"
+            }
+          ]
+        }
+      ],
+      "contract_evidence": [
+        {
+          "path": "/grain/description",
+          "quote": "門市×月份×商品"
+        }
+      ],
+      "missing_requirements": [
+        "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"scope\", \"requirements\": [{\"requirement_id\": \"channel\", \"quote\": \"線上通路\", \"status\": \"unsupported\"}]}"
+      ]
+    },
+    {
+      "requirement_id": "channel",
+      "status": "unsupported",
+      "mappings": [],
+      "contract_evidence": [
+        {
+          "path": "/grain/description",
+          "quote": "門市×月份×商品"
+        }
+      ],
+      "missing_requirements": [
+        "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"self\", \"requirements\": [{\"requirement_id\": \"channel\", \"quote\": \"線上通路\", \"status\": \"unsupported\"}]}"
+      ]
+    },
+    {
+      "requirement_id": "period",
+      "status": "supported",
+      "mappings": [
+        {
+          "column": "sales_month",
+          "role": "filter",
+          "source_quote": "2026年9月",
+          "aggregation": null,
+          "operator": ">=",
+          "value": "2026-09-01",
+          "conditions": [],
+          "contract_evidence": [
+            {
+              "path": "/columns/sales_month/description",
+              "quote": "商品銷售統計月份的第一天；月度粒度。"
+            }
+          ]
+        },
+        {
+          "column": "sales_month",
+          "role": "filter",
+          "source_quote": "2026年9月",
+          "aggregation": null,
+          "operator": "<",
+          "value": "2026-10-01",
+          "conditions": [],
+          "contract_evidence": [
+            {
+              "path": "/columns/sales_month/description",
+              "quote": "商品銷售統計月份的第一天；月度粒度。"
+            }
+          ]
+        }
+      ],
+      "contract_evidence": [
+        {
+          "path": "/grain/description",
+          "quote": "門市×月份×商品"
+        }
+      ],
+      "missing_requirements": []
+    },
+    {
+      "requirement_id": "population",
+      "status": "supported",
+      "mappings": [
+        {
+          "column": "store_id",
+          "role": "key",
+          "source_quote": "保留所有庫存商品",
+          "aggregation": null,
+          "operator": null,
+          "value": null,
+          "conditions": [],
+          "contract_evidence": [
+            {
+              "path": "/columns/store_id/description",
+              "quote": "交易門市識別碼；與 sales_month、product_id 組合唯一決定一列。"
+            }
+          ]
+        },
+        {
+          "column": "product_id",
+          "role": "key",
+          "source_quote": "保留所有庫存商品",
+          "aggregation": null,
+          "operator": null,
+          "value": null,
+          "conditions": [],
+          "contract_evidence": [
+            {
+              "path": "/columns/product_id/description",
+              "quote": "商品識別碼；與 store_id、sales_month 組合唯一決定一列。"
+            }
+          ]
+        }
+      ],
+      "contract_evidence": [
+        {
+          "path": "/grain/description",
+          "quote": "門市×月份×商品"
+        }
+      ],
+      "missing_requirements": []
+    },
+    {
+      "requirement_id": "grain",
+      "status": "supported",
+      "mappings": [
+        {
+          "column": "store_id",
+          "role": "key",
+          "source_quote": "各店各商品",
+          "aggregation": null,
+          "operator": null,
+          "value": null,
+          "conditions": [],
+          "contract_evidence": [
+            {
+              "path": "/columns/store_id/description",
+              "quote": "交易門市識別碼；與 sales_month、product_id 組合唯一決定一列。"
+            }
+          ]
+        },
+        {
+          "column": "product_id",
+          "role": "key",
+          "source_quote": "各店各商品",
+          "aggregation": null,
+          "operator": null,
+          "value": null,
+          "conditions": [],
+          "contract_evidence": [
+            {
+              "path": "/columns/product_id/description",
+              "quote": "商品識別碼；與 store_id、sales_month 組合唯一決定一列。"
+            }
+          ]
+        }
+      ],
+      "contract_evidence": [
+        {
+          "path": "/grain/description",
+          "quote": "門市×月份×商品"
+        }
+      ],
+      "missing_requirements": []
+    },
+    {
+      "requirement_id": "R_PURPOSE",
+      "status": "unsupported",
+      "mappings": [],
+      "contract_evidence": [],
+      "missing_requirements": [
+        "{\"statement\": \"契約未證明以下責任完整可用\", \"aspect\": \"self\", \"requirements\": [{\"requirement_id\": \"R_PURPOSE\", \"quote\": \"盤點日期\", \"status\": \"unsupported\"}]}"
+      ]
+    }
+  ],
+  "grain": "門市×月份×商品",
+  "keys": [
+    "store_id",
+    "sales_month",
+    "product_id"
+  ],
+  "population": "粒度：門市×月份×商品；適合商品/分類排行、商品銷量及毛利，不含訂單筆數；商品跨店排行需加總 net_sales/units_sold。",
+  "contract_evidence": [
+    {
+      "path": "/summary",
+      "quote": "粒度：門市×月份×商品；適合商品/分類排行、商品銷量及毛利，不含訂單筆數；商品跨店排行需加總 net_sales/units_sold。"
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+{"folder": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T171721Z-fa4587", "stopped": {"error_type": "ValueError", "error": "final grain differs from verified requirement keys"}}

@@ -1,0 +1,23 @@
+{
+  "ticket": "52e22eb4e62b4142995079d89efb29c2",
+  "result": "PASS",
+  "meaning": "本方向審核證據完整且未漂移；不是候選／root通過",
+  "reviewed_rounds": [
+    22,
+    23,
+    24
+  ],
+  "round_evidence_hashes_verified": 1233,
+  "raw_cases": 5,
+  "raw_rows": 33,
+  "direction": "REPLAN",
+  "own_proofs": {
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-22-24/inspection.json": "18c38b657ec01a1b53707d3ead6fd297d80710d787b2ba2d251393f42820ea11",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-audit-22-24/direction-findings.json": "1c559d0c2453db14d1d7620bdd036d19cb762977fbbde89fee76abab7c9808ff"
+  },
+  "Task_unchanged_during_audit": true,
+  "tracked_user_files_unchanged": true,
+  "all_audit_probe_processes_ended": true,
+  "POST": 0,
+  "SQL_DB": 0
+}

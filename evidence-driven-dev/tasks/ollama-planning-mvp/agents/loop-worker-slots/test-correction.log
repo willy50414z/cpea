@@ -1,0 +1,3 @@
+首次 GREEN: 65 passed, 2 failed。
+1. inventory_date 個別 mapping 反例預設舊 validator 會理解銷售日期語意，實際合法 snapshot_date filter 會被接受。未修改 guard 或加題目特判。改為完整 selection 反例：將 period 分工至庫存 snapshot_date、刪 sales order_date，既有 same-source scope mapping guard 必須拒絕。此語意邊界需 fresh auditor 裁定，不宣稱 coverage 結構證明業務語意。
+2. nested duplicate fake 在 map-01（customer_value，沒有 stock_qty）替換不到字串，造成 fake provider assert；改為在現有空 mappings 注入 nested duplicate column，仍使用原始 JSON 邊界拒絕並 replay。

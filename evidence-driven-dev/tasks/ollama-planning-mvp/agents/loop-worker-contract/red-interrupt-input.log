@@ -1,0 +1,44 @@
+....................FF                                                   [100%]
+=================================== FAILURES ===================================
+___ test_interrupted_run_is_saved_as_incomplete_and_cannot_replay_as_success ___
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-22/test_interrupted_run_is_saved_0')
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x72ef31d23e00>
+
+    def test_interrupted_run_is_saved_as_incomplete_and_cannot_replay_as_success(tmp_path, catalog):
+        mod = runner()
+        case = mod.diagnostic_case(catalog, REQUEST)
+        def interrupt(*args):
+            raise KeyboardInterrupt()
+        with pytest.raises(KeyboardInterrupt):
+            mod.record_run(tmp_path, catalog, case, interrupt)
+        meta = json.loads((tmp_path/'run.json').read_text(encoding='utf-8'))
+>       assert meta['stopped'] is not None
+E       assert None is not None
+
+tests/unit/test_managed_three_stage_runner.py:232: AssertionError
+_______ test_diagnostic_request_preserves_exact_unicode_and_line_endings _______
+
+tmp_path = PosixPath('/tmp/pytest-of-willy/pytest-22/test_diagnostic_request_preser0')
+catalog = <cpea.infrastructure.catalog.yaml_catalog.SchemaCatalog object at 0x72ef32313ef0>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x72ef32290350>
+
+    def test_diagnostic_request_preserves_exact_unicode_and_line_endings(tmp_path, catalog, monkeypatch):
+        mod = runner()
+        (tmp_path/'.local').mkdir()
+        original = '庫存🧾\r\n顯示資料日期。\n'
+        (tmp_path/'.local/index-recall-request.txt').write_bytes(original.encode('utf-8'))
+        monkeypatch.setattr(mod, 'TASK', tmp_path)
+>       assert mod.diagnostic_case(catalog)['request'] == original
+E       AssertionError: assert '庫存🧾\n顯示資料日期。\n' == '庫存🧾\r\n顯示資料日期。\n'
+E         
+E         - 庫存🧾
+E         ?    -
+E         + 庫存🧾
+E           顯示資料日期。
+
+tests/unit/test_managed_three_stage_runner.py:244: AssertionError
+=========================== short test summary info ============================
+FAILED tests/unit/test_managed_three_stage_runner.py::test_interrupted_run_is_saved_as_incomplete_and_cannot_replay_as_success
+FAILED tests/unit/test_managed_three_stage_runner.py::test_diagnostic_request_preserves_exact_unicode_and_line_endings
+2 failed, 20 passed in 7.89s

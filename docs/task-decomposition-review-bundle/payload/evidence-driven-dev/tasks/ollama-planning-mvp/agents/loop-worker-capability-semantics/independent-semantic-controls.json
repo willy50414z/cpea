@@ -1,0 +1,326 @@
+{
+  "result": "PASS",
+  "real_context_controls": [
+    {
+      "case": "complete",
+      "expected_PASS": true,
+      "actual_PASS": true,
+      "accepted_equivalences": 1,
+      "remaining_findings": 0,
+      "exception": null,
+      "raw_unchanged": true
+    },
+    {
+      "case": "duplicate_reverse",
+      "expected_PASS": true,
+      "actual_PASS": true,
+      "accepted_equivalences": 1,
+      "remaining_findings": 0,
+      "exception": null,
+      "raw_unchanged": true
+    },
+    {
+      "case": "half",
+      "expected_PASS": false,
+      "actual_PASS": false,
+      "accepted_equivalences": 0,
+      "remaining_findings": 1,
+      "exception": null,
+      "raw_unchanged": true
+    },
+    {
+      "case": "extra",
+      "expected_PASS": false,
+      "actual_PASS": false,
+      "accepted_equivalences": 0,
+      "remaining_findings": null,
+      "exception": "invalid mapping filter value",
+      "raw_unchanged": true
+    },
+    {
+      "case": "wrong_date",
+      "expected_PASS": false,
+      "actual_PASS": false,
+      "accepted_equivalences": 0,
+      "remaining_findings": null,
+      "exception": "conditional metric lacks verified condition evidence",
+      "raw_unchanged": true
+    },
+    {
+      "case": "wrong_operator",
+      "expected_PASS": false,
+      "actual_PASS": false,
+      "accepted_equivalences": 0,
+      "remaining_findings": null,
+      "exception": "conditional metric lacks verified condition evidence",
+      "raw_unchanged": true
+    },
+    {
+      "case": "wrong_sum",
+      "expected_PASS": false,
+      "actual_PASS": false,
+      "accepted_equivalences": 0,
+      "remaining_findings": 1,
+      "exception": null,
+      "raw_unchanged": true
+    },
+    {
+      "case": "scope_invalid",
+      "expected_PASS": false,
+      "actual_PASS": false,
+      "accepted_equivalences": 0,
+      "remaining_findings": null,
+      "exception": "conditional metric lacks verified condition evidence",
+      "raw_unchanged": true
+    },
+    {
+      "case": "undeclared",
+      "expected_PASS": false,
+      "actual_PASS": false,
+      "accepted_equivalences": 0,
+      "remaining_findings": 1,
+      "exception": null,
+      "raw_unchanged": true
+    },
+    {
+      "case": "own_wrong",
+      "expected_PASS": false,
+      "actual_PASS": false,
+      "accepted_equivalences": 1,
+      "remaining_findings": 1,
+      "exception": null,
+      "raw_unchanged": true
+    },
+    {
+      "case": "missing_key",
+      "expected_PASS": false,
+      "actual_PASS": false,
+      "accepted_equivalences": 1,
+      "remaining_findings": 2,
+      "exception": null,
+      "raw_unchanged": true
+    },
+    {
+      "case": "customer_membership_own_removed",
+      "expected_PASS": false,
+      "actual_PASS": false,
+      "accepted_equivalences": 0,
+      "remaining_findings": 1,
+      "exception": null,
+      "raw_unchanged": true
+    },
+    {
+      "case": "customer_irrelevant_identifier",
+      "expected_PASS": false,
+      "actual_PASS": false,
+      "accepted_equivalences": 0,
+      "remaining_findings": 2,
+      "exception": null,
+      "raw_unchanged": true
+    },
+    {
+      "case": "inventory_stock_replaced_with_sales",
+      "expected_PASS": false,
+      "actual_PASS": false,
+      "accepted_equivalences": 0,
+      "remaining_findings": 1,
+      "exception": null,
+      "raw_unchanged": true
+    },
+    {
+      "case": "inventory_metadata_replaced_with_transaction",
+      "expected_PASS": false,
+      "actual_PASS": false,
+      "accepted_equivalences": 0,
+      "remaining_findings": 1,
+      "exception": null,
+      "raw_unchanged": true
+    },
+    {
+      "case": "inventory_population_removed",
+      "expected_PASS": false,
+      "actual_PASS": false,
+      "accepted_equivalences": 0,
+      "remaining_findings": 3,
+      "exception": null,
+      "raw_unchanged": true
+    },
+    {
+      "case": "inventory_cross_view_scope",
+      "expected_PASS": false,
+      "actual_PASS": false,
+      "accepted_equivalences": 0,
+      "remaining_findings": null,
+      "exception": "unadmitted conditional metric field",
+      "raw_unchanged": true
+    }
+  ],
+  "synthetic_multigroup_exhaustive_subsets": [
+    {
+      "bits": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "PASS": false,
+      "expected": false
+    },
+    {
+      "bits": [
+        false,
+        false,
+        false,
+        true
+      ],
+      "PASS": false,
+      "expected": false
+    },
+    {
+      "bits": [
+        false,
+        false,
+        true,
+        false
+      ],
+      "PASS": false,
+      "expected": false
+    },
+    {
+      "bits": [
+        false,
+        false,
+        true,
+        true
+      ],
+      "PASS": true,
+      "expected": true
+    },
+    {
+      "bits": [
+        false,
+        true,
+        false,
+        false
+      ],
+      "PASS": false,
+      "expected": false
+    },
+    {
+      "bits": [
+        false,
+        true,
+        false,
+        true
+      ],
+      "PASS": false,
+      "expected": false
+    },
+    {
+      "bits": [
+        false,
+        true,
+        true,
+        false
+      ],
+      "PASS": false,
+      "expected": false
+    },
+    {
+      "bits": [
+        false,
+        true,
+        true,
+        true
+      ],
+      "PASS": false,
+      "expected": false
+    },
+    {
+      "bits": [
+        true,
+        false,
+        false,
+        false
+      ],
+      "PASS": false,
+      "expected": false
+    },
+    {
+      "bits": [
+        true,
+        false,
+        false,
+        true
+      ],
+      "PASS": false,
+      "expected": false
+    },
+    {
+      "bits": [
+        true,
+        false,
+        true,
+        false
+      ],
+      "PASS": false,
+      "expected": false
+    },
+    {
+      "bits": [
+        true,
+        false,
+        true,
+        true
+      ],
+      "PASS": false,
+      "expected": false
+    },
+    {
+      "bits": [
+        true,
+        true,
+        false,
+        false
+      ],
+      "PASS": true,
+      "expected": true
+    },
+    {
+      "bits": [
+        true,
+        true,
+        false,
+        true
+      ],
+      "PASS": false,
+      "expected": false
+    },
+    {
+      "bits": [
+        true,
+        true,
+        true,
+        false
+      ],
+      "PASS": false,
+      "expected": false
+    },
+    {
+      "bits": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "PASS": true,
+      "expected": true
+    }
+  ],
+  "scope_with_legacy_finding_rejected": true,
+  "preexisting_necessary_conditions_rejected": true,
+  "dynamic_7kinds_unknown_fields_lossless": true,
+  "overlapping_card_keys_rejected": true,
+  "POST": 0,
+  "SQL_DB": 0
+}

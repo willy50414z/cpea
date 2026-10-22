@@ -1,0 +1,43 @@
+{
+  "experiment": "EXP-015",
+  "repeat_of": "EXP-014",
+  "provider": "ollama",
+  "model": "qwen3.8:27b",
+  "model_digest": "aaee06c39dcf2437cde036998d960e1fc1494b8191be7cc9657d01e509097813",
+  "same_source_schema_catalog_case_messages_settings_harness": true,
+  "request": "對照各店各商品的盤點庫存件數與 2026 年 9 月線上通路的折扣金額及淨銷售額，並顯示庫存盤點日期，準備促銷後補貨評估；保留所有庫存商品。",
+  "calls": 1,
+  "retries": 0,
+  "reasoning": true,
+  "temperature": 1,
+  "top_p": 1,
+  "seed": 42,
+  "context_window": 32768,
+  "output_limit": 4096,
+  "network_read_timeout_seconds": 300,
+  "outer_hard_timeout_seconds": 420,
+  "elapsed_seconds": 420.0,
+  "termination": "EDD subprocess timeout, exit 124",
+  "model_answer_saved": false,
+  "semantic_result": "NOT_VERIFIED",
+  "complete_target_terms": null,
+  "actual_input_tokens": null,
+  "actual_output_tokens": null,
+  "cost_usd": null,
+  "source_mapping": "NOT_EXECUTED",
+  "end_to_end": "NOT_VERIFIED",
+  "raw_replay": "NOT_AVAILABLE: no completed model response or provider error",
+  "run_metadata_finalized": false,
+  "artifact_folder": ".local/qwen-indexed-20261021T041043Z-b0cbd4",
+  "artifact_hashes": {
+    "run.json": "902fa75a62004ce08890e67d66b9315fff908e42e3111ae978532696c44ce9e7",
+    "recall-request.json": "ab71c215d48bd96cdf97177b6459760703cabbe6c1c1bbf567bed29678994e43",
+    "budget.json": "2e73a07b862ddadd14c8ac98e353ab40127a76bd0833f0cf50856c244c2fefbb"
+  },
+  "evidence": [
+    "evidence/EV-20261021T041042-c4724be2.json",
+    "evidence/EV-20261021T041812-51640ddf.json"
+  ],
+  "reviewer": "主Agent及fresh subprocess，非跨Agent獨立驗證",
+  "offline_artifact_verification": "PASS"
+}

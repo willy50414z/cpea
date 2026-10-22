@@ -1,0 +1,185 @@
+{
+  "schema_version": 1,
+  "ticket": "27f5146885b04962accfbf8a58df97fd",
+  "researcher": "/root/loop_research_20",
+  "scope": "第20輪FAIL後獨立研究；不實作、不POST、不改Oracle或任何舊工件",
+  "question_ruling": {
+    "business_goal": "原題的庫存店商品母體、盤點量與日期、2026年9月線上折扣與淨額，以及全部候選的真能力／缺口，均是合理必要驗收。",
+    "partial_grain": "store_id／改名loc_key是店×商品的一個必要且可獨立辨識的鍵分量，不能因缺商品或不能直接完成整題而刪除。保留partial不等於允許daily作最終來源，不證庫存母體，不產可執行商品級淨額。",
+    "own_gap": "相對於此契約，daily revenue sum本身已證淨額能力；明示online及完整grain缺口只算dependency，own_gap=false。customer lifetime_spend可保留sum，但契約只保證會員累計，未證一般銷售全母體，自身仍欠保證，own_gap=true。這個對照必須保留。",
+    "conditions": "同View獨立月份scope已完整成立，metric重列逐值相同的AND月份不改選取列；應許可這個有限等價，不能把conditions=[]當唯一業務答案。此裁定不豁免漏鍵、錯own_gap或任何其他finding。",
+    "unnecessary": "既有raw應保留，但無須要求模型額外自由理由、重述來源事實、產出私有推理或列所有等價映射。現有status與own_gap有邏輯重複，卻不是漏鍵的充分根因；本候選不再新增輸出欄位。"
+  },
+  "observed_first_divergences": [
+    {
+      "sample": "COV-ISO-v1-01",
+      "finding": "模型已辨識store_id但把缺product／inventory當作整個grain無有用mapping；net曾辨識自身完整，最後又將grain／online依賴算成own缺口。",
+      "source": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261022T000748Z-82acde/COV-ISO-v1-01/node-provider-response.json",
+      "business_result": "FAIL"
+    },
+    {
+      "sample": "COV-ISO-v1-02",
+      "finding": "customer_id與店商品無關；單grain unsupported/own=true/[]正確。",
+      "source": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261022T000748Z-82acde/COV-ISO-v1-02/node-provider-response.json",
+      "business_result": "PASS"
+    },
+    {
+      "sample": "COV-ISO-v1-03",
+      "finding": "改名loc_key同樣被全有全無的grain判斷刪除；amount_value sum的dependency-only own=false已正確。metric日期conditions與同View月份filter逐值一致，屬Oracle exact表示分歧。",
+      "source": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-isolation-v2-rebind-1-20261022T000748Z-82acde/COV-ISO-v1-03/node-provider-response.json",
+      "business_result": "FAIL"
+    }
+  ],
+  "classification": {
+    "model": "已完成HTTP200、done=true、完整JSON且經parse/materialize；不是timeout/token/環境中斷。可觀察決策把整題可實現性混入逐項能力，且兩個不同欄名案例都漏同一必要分量；不能以單次隨機輸出或schema格式解釋。",
+    "contract": "既有語意規則明文要求部分鍵與自身／依賴區分，因此不是應刪掉驗收的業務歧義。輸入每項卻重複攜帶全域grain/population與dependency IDs，容易將不同責任合併閱讀；這是待自然實驗否證的呈現假設，不宣稱已證模型內部因果。",
+    "oracle": "原checker逐mapping JSON exact比較，只特判日期filter等價，沒有處理合法的metric重列scope AND；03證明表示層過窄。仍保留舊machine FAIL及所有原判定。"
+  },
+  "program_vs_model": {
+    "reliable_program_facts": [
+      "原ID/kind及required slots、全部契約欄位原文／型別／keys／能力、JSON path與字串presence",
+      "scope/grain IDs的同View圖、由已確定status導完整依賴gaps、role與不適用欄位",
+      "無損card重組／還原相等、來源/body/schema/runtime/證據hash／真closed作者審者來源",
+      "在極有限已驗證scope集合內，重列AND的集合等價；不得猜測NL含義"
+    ],
+    "model_semantics": [
+      "店鍵是否實質對應需求的一個有用分量；customer鍵不能依identifier型別湊partial",
+      "所有可用mappings、聚合、predicate、是否仍有自身能力／母體限制、status/own_gap",
+      "依quote與來源真意識別stock/sales、盤點日/成交日、會員累計/一般淨額，以及最終來源／typed整合"
+    ],
+    "not_safe_to_automate": [
+      "不能按欄名store_id/loc_key或kind以程式補partial鍵",
+      "不能看到合法sum就一律own=false；會員母體反例否證",
+      "不能自動刪metric.conditions或用新expected修原raw",
+      "status若另定intrinsic schema可從自身與依賴編譯，但仍不能程式決定自身語意；此輪不重設wire"
+    ]
+  },
+  "alternatives": [
+    {
+      "candidate": "只加JSON／欄位格式提示或原body重抽",
+      "decision": "拒絕",
+      "reason": "原raw形狀正確，舊prompt已明講兩項語意；格式不是第一偏離。"
+    },
+    {
+      "candidate": "程式推鍵／以sum代表自身完整／刪partial驗收",
+      "decision": "拒絕",
+      "reason": "會將語意答案硬編碼；customer無關鍵與會員金額反例會被破壞。"
+    },
+    {
+      "candidate": "新intrinsic wire、逐key強制分類或每需求分多次POST，再由程式計status",
+      "decision": "暫不採用",
+      "reason": "需改輸出、coverage API及自然九節點邊界，增加新語意表面；尚未證實去掉重複status能修有用部分遺漏。若本候選被否證，交fresh研究重判，而非自動疊加。"
+    },
+    {
+      "candidate": "無損責任cards＋有限冗餘AND等價的新薄版本",
+      "decision": "本次推薦的單一實驗",
+      "reason": "保留輸出wire與舊guard，改的是自身責任與依賴的任務定義／輸入分工，不是再添格式限制；另將已確定的Oracle表示問題獨立測試。效果仍待固定自然5case驗證。"
+    }
+  ],
+  "candidate_design": {
+    "version": "managed-capability-projection-1",
+    "content_version": "kind-capability-projection-1",
+    "module": "evaluations.diagnostics.managed_capability_projection",
+    "test": "tests/diagnostics/test_managed_capability_projection.py",
+    "manifest": "evaluations/fixtures/kind_diagnostics_capability_projection/manifest.json",
+    "card_transform": {
+      "identity": "保留每個原requirement_id，保留原輸入順序及任意Unicode IDs；不以語意／欄名重命名。",
+      "own_target": "逐值搬移kind/quote/business_object；grain kind再搬原grain；population kind再搬原population。沒有其他語意推導，不把缺product等判斷寫入。",
+      "binding_context": "原scope_ids/grain_requirement_ids/grain_binding及其餘未搬移欄位完整原值放入此區；含原grain/population或未知擴充欄位，不能靜默丟棄。ID仍指向同一整體cards。",
+      "reconstruct": "每card的identity、own_target與binding_context須key互斥，合併後逐值等於原requirement dict；整個陣列還原逐值相等。重複key、缺key、額外自造key均拒絕；必有generic任意ID/改名及會員population負例。",
+      "unchanged": "原request、完整View policy/schema、模型options、RecallWire/SelectionWire/coverage_schema、parse/compile/materialize及所有guards保持；非coverage階段完全委派policy-shape版本。",
+      "semantic_instruction": "先判本項kind定義的獨立有用能力分量，保留全部有用映射，再判先排除明示scope/grain依賴後的自身完整性，最後依全體same-View依賴填原status。依賴不完整不等於自身缺口；grain部分鍵不等於可完成整題。母體限制若屬本項自身能力仍保留，不因移入context而被忽略；只有明示依賴可排除。",
+      "no_leakage": "cards只來自當次自然recall與原contract；不得加入預期status/own_gap/mapping、有用key清單、候選排名、Oracle、固定來源名／欄名／本題對答案。通用規則可用異領域正反例，但不得帶本題答案。"
+    },
+    "matcher_delta": {
+      "scope": "只處理舊necessary mappings/predicates finding的「expected metric.conditions=[]而actual重列合法scope」；其他status/own_gap/path/provider/parse/typed及所有finding原樣保留。",
+      "admit": "actual各metric的column/aggregation及所有非conditions欄逐值等於原expected；每個重列predicate必與本metric.scope_ids所指、同View且supported的獨立filter mapping逐值相等。conditions集合必為一個以上完整scope filter群的聯集，不能只抄半個月份；這些filter群本身須通過原必要scope／日期等價驗收。順序與完全相同重複AND可忽略，保留原raw不canonicalize。",
+      "deny": [
+        "條件來自其他View或未列於本metric.scope_ids的獨立filter",
+        "缺任一月份邊界、錯月／錯欄／錯值／錯operator、OR替代AND",
+        "加入額外region/channel等收窄條件、沒有獨立filter、filter不是supported或本身語意錯",
+        "改sum／欄位、變own_gap/status、刪任何舊finding；expected本已有必要條件時不得藉此忽略"
+      ],
+      "history": "新matcher是明示新版本；舊Oracle/fixture/review不改、原20 FAIL/PASS/FAIL不改。同immutable03重驗仍因漏loc_key FAIL；新等價只移除其一個已證冗餘條件finding，不能稱自然成功。"
+    },
+    "reuse": "只新增一薄module與一focused test及新manifest/inputs；重用base/rebound prepare、record_sample/_run、freeze/replay與ManagedInvoke；不改globals、不複製framework。coverage schema仍原kind，可先從原rebound.prepare取得原context，再無損產新messages/body，外層完整版本及context守門不得偽裝成原body。自然record_run直接contract=新module，非coverage委派已PASS policy-shape module。"
+  },
+  "fixed_natural_cases": [
+    {
+      "id": "COV-ISO-v1-01",
+      "lineage": "原COV-ISO-v1-01",
+      "input": "原題／原full-eight recall／daily_sales原contract，只有新coverage責任cards/system。",
+      "necessary": "store_id partial own=true；revenue sum partial own=false，只欠online與grain；獨立整月完整；其餘全部真義。"
+    },
+    {
+      "id": "COV-ISO-v1-02",
+      "lineage": "原COV-ISO-v1-02",
+      "input": "原單grain／原任意ID／customer_value，只有新cards/system。",
+      "necessary": "customer_id仍unsupported/own=true/[]，不把identifier硬湊成有用部分。"
+    },
+    {
+      "id": "COV-ISO-v1-03",
+      "lineage": "原COV-ISO-v1-03",
+      "input": "原2032二月／原任意Unicode IDs／原改名daily全部契約，只有新cards/system。",
+      "necessary": "loc_key partial own=true；amount_value sum partial own=false；day_key完整閏年整月；容許有限相同AND重列，其他界線不變。"
+    },
+    {
+      "id": "COV-CAP-v1-04",
+      "lineage": "新補充對照，非舊三樣本替換；expected僅引用已核准原七View coverage中customer_value的完整8rows",
+      "input": "原題／原full-eight recall／原customer_value contract。",
+      "necessary": "lifetime_spend sum保留partial且own=true，會員母體未證全銷售仍是自身缺口；無關customer鍵不冒店商品。全部8列都驗。"
+    },
+    {
+      "id": "COV-CAP-v1-05",
+      "lineage": "新補充對照，非舊三樣本替換；expected僅引用已核准原七View coverage中inventory的完整8rows",
+      "input": "原題／原full-eight recall／原inventory contract。",
+      "necessary": "完整店商品鍵、stock sum、snapshot_date metadata與完整庫存母體維持supported/own=false；不把sales月份／通路套庫存。全部8列都驗。"
+    }
+  ],
+  "natural_execution_rule": "先凍結5個樣本與全部inputs/hash，再fresh delta reviewer核准。物理case固定kind-capability-projection-1:ISOLATION:<id>:node，每樣本一次首次POST、0retry/0cloud。前三logical IDs及原inputs lineage保留，舊suite仍三case原結果；新suite明列五case、不得藏成舊套件或事後增減。獨立樣本按固定順序全保留，無controller停止條件時完成其餘以顯示對照；任一錯整輪FAIL交fresh研究。",
+  "falsifiers": [
+    "任一daily仍漏有用鍵，則「責任呈現分離足以修正」被否證。",
+    "daily own仍true或customer own錯false，則自身／依賴分離不足／過度簡化。",
+    "customer無關key誤partial，則只是偏向保留identifier。",
+    "inventory完整能力被錯降，則cards丟失本項責任或造成系統性partial偏誤。",
+    "改名／Unicode／2032月份失敗則無泛化證據；任一錯不能靠Oracle等價範圍擴張救分。"
+  ],
+  "offline_tests_required": [
+    "原20三raw以原live及239-source frozen仍FAIL/PASS/FAIL，原15 FAIL與18 PASS維持；新checker對同immutable03只辨認重列AND、實質漏鍵仍FAIL。",
+    "cards lossless還原、任意ID/改名、所有kind、未知欄位、重複／缺／造欄拒絕、natural recall動態產生cards，不固定八需求答案。",
+    "原daily正確partial／依賴-only、customer無關鍵／會員自身缺口、完整inventory、錯stock/sales／日期metadata／母體的正反例；schema結構接受不冒稱NL語意Oracle。",
+    "有限scope AND正例：[]與全月同AND、順序與相同AND重複；反例：半界線、錯月／欄／operator／sum、額外scope、非本metric.scope_ids、cross-View、缺獨立filter／非supported、expected原已有必要條件。",
+    "原typed no-zero/left/anchor等全部原守門保留；原policy正反例及全fake9節點2prepared、新scope／原typed首錯live與完整frozen replay。",
+    "focused新測試＋原kind_mapping_managed_contract/runner、managed_node_diagnostics與policy_shape直接相關回歸；不盲跑無關全集，不改既有測試追PASS。"
+  ],
+  "approval_and_lineage": {
+    "keep_closed_PASS": "原fixture語意核准與policy-shape作者／審者／自然selection／selection parent均保持PASS，全部舊hash保持，不在其下加child或重作者化。",
+    "delta_review": "新fresh worker只核准新cards輸入／system、有限AND matcher、新補充case引用及新完整bindings。明確確認與原56row判斷一致。原review證明原outputs是正例，未聲稱conditions=[]是唯一等價表示；故不重開原PASS。若fresh reviewer發現真業務衝突則FAIL交研究／審核，不偷改原核准。",
+    "new_manifest": "引用原rebound與policy manifest SHA、原fixture root／已closed原review及作者／binding作者、policy closed作者／審者證據、原20證據。新作者真bound worker、node/round/producer/platform；新reviewer不同ticket/platform且真closed PASS。HTTP前／保存raw後核完整bindings/context，open/偽造review拒絕。",
+    "bindings": "新source/test與全部舊source/import/schema/model/options/runtime／fixture/lineage/reviews、新manifest／5body/messages/upstream與tokens全部明綁且freeze。另明綁非coverage委派之policy-shape完整已核准版本，不能只記新檔hash。rebound live仍相等、v2 live仍預期拒絕。",
+    "source_location": "僅新diagnostics submodule、tests/diagnostics focused檔、新fixtures子目錄及worker evidence；不得新增會讓舊source_paths glob漂移的evaluations頂層／tests/unit／舊prompts檔。"
+  },
+  "parent_path": [
+    "新contract child（預期round21，0POST）完成後必fresh audit19–21，不能先POST",
+    "新fresh semantics child 0POST，真FINAL後Main finish成closed PASS",
+    "新natural child固定5首次POST全部語意／replay通過",
+    "原natural_kind_coverage_isolation自身0POST整合，逐項核新舊差異與有限等價，原20 FAIL保留",
+    "依audit gate才到natural_kind_mapping_three_stage，以新module完整新自然recall→全7View→selection，共9首次POST；不注入任何fixtures",
+    "natural_own_responsibility_three_stage→natural_evidence_bound_three_stage→natural_slots_three_stage→natural_qwen_three_stage→three_stage_integration→root各自父層整合",
+    "fresh final verifier ACCEPT；原38×2 Gate未過狀態不變，不能由小套件或9POST聲稱38題通過"
+  ],
+  "resource_estimate": {
+    "this_research_POST": 0,
+    "next_contract_POST": 0,
+    "delta_review_POST": 0,
+    "isolation_POST": 5,
+    "full_natural_POST": 9,
+    "retries": 0,
+    "cloud": 0,
+    "HTTP_timeout": null,
+    "outer_timeout": null,
+    "model_output_limit": "num_predict=-1；沿用已授權options及context，無另加timeout",
+    "rounds_note": "葉3輪＋原coverage父1輪＋原自然父1輪＋六祖先各自整合；audit每3輪與fresh final不可省。不是承諾全部PASS。"
+  },
+  "remaining": "全部新候選效果尚未執行；僅研究完成，root及所有自然父門檻仍未過。"
+}

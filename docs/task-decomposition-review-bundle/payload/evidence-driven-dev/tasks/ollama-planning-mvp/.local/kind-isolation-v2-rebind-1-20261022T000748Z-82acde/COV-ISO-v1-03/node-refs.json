@@ -1,0 +1,147 @@
+{
+  "requirements": [
+    {
+      "requirement_id": "slot_0/🧾",
+      "scope_ids": [],
+      "grain_binding": null,
+      "grain_requirement_ids": []
+    },
+    {
+      "requirement_id": "model_dump",
+      "scope_ids": [],
+      "grain_binding": "linked",
+      "grain_requirement_ids": [
+        "slot_0/🧾"
+      ]
+    },
+    {
+      "requirement_id": "月~邊界",
+      "scope_ids": [],
+      "grain_binding": null,
+      "grain_requirement_ids": []
+    },
+    {
+      "requirement_id": "scope-channel",
+      "scope_ids": [],
+      "grain_binding": null,
+      "grain_requirement_ids": []
+    },
+    {
+      "requirement_id": "m_discount",
+      "scope_ids": [
+        "月~邊界",
+        "scope-channel"
+      ],
+      "grain_binding": "linked",
+      "grain_requirement_ids": [
+        "slot_0/🧾"
+      ]
+    },
+    {
+      "requirement_id": "amount/net",
+      "scope_ids": [
+        "月~邊界",
+        "scope-channel"
+      ],
+      "grain_binding": "linked",
+      "grain_requirement_ids": [
+        "slot_0/🧾"
+      ]
+    },
+    {
+      "requirement_id": "元資料",
+      "scope_ids": [],
+      "grain_binding": null,
+      "grain_requirement_ids": [
+        "slot_0/🧾"
+      ]
+    },
+    {
+      "requirement_id": "保留/全部",
+      "scope_ids": [],
+      "grain_binding": null,
+      "grain_requirement_ids": [
+        "slot_0/🧾"
+      ]
+    }
+  ],
+  "wire": {
+    "entries": {
+      "slot_0/🧾": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": []
+      },
+      "model_dump": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      },
+      "月~邊界": {
+        "status": "supported",
+        "own_gap": false,
+        "mappings": [
+          {
+            "column": "day_key",
+            "operator": ">=",
+            "value": "2032-02-01"
+          },
+          {
+            "column": "day_key",
+            "operator": "<",
+            "value": "2032-03-01"
+          }
+        ],
+        "contract_path": "/columns/day_key/description"
+      },
+      "scope-channel": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      },
+      "m_discount": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      },
+      "amount/net": {
+        "status": "partial",
+        "own_gap": false,
+        "mappings": [
+          {
+            "column": "amount_value",
+            "aggregation": "sum",
+            "conditions": [
+              {
+                "column": "day_key",
+                "operator": ">=",
+                "value": "2032-02-01"
+              },
+              {
+                "column": "day_key",
+                "operator": "<",
+                "value": "2032-03-01"
+              }
+            ]
+          }
+        ],
+        "contract_path": "/columns/amount_value/description"
+      },
+      "元資料": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      },
+      "保留/全部": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": [],
+        "contract_path": null
+      }
+    }
+  }
+}

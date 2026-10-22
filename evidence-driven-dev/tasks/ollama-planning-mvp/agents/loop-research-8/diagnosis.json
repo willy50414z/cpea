@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "ticket": "b2650013e22947db8ef7dda5e3f80dd7",
+  "role": "research",
+  "classification": [
+    {
+      "type": "原wire格式違反與schema責任未分離",
+      "status": "CONFIRMED",
+      "evidence": "research-probe.log；原map-02-call.json與map-02-request.json",
+      "finding": "原filter確實以conditions表達兩日期predicate；aggregation/operator/value均省略。ReferencedMapping schema僅column/role必填，因此parse接受，既有validate_coverage正確以nonmetric帶conditions拒絕。報錯文字only metric mapping may aggregate同時涵蓋conditions，不能讀成模型填了sum。",
+      "cause_boundary": "傳輸、完整JSON及Pydantic初步parse成功；首偏離在模型選了不符合現有mapping協定的形狀。現版prompt只泛稱所有欄位須合法，未像前版coverage_slots逐角色寫明conditions僅metric；schema也容許所有角色共用全部欄位。無因果實驗證明補prompt單獨足夠，不能將這點當已證改善。"
+    },
+    {
+      "type": "部分能力語意遺漏",
+      "status": "CONFIRMED_WITH_EXPLICIT_CONTRACT",
+      "evidence": "原三階段計畫§第二步、原map-02-call、daily_sales /columns/store_id與/grain",
+      "finding": "此介面已約定unsupported/uncertain無可用mapping、partial保留需求可用部分；daily_sales具有門市鍵且需求各店各商品的店是獨立必要分量，故空unsupported丟失本應揭露的店能力。這不是只因有同名欄位，契約number identifier門市id與門市×日期grain直接支持店身分。",
+      "boundary": "若只有全需求Boolean介面，把整個店×商品說不支持可合理；此三階段介面明定揭露部分能力，資訊責任不同。不能將Boolean語意偷換回來求PASS。原需求沒有要求選daily_sales，partial也不能被assignment當supported。"
+    },
+    {
+      "type": "結構驗證不等於語意完整性",
+      "status": "CONFIRMED",
+      "evidence": "research-probe.log兩來源獨立synthetic控制",
+      "finding": "現版原樣接受有key partial及空unsupported兩種結構；沒有通用演算法能只憑kind/columns自動知道業務匹配。對應完整性仍須模型及獨立自然審查。synthetic不是修復原raw，也不算自然PASS。"
+    }
+  ],
+  "partial_semantics": {
+    "supported": "本項自身及明示scope/grain依賴全滿足；須非空合法mapping及證據。",
+    "partial": "有至少一個對需求有用且可證的能力分量，但自身或必要依賴仍缺；不能作完整assignment。",
+    "unsupported": "沒有可證的有用mapping支援本責任；可同時記錄依賴缺口，但不是所有非完整項的總稱。",
+    "uncertain": "證據不足以判定可用mapping；保留不確定性且不選用。不能已知確定可用店鍵卻稱無法判斷。",
+    "completeness_boundary": "保留全部獨立且必要的可用能力分量，不要求枚舉等價替代寫法、重複欄位或與需求無關identifier。日期>=月初且<次月與>=月初且<=月底是date型別同一完整月份的合理替代；不必兩套都列。",
+    "examples": [
+      {
+        "requirement": "店×商品",
+        "view": "daily_sales",
+        "meaning": "store_id對店鍵有用、缺商品：partial+store key；不能supported。"
+      },
+      {
+        "requirement": "會員×商品",
+        "view": "customer_value",
+        "meaning": "customer_id對會員鍵有用：partial；但在本題店×商品，customer_id不支援任何所需鍵，unsupported合法。"
+      },
+      {
+        "requirement": "保留所有庫存商品",
+        "view": "daily_sales",
+        "meaning": "store_id僅識別店，不保證庫存商品母體，不能自動要求population partial或宣稱supported；本項unsupported可合法。"
+      },
+      {
+        "requirement": "九月線上店商品淨額",
+        "view": "daily_sales",
+        "meaning": "revenue sum是金額自身部分能力；沒有商品及通路仍partial，不能靠別View補scope。自身是否完整仍依金額口徑判斷，不能只從依賴缺口推own_gap=true。"
+      },
+      {
+        "requirement": "庫存件數",
+        "view": "含sold_qty_30d來源",
+        "meaning": "售出件數不是庫存件數，欄位同為數值不產生合法部分mapping。"
+      }
+    ]
+  },
+  "architecture_review": {
+    "evidence_limit": "8輪只有離線PASS、4次自然候選均FAIL；沒有三階段有效性或Qwen完整可行性的證明。此次原range本身業務語意可成立，首錯有可局部消除的表示冗餘；同時partial語意錯不能由schema修好。",
+    "decision": "不再新增自由缺口/理由/審查模型欄位。只用既有kind不變量縮小mapping輸出形狀，保留own責任與原全部guard；以離線辨識力及下一固定自然樣本可否證。此方案不是完成架構重寫或證明模型會成功。",
+    "risk": "錯誤recall kind、錯欄位含義、漏部分能力/依賴、假independent、錯typed整合仍可能結構通過，必須語意FAIL。若下一自然仍呈多類核心語意錯，應由fresh審核重判能力拆分/架構，不循環堆欄位。"
+  },
+  "model_POSTs": 0,
+  "task_controller_changed": false,
+  "implementation_changed": false,
+  "SQL_DB": 0
+}

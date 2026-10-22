@@ -1,0 +1,95 @@
+{
+  "ticket": "7892d49c20a748068a073870a4c684f9",
+  "result": "PASS",
+  "evidence": [
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-harness/red.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-harness/red-provenance.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-harness/red-context-drift.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-harness/red-external-import.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-harness/focused-complete.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-harness/regression.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-harness/offline-controls.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-harness/offline-controls-index.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-harness/frozen-replays.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-harness/frozen/freeze.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-harness/preservation-check.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-harness/historical-check.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-harness/dry-run-selection.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-harness/dry-run-coverage.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-harness/execute-without-review.log",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-harness/final-verification.log",
+    "evaluations/fixtures/kind_diagnostics_v1/manifest.json"
+  ],
+  "summary": "第10輪離線kind-isolation-v1 harness完成：新單節點runner重用managed-kind-mapping-1與原ManagedInvoke/finish guards，固定8需求、7View/56-row真契約證據、改名真SchemaCatalog與4個預定樣本；候選及全部舊source不變。focused48通過，原496原樣加新檔共544 passed in 91.02s；31組record/同版與163-source frozen replay一致（29synthetic raw，provider/context首錯無raw）。7種coverage反例原guard ACCEPT但固定machine Oracle拒絕，selection typed/scope/anchor/鍵/補零等負例保留原首錯；自由文字反例如實保留machine接受、獨立語意PENDING邊界。1198保護檔與1164歷史工件無變，兩src/舊raw分數/38Gate保持；本輪0POST/SQL/DB/commit/push，未動Task/control。fixtures及Oracle尚未fresh獨立核准；Main finish後必先下一fresh fixture review，不得直接POST。544後live code/tests/fixtures/manifest無變，只新增本worker必要raw/log/handoff。",
+  "changed": [
+    "evaluations/managed_node_diagnostics.py",
+    "evaluations/fixtures/kind_diagnostics_v1/",
+    "tests/unit/test_managed_node_diagnostics.py"
+  ],
+  "verification": {
+    "focused": 48,
+    "regression": 544,
+    "regression_seconds": 91.02,
+    "records": 31,
+    "live_replays": 31,
+    "frozen_replays": 31,
+    "synthetic_raws": 29,
+    "source_files": 163,
+    "fixture_files": 29,
+    "external_imports": 2,
+    "protected_files": 1198,
+    "historical_artifacts": 1164,
+    "POSTs": 0,
+    "SQL_DB": 0,
+    "after_regression": "live程式/tests/fixtures/manifest未變；僅新增/補記本worker evidence/log及本handoff",
+    "manifest_sha256": "1749d09913e0f5d5a1caab4a4ede1bf4fa80fee260bb4e257f1f705634d934be",
+    "fixture_approval": "PENDING_FRESH_INDEPENDENT_REVIEW"
+  },
+  "freeze": {
+    "root": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-harness/frozen",
+    "metadata": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-harness/frozen/freeze.json",
+    "scope": "完整repo import closure的source超集合/原prompts/tests/原profiles/pyproject/uv.lock、全部fixture、loopctl及其ledger import；同.venv/lockfile及四個相關distribution版本，未vendor外部套件",
+    "replay": "在frozen目錄cwd，PYTHONPATH=<frozen>/src:<frozen>，使用原repo/.venv/bin/python -m evaluations.managed_node_diagnostics --replay <absolute sample folder>；index列所有31組路徑"
+  },
+  "next_fresh_review": {
+    "node": "kind_diagnostic_fixture_semantics",
+    "model_POSTs": 0,
+    "read_only": true,
+    "primary": [
+      "evaluations/fixtures/kind_diagnostics_v1/request-original.txt",
+      "evaluations/fixtures/kind_diagnostics_v1/recall-original.json",
+      "evaluations/fixtures/kind_diagnostics_v1/coverage-selection.json",
+      "evaluations/fixtures/kind_diagnostics_v1/coverage-selection-normalized.json",
+      "evaluations/fixtures/kind_diagnostics_v1/oracle.json",
+      "evaluations/fixtures/kind_diagnostics_v1/renamed-profile/",
+      "evaluations/fixtures/kind_diagnostics_v1/inputs/",
+      "projects/retail/views/demo_retail/",
+      "evaluations/managed_node_diagnostics.py"
+    ],
+    "scope": "逐項獨立核對8需求精確Unicode索引/角色/scope/grain/背景；全部7View×8責任=56-row的status/mapping/own_gap/派生缺口及所引用真契約；三coverage對照、2032閏年/任意ID/改名等變、synthetic selection完整typed與2prepared及其全部自由文字；檢查body沒有Oracle/正解/draft洩漏且反例/等價規則合理。不得僅重跑parser或信作者machine checker。",
+    "unresolved": [
+      "customer lifetime_spend為會員累計折扣後消費，fixed fixture保守unsupported；last_order_date不是完整交易月份。fresh reviewer若認為有可證必要部分能力，REJECT整套回fresh研究，不能改Oracle求PASS。",
+      "月度來源固定單月的grain縮約與有用未選能力；daily/order/store_monthly的store鍵/淨額partial、自身vs依賴缺口；店鍵或銷售鍵齊不證庫存母體。",
+      "Machine checks不會核准任意自由文字。selection-free_text反例原guard/machine接受但獨立語意仍PENDING；自然selection全部task.request/preparation.description/notes/policy/refs及剩餘文字必須逐項獨立核對，機器PASS不能當語意PASS。"
+    ],
+    "review_file": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-semantics/review.json",
+    "required_json": {
+      "schema_version": 1,
+      "verdict": "ACCEPT或REJECT",
+      "reviewer_role": "fresh_fixture_semantics",
+      "ticket": "<下一fresh worker真實ticket>",
+      "author_ticket": "7892d49c20a748068a073870a4c684f9",
+      "manifest_sha256": "1749d09913e0f5d5a1caab4a4ede1bf4fa80fee260bb4e257f1f705634d934be",
+      "bindings": "<完整深拷manifest.bindings，不能只放摘要hash>",
+      "evidence": "<逐項8需求/56row/對照/typed/free-text獨立判斷log之repo相對路徑>",
+      "summary": "<獨立結論及未決事項>"
+    },
+    "binding_method": "先load_package()與bindings(package)==package[manifest][bindings]驗全部當前來源/fixture/Oracle/body/schema/upstream/model/runtime，再獨立逐項語意核對；review綁manifest raw SHA256及完整bindings。不要修改manifest approval欄，否則manifest漂移要新審。review完成後由Main以該worker handoff finish PASS；execute preflight還會讀Task確認review ticket屬不同platform的kind_diagnostic_fixture_semantics worker、closed且同round/producer PASS。reviewer自身finish前測preflight會因provenance尚未完成而拒絕，屬預期。",
+    "rejection": "任何fixture/Oracle歧義或錯誤寫REJECT及handoff FAIL交fresh研究；不得自行改fixture或發POST。"
+  },
+  "later_entrypoint": {
+    "selection": "僅fresh ACCEPT且completed semantic worker後：.venv/bin/python -m evaluations.managed_node_diagnostics --stage selection --execute --ticket <active selection worker ticket> --review evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-diagnostic-semantics/review.json",
+    "coverage": "第12輪後fresh audit允許後再由coverage worker使用--stage coverage，同review與manifest；三固定樣本各一次，安全/有效性問題停止整批，無內容錯答retry。",
+    "parent": "局部diagnostic不能替代E2E-RETURN-v1-01全新自然上游與各父層驗收；本worker不續跑"
+  }
+}

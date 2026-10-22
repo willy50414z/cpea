@@ -1,0 +1,18 @@
+--- before
++++ after
+@@ -292,12 +292,15 @@
+     contracts = parser.add_mutually_exclusive_group()
+     contracts.add_argument('--evidence-bound', action='store_true')
+     contracts.add_argument('--own-responsibility', action='store_true')
++    contracts.add_argument('--kind-mapping', action='store_true')
+     args = parser.parse_args(argv)
+     contract = None
+     if args.evidence_bound:
+         from evaluations import evidence_bound_managed_contract as contract
+     elif args.own_responsibility:
+         from evaluations import own_responsibility_managed_contract as contract
++    elif args.kind_mapping:
++        from evaluations import kind_mapping_managed_contract as contract
+     version = contract.VERSION if contract is not None else VERSION
+     catalog = SchemaCatalog('projects/retail')
+     case = diagnostic_case(catalog)

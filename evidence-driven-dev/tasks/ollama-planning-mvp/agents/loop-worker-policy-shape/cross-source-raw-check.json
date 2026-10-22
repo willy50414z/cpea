@@ -1,0 +1,34 @@
+{
+  "result": "PASS",
+  "checks": [
+    {
+      "sample": "full-None",
+      "identical_immutable_raw": 9,
+      "identical_artifacts": 56,
+      "same_stopped": null,
+      "source_comparison": "全部fingerprint欄位精確比較；僅將repo內絕對檔名身分轉回各封存root相對路徑，hash內容未變，無改global/run/metadata。"
+    },
+    {
+      "sample": "full-shape",
+      "identical_immutable_raw": 9,
+      "identical_artifacts": 54,
+      "same_stopped": {
+        "error_type": "ValueError",
+        "error": "empty collection policy lacks typed preserved nested child shape"
+      },
+      "source_comparison": "全部fingerprint欄位精確比較；僅將repo內絕對檔名身分轉回各封存root相對路徑，hash內容未變，無改global/run/metadata。"
+    },
+    {
+      "sample": "full-typed",
+      "identical_immutable_raw": 9,
+      "identical_artifacts": 52,
+      "same_stopped": {
+        "error_type": "ValidationError",
+        "error": "1 validation error for SelectionWire\ndraft.ready.tasks.0.filters\n  Field required [type=missing, input_value={'task_id': 'stock', 'vie...店商品庫存件數'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing"
+      },
+      "source_comparison": "全部fingerprint欄位精確比較；僅將repo內絕對檔名身分轉回各封存root相對路徑，hash內容未變，無改global/run/metadata。"
+    }
+  ],
+  "POST": 0,
+  "SQL_DB": 0
+}

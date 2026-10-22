@@ -1,0 +1,22 @@
+{
+  "session_id": 93494,
+  "run_folder": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/kind-policy-shape-1-20261021T231146Z-570327/SEL-ISO-v1-01",
+  "request": {
+    "id": "52128e22c3864f24a84bef58cb85c369",
+    "ticket_id": "3989747b0a0f45ffa8b33ca5027469c7",
+    "provider": "local",
+    "case_key": "kind-policy-shape-1:ISOLATION:SEL-ISO-v1-01:node",
+    "request_sha": "0557a32c19c3a52d0ca136394fb54c52b3da7da9042e93a955d5478f1f70ed5a",
+    "retry_number": 0,
+    "retry_of": null,
+    "status": "inflight",
+    "round": 18,
+    "reserved_at": "2026-10-21T23:12:01.642051+00:00"
+  },
+  "used": {
+    "agent_dispatches": 32,
+    "cloud_calls": 0,
+    "local_calls": 23,
+    "model_retries": 0
+  }
+}

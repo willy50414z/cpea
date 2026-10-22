@@ -1,0 +1,76 @@
+{
+  "controls": [
+    {
+      "case": "empty",
+      "PASS": true,
+      "expected_PASS": true
+    },
+    {
+      "case": "complete",
+      "PASS": true,
+      "expected_PASS": true
+    },
+    {
+      "case": "reverse_duplicate",
+      "PASS": true,
+      "expected_PASS": true
+    },
+    {
+      "case": "one_boundary",
+      "PASS": false,
+      "expected_PASS": false
+    },
+    {
+      "case": "extra_filter",
+      "PASS": false,
+      "expected_PASS": false
+    },
+    {
+      "case": "own_gap",
+      "PASS": false,
+      "expected_PASS": false
+    },
+    {
+      "case": "missing_useful_key",
+      "PASS": false,
+      "expected_PASS": false
+    },
+    {
+      "case": "aggregation",
+      "PASS": false,
+      "expected_PASS": false
+    },
+    {
+      "case": "bad_standalone_scope",
+      "PASS": false,
+      "expected_PASS": false
+    }
+  ],
+  "customer_card": {
+    "identity": {
+      "requirement_id": "MET-003"
+    },
+    "own_target": {
+      "quote": "淨銷售額",
+      "business_object": "淨銷售額",
+      "kind": "metric"
+    },
+    "binding_context": {
+      "scope_ids": [
+        "FILT-001",
+        "FILT-002"
+      ],
+      "grain": "門市×商品",
+      "population": "所有庫存商品",
+      "grain_binding": "linked",
+      "grain_requirement_ids": [
+        "GRN-001"
+      ]
+    }
+  },
+  "daily_own_false_customer_own_true": true,
+  "true_unapproved_preflight_rejection": "capability review lacks closed provenance",
+  "true_audit_execution_rejection": "execute requires active capability worker and approved 19–21 audit",
+  "true_author_closed": true,
+  "result": "PASS"
+}

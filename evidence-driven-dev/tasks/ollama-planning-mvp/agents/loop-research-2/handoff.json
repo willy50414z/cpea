@@ -1,0 +1,233 @@
+{
+  "schema_version": 1,
+  "ticket": "343083820be4478aa94373e4dc2e9b0b",
+  "role": "research",
+  "task_id": "ollama-planning-mvp",
+  "result": "REPLAN",
+  "summary": "原map05唯一性FAIL已離線重現；重複ID列無必要語意增益，但每需求恰一判定是必要不變量。選用固定具名需求槽位的新managed wire，嚴格拒絕重複JSON key；由程式產生已知來源事實，防止population自行加上未保證的退貨排除。保留舊wire及所有語意守門，新候選仍需全新自然三階段與完整父層獨立驗收。",
+  "evidence": [
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-2/diagnosis.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-2/plan.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-research-0/handoff.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-contract/handoff.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-1/handoff.json",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-1/semantic-review.log"
+  ],
+  "classification": {
+    "confirmed": "map05成功HTTP正常stop，8個requirements輸出9列；filter_channel_online重複兩列皆unsupported、缺口文字不同。任意一列在記憶體移除後均通過原adapter，沒有漏責任。原prompt已明寫恰一筆，schema只有通用list，未表達當次requirement集合。這是結構身分責任交給模型自由列舉所致的可定位失敗；不推測模型內部生成原因。",
+    "necessary": "每項必要資料責任均有且只有一個可追蹤判定；真實同源scope/欄位/角色/aggregation/條件/母體/根粒度/left/no-zero驗證均必要。重複列就算目前同意unsupported也不能由程式選一筆，衝突反例更不能吞掉。",
+    "redundant": "requirement ID集合、當次view、來源grain/keys與來源summary已在可信輸入，重複自由生成沒有業務決策必要；生成status、mapping、合法filter值與缺口仍屬模型責任。來源population是契約事實，不需要再由模型改寫。",
+    "population": "map03 /population 的「不含退貨」無契約支持，原adapter原樣接受它只證明結構合法。未進filter也沒有使這句話成真，因此前輪不能宣稱整份自然輸出完整語意通過。它不否定已完成訂單之店商品鍵與月份/online/兩sum本題映射，但若傳給selection會污染來源母體描述，必須在新候選治理。不得把已完成訂單推導成排除退貨，也不得去改契約或新增filter。",
+    "other_claim": "recall candidate_views/1/reason誤稱monthly可通路篩選已在worker log保存；map02實際unsupported/partial修正了操作性判定，該reason不可當能力證據，也不能宣稱該句正確。新自然樣本及最終驗證須比對所有能力與母體說法，不能只看ready。",
+    "not_confirmed": "新的schema在本機Ollama能否自然遵從、全部映射與selection能否完成尚未證實；這是下輪可否證假設。"
+  },
+  "hypothesis": {
+    "id": "LR2-H1",
+    "claim": "對當次recall的requirement IDs建立固定具名必填槽位，模型只填判定內容，Python依固定身分轉回原ViewCoverage；同時從唯讀契約生成來源事實，可避免自由清單重複ID與來源母體擅自加義，又不降低任何業務/驗證責任。",
+    "falsifier": "若schema/adapter讓重複JSON key、缺項、額外項或錯誤角色/同源scope通過；若來源population仍可帶進契約未有斷言；或全新自然樣本任何需求/候選/selection/prepared語意錯誤，候選FAIL，不修當次輸出或重送挑分。",
+    "selection_reason": "原prompt已有恰一筆，單加提醒沒有新的強制責任邊界。固定key槽位保留具名可追蹤性且避免位置錯配；契約事實由既有可信policy取值，比再要求模型摘要更可驗。"
+  },
+  "alternatives": [
+    {
+      "option": "重申只輸出一次或最後自查",
+      "decision": "本輪不選",
+      "reason": "既有prompt已明寫恰一筆，不能將相同成功HTTP重送或只換話術當作有辨識力修法。"
+    },
+    {
+      "option": "去重、選first/last或合併missing_requirements",
+      "decision": "拒絕",
+      "reason": "會掩蓋衝突判定並修答案；必要唯一性不可放寬。"
+    },
+    {
+      "option": "固定長度位置清單，由Python依順序補ID",
+      "decision": "不選",
+      "reason": "可消除ID生成，但同長度重排會靜默把判定配到另一需求；具名必填槽位更易驗。"
+    },
+    {
+      "option": "改為一般dict或每個requirement一個模型call",
+      "decision": "不選",
+      "reason": "一般dict未表達固定集合且Pydantic會last-wins；逐需求call增大拆分與整合成本且scope失去同call全局資訊。"
+    },
+    {
+      "option": "只加禁止退貨字串的prompt/validator",
+      "decision": "拒絕",
+      "reason": "會過擬合單詞；問題是所有來源母體改寫的責任，應由契約取文並保留真正population支持/合併判定。"
+    }
+  ],
+  "worker_scope": {
+    "allowed": [
+      "evaluations/referenced_view_coverage.py 或最小新evaluation-only槽位adapter",
+      "evaluations/managed_three_stage_runner.py",
+      "新的managed槽位prompt，保留原coverage_references.md供舊wire",
+      "tests/unit最小有辨識力測試及必要fixture接線",
+      "Task .local raw/log、各worker必要Handoff JSON"
+    ],
+    "preserve": [
+      "既有ReferencedViewCoverage/materialize_coverage與舊runner/wire，不原地重新解釋歷史raw",
+      "已passed的contract_and_managed_runner證據與所有既有nodes驗收",
+      "src/cpea/application/models/decomposition.py、src/cpea/workflows/task_decomposition/prompt.py既存兩變更",
+      "所有歷史raw/分數/Gate/兩輪6POST零retry計數"
+    ],
+    "forbidden": [
+      "Task或controller修改",
+      "SQL/DB",
+      "任何雲端或未經loopctl的模型POST",
+      "去重/補項/修答案",
+      "commit/push",
+      "新報告或experiments Markdown"
+    ]
+  },
+  "implementation_order": [
+    "第3輪coverage_slots_contract是純離線實作節點。先以原版本runner重播前輪6 raw prefix，保存hash/source快照與精確duplicate錯誤，再寫會失敗的槽位正反例。不能修改舊raw或用反事實作自然PASS。",
+    "新增managed專用版本化wire：entries為物件，其properties/required精確來自當次已驗證recall requirement IDs；每值只含status、mappings、contract_path、missing_requirements，不含重複的requirement_id。利用具extra=forbid的動態Pydantic model產生合法schema，安全內部欄名以alias對應任意ID；禁止硬編碼本題ID或項數。不要用一般dict假裝有exact key schema。",
+    "在新managed mapping的原始JSON解析邊界拒絕任何重複object key（包括entries及nested mapping欄位），先於Pydantic的last-wins解析；raw先保存。只在新evaluation流程加最小解析接點，不改全域parsing.py或舊wire語義。沒有合法原JSON時FAIL，不repair。",
+    "以明確當次candidate policy與recall作新adapter輸入：依recall原順序從必填具名槽位建ReferencedEntry，Python填入可信view、grain.description、完整grain.keys，以及contract_text(policy,\"/summary\")作population及其summary證據。再呼叫既有materialize_coverage/validate_coverage，保留所有必要守門。來源欄位不得再由新wire覆寫；沒有summary或無有效policy即fail closed。summary逐字保留，不把summary包含度量說明誤宣稱為新的母體推導。",
+    "新專用prompt清楚區分模型語意責任與Python生成事實；仍傳完整原request、全部requirements與單一View policy。七View共用該schema factory，selection繼續只接受原嚴格ViewCoverage。更新managed version/來源指紋及逐request動態schema保存，replay由相同recall重建相同schema與messages；保留原始/parsed/normalized/error。",
+    "完成focused與必要回歸、dry-run零推論、完整fake及所有錯誤前綴replay；新freeze涵蓋schema factory/parser/prompt/adapter/test。第3輪finish後按controller先派fresh auditor覆蓋第1至3輪，不能直接跳到自然呼叫。",
+    "audit允許後第4輪natural_slots_three_stage凍結同候選，從全新indexed recall開始跑目前原診斷題，全部7候選各一次mapping，再selection/prepared。一次預定自然樣本最多9個正常節點，首provider/parse/contract錯誤保存停止並FAIL交新研究；不修當次答案或原樣重試挑分。",
+    "自然子項PASS後必回natural_qwen_three_stage父節點獨立核對三階段全語意及同版raw replay；再回three_stage_integration跑整合與必要回歸，最後root核對LOOP1–4並交fresh verifier ACCEPT。不可只因children passed自動通過祖先。"
+  ],
+  "verification_gates": {
+    "offline_positive": [
+      "不同任意ID/Unicode及1、多需求各自建立所有required槽位，ID只由Python還原，保留partial及不同missing_requirements，不按本題8項硬編碼。",
+      "來源view/grain/keys/population完全等於當次policy，含明確排除退貨的合成summary須如實保留；僅含已完成訂單的summary不得增補退貨。真metadata仍需真欄位映射。",
+      "同源sales日期/online/兩sum與inventory metadata可完整fake至prepared；prepared包含left保母體、正確鍵與不補零。"
+    ],
+    "offline_negative": [
+      "entries缺key、多key、重複key（即使值相同）、衝突重複key、nested重複欄位、舊list、額外requirement_id或來源population覆寫皆拒絕；raw/error保存且後續節點零call。",
+      "具保留字或需轉義的任意requirement IDs正確alias處理；漏scope、錯role、假欄位、錯path、空supported mapping、monthly借channel、inventory套sales日期、inner丟母體、錯根grain及補零依舊拒絕。",
+      "新來源summary取文不能使population requirement自動supported；只有key不證明完整庫存母體，仍由模型逐項判定及selection anchor/left驗證。"
+    ],
+    "natural": [
+      "沿用loop-research-0完整natural_stage1/stage2/selection/prepared門檻，8種資料責任允許合理拆合，不按ID或項數硬評；七候選皆需完整自然驗證。",
+      "來源population只可用契約原文；檢查recall理由、missing_requirements及selection理由是否仍捏造能力/母體，發現不支持文字精確記路徑並交完整語意驗收，不能以結構ready自動PASS。",
+      "inventory anchor store_id×product_id，stock_qty與snapshot_date正確；sales_detail兩金額同task月份/online與sum、先彙總再left、缺值不補零；無SQL/DB。"
+    ],
+    "parent_integration": [
+      "每個父節點有自身證據，不能僅引用children PASS；從新raw完全離線重播至prepared，解析/normalized/validation/response一致。",
+      "必要回歸實跑與前後歷史工件hash核對，保存第1至3輪完整方向審核；所有既有Gate與原兩src變更保留。",
+      "根節點之後由新fresh-context verifier核對LOOP1–4、正反例、原失敗、父層整合與自然所有語意後ACCEPT，未驗項不得標PASS。"
+    ]
+  },
+  "tests_start": {
+    "focused": ".venv/bin/python -m pytest tests/unit/test_referenced_view_coverage.py tests/unit/test_managed_three_stage_runner.py tests/unit/test_three_stage_view_selection.py tests/unit/test_indexed_requirement_recall.py -q（納入新增槽位測試檔）",
+    "regression": "沿用loop-worker-contract/handoff.json verification.command的193相關集並加入新增測試；按實際變更擴充，不新增鏡像實作測試充數。",
+    "natural": ".venv/bin/python -m evaluations.managed_three_stage_runner --execute --ticket \"$EDD_WORKER_TICKET\"（必須先接新wire且通過第3輪fresh audit）"
+  },
+  "audit_context": {
+    "due_after_next_work_round": 3,
+    "must_cover": [
+      1,
+      2,
+      3
+    ],
+    "prior_rounds_evidence": [
+      {
+        "round": 1,
+        "node": "contract_and_managed_runner",
+        "result": "PASS",
+        "summary": "contract_and_managed_runner完成：舊raw精確重現原ValueError；只強化通用indexed recall背景/metadata邊界；新增controller-only三階段runner及22項離線測試。必要相關回歸193 passed；完整9節點與失敗3節點fake raw離線replay PASS。485項基線hash僅授權prompt變更，兩產品既存變更與所有歷史raw/報告/Gate未變。本輪模型/SQL/DB呼叫皆0，尚未驗證自然Qwen效果。",
+        "evidence": [
+          {
+            "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-contract/before-hashes.json",
+            "sha256": "f62d191df6bd389f0620831d640a3f372aa3cae7ca0c5ac5633fae1e979b8915"
+          },
+          {
+            "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-contract/historical-replay.log",
+            "sha256": "3785f98dbd8152c4c18c12cfd6c814121197f3025a2ee1bacb338ecee5fbf331"
+          },
+          {
+            "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-contract/red.log",
+            "sha256": "1e5d35dad05f1f9e0ff636b03738d0cea4b28d3aa74be0f69cbcfb6976566cdb"
+          },
+          {
+            "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-contract/red-interrupt-input.log",
+            "sha256": "0ff593e895549e8e370a1e33a708ef75058fc9df34dff6dc1b3959973baf47ea"
+          },
+          {
+            "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-contract/regression-final.log",
+            "sha256": "fdb36992756b30cb95ca6c71f3717cd522dd6cff4ef1ea47e6e6b456cee50ec7"
+          },
+          {
+            "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-contract/offline-final.log",
+            "sha256": "a5d53d7f03b84f93f856c857febaad3cc4f98599942d2d9ab72968f2740be707"
+          },
+          {
+            "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-contract/dry-run.log",
+            "sha256": "58134ed09a56e2190b30a59bbacf2ab973a5359b2d0d86aad5f3546a3f51de33"
+          },
+          {
+            "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-contract/hash-verification.json",
+            "sha256": "019b5a84ef546b5d4b5664779f67600f9f0a85c3324cf5ca265fd863f58ff71a"
+          },
+          {
+            "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-contract/source-freeze.json",
+            "sha256": "9e39d8c879cf1af97b17c71b55c290e18a175093174f94ad4189b5cf6ad5774f"
+          }
+        ]
+      },
+      {
+        "round": 2,
+        "node": "natural_qwen_three_stage",
+        "result": "FAIL",
+        "summary": "固定自然單樣本在第5個View daily_sales首錯停止：HTTP 200正常stop，8項requirements卻輸出9項coverage entries，filter_channel_online在entries[1]與[4]重複。共6次本機受控POST、0重試/雲端/SQL/DB。需求拆分與前4View本題責任已核對；sales_detail population額外「不含退貨」缺契約保證，完整差異見semantic-review.log。map-06/07、selection及prepared_requests未執行，不能宣稱端到端通過。失敗前綴6個raw離線replay一致，來源凍結仍匹配；不改來源或答案。交fresh研究，不重送成功HTTP挑分。",
+        "evidence": [
+          {
+            "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-1/preflight.json",
+            "sha256": "06de38c3378e2dc1fe7bd6e67840cea2b850ed8dfff4d64ae05cafebcc7740b9"
+          },
+          {
+            "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-1/replay.log",
+            "sha256": "6155704523a1808d9d1f8680f4f0839a543c011b86456cec15bf5b43b6321824"
+          },
+          {
+            "path": "evidence-driven-dev/tasks/ollama-planning-mvp/agents/loop-worker-natural-1/semantic-review.log",
+            "sha256": "cb118f8da616f7a2dae93c2e2273ec0ae28138e38251dea443154aab93a9c020"
+          },
+          {
+            "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T161155Z-cb9cb4/run.json",
+            "sha256": "3537bcce3b2c110c6b989e1d5fc92c334769e315760ee692229a9af57d85d7ab"
+          },
+          {
+            "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T161155Z-cb9cb4/map-05-call.json",
+            "sha256": "01eb97f8f4c157bbb029d500b1ba55e3c50e3f1417fba826aa584a6697782a84"
+          },
+          {
+            "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T161155Z-cb9cb4/map-05-provider-response.json",
+            "sha256": "d42f5108837c18fd4a53188d1758509967eaee76c12d0ad3641fe108cd8e03af"
+          },
+          {
+            "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T161155Z-cb9cb4/map-05-parsed.json",
+            "sha256": "75ddb3a430089d0719e248b98cd43eb6ace4a31ec561d6c8aeb0bee88097bf16"
+          },
+          {
+            "path": "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-managed-20261021T161155Z-cb9cb4/map-05-error.json",
+            "sha256": "1c983bd8871b2724bcfce507072f36770654b3e58adf9ec0257ed22479f1a570"
+          }
+        ]
+      }
+    ],
+    "third_round": "由coverage_slots_contract worker新增實作/測試/來源freeze證據，auditor須看整個未審段而非只看新PASS。"
+  },
+  "resources": {
+    "cloud_calls": 0,
+    "used_at_research": {
+      "agent_dispatches": 4,
+      "cloud_calls": 0,
+      "local_calls": 6,
+      "model_retries": 0
+    },
+    "max_capacity": "既有10**30僅容量；使用者本機輪次/呼叫/retry/agent/token/timeout不限授權不變。研究0新POST，下一離線節點0POST。",
+    "audit_every_rounds": 3,
+    "model": "qwen3.8:27b / digest aaee06c39dcf2437cde036998d960e1fc1494b8191be7cc9657d01e509097813",
+    "configuration": "think=true、temperature=1、top_p=1、seed=42、num_ctx=32768、num_predict=-1、HTTP與外層timeout=None；所有POST只走loopctl request，無SDK/直連或自動retry。"
+  },
+  "stop_rejudge": "新自然輸出或必要測試FAIL即依controller交新研究；不得把成功HTTP錯答視暫時性傳輸錯誤。第3輪必fresh方向審核，若schema能力不相容也保存失敗再研究，不能偷切回原wire抽樣。",
+  "ambiguities": {
+    "blocking": [],
+    "limits": "模型實際推理原因不可從raw證明；未嘗試本機新schema，方案效果仍未知。"
+  },
+  "no_new_model_calls": true,
+  "no_implementation_changes": true,
+  "task_or_controller_changes": false
+}

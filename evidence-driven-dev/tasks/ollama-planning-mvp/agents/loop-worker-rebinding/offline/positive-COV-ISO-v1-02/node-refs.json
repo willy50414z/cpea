@@ -1,0 +1,19 @@
+{
+  "requirements": [
+    {
+      "requirement_id": "unrelated/識別~鍵",
+      "scope_ids": [],
+      "grain_binding": null,
+      "grain_requirement_ids": []
+    }
+  ],
+  "wire": {
+    "entries": {
+      "unrelated/識別~鍵": {
+        "status": "unsupported",
+        "own_gap": true,
+        "mappings": []
+      }
+    }
+  }
+}

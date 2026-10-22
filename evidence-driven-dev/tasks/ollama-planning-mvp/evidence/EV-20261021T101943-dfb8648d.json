@@ -1,0 +1,23 @@
+{
+  "id": "EV-20261021T101943-dfb8648d",
+  "kind": "review",
+  "command": [
+    ".venv/bin/python",
+    "-m",
+    "evidence-driven-dev.tasks.ollama-planning-mvp.reports.run_qwen_coverage_uncapped_probe",
+    "--replay",
+    "evidence-driven-dev/tasks/ollama-planning-mvp/.local/qwen-coverage-20261021T100803Z-e0f13d"
+  ],
+  "cwd": "/home/willy/code/cpea_terms",
+  "started_at": "2026-10-21T10:19:43+00:00",
+  "finished_at": "2026-10-21T10:19:44+00:00",
+  "exit_code": 0,
+  "revision": "bc09c67fc4078501599c37e4cdfecdee40af2ef8",
+  "diff_fingerprint": "7055794fccfac615aaa94cdd99d6e17a66113c46da353a4d231b958a8476f3a5",
+  "post_fingerprint": "7055794fccfac615aaa94cdd99d6e17a66113c46da353a4d231b958a8476f3a5",
+  "source_unchanged": true,
+  "output_sha256": "6b2d52157cfcbcd0738580d70b5e79ae6cd5b3eeba860c9116e987bbc3684ffa",
+  "raw_output": ".local/EV-20261021T101943-dfb8648d.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "ae47855b4721b72a4df0c202fd7cc149333964e0b16b7f25816ab2d542af81a4"
+}

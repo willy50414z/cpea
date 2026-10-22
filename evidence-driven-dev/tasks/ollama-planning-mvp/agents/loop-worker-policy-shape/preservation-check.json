@@ -1,0 +1,33 @@
+{
+  "result": "PASS",
+  "protected_files": 5203,
+  "changed": [],
+  "old_source_count": 167,
+  "new_sources": {
+    "evaluations/diagnostics/managed_policy_shape.py": "c3fc6efc4b49af5054972d6a088ad9865c9135b1b9c5c0edb156df148b4747e6",
+    "tests/diagnostics/test_managed_policy_shape.py": "11ec53fc54178c3da83b711a2aa2a191d2c8ec327c58292769f195ee9dcccfde"
+  },
+  "manifest_sha256": "2ec21c08c50f1772538c61fbbd4d7c5ea00c3fb43527395ffe5fa10e61082992",
+  "bindings_sha256": "b0768af6a55350b6b5c143dddadee6022acc4209ddcc8aa1df3f81adc08041e5",
+  "old_rebound_bindings_unchanged": true,
+  "historical_v2_rejected": "fixed v2 diagnostic design/lineage differs",
+  "controller_used": {
+    "agent_dispatches": 30,
+    "cloud_calls": 0,
+    "local_calls": 22,
+    "model_retries": 0
+  },
+  "author_ticket": {
+    "id": "34175c2580224eddb7061898d2af61ef",
+    "role": "worker",
+    "node": "kind_policy_shape_contract",
+    "round": 16,
+    "platform_id": "/root/loop_worker_policy_shape",
+    "closed": false,
+    "reserved_at": "2026-10-21T22:47:57.221515+00:00"
+  },
+  "historical_GATE": "保護hash逐檔不變，38x2既有未通過狀態不升級",
+  "POST": 0,
+  "SQL_DB": 0,
+  "commit_push": 0
+}

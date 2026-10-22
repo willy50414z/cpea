@@ -1,0 +1,517 @@
+{
+  "$defs": {
+    "ColumnMapping": {
+      "additionalProperties": false,
+      "properties": {
+        "column": {
+          "minLength": 1,
+          "title": "Column",
+          "type": "string"
+        }
+      },
+      "required": [
+        "column"
+      ],
+      "title": "ColumnMapping",
+      "type": "object"
+    },
+    "KindDecision_filter_dd4dc44649024186": {
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "enum": [
+            "supported",
+            "partial",
+            "unsupported",
+            "uncertain"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "own_gap": {
+          "title": "Own Gap",
+          "type": "boolean"
+        },
+        "mappings": {
+          "items": {
+            "$ref": "#/$defs/RequiredFilter"
+          },
+          "title": "Mappings",
+          "type": "array"
+        },
+        "contract_path": {
+          "anyOf": [
+            {
+              "enum": [
+                "/columns/active_in_last_90d/description",
+                "/columns/active_in_last_90d/role",
+                "/columns/active_in_last_90d/type",
+                "/columns/avg_order_value/description",
+                "/columns/avg_order_value/disallowed_aggregations/0",
+                "/columns/avg_order_value/disallowed_aggregations/1",
+                "/columns/avg_order_value/role",
+                "/columns/avg_order_value/type",
+                "/columns/avg_order_value/unit",
+                "/columns/city/description",
+                "/columns/city/role",
+                "/columns/city/type",
+                "/columns/completed_order_count/description",
+                "/columns/completed_order_count/role",
+                "/columns/completed_order_count/type",
+                "/columns/customer_name/description",
+                "/columns/customer_name/role",
+                "/columns/customer_name/type",
+                "/columns/latest_day/description",
+                "/columns/latest_day/role",
+                "/columns/latest_day/type",
+                "/columns/membership_tier/description",
+                "/columns/membership_tier/role",
+                "/columns/membership_tier/type",
+                "/columns/person_key/description",
+                "/columns/person_key/role",
+                "/columns/person_key/type",
+                "/columns/registered_on/description",
+                "/columns/registered_on/role",
+                "/columns/registered_on/type",
+                "/columns/value_total/description",
+                "/columns/value_total/role",
+                "/columns/value_total/type",
+                "/columns/value_total/unit",
+                "/grain/description",
+                "/grain/keys/0",
+                "/summary",
+                "/view"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Contract Path"
+        }
+      },
+      "required": [
+        "status",
+        "own_gap",
+        "mappings",
+        "contract_path"
+      ],
+      "title": "KindDecision_filter_dd4dc44649024186",
+      "type": "object"
+    },
+    "KindDecision_grain_dd4dc44649024186": {
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "enum": [
+            "supported",
+            "partial",
+            "unsupported",
+            "uncertain"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "own_gap": {
+          "title": "Own Gap",
+          "type": "boolean"
+        },
+        "mappings": {
+          "items": {
+            "$ref": "#/$defs/ColumnMapping"
+          },
+          "title": "Mappings",
+          "type": "array"
+        }
+      },
+      "required": [
+        "status",
+        "own_gap",
+        "mappings"
+      ],
+      "title": "KindDecision_grain_dd4dc44649024186",
+      "type": "object"
+    },
+    "KindDecision_metadata_dd4dc44649024186": {
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "enum": [
+            "supported",
+            "partial",
+            "unsupported",
+            "uncertain"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "own_gap": {
+          "title": "Own Gap",
+          "type": "boolean"
+        },
+        "mappings": {
+          "items": {
+            "$ref": "#/$defs/ColumnMapping"
+          },
+          "title": "Mappings",
+          "type": "array"
+        },
+        "contract_path": {
+          "anyOf": [
+            {
+              "enum": [
+                "/columns/active_in_last_90d/description",
+                "/columns/active_in_last_90d/role",
+                "/columns/active_in_last_90d/type",
+                "/columns/avg_order_value/description",
+                "/columns/avg_order_value/disallowed_aggregations/0",
+                "/columns/avg_order_value/disallowed_aggregations/1",
+                "/columns/avg_order_value/role",
+                "/columns/avg_order_value/type",
+                "/columns/avg_order_value/unit",
+                "/columns/city/description",
+                "/columns/city/role",
+                "/columns/city/type",
+                "/columns/completed_order_count/description",
+                "/columns/completed_order_count/role",
+                "/columns/completed_order_count/type",
+                "/columns/customer_name/description",
+                "/columns/customer_name/role",
+                "/columns/customer_name/type",
+                "/columns/latest_day/description",
+                "/columns/latest_day/role",
+                "/columns/latest_day/type",
+                "/columns/membership_tier/description",
+                "/columns/membership_tier/role",
+                "/columns/membership_tier/type",
+                "/columns/person_key/description",
+                "/columns/person_key/role",
+                "/columns/person_key/type",
+                "/columns/registered_on/description",
+                "/columns/registered_on/role",
+                "/columns/registered_on/type",
+                "/columns/value_total/description",
+                "/columns/value_total/role",
+                "/columns/value_total/type",
+                "/columns/value_total/unit",
+                "/grain/description",
+                "/grain/keys/0",
+                "/summary",
+                "/view"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Contract Path"
+        }
+      },
+      "required": [
+        "status",
+        "own_gap",
+        "mappings",
+        "contract_path"
+      ],
+      "title": "KindDecision_metadata_dd4dc44649024186",
+      "type": "object"
+    },
+    "KindDecision_metric_dd4dc44649024186": {
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "enum": [
+            "supported",
+            "partial",
+            "unsupported",
+            "uncertain"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "own_gap": {
+          "title": "Own Gap",
+          "type": "boolean"
+        },
+        "mappings": {
+          "items": {
+            "$ref": "#/$defs/MetricMapping"
+          },
+          "title": "Mappings",
+          "type": "array"
+        },
+        "contract_path": {
+          "anyOf": [
+            {
+              "enum": [
+                "/columns/active_in_last_90d/description",
+                "/columns/active_in_last_90d/role",
+                "/columns/active_in_last_90d/type",
+                "/columns/avg_order_value/description",
+                "/columns/avg_order_value/disallowed_aggregations/0",
+                "/columns/avg_order_value/disallowed_aggregations/1",
+                "/columns/avg_order_value/role",
+                "/columns/avg_order_value/type",
+                "/columns/avg_order_value/unit",
+                "/columns/city/description",
+                "/columns/city/role",
+                "/columns/city/type",
+                "/columns/completed_order_count/description",
+                "/columns/completed_order_count/role",
+                "/columns/completed_order_count/type",
+                "/columns/customer_name/description",
+                "/columns/customer_name/role",
+                "/columns/customer_name/type",
+                "/columns/latest_day/description",
+                "/columns/latest_day/role",
+                "/columns/latest_day/type",
+                "/columns/membership_tier/description",
+                "/columns/membership_tier/role",
+                "/columns/membership_tier/type",
+                "/columns/person_key/description",
+                "/columns/person_key/role",
+                "/columns/person_key/type",
+                "/columns/registered_on/description",
+                "/columns/registered_on/role",
+                "/columns/registered_on/type",
+                "/columns/value_total/description",
+                "/columns/value_total/role",
+                "/columns/value_total/type",
+                "/columns/value_total/unit",
+                "/grain/description",
+                "/grain/keys/0",
+                "/summary",
+                "/view"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Contract Path"
+        }
+      },
+      "required": [
+        "status",
+        "own_gap",
+        "mappings",
+        "contract_path"
+      ],
+      "title": "KindDecision_metric_dd4dc44649024186",
+      "type": "object"
+    },
+    "KindDecision_population_dd4dc44649024186": {
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "enum": [
+            "supported",
+            "partial",
+            "unsupported",
+            "uncertain"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "own_gap": {
+          "title": "Own Gap",
+          "type": "boolean"
+        },
+        "mappings": {
+          "items": {
+            "$ref": "#/$defs/ColumnMapping"
+          },
+          "title": "Mappings",
+          "type": "array"
+        },
+        "contract_path": {
+          "anyOf": [
+            {
+              "enum": [
+                "/columns/active_in_last_90d/description",
+                "/columns/active_in_last_90d/role",
+                "/columns/active_in_last_90d/type",
+                "/columns/avg_order_value/description",
+                "/columns/avg_order_value/disallowed_aggregations/0",
+                "/columns/avg_order_value/disallowed_aggregations/1",
+                "/columns/avg_order_value/role",
+                "/columns/avg_order_value/type",
+                "/columns/avg_order_value/unit",
+                "/columns/city/description",
+                "/columns/city/role",
+                "/columns/city/type",
+                "/columns/completed_order_count/description",
+                "/columns/completed_order_count/role",
+                "/columns/completed_order_count/type",
+                "/columns/customer_name/description",
+                "/columns/customer_name/role",
+                "/columns/customer_name/type",
+                "/columns/latest_day/description",
+                "/columns/latest_day/role",
+                "/columns/latest_day/type",
+                "/columns/membership_tier/description",
+                "/columns/membership_tier/role",
+                "/columns/membership_tier/type",
+                "/columns/person_key/description",
+                "/columns/person_key/role",
+                "/columns/person_key/type",
+                "/columns/registered_on/description",
+                "/columns/registered_on/role",
+                "/columns/registered_on/type",
+                "/columns/value_total/description",
+                "/columns/value_total/role",
+                "/columns/value_total/type",
+                "/columns/value_total/unit",
+                "/grain/description",
+                "/grain/keys/0",
+                "/summary",
+                "/view"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Contract Path"
+        }
+      },
+      "required": [
+        "status",
+        "own_gap",
+        "mappings",
+        "contract_path"
+      ],
+      "title": "KindDecision_population_dd4dc44649024186",
+      "type": "object"
+    },
+    "KindSlots_dd4dc44649024186": {
+      "additionalProperties": false,
+      "properties": {
+        "slot_0/🧾": {
+          "$ref": "#/$defs/KindDecision_grain_dd4dc44649024186"
+        },
+        "model_dump": {
+          "$ref": "#/$defs/KindDecision_metric_dd4dc44649024186"
+        },
+        "月~邊界": {
+          "$ref": "#/$defs/KindDecision_filter_dd4dc44649024186"
+        },
+        "scope-channel": {
+          "$ref": "#/$defs/KindDecision_filter_dd4dc44649024186"
+        },
+        "m_discount": {
+          "$ref": "#/$defs/KindDecision_metric_dd4dc44649024186"
+        },
+        "amount/net": {
+          "$ref": "#/$defs/KindDecision_metric_dd4dc44649024186"
+        },
+        "元資料": {
+          "$ref": "#/$defs/KindDecision_metadata_dd4dc44649024186"
+        },
+        "保留/全部": {
+          "$ref": "#/$defs/KindDecision_population_dd4dc44649024186"
+        }
+      },
+      "required": [
+        "slot_0/🧾",
+        "model_dump",
+        "月~邊界",
+        "scope-channel",
+        "m_discount",
+        "amount/net",
+        "元資料",
+        "保留/全部"
+      ],
+      "title": "KindSlots_dd4dc44649024186",
+      "type": "object"
+    },
+    "MetricMapping": {
+      "additionalProperties": false,
+      "properties": {
+        "column": {
+          "minLength": 1,
+          "title": "Column",
+          "type": "string"
+        },
+        "aggregation": {
+          "enum": [
+            "sum",
+            "count",
+            "count_distinct",
+            "avg",
+            "min",
+            "max"
+          ],
+          "title": "Aggregation",
+          "type": "string"
+        },
+        "conditions": {
+          "items": {
+            "$ref": "#/$defs/RequiredFilter"
+          },
+          "title": "Conditions",
+          "type": "array"
+        }
+      },
+      "required": [
+        "column",
+        "aggregation",
+        "conditions"
+      ],
+      "title": "MetricMapping",
+      "type": "object"
+    },
+    "RequiredFilter": {
+      "additionalProperties": false,
+      "properties": {
+        "column": {
+          "title": "Column",
+          "type": "string"
+        },
+        "operator": {
+          "enum": [
+            "=",
+            "!=",
+            "<>",
+            ">",
+            ">=",
+            "<",
+            "<=",
+            "IN",
+            "NOT IN",
+            "LIKE",
+            "IS NULL",
+            "IS NOT NULL"
+          ],
+          "title": "Operator",
+          "type": "string"
+        },
+        "value": {
+          "title": "Value"
+        }
+      },
+      "required": [
+        "column",
+        "operator",
+        "value"
+      ],
+      "title": "RequiredFilter",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "entries": {
+      "$ref": "#/$defs/KindSlots_dd4dc44649024186"
+    }
+  },
+  "required": [
+    "entries"
+  ],
+  "title": "KindCoverage_dd4dc44649024186",
+  "type": "object"
+}

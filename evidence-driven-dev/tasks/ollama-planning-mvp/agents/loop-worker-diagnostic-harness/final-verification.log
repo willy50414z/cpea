@@ -1,0 +1,31 @@
+{
+  "result": "PASS",
+  "preserved_files": 1198,
+  "frozen_sources": 163,
+  "frozen_fixtures": 29,
+  "frozen_external_sources": 2,
+  "manifest_sha256": "1749d09913e0f5d5a1caab4a4ede1bf4fa80fee260bb4e257f1f705634d934be",
+  "source_versions": {
+    "candidate": "managed-kind-mapping-1",
+    "runner": "managed-node-diagnostics-1"
+  },
+  "fixture_approval": "PENDING_FRESH_INDEPENDENT_REVIEW",
+  "request_sha256": "1cf6e584921c4a47c1a8cbe010aebafec41ed4a0cc83bc2b4e638c0c0165087b",
+  "controller_used": {
+    "agent_dispatches": 19,
+    "cloud_calls": 0,
+    "local_calls": 21,
+    "model_retries": 0
+  },
+  "all_expected_provider_requests": 21,
+  "POSTs_this_worker": 0,
+  "SQL_DB": 0,
+  "focused": "48 passed in 35.53s",
+  "regression": "544 passed in 91.02s",
+  "free_text_boundary": "machine acceptance does not approve semantic free text; fresh full review required",
+  "historical_artifacts": 1164,
+  "historical_changed": 0,
+  "frozen_replays": 31,
+  "frozen_raws": 29,
+  "live_replays": 31
+}

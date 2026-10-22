@@ -1,0 +1,21 @@
+{
+  "id": "EV-20261019T151623-d0b6fc25",
+  "kind": "holdout",
+  "command": [
+    "python3",
+    "-c",
+    "import runpy\nc=runpy.run_path('evidence-driven-dev/evaluation/fixtures/cases.py')\nassert c['bounded'](3.2,-2,3.5)==3.2\nassert c['bounded'](100,-2,3.5)==3.5\nassert c['pipeline']('καφές',[{'view':'cafe','aliases':['ΚΑΦΈΣ']}])=='SELECT * FROM cafe'\nassert c['pipeline']('PAYMENTS',[{'view':'accounting','aliases':['payments']}])=='SELECT * FROM accounting'\nassert c['select_route'](['sales'],'sales!') is None\nassert c['select_route'](['sales'],' '+chr(9)+'sAlEs'+chr(10))=='sales'\nassert c['select_route'](['ß','ss'],'SS') is None\nassert c['select_route'](['İ'],'I') is None\nprint('8 fresh holdout assertions passed')\n"
+  ],
+  "cwd": "/tmp/edd-eval-1z2tnuvr",
+  "started_at": "2026-10-19T15:16:23+00:00",
+  "finished_at": "2026-10-19T15:16:23+00:00",
+  "exit_code": 0,
+  "revision": "e85a5eb006ae04e7c69b735e3bd6ccb553b0768d",
+  "diff_fingerprint": "f7dbc3704ce38527dbd76b6c36f101e74f590b4dcccbbb7d4c9ef34acd045aac",
+  "post_fingerprint": "f7dbc3704ce38527dbd76b6c36f101e74f590b4dcccbbb7d4c9ef34acd045aac",
+  "source_unchanged": true,
+  "output_sha256": "26341c85f324deeb05715e2141053fb9e6b8f74705b012dcb2fe2e052dfcd69d",
+  "raw_output": ".local/EV-20261019T151623-d0b6fc25.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "e96a4e3fc7fdb1ddb22d7aa18ba223e9d783bf5e143684ae3b420b68d5314673"
+}

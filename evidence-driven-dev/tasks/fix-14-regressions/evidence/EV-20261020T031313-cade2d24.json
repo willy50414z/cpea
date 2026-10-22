@@ -1,0 +1,23 @@
+{
+  "id": "EV-20261020T031313-cade2d24",
+  "kind": "focused",
+  "command": [
+    ".venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/unit/test_mapping_preflight.py"
+  ],
+  "cwd": "/home/willy/code/cpea",
+  "started_at": "2026-10-20T03:13:13+00:00",
+  "finished_at": "2026-10-20T03:13:18+00:00",
+  "exit_code": 1,
+  "revision": "014cee1aff3abcfb51bbe5af6db0abd2ef060225",
+  "diff_fingerprint": "22ffe21c510518ecf2a15806f9f7b6f71a4914855cee539fec344d24bca6ad10",
+  "post_fingerprint": "22ffe21c510518ecf2a15806f9f7b6f71a4914855cee539fec344d24bca6ad10",
+  "source_unchanged": true,
+  "output_sha256": "80b7fe0ef939dc9b31f86f790d78ba1f06675545a2fe9c47b1a1d3cf9d463afd",
+  "raw_output": ".local/EV-20261020T031313-cade2d24.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "eb7b04d211163efbf4e2a3ae6853620bb1f9a02eefd362c1bb1ef25b928ca36a"
+}

@@ -16,6 +16,7 @@ def run_metadata(runtime, cases, *, kind='real-model'):
             'history_token_budget', 'history_recent_turns', 'max_rows', 'sql_generation_mode',
             'token_count_encoding', 'gcp_project', 'gcp_location']
     settings = {key: values[key] for key in keys}
+    settings['sql_dialect'] = runtime.settings.database_settings.resolved_dialect
     canonical = [case.model_dump() if hasattr(case, 'model_dump') else case for case in cases]
     digest = sha256()
     package = Path(cpea.__file__).parent

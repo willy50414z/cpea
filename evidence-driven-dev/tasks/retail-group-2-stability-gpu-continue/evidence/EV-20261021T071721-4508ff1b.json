@@ -1,0 +1,30 @@
+{
+  "id": "EV-20261021T071721-4508ff1b",
+  "kind": "experiment",
+  "command": [
+    ".venv/bin/python",
+    "evidence-driven-dev/tasks/retail-group-2-stability-gpu-continue/.local/continue_live.py",
+    "--selection",
+    "evidence-driven-dev/tasks/retail-group-2-stability-gpu-continue/.local/selection.json",
+    "--previous",
+    "evidence-driven-dev/tasks/retail-group-2-stability-postfix/.local/live-group2-postfix-20261021",
+    "--previous",
+    "evidence-driven-dev/tasks/retail-group-2-stability-gpu-continue/.local/live-gpu-continue-20261021",
+    "--output",
+    "evidence-driven-dev/tasks/retail-group-2-stability-gpu-continue/.local/live-gpu-continue-part2-20261021",
+    "--runs",
+    "3"
+  ],
+  "cwd": "/home/willy/code/cpea",
+  "started_at": "2026-10-21T07:17:21+00:00",
+  "finished_at": "2026-10-21T07:34:27+00:00",
+  "exit_code": 1,
+  "revision": "014cee1aff3abcfb51bbe5af6db0abd2ef060225",
+  "diff_fingerprint": "42e793d060d4fbbc8b4e1a7d8ad7661b949ce2563c9030b188852398e18d418c",
+  "post_fingerprint": "42e793d060d4fbbc8b4e1a7d8ad7661b949ce2563c9030b188852398e18d418c",
+  "source_unchanged": true,
+  "output_sha256": "f10f79aaaa59839c9242fe5aed0013a76e59a0bc1b5bb2dfe18ef613998417ee",
+  "raw_output": ".local/EV-20261021T071721-4508ff1b.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "413284572f1f64eb6125d95bf56db09a8a5e80a2a1afd98409f632df793f75f7"
+}

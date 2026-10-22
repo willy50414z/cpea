@@ -1,6 +1,6 @@
 # CPEA 架構
 
-目前產品為 `src/cpea` 的單一 Python package，驗證平台為 Windows x64／Python 3.12。核心提供單一 View MSSQL 產生、選配 SQL Server 執行與 Gradio 單題首頁；其他 API 接入與企業級 enforcement 狀態見 [企業級設計](enterprise_design.md)。
+目前產品為 `src/cpea` 的單一 Python package，使用 Python 3.12。核心提供單一 View SQL Server／PostgreSQL SQL 產生、選配資料庫執行與 Gradio 單題首頁；其他 API 接入與企業級 enforcement 狀態見 [企業級設計](enterprise_design.md)。
 
 ```mermaid
 flowchart TD
@@ -16,7 +16,7 @@ flowchart TD
     B --> APP[Application services]
     APP --> W[Text-to-SQL SQLGenerationWorkflow]
     W --> P[QueryFact／SchemaLink／QueryPlan 與契約政策]
-    W --> COMP[MSSQL compiler／SQL policy]
+    W --> COMP[SQL Server／PostgreSQL compiler／SQL policy]
     APP --> EXEC[SQLQueryExecutor port]
     EXEC --> INJECT[部署注入 executor]
     EXEC --> DB[選配 SQLServerExecutor／SQLAlchemy／pymssql]
@@ -34,13 +34,15 @@ flowchart TD
 | `application/models/`、`catalog_contract.py` | Service read models、trace、既有契約政策與 prompt rendering |
 | `domain/` | QueryFact、SchemaLink、QueryPlan、ViewDefinition 等核心概念 |
 | `workflows/text_to_sql/` | SQL generation graph、LLM draft schema 與 graph factory |
-| `infrastructure/database/` | 選配 SQLAlchemy／pymssql adapter（NullPool），綁定 datasource／View、有限讀取、逾時與資源釋放 |
+| `infrastructure/database/` | 依 URL 選擇 SQL Server／PostgreSQL adapter，綁定 datasource／View、獨立連線、有限讀取、逾時與資源釋放 |
 | `infrastructure/catalog/` | 有路徑邊界的 YAML snapshot loader |
 | `infrastructure/retrieval/` | LangChain Document 轉換、lexical／vector retrieval、rerank 與 cache |
 | `infrastructure/llm/` | 既有模型 factory、共享 JSON parsing、token/context budget |
-| `infrastructure/sql_compiler.py`、`sql_policy.py` | 保留既有 MSSQL renderer／唯讀 SQL 檢查 |
+| `infrastructure/sql_compiler.py`、`sql_policy.py` | 依資料庫方言產生 SQL Server／PostgreSQL SQL，並檢查唯讀與 View allowlist |
 | `projects/<project-id>/` | 私有專案 View 契約、`.env`、單一題庫與評估產物；wheel／sdist 排除 |
 | `evaluations/` | 共用品質工具與合成 fixture；原始私有 PoC 題庫封存於被忽略的 `artifacts/baseline/` |
+
+各 project 的 `CPEA_DATABASE_URL` 決定 adapter 與編譯方言：`mssql+pymssql://` 使用 SQL Server，`postgresql://`／`postgresql+psycopg://` 使用 PostgreSQL；兩種資料庫統一使用同一個連線 key。無 URL 時可用 `CPEA_DATABASE_DIALECT=postgresql` 指定純 SQL 生成，預設為 SQL Server。生成、執行前重編譯與評估使用相同方言；評估移除連線設定並保留方言，不載入 DB driver。PostgreSQL 連線採唯讀 transaction、`statement_timeout` 與固定標準字串語意，查詢後直接關閉。詳見 [資料庫設定](../README.md#自動選擇資料庫)。
 
 Domain 不 import API；application 回應模型由 API 引用。API／CLI／Graph 使用 bootstrap 建立依賴。Provider-specific LLM／retrieval 的現有抽象沿用 LangChain，沒有另外引入通用 plugin 平台。
 
@@ -57,11 +59,11 @@ assess_semantics 若發現來源粒度不符 → 排除當前來源 → match_ca
 
 語意檢查優先使用 MATCH 已提供的業務選項；漏給選項時，針對伺服器實際判定的待確認詞彙補一次批次整理，並限制到用途合法的欄位與原有單一來源。補整理不更改查詢子句。只有一個合法候選時自動套用至該詞彙所有子句用途，再驗證完整查詢；這項判定只保留本題依據，不寫入人工確認詞彙檔，也不覆蓋不同的既有人工選擇。其餘歧義才詢問使用者。來源粒度不符時繼續其他候選，來源排除與失敗原因保留於 trace。模型無法產生合法選項屬系統錯誤；只有確實沒有相關選項或口徑仍太多時，才向使用者指出需補充的詞彙。
 
-Graph 只產生 QueryPlan／SQL／QueryTaskTrace；SQLExecutionAgent 顯式取得 executor 與 datasource 後執行一次，保留最大筆數、truncation 和 execution trace；AnswerSynthesisService 根據結果產生附來源的回答。首頁未設定 executor／binding 時，以生成模式完成 SQL 與 HILP，明確標示未執行查詢；方式固定於送題時。執行型 JSON／SSE API 仍在 generation／LLM 呼叫前回報 unavailable。TOP 和 SQL policy 不取代真實資料庫權限與負載限制。
+Graph 只產生 QueryPlan／SQL／QueryTaskTrace；SQLExecutionAgent 顯式取得 executor 與 datasource 後執行一次，保留最大筆數、truncation 和 execution trace；AnswerSynthesisService 根據結果產生附來源的回答。首頁未設定 executor／binding 時，以生成模式完成 SQL 與 HILP，明確標示未執行查詢；方式固定於送題時。執行型 JSON／SSE API 仍在 generation／LLM 呼叫前回報 unavailable。TOP／LIMIT 和 SQL policy 不取代真實資料庫權限與負載限制。
 
 第一階段檢索文字只含 View 摘要與欄位描述，不列欄位名稱或型別。檢索與 context budget 篩選後，依排名逐一將單一候選 View 的完整核准契約交給模型，回傳欄位草稿並驗證。每個候選最多一次驗證後修正，失敗才試下一個候選。預設 v10 在通過 QueryPlan 硬性驗證後檢查語意疑慮，需要時先 HILP 確認，再產生 SQL；確認不再次呼叫 MATCH。歷史 v1–v9 保留逐一驗證並編譯的比較流程。每次呼叫的 JSON Schema 只允許當前 View 及其欄位。候選契約包含欄位名稱、描述、能力、可用聚合、詞彙對應、範圍與 operator 政策；不把 samples、測試題庫或預期答案放入模型 context。格式解析錯誤另有一次重試。雲端 SDK 的隱藏重試停用，API 錯誤交由呼叫端處理。
 
-Python 將 fields／criteria／having／group 轉為 QueryFact、SchemaLink 與 QueryPlan，再由既有 compiler 產生 MSSQL。MATCH v10 的欄位與 View 名稱由當次單一候選契約限制，輸出格式由 Pydantic JSON Schema 約束，並增加完整詞彙證據與原文字元區間；上游 v1–v9 prompt 與 schema 保留原版本。v3 View 契約不使用預設聚合，聚合函數需由需求與契約能力決定。驗證失敗時，將原契約、前次映射與錯誤傳給同一 View 修正一次；仍失敗才試下一個 View。條件值必須來自需求原文或契約明確的 term mapping。檢查原文引用、欄位能力、operator／aggregation、catalog scope、QueryPlan 與唯讀 SQL policy；明確代碼、數值等 literal 若未承接，則拒絕查詢，避免漏掉篩選後擴大查詢。此檢查不等同完整自然語言解析。
+Python 將 fields／criteria／having／group 轉為 QueryFact、SchemaLink 與 QueryPlan，再由 compiler 依資料庫方言產生 SQL。MATCH v10 的欄位與 View 名稱由當次單一候選契約限制，輸出格式由 Pydantic JSON Schema 約束，並增加完整詞彙證據與原文字元區間；上游 v1–v9 prompt 與 schema 保留原版本。v3 View 契約不使用預設聚合，聚合函數需由需求與契約能力決定。驗證失敗時，將原契約、前次映射與錯誤傳給同一 View 修正一次；仍失敗才試下一個 View。條件值必須來自需求原文或契約明確的 term mapping。檢查原文引用、欄位能力、operator／aggregation、catalog scope、QueryPlan 與唯讀 SQL policy；明確代碼、數值等 literal 若未承接，則拒絕查詢，避免漏掉篩選後擴大查詢。此檢查不等同完整自然語言解析。
 
 Python 不依特定品號、客戶或題目補寫查詢，也不透過案例或答案修正模型。查詢只使用一個核准 View；來源參照保留實際選中的契約，候選與失敗嘗試留在 trace。
 

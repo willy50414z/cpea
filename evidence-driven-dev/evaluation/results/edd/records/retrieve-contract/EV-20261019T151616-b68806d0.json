@@ -1,0 +1,21 @@
+{
+  "id": "EV-20261019T151616-b68806d0",
+  "kind": "regression",
+  "command": [
+    "python3",
+    "evaluation/checks.py",
+    "all"
+  ],
+  "cwd": "/tmp/edd-eval-1z2tnuvr",
+  "started_at": "2026-10-19T15:16:16+00:00",
+  "finished_at": "2026-10-19T15:16:16+00:00",
+  "exit_code": 0,
+  "revision": "e85a5eb006ae04e7c69b735e3bd6ccb553b0768d",
+  "diff_fingerprint": "f7dbc3704ce38527dbd76b6c36f101e74f590b4dcccbbb7d4c9ef34acd045aac",
+  "post_fingerprint": "f7dbc3704ce38527dbd76b6c36f101e74f590b4dcccbbb7d4c9ef34acd045aac",
+  "source_unchanged": true,
+  "output_sha256": "81784505de4ff241ab08fe4a44616c8ac091203deb3ee0079492afd34fc5e2b4",
+  "raw_output": ".local/EV-20261019T151616-b68806d0.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "714f5ccc4c22d51ea7eb3a3d199fa1bf9a3d406db46987dee817573fcd1e9877"
+}

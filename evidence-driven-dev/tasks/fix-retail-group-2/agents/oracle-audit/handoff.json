@@ -1,0 +1,17 @@
+{
+  "status": "DONE_WITH_CONCERNS",
+  "summary": "完成14題Oracle／契約唯讀調查及離線probe：6題確定產品行為Bug，2題列條件Bug兼粒度歧義，3題合理澄清，1題有2次環境逾時兼語意歧義，2題安全拒絕成功但raw mapping診斷FAIL。原Oracle與48/90均保留。",
+  "evidence": [
+    "agents/oracle-audit/task.md",
+    "../../../projects/retail/evaluations/cases.jsonl",
+    "../retail-test-group-2/.local/combined-group2-20261020/results.jsonl",
+    "../retail-test-group-2/.local/combined-group2-20261020/calls.jsonl"
+  ],
+  "risks": [
+    "合法SQL不保證題文唯一View；不得以14題都ready原target驗收。",
+    "CUSTOMER S3-03回購與active、期間消費與lifetime存在語意差異。",
+    "未執行模型、DB、SQL編譯或全395題回歸；產品根因程式位置由Main/source-audit核對。"
+  ],
+  "next_step": "Main讀取逐題證據後整合：保留原Oracle，分列safe reject與raw mapping；優先原call replay驗證6個確定Bug及2個guard症狀，保留含糊題澄清與反例回歸。",
+  "diff_reference": "evidence-driven-dev/tasks/fix-retail-group-2/agents/oracle-audit/task.md（僅報告；無產品／tests／Oracle變更）"
+}

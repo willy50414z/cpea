@@ -18,7 +18,7 @@ from cpea.workflows.text_to_sql.clarification import business_label
 import gradio as gr
 
 from cpea.application.errors import DependencyUnavailable
-from cpea.config.database import SQLServerConfigurationError
+from cpea.config.database import DatabaseConfigurationError, SQLServerConfigurationError
 from cpea.interfaces.api.schemas import StreamQueryRequest
 from cpea.interfaces.api.streaming import ERROR_MESSAGE, _encode_value
 from cpea.application.models.query import ClarificationChoice, ClarificationRequest
@@ -104,7 +104,7 @@ def _failure_details(exc):
         for frame, lineno in walk_tb(error.__traceback__):
             lines.append(f'  File {json.dumps(frame.f_code.co_filename)}, line {lineno}, in {frame.f_code.co_name}')
         lines.append(type(error).__name__)
-        if isinstance(error, SQLServerConfigurationError):
+        if isinstance(error, (DatabaseConfigurationError, SQLServerConfigurationError)):
             code = error.code
             lines.append(str(error))
         if isinstance(error, ModuleNotFoundError) and error.name:
@@ -348,6 +348,8 @@ def single_question_updates(runtime, question, gate, *, payload=None, project_id
                 gate.steps.append(WorkflowStep('workflow error', {'phase': phase, 'code': error_code}))
             message = ('資料庫連線設定不符合 SQL Server 格式，請檢查本題 project 的連線設定。'
                        if error_code in {'sqlserver_' + reason for reason in SQLServerConfigurationError.messages}
+                       else '資料庫連線設定無效或與所選方言不符，請檢查本題 project 的連線設定。'
+                       if error_code in {'database_' + reason for reason in DatabaseConfigurationError.messages}
                        else ERROR_MESSAGE)
             yield _frame(gate, message)
     finally:

@@ -1,0 +1,23 @@
+{
+  "id": "EV-20261020T032920-2a55076d",
+  "kind": "boundary",
+  "command": [
+    ".venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/unit/test_mapping_preflight.py"
+  ],
+  "cwd": "/home/willy/code/cpea",
+  "started_at": "2026-10-20T03:29:20+00:00",
+  "finished_at": "2026-10-20T03:29:28+00:00",
+  "exit_code": 1,
+  "revision": "014cee1aff3abcfb51bbe5af6db0abd2ef060225",
+  "diff_fingerprint": "3c9c3b40e517466d1284c5efb02141de4860009f10c45535f275a496c5243476",
+  "post_fingerprint": "3c9c3b40e517466d1284c5efb02141de4860009f10c45535f275a496c5243476",
+  "source_unchanged": true,
+  "output_sha256": "0143b7a5d2cb001eb8e8f4922ffa1e8bdf9e38c364a3521ee6f7c53afa62ff19",
+  "raw_output": ".local/EV-20261020T032920-2a55076d.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "14e140817723b7ddcfad6e989a72c95fb1cb7154eb7d0e64362803f46bbde7d4"
+}

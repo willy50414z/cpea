@@ -73,12 +73,13 @@ class SQLExecutionAgent:
     def validate_generation(self, generation: SQLGenerationResponse, request: str) -> None:
         if not generation.supported or not generation.sql:
             raise SQLExecutionError(generation.explanation, generation)
-        validate_generated_sql(generation.sql, {view.name for view in self.catalog.views()})
+        dialect = self.settings.database_settings.resolved_dialect
+        validate_generated_sql(generation.sql, {view.name for view in self.catalog.views()}, dialect=dialect)
         if generation.query_plan is None:
             raise SQLExecutionError('Missing approved query plan', generation)
         # Recompile deterministically to confirm the approved plan and exact SQL.
         approved = compile_single_view(generation.query_plan, self.catalog, request=request,
-                                       max_rows=self.settings.max_rows)
+                                       max_rows=self.settings.max_rows, dialect=dialect)
         if approved != generation.sql:
             raise SQLExecutionError('SQL does not match approved query plan', generation)
 

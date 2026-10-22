@@ -1,0 +1,20 @@
+{
+  "id": "EV-20261021T013310-120af76f",
+  "kind": "baseline",
+  "command": [
+    ".venv/bin/python",
+    "evidence-driven-dev/tasks/retail-group-2-stability-postfix/.local/preflight.py"
+  ],
+  "cwd": "/home/willy/code/cpea",
+  "started_at": "2026-10-21T01:33:10+00:00",
+  "finished_at": "2026-10-21T01:33:12+00:00",
+  "exit_code": 0,
+  "revision": "014cee1aff3abcfb51bbe5af6db0abd2ef060225",
+  "diff_fingerprint": "42e793d060d4fbbc8b4e1a7d8ad7661b949ce2563c9030b188852398e18d418c",
+  "post_fingerprint": "42e793d060d4fbbc8b4e1a7d8ad7661b949ce2563c9030b188852398e18d418c",
+  "source_unchanged": true,
+  "output_sha256": "d9523a1c9ee43657e618439027a25526105b765a1e61367388dcf28e6bd96903",
+  "raw_output": ".local/EV-20261021T013310-120af76f.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "f39b0b36da1c212b171cee21d20b7d37c747a0e1d507182c661b000947acf48e"
+}

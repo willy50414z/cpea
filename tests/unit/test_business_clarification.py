@@ -103,17 +103,18 @@ def test_too_many_related_choices_require_rephrasing_without_truncation(tmp_path
 
 @pytest.mark.parametrize('options, status, calls', [
     ([], 'unsupported', 1),
-    ([option('order_amount', '每筆訂單商品成本金額', evidence_quote='捏造的證據')], 'error', 2),
-    ([option('order_amount', '每筆訂單商品成本金額', evidence_quote=' ')], 'error', 2),
-    ([option('missing_column', '不存在的成本')], 'error', 2),
+    ([option('order_amount', '每筆訂單商品成本金額', evidence_quote='捏造的證據')], 'error', 3),
+    ([option('order_amount', '每筆訂單商品成本金額', evidence_quote=' ')], 'error', 3),
+    ([option('missing_column', '不存在的成本')], 'error', 3),
     ([option('order_amount', '每筆訂單商品成本金額', same_concept=False)], 'unsupported', 1),
     ([option('order_amount', '每筆訂單商品成本金額', grain_compatible=False)], 'unsupported', 1),
-    ([option('order_amount', f'{VIEW}.order_amount', evidence_quote='每筆訂單商品成本金額')], 'error', 2),
-    ([option('order_amount', 'MAX(成本)', evidence_quote='每筆訂單商品成本金額')], 'error', 2),
+    ([option('order_amount', f'{VIEW}.order_amount', evidence_quote='每筆訂單商品成本金額')], 'error', 3),
+    ([option('order_amount', 'MAX(成本)', evidence_quote='每筆訂單商品成本金額')], 'error', 3),
     ([option('order_amount', '成本金額', evidence_quote='每筆訂單商品成本金額'),
-      option('net_amount', '成本金額', evidence_quote='每筆訂單含運成本金額')], 'error', 2),
+      option('net_amount', '成本金額', evidence_quote='每筆訂單含運成本金額')], 'error', 3),
 ])
 def test_no_valid_proposals_never_fall_back_to_all_columns(tmp_path, options, status, calls):
+    # One MATCH, one resolution, and at most one semantic validation repair.
     runtime = cost_runtime(tmp_path, options=options)
     try:
         result = runtime.generate(COST_QUESTION)

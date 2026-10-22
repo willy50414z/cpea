@@ -2,7 +2,7 @@
 
 ### Requirement: 明確設定與選配安裝
 
-系統 SHALL 提供選配的 SQL Server adapter，使用 `CPEA_SQLSERVER_CONNECTION_STRING` 與明確 datasource binding 設定連線。系統 MUST 遵守既有 process environment、明確 env file、預設值的設定優先順序，且 MUST 提供空白 env 欄位而不包含憑證。連線字串空白時 SHALL 維持未啟用狀態。登入與查詢 timeout SHALL 分別由 `CPEA_SQLSERVER_CONNECT_TIMEOUT_SECONDS`、`CPEA_SQLSERVER_QUERY_TIMEOUT_SECONDS` 設定；空白時分別採 5 秒與 30 秒，非正數或非法值 MUST 拒絕。
+系統 SHALL 提供選配的 SQL Server adapter，使用 `CPEA_DATABASE_URL` 與明確 datasource binding 設定連線。系統 MUST 遵守既有 process environment、明確 env file、預設值的設定優先順序，且 MUST 提供空白 env 欄位而不包含憑證。連線字串空白時 SHALL 維持未啟用狀態。登入與查詢 timeout SHALL 分別由 `CPEA_SQLSERVER_CONNECT_TIMEOUT_SECONDS`、`CPEA_SQLSERVER_QUERY_TIMEOUT_SECONDS` 設定；空白時分別採 5 秒與 30 秒，非正數或非法值 MUST 拒絕。
 
 #### Scenario: 使用者尚未提供 DB 設定
 

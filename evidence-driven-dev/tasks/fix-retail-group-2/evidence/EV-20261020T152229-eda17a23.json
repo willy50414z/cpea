@@ -1,0 +1,23 @@
+{
+  "id": "EV-20261020T152229-eda17a23",
+  "kind": "focused",
+  "command": [
+    ".venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/unit/test_request_operation_boundaries.py::test_numeric_business_qualifier_requires_the_complete_mapped_phrase"
+  ],
+  "cwd": "/home/willy/code/cpea",
+  "started_at": "2026-10-20T15:22:29+00:00",
+  "finished_at": "2026-10-20T15:22:31+00:00",
+  "exit_code": 1,
+  "revision": "014cee1aff3abcfb51bbe5af6db0abd2ef060225",
+  "diff_fingerprint": "e72c8a1b71d62832724eae0c6d1b46c73789bcc96b93edf0de8888ab4206df24",
+  "post_fingerprint": "e72c8a1b71d62832724eae0c6d1b46c73789bcc96b93edf0de8888ab4206df24",
+  "source_unchanged": true,
+  "output_sha256": "17b7a41f29bb5d872a4df7233a72670eab05a3f733dc45455f5b7a76663b504a",
+  "raw_output": ".local/EV-20261020T152229-eda17a23.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "b6742b24bd7b9c05f38412c0236df2d5241f1db2bef9df6af96940c7f24cc0d5"
+}

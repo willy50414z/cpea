@@ -1,0 +1,20 @@
+{
+  "id": "EV-20261019T151538-3abd6dd1",
+  "kind": "experiment",
+  "command": [
+    "python3",
+    "evaluation/route_prototype.py"
+  ],
+  "cwd": "/tmp/edd-eval-1z2tnuvr",
+  "started_at": "2026-10-19T15:15:38+00:00",
+  "finished_at": "2026-10-19T15:15:38+00:00",
+  "exit_code": 0,
+  "revision": "e85a5eb006ae04e7c69b735e3bd6ccb553b0768d",
+  "diff_fingerprint": "77d43a6ffc1c8f5e5bda5168327367481cbc4dc7f83ec03128f42381056bd520",
+  "post_fingerprint": "77d43a6ffc1c8f5e5bda5168327367481cbc4dc7f83ec03128f42381056bd520",
+  "source_unchanged": true,
+  "output_sha256": "e41f12c499be6773626713b5a1d7ea5c928d83084ca4804a51b1a08b2ee0ce29",
+  "raw_output": ".local/EV-20261019T151538-3abd6dd1.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "7c47a658e62abf3970727336d308211aed1886b0b5aa4ed994f523c41fa51910"
+}

@@ -1,0 +1,26 @@
+{
+  "id": "EV-20261021T013331-be85c443",
+  "kind": "experiment",
+  "command": [
+    ".venv/bin/python",
+    "evidence-driven-dev/tasks/retail-group-2-stability-postfix/.local/run_live.py",
+    "--selection",
+    "evidence-driven-dev/tasks/retail-group-2-stability-postfix/.local/selection.json",
+    "--output",
+    "evidence-driven-dev/tasks/retail-group-2-stability-postfix/.local/live-group2-postfix-20261021",
+    "--runs",
+    "3"
+  ],
+  "cwd": "/home/willy/code/cpea",
+  "started_at": "2026-10-21T01:33:31+00:00",
+  "finished_at": "2026-10-21T03:50:55+00:00",
+  "exit_code": 1,
+  "revision": "014cee1aff3abcfb51bbe5af6db0abd2ef060225",
+  "diff_fingerprint": "42e793d060d4fbbc8b4e1a7d8ad7661b949ce2563c9030b188852398e18d418c",
+  "post_fingerprint": "42e793d060d4fbbc8b4e1a7d8ad7661b949ce2563c9030b188852398e18d418c",
+  "source_unchanged": true,
+  "output_sha256": "96b3457134e066386c6f48b91ee9e54575fd8a4ddb6e20be4bfda4690d854a42",
+  "raw_output": ".local/EV-20261021T013331-be85c443.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "1cc9e4ca4ee48f339a1c1e1ef839f6bbbcf16d6e84f689653043d5291fa385eb"
+}

@@ -1,0 +1,20 @@
+{
+  "id": "EV-20261020T050600-34a5fb8c",
+  "kind": "baseline",
+  "command": [
+    ".venv/bin/python",
+    "evidence-driven-dev/tasks/retail-test-group-2/.local/preflight.py"
+  ],
+  "cwd": "/home/willy/code/cpea",
+  "started_at": "2026-10-20T05:06:00+00:00",
+  "finished_at": "2026-10-20T05:06:02+00:00",
+  "exit_code": 0,
+  "revision": "014cee1aff3abcfb51bbe5af6db0abd2ef060225",
+  "diff_fingerprint": "1c843050fcd699b19aff6641c0045e9b6fd8a92d1ea2329be9d68acb4d490f7c",
+  "post_fingerprint": "1c843050fcd699b19aff6641c0045e9b6fd8a92d1ea2329be9d68acb4d490f7c",
+  "source_unchanged": true,
+  "output_sha256": "e2d311b24a44372637f1944003fda74b075d2590c38de605ec648181fe31b5e1",
+  "raw_output": ".local/EV-20261020T050600-34a5fb8c.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "3908c8d0a3cf1588b9cc0553b54b2c887ff3a5f20f6452b0dd4ce5214fd6f3ca"
+}

@@ -83,14 +83,14 @@ def main() -> None:
                         help='integration profile directory for generated contracts')
     args = parser.parse_args()
     root = args.root.resolve()
-    config = dotenv_values(project_root / '.env')
+    config = dotenv_values(root / '.env', interpolate=False, encoding='utf-8')
     schema = config.get('RETAILER_DB_SCHEMA')
     if not schema or not re.fullmatch(r'[A-Za-z_][A-Za-z_0-9]*', schema):
         raise ValueError('invalid RETAILER_DB_SCHEMA')
     if schema != 'demo_retail':
         raise ValueError('review the grain evidence rules for this schema before generating')
     generated = {}
-    with psycopg.connect(config['RETAILER_CONNECTION_STRING'], connect_timeout=8,
+    with psycopg.connect(config['CPEA_DATABASE_URL'], connect_timeout=8,
                          options='-c default_transaction_read_only=on') as db:
         with db.cursor() as cursor:
             cursor.execute('BEGIN READ ONLY')

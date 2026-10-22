@@ -51,7 +51,7 @@ def test_project_name_binds_cli_web_executor_and_vocabulary_despite_stale_settin
     with (root / '.env').open('a', encoding='utf-8') as file:
         file.write('CPEA_DATASOURCE_ID=old-retail-binding\n'
                    'CPEA_DEPLOYMENT_FILE=deployment.yaml\n'
-                   'CPEA_SQLSERVER_CONNECTION_STRING=mssql+pymssql://test:test@server.example/retail\n')
+                   'CPEA_DATABASE_URL=mssql+pymssql://test:test@server.example/retail\n')
     (root / 'deployment.yaml').write_text('datasource_id: old-deployment-binding\n', encoding='utf-8')
     bound = []
     def executor(settings, datasource_id, allowed_views, max_rows):
@@ -137,19 +137,19 @@ def test_project_load_failure_returns_controlled_error(tmp_path, caplog):
     assert str(tmp_path) not in str(frames[-1].messages)
 
 
-def test_project_with_postgres_url_reports_configuration_error_without_loading_model(tmp_path, caplog):
+def test_project_with_unsupported_url_reports_configuration_error_without_loading_model(tmp_path, caplog):
     projects = projects_fixture(tmp_path / 'projects')
     env = projects.projects_root / 'retail' / '.env'
     with env.open('a', encoding='utf-8') as file:
-        file.write('CPEA_SQLSERVER_CONNECTION_STRING=postgresql://private-user:top-secret@private-server/private-db\n')
+        file.write('CPEA_DATABASE_URL=mysql://private-user:top-secret@private-server/private-db\n')
     gate = SessionGate('retail')
     try:
         frames = list(project_question_updates(projects, 'retail', QUESTION, gate))
         assert frames[-1].state == 'error' and not frames[-1].sql
-        assert '資料庫連線設定不符合 SQL Server 格式' in frames[-1].messages[-1]['content']
+        assert '資料庫連線設定無效' in frames[-1].messages[-1]['content']
         assert 'phase=load_project' in caplog.text
-        assert 'error_code=sqlserver_driver_unsupported' in caplog.text
-        assert 'requires the mssql+pymssql URL driver' in caplog.text
+        assert 'error_code=database_driver_unsupported' in caplog.text
+        assert 'Database URL requires postgresql' in caplog.text
         for secret in ('private-user', 'top-secret', 'private-server', 'private-db'):
             assert secret not in caplog.text and secret not in str(frames)
         assert not projects._runtimes

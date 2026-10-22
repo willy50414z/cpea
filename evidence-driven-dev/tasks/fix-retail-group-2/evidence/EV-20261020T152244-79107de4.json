@@ -1,0 +1,23 @@
+{
+  "id": "EV-20261020T152244-79107de4",
+  "kind": "focused",
+  "command": [
+    ".venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/unit/test_candidate_comparison_evidence.py"
+  ],
+  "cwd": "/home/willy/code/cpea",
+  "started_at": "2026-10-20T15:22:44+00:00",
+  "finished_at": "2026-10-20T15:22:46+00:00",
+  "exit_code": 1,
+  "revision": "014cee1aff3abcfb51bbe5af6db0abd2ef060225",
+  "diff_fingerprint": "99fc6856b391f3a38a50d3e588e0664523aa63706b319e271956d690d35bf9e6",
+  "post_fingerprint": "99fc6856b391f3a38a50d3e588e0664523aa63706b319e271956d690d35bf9e6",
+  "source_unchanged": true,
+  "output_sha256": "a2c59cc67b767979839ecc354c98932ac52e47308ef1bffbce1fecea5a7c0705",
+  "raw_output": ".local/EV-20261020T152244-79107de4.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "58f526bd9842fcf80eb9b9ad5b468a4c3d9dbf5cde87315d56b54cefd70b952a"
+}

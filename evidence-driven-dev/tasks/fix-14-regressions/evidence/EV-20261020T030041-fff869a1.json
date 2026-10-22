@@ -1,0 +1,25 @@
+{
+  "id": "EV-20261020T030041-fff869a1",
+  "kind": "baseline",
+  "command": [
+    "python3",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "evidence-driven-dev/tests",
+    "-v"
+  ],
+  "cwd": "/home/willy/code/cpea",
+  "started_at": "2026-10-20T03:00:41+00:00",
+  "finished_at": "2026-10-20T03:00:46+00:00",
+  "exit_code": 0,
+  "revision": "014cee1aff3abcfb51bbe5af6db0abd2ef060225",
+  "diff_fingerprint": "2d390f8e872bfe122a38c9f23feead685b534e338dcf775b88f34a90b906af15",
+  "post_fingerprint": "2d390f8e872bfe122a38c9f23feead685b534e338dcf775b88f34a90b906af15",
+  "source_unchanged": true,
+  "output_sha256": "192dabca1dbdfa9637df1ce564f906eb3c7209b3c4fc1bd7cbcdb51cfa351b23",
+  "raw_output": ".local/EV-20261020T030041-fff869a1.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "30c8a804e2e316da8bf166ee438d94aee162218ece9c678a3e2a3606aac21f50"
+}

@@ -1,0 +1,14 @@
+{
+  "start_epoch": 1792422792.9118502,
+  "base_sha": "3ace66c8fc0ef57782dc8989d54f7ef7487c8d77",
+  "token_count": "NOT_MEASURED",
+  "end_epoch": 1792422851.4738312,
+  "elapsed_seconds": 58.562,
+  "test_methods": 33,
+  "unit_test_processes": 7,
+  "expected_failure_processes": 12,
+  "replay_processes": 1,
+  "holdout_subcases": 133,
+  "tool_calls_through_completion": 5,
+  "human_questions": 0
+}

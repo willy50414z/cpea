@@ -6,8 +6,8 @@
 
 ## 一、輸入
 
-- PostgreSQL Connection String：已經放在.env的RETAILER_CONNECTION_STRING。
-- Target Schema：已經放在.env的RETAILER_DB_SCHEMA。
+- PostgreSQL Connection String：已放在所選專案 `.env` 的 `CPEA_DATABASE_URL`。
+- Target Schema：已放在所選專案 `.env` 的 `RETAILER_DB_SCHEMA`。
 - 輸出：`views/{schema}/{view}.yaml`
 
 請先閱讀現有專案的 Contract Loader、YAML 格式及 MATCH_PROMPT，確保產出可以被目前系統載入。

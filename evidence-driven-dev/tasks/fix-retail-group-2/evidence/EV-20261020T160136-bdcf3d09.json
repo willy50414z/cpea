@@ -1,0 +1,20 @@
+{
+  "id": "EV-20261020T160136-bdcf3d09",
+  "kind": "review",
+  "command": [
+    ".venv/bin/python",
+    "evidence-driven-dev/tasks/fix-retail-group-2/.local/verify_final.py"
+  ],
+  "cwd": "/home/willy/code/cpea",
+  "started_at": "2026-10-20T16:01:36+00:00",
+  "finished_at": "2026-10-20T16:01:37+00:00",
+  "exit_code": 1,
+  "revision": "014cee1aff3abcfb51bbe5af6db0abd2ef060225",
+  "diff_fingerprint": "b2dfa5e2f99a34e3e4bc203ba649ca1206efa1e8f48522170efb01d5732bb002",
+  "post_fingerprint": "b2dfa5e2f99a34e3e4bc203ba649ca1206efa1e8f48522170efb01d5732bb002",
+  "source_unchanged": true,
+  "output_sha256": "930eafaa46acabbcf4b4419927fb04029661e2342c64875e142ffa7ee3a80cb7",
+  "raw_output": ".local/EV-20261020T160136-bdcf3d09.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "08317417b557eab30a4f694d35b043d78563e44512318a75e2efad01f7685bd6"
+}

@@ -1,0 +1,20 @@
+{
+  "id": "EV-20261020T033349-1c0893b0",
+  "kind": "focused",
+  "command": [
+    ".venv/bin/python",
+    "evidence-driven-dev/tasks/fix-14-regressions/.local/current_mapping_replay.py"
+  ],
+  "cwd": "/home/willy/code/cpea",
+  "started_at": "2026-10-20T03:33:49+00:00",
+  "finished_at": "2026-10-20T03:33:52+00:00",
+  "exit_code": 0,
+  "revision": "014cee1aff3abcfb51bbe5af6db0abd2ef060225",
+  "diff_fingerprint": "3e860a198c01c8d8dc1cf8c16f1e3b4c2a59566da7177b1db153c969fe651ac1",
+  "post_fingerprint": "3e860a198c01c8d8dc1cf8c16f1e3b4c2a59566da7177b1db153c969fe651ac1",
+  "source_unchanged": true,
+  "output_sha256": "56fe480deb904cfb66b5d4e09eb170b36d6d2f211a26b073b8281608b3a0a779",
+  "raw_output": ".local/EV-20261020T033349-1c0893b0.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "3be77b50ea082667614549b0d5db04f31083650e2ee86a05523c3704be6a6ef1"
+}

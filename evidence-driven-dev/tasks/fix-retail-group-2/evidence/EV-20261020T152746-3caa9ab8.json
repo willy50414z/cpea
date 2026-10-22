@@ -1,0 +1,26 @@
+{
+  "id": "EV-20261020T152746-3caa9ab8",
+  "kind": "experiment",
+  "command": [
+    ".venv/bin/python",
+    "evidence-driven-dev/tasks/fix-retail-group-2/.local/live_focus.py",
+    "--selection",
+    "evidence-driven-dev/tasks/fix-retail-group-2/.local/focus-selection.json",
+    "--output",
+    "evidence-driven-dev/tasks/fix-retail-group-2/.local/live-focus-20261020",
+    "--runs",
+    "1"
+  ],
+  "cwd": "/home/willy/code/cpea",
+  "started_at": "2026-10-20T15:27:46+00:00",
+  "finished_at": "2026-10-20T15:56:01+00:00",
+  "exit_code": 0,
+  "revision": "014cee1aff3abcfb51bbe5af6db0abd2ef060225",
+  "diff_fingerprint": "56a3c12c4b01db09ef169154cbce4d5a5d6920bd3a1025a96fa56652ec7eb39c",
+  "post_fingerprint": "56a3c12c4b01db09ef169154cbce4d5a5d6920bd3a1025a96fa56652ec7eb39c",
+  "source_unchanged": true,
+  "output_sha256": "9bec006d0b641844340053c720bb25f710a9a85ea28d172819939c78daa77e50",
+  "raw_output": ".local/EV-20261020T152746-3caa9ab8.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "db834523c4190ea277ec7327d794f29416a39fc295eb261975e9b5e67708352e"
+}

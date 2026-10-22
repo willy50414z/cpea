@@ -18,9 +18,9 @@ from cpea.application.models.confirmation import (Clarification, ConfirmationIte
 from cpea.application.ports.term_mappings import (MappingScope, MappingStoreError, MappingConflict, TermMapping, normalize_term, view_fingerprint)
 from cpea.application.services.confirmation import ConfirmationRegistry
 from cpea.infrastructure.terms_mapping import JsonTermMappingRepository
-from cpea.workflows.text_to_sql.semantics import assess
+from cpea.workflows.text_to_sql.semantics import assess, aggregate_threshold, row_listing_errors
 from cpea.workflows.text_to_sql.clarification import (
-    MAX_BUSINESS_OPTIONS, RESOLUTION_PROMPT, business_label, requires_resolution, semantic_choices,
+    MAX_BUSINESS_OPTIONS, RESOLUTION_PROMPT, business_label, incompatible_term, requires_resolution, semantic_choices,
 )
 from typing import Any, Literal, TypedDict
 
@@ -33,7 +33,7 @@ from cpea.infrastructure.llm.context_budget import ContextPacker
 from cpea.infrastructure.llm.factory import bind_response_schema, response_schema_for
 from cpea.application.models.query import (CandidateAttempt, ClarificationChoice, ClarificationOption,
     ClarificationRequest, ConversationTurn, MappingAttempt, QueryTaskTrace, SourceReference, SQLGenerationResponse)
-from cpea.workflows.text_to_sql.schemas import ClarificationResolution, SQLClauseMapping, SchemaLinkDraft
+from cpea.workflows.text_to_sql.schemas import ClauseField, ClarificationResolution, SQLClauseMapping, SchemaLinkDraft
 from cpea.domain.models import HavingFilter, QueryFact, QueryFilter, QueryPlan, SchemaLink
 from cpea.application.ports.catalog import CatalogProvider
 from cpea.infrastructure.sql_compiler import compile_single_view, validate_single_view_plan
@@ -51,6 +51,14 @@ _LEGACY_COLUMN_TYPES = {
 }
 
 
+class CandidateConflict(BaseModel):
+    view: str
+    conflict_type: Literal['business_object', 'time_scope', 'metric_definition', 'filter_grain']
+    request_evidence: str
+    contract_evidence: str
+    reason: str
+
+
 class ViewComparison(BaseModel):
     decision: Literal["select", "clarify"]
     selected_view: str | None = None
@@ -59,12 +67,26 @@ class ViewComparison(BaseModel):
     reason: str = ""
     question: str | None = None
     options: list[ClarificationOption] = Field(default_factory=list)
+    conflicts: list[CandidateConflict] = Field(default_factory=list)
 
 
 COMPARE_SYSTEM = """比較已通過契約與查詢計畫驗證的單一 View 方案。只使用問題原文與提供的 YAML 契約證據。
 若問題明確指出其中一種業務粒度或指標口徑，可選擇該 View；需提供問題原文中的連續片段 request_evidence，及所選契約中的連續片段 contract_evidence。
 若多種解讀仍合理，回傳 decision=clarify、自然語言問題及每個候選 View 的業務選項。不要用技術欄位名作為選項標籤。
 SQL 能編譯或排序較高，不足以證明業務語意正確。不得假設不同口徑的金額等價。"""
+
+COMPARE_EVIDENCE = """選擇來源時，conflicts 必須逐一列出所有其餘候選：view、conflict_type（business_object/time_scope/metric_definition/filter_grain）、完整需求的逐字片段 request_evidence、該競爭契約的逐字片段 contract_evidence，以及具體口徑衝突 reason。
+request_evidence 只填造成差異的一個完整業務詞或子句，必須包含於 mapped_fields.request_text；不要填整段問題或無關的其他欄位。
+每項反證的 request_evidence 必須等於選定來源的 request_evidence；引用須顯示這個完整需求在兩來源的業務差異。兩來源共同支持的描述不是反證，無關欄位差異也不是反證。
+只能因競爭來源無法保留本題的業務對象、時間、指標或篩選粒度而排除，不能因名稱不同、排序較低或偏好而排除；逐列條件不能改成跨列聚合重建。
+同一需求片段在兩個契約可有不同措辭，不要求兩者字面相同；但原文片段和契約引用均須完整且可核對。
+若多個候選仍各有合法解讀（例如未指定日/月或訂單/明細粒度且涉及單列最大值），必須 clarify，不得捏造衝突。"""
+
+COMPARE_SYSTEM_V10 = """比較單一 View 候選能否承接完整原始需求。候選僅通過結構與 SQL 能力檢查，尚未證明業務語意正確；不得預先認定每個候選都是合法解讀。
+先核對每個指標的統計單位、篩選時點與原文指定的業務對象。對每個實體的總量取最大值，不等於對該實體的明細值取最大值；只按期間分組不能重建每個實體的總量。MIN/MAX 及列門檻通常不能跨粒度互換；SUM 有時等價也必須保留相同對象與條件。
+原文已指定的單位或口徑不得改成其他口徑，再要求使用者在兩者之間選擇。目標與實績、計數與識別碼、整體與明細必須分清。提供的 operator/value 也必須維持原本篩選對象與時點。
+若有唯一可承接完整需求的來源，decision=select，提供逐字 request_evidence 與 contract_evidence，並逐一反證其餘來源。若多個來源仍各有合法解讀，decision=clarify；不得因排序、SQL可編譯或字面相似度選來源。
+""" + COMPARE_EVIDENCE
 
 
 class SQLGenerationState(TypedDict, total=False):
@@ -370,6 +392,7 @@ class SQLGenerationWorkflow:
         facts: list[QueryFact] = []
         mapping_attempts: list[MappingAttempt] = list(state.get('mapping_attempts', []))
         successful: list[tuple[str, dict[str, Any], dict[str, Any], int]] = []
+        unavailable_terms: list[str] = []
         failure_stage = "schema_linking"
         pending = [(candidate, None) for candidate in detailed]
         while pending:
@@ -383,6 +406,12 @@ class SQLGenerationWorkflow:
             if self.match_prompt.version != "v4":
                 context["response_schema"] = response_schema
             if self.match_prompt.version == 'v10':
+                context['mapping_rules'] = (
+                    'fields.text must include the complete business phrase, including numeric/time qualifiers, '
+                    'not just an operation such as MAX. Existing statistical metric names do not authorize '
+                    'new aggregation. A request for existing rows must preserve its row grain. '
+                    'Keep ordinary thresholds in criteria, including precomputed counts or average values; '
+                    'having requires an explicitly requested permitted cross-row aggregate threshold.')
                 context['confirmed_term_mappings'] = [m.model_dump() for m in state['snapshot'].mappings
                     if m.status == 'active' and m.view == candidate_view
                     and normalize_term(m.term) in normalize_term(request)
@@ -410,6 +439,15 @@ class SQLGenerationWorkflow:
                 self._emit('validate candidate mapping', {'view': candidate_view, 'status': '格式驗證未通過'})
                 attempts.append(CandidateAttempt(view=candidate_view, outcome="schema_mismatch", errors=[str(exc)]))
                 continue
+            if (self.match_prompt.version == 'v10' and mapping.table is not None
+                    and not isinstance(mapping.table, list) and mapping.fields):
+                # QueryPlan already selects group dimensions; preserve that same
+                # grounded representation in the validated mapper trace too.
+                present = {field.column for field in mapping.fields}
+                for dimension in mapping.group:
+                    if dimension.column not in present:
+                        mapping.fields.append(ClauseField(text=dimension.text, column=dimension.column))
+                        present.add(dimension.column)
             mapping_attempts.append(MappingAttempt(attempt_index=len(mapping_attempts) + 1,
                                                    mapping=mapping, outcome="rejected"))
             if isinstance(mapping.table, list):
@@ -471,6 +509,8 @@ class SQLGenerationWorkflow:
             )
             facts = draft.facts
             errors = self._link_errors(facts, draft, view, request)
+            if self.match_prompt.version == 'v10' and not errors:
+                errors.extend(row_listing_errors(request, mapping, self.catalog, view))
             if mapping.unsupported_reason:
                 errors.append("selected View cannot also declare an unsupported reason")
             for item in mapping.ignored:
@@ -487,11 +527,13 @@ class SQLGenerationWorkflow:
             if getattr(mapping, "having", []) and re.search(r"(?:\bOR\b|或者|或是|或\s*者|COUNT\s*\(\s*\*\s*\))", request, re.IGNORECASE):
                 errors.append("unsupported HAVING expression")
             for item in getattr(mapping, "having", []):
-                if not re.search(r"(?:合計|總和|加總|累計|平均|最大|最小|聚合後|分組後|\b(?:SUM|COUNT|AVG|MAX|MIN)\b)",
-                                 item.text, re.IGNORECASE):
+                if not aggregate_threshold(item, self.catalog, view):
                     errors.append(f"HAVING requires an explicit aggregate threshold; use criteria for row filters: {item.text}")
-            if any(re.search(r"(?:合計|總和|平均|計數|筆數).*(?:大於|小於|超過|低於|至少|以上|以下|[<>]=?)", item.text)
-                   for item in mapping.criteria):
+                if (item.column in self.catalog.columns(view) and
+                        item.aggregation not in self.catalog.field_contract(view, item.column).get('aggregations', [])):
+                    errors.append(f"Precomputed row metrics must use criteria unless a permitted cross-row operation "
+                                  f"is explicitly requested; do not aggregate the name of {item.column}: {item.text}")
+            if any(aggregate_threshold(item, self.catalog, view) for item in mapping.criteria):
                 errors.append("aggregate threshold cannot be a WHERE criterion")
             for item in [*mapping.order, *mapping.group, *mapping.ignored]:
                 if not item.text or item.text not in request:
@@ -501,6 +543,9 @@ class SQLGenerationWorkflow:
             missing_literals = unmapped_request_literals(request, mapping, self.catalog, view)
             if missing_literals:
                 errors.append("unmapped request literals: " + ", ".join(missing_literals))
+                errors.append('Preserve every literal. If a number belongs to an approved metric definition, '
+                              'include its complete business phrase in fields.text and preserve its qualifiers; '
+                              'do not hide it in ignored or turn it into an invented filter.')
             outcome = "schema_mismatch"
             if not errors:
                 selected = {"semantic_retry": False, "request_facts": facts, "selected_mapping_index": len(mapping_attempts),
@@ -554,6 +599,15 @@ class SQLGenerationWorkflow:
                                 mapping = resolved
                                 selected['clause_mapping'] = mapping
                                 mapping_attempts[-1].mapping = mapping
+                            incompatible = list(dict.fromkeys(use['term'] for use in uses
+                                if incompatible_term(mapping, use['term'])))
+                            if incompatible:
+                                reason = 'no compatible meaning for required terms: ' + ', '.join(incompatible)
+                                unavailable_terms.extend(incompatible)
+                                mapping_attempts[-1].reason = reason
+                                attempts.append(CandidateAttempt(view=view, outcome='schema_mismatch', errors=[reason]))
+                                self._emit('reject semantic source', {'view': view, 'reason': reason})
+                                continue
                             mapping_attempts[-1].outcome = 'candidate'
                             attempts.append(CandidateAttempt(view=view, outcome='matched', facts=facts, links=draft.links))
                             self._emit('selected columns', {'view': view,
@@ -618,6 +672,13 @@ class SQLGenerationWorkflow:
             mapping_attempts[winner[3]].outcome = "selected"
             return {**winner[1], **winner[2], "candidate_attempts": attempts,
                     "mapping_attempts": mapping_attempts}
+        if unavailable_terms:
+            terms = list(dict.fromkeys(unavailable_terms))
+            return {'candidate_attempts': attempts, 'mapping_attempts': mapping_attempts,
+                    'rejection_stage': 'semantic_validation', 'response': SQLGenerationResponse(
+                        supported=False, code='clarification_rephrase',
+                        explanation='請補充「' + '」、「'.join(terms) + '」的統計對象或計算口徑。',
+                        limitations=['clarification_unavailable: ' + term for term in terms])}
         reasons = [f"{attempt.view}: {', '.join(attempt.errors or attempt.unresolved)}" for attempt in attempts]
         return {"request_facts": facts, "candidate_attempts": attempts,
                 "mapping_attempts": mapping_attempts, "rejection_stage": failure_stage,
@@ -642,6 +703,8 @@ class SQLGenerationWorkflow:
                              "scope_rules": schema.get("scope_rules"),
                              "mapped_fields": [{"request_text": link.fact_text, "role": link.role,
                                                 "aggregation": link.aggregation,
+                                                **({'operator': link.operator, 'value': link.value}
+                                                   if self.match_prompt.version == 'v10' else {}),
                                                 "description": columns[link.column]["description"]}
                                                for link in selected["links"].links
                                                if link.column in columns]})
@@ -673,10 +736,10 @@ class SQLGenerationWorkflow:
                            if other_view != view)
                    for field in item["mapped_fields"]):
                 exact_matches.add(view)
-        if len(exact_matches) == 1:
+        if len(exact_matches) == 1 and self.match_prompt.version != 'v10':
             return exact_matches.pop(), None
         prompt = ChatPromptTemplate.from_messages([
-            ("system", COMPARE_SYSTEM),
+            ("system", COMPARE_SYSTEM_V10 if self.match_prompt.version == 'v10' else COMPARE_SYSTEM),
             ("human", "問題：{request}\n候選證據：{candidates}"),
         ])
         try:
@@ -684,14 +747,33 @@ class SQLGenerationWorkflow:
                 "candidates": json.dumps(evidence, ensure_ascii=False)}, ViewComparison)
         except ValueError:
             result = None
-        if (result is not None and result.decision == "select" and result.selected_view in names
+        grounded_choice = (result is not None and result.decision == "select" and result.selected_view in names
                 and result.request_evidence and result.request_evidence in request
                 and result.contract_evidence
-                and result.contract_evidence in contract_texts[result.selected_view]
-                and result.request_evidence in contract_texts[result.selected_view]
-                and all(result.request_evidence not in text for view, text in contract_texts.items()
-                        if view != result.selected_view)):
-            return result.selected_view, None
+                and result.contract_evidence in contract_texts[result.selected_view])
+        if grounded_choice:
+            if self.match_prompt.version == 'v10':
+                # A shared short name cannot outweigh other requirements. Every
+                # alternative needs an independently grounded semantic conflict.
+                others = names - {result.selected_view}
+                conflicts = result.conflicts
+                if ({item.view for item in conflicts} == others
+                        and len({(item.view, item.request_evidence) for item in conflicts}) == len(conflicts)
+                        and all(any(item.view == view and item.request_evidence == result.request_evidence
+                                    for item in conflicts) for view in others)
+                        and all(item.reason.strip() and len(item.request_evidence) >= 4
+                                and item.request_evidence in request and item.contract_evidence
+                                and item.contract_evidence in contract_texts[item.view]
+                                and item.contract_evidence not in contract_texts[result.selected_view]
+                                and not re.search(r'偏好|順位|排名|排序較|[高低]分|分數|可編譯|能編譯', item.reason)
+                                and any(item.request_evidence in field['request_text']
+                                        for candidate in evidence for field in candidate['mapped_fields'])
+                                for item in conflicts)):
+                    return result.selected_view, None
+            elif (result.request_evidence in contract_texts[result.selected_view]
+                  and all(result.request_evidence not in text for view, text in contract_texts.items()
+                          if view != result.selected_view)):
+                return result.selected_view, None
         labels = {item["view"]: item for item in evidence}
         def grain_label(item: dict[str, Any]) -> str:
             grain = item.get("grain")
@@ -866,8 +948,22 @@ class SQLGenerationWorkflow:
         schema = response_schema_for(ClarificationResolution, column_names=set(self.catalog.columns(view)))
         prompt = ChatPromptTemplate.from_messages([
             ('system', RESOLUTION_PROMPT), ('human', '需求: {request}\n語意確認資料: {context}')])
-        resolution = self._invoke_model(prompt, {'request': state['request'],
-            'context': json.dumps(context, ensure_ascii=False)}, ClarificationResolution, response_schema=schema)
+        for attempt in range(2):
+            resolution = self._invoke_model(prompt, {'request': state['request'],
+                'context': json.dumps(context, ensure_ascii=False)}, ClarificationResolution, response_schema=schema)
+            try:
+                return self._validate_resolution(state, grouped, required, resolution)
+            except ValueError as exc:
+                if attempt:
+                    raise
+                context['repair'] = {'previous_resolution': resolution.model_dump(mode='json'),
+                    'validation_errors': [str(exc)],
+                    'instruction': 'Repair only these semantic choices. Keep the required terms and query unchanged. '
+                        'Quote each column description verbatim; remove database identifiers and SQL from labels.'}
+                self._emit('resolve semantic choices', '修正未通過驗證的業務選項')
+
+    def _validate_resolution(self, state, grouped, required, resolution):
+        view = state['selected_views'][0]
         if not resolution.source_compatible:
             return None
         resolved_terms = [normalize_term(item.term) for item in resolution.clarifications]
@@ -877,6 +973,14 @@ class SQLGenerationWorkflow:
         for proposal in resolution.clarifications:
             if any(option.column not in eligible[normalize_term(proposal.term)] for option in proposal.options):
                 raise ValueError('semantic resolution proposed an ineligible column')
+            for option in proposal.options:
+                if option.same_concept and option.grain_compatible:
+                    description = str(self.catalog.field_contract(view, option.column).get('description', ''))
+                    if not option.evidence_quote.strip() or option.evidence_quote not in description:
+                        raise ValueError(f'evidence_quote must quote the description verbatim: {option.column}')
+                    if business_label(option.label, self.catalog) is None:
+                        raise ValueError(f'invalid business label for {option.column}: {option.label!r}; '
+                                         'omit database identifiers, SQL and technical information')
         retained = [item for item in state['clause_mapping'].clarifications
                     if normalize_term(item.term) not in grouped]
         mapping = state['clause_mapping'].model_copy(update={
@@ -1199,12 +1303,13 @@ class SQLGenerationWorkflow:
             return {"plan": plan, "rejection_stage": "query_plan", "response": self._unsupported(
                 "核准的 Schema Links 無法組成安全查詢。", errors)}
         try:
-            sql = compile_single_view(plan, self.catalog, max_rows=self.settings.max_rows, request=state["request"])
+            sql = compile_single_view(plan, self.catalog, max_rows=self.settings.max_rows, request=state["request"],
+                                      dialect=self.settings.database_settings.resolved_dialect)
         except SQLPolicyError as exc:
             return {"plan": plan, "rejection_stage": "sql_compilation", "response": self._unsupported(
                 "Query Plan 無法編譯為安全的單一 View SQL。", [str(exc)])}
         try:
-            validate_generated_sql(sql, {view})
+            validate_generated_sql(sql, {view}, dialect=self.settings.database_settings.resolved_dialect)
         except SQLPolicyError as exc:
             return {"plan": plan, "compiled_sql": sql, "rejection_stage": "sql_validation", "response": self._unsupported(
                 "產出的 SQL 未通過安全檢查。", [str(exc)])}

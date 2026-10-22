@@ -1,0 +1,23 @@
+{
+  "id": "EV-20261020T031749-f7e8473a",
+  "kind": "regression",
+  "command": [
+    ".venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "tests"
+  ],
+  "cwd": "/home/willy/code/cpea",
+  "started_at": "2026-10-20T03:17:49+00:00",
+  "finished_at": "2026-10-20T03:18:39+00:00",
+  "exit_code": 1,
+  "revision": "014cee1aff3abcfb51bbe5af6db0abd2ef060225",
+  "diff_fingerprint": "4a2206d76d14f0d152d7b5c19722d5595ce584b419ff2c2b8131ff57b9e66918",
+  "post_fingerprint": "4a2206d76d14f0d152d7b5c19722d5595ce584b419ff2c2b8131ff57b9e66918",
+  "source_unchanged": true,
+  "output_sha256": "b8a2465a4e1b98aa762d7e9e37e7dc187cf428c806bbb56f3597102feba14369",
+  "raw_output": ".local/EV-20261020T031749-f7e8473a.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "eb543acc99cd76384435245967186bf856fb591ec42a73035a522ec437bd0c83"
+}

@@ -7,6 +7,7 @@ import pytest
 
 from cpea.domain.models import HavingFilter, QueryFilter, QueryPlan
 from cpea.config.settings import AssistantSettings
+from cpea.config.database import DatabaseSettings
 from cpea.infrastructure.catalog.yaml_catalog import SchemaCatalog
 from cpea.infrastructure.llm.context_budget import ContextPacker
 from cpea.infrastructure.retrieval.schema import SchemaRetriever
@@ -110,6 +111,7 @@ def test_unrequested_aggregate_threshold_is_repaired_as_row_filter(tmp_path):
 
     settings = replace(AssistantSettings.from_env(ROOT / "projects/retail/.env"),
                        retrieval_mode="lexical", context_window=16000, max_output_tokens=8192,
+                       database=DatabaseSettings(dialect='mssql'),
                        terms_mapping_path=str(tmp_path / "terms_mapping.json"))
     catalog = SchemaCatalog(ROOT / "projects/retail", allow_drafts=True)
     llm = RepairLLM()

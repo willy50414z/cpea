@@ -66,7 +66,7 @@ SSE framing 留在 API 層，application 層提供具型別的 SQL／結果階�
 
 | 欄位 | 用途／空白時行為 |
 |---|---|
-| `CPEA_SQLSERVER_CONNECTION_STRING` | 完整 `mssql+pymssql://` SQLAlchemy URL；空白表示未啟用內建 adapter |
+| `CPEA_DATABASE_URL` | 完整 `mssql+pymssql://` SQLAlchemy URL；空白表示未啟用內建 adapter |
 | `CPEA_DATASOURCE_ID` | 已有的邏輯 datasource binding；也可由 deployment YAML 提供 |
 | `CPEA_SQLSERVER_CONNECT_TIMEOUT_SECONDS` | 登入逾時，空白採 5 秒 |
 | `CPEA_SQLSERVER_QUERY_TIMEOUT_SECONDS` | 查詢逾時，空白採 30 秒 |

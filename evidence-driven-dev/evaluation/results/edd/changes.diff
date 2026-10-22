@@ -1,0 +1,35 @@
+diff --git a/evidence-driven-dev/evaluation/fixtures/cases.py b/evidence-driven-dev/evaluation/fixtures/cases.py
+index af5528a..5f64bbb 100644
+--- a/evidence-driven-dev/evaluation/fixtures/cases.py
++++ b/evidence-driven-dev/evaluation/fixtures/cases.py
+@@ -3,13 +3,13 @@
+ def bounded(value, minimum, maximum):
+     if minimum > maximum:
+         raise ValueError('invalid range')
+-    return max(minimum, min(value, maximum - 1))
++    return max(minimum, min(value, maximum))
+ 
+ 
+ def retrieve(state, catalog):
+-    terms = state['question'].lower().split()
++    terms = state['question'].casefold().split()
+     return [row['view'] for row in catalog
+-            if any(term in row['aliases'] for term in terms)]
++            if any(term in {alias.casefold() for alias in row['aliases']} for term in terms)]
+ 
+ 
+ def compile_sql(state):
+@@ -26,8 +26,8 @@ def pipeline(question, catalog):
+ 
+ 
+ def select_route(labels, query, threshold=0.5):
+-    # Earlier attempts varied threshold but continued to misroute some requests.
+-    scores = [(label, len(set(label.lower()) & set(query.lower())) / max(1, len(set(query.lower()))))
+-              for label in labels]
+-    winner, score = max(scores, key=lambda item: item[1])
+-    return winner if score >= threshold else None
++    normalized = query.casefold().strip()
++    if not normalized:
++        return None
++    matches = [label for label in labels if label.casefold().strip() == normalized]
++    return matches[0] if len(matches) == 1 else None

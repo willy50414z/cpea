@@ -19,7 +19,7 @@ def _mapping_values(items, *, omit_text: bool = False):
 
 
 def grade_view_matching(case: ViewMatchingCase, generation, *, catalog=None,
-                        max_rows: int = 200) -> tuple[str, str, list[str]]:
+                        max_rows: int = 200, dialect: str = 'mssql') -> tuple[str, str, list[str]]:
     trace = generation.query_trace
     attempts = trace.mapping_attempts if trace else []
     if case.category == "normal":
@@ -76,13 +76,13 @@ def grade_view_matching(case: ViewMatchingCase, generation, *, catalog=None,
             if plan.order_directions != spec.order_directions:
                 sql_failures.append("sql_order_direction")
             try:
-                validate_generated_sql(generation.sql, {case.target_view})
+                validate_generated_sql(generation.sql, {case.target_view}, dialect=dialect)
             except SQLPolicyError:
                 sql_failures.append("sql_policy")
             if catalog is not None:
                 try:
                     compiled_sql = compile_single_view(plan, catalog,
-                        max_rows=max_rows, request=case.request)
+                        max_rows=max_rows, request=case.request, dialect=dialect)
                     if generation.sql != compiled_sql:
                         sql_failures.append("sql_compiled_structure")
                 except SQLPolicyError:

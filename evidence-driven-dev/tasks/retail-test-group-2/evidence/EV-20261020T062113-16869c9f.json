@@ -1,0 +1,28 @@
+{
+  "id": "EV-20261020T062113-16869c9f",
+  "kind": "focused",
+  "command": [
+    ".venv/bin/python",
+    "evidence-driven-dev/tasks/retail-test-group-2/.local/continue_group2.py",
+    "--selection",
+    "evidence-driven-dev/tasks/retail-test-group-2/.local/selection.json",
+    "--previous",
+    "evidence-driven-dev/tasks/retail-test-group-2/.local/live-group2-20261020",
+    "--output",
+    "evidence-driven-dev/tasks/retail-test-group-2/.local/live-group2-20261020-part2",
+    "--runs",
+    "3"
+  ],
+  "cwd": "/home/willy/code/cpea",
+  "started_at": "2026-10-20T06:21:13+00:00",
+  "finished_at": "2026-10-20T06:26:17+00:00",
+  "exit_code": 1,
+  "revision": "014cee1aff3abcfb51bbe5af6db0abd2ef060225",
+  "diff_fingerprint": "1c843050fcd699b19aff6641c0045e9b6fd8a92d1ea2329be9d68acb4d490f7c",
+  "post_fingerprint": "1c843050fcd699b19aff6641c0045e9b6fd8a92d1ea2329be9d68acb4d490f7c",
+  "source_unchanged": true,
+  "output_sha256": "dcd5a65d64162ec609a706f846e7777de3dbbd45fdffbc5caf0b24e82041c6bc",
+  "raw_output": ".local/EV-20261020T062113-16869c9f.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "f73b9aaeba20b2696fde3499d47315f300e047a9a8248509c6c74128b0fd6072"
+}

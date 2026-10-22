@@ -1,0 +1,21 @@
+{
+  "id": "EV-20261019T151536-121c1d13",
+  "kind": "experiment",
+  "command": [
+    "python3",
+    "evaluation/threshold.py",
+    "0.6"
+  ],
+  "cwd": "/tmp/edd-eval-1z2tnuvr",
+  "started_at": "2026-10-19T15:15:36+00:00",
+  "finished_at": "2026-10-19T15:15:36+00:00",
+  "exit_code": 1,
+  "revision": "e85a5eb006ae04e7c69b735e3bd6ccb553b0768d",
+  "diff_fingerprint": "0d1120691f67ddb9f6367d2c1c157a868e04f6b27a4d9b0fdb1afc9b657b17a4",
+  "post_fingerprint": "0d1120691f67ddb9f6367d2c1c157a868e04f6b27a4d9b0fdb1afc9b657b17a4",
+  "source_unchanged": true,
+  "output_sha256": "bab82b674008d21774457aadbc0f306f2d709c3446a65348e3dbce8c01c21705",
+  "raw_output": ".local/EV-20261019T151536-121c1d13.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "a4c294bb81a27b1516bc3046d64ef2d8e277b5f3b879a4552213f41173649e3e"
+}

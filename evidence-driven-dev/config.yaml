@@ -1,0 +1,6 @@
+{
+  "schema_version": 1,
+  "failure_limit": 3,
+  "superpowers": "discover",
+  "raw_directory": ".local"
+}

@@ -493,10 +493,10 @@ def check_grain_uniqueness(catalog: SchemaCatalog) -> None:
     except ImportError as exc:
         raise SystemExit("唯一鍵檢查需要 postgres-contracts：uv run --locked --extra postgres-contracts python -m evaluations.retail_view_benchmark --check") from exc
 
-    config = dotenv_values(ROOT / ".env", interpolate=False, encoding="utf-8")
-    connection_string = config.get("RETAILER_CONNECTION_STRING")
+    config = dotenv_values(catalog.root / ".env", interpolate=False, encoding="utf-8")
+    connection_string = config.get("CPEA_DATABASE_URL")
     if not connection_string:
-        raise SystemExit("唯一鍵檢查需要 .env 中的 RETAILER_CONNECTION_STRING")
+        raise SystemExit("唯一鍵檢查需要專案 .env 中的 CPEA_DATABASE_URL")
 
     failures = []
     with psycopg.connect(connection_string, connect_timeout=8,

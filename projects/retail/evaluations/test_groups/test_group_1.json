@@ -1,0 +1,164 @@
+{
+  "schema_version": 1,
+  "group_id": "test_group_1",
+  "project_id": "retail",
+  "created_at": "2026-10-20T05:05:25.163572+00:00",
+  "case_count": 14,
+  "case_ids": [
+    "RETAIL-CUSTOMER_VALUE-S1-01",
+    "RETAIL-CUSTOMER_VALUE-S1-03",
+    "RETAIL-DAILY_SALES-B-09",
+    "RETAIL-DAILY_SALES-M2-01",
+    "RETAIL-INVENTORY_STATUS-H3-01",
+    "RETAIL-INVENTORY_STATUS-M2-04",
+    "RETAIL-ORDER_SUMMARY-B-04",
+    "RETAIL-ORDER_SUMMARY-B-09",
+    "RETAIL-PRODUCT_MONTHLY-B-01",
+    "RETAIL-PRODUCT_MONTHLY-B-06",
+    "RETAIL-SALES_DETAIL-H1-04",
+    "RETAIL-SALES_DETAIL-M3-01",
+    "RETAIL-STORE_MONTHLY_KPI-H1-01",
+    "RETAIL-STORE_MONTHLY_KPI-M3-03"
+  ],
+  "dataset_path": "projects/retail/evaluations/cases.jsonl",
+  "dataset_sha256": "4160a4b229483f9286f501d1504c08c2f4decbedcfd122812bacd884f1625cf9",
+  "membership_sha256": "400ada71db68764edd250f392a60b86337ea8bdbf3268800614a9286f00e87ec",
+  "planned_repetitions": 3,
+  "cases": [
+    {
+      "case_id": "RETAIL-CUSTOMER_VALUE-S1-01",
+      "question": "列出會員等級、累計折扣後消費金額，條件是註冊日期 >= 2026-07-01。",
+      "category": "normal",
+      "target_view": "demo_retail.v_customer_value",
+      "sql_difficulty": "S",
+      "semantic_difficulty": "L1",
+      "case_sha256": "1cd6274117ec7cffdaade0903f96f4f81314cf6c32034687d894d379b5f7a6b2"
+    },
+    {
+      "case_id": "RETAIL-CUSTOMER_VALUE-S1-03",
+      "question": "列出最近90日活躍狀態、累計折扣後消費金額，條件是會員名稱 LIKE 王%。",
+      "category": "normal",
+      "target_view": "demo_retail.v_customer_value",
+      "sql_difficulty": "S",
+      "semantic_difficulty": "L1",
+      "case_sha256": "ae8fcadc24564256a7a82f993a114145211122d2dd39ec550dfe4495ec668caf"
+    },
+    {
+      "case_id": "RETAIL-DAILY_SALES-B-09",
+      "question": "請從 demo_retail.v_daily_sales 依銷售日期分組，只顯示銷售日期，只保留折扣後銷售淨額合計大於 100 的群組。",
+      "category": "normal",
+      "target_view": "demo_retail.v_daily_sales",
+      "sql_difficulty": null,
+      "semantic_difficulty": null,
+      "case_sha256": "160e2d307ba19e9b9890020cf50bfb8479a0719c5bbf73190b45d5e7791ec80b"
+    },
+    {
+      "case_id": "RETAIL-DAILY_SALES-M2-01",
+      "question": "想按成交日期分組，顯示實際營收合計與成交訂單數的單列最大值，限定門市代號 IN 1、2、3且賣出件數 >= 1且毛利金額 >= 100，依成交日期排序。",
+      "category": "normal",
+      "target_view": "demo_retail.v_daily_sales",
+      "sql_difficulty": "M",
+      "semantic_difficulty": "L2",
+      "case_sha256": "323fb3468fdd45e98013159821df553e93bde6783f2e564d79de19dd6daf3a06"
+    },
+    {
+      "case_id": "RETAIL-INVENTORY_STATUS-H3-01",
+      "question": "整理報表時照南北區域別、商品屬於哪一類、缺貨還是需要補貨分組，顯示盤點時還剩幾件合計與最近一個月賣掉幾件的單列最大值，限定庫存是哪一天盤的 = 2026-10-14且商品庫存代碼 LIKE SKU-%且低於多少件要補貨 >= 100，依南北區域別排序。",
+      "category": "normal",
+      "target_view": "demo_retail.v_inventory_status",
+      "sql_difficulty": "H",
+      "semantic_difficulty": "L3",
+      "case_sha256": "fe83612d882ec93a32e8f263b0aa32360c2b419aa6bdc3f1e5cc1a1336485c71"
+    },
+    {
+      "case_id": "RETAIL-INVENTORY_STATUS-M2-04",
+      "question": "想按存貨狀況分組，顯示現有件數合計與存貨成本的單列最大值，限定盤點日期 = 2026-10-14且商品名字 LIKE 茶%且商品代碼 LIKE SKU-%，依存貨狀況排序。",
+      "category": "normal",
+      "target_view": "demo_retail.v_inventory_status",
+      "sql_difficulty": "M",
+      "semantic_difficulty": "L2",
+      "case_sha256": "015082f2676ac128b78e8cb1c88aa54c5383bdb14b66b6ea53093a327b851f76"
+    },
+    {
+      "case_id": "RETAIL-ORDER_SUMMARY-B-04",
+      "question": "請從 demo_retail.v_order_summary 查詢含稅發票總額。",
+      "category": "ambiguous",
+      "target_view": "demo_retail.v_order_summary",
+      "sql_difficulty": null,
+      "semantic_difficulty": null,
+      "case_sha256": "9d5cf36124cfbe9707a8fef9393eeef30051088a387f017217cc50d262c66147"
+    },
+    {
+      "case_id": "RETAIL-ORDER_SUMMARY-B-09",
+      "question": "請從 demo_retail.v_order_summary 依訂單成立日期分組，只顯示訂單成立日期，只保留訂單折扣後總金額合計大於 100 的群組。",
+      "category": "normal",
+      "target_view": "demo_retail.v_order_summary",
+      "sql_difficulty": null,
+      "semantic_difficulty": null,
+      "case_sha256": "fe37940180939f1a25657e80e62967edd1ddf4358d0b07711f29d0c0a51ac570"
+    },
+    {
+      "case_id": "RETAIL-PRODUCT_MONTHLY-B-01",
+      "question": "請從 demo_retail.v_product_monthly 列出 會員名稱。",
+      "category": "unsupported",
+      "target_view": "demo_retail.v_product_monthly",
+      "sql_difficulty": null,
+      "semantic_difficulty": null,
+      "case_sha256": "3d84e74d23a9c915df252ac8ded41d38eb789cf6ad637a47a798469d1adffa19"
+    },
+    {
+      "case_id": "RETAIL-PRODUCT_MONTHLY-B-06",
+      "question": "請結合 demo_retail.v_product_monthly 與會員註冊資料，列出交易及註冊來源。",
+      "category": "unsupported",
+      "target_view": "demo_retail.v_product_monthly",
+      "sql_difficulty": null,
+      "semantic_difficulty": null,
+      "case_sha256": "51255b0abe786ce80f3f301145221e2d592ab90fd2b8990681d4bf974b7447f9"
+    },
+    {
+      "case_id": "RETAIL-SALES_DETAIL-H1-04",
+      "question": "依訂單成立月份、區域、商品分類分組，顯示折扣金額合計與折扣前銷售金額的單列最大值，限定下單時銷售單價 >= 100且明細銷售件數 >= 1且門市名稱 LIKE 中山%，依訂單成立月份排序。",
+      "category": "normal",
+      "target_view": "demo_retail.v_sales_detail",
+      "sql_difficulty": "H",
+      "semantic_difficulty": "L1",
+      "case_sha256": "6c29f277fda0b75dd97ae6d33d08b940e06be90a36ca2e692745c4bf5497d7da"
+    },
+    {
+      "case_id": "RETAIL-SALES_DETAIL-M3-01",
+      "question": "整理報表時照訂單落在哪個月分組，顯示扣完折扣的銷售金額合計與這行商品賣了幾件的單列最大值，限定訂單發生的那一天 >= 2026-07-01且商品庫存代碼 LIKE SKU-%且會員叫什麼 LIKE 王%，依訂單落在哪個月排序。",
+      "category": "normal",
+      "target_view": "demo_retail.v_sales_detail",
+      "sql_difficulty": "M",
+      "semantic_difficulty": "L3",
+      "case_sha256": "9d031bc501eb8bca61ef02de5c437a7fab0680b7d73d536d069265152b14bed5"
+    },
+    {
+      "case_id": "RETAIL-STORE_MONTHLY_KPI-H1-01",
+      "question": "依統計月份、區域、門市名稱分組，顯示折扣後銷售淨額合計與已完成訂單筆數的單列最大值，限定門市識別碼 IN 1、2、3且月營收目標 >= 100且銷售件數 >= 1，依統計月份排序。",
+      "category": "normal",
+      "target_view": "demo_retail.v_store_monthly_kpi",
+      "sql_difficulty": "H",
+      "semantic_difficulty": "L1",
+      "case_sha256": "cd1f2094ccb64a401070284ed3b5dc6002dd806ceeded5d29fd8974b15d29b77"
+    },
+    {
+      "case_id": "RETAIL-STORE_MONTHLY_KPI-M3-03",
+      "question": "整理報表時照城市別分組，顯示成交商品有幾件合計與折扣後進帳的單列最大值，限定完成了幾筆單 >= 1且賺到的毛利 >= 100且這個月資料齊不齊 = 1，依城市別排序。",
+      "category": "normal",
+      "target_view": "demo_retail.v_store_monthly_kpi",
+      "sql_difficulty": "M",
+      "semantic_difficulty": "L3",
+      "case_sha256": "f67ce3cdf07aed164a8c43299cc3e4fd3cabbf5003fb1c403efbf9717e9f2d58"
+    }
+  ],
+  "selection": {
+    "method": "既有14題，不重新抽樣",
+    "source_run": "projects/retail/artifacts/evaluations/20261019T115951Z-qwen-v10-samples14-stability3"
+  },
+  "history": {
+    "original_14x3_run": "projects/retail/artifacts/evaluations/20261019T115951Z-qwen-v10-samples14-stability3",
+    "repair_6x3_run": "evidence-driven-dev/tasks/fix-14-regressions/.local/live-six-20261020T0331",
+    "note": "修復版只重測原未通過6題；其他8題不宣稱已在修復版重跑。"
+  }
+}

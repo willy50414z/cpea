@@ -64,10 +64,10 @@ class AssistantRuntime:
         self._llm = llm
         self.executor = executor
         self.datasource_id = datasource_id if datasource_id is not None else self.deployment.datasource_id
-        if executor is None and settings.sqlserver.enabled:
-            from cpea.infrastructure.database.sql_server import SQLServerExecutor
-            self.executor = SQLServerExecutor(settings.sqlserver, self.datasource_id,
-                {view.name for view in self.catalog.views()}, settings.max_rows)
+        if executor is None and settings.database_settings.enabled:
+            from cpea.infrastructure.database.factory import create_executor
+            self.executor = create_executor(settings, self.datasource_id,
+                {view.name for view in self.catalog.views()})
         self._retriever = retriever
         self._context_packer = context_packer
         self.match_prompt = match_prompt

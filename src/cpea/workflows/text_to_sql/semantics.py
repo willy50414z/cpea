@@ -19,6 +19,102 @@ OPERATORS = {'=': ('等於', '為', '='), '>': ('大於', '超過', '>'), '<': (
              '>=': ('至少', '以上', '>='), '<=': ('至多', '以下', '<='),
              '!=': ('不等於', '!='), '<>': ('不等於', '<>'), 'LIKE': ('包含', 'LIKE'), 'IN': ('IN', '屬於')}
 NEGATION = re.compile(r'不含|不包含|不是|非|未包含|僅限|不等於|不代表|並非')
+EXPLICIT_AGGREGATIONS = {
+    '單列最大值': 'max', '單列最高值': 'max', '最大值': 'max', '最高值': 'max',
+    '單列最小值': 'min', '單列最低值': 'min', '最小值': 'min', '最低值': 'min',
+    '平均值': 'avg', '合計': 'sum', '總和': 'sum', '加總': 'sum',
+}
+AGGREGATION_SUFFIX = re.compile(r'\s*的?\s*(' + '|'.join(EXPLICIT_AGGREGATIONS) +
+                                r')(?=$|[' + re.escape(PUNCTUATION) + r']|與|及|和|且|限定|依|按)')
+QUERY_WRAPPER = re.compile(r'(?:' + '|'.join(re.escape(token) for token in sorted(GRAMMAR, key=len, reverse=True))
+                           + '|[' + re.escape(PUNCTUATION) + '])*')
+
+
+def aggregate_threshold(item, catalog, view):
+    """Statistical words inside an approved row metric are not SQL operations."""
+    tokens = OPERATORS.get(item.operator, (item.operator,))
+    pattern = '|'.join(r'\b' + re.escape(token) + r'\b' if token.isascii() and token.isalpha()
+                       else re.escape(token) for token in sorted(tokens, key=len, reverse=True))
+    # Only the left operand describes a metric. LIKE/IN values can themselves
+    # contain statistical words and must never authorize a SQL operation.
+    text = re.split(r'\s*(?:' + pattern + r')\s*', item.text, maxsplit=1, flags=re.IGNORECASE)[0]
+    start, end = _peel(text, 0, len(text))
+    text = text[start:end]
+    try:
+        spec = catalog.field_contract(view, item.column)
+    except ValueError:
+        return False  # The schema validator reports unknown columns separately.
+    if description_supports(text, str(spec.get('description', ''))):
+        return False
+    named = False
+    for name in sorted([item.column, *spec.get('aliases', [])], key=len, reverse=True):
+        if name:
+            named = named or name in text
+            text = text.replace(name, '')
+    explicit = re.search(r'\b(?:SUM|COUNT|AVG|MAX|MIN)\s*\(|聚合後|分組後', text, re.IGNORECASE)
+    suffix = re.search(r'(?:' + '|'.join(EXPLICIT_AGGREGATIONS) + r')\s*$', text)
+    # An unrecognized business phrase such as a precomputed average still goes
+    # through semantic validation; the word "average" alone is not new AVG().
+    return bool(explicit or suffix or (named and re.search(r'累計|平均|計數|筆數', text)))
+
+
+def row_listing_errors(request, mapping, catalog, view):
+    """A request for existing rows must not become a newly aggregated report."""
+    if not re.search(r'列出|每列|逐筆', request):
+        return []
+    errors = aggregation_errors(request, mapping, catalog, view, require_explicit=True)
+    grouping_text = request
+    names = set()
+    for item in [*mapping.fields, *mapping.group]:
+        spec = catalog.field_contract(view, item.column)
+        names.update([item.column, *spec.get('aliases', [])])
+        if description_supports(item.text, str(spec.get('description', ''))):
+            names.add(item.text)
+    for name in sorted(names, key=len, reverse=True):
+        if name:
+            grouping_text = grouping_text.replace(name, ' ')
+    if mapping.group and not re.search(r'分組|彙總|匯總', grouping_text) and (
+            not any(item.aggregation for item in mapping.fields) or errors):
+        errors.append('unrequested GROUP BY changes the requested row grain')
+    return errors
+
+
+def aggregation_errors(request, mapping, catalog, view, *, require_explicit=False):
+    """Bind explicit operations to their own mapped phrase, never to another metric."""
+    errors = []
+    spans = [(field, match.start(), match.end()) for field in mapping.fields if field.text
+             for match in re.finditer(re.escape(field.text), request)]
+    for item in mapping.fields:
+        if not item.text:
+            continue
+        names = [item.column, *catalog.field_contract(view, item.column).get('aliases', [])]
+        operations = []
+        # A complete approved name may itself contain statistical terminology.
+        intrinsic = any(QUERY_WRAPPER.fullmatch(item.text[:match.start()])
+                        and QUERY_WRAPPER.fullmatch(item.text[match.end():])
+                        for name in names if name
+                        for match in re.finditer(re.escape(name), item.text))
+        if not intrinsic:
+            start, end = _peel(item.text, 0, len(item.text))
+            internal = re.search(r'的?(' + '|'.join(EXPLICIT_AGGREGATIONS) + r')$', item.text[start:end])
+            if internal:
+                operations.append(EXPLICIT_AGGREGATIONS[internal.group(1)])
+        for occurrence in re.finditer(re.escape(item.text), request):
+            # A short metric name may also occur inside a different, longer
+            # mapped metric. Its operation belongs to that longer phrase.
+            if any(other.column != item.column and len(other.text) > len(item.text)
+                   and start <= occurrence.start() and occurrence.end() <= end
+                   for other, start, end in spans):
+                continue
+            suffix = AGGREGATION_SUFFIX.match(request, occurrence.end())
+            if suffix:
+                operations.append(EXPLICIT_AGGREGATIONS[suffix.group(1)])
+        if any(operation != item.aggregation for operation in operations):
+            errors.append(f'explicit aggregation mismatch for {item.column}: '
+                          f'expected {sorted(set(operations))}, got {item.aggregation}')
+        if require_explicit and item.aggregation and not operations:
+            errors.append(f'unrequested aggregation changes the requested row grain: {item.column}')
+    return errors
 
 
 def description_supports(term, description, quote=None):
@@ -93,7 +189,7 @@ def assess(request, mapping, catalog, view, snapshot, *, all_uses=None):
     evidence cannot discard qualifiers, even if the model puts them in ignored.
     """
     covered = [False] * len(request)
-    uses, errors, reused = [], [], []
+    uses, errors, reused = [], aggregation_errors(request, mapping, catalog, view), []
     fingerprint = view_fingerprint(catalog, view)
     active = snapshot.active()
     required = explicit_column_references(request, catalog)
@@ -202,7 +298,9 @@ def assess(request, mapping, catalog, view, snapshot, *, all_uses=None):
                         if re.fullmatch(pattern, before) and re.fullmatch(pattern, after):
                             a, b = pos, pos + len(name)
                             break
-            a, b = _business_span(request, a, b, item, clause)
+            syntax_clause = ('group' if clause == 'fields' and not item.aggregation
+                             and item.column in {group.column for group in mapping.group} else clause)
+            a, b = _business_span(request, a, b, item, syntax_clause)
             if a >= b:
                 continue
             if any(c not in catalog.columns(view) for c in candidates):

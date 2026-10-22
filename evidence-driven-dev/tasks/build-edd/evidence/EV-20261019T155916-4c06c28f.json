@@ -1,0 +1,21 @@
+{
+  "id": "EV-20261019T155916-4c06c28f",
+  "kind": "review",
+  "command": [
+    "/usr/bin/python3",
+    "-c",
+    "import json; from pathlib import Path; d=json.loads(Path('evidence-driven-dev/reports/live-hooks.json').read_text(encoding='utf-8')); assert d['turn_completed']; assert {'sessionStart','subagentStop','stop'} <= {x['eventName'] for x in d['events'] if x['status']=='completed'}; print(json.dumps({'result':'PASS_WITH_WARNINGS','events':[(x['eventName'],x['status']) for x in d['events']],'warning':d['warning']},ensure_ascii=False))"
+  ],
+  "cwd": "/home/willy/code/cpea",
+  "started_at": "2026-10-19T15:59:16+00:00",
+  "finished_at": "2026-10-19T15:59:16+00:00",
+  "exit_code": 0,
+  "revision": "014cee1aff3abcfb51bbe5af6db0abd2ef060225",
+  "diff_fingerprint": "2d390f8e872bfe122a38c9f23feead685b534e338dcf775b88f34a90b906af15",
+  "post_fingerprint": "2d390f8e872bfe122a38c9f23feead685b534e338dcf775b88f34a90b906af15",
+  "source_unchanged": true,
+  "output_sha256": "4194278db1c591e270983aefa837f99d021349679d0357d880d8e587b542525a",
+  "raw_output": ".local/EV-20261019T155916-4c06c28f.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "fee87ebeaa05f654aecd23128cbff67780d1e363e83f79e2f075252b968e55cb"
+}

@@ -1,0 +1,20 @@
+{
+  "id": "EV-20261019T151446-d3ae7f31",
+  "kind": "experiment",
+  "command": [
+    "python3",
+    "evaluation/replay.py"
+  ],
+  "cwd": "/tmp/edd-eval-1z2tnuvr",
+  "started_at": "2026-10-19T15:14:46+00:00",
+  "finished_at": "2026-10-19T15:14:46+00:00",
+  "exit_code": 0,
+  "revision": "e85a5eb006ae04e7c69b735e3bd6ccb553b0768d",
+  "diff_fingerprint": "4c12ea4738f82ed5cf887537d9d6a30406076e4b11524f4e1c1f8d21c0fd699a",
+  "post_fingerprint": "4c12ea4738f82ed5cf887537d9d6a30406076e4b11524f4e1c1f8d21c0fd699a",
+  "source_unchanged": true,
+  "output_sha256": "8a53350d91bc925881a04eb065dadd5e60c4a465682b8e9dc68504c4a653b8bd",
+  "raw_output": ".local/EV-20261019T151446-d3ae7f31.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "ce7dede537e299459a77530279e2287dce8b0fee2e8efd2350c68186cc63e4fa"
+}

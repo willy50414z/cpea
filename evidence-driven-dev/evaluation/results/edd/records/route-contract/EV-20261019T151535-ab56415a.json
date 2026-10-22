@@ -1,0 +1,21 @@
+{
+  "id": "EV-20261019T151535-ab56415a",
+  "kind": "baseline",
+  "command": [
+    "python3",
+    "evaluation/checks.py",
+    "route"
+  ],
+  "cwd": "/tmp/edd-eval-1z2tnuvr",
+  "started_at": "2026-10-19T15:15:35+00:00",
+  "finished_at": "2026-10-19T15:15:35+00:00",
+  "exit_code": 1,
+  "revision": "e85a5eb006ae04e7c69b735e3bd6ccb553b0768d",
+  "diff_fingerprint": "0d1120691f67ddb9f6367d2c1c157a868e04f6b27a4d9b0fdb1afc9b657b17a4",
+  "post_fingerprint": "0d1120691f67ddb9f6367d2c1c157a868e04f6b27a4d9b0fdb1afc9b657b17a4",
+  "source_unchanged": true,
+  "output_sha256": "5a1a505865696a93bc3983f5ae25fcaea1bdbb5c482ea99414d1e74efd5758dc",
+  "raw_output": ".local/EV-20261019T151535-ab56415a.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "198f34992bd78a74109d512dfd57fc9dfa867fe67c3dedd6de5e9b58e6cd4b2f"
+}

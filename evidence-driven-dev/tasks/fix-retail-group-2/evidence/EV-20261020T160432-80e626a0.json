@@ -1,0 +1,24 @@
+{
+  "id": "EV-20261020T160432-80e626a0",
+  "kind": "experiment",
+  "command": [
+    ".venv/bin/python",
+    "evidence-driven-dev/tasks/fix-retail-group-2/.local/hybrid_focus.py",
+    "--input",
+    "evidence-driven-dev/tasks/fix-retail-group-2/.local/hybrid-focus-B-20261020",
+    "--output",
+    "evidence-driven-dev/tasks/fix-retail-group-2/.local/hybrid-focus-C-20261020"
+  ],
+  "cwd": "/home/willy/code/cpea",
+  "started_at": "2026-10-20T16:04:32+00:00",
+  "finished_at": "2026-10-20T16:07:20+00:00",
+  "exit_code": 0,
+  "revision": "014cee1aff3abcfb51bbe5af6db0abd2ef060225",
+  "diff_fingerprint": "42e793d060d4fbbc8b4e1a7d8ad7661b949ce2563c9030b188852398e18d418c",
+  "post_fingerprint": "42e793d060d4fbbc8b4e1a7d8ad7661b949ce2563c9030b188852398e18d418c",
+  "source_unchanged": true,
+  "output_sha256": "ce553627ebe7e96e164ff2d6a1d8df716242b9affd7c84c3e02281db3fb80b20",
+  "raw_output": ".local/EV-20261020T160432-80e626a0.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "2460351b48784376452fc7d99d22f6ff24a1ef26cccaea280f0d51a7158b9907"
+}

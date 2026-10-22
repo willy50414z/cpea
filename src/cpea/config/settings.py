@@ -10,7 +10,7 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 from dotenv import dotenv_values
-from cpea.config.database import SQLServerSettings
+from cpea.config.database import DatabaseSettings, SQLServerSettings
 
 _ENV_LAYERS = ContextVar('cpea_env_layers', default=None)
 
@@ -21,6 +21,15 @@ def _get_env(name):
     for layer in _layers():
         if name in layer:
             return layer[name]
+    return None
+
+
+def _defined_env(*names):
+    # An explicit blank disables a lower-priority connection setting.
+    for layer in _layers():
+        for name in names:
+            if name in layer:
+                return layer[name]
     return None
 
 
@@ -121,6 +130,14 @@ class AssistantSettings:
     gcp_location: str = "global"
     llm_reasoning: bool = False
     sqlserver: SQLServerSettings = field(default_factory=SQLServerSettings)
+    database: DatabaseSettings | None = None
+
+    @property
+    def database_settings(self) -> DatabaseSettings:
+        if self.database is not None:
+            return self.database
+        return DatabaseSettings(self.sqlserver.connection_string,
+            self.sqlserver.connect_timeout_seconds, self.sqlserver.query_timeout_seconds)
 
     @property
     def output_token_reserve(self) -> int:
@@ -296,12 +313,25 @@ class AssistantSettings:
             deployment_file=_first_env('CPEA_DEPLOYMENT_FILE', default='') or None,
             datasource_id=(_get_env('CPEA_DATASOURCE_ID') or '').strip() or None,
             sqlserver=SQLServerSettings(
-                connection_string=(_get_env('CPEA_SQLSERVER_CONNECTION_STRING') or '').strip(),
-                connect_timeout_seconds=_db_timeout('CPEA_SQLSERVER_CONNECT_TIMEOUT_SECONDS', 5),
-                query_timeout_seconds=_db_timeout('CPEA_SQLSERVER_QUERY_TIMEOUT_SECONDS', 30),
+                connection_string=(_get_env('CPEA_DATABASE_URL') or '').strip(),
+                connect_timeout_seconds=_db_timeout('CPEA_DATABASE_CONNECT_TIMEOUT_SECONDS', 5,
+                                                    'CPEA_SQLSERVER_CONNECT_TIMEOUT_SECONDS'),
+                query_timeout_seconds=_db_timeout('CPEA_DATABASE_QUERY_TIMEOUT_SECONDS', 30,
+                                                  'CPEA_SQLSERVER_QUERY_TIMEOUT_SECONDS'),
                 freetds_config_file=_first_env('FREETDSCONF', 'FREETDS', default='') or None,
             ),
         )
+
+        generic_names = ('CPEA_DATABASE_URL', 'CPEA_DATABASE_DIALECT',
+                         'CPEA_DATABASE_CONNECT_TIMEOUT_SECONDS', 'CPEA_DATABASE_QUERY_TIMEOUT_SECONDS')
+        if any(_get_env(name) is not None for name in generic_names):
+            result = replace(result, database=DatabaseSettings(
+                connection_string=(_get_env('CPEA_DATABASE_URL') or '').strip(),
+                connect_timeout_seconds=_db_timeout('CPEA_DATABASE_CONNECT_TIMEOUT_SECONDS', 5,
+                                                    'CPEA_SQLSERVER_CONNECT_TIMEOUT_SECONDS'),
+                query_timeout_seconds=_db_timeout('CPEA_DATABASE_QUERY_TIMEOUT_SECONDS', 30,
+                                                  'CPEA_SQLSERVER_QUERY_TIMEOUT_SECONDS'),
+                dialect=_first_env('CPEA_DATABASE_DIALECT', default='auto').lower()))
 
         if result.request_timeout_seconds <= 0:
             raise ValueError('ASSISTANT_LLM_TIMEOUT_SECONDS must be positive')
@@ -314,8 +344,8 @@ class AssistantSettings:
         return result
 
 
-def _db_timeout(name: str, default: int) -> int:
-    raw = _get_env(name)
+def _db_timeout(name: str, default: int, *aliases: str) -> int:
+    raw = _defined_env(name, *aliases)
     if raw is None or not raw.strip():
         return default
     try:

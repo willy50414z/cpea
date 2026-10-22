@@ -1,0 +1,29 @@
+ M .env.example
+ M README.md
+ M docs/architecture.md
+ M docs/prompt/views_setting_generator_prompt.md
+ M evaluations/governance_runner.py
+ M evaluations/metadata.py
+ M evaluations/project_runner.py
+ M evaluations/retail_view_benchmark.py
+ M evaluations/view_matching_grading.py
+ M openspec/changes/sql-server-single-question-ui/design.md
+ M openspec/changes/sql-server-single-question-ui/specs/sql-server-adapter/spec.md
+ M pyproject.toml
+ M scripts/generate_view_contracts.py
+ M src/cpea/application/services/sql_execution.py
+ M src/cpea/bootstrap.py
+ M src/cpea/config/database.py
+ M src/cpea/config/settings.py
+ M src/cpea/infrastructure/sql_compiler.py
+ M src/cpea/infrastructure/sql_policy.py
+ M src/cpea/interfaces/web/ui.py
+ M src/cpea/workflows/text_to_sql/sql_generation.py
+ M tests/unit/test_having.py
+ M tests/unit/test_sql_server.py
+ M tests/unit/test_web_projects.py
+ M uv.lock
+?? evidence-driven-dev/
+?? src/cpea/infrastructure/database/factory.py
+?? src/cpea/infrastructure/database/postgres.py
+?? tests/unit/test_postgres.py

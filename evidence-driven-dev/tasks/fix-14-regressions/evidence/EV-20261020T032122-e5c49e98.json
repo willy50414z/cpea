@@ -1,0 +1,23 @@
+{
+  "id": "EV-20261020T032122-e5c49e98",
+  "kind": "metamorphic",
+  "command": [
+    ".venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/unit/test_mapping_preflight.py"
+  ],
+  "cwd": "/home/willy/code/cpea",
+  "started_at": "2026-10-20T03:21:22+00:00",
+  "finished_at": "2026-10-20T03:21:29+00:00",
+  "exit_code": 1,
+  "revision": "014cee1aff3abcfb51bbe5af6db0abd2ef060225",
+  "diff_fingerprint": "5c635d615712a2efcb17eea0a606c5111959da3ccfca352ce673b95d6c0ec4d0",
+  "post_fingerprint": "5c635d615712a2efcb17eea0a606c5111959da3ccfca352ce673b95d6c0ec4d0",
+  "source_unchanged": true,
+  "output_sha256": "708836a52bd8951b8aafdc0d846597f5a87c8f78e08a7ed0a6dfd6c6f9c94bb0",
+  "raw_output": ".local/EV-20261020T032122-e5c49e98.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "ae067de07546c6ea327c1e84faab4510fa113770beb0128c973c22da153cc577"
+}

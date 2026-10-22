@@ -1,0 +1,23 @@
+{
+  "id": "EV-20261020T155516-d22e8b58",
+  "kind": "negative",
+  "command": [
+    ".venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "evidence-driven-dev/tasks/fix-retail-group-2/.local/test_B_boundaries.py"
+  ],
+  "cwd": "/home/willy/code/cpea",
+  "started_at": "2026-10-20T15:55:16+00:00",
+  "finished_at": "2026-10-20T15:55:22+00:00",
+  "exit_code": 1,
+  "revision": "014cee1aff3abcfb51bbe5af6db0abd2ef060225",
+  "diff_fingerprint": "56a3c12c4b01db09ef169154cbce4d5a5d6920bd3a1025a96fa56652ec7eb39c",
+  "post_fingerprint": "56a3c12c4b01db09ef169154cbce4d5a5d6920bd3a1025a96fa56652ec7eb39c",
+  "source_unchanged": true,
+  "output_sha256": "f72dd3d395575f817078a6876b2d2b6a856ad94b9928bd812e456d80af44a6b6",
+  "raw_output": ".local/EV-20261020T155516-d22e8b58.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "596bb580476ca38dc2b863a1e2b67fc8ecb77fa693625e561c8192acc371df4e"
+}

@@ -1,0 +1,20 @@
+{
+  "id": "EV-20261019T152326-3bfbc973",
+  "kind": "review",
+  "command": [
+    "/usr/bin/python3",
+    "evidence-driven-dev/scripts/check_assets.py"
+  ],
+  "cwd": "/home/willy/code/cpea",
+  "started_at": "2026-10-19T15:23:26+00:00",
+  "finished_at": "2026-10-19T15:23:27+00:00",
+  "exit_code": 0,
+  "revision": "014cee1aff3abcfb51bbe5af6db0abd2ef060225",
+  "diff_fingerprint": "4b4d24b3ee4f15b262d7deb5bbef1f6b2a3ff5c54908b57364b01e78d5486e8a",
+  "post_fingerprint": "4b4d24b3ee4f15b262d7deb5bbef1f6b2a3ff5c54908b57364b01e78d5486e8a",
+  "source_unchanged": true,
+  "output_sha256": "b740e0796450a7f6cbeaadfdcab6399586bb65f0406318763c1f5426d247fd11",
+  "raw_output": ".local/EV-20261019T152326-3bfbc973.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "e88d4e50fcb150812015d995514c4327b71102fd11e3ae417f044b57bb395b0f"
+}

@@ -30,6 +30,18 @@ def requires_resolution(mapping, term, catalog, view):
     return any(option.same_concept and option.grain_compatible for option in proposal.options)
 
 
+def incompatible_term(mapping, term):
+    """Explicitly unrelated choices cannot establish a viable source."""
+    proposals = [item for item in getattr(mapping, 'clarifications', [])
+                 if normalize_term(item.term) == normalize_term(term)]
+    if len(proposals) != 1:
+        return False
+    proposal = proposals[0]
+    if not proposal.options:
+        return not proposal.needs_refinement
+    return all(not option.same_concept or not option.grain_compatible for option in proposal.options)
+
+
 def business_label(label, catalog):
     """Reject technical labels rather than attempting to redact them in place."""
     if not isinstance(label, str) or not 1 <= len(label.strip()) <= 60:

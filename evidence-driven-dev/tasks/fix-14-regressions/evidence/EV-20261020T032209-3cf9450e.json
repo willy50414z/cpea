@@ -1,0 +1,26 @@
+{
+  "id": "EV-20261020T032209-3cf9450e",
+  "kind": "focused",
+  "command": [
+    ".venv/bin/python",
+    "evidence-driven-dev/tasks/fix-14-regressions/.local/live_probe.py",
+    "--selection",
+    "evidence-driven-dev/tasks/fix-14-regressions/.local/selection-label.json",
+    "--output",
+    "evidence-driven-dev/tasks/fix-14-regressions/.local/live-label-20261020T0322",
+    "--runs",
+    "1"
+  ],
+  "cwd": "/home/willy/code/cpea",
+  "started_at": "2026-10-20T03:22:09+00:00",
+  "finished_at": "2026-10-20T03:28:20+00:00",
+  "exit_code": 0,
+  "revision": "014cee1aff3abcfb51bbe5af6db0abd2ef060225",
+  "diff_fingerprint": "e9e8c6dd0d963c614064170a252907bee10dc82bbcf33ed544e54a74aeb42234",
+  "post_fingerprint": "e9e8c6dd0d963c614064170a252907bee10dc82bbcf33ed544e54a74aeb42234",
+  "source_unchanged": true,
+  "output_sha256": "c8192bf185c3f01e0159bc9fd1e85fbb7be713adc437a650b6c8930d62fa7acf",
+  "raw_output": ".local/EV-20261020T032209-3cf9450e.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "a7113515541aee63bad831646954b9ce1fc370c9f3f0f263996ad22bb64dc724"
+}

@@ -13,7 +13,7 @@ from dotenv import dotenv_values
 
 from cpea.bootstrap import AssistantRuntime
 from cpea.config.deployment import DeploymentSettings
-from cpea.config.database import SQLServerSettings
+from cpea.config.database import DatabaseSettings, SQLServerSettings
 from cpea.config.projects import ProjectWorkspace, resolve_project
 from cpea.config.settings import AssistantSettings
 from cpea.infrastructure.catalog.yaml_catalog import SchemaCatalog
@@ -33,7 +33,8 @@ def _runtime_for_project(workspace: ProjectWorkspace, *, allow_draft_profile: bo
         profile_path=str(workspace.root), datasource_id=settings.datasource_id)
     # Project evaluation grades SQL generation only; configured DB credentials
     # must not force a driver load or an accidental execution dependency.
-    settings = replace(settings, sqlserver=SQLServerSettings())
+    settings = replace(settings, sqlserver=SQLServerSettings(),
+        database=DatabaseSettings(dialect=settings.database_settings.resolved_dialect))
     catalog = SchemaCatalog(workspace.root, allow_drafts=allow_draft_profile)
     return AssistantRuntime(settings, deployment=deployment, catalog=catalog,
                             match_prompt=load_match_prompt(prompt_version))

@@ -1,0 +1,20 @@
+{
+  "id": "EV-20261020T141423-03800329",
+  "kind": "focused",
+  "command": [
+    ".venv/bin/python",
+    "/home/willy/code/cpea/evidence-driven-dev/tasks/retail-test-group-2/.local/verify_and_report.py"
+  ],
+  "cwd": "/home/willy/code/cpea",
+  "started_at": "2026-10-20T14:14:23+00:00",
+  "finished_at": "2026-10-20T14:14:25+00:00",
+  "exit_code": 0,
+  "revision": "014cee1aff3abcfb51bbe5af6db0abd2ef060225",
+  "diff_fingerprint": "1c843050fcd699b19aff6641c0045e9b6fd8a92d1ea2329be9d68acb4d490f7c",
+  "post_fingerprint": "1c843050fcd699b19aff6641c0045e9b6fd8a92d1ea2329be9d68acb4d490f7c",
+  "source_unchanged": true,
+  "output_sha256": "f3d7387007fbf6039f9626ed5a092ce052f985823792663f2dd9727365f4b655",
+  "raw_output": ".local/EV-20261020T141423-03800329.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "2a277c161a1510916a8e86b8f28b933fcfd60c81b01256e1d23dd522c1786960"
+}

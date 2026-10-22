@@ -1,0 +1,21 @@
+{
+  "id": "EV-20261019T155915-e933d198",
+  "kind": "review",
+  "command": [
+    "/usr/bin/python3",
+    "-c",
+    "import sys,json; from pathlib import Path; sys.path.insert(0,'evidence-driven-dev/scripts'); from capabilities import discover; r=discover(Path.cwd()); print(json.dumps(r,ensure_ascii=False)); assert not r['missing'] and not r['plugin_errors'] and not r['errors'] and not r['hook_errors']; assert len(r['hooks'])==3 and all(h['trustStatus']=='trusted' and h['enabled'] for h in r['hooks'])"
+  ],
+  "cwd": "/home/willy/code/cpea",
+  "started_at": "2026-10-19T15:59:15+00:00",
+  "finished_at": "2026-10-19T15:59:16+00:00",
+  "exit_code": 0,
+  "revision": "014cee1aff3abcfb51bbe5af6db0abd2ef060225",
+  "diff_fingerprint": "2d390f8e872bfe122a38c9f23feead685b534e338dcf775b88f34a90b906af15",
+  "post_fingerprint": "2d390f8e872bfe122a38c9f23feead685b534e338dcf775b88f34a90b906af15",
+  "source_unchanged": true,
+  "output_sha256": "962bfac1ab36d60db4c800092bab2f18f08c73b9f895705e8c393812b3701d3b",
+  "raw_output": ".local/EV-20261019T155915-e933d198.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "7ebec9db40fab47f15a0586ca043a334e016311bcb4de014bb42fe986293e8d2"
+}

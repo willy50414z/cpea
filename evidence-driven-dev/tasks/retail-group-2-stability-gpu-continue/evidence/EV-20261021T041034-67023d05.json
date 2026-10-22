@@ -1,0 +1,20 @@
+{
+  "id": "EV-20261021T041034-67023d05",
+  "kind": "baseline",
+  "command": [
+    ".venv/bin/python",
+    "evidence-driven-dev/tasks/retail-group-2-stability-gpu-continue/.local/preflight.py"
+  ],
+  "cwd": "/home/willy/code/cpea",
+  "started_at": "2026-10-21T04:10:34+00:00",
+  "finished_at": "2026-10-21T04:10:36+00:00",
+  "exit_code": 0,
+  "revision": "014cee1aff3abcfb51bbe5af6db0abd2ef060225",
+  "diff_fingerprint": "42e793d060d4fbbc8b4e1a7d8ad7661b949ce2563c9030b188852398e18d418c",
+  "post_fingerprint": "42e793d060d4fbbc8b4e1a7d8ad7661b949ce2563c9030b188852398e18d418c",
+  "source_unchanged": true,
+  "output_sha256": "39b29c9a9e2f552a99356b92233d2dc25209e4c6804d3ec964a46b641d522261",
+  "raw_output": ".local/EV-20261021T041034-67023d05.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "e10cd1958ed5d498c65387385abac0089ffef99c9e6cfa5cff0372dade0cc28d"
+}

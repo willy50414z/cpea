@@ -75,12 +75,12 @@ def adapter(driver, view=VIEW):
 
 
 def test_settings_priority_blanks_and_secrets(tmp_path, monkeypatch):
-    names = ['CPEA_SQLSERVER_CONNECTION_STRING', 'CPEA_SQLSERVER_CONNECT_TIMEOUT_SECONDS',
+    names = ['CPEA_DATABASE_URL', 'CPEA_SQLSERVER_CONNECT_TIMEOUT_SECONDS',
              'CPEA_SQLSERVER_QUERY_TIMEOUT_SECONDS', 'CPEA_ENV_FILE']
     for name in names:
         monkeypatch.delenv(name, raising=False)
     env = tmp_path / '.env'
-    env.write_text('CPEA_SQLSERVER_CONNECTION_STRING=PWD=file-secret\n'
+    env.write_text('CPEA_DATABASE_URL=PWD=file-secret\n'
                    'CPEA_SQLSERVER_CONNECT_TIMEOUT_SECONDS=8\n'
                    'CPEA_SQLSERVER_QUERY_TIMEOUT_SECONDS=25\n', encoding='utf-8')
     monkeypatch.chdir(tmp_path)

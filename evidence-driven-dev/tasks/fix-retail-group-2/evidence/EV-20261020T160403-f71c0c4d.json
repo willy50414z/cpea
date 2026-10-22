@@ -1,0 +1,23 @@
+{
+  "id": "EV-20261020T160403-f71c0c4d",
+  "kind": "focused",
+  "command": [
+    ".venv/bin/python",
+    "evidence-driven-dev/tasks/fix-retail-group-2/.local/replay_workflow.py",
+    "--run-dir",
+    "evidence-driven-dev/tasks/fix-retail-group-2/.local/hybrid-focus-B-20261020",
+    "--expect-oracle"
+  ],
+  "cwd": "/home/willy/code/cpea",
+  "started_at": "2026-10-20T16:04:03+00:00",
+  "finished_at": "2026-10-20T16:04:07+00:00",
+  "exit_code": 0,
+  "revision": "014cee1aff3abcfb51bbe5af6db0abd2ef060225",
+  "diff_fingerprint": "42e793d060d4fbbc8b4e1a7d8ad7661b949ce2563c9030b188852398e18d418c",
+  "post_fingerprint": "42e793d060d4fbbc8b4e1a7d8ad7661b949ce2563c9030b188852398e18d418c",
+  "source_unchanged": true,
+  "output_sha256": "2f867e64ee3e9ffb4ad4cc8c6617a5cbdf7fb86bfe2cb17f6ab42bc12094a47c",
+  "raw_output": ".local/EV-20261020T160403-f71c0c4d.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "6d98491af4262d2ffcf040d2eb8bdedeb461c81744f9edf5c545e0313b380144"
+}

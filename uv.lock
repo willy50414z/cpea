@@ -147,6 +147,9 @@ dependencies = [
 azure = [
     { name = "langchain-openai" },
 ]
+postgres = [
+    { name = "psycopg", extra = ["binary"] },
+]
 postgres-contracts = [
     { name = "psycopg", extra = ["binary"] },
 ]
@@ -171,6 +174,7 @@ requires-dist = [
     { name = "langchain-openai", marker = "extra == 'azure'", specifier = ">=1,<2" },
     { name = "langgraph", specifier = ">=1.2,<2" },
     { name = "numpy", specifier = ">=2.4,<3" },
+    { name = "psycopg", extras = ["binary"], marker = "extra == 'postgres'", specifier = ">=3.2,<4" },
     { name = "psycopg", extras = ["binary"], marker = "extra == 'postgres-contracts'", specifier = ">=3.2,<4" },
     { name = "pydantic", specifier = ">=2.14,<3" },
     { name = "pymssql", marker = "extra == 'sqlserver'", specifier = ">=2.3,<3" },
@@ -181,7 +185,7 @@ requires-dist = [
     { name = "tiktoken", specifier = ">=0.14,<1" },
     { name = "uvicorn", specifier = ">=0.30,<1" },
 ]
-provides-extras = ["azure", "postgres-contracts", "sqlserver"]
+provides-extras = ["azure", "postgres-contracts", "postgres", "sqlserver"]
 
 [package.metadata.requires-dev]
 dev = [

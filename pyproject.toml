@@ -36,6 +36,9 @@ azure = [
 postgres-contracts = [
     "psycopg[binary]>=3.2,<4",
 ]
+postgres = [
+    "psycopg[binary]>=3.2,<4",
+]
 sqlserver = [
     "pymssql>=2.3,<3",
     "sqlalchemy>=2.0,<3",

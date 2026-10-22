@@ -114,10 +114,10 @@ def _identity(target: ModelTarget, settings, *, live: bool) -> tuple[str | None,
 
 def grade(case: GovernanceCase, generation, answer: str | None, citations: list[str],
           *, execution_error: str | None = None, catalog=None,
-          max_rows: int = 200) -> tuple[str | None, str | None, list[str]]:
+          max_rows: int = 200, dialect: str = 'mssql') -> tuple[str | None, str | None, list[str]]:
     if case.view_matching_case is not None:
         mapping_status, sql_status, failures = grade_view_matching(case.view_matching_case, generation,
-                                                                   catalog=catalog, max_rows=max_rows)
+                                                                   catalog=catalog, max_rows=max_rows, dialect=dialect)
         if execution_error:
             return "error", None, [*failures, f"execution:{execution_error}"]
         if not case.view_matching_case.approved_for(case.view_matching_case.contract_fingerprint):
@@ -251,11 +251,13 @@ def _run_one(case: GovernanceCase, target: ModelTarget, repetition: int, base: A
             status, review_state = None, 'pending'
     else:
         status, review_state, failures = grade(case, generation, answer, citations,
-                                               catalog=base.catalog, max_rows=settings.max_rows)
+                                               catalog=base.catalog, max_rows=settings.max_rows,
+                                               dialect=settings.database_settings.resolved_dialect)
     mapping_status = sql_status = None
     if case.view_matching_case is not None and generation is not None:
         mapping_status, sql_status, _ = grade_view_matching(case.view_matching_case, generation,
-                                                            catalog=base.catalog, max_rows=settings.max_rows)
+                                                            catalog=base.catalog, max_rows=settings.max_rows,
+                                                            dialect=settings.database_settings.resolved_dialect)
     # Call records are correlated by key; this works even with concurrent runs.
     return {
         "run_id": recorder.run_id, "case_id": case.case_id,

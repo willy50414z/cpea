@@ -1,0 +1,20 @@
+{
+  "id": "EV-20261020T031052-30ca59b8",
+  "kind": "baseline",
+  "command": [
+    ".venv/bin/python",
+    "evidence-driven-dev/tasks/fix-14-regressions/.local/mapping-replay.py"
+  ],
+  "cwd": "/home/willy/code/cpea",
+  "started_at": "2026-10-20T03:10:52+00:00",
+  "finished_at": "2026-10-20T03:10:54+00:00",
+  "exit_code": 0,
+  "revision": "014cee1aff3abcfb51bbe5af6db0abd2ef060225",
+  "diff_fingerprint": "2d390f8e872bfe122a38c9f23feead685b534e338dcf775b88f34a90b906af15",
+  "post_fingerprint": "2d390f8e872bfe122a38c9f23feead685b534e338dcf775b88f34a90b906af15",
+  "source_unchanged": true,
+  "output_sha256": "9c7f391f3b696aa52386ab3e72f34ccd624b69add1d7514b5104a67f4a9bb35a",
+  "raw_output": ".local/EV-20261020T031052-30ca59b8.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "b1b4be72e97fc5478c5b9a0c7f838df8aeea089c68a8a210fc3169496d07acd9"
+}

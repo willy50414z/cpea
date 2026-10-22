@@ -1,0 +1,18 @@
+{
+  "temp_repo": "/tmp/edd-eval-1z2tnuvr",
+  "base_sha": "e85a5eb006ae04e7c69b735e3bd6ccb553b0768d",
+  "cli_calls": 80,
+  "recorded_test_runs": 17,
+  "cli_wall_seconds": 9.155032456030312,
+  "test_subprocess_seconds": 3.0,
+  "real_user_interruptions": 0,
+  "simulated_user_events": 1,
+  "new_subagents": 0,
+  "final_contract_tests": 28,
+  "fresh_holdout_assertions": 8,
+  "token_cost": "NOT_MEASURED",
+  "repeated_failure_cli_guard": true,
+  "waiting_recovery": true,
+  "stale_evidence_detected": true,
+  "code_diff": "/tmp/edd-eval-1z2tnuvr/evidence-driven-dev/.local/fixture-diff.patch"
+}

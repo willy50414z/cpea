@@ -1,6 +1,6 @@
 # CPEA A/B 評估與外部引擎研究規格
 
-> **狀態：**計畫待使用者確認；所有新增任務未執行。本文件不是實作、安裝套件、模型或 DB 呼叫授權。未經另行指示，不執行下列實驗。
+> **狀態：**使用者後續已指示實作。離線增補工具與隔離 Wren 技術探測進度見 [研究實作紀錄](research-implementation-report.md)；自然比較、獨立核准及 R3 前置仍未完成。本文件本身不是模型或 DB 呼叫授權，原有核准與依賴限制持續適用。
 
 **目標：**在投入更多自建 Query Planner 維護前，用相同業務語意義務比較可替換策略及成熟 Package；保留原 S1～S6 的雙節點、治理、證據與產品驗收。
 
@@ -42,7 +42,7 @@
 | Contract／Semantic Validation | 原文義務、原生產物、契約與來源 lineage | 各層 verdict、引用、未觀測項及首錯；parser 成功不代表語意正確 |
 | Cross-View Integration | 核准 integration 與固定結果／fixture | S1／R2 僅靜態計畫；S3／R3 才評實際整合結果 |
 
-預定評估契約（名稱為規格，尚未實作）：
+評估契約（已於 `evaluations/query_pipeline_experiments.py` 建立離線實作；獨立審查及正式研究驗收未完成）：
 
 - 候選描述 `StrategyDescriptor`：`strategy_id/version`、`adapter_id/version`、`implementation_kind=product_service|research_candidate|external_engine`、能力清單、輸入／輸出種類、套件版本、是否需要模型／DB、支援方言及限制。ID 不等於模型名稱；模型另記版本。
 - 固定輸入 `EvaluationInput`：`case_ref/hash`、原文、catalog snapshot／fingerprint、能力範圍、可選核准 upstream／Prepared Task 的安全引用與 hash；`input_origin`、`upstream_injected`、approval 引用必填。此為允許清單，oracle／case ID／預期 SQL／評審結果不傳入自然模型 context。

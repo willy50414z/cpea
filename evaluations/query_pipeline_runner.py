@@ -88,6 +88,8 @@ def _metadata(profile, cases_path, planner_settings, sql_settings, mode, runs, e
         return subprocess.run(['git', *args], cwd=repo, capture_output=True, check=True).stdout
     planner, sql = _versions(planner_settings), _versions(sql_settings)
     return {'schema_version': 'query-pipeline-run-v1', 'mode': mode, 'kind': kind, 'runs': runs,
+        'worktree': str(repo.resolve()), 'branch': git('branch', '--show-current').decode('utf-8').strip(),
+        'lock_sha256': sha256((repo / 'uv.lock').read_bytes()).hexdigest() if (repo / 'uv.lock').is_file() else None,
         'input_origin': {'planning': 'original_request', 'sql': 'approved_tasks', 'integrated': 'natural_planning'}[mode],
         'exploratory': exploratory, 'started_at': datetime.now(timezone.utc).isoformat(),
         'head': git('rev-parse', 'HEAD').decode('utf-8').strip(),
@@ -102,7 +104,10 @@ def _metadata(profile, cases_path, planner_settings, sql_settings, mode, runs, e
         'runner_sha256': sql['runner_sha256'],
         'grader_version': GRADER_VERSION, 'grader_sha256': sql['grader_sha256'],
         'model_versions': {'planning': planner_settings.llm_model, 'sql': sql_settings.llm_model},
-        'model_version_verified': False, 'model_calls': 0, 'sdk_retries': 0,
+        'model_version_verified': False,
+        'model_revision': {node: {'digest': None, 'verified_at': None, 'source': None,
+            'reason': 'immutable revision not verified'} for node in ('planning', 'sql')},
+        'result_completeness': 'not_tested', 'model_calls': 0, 'sdk_retries': 0,
         'input_tokens': None, 'output_tokens': None, 'token_counter': 'provider_usage_or_unknown'}
 
 
@@ -141,6 +146,9 @@ class _RecordedModel:
         finally:
             event['elapsed_ms'] = (perf_counter() - started) * 1000
             self.journal['calls'].append(event)
+            # Persist before the caller's parser/validator can fail or the process can stop.
+            if sink := self.journal.get('record_call'):
+                sink(event)
 
 
 class _RecordedGenerator:
@@ -252,6 +260,10 @@ def evaluate_query_pipeline(*, mode, profile, cases_path, env_file, planner_sett
                     continue
                 events, planning_events = [], []
                 journal = {'calls': [], 'stopped': False, 'error': None}
+                def record_call(event):
+                    _write(output / 'private/trials' / trial_id / 'raw-calls' /
+                           f'{len(journal["calls"]) - 1:04d}.json', event)
+                journal['record_call'] = record_call
                 mapping = output / 'private/trials' / trial_id / 'terms_mapping.json'
                 repository = JsonTermMappingRepository(mapping, MappingScope(profile_id=catalog.profile_id, datasource_id=sql_settings.datasource_id))
                 mapping_hashes.append(content_hash(repository.read().model_dump(mode='json')))
@@ -380,7 +392,270 @@ def replay_query_pipeline(run_dir, *, profile, cases_path, output_root=None, rev
             entry['response_ref'] = _write_trial(output, f'{len(entries):06d}', response, [])
         entries.append(entry)
     (output / 'events.jsonl').write_text('', encoding='utf-8')
+    _write(output / 'replay-report.json', {'kind': 'response_regrade',
+        'source_drift': metadata['source_drift'], 'model_calls': 0, 'natural_success': 0,
+        'source_run_sha256': metadata['replay_of']['run_sha256']})
     return _write_reports(output, metadata, entries)
+
+
+def _research_versions():
+    return {p.name: sha256(p.read_bytes()).hexdigest() for p in
+            (Path(__file__), Path(__file__).with_name('query_pipeline_experiments.py'),
+             Path(__file__).with_name('query_pipeline_grading.py'),
+             Path(__file__).with_name('query_pipeline_cases.py'),
+             Path(__file__).with_name('query_pipeline_wren_poc.py'))}
+
+
+def _callable_version(function):
+    """Fingerprint executable Python code without location-dependent line numbers."""
+    from types import CodeType
+    import inspect
+    def code_value(code):
+        return [code.co_code.hex(), code.co_names, [code_value(c) if isinstance(c, CodeType)
+                else repr(c) for c in code.co_consts]]
+    code = getattr(function, '__code__', None)
+    if code is None:
+        raise ValueError('versioned Python parser/normalizer functions required')
+    source_file = inspect.getsourcefile(function)
+    module_hash = sha256(Path(source_file).read_bytes()).hexdigest() if source_file and Path(source_file).is_file() else None
+    return content_hash([code_value(code), module_hash, repr(getattr(function, '__defaults__', None)),
+        repr(getattr(function, '__kwdefaults__', None)),
+        [repr(cell.cell_contents) for cell in (getattr(function, '__closure__', None) or ())]])
+
+
+def _artifact(output, path, value):
+    from evaluations.query_pipeline_experiments import ArtifactReference
+    _write(output / path, value)
+    return ArtifactReference(ref=path, sha256=content_hash(value))
+
+
+def research_execution_hash(manifest, inputs, strategy, settings):
+    return content_hash({'manifest': manifest.model_dump(mode='json'),
+        'inputs': [value.model_dump(mode='json') for value in inputs],
+        'strategy': strategy.model_dump(mode='json'), 'settings': _versions(settings),
+        'research_sources': _research_versions()})
+
+
+def evaluate_strategy(*, manifest, inputs, strategy, parser, normalizer, output_root,
+                      transport=None, settings=None, live=False, preregistration_review=None):
+    """Native observation branch. Injected transports ALWAYS remain stub.
+
+    Only a preapproved live run can construct the recorded product model (no DB tools).
+    Full product candidates continue
+    to use evaluate_query_pipeline; partial/native candidates never enter its grader.
+    Approval references are recorded, not promoted to independent semantic approval.
+    """
+    prepared_at = perf_counter()
+    from evaluations.query_pipeline_experiments import EvaluationInput, StrategyObservation, validate_strategy
+    # Pydantic's frozen models can still contain mutable nested dictionaries.
+    inputs = [EvaluationInput.model_validate(value.model_dump(mode='json')) for value in inputs]
+    if strategy not in manifest.strategies or [v.case_sha256 for v in inputs] != manifest.case_hashes:
+        raise ValueError('inputs/strategy differ from preregistered matrix')
+    for value in inputs:
+        validate_strategy(strategy, value, scope=manifest.scope)
+    if transport is None:
+        from evaluations.query_pipeline_grading import independent_review_valid
+        if not live or settings is None or not strategy.requires_model:
+            raise ValueError('real models require explicit live settings and approval')
+        fingerprint = research_execution_hash(manifest, inputs, strategy, settings)
+        if not independent_review_valid(preregistration_review, input_sha256=fingerprint,
+                artifact_sha256=fingerprint, rules_sha256=fingerprint):
+            raise ValueError('independent preregistration approval required for frozen matrix/settings')
+    output = _new_output(output_root)
+    _write(output / 'experiment.json', manifest.model_dump(mode='json'))
+    _write(output / 'strategy.json', strategy.model_dump(mode='json'))
+    _write(output / 'private/inputs.json', [v.model_dump(mode='json') for v in inputs])
+    repo = git_workspace(Path(__file__).resolve().parents[1])
+    def git(*args):
+        return subprocess.run(['git', *args], cwd=repo, capture_output=True, check=True).stdout
+    metadata = {'schema_version': 'query-pipeline-native-run-v1', 'kind': 'stub' if transport else 'research_live',
+        'experiment_id': manifest.experiment_id, 'mode': manifest.mode, 'scope': manifest.scope,
+        'head': git('rev-parse', 'HEAD').decode('utf-8').strip(), 'worktree': str(repo),
+        'branch': git('branch', '--show-current').decode('utf-8').strip(),
+        'dirty_paths': git('status', '--porcelain').decode('utf-8').splitlines(),
+        'dirty_diff_sha256': sha256(git('diff', 'HEAD', '--binary')).hexdigest(),
+        'source_versions': _research_versions(), 'model_revision': None,
+        'context_sha256': [content_hash(value.model_context()) for value in inputs],
+        'preprocessing_ms': (perf_counter() - prepared_at) * 1000,
+        'adapter_functions': {'parser': _callable_version(parser), 'normalizer': _callable_version(normalizer)},
+        'lock_sha256': sha256((repo / 'uv.lock').read_bytes()).hexdigest() if (repo / 'uv.lock').is_file() else None,
+        'model_revision_reason': 'immutable revision not verified',
+        'settings': _versions(settings) if settings is not None else None,
+        'preregistration_approval_verified': transport is None,
+        'upstream_injected': [v.upstream_injected for v in inputs],
+        'planned': len(inputs) * manifest.runs, 'matrix_planned': manifest.planned,
+        'completed': 0, 'failed': 0, 'skipped': 0, 'pending': 0, 'unsupported': 0,
+        'unfinished': len(inputs) * manifest.runs,
+        'model_calls': 0, 'transport_calls': 0, 'input_tokens': None, 'output_tokens': None,
+        'sdk_retries': 0, 'natural_success': 0, 'result_completeness': 'not_tested'}
+    _write(output / 'run.json', metadata)
+    _write(output / 'observations.json', [])
+    observations, integrity = [], {}
+    all_usage = []
+    stopped = False
+    for _round in range(manifest.runs):
+        for value in inputs:
+            base = f'private/trials/{len(observations):06d}'
+            data = dict(node_id=strategy.adapter_id, native_schema_id=strategy.native_schema_id,
+                        native_schema_version=strategy.native_schema_version, status='skipped' if stopped else 'completed')
+            if not stopped:
+                stage, started = 'provider', perf_counter()
+                data['calls'] = 0
+                metadata['transport_calls'] += 1
+                try:
+                    if transport is not None:
+                        raw = transport(value.model_context())
+                    else:
+                        from langchain_core.messages import HumanMessage
+                        journal = {'calls': [], 'stopped': False, 'error': None,
+                            'record_call': lambda event: _write(output / (base + '/provider-call.json'), event)}
+                        model = _RecordedModel(get_llm_config(settings=settings), strategy.adapter_id, journal)
+                        try:
+                            message = HumanMessage(content=json.dumps(value.model_context(), ensure_ascii=False))
+                            response = model.invoke([message])
+                            raw = getattr(response, 'content', str(response))
+                        finally:
+                            metadata['model_calls'] += len(journal['calls'])
+                            data['calls'] = len(journal['calls'])
+                            usage = [call.get('usage') for call in journal['calls']]
+                            all_usage.extend(usage)
+                            for key in ('input_tokens', 'output_tokens'):
+                                data[key] = sum(u[key] for u in usage) if usage and all(u and u.get(key) is not None for u in usage) else None
+                                metadata[key] = sum(u[key] for u in all_usage) if all_usage and all(u and u.get(key) is not None for u in all_usage) else None
+                    data['raw'] = _artifact(output, base + '/raw.json', raw)
+                    stage = 'parse'
+                    converted = perf_counter()
+                    parsed = parser(raw)
+                    data['parsed'] = _artifact(output, base + '/parsed.json', parsed)
+                    stage = 'normalize'
+                    normalized = normalizer(parsed)
+                    data['normalized'] = _artifact(output, base + '/normalized.json', normalized)
+                    if isinstance(normalized, dict):
+                        native_status = normalized.get('status')
+                        if native_status in ('pending', 'needs_confirmation', 'needs_clarification'):
+                            data['status'] = 'pending'
+                        elif native_status == 'unsupported':
+                            data['status'] = 'unsupported'
+                    data['conversion_ms'] = (perf_counter() - converted) * 1000
+                except Exception as exc:
+                    # Stop the entire candidate run; no retry and no successful-answer selection.
+                    stopped = True
+                    data.update(status='failed', first_error=stage + '_error', errors=[type(exc).__name__])
+                    _write(output / (base + '/error.json'), {'stage': stage, 'type': type(exc).__name__, 'message': str(exc)})
+                finally:
+                    data['elapsed_ms'] = (perf_counter() - started) * 1000
+            observation = StrategyObservation(**data).model_dump(mode='json')
+            observations.append(observation)
+            metadata[observation['status']] += 1
+            metadata['unfinished'] = metadata['planned'] - len(observations)
+            _update(output / 'observations.json', observations)
+            _update(output / 'run.json', metadata)
+    _write(output / 'assessments.json', {'status': 'not_assessed', 'natural_success': 0,
+        'reason': 'native projection and independent semantic rules must be supplied separately'})
+    (output / 'comparison.md').write_text(
+        '# 原生候選觀測\n\n'
+        f'計畫 {metadata["planned"]}；完成 {metadata["completed"]}；失敗 {metadata["failed"]}；'
+        f'略過 {metadata["skipped"]}；待確認 {metadata["pending"]}；不支援 {metadata["unsupported"]}；'
+        f'未完成 {metadata["unfinished"]}。\n\n'
+        f'來源：{metadata["kind"]}。此為單一候選記錄，未進行跨候選比較、獨立語意核准或自然驗收。'
+        '用量見 run.json，DB 結果未測。\n',
+        encoding='utf-8')
+    # Index all files after final updates, including errors and all fixed inputs.
+    for path in sorted(output.rglob('*')):
+        if path.is_file():
+            integrity[path.relative_to(output).as_posix()] = sha256(path.read_bytes()).hexdigest()
+    _write(output / 'integrity.json', integrity)
+    return {'output': str(output), **metadata}
+
+
+def index_managed_evidence(run_dir, *, references):
+    """Verify a read-only archive index; this does not run the managed parser."""
+    root = Path(run_dir).resolve()
+    for ref, digest in references.items():
+        path = (root / ref).resolve()
+        if not path.is_relative_to(root) or not path.is_file() or sha256(path.read_bytes()).hexdigest() != digest:
+            raise ValueError('artifact integrity mismatch')
+    return {'kind': 'managed_readonly_index', 'source': str(root), 'references': references,
+            'replayed': False}
+
+
+def _verified_native_run(root):
+    integrity = json.loads((root / 'integrity.json').read_text(encoding='utf-8'))
+    required = {'run.json', 'experiment.json', 'strategy.json', 'observations.json', 'private/inputs.json'}
+    if not required <= set(integrity):
+        raise ValueError('artifact integrity index missing required entries')
+    index_managed_evidence(root, references=integrity)
+    for observation in _read_reference(root, 'observations.json'):
+        for key in ('raw', 'parsed', 'normalized'):
+            if observation[key]:
+                ref = observation[key]
+                if ref['ref'] not in integrity or content_hash(_read_reference(root, ref['ref'])) != ref['sha256']:
+                    raise ValueError('observation integrity mismatch')
+    return integrity
+
+
+def replay_strategy(run_dir, *, parser, normalizer, output_root):
+    """Reparse first native Raw, preserving failures; never invokes a transport."""
+    root = Path(run_dir).resolve()
+    integrity = _verified_native_run(root)
+    original = _read_reference(root, 'run.json')
+    compatible = (original['source_versions'] == _research_versions() and original['adapter_functions'] ==
+        {'parser': _callable_version(parser), 'normalizer': _callable_version(normalizer)})
+    report = {'kind': 'raw_replay', 'compatible': compatible, 'reproduced': False,
+              'model_calls': 0, 'natural_success': 0, 'source_run_sha256': integrity['run.json'], 'trials': []}
+    if not compatible:
+        report['reason'] = 'source_drift'
+    else:
+        for observation in _read_reference(root, 'observations.json'):
+            error, normalized, parsed = observation['first_error'], None, None
+            if observation['raw']:
+                stage = 'parse'
+                try:
+                    parsed = parser(_read_reference(root, observation['raw']['ref']))
+                    stage = 'normalize'
+                    normalized = normalizer(parsed)
+                    error = None
+                except Exception:
+                    error = stage + '_error'
+            same = error == observation['first_error']
+            if observation['parsed']:
+                same = same and content_hash(parsed) == observation['parsed']['sha256']
+            if observation['normalized']:
+                same = same and content_hash(normalized) == observation['normalized']['sha256']
+            report['trials'].append({'first_error': error, 'reproduced': same if observation['raw'] else None,
+                'status': observation['status'], 'raw_observed': observation['raw'] is not None})
+        report['reproduced'] = (any(t['raw_observed'] for t in report['trials']) and
+            all(t['reproduced'] is True or t['status'] == 'skipped' for t in report['trials']))
+    output = _new_output(output_root)
+    _write(output / 'replay-report.json', report)
+    return {'output': str(output), **report}
+
+
+def regrade_strategy(run_dir, *, rules, output_root, reviews=None):
+    """New semantic rule version over recorded projections, distinct from Raw replay."""
+    from evaluations.query_pipeline_grading import assess_requirements
+    root = Path(run_dir).resolve()
+    integrity = _verified_native_run(root)
+    inputs = _read_reference(root, 'private/inputs.json')
+    observations = _read_reference(root, 'observations.json')
+    output = _new_output(output_root)
+    _write(output / 'private/rules.json', rules)
+    scores = []
+    for index, observation in enumerate(observations):
+        if observation['normalized']:
+            value = _read_reference(root, observation['normalized']['ref'])
+            score = assess_requirements(value, rules=rules, input_sha256=content_hash(inputs[index % len(inputs)]),
+                review=(reviews or {}).get(str(index)))
+            scores.append(score.model_dump(mode='json'))
+        else:
+            scores.append({'status': observation['status'], 'reason': observation['first_error'],
+                           'natural_success': False})
+    _write(output / 'assessments.json', scores)
+    report = {'kind': 'response_regrade', 'source_run_sha256': integrity['run.json'],
+              'rules_sha256': content_hash(rules), 'model_calls': 0, 'natural_success': 0,
+              'planned': len(observations), 'result_completeness': 'not_tested'}
+    _write(output / 'replay-report.json', report)
+    return {'output': str(output), **report}
 
 
 def main(argv=None):

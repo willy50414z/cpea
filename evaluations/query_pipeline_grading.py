@@ -121,3 +121,100 @@ def summarize_pipeline(entries, *, planned, runs, support_planned=None):
         'supported_success_rate': supported_success / support_planned if support_planned else None,
         'total_elapsed_ms': sum(e.get('elapsed_ms', 0) for e in entries),
         'false_ready': sum(bool(e.get('grading', {}).get('false_ready')) for e in completed)}
+
+
+def _pointer(value, pointer):
+    if not pointer.startswith('/'):
+        raise ValueError('obligation requires an absolute JSON pointer')
+    for part in pointer[1:].split('/'):
+        key = part.replace('~1', '/').replace('~0', '~')
+        value = value[int(key)] if isinstance(value, list) else value[key]
+    return value
+
+
+def independent_review_valid(review, *, input_sha256, artifact_sha256, rules_sha256):
+    """Input approval is separate; this validates a hash-bound output review only."""
+    return bool(review and review.get('decision') == 'approved' and review.get('author')
+        and review.get('reviewer') and review['reviewer'] != review['author'] and review.get('reviewed_at')
+        and review.get('input_sha256') == input_sha256
+        and review.get('artifact_sha256') == artifact_sha256 and review.get('rules_sha256') == rules_sha256)
+
+
+def assess_requirements(normalized, *, rules, input_sha256, review=None):
+    """Score approved semantic projections, never repair or enrich native output.
+
+    Callers own projection validity; unknown native semantics remain unobserved.
+    Match one WHOLE legal alternative rather than selecting a best rule per field.
+    SQL/compiler, reference, integration and natural gates require separate evidence.
+    """
+    from evaluations.query_pipeline_experiments import LAYERS, RequirementAssessment, SemanticAssessment
+    alternatives = rules.get('alternatives', [])
+    if not rules.get('version') or not alternatives or any(not a for a in alternatives):
+        raise ValueError('versioned complete obligation alternatives required')
+    identifiers = [r['requirement_id'] for r in alternatives[0]]
+    if len(set(identifiers)) != len(identifiers) or any(
+            {r['requirement_id'] for r in a} != set(identifiers) or len(a) != len(identifiers) for a in alternatives):
+        raise ValueError('alternatives must cover identical unique requirement IDs')
+    candidates = []
+    for alternative in alternatives:
+        assessments = []
+        for rule in alternative:
+            verdict, coverage, evidence = 'NOT_OBSERVED', 'unknown', []
+            if rule.get('match', 'exact') not in {'exact', 'set'} or not rule['pointer'].startswith('/'):
+                raise ValueError('unsupported obligation comparison')
+            # Access expected even when evidence is absent: malformed rules must fail early.
+            expected = rule['expected']
+            try:
+                actual = _pointer(normalized, rule['pointer'])
+            except (KeyError, IndexError, TypeError, ValueError):
+                pass
+            else:
+                if rule.get('match') == 'set':
+                    equal = isinstance(actual, list) and isinstance(expected, list) and (
+                        {content_hash(v) for v in actual} == {content_hash(v) for v in expected})
+                else:
+                    equal = content_hash(actual) == content_hash(expected)
+                verdict, coverage = ('PASS', 'satisfied') if equal else ('FAIL', 'partial')
+                evidence = [rule['pointer']]
+            assessments.append(RequirementAssessment(requirement_id=rule['requirement_id'],
+                obligation=rule['obligation'], evidence=evidence, verdict=verdict, coverage=coverage))
+        candidates.append(assessments)
+    chosen = max(candidates, key=lambda rows: sum(r.verdict == 'PASS' for r in rows))
+    verdicts = {r.verdict for r in chosen}
+    verdict = 'FAIL' if 'FAIL' in verdicts else ('NOT_OBSERVED' if 'NOT_OBSERVED' in verdicts else 'PASS')
+    layers = dict.fromkeys(LAYERS, 'NOT_OBSERVED')
+    layers['requirements'] = verdict
+    rule_hash = content_hash(rules)
+    return SemanticAssessment(grading_version='query-pipeline-requirements-v1', rules_sha256=rule_hash,
+        requirements=chosen, layers=layers, first_error='requirements' if verdict == 'FAIL' else None,
+        independent_approval=independent_review_valid(review, input_sha256=input_sha256,
+            artifact_sha256=content_hash(normalized), rules_sha256=rule_hash))
+
+
+def _rate(numerator, denominator):
+    return {'numerator': numerator, 'denominator': denominator,
+            'rate': numerator / denominator if numerator is not None and denominator else None}
+
+
+def mapping_metrics(*, expected, observed):
+    expected = {content_hash(v) for v in expected}
+    if observed is None:
+        return {'recall': _rate(None, len(expected)), 'precision': _rate(None, None)}
+    observed = {content_hash(v) for v in observed}
+    hits = len(expected & observed)
+    return {'recall': _rate(hits, len(expected)), 'precision': _rate(hits, len(observed))}
+
+
+def calibrate_oracle(rows, *, review=None, rules_sha256=None):
+    """Report disagreements without changing the oracle or assuming labels approved."""
+    if any(r.get('independent_verdict') not in {'legal', 'illegal', 'disputed', 'unknown'}
+           or (r.get('automated_pass') is not None and type(r['automated_pass']) is not bool) for r in rows):
+        raise ValueError('invalid calibration label')
+    legal = [r for r in rows if r['independent_verdict'] == 'legal' and r['automated_pass'] is not None]
+    illegal = [r for r in rows if r['independent_verdict'] == 'illegal' and r['automated_pass'] is not None]
+    return {'planned': len(rows), 'false_reject': _rate(sum(not r['automated_pass'] for r in legal), len(legal)),
+        'false_accept': _rate(sum(r['automated_pass'] for r in illegal), len(illegal)),
+        'disputed': sum(r['independent_verdict'] == 'disputed' for r in rows),
+        'unobserved': sum(r['independent_verdict'] == 'unknown' or r['automated_pass'] is None for r in rows),
+        'approval_verified': independent_review_valid(review, input_sha256=content_hash(rows),
+            artifact_sha256=content_hash(rows), rules_sha256=rules_sha256)}

@@ -1,0 +1,197 @@
+{
+  "collected_on": "2026-10-22",
+  "method": "GitHub release/tag commit plus immutable raw sources",
+  "independently_reviewed": false,
+  "sources": [
+    {
+      "repo": "Canner/WrenAI",
+      "tag": "wren-pydantic-v0.3.1",
+      "commit": "7f94c7889bf83b936df9ab3079fbf2fd8110b4d5",
+      "release_url": "https://github.com/Canner/WrenAI/releases/tag/wren-pydantic-v0.3.1",
+      "files": [
+        {
+          "path": "LICENSE",
+          "sha256": "25ce726569e5c568a00f46133a3f7515a216c6c435f8aa8531ede1924b0d6309",
+          "url": "https://github.com/Canner/WrenAI/blob/7f94c7889bf83b936df9ab3079fbf2fd8110b4d5/LICENSE"
+        },
+        {
+          "path": "core/wren/README.md",
+          "sha256": "92108667489e7574a8b644e1d6d51ee2330fbe8ae89552424ab0421a91a97d1a",
+          "url": "https://github.com/Canner/WrenAI/blob/7f94c7889bf83b936df9ab3079fbf2fd8110b4d5/core/wren/README.md"
+        },
+        {
+          "path": "core/wren/pyproject.toml",
+          "sha256": "cd388d2d5ea3dc6206674e453e9cb3295003ad8139df1464c9cd9d85bf073880",
+          "url": "https://github.com/Canner/WrenAI/blob/7f94c7889bf83b936df9ab3079fbf2fd8110b4d5/core/wren/pyproject.toml"
+        },
+        {
+          "path": "core/wren-core/core/LICENSE",
+          "sha256": "3da122eeaedca9b81aa873d2cb090c66eeaa1594e776efab631fbf0d1cebfeed",
+          "url": "https://github.com/Canner/WrenAI/blob/7f94c7889bf83b936df9ab3079fbf2fd8110b4d5/core/wren-core/core/LICENSE"
+        },
+        {
+          "path": "core/wren-core-base/LICENSE",
+          "sha256": "3da122eeaedca9b81aa873d2cb090c66eeaa1594e776efab631fbf0d1cebfeed",
+          "url": "https://github.com/Canner/WrenAI/blob/7f94c7889bf83b936df9ab3079fbf2fd8110b4d5/core/wren-core-base/LICENSE"
+        },
+        {
+          "path": "core/wren-core-base/src/mdl/manifest.rs",
+          "sha256": "6b04ec6c1e440719fceaa79ca38cf5ad1b3a9188142b200e563d67c4dcc1e644",
+          "url": "https://github.com/Canner/WrenAI/blob/7f94c7889bf83b936df9ab3079fbf2fd8110b4d5/core/wren-core-base/src/mdl/manifest.rs"
+        },
+        {
+          "path": "core/wren-core-py/README.md",
+          "sha256": "9d3f003380678173eaef0577e369b9b6f3cefc1827d15bb66a6fdd8aa82bbfbb",
+          "url": "https://github.com/Canner/WrenAI/blob/7f94c7889bf83b936df9ab3079fbf2fd8110b4d5/core/wren-core-py/README.md"
+        },
+        {
+          "path": "core/wren-core-py/pyproject.toml",
+          "sha256": "263ad2ff9411038bc8c979e33eeb52f43f9e4bcb39826c282d58da0eb019e6d9",
+          "url": "https://github.com/Canner/WrenAI/blob/7f94c7889bf83b936df9ab3079fbf2fd8110b4d5/core/wren-core-py/pyproject.toml"
+        },
+        {
+          "path": "core/wren-core-py/src/context.rs",
+          "sha256": "1e307090839db6cf8f4f6d025471621673ff7587d80d1ba00f4fe0e3dc5f5c23",
+          "url": "https://github.com/Canner/WrenAI/blob/7f94c7889bf83b936df9ab3079fbf2fd8110b4d5/core/wren-core-py/src/context.rs"
+        },
+        {
+          "path": "core/wren-core-py/src/lib.rs",
+          "sha256": "ca36e686c386ec5b710aa971afebee722034066ce390619a042329445d593813",
+          "url": "https://github.com/Canner/WrenAI/blob/7f94c7889bf83b936df9ab3079fbf2fd8110b4d5/core/wren-core-py/src/lib.rs"
+        }
+      ]
+    },
+    {
+      "repo": "cube-js/cube",
+      "tag": "v1.8.9",
+      "commit": "b4b2591791653a91eaf7b3a61a2eb8125bc2ae41",
+      "release_url": "https://github.com/cube-js/cube/releases/tag/v1.8.9",
+      "files": [
+        {
+          "path": "LICENSE",
+          "sha256": "fae0bbc037781c1d4697b700106f50a0a13910778ef8279a657bd61dcaeb5a5f",
+          "url": "https://github.com/cube-js/cube/blob/b4b2591791653a91eaf7b3a61a2eb8125bc2ae41/LICENSE"
+        },
+        {
+          "path": "README.md",
+          "sha256": "501931b17fc2324f42577bbb7e391dd815f54b59698751abd4d53cbfe7e8fd94",
+          "url": "https://github.com/cube-js/cube/blob/b4b2591791653a91eaf7b3a61a2eb8125bc2ae41/README.md"
+        },
+        {
+          "path": "packages/cubejs-schema-compiler/LICENSE",
+          "sha256": "abcfcdca83be4a1ba4b5fc16d42277e5fafe24c1359e6c29a5152016069ce137",
+          "url": "https://github.com/cube-js/cube/blob/b4b2591791653a91eaf7b3a61a2eb8125bc2ae41/packages/cubejs-schema-compiler/LICENSE"
+        }
+      ]
+    },
+    {
+      "repo": "langchain-ai/langchain",
+      "tag": "langchain-core==1.6.13",
+      "commit": "bdf0f53ed0aec3c9ae371a549e1a4d2ee4e9f021",
+      "release_url": "https://github.com/langchain-ai/langchain/releases/tag/langchain-core%3D%3D1.6.13",
+      "files": [
+        {
+          "path": "libs/core/LICENSE",
+          "sha256": "4ec67e4ca6e6721dba849b2ca82261597c86a61ee214bbf21416006b7b2d0478",
+          "url": "https://github.com/langchain-ai/langchain/blob/bdf0f53ed0aec3c9ae371a549e1a4d2ee4e9f021/libs/core/LICENSE"
+        },
+        {
+          "path": "libs/langchain/LICENSE",
+          "sha256": "4ec67e4ca6e6721dba849b2ca82261597c86a61ee214bbf21416006b7b2d0478",
+          "url": "https://github.com/langchain-ai/langchain/blob/bdf0f53ed0aec3c9ae371a549e1a4d2ee4e9f021/libs/langchain/LICENSE"
+        },
+        {
+          "path": "libs/langchain/pyproject.toml",
+          "sha256": "0485910a8ba61a00fb2eb1b6829b8a2b03fe95be291462895c4788afa425f52a",
+          "url": "https://github.com/langchain-ai/langchain/blob/bdf0f53ed0aec3c9ae371a549e1a4d2ee4e9f021/libs/langchain/pyproject.toml"
+        }
+      ]
+    },
+    {
+      "repo": "run-llama/llama_index",
+      "tag": "v0.14.25",
+      "commit": "f12d46acab73f5b2243ef49c2f00101617b38ce4",
+      "release_url": "https://github.com/run-llama/llama_index/releases/tag/v0.14.25",
+      "files": [
+        {
+          "path": "LICENSE",
+          "sha256": "24f40b5190fdacabc24ddbb5f76364d15e4f030925220ea300d8a2dd4993c8cb",
+          "url": "https://github.com/run-llama/llama_index/blob/f12d46acab73f5b2243ef49c2f00101617b38ce4/LICENSE"
+        },
+        {
+          "path": "llama-index-core/llama_index/core/indices/struct_store/sql_query.py",
+          "sha256": "8513b2c96385ecdd1d75d0929ab806989e5bfc47f98b3f6624cde533e2326f95",
+          "url": "https://github.com/run-llama/llama_index/blob/f12d46acab73f5b2243ef49c2f00101617b38ce4/llama-index-core/llama_index/core/indices/struct_store/sql_query.py"
+        },
+        {
+          "path": "llama-index-core/llama_index/core/indices/struct_store/sql_retriever.py",
+          "sha256": "2b7757132b7e6a912984072ad8035aeb90d9afacc79efa32c56a0d5e673d2a26",
+          "url": "https://github.com/run-llama/llama_index/blob/f12d46acab73f5b2243ef49c2f00101617b38ce4/llama-index-core/llama_index/core/indices/struct_store/sql_retriever.py"
+        },
+        {
+          "path": "llama-index-core/llama_index/core/utilities/sql_wrapper.py",
+          "sha256": "95638ec5d28993170a1c6499901a080b3cd199dc56740200a7c1cbcd0e14ed01",
+          "url": "https://github.com/run-llama/llama_index/blob/f12d46acab73f5b2243ef49c2f00101617b38ce4/llama-index-core/llama_index/core/utilities/sql_wrapper.py"
+        }
+      ]
+    },
+    {
+      "repo": "dbt-labs/metricflow",
+      "tag": "v0.213.0",
+      "commit": "4200f85c59b2bb334f0b0dea851b38d0b8198134",
+      "release_url": "https://github.com/dbt-labs/metricflow/releases/tag/v0.213.0",
+      "files": [
+        {
+          "path": "LICENSE",
+          "sha256": "438b69717fc3020f549d12e262421c57c5b21d38e97a36f8d9b9d68082c09974",
+          "url": "https://github.com/dbt-labs/metricflow/blob/4200f85c59b2bb334f0b0dea851b38d0b8198134/LICENSE"
+        },
+        {
+          "path": "README.md",
+          "sha256": "0bc03f8c21f80e98e0965f777f475fbc292206a1043f1a6fde4efec055986f13",
+          "url": "https://github.com/dbt-labs/metricflow/blob/4200f85c59b2bb334f0b0dea851b38d0b8198134/README.md"
+        },
+        {
+          "path": "dbt-metricflow/LICENSE",
+          "sha256": "438b69717fc3020f549d12e262421c57c5b21d38e97a36f8d9b9d68082c09974",
+          "url": "https://github.com/dbt-labs/metricflow/blob/4200f85c59b2bb334f0b0dea851b38d0b8198134/dbt-metricflow/LICENSE"
+        },
+        {
+          "path": "pyproject.toml",
+          "sha256": "f00dc9fe38eafcf4209099653ac8e684d0749a39c67b976da09b3375ba82d6af",
+          "url": "https://github.com/dbt-labs/metricflow/blob/4200f85c59b2bb334f0b0dea851b38d0b8198134/pyproject.toml"
+        },
+        {
+          "path": "requirements-files/requirements.txt",
+          "sha256": "939367943a36cc7170f005c38126cc15711d012ea2ca94e7a399b9250d649e30",
+          "url": "https://github.com/dbt-labs/metricflow/blob/4200f85c59b2bb334f0b0dea851b38d0b8198134/requirements-files/requirements.txt"
+        }
+      ]
+    },
+    {
+      "repo": "tobymao/sqlglot",
+      "tag": "v30.24.0",
+      "commit": "5d588c0f32d17a08191898638f67ff27bb0a13ff",
+      "release_url": null,
+      "files": []
+    },
+    {
+      "repo": "vanna-ai/vanna",
+      "tag": "v2.0.2",
+      "commit": "365d0617c1a4567ffee1b19b40c27feb4206bfcf",
+      "release_url": "https://github.com/vanna-ai/vanna/releases/tag/v2.0.2",
+      "files": [
+        {
+          "path": "LICENSE",
+          "sha256": "55888f30c0ea8fd05cc5490062aac0cc9a67e6d0855c2ae78257d1a92e65f519",
+          "url": "https://github.com/vanna-ai/vanna/blob/365d0617c1a4567ffee1b19b40c27feb4206bfcf/LICENSE"
+        },
+        {
+          "path": "README.md",
+          "sha256": "adcbeab09af809005f4f5ff0383890ae8bc3de26fbc49c0245d79a4cc40f6617",
+          "url": "https://github.com/vanna-ai/vanna/blob/365d0617c1a4567ffee1b19b40c27feb4206bfcf/README.md"
+        }
+      ]
+    }
+  ]
+}

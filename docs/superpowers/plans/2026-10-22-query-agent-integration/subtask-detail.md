@@ -10,7 +10,7 @@
 
 **規格：**[task.md](task.md)，包含全域限制、範圍、共同驗證方式與完成定義。
 
-**研究增補：**[ab-evaluation-plan.md](ab-evaluation-plan.md) 定義共同業務語意義務、候選責任、實驗控制與限制；[decision-record-spec.md](decision-record-spec.md) 定義實驗及架構裁定。2026-10-22 增補只編修文件；下列後綴／R 任務全部未執行，不繼承原 S1-02～S1-07 的完成狀態，亦不改寫其證據。
+**研究增補：**[ab-evaluation-plan.md](ab-evaluation-plan.md) 定義共同業務語意義務、候選責任、實驗控制與限制；[decision-record-spec.md](decision-record-spec.md) 定義實驗及架構裁定。2026-10-22 首次增補只編修文件；後續依使用者指示的實作進度見 [研究實作紀錄](research-implementation-report.md)。下列後綴／R 任務不繼承原 S1-02～S1-07 的完成狀態，亦不改寫其證據。
 
 ## 全域限制與審查重點
 
@@ -327,13 +327,13 @@
 
 **實作證據：**待填：完整 run IDs、需求覆蓋、答案引用、模型比較與產品限制。
 
-## 研究增補子任務（全部未執行）
+## 研究增補子任務
 
-以下為可執行步驟規格，**本次不執行**。原 S1-01～S1-08 的測試命令與勾選不變。未來程式增補先沿用本文件檔案責任配置；先查現有能力，只有必要時才增加 evaluation 內部模組，產品不得依賴研究程式。每項實際執行後須依決策規格填 HEAD／命令／退出碼／原件 hash／獨立審核與限制，不能只填 PASS。
+以下為可執行步驟規格。2026-10-22 依使用者後續指示開始離線實作，進度、命令與限制統一見 [研究實作紀錄](research-implementation-report.md)；下列未勾選步驟仍是完整驗收待辦，不能以局部程式測試代替。原 S1-01～S1-08 的測試命令與勾選不變。程式增補沿用本文件檔案責任配置；只有必要時增加 evaluation 內部模組，產品不得依賴研究程式。每項實際執行後須依決策規格填 HEAD／命令／退出碼／原件 hash／獨立審核與限制，不能只填 PASS。
 
 ### S1-02-E1：能力責任與最小評估 Adapter 邊界
 
-**狀態：**未執行。**依賴：**既有 S1-02 與實際程式盤點。**預期產物：**責任矩陣、StrategyDescriptor／EvaluationInput／StrategyObservation／SemanticAssessment 規格及必要的 evaluation 薄封套；**證據：**無。
+**狀態：**介面程式已離線驗證，待獨立審查。**依賴：**既有 S1-02 與實際程式盤點。**預期產物：**責任矩陣、StrategyDescriptor／EvaluationInput／StrategyObservation／SemanticAssessment 規格及必要的 evaluation 薄封套；**證據：**見 [研究實作紀錄](research-implementation-report.md)，原未勾選項仍須依完整完成條件驗收。
 
 - [ ] 對照現有 `QueryPipelineService` 注入、`plan`／`generate`、`TaskSQLInput`、managed contract hook，標示已可直接重用與缺口；A0 沒有 Coverage 欄位不得補造。
 - [ ] 按研究規格第 2 節確認六項能力、三種 implementation_kind、輸入原生型別與候選版本；同責任才比較，不為 package 建固定 node。
@@ -344,7 +344,7 @@
 
 ### S1-06-E1：共用實驗識別與原件記錄
 
-**狀態：**未執行。**依賴：**S1-02-E1、既有 S1-06。**預期產物：**runner 追加 metadata／manifest、逐節點 observation 及證據索引，沿用 `query_pipeline_runner.py` 與 private trial 路徑；**證據：**無。
+**狀態：**記錄與候選分流程式已離線驗證，真實研究未測。**依賴：**S1-02-E1、既有 S1-06。**預期產物：**runner 追加 metadata／manifest、逐節點 observation 及證據索引，沿用 `query_pipeline_runner.py` 與 private trial 路徑；**證據：**見 [研究實作紀錄](research-implementation-report.md)，原未勾選項仍須依完整完成條件驗收。
 
 - [ ] 逐欄核對研究規格第 3.1 節與現有 `run.json`，只補缺項：Experiment／Strategy／Adapter、worktree、模型 digest／核實來源、上游注入核准與原生 schema 等。
 - [ ] 分開 fake／stub 與研究 adapter 真實呼叫；不能讓既有 factory 的 stub 標記造成自然成績誤計，也不能以 candidate 設定自行宣稱 natural。
@@ -355,7 +355,7 @@
 
 ### S1-07-E1：跨格式語意評分與 Replay 銜接
 
-**狀態：**未執行。**依賴：**S1-06-E1、既有 S1-07。**預期產物：**逐義務評分、六層 verdict、Oracle 誤拒／誤收對照、Replay／重評報告，延伸現有 cases／grading／runner；**證據：**無。
+**狀態：**逐義務核心與重現已離線驗證，其他 validator 與規則核准待辦。**依賴：**S1-06-E1、既有 S1-07。**預期產物：**逐義務評分、六層 verdict、Oracle 誤拒／誤收對照、Replay／重評報告，延伸現有 cases／grading／runner；**證據：**見 [研究實作紀錄](research-implementation-report.md)，原未勾選項仍須依完整完成條件驗收。
 
 - [ ] 建立原文義務與候選原生 evidence 的對照，沿用完整合法替代規則；區分 schema、引用、語意、integration、SQL 靜態、完整自然流程，不以 JSON 相同判成功。
 - [ ] 對研究規格第 3.3 節所有指標指定分子／分母／適用責任；同 View scope、grain、own_gap 與依賴分開；不可比與未知不算 PASS。
@@ -410,7 +410,7 @@
 
 ### R2-01：外部引擎功能與適配性研究
 
-**狀態：**未執行。**依賴：**計畫確認、現有七 View／技術契約證據。**預期產物：**版本化 capability／license／部署矩陣、業務義務及待確認事項；**證據：**無，本次官方入口閱讀不是完整研究驗收。
+**狀態：**固定版本研究草稿完成，待獨立審查。**依賴：**計畫確認、現有七 View／技術契約證據。**預期產物：**版本化 capability／license／部署矩陣、業務義務及待確認事項；**證據：**見 [外部引擎研究](external-engine-research.md)，不視為完整研究驗收。
 
 - [ ] 優先 Wren MDL／規劃，接續 MetricFlow 指標／維度／Entity／Join；視治理需求研究 Cube，LangChain／LlamaIndex／Vanna 作基本生成對照。
 - [ ] 核對官方實作及確切 release／LICENSE，列離線能力／模型／DB 需求、方言與部署限制；不把 Package 功能宣稱當成 CPEA 通過。
@@ -420,7 +420,7 @@
 
 ### R2-02：隔離 Wren 最小靜態 PoC
 
-**狀態：**未執行。**依賴：**R2-01、S1-07-E1、技術測試語意義務核准。**預期產物：**隔離環境版本清單、七 View 轉換草稿、人工知識清單、plan／SQL 原件及靜態評分；**證據：**無。
+**狀態：**七 View 技術編譯探測完成，正式語意 Pilot 未完成。**依賴：**R2-01、S1-07-E1、技術測試語意義務核准。**預期產物：**隔離環境版本清單、七 View 轉換草稿、人工知識清單、plan／SQL 原件及靜態評分；**證據：**見 [研究實作紀錄](research-implementation-report.md)，原未勾選項仍須依完整完成條件驗收。
 
 - [ ] 在另行授權的獨立 venv／容器固定版本；不改產品依賴、正式入口、原 YAML 或業務核准狀態，不提供 DB credentials。
 - [ ] 逐欄記錄 YAML→外部 semantic model 的轉換、不可表示語意與新增人工知識，未知 cardinality／key 不臆測。
@@ -431,7 +431,7 @@
 
 ### R2-03：成本、缺口與可行性結論
 
-**狀態：**未執行。**依賴：**R2-02 成功或受阻證據。**預期產物：**可行性報告、實測／估算成本、新客戶導入假設、ADG 輸入；**證據：**無。
+**狀態：**成本與缺口草稿完成，待獨立審查。**依賴：**R2-02 成功或受阻證據。**預期產物：**可行性報告、實測／估算成本、新客戶導入假設、ADG 輸入；**證據：**見 [研究實作紀錄](research-implementation-report.md)，原未勾選項仍須依完整完成條件驗收。
 
 - [ ] 逐項整理研究規格第 5 節的導入、semantic model、Join、指標／粒度／母體／缺值、方言、權限／部署、授權及未支援業務要求。
 - [ ] 分開建模／修正／維護／升版工時、模型成本與新 ERP 估算；沒有新 ERP 代表樣本時列證據不足。

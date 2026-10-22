@@ -115,6 +115,8 @@ def test_replay_makes_zero_model_and_db_calls_and_keeps_original_run(tmp_path, m
     metadata = json.loads((Path(replay['output']) / 'run.json').read_text(encoding='utf-8'))
     assert metadata['mode'] == 'integrated' and metadata['input_origin'] == 'natural_planning'
     assert metadata['replay_of']['run_sha256'] and metadata['grader_sha256']
+    report = json.loads((Path(replay['output']) / 'replay-report.json').read_text(encoding='utf-8'))
+    assert report['kind'] == 'response_regrade' and report['model_calls'] == 0
 
 
 def test_factory_mode_never_connects_network_or_database(tmp_path, monkeypatch):
@@ -186,6 +188,17 @@ def test_recorded_model_never_retries_provider_error_even_when_value_error(tmp_p
     with pytest.raises(ValueError): model.invoke([])
     with pytest.raises(RuntimeError, match='no retry'): model.invoke([])
     assert len(calls) == 1 and len(journal['calls']) == 1
+
+
+def test_recorded_model_flushes_first_raw_before_caller_parser(tmp_path):
+    from evaluations.query_pipeline_runner import _RecordedModel
+    saved = []
+    journal = dict(calls=[], stopped=False, error=None, record_call=saved.append)
+    model = _RecordedModel(SimpleNamespace(invoke=lambda _: SimpleNamespace(
+        content='malformed first Raw', usage_metadata=None)), 'planning', journal)
+    result = model.invoke([])
+    assert saved[0]['response'] == result.content
+    assert saved[0]['usage'] is None
 
 
 @pytest.mark.parametrize('mode', ['planning', 'integrated'])

@@ -68,3 +68,21 @@ def approved_planning(case, catalog):
         prepared = []
     return DecompositionResponse(status=draft.status, draft=draft, prepared_requests=prepared,
                                  contract_fingerprint=catalog.fingerprint)
+
+
+def evaluation_input(case, catalog, *, capability, case_ref, upstream=None, approval_ref=None):
+    """Reuse the versioned case registry without leaking its oracle to native adapters."""
+    from evaluations.query_pipeline_experiments import EvaluationInput
+    if case['case_sha256'] != case_sha256(case) or case['contract_fingerprint'] != catalog.fingerprint:
+        raise ValueError('case or catalog drift')
+    if upstream is not None and (not approved_for(case, catalog) or not approval_ref):
+        raise ValueError('upstream injection requires approved case and approval reference')
+    snapshot = {view.name: view.policy for view in catalog.views()}
+    origin = {'capability_resolution': 'approved_recall', 'query_planning': 'approved_planning',
+              'single_view_sql': 'approved_tasks'}.get(capability, 'semantic_request')
+    return EvaluationInput(case_ref=case_ref, case_sha256=case['case_sha256'], request=case['request'],
+        catalog_snapshot=snapshot, catalog_fingerprint=catalog.fingerprint,
+        catalog_snapshot_sha256=content_hash(snapshot), capability=capability,
+        input_origin=origin if upstream is not None else 'original_request',
+        upstream_injected=upstream is not None, upstream=upstream,
+        upstream_sha256=content_hash(upstream) if upstream is not None else None, approval_ref=approval_ref)

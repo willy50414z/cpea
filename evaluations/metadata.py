@@ -7,6 +7,15 @@ from pathlib import Path
 from uuid import uuid4
 import cpea
 
+
+def git_workspace(path):
+    """Locate the evaluated checkout even when this package is installed elsewhere."""
+    for candidate in (Path(path).resolve(),Path.cwd(),Path(__file__).resolve().parent):
+        for parent in (candidate,*candidate.parents):
+            if (parent/'.git').exists():
+                return parent
+    raise ValueError('evaluation provenance requires a Git workspace')
+
 def run_metadata(runtime, cases, *, kind='real-model'):
     values = asdict(runtime.settings)
     keys = ['llm_provider', 'llm_model', 'llm_reasoning', 'temperature', 'top_p', 'seed', 'context_window',

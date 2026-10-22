@@ -71,6 +71,14 @@ Catalog snapshot 保留各 View YAML 的 physical name、欄位能力、聚合�
 
 不支援跨 View JOIN、SQL dialect 切換或新業務 workflow。未來 API operation 是獨立能力介面，設計列於 enterprise_design，不會強迫以 SQL 呼叫 API。
 
+## 前置資料分工規劃
+
+`TaskDecompositionService.plan(request)` 是可獨立呼叫的規劃入口。其 graph 為 `load_contracts → plan_tasks → validate_plan → prepare_requests`，先將全部核准契約提供給模型，再驗證子任務、來源、欄位、條件、原始／彙總粒度、相依關係與合併鍵。只有 ready 計畫能取得各自單 View 的 `{request, history: []}` payload；未就緒及未綁定輸入不提供可提交 payload。此服務不載入 SQL compiler、retriever、DB executor 或既有 query runtime。
+
+規劃結果另保存逐邊整合方式、母體、聚合／巢狀收集／月份展開要求及時間語意。來源唯一鍵與固定條件足以證明單列時，允許冗餘顯示維度；無法證明的細粒度輸出必須明確準備對齊動作。確定性的結構驗證不代表已完整理解自然語言，實際資料合併及決策仍需後續驗收。
+
+此階段由獨立 `cpea-plan-eval` 評估 Retail 30 題跨來源需求，停在 requests 準備；既有網頁及 SQL API 尚未自動串接這個入口。執行方式、根目錄 Azure 設定與結果界線見[前置需求拆分評估](../evaluations/README.md)。
+
 ## 單題串流與 Gradio 首頁
 
 `StagedQueryService` 以空 history 產生 `SQLStage`，檢查 supported、profile allowlist 與 query plan，再由 `SQLExecutionAgent.execute_generation()` 執行相同 SQL，回傳 `ResultStage`。驗證會以既有 compiler 重新編譯 plan 並比較 SQL，不再次呼叫 LLM。舊 `run()`／JSON query 行為及 execution trace、attempts、row bounding 保留；新流程不呼叫 AnswerSynthesisService。

@@ -139,17 +139,18 @@ def test_retail_pending_case_is_exploratory_only(tmp_path):
     (project / "evaluations" / "cases.jsonl").write_text(first + "\n", encoding="utf-8")
     (project / ".env").write_text("ASSISTANT_LLM_PROVIDER=ollama\nASSISTANT_LLM_MODEL=offline-test\n"
         "ASSISTANT_RETRIEVAL_MODE=lexical\nASSISTANT_LLM_NUM_CTX=16000\n", encoding="utf-8")
+    prompt_version = json.loads(first)["prompt_version"]
     factory_calls = []
     def factory(target, settings):
         factory_calls.append(1)
         return StubLLM()
     with pytest.raises(ValueError, match="no approved cases"):
         evaluate_project("retail", projects_root=projects, repo_root=ROOT,
-                         allow_draft_profile=True, model_factory=factory, prompt_version="v9")
+                         allow_draft_profile=True, model_factory=factory, prompt_version=prompt_version)
     assert not factory_calls
     result = evaluate_project("retail", projects_root=projects, repo_root=ROOT,
                               allow_draft_profile=True, exploratory=True,
-                              runs=1, model_factory=factory, prompt_version="v9")
+                              runs=1, model_factory=factory, prompt_version=prompt_version)
     assert result["planned_total"] == 1 and result["completed_total"] == 1
     record = json.loads((Path(result["output"]) / "results.jsonl").read_text(encoding="utf-8"))
     assert record["review_state"] == "pending" and record["status"] is None

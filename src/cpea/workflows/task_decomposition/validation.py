@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import json
 from datetime import date
-from cpea.application.models.decomposition import DecompositionDraft, PreparedSQLRequest
+from cpea.application.models.decomposition import DecompositionDraft, PlanningTask, PreparedSQLRequest
 from cpea.application.ports.catalog import CatalogProvider
 
 
@@ -188,6 +188,21 @@ def validate_decomposition(draft: DecompositionDraft, catalog: CatalogProvider) 
     return errors
 
 
+def render_task_request(task: PlanningTask) -> str:
+    body = {'view':task.view,'required_columns':task.required_columns,
+            'filters':[f.model_dump() for f in task.filters], 'metrics':task.metrics,
+            'conditional_metrics':[m.model_dump() for m in task.conditional_metrics],
+            'metadata_collections':task.metadata_collections,
+            'attributes':task.attributes,'group_by':task.group_by,'output_grain':task.output_grain}
+    instruction = '只執行以下單一 View 資料查詢；保留全部條件及指定輸出粒度，不作跨來源整合或業務決策。'
+    if task.metadata_collections:
+        instruction += ' metadata_collections 為每組完整 DISTINCT 值集合，不增加分組，不任取單值。日期集合僅記錄資料時間，不代表日期一致；混合日期不得宣稱同日總額，仍須遵守契約的跨日禁止加總限制。'
+    request = instruction + '\n' + json.dumps(body,ensure_ascii=False)
+    if len(request)>4000:
+        raise ValueError('prepared request exceeds SQL API length limit')
+    return request
+
+
 def prepare_requests(draft: DecompositionDraft, catalog: CatalogProvider) -> list[PreparedSQLRequest]:
     if draft.status != 'ready':
         return []
@@ -196,17 +211,7 @@ def prepare_requests(draft: DecompositionDraft, catalog: CatalogProvider) -> lis
         raise ValueError('; '.join(errors))
     prepared = []
     for task in draft.tasks:
-        body = {'view':task.view,'required_columns':task.required_columns,
-                'filters':[f.model_dump() for f in task.filters], 'metrics':task.metrics,
-                'conditional_metrics':[m.model_dump() for m in task.conditional_metrics],
-                'metadata_collections':task.metadata_collections,
-                'attributes':task.attributes,'group_by':task.group_by,'output_grain':task.output_grain}
-        instruction = '只執行以下單一 View 資料查詢；保留全部條件及指定輸出粒度，不作跨來源整合或業務決策。'
-        if task.metadata_collections:
-            instruction += ' metadata_collections 為每組完整 DISTINCT 值集合，不增加分組，不任取單值。日期集合僅記錄資料時間，不代表日期一致；混合日期不得宣稱同日總額，仍須遵守契約的跨日禁止加總限制。'
-        request = instruction + '\n' + json.dumps(body,ensure_ascii=False)
-        if len(request)>4000:
-            raise ValueError('prepared request exceeds SQL API length limit')
+        request = render_task_request(task)
         prepared.append(PreparedSQLRequest(task_id=task.task_id,view=task.view,
                                            payload={'request':request,'history':[]}))
     return prepared

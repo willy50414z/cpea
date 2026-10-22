@@ -1,5 +1,9 @@
 # CPEA 架構
 
+查詢 Pipeline 新增獨立的 SQL 階段 application service：`QueryPipelineService` 注入既有 `TaskDecompositionService` 與 `SQLGenerationService`，外層 LangGraph 僅有 `decompose_request`、`generate_task_sql` 兩個核心 node。整批 preflight 先檢查契約版本、prepared payload 與能力；第二個 node 依序產生 SQL，每份結果須與核准 task、compiler 重編譯及 SQL policy 一致。第一個 pending／失敗即停止，其餘 task 標為 skipped，整體失敗不公開部分 SQL。typed input 保存原文與 task，legacy request 由共用 renderer 產生。
+
+此入口不建立 executor、DB runtime 或結果整合器，不接管既有 CLI／網頁／API。inner SQL run 以每次呼叫的 owner 清理，保留 pending 問題但尚無外層 resume。評估三模式與 replay 只位於 `evaluations/`；產品程式不依賴題庫或 grader。`sql_ready` 只表示 SQL 階段 gate 通過，仍需獨立人工語意審查。詳見 [能力矩陣](superpowers/plans/2026-10-22-query-agent-integration/capability-matrix.md)。
+
 目前產品為 `src/cpea` 的單一 Python package，使用 Python 3.12。核心提供單一 View SQL Server／PostgreSQL SQL 產生、選配資料庫執行與 Gradio 單題首頁；其他 API 接入與企業級 enforcement 狀態見 [企業級設計](enterprise_design.md)。
 
 ```mermaid

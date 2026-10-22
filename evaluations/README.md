@@ -41,6 +41,41 @@ Retail 題庫可用 `uv run --locked --extra postgres-contracts python -m evalua
 
 正式模型評估要求乾淨的 Git 工作目錄。客戶問題、SQL、trace、prompt、response 與資料列可能是私有內容；原始產物不可當作公開報告。`projects/` 與 `artifacts/` 被 Git 忽略，通用 wheel／sdist 也排除私有專案資料。本次沒有 durable audit、retention job 或資料庫；保存與存取由部署方管理。
 
+## 查詢 Pipeline：SQL 階段
+
+獨立入口 `python -m evaluations.query_pipeline_runner`（安裝新版套件後亦可用 `cpea-pipeline-eval`）提供 `planning`、`sql`、`integrated` 三種模式，依序對應原始需求的切割、核准任務的單 View SQL 生成，以及自然串接。既有 CLI、API、網頁與單題服務不改道。
+
+目前兩段預設皆為 Ollama `qwen3.8:27b`，僅先作連通 smoke；正式面板與三輪驗收留待人工核准及分階段調校。可明確指定各節點 provider／model；`--ollama-base-url` 設定 Ollama 端點。以下命令會呼叫真實模型，須明確使用 `--live`；待審案例必須加 `--exploratory`，不計為正式驗收：
+
+```bash
+.venv/bin/python -m evaluations.query_pipeline_runner \
+  --mode integrated --profile projects/retail \
+  --cases projects/retail/evaluations/query_pipeline_cases.jsonl \
+  --env-file .env --ollama-base-url http://127.0.0.1:7401 \
+  --planner-provider ollama --planner-model qwen3.8:27b \
+  --sql-provider ollama --sql-model qwen3.8:27b \
+  --runs 1 --exploratory --live
+```
+
+連通 smoke 應先把單一正向案例複製到另外的 casefile，保留原案例與內容指紋，再透過 `--cases` 指向該檔；不要將 smoke 混入完整面板三輪分母。程式注入的 `planner_factory`／`generator_factory` 屬離線 stub，永遠不計為自然成功。每個 trial 使用全新的 mapping repository 與 registry；不沿用產品詞彙、不建立 executor 或 DB runtime，不改寫 `.env`。
+
+`sql_ready` 要求所有核准 task 通過整批 preflight、task-to-QueryPlan 語意核對、compiler 重編譯及 SQL policy；它只表示 SQL 階段就緒。NULL／boolean filter、conditional metric、metadata 集合、相依輸入與不支援的 operator／value 均整批拒絕。第一個 pending／錯誤會停止後續任務；先前 SQL 僅保存在私有證據。外層目前沒有確認恢復或 DB／整合／回答能力。
+
+每次建立新目錄，包含 `run.json`、`events.jsonl`、`planning.json`、`result.json`、`grading.json` 與繁體中文 `overview.md`。公開摘要僅含固定狀態、問題碼、計數與私有引用；`private/trials/<安全編號>/` 保存原文、planning、實際交接、generation、被 gate 拒絕的原始計畫與 model calls。模型 task_id 不用作路徑。原始 provider 診斷保存於 `private/provider-error.txt`；provider 錯誤停止剩餘 trial，不補跑，rate limit 依根目錄 `AGENTS.md` 處理。
+
+輸入核准與輸出審核分開。案例 `approved_plans` 中的替代必須是完整方案，不能混拼各方案片段。`automated_pass` 僅代表確定性檢查；自然成功還要求對該 `response_sha256` 的人工 `output_reviews` 核准。事後人工審查可使用獨立 UTF-8 JSON：最外層為 case_id，下一層為 response_sha256，再填 `decision=approved`、`reviewer`、`reviewed_at`；透過 replay 的 `--reviews <審查檔>` 載入，會記錄審查檔指紋，不改寫題庫或原 run。未審核輸出、stub、replay、skipped 與未完成 trial 都不會提高新增自然成功率。模型版本無法確認時保留 `model_version_verified=false`；缺少 provider 用量保留 null。
+
+離線重評不呼叫模型或 DB，寫入新目錄並保留原 mode／input_origin；case／catalog 漂移會拒絕，source／prompt／schema 漂移另標記。`sql_ready` 的錄製 SQL 仍會重新執行 gate：
+
+```bash
+.venv/bin/python -m evaluations.query_pipeline_runner \
+  --mode integrated --profile projects/retail \
+  --cases projects/retail/evaluations/query_pipeline_cases.jsonl \
+  --replay projects/retail/artifacts/query_pipeline/<原始run目錄>
+```
+
+能力矩陣與待審面板見 [S1 能力矩陣](../docs/superpowers/plans/2026-10-22-query-agent-integration/capability-matrix.md)。本階段尚未完成正式自然品質驗收。
+
 ## 共用與歷史工具
 
 `evaluations/` 保留共用評分、治理 runner、模型矩陣範例與合成 fixture。舊版兩份 reliability JSONL 保存在 `examples/legacy-evaluation-cases/` 作來源對照；既有 `artifacts/evaluations/`、`artifacts/stability/` 和原 PoC 封存保留原位，不改寫為新的專案 run。

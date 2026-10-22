@@ -1,0 +1,881 @@
+[
+  {
+    "schema_version": "query-pipeline-cases-v1",
+    "case_id": "raw_inventory",
+    "request": "列出各門市各商品的目前庫存件數。",
+    "profile_id": "synthetic-planning",
+    "contract_fingerprint": "b012c40a3b64349edca9d14c8e112cdbc13e952165a1a26d00e81f36caddcb5b",
+    "review_state": "pending",
+    "requirements": [
+      "每門市商品一列",
+      "輸出庫存件數"
+    ],
+    "expected_stage_status": "sql_ready",
+    "expected_planning_status": "ready",
+    "approved_plans": [
+      {
+        "status": "ready",
+        "strategy": "single_view",
+        "tasks": [
+          {
+            "task_id": "stock",
+            "view": "demo.stock",
+            "required_columns": [
+              "store_id",
+              "product_id",
+              "stock_qty"
+            ],
+            "output_grain": [
+              "store_id",
+              "product_id"
+            ],
+            "attributes": [
+              "stock_qty"
+            ],
+            "request": "目前庫存"
+          }
+        ],
+        "integration": {
+          "anchor_task": "stock",
+          "output_grain": [
+            "store_id",
+            "product_id"
+          ],
+          "edges": [],
+          "notes": [
+            "目前庫存與九月銷量按門市商品合併，不跨日加總庫存。"
+          ]
+        }
+      }
+    ],
+    "required_capabilities": [
+      "raw_rows"
+    ],
+    "case_sha256": "7b744dec60e668192c3d9087b48b1b5b5412aa52e3563f058ee45c6abf6137e4"
+  },
+  {
+    "schema_version": "query-pipeline-cases-v1",
+    "case_id": "sales_aggregate",
+    "request": "按門市、商品加總已完成交易的銷售件數。",
+    "profile_id": "synthetic-planning",
+    "contract_fingerprint": "b012c40a3b64349edca9d14c8e112cdbc13e952165a1a26d00e81f36caddcb5b",
+    "review_state": "pending",
+    "requirements": [
+      "以門市商品分組",
+      "SUM(quantity)"
+    ],
+    "expected_stage_status": "sql_ready",
+    "expected_planning_status": "ready",
+    "approved_plans": [
+      {
+        "status": "ready",
+        "strategy": "single_view",
+        "tasks": [
+          {
+            "task_id": "sales",
+            "view": "demo.sales",
+            "required_columns": [
+              "store_id",
+              "product_id",
+              "quantity"
+            ],
+            "filters": [],
+            "metrics": {
+              "quantity": "sum"
+            },
+            "group_by": [
+              "store_id",
+              "product_id"
+            ],
+            "output_grain": [
+              "store_id",
+              "product_id"
+            ],
+            "request": "九月銷量"
+          }
+        ],
+        "integration": {
+          "anchor_task": "sales",
+          "output_grain": [
+            "store_id",
+            "product_id"
+          ],
+          "edges": [],
+          "notes": [
+            "目前庫存與九月銷量按門市商品合併，不跨日加總庫存。"
+          ]
+        }
+      }
+    ],
+    "required_capabilities": [
+      "aggregation"
+    ],
+    "case_sha256": "09fb69d537812e9a1f2bbc3ca24514a3ca722364a9f09d733908e751924e120f"
+  },
+  {
+    "schema_version": "query-pipeline-cases-v1",
+    "case_id": "date_channel_and",
+    "request": "列出2026年9月線上通路已完成交易，按門市、商品加總銷售件數。",
+    "profile_id": "synthetic-planning",
+    "contract_fingerprint": "b012c40a3b64349edca9d14c8e112cdbc13e952165a1a26d00e81f36caddcb5b",
+    "review_state": "pending",
+    "requirements": [
+      "日期>=2026-09-01且<2026-10-01",
+      "sales_channel=online",
+      "門市商品銷量"
+    ],
+    "expected_stage_status": "sql_ready",
+    "expected_planning_status": "ready",
+    "approved_plans": [
+      {
+        "status": "ready",
+        "strategy": "single_view",
+        "tasks": [
+          {
+            "task_id": "sales",
+            "view": "demo.sales",
+            "required_columns": [
+              "store_id",
+              "product_id",
+              "quantity",
+              "order_date",
+              "sales_channel"
+            ],
+            "filters": [
+              {
+                "column": "order_date",
+                "operator": ">=",
+                "value": "2026-09-01"
+              },
+              {
+                "column": "order_date",
+                "operator": "<",
+                "value": "2026-10-01"
+              },
+              {
+                "column": "sales_channel",
+                "operator": "=",
+                "value": "online"
+              }
+            ],
+            "metrics": {
+              "quantity": "sum"
+            },
+            "group_by": [
+              "store_id",
+              "product_id"
+            ],
+            "output_grain": [
+              "store_id",
+              "product_id"
+            ],
+            "request": "九月銷量"
+          }
+        ],
+        "integration": {
+          "anchor_task": "sales",
+          "output_grain": [
+            "store_id",
+            "product_id"
+          ],
+          "edges": [],
+          "notes": [
+            "目前庫存與九月銷量按門市商品合併，不跨日加總庫存。"
+          ]
+        }
+      }
+    ],
+    "required_capabilities": [
+      "aggregation",
+      "and_filters"
+    ],
+    "case_sha256": "3e0fb87bec627464c7d4eaae96ad1b769920a8bdd9de12cfa6be6d32a12d0057"
+  },
+  {
+    "schema_version": "query-pipeline-cases-v1",
+    "case_id": "independent_views",
+    "request": "以目前庫存中的門市商品為母體，並列2026年9月銷售件數，保留沒有銷售的庫存商品。",
+    "profile_id": "synthetic-planning",
+    "contract_fingerprint": "b012c40a3b64349edca9d14c8e112cdbc13e952165a1a26d00e81f36caddcb5b",
+    "review_state": "pending",
+    "requirements": [
+      "庫存母體",
+      "九月銷量",
+      "left保留庫存"
+    ],
+    "expected_stage_status": "sql_ready",
+    "expected_planning_status": "ready",
+    "approved_plans": [
+      {
+        "status": "ready",
+        "strategy": "multi_view",
+        "tasks": [
+          {
+            "task_id": "stock",
+            "view": "demo.stock",
+            "required_columns": [
+              "store_id",
+              "product_id",
+              "stock_qty"
+            ],
+            "output_grain": [
+              "store_id",
+              "product_id"
+            ],
+            "attributes": [
+              "stock_qty"
+            ],
+            "request": "目前庫存"
+          },
+          {
+            "task_id": "sales",
+            "view": "demo.sales",
+            "required_columns": [
+              "store_id",
+              "product_id",
+              "quantity",
+              "order_date"
+            ],
+            "filters": [
+              {
+                "column": "order_date",
+                "operator": ">=",
+                "value": "2026-09-01"
+              },
+              {
+                "column": "order_date",
+                "operator": "<",
+                "value": "2026-10-01"
+              }
+            ],
+            "metrics": {
+              "quantity": "sum"
+            },
+            "group_by": [
+              "store_id",
+              "product_id"
+            ],
+            "output_grain": [
+              "store_id",
+              "product_id"
+            ],
+            "request": "九月銷量"
+          }
+        ],
+        "integration": {
+          "anchor_task": "stock",
+          "output_grain": [
+            "store_id",
+            "product_id"
+          ],
+          "edges": [
+            {
+              "left_task": "stock",
+              "right_task": "sales",
+              "left_keys": [
+                "store_id",
+                "product_id"
+              ],
+              "right_keys": [
+                "store_id",
+                "product_id"
+              ],
+              "mode": "left",
+              "cardinality": "one_to_one",
+              "preserve_task": "stock"
+            }
+          ],
+          "notes": [
+            "目前庫存與九月銷量按門市商品合併，不跨日加總庫存。"
+          ]
+        }
+      }
+    ],
+    "required_capabilities": [
+      "independent_views"
+    ],
+    "case_sha256": "87ee724749a6776131c6dceeacfc2197a20589f8194849866d30c6ac2350d494"
+  },
+  {
+    "schema_version": "query-pipeline-cases-v1",
+    "case_id": "same_view_tasks",
+    "request": "分別按門市、商品統計2026年9月與10月的銷售件數，以9月出現的門市商品為母體並列。",
+    "profile_id": "synthetic-planning",
+    "contract_fingerprint": "b012c40a3b64349edca9d14c8e112cdbc13e952165a1a26d00e81f36caddcb5b",
+    "review_state": "pending",
+    "requirements": [
+      "兩個獨立期間任務",
+      "九月母體",
+      "門市商品粒度"
+    ],
+    "expected_stage_status": "sql_ready",
+    "expected_planning_status": "ready",
+    "approved_plans": [
+      {
+        "status": "ready",
+        "strategy": "single_view",
+        "tasks": [
+          {
+            "task_id": "september",
+            "view": "demo.sales",
+            "required_columns": [
+              "store_id",
+              "product_id",
+              "quantity",
+              "order_date"
+            ],
+            "filters": [
+              {
+                "column": "order_date",
+                "operator": ">=",
+                "value": "2026-09-01"
+              },
+              {
+                "column": "order_date",
+                "operator": "<",
+                "value": "2026-10-01"
+              }
+            ],
+            "metrics": {
+              "quantity": "sum"
+            },
+            "group_by": [
+              "store_id",
+              "product_id"
+            ],
+            "output_grain": [
+              "store_id",
+              "product_id"
+            ],
+            "request": "九月銷量"
+          },
+          {
+            "task_id": "october",
+            "view": "demo.sales",
+            "required_columns": [
+              "store_id",
+              "product_id",
+              "quantity",
+              "order_date"
+            ],
+            "filters": [
+              {
+                "column": "order_date",
+                "operator": ">=",
+                "value": "2026-10-01"
+              },
+              {
+                "column": "order_date",
+                "operator": "<",
+                "value": "2026-11-01"
+              }
+            ],
+            "metrics": {
+              "quantity": "sum"
+            },
+            "group_by": [
+              "store_id",
+              "product_id"
+            ],
+            "output_grain": [
+              "store_id",
+              "product_id"
+            ],
+            "request": "十月銷量"
+          }
+        ],
+        "integration": {
+          "anchor_task": "september",
+          "output_grain": [
+            "store_id",
+            "product_id"
+          ],
+          "edges": [
+            {
+              "left_task": "september",
+              "right_task": "october",
+              "left_keys": [
+                "store_id",
+                "product_id"
+              ],
+              "right_keys": [
+                "store_id",
+                "product_id"
+              ],
+              "mode": "left",
+              "cardinality": "one_to_one",
+              "preserve_task": "september"
+            }
+          ],
+          "notes": []
+        }
+      }
+    ],
+    "required_capabilities": [
+      "independent_tasks"
+    ],
+    "case_sha256": "df64e72aec5a0f448ca805a1e104129f50257ab0c6a619c651a99039b088a075"
+  },
+  {
+    "schema_version": "query-pipeline-cases-v1",
+    "case_id": "equivalent_in_order",
+    "request": "依門市、商品加總線上或實體門市通路已完成交易的銷售件數。",
+    "profile_id": "synthetic-planning",
+    "contract_fingerprint": "b012c40a3b64349edca9d14c8e112cdbc13e952165a1a26d00e81f36caddcb5b",
+    "review_state": "pending",
+    "requirements": [
+      "通路IN online/in_store",
+      "門市商品SUM(quantity)"
+    ],
+    "expected_stage_status": "sql_ready",
+    "expected_planning_status": "ready",
+    "approved_plans": [
+      {
+        "status": "ready",
+        "strategy": "single_view",
+        "tasks": [
+          {
+            "task_id": "sales",
+            "view": "demo.sales",
+            "required_columns": [
+              "store_id",
+              "product_id",
+              "quantity",
+              "sales_channel"
+            ],
+            "filters": [
+              {
+                "column": "sales_channel",
+                "operator": "IN",
+                "value": [
+                  "online",
+                  "in_store"
+                ]
+              }
+            ],
+            "metrics": {
+              "quantity": "sum"
+            },
+            "group_by": [
+              "store_id",
+              "product_id"
+            ],
+            "output_grain": [
+              "store_id",
+              "product_id"
+            ],
+            "request": "九月銷量"
+          }
+        ],
+        "integration": {
+          "anchor_task": "sales",
+          "output_grain": [
+            "store_id",
+            "product_id"
+          ],
+          "edges": [],
+          "notes": [
+            "目前庫存與九月銷量按門市商品合併，不跨日加總庫存。"
+          ]
+        }
+      },
+      {
+        "status": "ready",
+        "strategy": "single_view",
+        "tasks": [
+          {
+            "task_id": "sales",
+            "view": "demo.sales",
+            "required_columns": [
+              "store_id",
+              "product_id",
+              "quantity",
+              "sales_channel"
+            ],
+            "filters": [
+              {
+                "column": "sales_channel",
+                "operator": "IN",
+                "value": [
+                  "in_store",
+                  "online"
+                ]
+              }
+            ],
+            "metrics": {
+              "quantity": "sum"
+            },
+            "group_by": [
+              "store_id",
+              "product_id"
+            ],
+            "output_grain": [
+              "store_id",
+              "product_id"
+            ],
+            "request": "九月銷量"
+          }
+        ],
+        "integration": {
+          "anchor_task": "sales",
+          "output_grain": [
+            "store_id",
+            "product_id"
+          ],
+          "edges": [],
+          "notes": [
+            "目前庫存與九月銷量按門市商品合併，不跨日加總庫存。"
+          ]
+        }
+      }
+    ],
+    "required_capabilities": [
+      "aggregation",
+      "in_filter"
+    ],
+    "case_sha256": "d12da48e741945362e2eeadeacefbb035a70eef78930e830569cd749bed143ff"
+  },
+  {
+    "schema_version": "query-pipeline-cases-v1",
+    "case_id": "ambiguous",
+    "request": "請列出最好的商品。",
+    "profile_id": "synthetic-planning",
+    "contract_fingerprint": "b012c40a3b64349edca9d14c8e112cdbc13e952165a1a26d00e81f36caddcb5b",
+    "review_state": "pending",
+    "requirements": [
+      "先釐清最好指標及期間"
+    ],
+    "expected_stage_status": "needs_clarification",
+    "expected_planning_status": "needs_clarification",
+    "approved_plans": [],
+    "required_capabilities": [
+      "clarification"
+    ],
+    "case_sha256": "e39a041be814a17a53f7dde489d2272fe09c0aca0410bd5a4bb50415a8e420cd"
+  },
+  {
+    "schema_version": "query-pipeline-cases-v1",
+    "case_id": "missing_capability",
+    "request": "按門市列出未來30天的天氣預報。",
+    "profile_id": "synthetic-planning",
+    "contract_fingerprint": "b012c40a3b64349edca9d14c8e112cdbc13e952165a1a26d00e81f36caddcb5b",
+    "review_state": "pending",
+    "requirements": [
+      "catalog沒有天氣來源",
+      "不得捏造來源"
+    ],
+    "expected_stage_status": "unsupported",
+    "expected_planning_status": "unsupported",
+    "approved_plans": [],
+    "required_capabilities": [
+      "weather_source"
+    ],
+    "case_sha256": "78e7ac68d89ca6f2c08c89bcee91087f82e3bc35f21abe37e0b47597f6b489bf"
+  },
+  {
+    "schema_version": "query-pipeline-cases-v1",
+    "case_id": "conditional_metric",
+    "request": "按門市、商品計算線上通路銷售件數，保留其他通路的門市商品分組。",
+    "profile_id": "synthetic-planning",
+    "contract_fingerprint": "b012c40a3b64349edca9d14c8e112cdbc13e952165a1a26d00e81f36caddcb5b",
+    "review_state": "pending",
+    "requirements": [
+      "條件聚合",
+      "不可改全域WHERE"
+    ],
+    "expected_stage_status": "unsupported",
+    "expected_planning_status": "ready",
+    "approved_plans": [
+      {
+        "status": "ready",
+        "strategy": "single_view",
+        "tasks": [
+          {
+            "task_id": "sales",
+            "view": "demo.sales",
+            "required_columns": [
+              "store_id",
+              "product_id",
+              "quantity",
+              "sales_channel"
+            ],
+            "filters": [],
+            "metrics": {},
+            "group_by": [
+              "store_id",
+              "product_id"
+            ],
+            "output_grain": [
+              "store_id",
+              "product_id"
+            ],
+            "request": "九月銷量",
+            "conditional_metrics": [
+              {
+                "column": "quantity",
+                "aggregation": "sum",
+                "conditions": [
+                  {
+                    "column": "sales_channel",
+                    "operator": "=",
+                    "value": "online"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "integration": {
+          "anchor_task": "sales",
+          "output_grain": [
+            "store_id",
+            "product_id"
+          ],
+          "edges": [],
+          "notes": [
+            "目前庫存與九月銷量按門市商品合併，不跨日加總庫存。"
+          ]
+        }
+      }
+    ],
+    "required_capabilities": [
+      "conditional_metrics"
+    ],
+    "case_sha256": "28fc141674505ffc74e1949c27dfcc089ab988c04cd8dfff1b7cf1d8849c1a84"
+  },
+  {
+    "schema_version": "query-pipeline-cases-v1",
+    "case_id": "metadata_collection",
+    "request": "按門市、商品加總銷售件數，同時附每組所有交易日期的完整不重複集合，日期不增加分組。",
+    "profile_id": "synthetic-planning",
+    "contract_fingerprint": "b012c40a3b64349edca9d14c8e112cdbc13e952165a1a26d00e81f36caddcb5b",
+    "review_state": "pending",
+    "requirements": [
+      "完整日期集合",
+      "門市商品粒度"
+    ],
+    "expected_stage_status": "unsupported",
+    "expected_planning_status": "ready",
+    "approved_plans": [
+      {
+        "status": "ready",
+        "strategy": "single_view",
+        "tasks": [
+          {
+            "task_id": "sales",
+            "view": "demo.sales",
+            "required_columns": [
+              "store_id",
+              "product_id",
+              "quantity",
+              "order_date"
+            ],
+            "filters": [],
+            "metrics": {
+              "quantity": "sum"
+            },
+            "group_by": [
+              "store_id",
+              "product_id"
+            ],
+            "output_grain": [
+              "store_id",
+              "product_id"
+            ],
+            "request": "九月銷量",
+            "metadata_collections": [
+              "order_date"
+            ]
+          }
+        ],
+        "integration": {
+          "anchor_task": "sales",
+          "output_grain": [
+            "store_id",
+            "product_id"
+          ],
+          "edges": [],
+          "notes": [
+            "目前庫存與九月銷量按門市商品合併，不跨日加總庫存。"
+          ]
+        }
+      }
+    ],
+    "required_capabilities": [
+      "metadata_collections"
+    ],
+    "case_sha256": "e4a75b63cf8352f2011d8c024bcd1f941f0100417c8c01b64e8f27cd412bc998"
+  },
+  {
+    "schema_version": "query-pipeline-cases-v1",
+    "case_id": "dependent_input",
+    "request": "先取得缺貨商品，再只查這批商品於2026年9月的銷售件數。",
+    "profile_id": "synthetic-planning",
+    "contract_fingerprint": "b012c40a3b64349edca9d14c8e112cdbc13e952165a1a26d00e81f36caddcb5b",
+    "review_state": "pending",
+    "requirements": [
+      "先查庫存缺貨集合",
+      "下游綁定商品集合"
+    ],
+    "expected_stage_status": "unsupported",
+    "expected_planning_status": "ready",
+    "approved_plans": [
+      {
+        "status": "ready",
+        "strategy": "multi_view",
+        "tasks": [
+          {
+            "task_id": "stock",
+            "view": "demo.stock",
+            "required_columns": [
+              "store_id",
+              "product_id",
+              "stock_qty"
+            ],
+            "output_grain": [
+              "store_id",
+              "product_id"
+            ],
+            "attributes": [
+              "stock_qty"
+            ],
+            "request": "目前庫存"
+          },
+          {
+            "task_id": "sales",
+            "view": "demo.sales",
+            "required_columns": [
+              "store_id",
+              "product_id",
+              "quantity",
+              "order_date"
+            ],
+            "filters": [
+              {
+                "column": "order_date",
+                "operator": ">=",
+                "value": "2026-09-01"
+              },
+              {
+                "column": "order_date",
+                "operator": "<",
+                "value": "2026-10-01"
+              }
+            ],
+            "metrics": {
+              "quantity": "sum"
+            },
+            "group_by": [
+              "store_id",
+              "product_id"
+            ],
+            "output_grain": [
+              "store_id",
+              "product_id"
+            ],
+            "request": "九月銷量",
+            "depends_on": [
+              "stock"
+            ],
+            "unbound_inputs": [
+              "stock_product_ids"
+            ]
+          }
+        ],
+        "integration": {
+          "anchor_task": "stock",
+          "output_grain": [
+            "store_id",
+            "product_id"
+          ],
+          "edges": [
+            {
+              "left_task": "stock",
+              "right_task": "sales",
+              "left_keys": [
+                "store_id",
+                "product_id"
+              ],
+              "right_keys": [
+                "store_id",
+                "product_id"
+              ],
+              "mode": "left",
+              "cardinality": "one_to_one",
+              "preserve_task": "stock"
+            }
+          ],
+          "notes": [
+            "目前庫存與九月銷量按門市商品合併，不跨日加總庫存。"
+          ]
+        }
+      }
+    ],
+    "required_capabilities": [
+      "dependency",
+      "unbound_inputs"
+    ],
+    "case_sha256": "de0409c3b2f0c1f0ec358f2c0cbf8945b61fe702e370edbe432b707151ed4e04"
+  },
+  {
+    "schema_version": "query-pipeline-cases-v1",
+    "case_id": "null_filter",
+    "request": "列出庫存件數為NULL的門市商品。",
+    "profile_id": "synthetic-planning",
+    "contract_fingerprint": "b012c40a3b64349edca9d14c8e112cdbc13e952165a1a26d00e81f36caddcb5b",
+    "review_state": "pending",
+    "requirements": [
+      "保留NULL條件",
+      "不可移除篩選"
+    ],
+    "expected_stage_status": "unsupported",
+    "expected_planning_status": "ready",
+    "approved_plans": [
+      {
+        "status": "ready",
+        "strategy": "single_view",
+        "tasks": [
+          {
+            "task_id": "stock",
+            "view": "demo.stock",
+            "required_columns": [
+              "store_id",
+              "product_id",
+              "stock_qty"
+            ],
+            "output_grain": [
+              "store_id",
+              "product_id"
+            ],
+            "attributes": [
+              "stock_qty"
+            ],
+            "request": "目前庫存",
+            "filters": [
+              {
+                "column": "stock_qty",
+                "operator": "IS NULL",
+                "value": null
+              }
+            ]
+          }
+        ],
+        "integration": {
+          "anchor_task": "stock",
+          "output_grain": [
+            "store_id",
+            "product_id"
+          ],
+          "edges": [],
+          "notes": [
+            "目前庫存與九月銷量按門市商品合併，不跨日加總庫存。"
+          ]
+        }
+      }
+    ],
+    "required_capabilities": [
+      "null_filter"
+    ],
+    "case_sha256": "2d4de03ed728d66718633e85cc02dddd3b367ae6aa6e966fb46cb516f83d0e9a"
+  }
+]

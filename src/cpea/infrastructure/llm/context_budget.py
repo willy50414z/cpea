@@ -109,9 +109,12 @@ class ContextPacker:
         self,
         settings: AssistantSettings,
         token_counter: TokenCounter | None = None,
+        *,
+        enforce_budget: bool = True,
     ) -> None:
         self.settings = settings
         self.token_counter = token_counter or build_token_counter(settings)
+        self.enforce_budget = enforce_budget
 
     def pack_history(self, question: str, history: Sequence[ConversationTurn]) -> str:
         if not history or self.settings.history_token_budget == 0:
@@ -190,7 +193,7 @@ class ContextPacker:
                 f"{candidate.document.page_content}"
             )
             tokens = self.token_counter.count(block)
-            if used + tokens > document_budget:
+            if self.enforce_budget and used + tokens > document_budget:
                 dropped.extend(
                     str(item.document.metadata["document_id"])
                     for item in ordered[len(sources) :]

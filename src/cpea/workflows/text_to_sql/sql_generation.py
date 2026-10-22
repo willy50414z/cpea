@@ -1384,7 +1384,9 @@ class SQLGenerationWorkflow:
         for attempt in range(2):
             counter = self.context_packer.token_counter
             tokens = counter.count_messages([(message.type, str(message.content)) for message in messages])
-            if tokens + self.settings.output_token_reserve + self.settings.context_safety_tokens > self.settings.context_window:
+            if (getattr(self.context_packer, 'enforce_budget', True)
+                    and tokens + self.settings.output_token_reserve + self.settings.context_safety_tokens
+                    > self.settings.context_window):
                 raise ValueError("prompt exceeds context budget")
             try:
                 raw = response_llm.invoke(messages)

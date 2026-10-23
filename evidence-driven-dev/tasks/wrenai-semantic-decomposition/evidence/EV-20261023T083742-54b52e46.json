@@ -1,0 +1,22 @@
+{
+  "id": "EV-20261023T083742-54b52e46",
+  "kind": "regression",
+  "command": [
+    "env",
+    "PYTHONPATH=/home/willy/code/cpea-wrenai/src",
+    ".venv/bin/python",
+    "evidence-driven-dev/tasks/wrenai-semantic-decomposition/agents/final_verifier/.local/verify_all.py"
+  ],
+  "cwd": "/home/willy/code/cpea-wrenai",
+  "started_at": "2026-10-23T08:37:42+00:00",
+  "finished_at": "2026-10-23T08:42:21+00:00",
+  "exit_code": 1,
+  "revision": "ab4c67a45fa7039379bcadd788af0ae83bb3630f",
+  "diff_fingerprint": "a075a1513211d88367265115ff8bb6e7d5ab0e534cf027b1d571967fd5a6d983",
+  "post_fingerprint": "a075a1513211d88367265115ff8bb6e7d5ab0e534cf027b1d571967fd5a6d983",
+  "source_unchanged": true,
+  "output_sha256": "b5d01a69555f47b4c0151b4c646cbe06dbc4fa31b81f3095f910eec371d40306",
+  "raw_output": ".local/EV-20261023T083742-54b52e46.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "169ba6a441ddaee0670ba20badfb8d110351936665c6ba832a5d04217e487ab2"
+}

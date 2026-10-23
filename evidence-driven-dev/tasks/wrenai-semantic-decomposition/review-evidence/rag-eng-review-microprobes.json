@@ -1,0 +1,40 @@
+{
+  "source_sha": "ce9ed54c86acb8a0b6ff5d5fea23ed60f057acfc",
+  "mode": "AST-extracted microprobe; not upstream package import",
+  "pruning_empty_columns_ddl": "CREATE TABLE sample (\n  store_id BIGINT,\n  stock_qty NUMERIC\n);",
+  "pruning_unknown_column_ddl": "CREATE TABLE sample (\n  \n);",
+  "batch_partial_failure_events": [
+    {
+      "event": "start",
+      "input": [
+        "fail"
+      ]
+    },
+    {
+      "event": "start",
+      "input": [
+        "sibling"
+      ]
+    },
+    {
+      "event": "gather_returned_error"
+    },
+    {
+      "event": "finished_after_failure",
+      "input": [
+        "sibling"
+      ]
+    }
+  ],
+  "grading_extra_metric_scores": {
+    "view": true,
+    "columns": true,
+    "column_recall": 1.0,
+    "column_precision": 0.6666666666666666,
+    "filters": true,
+    "metrics": true,
+    "conditional_metrics": true,
+    "metadata": true,
+    "grain": true
+  }
+}

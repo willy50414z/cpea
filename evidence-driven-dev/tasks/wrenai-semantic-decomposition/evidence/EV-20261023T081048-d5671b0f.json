@@ -1,0 +1,25 @@
+{
+  "id": "EV-20261023T081048-d5671b0f",
+  "kind": "experiment",
+  "command": [
+    "env",
+    "PYTHONPATH=/home/willy/code/cpea-wrenai/src",
+    ".venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/unit/test_wrenai_schema_adapter.py"
+  ],
+  "cwd": "/home/willy/code/cpea-wrenai",
+  "started_at": "2026-10-23T08:10:48+00:00",
+  "finished_at": "2026-10-23T08:10:50+00:00",
+  "exit_code": 0,
+  "revision": "ab4c67a45fa7039379bcadd788af0ae83bb3630f",
+  "diff_fingerprint": "568ff55751eafaee850919078affd455bc7386aec0a395d856c3e2b99d8ffa9b",
+  "post_fingerprint": "568ff55751eafaee850919078affd455bc7386aec0a395d856c3e2b99d8ffa9b",
+  "source_unchanged": true,
+  "output_sha256": "77d92cd56cd64a1a5b65adac4e344cc7fd9699faace17014c0a319c92f46082d",
+  "raw_output": ".local/EV-20261023T081048-d5671b0f.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "c7d1025f05d6a03ebd711721277e698a7901e2525868baa2b69737ad0464f423"
+}

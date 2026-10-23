@@ -1,0 +1,22 @@
+{
+  "id": "EV-20261023T084353-f4f6324b",
+  "kind": "review",
+  "command": [
+    "env",
+    "PYTHONPATH=/home/willy/code/cpea-wrenai/src",
+    ".venv/bin/python",
+    "evidence-driven-dev/tasks/wrenai-semantic-decomposition/agents/final_verifier/.local/baseline_compare.py"
+  ],
+  "cwd": "/home/willy/code/cpea-wrenai",
+  "started_at": "2026-10-23T08:43:53+00:00",
+  "finished_at": "2026-10-23T08:44:04+00:00",
+  "exit_code": 0,
+  "revision": "ab4c67a45fa7039379bcadd788af0ae83bb3630f",
+  "diff_fingerprint": "a075a1513211d88367265115ff8bb6e7d5ab0e534cf027b1d571967fd5a6d983",
+  "post_fingerprint": "a075a1513211d88367265115ff8bb6e7d5ab0e534cf027b1d571967fd5a6d983",
+  "source_unchanged": true,
+  "output_sha256": "90ae05a73fa9434c96f8dec087f9b74d265e99311e7d30e57f3dc9eadbfa93d2",
+  "raw_output": ".local/EV-20261023T084353-f4f6324b.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "80c3c5cc8a1b6514a7014ebf8c6c3243c591300e14daa612934961b306eaee93"
+}

@@ -1,0 +1,29 @@
+{
+  "id": "EV-20261023T074047-2f43a752",
+  "kind": "baseline",
+  "command": [
+    "env",
+    "PYTHONPATH=/home/willy/code/cpea-wrenai/src",
+    ".venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/unit/test_task_decomposition_workflow.py",
+    "tests/unit/test_task_decomposition_contract.py",
+    "tests/unit/test_schema_mapping_decomposition.py",
+    "tests/unit/test_decomposition_evaluation.py",
+    "tests/integration/test_decomposition_runner.py"
+  ],
+  "cwd": "/home/willy/code/cpea-wrenai",
+  "started_at": "2026-10-23T07:40:47+00:00",
+  "finished_at": "2026-10-23T07:40:56+00:00",
+  "exit_code": 0,
+  "revision": "ab4c67a45fa7039379bcadd788af0ae83bb3630f",
+  "diff_fingerprint": "28e6f5132adb572c2da40de167a0e53b648bf0c4793903778077553de285b516",
+  "post_fingerprint": "28e6f5132adb572c2da40de167a0e53b648bf0c4793903778077553de285b516",
+  "source_unchanged": true,
+  "output_sha256": "733734085981969f444ca0ff32149f769cc04670f223c6dcabaa7c6cfe10c22d",
+  "raw_output": ".local/EV-20261023T074047-2f43a752.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "510922dbf82d07946d3878995d5929116b4c9eab4dae27787dab0642bd9b67f7"
+}

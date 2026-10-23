@@ -1,0 +1,23 @@
+{
+  "id": "EV-20261023T063022-7362dae9",
+  "kind": "focused",
+  "command": [
+    ".venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/unit/test_schema_mapping_validation.py"
+  ],
+  "cwd": "/home/willy/code/cpea_terms",
+  "started_at": "2026-10-23T06:30:22+00:00",
+  "finished_at": "2026-10-23T06:30:24+00:00",
+  "exit_code": 0,
+  "revision": "095b6125623af5b9ade6914a6a83444e3d704b57",
+  "diff_fingerprint": "9241d2958f61f44d7e70455e3b65f917f4a21c2a3bb5ff92000d7bc79d6d910c",
+  "post_fingerprint": "9241d2958f61f44d7e70455e3b65f917f4a21c2a3bb5ff92000d7bc79d6d910c",
+  "source_unchanged": true,
+  "output_sha256": "1c5291f5f3db573d4a149e4e4f1378c195f1aa70c17eef94b57bb26b66330770",
+  "raw_output": ".local/EV-20261023T063022-7362dae9.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "bfadbffdd4468ce48cf9839d0f966a555c66c75e5a38fe80ed9c78e73bb4b06d"
+}

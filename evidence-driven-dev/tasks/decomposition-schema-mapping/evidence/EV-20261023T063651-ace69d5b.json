@@ -1,0 +1,20 @@
+{
+  "id": "EV-20261023T063651-ace69d5b",
+  "kind": "holdout",
+  "command": [
+    ".venv/bin/python",
+    "evidence-driven-dev/tasks/decomposition-schema-mapping/.local/review-holdouts.py"
+  ],
+  "cwd": "/home/willy/code/cpea_terms",
+  "started_at": "2026-10-23T06:36:51+00:00",
+  "finished_at": "2026-10-23T06:36:51+00:00",
+  "exit_code": 0,
+  "revision": "095b6125623af5b9ade6914a6a83444e3d704b57",
+  "diff_fingerprint": "450fbcaf55f4814ee7b732d48a97b10fdf7aaff82faa2f5e1d77b78bfd90886f",
+  "post_fingerprint": "450fbcaf55f4814ee7b732d48a97b10fdf7aaff82faa2f5e1d77b78bfd90886f",
+  "source_unchanged": true,
+  "output_sha256": "82042bb32c0cc48b2f18c5e06f768b9c75add4e5eb7a44c41065dcc87a675fc1",
+  "raw_output": ".local/EV-20261023T063651-ace69d5b.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "8fced7ccb0ee18b189965ecefec8922244f8faa668b8bbabd2fb527d3c51cf6a"
+}

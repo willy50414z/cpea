@@ -1,0 +1,20 @@
+{
+  "id": "EV-20261023T065411-6e005928",
+  "kind": "review",
+  "command": [
+    ".venv/bin/python",
+    "evidence-driven-dev/tasks/decomposition-schema-mapping/.local/verify-final.py"
+  ],
+  "cwd": "/home/willy/code/cpea_terms",
+  "started_at": "2026-10-23T06:54:11+00:00",
+  "finished_at": "2026-10-23T06:54:14+00:00",
+  "exit_code": 0,
+  "revision": "095b6125623af5b9ade6914a6a83444e3d704b57",
+  "diff_fingerprint": "aca4e956eca8f02c5b3977d2f0328b7dfeb119c4d16707f53898fd85ca9e1b46",
+  "post_fingerprint": "aca4e956eca8f02c5b3977d2f0328b7dfeb119c4d16707f53898fd85ca9e1b46",
+  "source_unchanged": true,
+  "output_sha256": "028b5bee4aabf6f770d2749d140671cdf8c4210afbaca127121c4f2e6193aea1",
+  "raw_output": ".local/EV-20261023T065411-6e005928.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "99b05535612385f3c4c6db10ca84db0b34298a3422315d921001a35c8f137288"
+}

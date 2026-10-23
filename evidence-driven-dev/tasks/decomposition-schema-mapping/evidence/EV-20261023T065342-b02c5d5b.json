@@ -1,0 +1,30 @@
+{
+  "id": "EV-20261023T065342-b02c5d5b",
+  "kind": "focused",
+  "command": [
+    ".venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/unit/test_schema_mapping_validation.py",
+    "tests/unit/test_schema_mapping_review.py",
+    "tests/unit/test_schema_mapping_decomposition.py",
+    "tests/unit/test_schema_mapping_retrieval.py",
+    "tests/unit/test_task_decomposition_workflow.py",
+    "tests/unit/test_task_decomposition_contract.py",
+    "tests/unit/test_decomposition_evaluation.py",
+    "tests/integration/test_decomposition_runner.py"
+  ],
+  "cwd": "/home/willy/code/cpea_terms",
+  "started_at": "2026-10-23T06:53:42+00:00",
+  "finished_at": "2026-10-23T06:53:54+00:00",
+  "exit_code": 0,
+  "revision": "095b6125623af5b9ade6914a6a83444e3d704b57",
+  "diff_fingerprint": "aca4e956eca8f02c5b3977d2f0328b7dfeb119c4d16707f53898fd85ca9e1b46",
+  "post_fingerprint": "aca4e956eca8f02c5b3977d2f0328b7dfeb119c4d16707f53898fd85ca9e1b46",
+  "source_unchanged": true,
+  "output_sha256": "54e79c755d48d1195e46b132c8cd62b305d149c251c2cb9202a13443987b6429",
+  "raw_output": ".local/EV-20261023T065342-b02c5d5b.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "285e81dadc1004f1d7e998693307af48afc511fc0a40c211ca891ed36f328816"
+}

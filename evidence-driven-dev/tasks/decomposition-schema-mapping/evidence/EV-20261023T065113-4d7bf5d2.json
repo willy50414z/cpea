@@ -1,0 +1,24 @@
+{
+  "id": "EV-20261023T065113-4d7bf5d2",
+  "kind": "regression",
+  "command": [
+    ".venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "--tb=short",
+    "--junitxml=evidence-driven-dev/tasks/decomposition-schema-mapping/.local/final-suite.xml"
+  ],
+  "cwd": "/home/willy/code/cpea_terms",
+  "started_at": "2026-10-23T06:51:13+00:00",
+  "finished_at": "2026-10-23T06:52:32+00:00",
+  "exit_code": 1,
+  "revision": "095b6125623af5b9ade6914a6a83444e3d704b57",
+  "diff_fingerprint": "1dc40c022aeac8db1580d7b0b6989fad121342e793ea7cbb2b17efa9f94548e3",
+  "post_fingerprint": "1dc40c022aeac8db1580d7b0b6989fad121342e793ea7cbb2b17efa9f94548e3",
+  "source_unchanged": true,
+  "output_sha256": "54271ea606664fac5461ecc2501dae1dc6bcae25e1fc5f0a93430c29ab5b4973",
+  "raw_output": ".local/EV-20261023T065113-4d7bf5d2.log",
+  "output_policy": "原始輸出僅保留於 Git 忽略目錄；分享前審查敏感資料",
+  "digest": "bd6c3e427589e1492a97f31f6df4679349e698078b72262bd1fd52120eb4c7bb"
+}

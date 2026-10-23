@@ -1,11 +1,50 @@
-version: 3
+version: 4
 view: demo_retail.v_inventory_status
-summary: '粒度：門市×商品；stock_status: 缺貨/需補貨/正常。estimated_days_of_supply 根據最近30日銷量估算，無銷量時為 NULL。'
+summary: 門市商品庫存與補貨狀態資料。
 grain:
-  description: 門市×商品
+  description: 每個門市與商品組合一列
   keys:
   - store_id
   - product_id
+source:
+  verification: metadata_verified
+  relations:
+  - demo_retail.inventory
+  - demo_retail.products
+  - demo_retail.stores
+  - demo_retail.v_sales_detail
+  definition_sha256: b971342e24e476334164eebc1b384ce0097f2b5885af4710bf6e1f6283abb5e0
+scope:
+  population: 庫存表中能連結門市與商品主檔的紀錄。
+  included:
+  - 即使固定窗口無銷量仍保留庫存紀錄
+  excluded: []
+  row_coverage: 不自動補齊所有門市商品組合；無窗口銷量時 sold_qty_30d 為 0，可銷售天數為 null。
+time:
+  kind: mixed
+  dimensions:
+    snapshot_date: 各筆庫存紀錄的盤點日期；未限定最新日期。
+  coverage: null
+  rules:
+  - columns:
+    - sold_qty_30d
+    - estimated_days_of_supply
+    description: 銷量窗口固定為 2026-09-15 至 2026-10-14，含首尾；不隨執行日期或 snapshot_date 移動。
+  - columns:
+    - snapshot_date
+    - stock_qty
+    - inventory_cost_value
+    description: snapshot_date 來自各庫存紀錄，SQL 未保證所有紀錄同日；庫存與估值只在相同快照日期下彙總。
+usage:
+  supported:
+  - 庫存件數與成本估值
+  - 缺貨與補貨狀態查詢
+  - 依固定銷量窗口估計可銷售天數
+  unsupported:
+  - question: 歷史庫存變化趨勢
+    reason: 來源主鍵為門市與商品，沒有多期快照序列保證。
+  - question: 以目前日期為基準的最近 30 日銷量
+    reason: 銷量窗口是 SQL 固定日期，不能透過篩選快照日期重算。
 columns:
   snapshot_date:
     type: date
@@ -15,34 +54,42 @@ columns:
     type: number
     role: identifier
     description: 庫存所屬門市識別碼；與 product_id 組合唯一決定一列。
+    entity: 門市
   store_name:
     type: string
     role: dimension
     description: 庫存所屬門市名稱。
+    entity: 門市
   region:
     type: string
     role: dimension
     description: 庫存門市所屬區域；北部、中部、南部。
+    entity: 門市
   city:
     type: string
     role: dimension
     description: 庫存門市所在城市。
+    entity: 門市
   product_id:
     type: number
     role: identifier
     description: 庫存商品識別碼；與 store_id 組合唯一決定一列。
+    entity: 商品
   sku:
     type: string
     role: identifier
     description: 商品庫存單位代碼（SKU）。
+    entity: 商品
   product_name:
     type: string
     role: dimension
     description: 庫存商品名稱。
+    entity: 商品
   category:
     type: string
     role: dimension
     description: 庫存商品分類。
+    entity: 商品
   stock_qty:
     type: number
     role: measure
@@ -64,9 +111,39 @@ columns:
   sold_qty_30d:
     type: number
     role: measure
-    description: 過去 30 個曆日，此門市此商品已完成訂單銷售件數；無銷量為 0。
+    description: 固定 2026-09-15 至 2026-10-14（含首尾）的已完成訂單銷售件數；無銷量為 0。
   estimated_days_of_supply:
     type: number
     role: measure
     description: 預估庫存可銷售天數，stock_qty × 30 ÷ sold_qty_30d，單位天；近 30 日銷量為 0 時為 NULL，屬簡化估計。
     unit: 天
+metrics:
+  stock:
+    description: 庫存件數
+    columns:
+    - stock_qty
+    calculation: 庫存表的 stock_qty。
+    aggregation_notes: 同快照日期可跨門市或商品加總，不可跨不同快照日期直接加總。
+  cost_value:
+    description: 庫存成本估值
+    columns:
+    - stock_qty
+    - inventory_cost_value
+    calculation: stock_qty × 商品主檔 unit_cost。
+    aggregation_notes: 同快照日期可加總；成本單價未輸出，不是預估銷售額。
+  status:
+    description: 庫存狀態
+    columns:
+    - stock_qty
+    - reorder_point
+    - stock_status
+    calculation: stock_qty = 0 為缺貨；否則 stock_qty <= reorder_point 為需補貨；其餘正常。
+    aggregation_notes: 狀態為每個門市商品組合的分類。
+  supply_days:
+    description: 簡化可銷售天數
+    columns:
+    - stock_qty
+    - sold_qty_30d
+    - estimated_days_of_supply
+    calculation: 窗口銷量 > 0 時 stock_qty × 30 ÷ sold_qty_30d，四捨五入至一位小數；否則 null。
+    aggregation_notes: 不可把單列天數相加視為整體供應天數；不同品項的重算口徑須另行確認。

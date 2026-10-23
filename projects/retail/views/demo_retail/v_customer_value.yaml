@@ -1,27 +1,70 @@
-version: 3
+version: 4
 view: demo_retail.v_customer_value
-summary: 粒度：每會員一列，包含未下單會員；
+summary: 會員消費價值資料。
 grain:
-  description: 每會員一列，包含未下單會員
+  description: 每位會員一列
   keys:
   - customer_id
+source:
+  verification: metadata_verified
+  relations:
+  - demo_retail.customers
+  - demo_retail.v_order_summary
+  definition_sha256: 6b8e8b7148da30f717bcb4b39d88721fd2bb7f2aadbbfee32dbf02e74adaab12
+scope:
+  population: 會員主檔中的會員。
+  included:
+  - 包含未下單會員
+  - 消費統計僅計可連結的已完成訂單
+  excluded: []
+  row_coverage: 會員以 LEFT JOIN 連結訂單；沒有已完成訂單時訂單數、累計金額與平均訂單金額為 0，最後訂單日期為 null。
+time:
+  kind: cumulative
+  dimensions:
+    registered_on: 會員註冊日期。
+    last_order_date: 最後一筆已完成訂單成立日期；未下單為 null。
+  coverage: null
+  rules:
+  - columns:
+    - registered_on
+    - lifetime_spend
+    - completed_order_count
+    - avg_order_value
+    description: 註冊日期篩選只選會員，不會將累計消費限制為該期間的交易；SQL 未設定交易統計的日期上下界。
+  - columns:
+    - last_order_date
+    - active_in_last_90d
+    description: 活躍旗標固定判定最後訂單日期 >= 2026-07-17，沒有上界；未下單為 false。不是依執行日期移動的 90 日窗口。
+usage:
+  supported:
+  - 會員累計消費、訂單數與會員分群
+  - 依會員登記城市與等級分析
+  unsupported:
+  - question: 指定交易期間的會員消費金額
+    reason: 只有累計值；註冊日期與最後訂單日期無法還原期間交易。
+  - question: 依交易門市城市分析消費
+    reason: city 是會員登記城市，未輸出門市維度。
 columns:
   customer_id:
     type: number
     role: identifier
     description: 會員id
+    entity: 會員
   customer_name:
     type: string
     role: dimension
     description: 會員名稱
+    entity: 會員
   membership_tier:
     type: string
     role: dimension
     description: 會員等級；一般、銀卡、金卡、VIP
+    entity: 會員
   city:
     type: string
     role: dimension
     description: 會員登記城市，不是交易門市所在地
+    entity: 會員
   registered_on:
     type: date
     role: dimension
@@ -50,4 +93,25 @@ columns:
   active_in_last_90d:
     type: boolean
     role: dimension
-    description: 最近 90 日內有已完成訂單；沒有則為 false。
+    description: 最後訂單日期 >= 2026-07-17 的固定旗標，沒有上界；未下單為 false。
+metrics:
+  completed_orders:
+    description: 會員已完成訂單數
+    columns:
+    - completed_order_count
+    calculation: COUNT 已完成訂單；未下單為 0。
+    aggregation_notes: 跨會員可加總。
+  lifetime_spend:
+    description: 累計折扣後消費金額
+    columns:
+    - lifetime_spend
+    calculation: SUM 訂單折扣後金額；未下單為 0。
+    aggregation_notes: 跨會員可加總，不代表特定交易期間金額。
+  average_order_value:
+    description: 會員平均訂單金額
+    columns:
+    - avg_order_value
+    - lifetime_spend
+    - completed_order_count
+    calculation: 會員有訂單時，累計訂單金額除以訂單數並四捨五入至小數二位；否則為 0。
+    aggregation_notes: 跨會員應以總消費額除以總訂單數重算，不能直接加總或平均會員客單價。

@@ -1,12 +1,42 @@
-version: 3
+version: 4
 view: demo_retail.v_product_monthly
-summary: 粒度：門市×月份×商品；適合商品/分類排行、商品銷量及毛利，不含訂單筆數；商品跨店排行需加總 net_sales/units_sold。
+summary: 商品每月銷售彙總資料。
 grain:
-  description: 門市×月份×商品
+  description: 每個門市、月份與商品組合一列
   keys:
   - store_id
   - sales_month
   - product_id
+source:
+  verification: metadata_verified
+  relations:
+  - demo_retail.v_sales_detail
+  definition_sha256: 8373aee3b14dc8f80c7f7efcda440c71e87e8d81cf1524c07466071cf5e46f3a
+scope:
+  population: 依門市、訂單月份與商品彙總的交易明細。
+  included:
+  - 僅含已完成訂單的商品明細
+  excluded:
+  - 未完成訂單
+  row_coverage: 只出現有已完成交易的門市月份商品組合；沒有訂單筆數。
+time:
+  kind: aggregate
+  dimensions:
+    sales_month: 訂單成立月份的第一天。
+  coverage: null
+  rules:
+  - columns:
+    - sales_month
+    description: 僅保留月彙總，不能還原單日或交易時間分布。
+usage:
+  supported:
+  - 每月商品與分類營收、銷量及毛利
+  - 跨門市彙總商品銷售排行
+  unsupported:
+  - question: 訂單筆數與客單價
+    reason: 沒有訂單識別碼或訂單數。
+  - question: 交易明細金額分布與單筆交易極值
+    reason: 已按門市月份商品彙總，單列值不是交易明細值。
 columns:
   sales_month:
     type: date
@@ -16,34 +46,42 @@ columns:
     type: number
     role: identifier
     description: 交易門市識別碼；與 sales_month、product_id 組合唯一決定一列。
+    entity: 門市
   store_name:
     type: string
     role: dimension
     description: 交易門市名稱。
+    entity: 門市
   region:
     type: string
     role: dimension
     description: 交易門市所屬區域；北部、中部、南部。
+    entity: 門市
   city:
     type: string
     role: dimension
     description: 交易門市所在城市。
+    entity: 門市
   product_id:
     type: number
     role: identifier
     description: 商品識別碼；與 store_id、sales_month 組合唯一決定一列。
+    entity: 商品
   sku:
     type: string
     role: identifier
     description: 商品庫存單位代碼（SKU）。
+    entity: 商品
   product_name:
     type: string
     role: dimension
     description: 商品名稱。
+    entity: 商品
   category:
     type: string
     role: dimension
     description: 商品分類，例如飲料、零食、日用品。
+    entity: 商品
   units_sold:
     type: number
     role: measure
@@ -69,3 +107,36 @@ columns:
     role: measure
     description: 此門市此月份此商品的毛利總額，單位 TWD；不是毛利率。
     unit: TWD
+metrics:
+  units:
+    description: 月度商品銷售件數
+    columns:
+    - units_sold
+    calculation: SUM 交易明細 quantity。
+    aggregation_notes: 可依所需維度加總；MIN、MAX、AVG 作用於本 view 的單列值，不能還原較細粒度的分布。
+  gross_sales:
+    description: 月度折扣前銷售額
+    columns:
+    - gross_sales
+    calculation: SUM 交易明細 quantity × unit_price。
+    aggregation_notes: 可依所需維度加總；MIN、MAX、AVG 作用於本 view 的單列值，不能還原較細粒度的分布。
+  discount:
+    description: 月度折扣金額
+    columns:
+    - discount_amount
+    calculation: SUM 交易明細 discount_amount。
+    aggregation_notes: 可依所需維度加總；MIN、MAX、AVG 作用於本 view 的單列值，不能還原較細粒度的分布。
+  net_sales:
+    description: 月度折扣後銷售額
+    columns:
+    - net_sales
+    - gross_sales
+    - discount_amount
+    calculation: SUM 交易明細 net_sales，等於 gross_sales − discount_amount。
+    aggregation_notes: 可依所需維度加總；MIN、MAX、AVG 作用於本 view 的單列值，不能還原較細粒度的分布。
+  profit:
+    description: 月度毛利
+    columns:
+    - gross_profit
+    calculation: SUM 交易明細 gross_profit。
+    aggregation_notes: 可依所需維度加總；MIN、MAX、AVG 作用於本 view 的單列值，不能還原較細粒度的分布。
